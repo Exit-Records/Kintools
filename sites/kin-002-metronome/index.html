@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Metronome - Kin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="theme-color" content="#c65d2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<style>
+:root {
+  --bg: #f6f4ef;
+  --panel: #ffffff;
+  --text: #2a2a2a;
+  --text-dim: #9a9790;
+  --accent: #c65d2e;
+  --accent-soft: #f2e7e2;
+  --border: #e8e6e1;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100dvh;
+  padding: 24px 16px;
+}
+
+.app {
+  max-width: 400px;
+  width: 100%;
+  background: var(--panel);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.catalog-num {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+/* BPM Display */
+.bpm-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bpm-display {
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.bpm-label {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* Beat dots */
+.beat-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  min-height: 20px;
+}
+
+.beat-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.08s, transform 0.08s;
+}
+
+.beat-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+.beat-dot.downbeat {
+  background: var(--accent);
+  transform: scale(1.5);
+}
+
+/* Slider */
+.slider-row {
+  margin-bottom: 20px;
+}
+
+.slider-row label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+input[type=range] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button {
+  flex: 1;
+  min-height: 52px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* Settings row */
+.settings {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.setting {
+  flex: 1;
+}
+
+.setting label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--panel);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Subdivisions */
+.subdivision-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.sub-btn {
+  flex: 1;
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sub-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Flash overlay */
+.flash {
+  position: fixed;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.06s;
+  z-index: 100;
+}
+
+.flash.active {
+  opacity: 0.15;
+}
+
+/* Options */
+.options {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.option-label input[type=checkbox] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+/* Footer */
+footer {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+footer .kin-mark {
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<div class="flash" id="flash"></div>
+
+<div class="app">
+
+  <h1>Metronome</h1>
+  <div class="catalog-num">KIN-002</div>
+
+  <div class="bpm-section">
+    <div class="bpm-display" id="bpmDisplay">120</div>
+    <div class="bpm-label">BPM</div>
+  </div>
+
+  <div class="beat-dots" id="beatDots"></div>
+
+  <div class="slider-row">
+    <label>Tempo</label>
+    <input id="bpmSlider" type="range" min="30" max="300" value="120">
+  </div>
+
+  <div class="buttons">
+    <button class="btn-primary" id="startStop">Start</button>
+    <button class="btn-secondary" id="tap">Tap Tempo</button>
+  </div>
+
+  <div class="settings">
+    <div class="setting">
+      <label>Time Signature</label>
+      <select id="signature">
+        <option value="4">4/4</option>
+        <option value="3">3/4</option>
+        <option value="5">5/4</option>
+        <option value="6">6/8</option>
+        <option value="7">7/8</option>
+      </select>
+    </div>
+    <div class="setting">
+      <label>Subdivision</label>
+      <div class="subdivision-row">
+        <button class="sub-btn active" data-sub="1">1/4</button>
+        <button class="sub-btn" data-sub="2">1/8</button>
+        <button class="sub-btn" data-sub="3">Trip</button>
+        <button class="sub-btn" data-sub="4">1/16</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-row">
+    <label>Volume</label>
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
+  <div class="options">
+    <label class="option-label">
+      <input type="checkbox" id="flashToggle">
+      Flash on beat
+    </label>
+    <label class="option-label">
+      <input type="checkbox" id="accentToggle" checked>
+      Accent downbeat
+    </label>
+  </div>
+
+  <footer>
+    <span class="kin-mark">Kin</span><br>
+    by Darren White
+  </footer>
+
+</div>
+
+<script>
+(() => {
+  // Elements
+  const bpmSlider = document.getElementById('bpmSlider');
+  const bpmDisplay = document.getElementById('bpmDisplay');
+  const startBtn = document.getElementById('startStop');
+  const tapBtn = document.getElementById('tap');
+  const volumeSlider = document.getElementById('volume');
+  const flashToggle = document.getElementById('flashToggle');
+  const accentToggle = document.getElementById('accentToggle');
+  const flash = document.getElementById('flash');
+  const signatureSelect = document.getElementById('signature');
+  const beatDotsContainer = document.getElementById('beatDots');
+  const subBtns = document.querySelectorAll('.sub-btn');
+
+  // State
+  let bpm = parseInt(localStorage.getItem('kin_met_bpm')) || 120;
+  let vol = parseFloat(localStorage.getItem('kin_met_vol')) || 0.5;
+  let beatsPerBar = parseInt(localStorage.getItem('kin_met_sig')) || 4;
+  let subdivision = parseInt(localStorage.getItem('kin_met_sub')) || 1;
+  let isPlaying = false;
+  let audioCtx = null;
+  let nextNoteTime = 0;
+  let currentBeat = 0;
+  let currentSubBeat = 0;
+  let timerID = null;
+  let taps = [];
+
+  // Scheduling constants
+  const SCHEDULE_AHEAD = 0.1; // seconds to look ahead
+  const LOOKAHEAD = 25; // ms between scheduler calls
+
+  // Init UI from saved state
+  bpmSlider.value = bpm;
+  bpmDisplay.textContent = bpm;
+  volumeSlider.value = vol;
+  signatureSelect.value = beatsPerBar;
+
+  subBtns.forEach(btn => {
+    if (parseInt(btn.dataset.sub) === subdivision) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  buildBeatDots();
+
+  // Beat dots
+  function buildBeatDots() {
+    beatDotsContainer.innerHTML = '';
+    for (let i = 0; i < beatsPerBar; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'beat-dot';
+      beatDotsContainer.appendChild(dot);
+    }
+  }
+
+  function highlightBeat(beatIndex) {
+    const dots = beatDotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove('active', 'downbeat');
+    }
+    if (beatIndex < dots.length) {
+      dots[beatIndex].classList.add(beatIndex === 0 ? 'downbeat' : 'active');
+    }
+  }
+
+  // Audio scheduling (Web Audio API accurate timing)
+  function createClick(time, isDownbeat, isSubdivision) {
+    if (!audioCtx) return;
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const v = parseFloat(volumeSlider.value);
+
+    if (isSubdivision) {
+      osc.frequency.value = 600;
+      gain.gain.value = v * 0.3;
+    } else if (isDownbeat && accentToggle.checked) {
+      osc.frequency.value = 1200;
+      gain.gain.value = v;
+    } else {
+      osc.frequency.value = 800;
+      gain.gain.value = v * 0.7;
+    }
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(time);
+    osc.stop(time + 0.03);
+
+    // Schedule visual update
+    const delay = (time - audioCtx.currentTime) * 1000;
+    setTimeout(() => {
+      if (!isSubdivision) {
+        highlightBeat(currentBeat > 0 ? currentBeat - 1 : beatsPerBar - 1);
+      }
+      if (flashToggle.checked && !isSubdivision) {
+        flash.classList.add('active');
+        setTimeout(() => flash.classList.remove('active'), 60);
+      }
+    }, Math.max(0, delay));
+  }
+
+  function nextNote() {
+    const secondsPerBeat = 60 / bpm;
+    const secondsPerSubBeat = secondsPerBeat / subdivision;
+
+    nextNoteTime += secondsPerSubBeat;
+
+    currentSubBeat++;
+    if (currentSubBeat >= subdivision) {
+      currentSubBeat = 0;
+      currentBeat = (currentBeat + 1) % beatsPerBar;
+    }
+  }
+
+  function scheduler() {
+    while (nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD) {
+      const isDownbeat = (currentBeat === 0 && currentSubBeat === 0);
+      const isSubdivision = (currentSubBeat !== 0);
+      createClick(nextNoteTime, isDownbeat, isSubdivision);
+      nextNote();
+    }
+    timerID = setTimeout(scheduler, LOOKAHEAD);
+  }
+
+  function start() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    isPlaying = true;
+    currentBeat = 0;
+    currentSubBeat = 0;
+    nextNoteTime = audioCtx.currentTime;
+    scheduler();
+    startBtn.textContent = 'Stop';
+  }
+
+  function stop() {
+    isPlaying = false;
+    clearTimeout(timerID);
+    timerID = null;
+    startBtn.textContent = 'Start';
+    // Clear dots
+    const dots = beatDotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove('active', 'downbeat');
+    }
+  }
+
+  // Event listeners
+  startBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      stop();
+    } else {
+      start();
+    }
+  });
+
+  bpmSlider.addEventListener('input', () => {
+    bpm = parseInt(bpmSlider.value);
+    bpmDisplay.textContent = bpm;
+    localStorage.setItem('kin_met_bpm', bpm);
+  });
+
+  volumeSlider.addEventListener('input', () => {
+    localStorage.setItem('kin_met_vol', volumeSlider.value);
+  });
+
+  signatureSelect.addEventListener('change', () => {
+    beatsPerBar = parseInt(signatureSelect.value);
+    localStorage.setItem('kin_met_sig', beatsPerBar);
+    buildBeatDots();
+    if (isPlaying) {
+      currentBeat = 0;
+      currentSubBeat = 0;
+    }
+  });
+
+  subBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      subdivision = parseInt(btn.dataset.sub);
+      localStorage.setItem('kin_met_sub', subdivision);
+      if (isPlaying) {
+        currentSubBeat = 0;
+      }
+    });
+  });
+
+  // Tap tempo
+  tapBtn.addEventListener('click', () => {
+    const now = Date.now();
+    taps.push(now);
+
+    // Reset if gap > 2 seconds
+    if (taps.length >= 2 && (taps[taps.length - 1] - taps[taps.length - 2]) > 2000) {
+      taps = [now];
+      return;
+    }
+
+    if (taps.length > 6) taps.shift();
+
+    if (taps.length >= 2) {
+      let intervals = [];
+      for (let i = 1; i < taps.length; i++) {
+        intervals.push(taps[i] - taps[i - 1]);
+      }
+      const avg = intervals.reduce((a, b) => a + b) / intervals.length;
+      const newBpm = Math.round(60000 / avg);
+
+      if (newBpm >= 30 && newBpm <= 300) {
+        bpm = newBpm;
+        bpmSlider.value = bpm;
+        bpmDisplay.textContent = bpm;
+        localStorage.setItem('kin_met_bpm', bpm);
+      }
+    }
+  });
+
+  // Keyboard shortcut: space to start/stop
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target === document.body) {
+      e.preventDefault();
+      if (isPlaying) stop(); else start();
+    }
+  });
+
+  // Service Worker registration
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+})();
+</script>
+
+</body>
+</html>

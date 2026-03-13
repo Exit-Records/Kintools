@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>BPM Counter — KIN-003</title>
+  <meta name="description" content="Tap the beat. Get the BPM. A simple, accurate tempo counter for DJs, musicians and runners." />
+  <meta name="theme-color" content="#1a1714" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BPM" />
+  <meta property="og:title" content="BPM Counter — KIN-003" />
+  <meta property="og:description" content="Tap the beat. Get the BPM." />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       KIN-003 BPM Counter
+       Creator: dBridge
+       ───────────────────────────────────────────── */
+
+    :root {
+      --bg:            #1a1714;
+      --surface:       #242018;
+      --surface-hi:    #2e2923;
+      --border:        #3a342c;
+      --text-primary:  #f0ece4;
+      --text-secondary:#8c8072;
+      --text-dim:      #5a5248;
+      --accent:        #d4a853;
+      --accent-glow:   rgba(212, 168, 83, 0.18);
+      --accent-dim:    rgba(212, 168, 83, 0.08);
+      --tap-active:    #e8ba6a;
+      --font-sans: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overscroll-behavior: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .app-header {
+      padding: 28px 0 0;
+    }
+
+    .kin-wordmark {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .app-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0 40px;
+    }
+
+    /* ─── BPM Display ─── */
+
+    .bpm-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .bpm-number {
+      font-family: var(--font-mono);
+      font-size: clamp(88px, 22vw, 120px);
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .bpm-label {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    .bpm-prompt {
+      font-family: var(--font-mono);
+      font-size: clamp(40px, 10vw, 56px);
+      font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0.3em;
+      line-height: 1;
+      opacity: 0.5;
+    }
+
+    /* ─── Confidence bar ─── */
+
+    .confidence-bar {
+      width: 100%;
+      max-width: 200px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 44px;
+    }
+
+    .confidence-bar[hidden] {
+      display: none;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ─── Tap Button ─── */
+
+    .tap-button {
+      width: min(280px, 72vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition:
+        background 0.06s ease,
+        border-color 0.06s ease,
+        box-shadow 0.06s ease,
+        transform 0.06s ease;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow:
+        0 0 0 0 var(--accent-glow),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .tap-button:hover {
+      background: var(--surface-hi);
+      border-color: var(--accent);
+      box-shadow:
+        0 0 24px 4px var(--accent-glow),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .tap-button:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .tap-button.active {
+      background: var(--surface-hi);
+      border-color: var(--tap-active);
+      transform: scale(0.97);
+      box-shadow:
+        0 0 40px 8px var(--accent-glow),
+        0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .tap-button.active .tap-label {
+      color: var(--tap-active);
+    }
+
+    .tap-label {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--text-secondary);
+      transition: color 0.06s ease;
+      pointer-events: none;
+    }
+
+    /* ─── Tap count ─── */
+
+    .tap-count {
+      margin-top: 28px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-align: center;
+      min-height: 18px;
+    }
+
+    /* ─── Reset ─── */
+
+    .reset-button {
+      margin-top: 20px;
+      background: none;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 100px;
+      transition: color 0.15s ease, background 0.15s ease;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reset-button:hover {
+      color: var(--text-secondary);
+      background: var(--accent-dim);
+    }
+
+    .reset-button[hidden] {
+      display: none;
+    }
+
+    /* ─── Footer ─── */
+
+    .app-footer {
+      padding: 0 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .footer-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    .footer-sep {
+      color: var(--border);
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    @media (min-width: 640px) {
+      .app-shell {
+        padding: 0 40px;
+      }
+
+      .tap-button {
+        width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+  <header class="app-header">
+    <span class="kin-wordmark">Kin</span>
+  </header>
+
+  <main class="app-main">
+    <div class="bpm-display" id="bpm-display" aria-live="polite" aria-atomic="true">
+      <span class="bpm-prompt" id="bpm-prompt">· · ·</span>
+    </div>
+
+    <div class="confidence-bar" id="confidence-bar" hidden>
+      <div class="confidence-fill" id="confidence-fill"></div>
+    </div>
+
+    <button
+      class="tap-button"
+      id="tap-btn"
+      type="button"
+      aria-label="Tap to the beat"
+    >
+      <span class="tap-label">TAP</span>
+    </button>
+
+    <p class="tap-count" id="tap-count"></p>
+
+    <button class="reset-button" id="reset-btn" type="button" hidden>Reset</button>
+  </main>
+
+  <footer class="app-footer">
+    <span class="footer-text">Kin</span>
+    <span class="footer-sep">·</span>
+    <span class="footer-text">dBridge</span>
+    <span class="footer-sep">·</span>
+    <span class="footer-text">KIN-003</span>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    const MAX_TAPS = 8;
+    const TIMEOUT_MS = 3000;
+
+    let taps = [];
+    let tapCount = 0;
+    let timeoutId = null;
+    let flashId = null;
+
+    const tapBtn       = document.getElementById('tap-btn');
+    const resetBtn     = document.getElementById('reset-btn');
+    const bpmDisplay   = document.getElementById('bpm-display');
+    const confidenceBar  = document.getElementById('confidence-bar');
+    const confidenceFill = document.getElementById('confidence-fill');
+    const tapCountEl   = document.getElementById('tap-count');
+    const bpmPrompt    = document.getElementById('bpm-prompt');
+
+    function reset() {
+      taps = [];
+      tapCount = 0;
+      if (timeoutId) clearTimeout(timeoutId);
+
+      bpmDisplay.innerHTML = '<span class="bpm-prompt" id="bpm-prompt">· · ·</span>';
+      confidenceBar.hidden = true;
+      confidenceFill.style.width = '0%';
+      tapCountEl.textContent = '';
+      resetBtn.hidden = true;
+    }
+
+    function updateDisplay(bpm, confidence) {
+      bpmDisplay.innerHTML =
+        '<span class="bpm-number">' + bpm + '</span>' +
+        '<span class="bpm-label">BPM</span>';
+      confidenceBar.hidden = false;
+      confidenceFill.style.width = (Math.min(confidence, 1) * 100) + '%';
+      resetBtn.hidden = false;
+    }
+
+    function tap() {
+      const now = performance.now();
+
+      // Flash
+      tapBtn.classList.add('active');
+      if (flashId) clearTimeout(flashId);
+      flashId = setTimeout(function () {
+        tapBtn.classList.remove('active');
+      }, 80);
+
+      // Idle timeout — reset if no tap for TIMEOUT_MS
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(reset, TIMEOUT_MS);
+
+      // Add tap
+      taps.push(now);
+      if (taps.length > MAX_TAPS) taps.shift();
+      tapCount++;
+
+      // Update count hint
+      if (tapCount < 2) {
+        tapCountEl.textContent = 'Keep tapping\u2026';
+      } else {
+        tapCountEl.textContent = tapCount + ' tap' + (tapCount === 1 ? '' : 's');
+      }
+
+      // Calculate BPM
+      if (taps.length >= 2) {
+        var total = 0;
+        for (var i = 1; i < taps.length; i++) {
+          total += taps[i] - taps[i - 1];
+        }
+        var avg = total / (taps.length - 1);
+        var bpm = Math.round(60000 / avg);
+        var confidence = taps.length / 4;
+        updateDisplay(bpm, confidence);
+      }
+    }
+
+    // Touch/click handler (pointerdown for fastest response)
+    tapBtn.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      tap();
+    });
+
+    resetBtn.addEventListener('click', reset);
+
+    // Keyboard support
+    document.addEventListener('keydown', function (e) {
+      if (e.code === 'Space' || e.code === 'Enter') {
+        e.preventDefault();
+        tap();
+      }
+      if (e.code === 'Escape' || e.code === 'KeyR') {
+        reset();
+      }
+    });
+  })();
+</script>
+
+<script>
+  // Service Worker registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function (err) {
+        console.warn('SW registration failed:', err);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

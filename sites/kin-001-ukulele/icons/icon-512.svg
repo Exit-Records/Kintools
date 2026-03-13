@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background: dark ink, rounded square (iOS-safe radius) -->
+  <rect width="512" height="512" rx="112" fill="#2c2318"/>
+
+  <!-- Left tine -->
+  <rect x="178" y="82" width="46" height="210" rx="23" fill="#f5f0e8"/>
+
+  <!-- Right tine -->
+  <rect x="288" y="82" width="46" height="210" rx="23" fill="#f5f0e8"/>
+
+  <!-- Bridge connecting tines at base -->
+  <rect x="178" y="268" width="156" height="44" rx="22" fill="#f5f0e8"/>
+
+  <!-- Handle -->
+  <rect x="233" y="292" width="46" height="138" rx="23" fill="#f5f0e8"/>
+
+  <!-- Amber accent at base of handle -->
+  <circle cx="256" cy="445" r="24" fill="#c8721a"/>
+</svg>

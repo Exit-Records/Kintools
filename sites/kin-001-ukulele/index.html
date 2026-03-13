@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta name="description" content="A free, offline ukulele tuner. Supports gCEA, aDF#B, DGBE, and fA#DG tunings. No account required." />
+  <title>Kin Ukulele Tuner</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2c2318" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="/icons/icon-512.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --cream-mid: #ede7d9;
+      --cream-dark: #ddd5c4;
+      --ink: #2c2318;
+      --ink-mid: #4a3f32;
+      --ink-soft: #7a6b5a;
+      --amber: #c8721a;
+      --amber-light: #e8923a;
+      --green: #3a7a52;
+      --green-light: #4a9a66;
+      --red: #b04040;
+      --card-bg: #faf7f2;
+      --shadow: 0 2px 12px rgba(44,35,24,0.10);
+      --shadow-deep: 0 4px 24px rgba(44,35,24,0.16);
+      --radius: 16px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 32px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 480px;
+      padding: 28px 0 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kin-wordmark {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(22px, 6vw, 28px);
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    main {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Tuning selector */
+    .tuning-section {
+      background: var(--card-bg);
+      border: 1px solid var(--cream-dark);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+    }
+
+    .tuning-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .tuning-btn {
+      background: var(--cream);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      min-height: 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tuning-btn:hover {
+      border-color: var(--amber);
+      background: #fdf6ed;
+    }
+
+    .tuning-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+
+    .tuning-btn.active .tuning-name {
+      color: var(--cream);
+    }
+
+    .tuning-btn.active .tuning-notes {
+      color: var(--cream-mid);
+    }
+
+    .tuning-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .tuning-notes {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 12px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.2;
+    }
+
+    /* Pitch display */
+    .display-card {
+      background: var(--card-bg);
+      border: 1px solid var(--cream-dark);
+      border-radius: var(--radius);
+      padding: 28px 20px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      min-height: 220px;
+    }
+
+    .detected-note {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(72px, 20vw, 96px);
+      font-weight: 600;
+      line-height: 1;
+      color: var(--ink);
+      transition: color 0.2s;
+      letter-spacing: -0.02em;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detected-note.in-tune {
+      color: var(--green);
+    }
+
+    .detected-note.flat {
+      color: var(--amber);
+    }
+
+    .detected-note.sharp {
+      color: var(--red);
+    }
+
+    .detected-note.idle {
+      color: var(--cream-dark);
+    }
+
+    .freq-display {
+      font-size: 13px;
+      color: var(--ink-soft);
+      font-variant-numeric: tabular-nums;
+      min-height: 18px;
+      margin-top: 4px;
+    }
+
+    /* Needle meter */
+    .meter-wrap {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+      padding: 0 2px;
+    }
+
+    .meter-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--cream-mid);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .meter-center {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: var(--cream-dark);
+      transform: translateX(-50%);
+    }
+
+    .meter-needle {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      border-radius: 2px;
+      background: var(--ink-soft);
+      transform: translateX(-50%);
+      transition: left 0.08s ease-out, background 0.2s;
+      left: 50%;
+    }
+
+    .meter-needle.in-tune { background: var(--green); }
+    .meter-needle.flat { background: var(--amber); }
+    .meter-needle.sharp { background: var(--red); }
+
+    /* Status text */
+    .status-line {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      min-height: 20px;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+
+    .status-line.in-tune { color: var(--green); }
+    .status-line.flat { color: var(--amber); }
+    .status-line.sharp { color: var(--red); }
+
+    /* String buttons */
+    .strings-section {
+      background: var(--card-bg);
+      border: 1px solid var(--cream-dark);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .strings-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .string-btn {
+      background: var(--cream);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 10px;
+      padding: 14px 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.15s, background 0.15s;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .string-btn:hover {
+      border-color: var(--amber-light);
+      background: #fdf6ed;
+    }
+
+    .string-btn.active-string {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .string-btn.active-string .string-note {
+      color: white;
+    }
+
+    .string-btn.active-string .string-num {
+      color: rgba(255,255,255,0.75);
+    }
+
+    .string-note {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .string-num {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    /* Listen button */
+    .listen-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .listen-btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      min-height: 56px;
+      letter-spacing: 0.01em;
+    }
+
+    .listen-btn.start {
+      background: var(--ink);
+      color: var(--cream);
+      box-shadow: var(--shadow);
+    }
+
+    .listen-btn.start:hover {
+      background: var(--ink-mid);
+      box-shadow: var(--shadow-deep);
+    }
+
+    .listen-btn.start:active {
+      transform: scale(0.98);
+    }
+
+    .listen-btn.stop {
+      background: var(--red);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .listen-btn.stop:hover {
+      background: #943535;
+      box-shadow: var(--shadow-deep);
+    }
+
+    .listen-btn.stop:active {
+      transform: scale(0.98);
+    }
+
+    .mic-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .mic-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cream-dark);
+    }
+
+    .mic-dot.listening {
+      background: var(--green);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--cream-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-kin {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer-meta {
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .footer-meta span {
+      display: block;
+    }
+
+    .footer-catalog {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+    }
+
+    /* Offline notice */
+    .offline-notice {
+      display: none;
+      background: var(--amber);
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-top: -8px;
+      text-align: center;
+    }
+
+    .offline-notice.visible { display: block; }
+
+    /* Permission error */
+    .error-msg {
+      background: #fdf0f0;
+      border: 1px solid #e8c8c8;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--red);
+      text-align: center;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="kin-wordmark">Kin</span>
+    <h1>Ukulele Tuner</h1>
+  </header>
+
+  <main>
+    <div class="offline-notice" id="offlineNotice">You're offline — tuner still works</div>
+    <div class="error-msg" id="errorMsg"></div>
+
+    <!-- Tuning Selector -->
+    <div class="tuning-section">
+      <div class="section-label">Tuning</div>
+      <div class="tuning-grid" id="tuningGrid"></div>
+    </div>
+
+    <!-- Pitch Display -->
+    <div class="display-card">
+      <div class="detected-note idle" id="noteDisplay">–</div>
+      <div class="freq-display" id="freqDisplay"></div>
+      <div class="meter-wrap">
+        <div class="meter-labels">
+          <span>♭ Flat</span>
+          <span>In tune</span>
+          <span>Sharp ♯</span>
+        </div>
+        <div class="meter-bar">
+          <div class="meter-center"></div>
+          <div class="meter-needle" id="needle"></div>
+        </div>
+      </div>
+      <div class="status-line" id="statusLine"></div>
+    </div>
+
+    <!-- String Quick-Reference -->
+    <div class="strings-section">
+      <div class="section-label">Strings</div>
+      <div class="strings-row" id="stringsRow"></div>
+    </div>
+
+    <!-- Listen Controls -->
+    <div class="listen-section">
+      <button class="listen-btn start" id="listenBtn">Start Listening</button>
+      <div class="mic-indicator">
+        <div class="mic-dot" id="micDot"></div>
+        <span id="micLabel">Tap to begin</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-kin">Kin</span>
+    <div class="footer-meta">
+      <span>by Maya</span>
+      <span class="footer-catalog">KIN-001</span>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Tuning data ───────────────────────────────────────────────────────────
+    const TUNINGS = [
+      {
+        id: 'gCEA',
+        name: 'gCEA',
+        label: 'Standard',
+        notes: ['G4', 'C4', 'E4', 'A4'],
+        strings: ['G', 'C', 'E', 'A']
+      },
+      {
+        id: 'aDF#B',
+        name: 'aDF♯B',
+        label: 'A Tuning',
+        notes: ['A4', 'D4', 'F#4', 'B4'],
+        strings: ['A', 'D', 'F♯', 'B']
+      },
+      {
+        id: 'DGBE',
+        name: 'DGBE',
+        label: 'Baritone',
+        notes: ['D4', 'G3', 'B3', 'E4'],
+        strings: ['D', 'G', 'B', 'E']
+      },
+      {
+        id: 'fA#DG',
+        name: 'fA♯DG',
+        label: 'Low F',
+        notes: ['F4', 'A#3', 'D4', 'G4'],
+        strings: ['F', 'A♯', 'D', 'G']
+      }
+    ];
+
+    // ─── Note frequencies (A4 = 440 Hz) ───────────────────────────────────────
+    const NOTE_NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+
+    function noteToFreq(name) {
+      // Parse note name like "G4", "A#3", "F#4"
+      const match = name.match(/^([A-G][♯#]?)(\d)$/);
+      if (!match) return null;
+      let notePart = match[1].replace('#', '♯');
+      const octave = parseInt(match[2]);
+      const semitone = NOTE_NAMES.indexOf(notePart);
+      if (semitone === -1) return null;
+      // MIDI number: C4 = 60
+      const midi = (octave + 1) * 12 + semitone;
+      return 440 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    // Precompute target frequencies for current tuning
+    let targetFreqs = [];
+
+    function setTuning(tuning) {
+      activeTuning = tuning;
+      targetFreqs = tuning.notes.map(noteToFreq);
+      renderStrings();
+      renderTuningButtons();
+      resetDisplay();
+    }
+
+    // ─── State ─────────────────────────────────────────────────────────────────
+    let activeTuning = TUNINGS[0];
+    let isListening = false;
+    let audioCtx = null;
+    let analyser = null;
+    let micStream = null;
+    let animFrame = null;
+    let activeStringIdx = null; // null = free detect
+
+    // ─── Render tuning buttons ─────────────────────────────────────────────────
+    function renderTuningButtons() {
+      const grid = document.getElementById('tuningGrid');
+      grid.innerHTML = '';
+      TUNINGS.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'tuning-btn' + (t.id === activeTuning.id ? ' active' : '');
+        btn.innerHTML = `
+          <span class="tuning-name">${t.name} <span style="font-size:11px;font-weight:400;opacity:0.7">${t.label}</span></span>
+          <span class="tuning-notes">${t.strings.join(' · ')}</span>
+        `;
+        btn.addEventListener('click', () => {
+          setTuning(t);
+          resetDisplay();
+        });
+        grid.appendChild(btn);
+      });
+    }
+
+    // ─── Render string buttons ─────────────────────────────────────────────────
+    function renderStrings() {
+      const row = document.getElementById('stringsRow');
+      row.innerHTML = '';
+      const labels = ['4', '3', '2', '1'];
+      activeTuning.strings.forEach((note, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'string-btn' + (activeStringIdx === i ? ' active-string' : '');
+        btn.innerHTML = `
+          <span class="string-note">${note}</span>
+          <span class="string-num">String ${labels[i]}</span>
+        `;
+        btn.addEventListener('click', () => {
+          activeStringIdx = (activeStringIdx === i) ? null : i;
+          renderStrings();
+        });
+        row.appendChild(btn);
+      });
+    }
+
+    // ─── Display helpers ───────────────────────────────────────────────────────
+    function resetDisplay() {
+      const noteEl = document.getElementById('noteDisplay');
+      noteEl.textContent = '–';
+      noteEl.className = 'detected-note idle';
+      document.getElementById('freqDisplay').textContent = '';
+      document.getElementById('statusLine').textContent = '';
+      document.getElementById('statusLine').className = 'status-line';
+      setNeedle(0, 'idle');
+    }
+
+    function setNeedle(cents, state) {
+      // cents: -50 to +50, mapped to 0–100%
+      const pct = Math.max(0, Math.min(100, 50 + (cents / 50) * 50));
+      const needle = document.getElementById('needle');
+      needle.style.left = pct + '%';
+      needle.className = 'meter-needle ' + state;
+    }
+
+    function updateDisplay(freq) {
+      const noteEl = document.getElementById('noteDisplay');
+      const freqEl = document.getElementById('freqDisplay');
+      const statusEl = document.getElementById('statusLine');
+
+      // Find closest note (overall chromatic)
+      const midi = 12 * Math.log2(freq / 440) + 69;
+      const nearestMidi = Math.round(midi);
+      const cents = (midi - nearestMidi) * 100;
+      const octave = Math.floor((nearestMidi) / 12) - 1;
+      const noteName = NOTE_NAMES[((nearestMidi % 12) + 12) % 12];
+
+      // Determine which target string is closest
+      let closestIdx = 0;
+      let minDist = Infinity;
+
+      if (activeStringIdx !== null) {
+        closestIdx = activeStringIdx;
+      } else {
+        targetFreqs.forEach((tf, i) => {
+          if (!tf) return;
+          const dist = Math.abs(Math.log2(freq / tf));
+          if (dist < minDist) {
+            minDist = dist;
+            closestIdx = i;
+          }
+        });
+      }
+
+      const targetFreq = targetFreqs[closestIdx];
+      const centsFromTarget = targetFreq
+        ? 1200 * Math.log2(freq / targetFreq)
+        : 0;
+
+      freqEl.textContent = freq.toFixed(1) + ' Hz';
+      noteEl.textContent = noteName + octave;
+
+      const ABS = Math.abs(centsFromTarget);
+      let state, statusText;
+
+      if (ABS <= 8) {
+        state = 'in-tune';
+        statusText = 'In tune ✓';
+      } else if (centsFromTarget < -8) {
+        state = 'flat';
+        statusText = 'Tune up (' + Math.abs(Math.round(centsFromTarget)) + ' cents flat)';
+      } else {
+        state = 'sharp';
+        statusText = 'Tune down (' + Math.abs(Math.round(centsFromTarget)) + ' cents sharp)';
+      }
+
+      noteEl.className = 'detected-note ' + state;
+      statusEl.textContent = statusText;
+      statusEl.className = 'status-line ' + state;
+      setNeedle(Math.max(-50, Math.min(50, centsFromTarget)), state);
+    }
+
+    // ─── Pitch detection (autocorrelation, YIN-simplified) ────────────────────
+    function detectPitch(buffer, sampleRate) {
+      const SIZE = buffer.length;
+      const MAX_SAMPLES = Math.floor(SIZE / 2);
+      const threshold = 0.2;
+
+      // YIN difference function
+      const yinBuffer = new Float32Array(MAX_SAMPLES);
+      for (let tau = 1; tau < MAX_SAMPLES; tau++) {
+        let sum = 0;
+        for (let i = 0; i < MAX_SAMPLES; i++) {
+          const diff = buffer[i] - buffer[i + tau];
+          sum += diff * diff;
+        }
+        yinBuffer[tau] = sum;
+      }
+
+      // Cumulative mean normalised difference
+      yinBuffer[0] = 1;
+      let runSum = 0;
+      for (let tau = 1; tau < MAX_SAMPLES; tau++) {
+        runSum += yinBuffer[tau];
+        yinBuffer[tau] *= tau / runSum;
+      }
+
+      // Find first minimum below threshold
+      let tau = 2;
+      while (tau < MAX_SAMPLES) {
+        if (yinBuffer[tau] < threshold) {
+          while (tau + 1 < MAX_SAMPLES && yinBuffer[tau + 1] < yinBuffer[tau]) {
+            tau++;
+          }
+          // Parabolic interpolation
+          const before = yinBuffer[tau - 1] || yinBuffer[tau];
+          const after  = yinBuffer[tau + 1] || yinBuffer[tau];
+          const denom  = 2 * (2 * yinBuffer[tau] - before - after);
+          const refined = denom === 0 ? tau : tau + (before - after) / denom;
+          if (refined > 0) return sampleRate / refined;
+          break;
+        }
+        tau++;
+      }
+      return -1;
+    }
+
+    // ─── Audio processing loop ─────────────────────────────────────────────────
+    function processAudio() {
+      if (!isListening) return;
+
+      const bufferLength = analyser.fftSize;
+      const buffer = new Float32Array(bufferLength);
+      analyser.getFloatTimeDomainData(buffer);
+
+      // RMS check — don't process silence
+      let rms = 0;
+      for (let i = 0; i < bufferLength; i++) rms += buffer[i] * buffer[i];
+      rms = Math.sqrt(rms / bufferLength);
+
+      if (rms < 0.005) {
+        resetDisplay();
+        const noteEl = document.getElementById('noteDisplay');
+        noteEl.textContent = '–';
+        noteEl.className = 'detected-note idle';
+        document.getElementById('freqDisplay').textContent = '';
+        document.getElementById('statusLine').textContent = 'Play a string...';
+        document.getElementById('statusLine').className = 'status-line';
+        setNeedle(0, '');
+        animFrame = requestAnimationFrame(processAudio);
+        return;
+      }
+
+      const pitch = detectPitch(buffer, audioCtx.sampleRate);
+
+      if (pitch > 50 && pitch < 2000) {
+        updateDisplay(pitch);
+      }
+
+      animFrame = requestAnimationFrame(processAudio);
+    }
+
+    // ─── Start / stop listening ────────────────────────────────────────────────
+    async function startListening() {
+      const errorEl = document.getElementById('errorMsg');
+      errorEl.className = 'error-msg';
+      errorEl.textContent = '';
+
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: false,
+            autoGainControl: false,
+            noiseSuppression: false,
+            channelCount: 1
+          }
+        });
+      } catch (e) {
+        let msg = 'Microphone access was denied. Please allow microphone access and try again.';
+        if (e.name === 'NotFoundError') msg = 'No microphone found. Please connect a microphone and try again.';
+        errorEl.textContent = msg;
+        errorEl.className = 'error-msg visible';
+        return;
+      }
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+      const source = audioCtx.createMediaStreamSource(micStream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 4096;
+      analyser.smoothingTimeConstant = 0.0;
+      source.connect(analyser);
+
+      isListening = true;
+      updateListenUI(true);
+      processAudio();
+    }
+
+    function stopListening() {
+      isListening = false;
+      if (animFrame) cancelAnimationFrame(animFrame);
+      if (micStream) micStream.getTracks().forEach(t => t.stop());
+      if (audioCtx) audioCtx.close();
+      audioCtx = null;
+      analyser = null;
+      micStream = null;
+      updateListenUI(false);
+      resetDisplay();
+    }
+
+    function updateListenUI(listening) {
+      const btn = document.getElementById('listenBtn');
+      const dot = document.getElementById('micDot');
+      const label = document.getElementById('micLabel');
+      if (listening) {
+        btn.textContent = 'Stop Listening';
+        btn.className = 'listen-btn stop';
+        dot.className = 'mic-dot listening';
+        label.textContent = 'Listening…';
+      } else {
+        btn.textContent = 'Start Listening';
+        btn.className = 'listen-btn start';
+        dot.className = 'mic-dot';
+        label.textContent = 'Tap to begin';
+      }
+    }
+
+    document.getElementById('listenBtn').addEventListener('click', () => {
+      if (isListening) stopListening();
+      else startListening();
+    });
+
+    // ─── Offline indicator ─────────────────────────────────────────────────────
+    function updateOffline() {
+      const notice = document.getElementById('offlineNotice');
+      if (!navigator.onLine) notice.classList.add('visible');
+      else notice.classList.remove('visible');
+    }
+    window.addEventListener('online', updateOffline);
+    window.addEventListener('offline', updateOffline);
+    updateOffline();
+
+    // ─── Service Worker registration ───────────────────────────────────────────
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+          console.warn('Service worker registration failed:', err);
+        });
+      });
+    }
+
+    // ─── Initial render ────────────────────────────────────────────────────────
+    setTuning(TUNINGS[0]);
+    renderTuningButtons();
+    resetDisplay();
+  </script>
+</body>
+</html>

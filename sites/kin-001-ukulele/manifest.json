@@ -1,0 +1,22 @@
+{
+  "name": "Kin Ukulele Tuner",
+  "short_name": "Uke Tuner",
+  "description": "A free, offline ukulele tuner supporting standard and alternate tunings.",
+  "display": "standalone",
+  "theme_color": "#2c2318",
+  "background_color": "#f5f0e8",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
