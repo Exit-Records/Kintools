@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kin Ambient Mixer — KIN-007</title>
+  <title>Ambient Mixer — KIN-007</title>
   <meta name="description" content="Privacy-first ambient sound mixer. All audio generated locally in your browser. No streaming, no tracking." />
-  <meta property="og:title" content="Kin Ambient Mixer" />
+  <meta property="og:title" content="Ambient Mixer" />
   <meta property="og:description" content="White noise, pink noise, rain, wind, waves and fire — all generated locally. Free forever." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,7 +47,8 @@
       align-items: center; justify-content: center;
       gap: 24px; padding: 24px; text-align: center;
     }
-    #welcome .logo { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+    #welcome .logo { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); }
+    #welcome .logo .logo-id { text-transform: uppercase; letter-spacing: 0.2em; }
     #welcome h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 300; letter-spacing: -0.5px; }
     #welcome h1 span { color: var(--accent2); }
     #welcome p { color: var(--muted); max-width: 380px; font-size: 15px; }
@@ -290,8 +291,8 @@
 
 <!-- ═══ Welcome ═══════════════════════════════════════════════ -->
 <div id="welcome">
-  <span class="logo">KIN-007 · dBridge</span>
-  <h1>Kin Ambient<br><span>Mixer</span></h1>
+  <span class="logo"><span class="logo-id">KIN-007</span> · dBridge</span>
+  <h1>Ambient<br><span>Mixer</span></h1>
   <p>White noise, rain, wind, waves and fire — all generated locally in your browser. No streaming, no tracking.</p>
   <button id="btn-start">Start Relaxing</button>
   <span class="tagline">Audio starts on first interaction &nbsp;·&nbsp; Works offline</span>
@@ -303,7 +304,7 @@
   <!-- Header -->
   <header class="app-header">
     <div class="brand">
-      <span class="brand-name">Kin Ambient Mixer</span>
+      <span class="brand-name">Ambient Mixer</span>
       <span class="brand-sub">dBridge · Free forever</span>
     </div>
     <span class="kin-badge">KIN-007</span>
