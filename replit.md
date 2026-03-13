@@ -16,6 +16,45 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Netlify Deployment — Lessons Learned
+
+When deploying any Kin tool from this monorepo to Netlify, apply these fixes upfront:
+
+### 1. `netlify.toml` — always run from workspace root
+```toml
+[build]
+  command = "pnpm install && pnpm --filter @workspace/<slug> run build"
+  publish = "artifacts/<slug>/dist/public"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "10"
+  BASE_PATH    = "/"
+```
+- **Do NOT** set `base = "artifacts/<slug>"` — pnpm workspaces must install from the root
+- Set `PNPM_VERSION` explicitly so Netlify uses pnpm instead of npm
+- Set `BASE_PATH = "/"` so vite.config.ts gets it during build
+
+### 2. `pnpm-lock.yaml` must be pushed to GitHub
+- Netlify detects the package manager from the lockfile
+- Without it, Netlify defaults to npm and the install fails
+- Always include `pnpm-lock.yaml` in the repo (do not add it to `.gitignore`)
+
+### 3. `vite.config.ts` — never hard-throw on missing env vars
+Replit injects `PORT` and `BASE_PATH` at runtime, but Netlify doesn't set `PORT` during a static build. Always make them optional:
+```ts
+const port     = process.env.PORT     ? Number(process.env.PORT) : 3000;
+const basePath = process.env.BASE_PATH ?? "/";
+```
+Never use a hard `throw new Error(...)` for these — it crashes the build.
+
+### 4. GitHub push for monorepo
+- Use the GitHub Git Data API (trees → commit → ref update) to push many files at once
+- For an empty repo, create a seed file first (e.g. README.md via PUT /contents/), then use the tree API with `base_tree`
+- Always push `pnpm-lock.yaml` alongside code changes
+
+---
+
 ## Artifacts
 
 ### `artifacts/kin-qr-builder` — Kin QR Builder (KIN-005)
