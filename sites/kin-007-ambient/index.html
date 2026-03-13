@@ -1012,6 +1012,7 @@ function showToast(msg) {
 document.getElementById('btn-start').addEventListener('click', () => {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
+  resizeCanvas();
   applyPreset('deep-sleep');
   animate();
 });
