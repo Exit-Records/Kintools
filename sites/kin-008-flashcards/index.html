@@ -264,6 +264,19 @@
     }
     .btn-save:hover { background: var(--accent2); }
 
+    .cloze-tip {
+      font-size: 12px; color: var(--muted); margin-bottom: 12px;
+      padding: 10px 12px; background: var(--surface3);
+      border-radius: 7px; line-height: 1.6;
+    }
+    .cloze-tip code {
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px;
+      background: var(--bg); padding: 1px 5px; border-radius: 4px;
+      color: var(--accent2);
+    }
+    .cloze-tip-label {
+      font-weight: 600; color: var(--accent2); margin-right: 4px;
+    }
     .btn-add-card {
       width: 100%; padding: 12px; margin-top: 12px;
       border-radius: var(--radius); border: 1px dashed var(--border);
@@ -535,8 +548,13 @@
     <div class="add-card-form" id="add-card-form" style="display:none">
       <h4 id="add-form-title">Add Card</h4>
       <div class="form-row">
-        <textarea id="input-front" placeholder="Front (or cloze: The capital of France is {{Paris}})"></textarea>
-        <textarea id="input-back" placeholder="Back (leave blank for cloze cards)"></textarea>
+        <textarea id="input-front" placeholder="Question / front side"></textarea>
+        <textarea id="input-back" placeholder="Answer / back side"></textarea>
+      </div>
+      <div class="cloze-tip">
+        <span class="cloze-tip-label">🧩 Cloze</span>
+        Wrap the answer in <code>{{&nbsp;}}</code> to make a fill-in-the-blank card — leave Back empty.<br>
+        <em>Example:</em> <code>The capital of France is {{Paris}}</code>
       </div>
       <div class="form-actions">
         <button class="btn-ghost" id="btn-cancel-add">Cancel</button>
@@ -729,6 +747,18 @@ const STARTER_DECKS = [
     ['Evolution by natural selection','Charles Darwin'],
     ['Radioactivity research','Marie Curie'],
     ['Electric light bulb development','Thomas Edison'],
+  ]},
+  { name: 'Cloze Examples 🧩', cards: [
+    ['The capital of France is {{Paris}}',''],
+    ['Water boils at {{100}}°C at sea level',''],
+    ['The chemical symbol for gold is {{Au}}',''],
+    ['{{Neil Armstrong}} was the first person to walk on the Moon',''],
+    ['The largest planet in our solar system is {{Jupiter}}',''],
+    ['{{DNA}} carries the genetic information of living organisms',''],
+    ['The speed of light is approximately {{299,792}} kilometres per second',''],
+    ['{{Shakespeare}} wrote Romeo and Juliet',''],
+    ['The {{heart}} pumps blood around the body',''],
+    ['{{Photosynthesis}} converts sunlight into energy in plants',''],
   ]},
 ];
 
@@ -1356,7 +1386,12 @@ document.getElementById('btn-study-back').addEventListener('click', () => render
 document.getElementById('btn-back-from-complete').addEventListener('click', () => renderDeck(study.deckId));
 document.getElementById('btn-study-again').addEventListener('click', () => startStudy(study.deckId));
 
-document.getElementById('flashcard-scene').addEventListener('click', flipCard);
+// On touch devices, 'click' fires after 'touchend' — use flag to avoid double-flip
+let lastTouchHandled = 0;
+document.getElementById('flashcard-scene').addEventListener('click', () => {
+  if (Date.now() - lastTouchHandled < 600) return;
+  flipCard();
+});
 document.getElementById('btn-know').addEventListener('click', () => handleAnswer('know'));
 document.getElementById('btn-hard').addEventListener('click', () => handleAnswer('hard'));
 document.getElementById('btn-dontknow').addEventListener('click', () => handleAnswer('dontknow'));
@@ -1406,18 +1441,25 @@ document.querySelectorAll('.modal-backdrop').forEach(bd => {
     const dt = Date.now() - startTime;
     const absDx = Math.abs(dx), absDy = Math.abs(dy);
 
-    // Tap → flip
-    if (absDx < 10 && absDy < 10 && dt < 300) { flipCard(); return; }
+    // Mark that touch was handled so the subsequent 'click' event is ignored
+    lastTouchHandled = Date.now();
 
-    // Swipe (horizontal only, must be dominant axis)
-    if (absDx > 60 && absDx > absDy * 1.5 && dt < 500) {
+    // Tap → flip
+    if (absDx < 15 && absDy < 15 && dt < 400) {
+      flipCard();
+      return;
+    }
+
+    // Horizontal swipe — must be clearly dominant axis
+    if (absDx > 50 && absDx > absDy * 2 && dt < 600) {
       if (!study.flipped) { flipCard(); return; }
       if (dx > 0) handleAnswer('know');
       else handleAnswer('dontknow');
+      return;
     }
 
     // Swipe down → hard
-    if (absDy > 60 && absDy > absDx * 1.5 && dy > 0 && dt < 500) {
+    if (absDy > 50 && absDy > absDx * 2 && dy > 0 && dt < 600) {
       if (study.flipped && study.confidenceMode) handleAnswer('hard');
     }
   }, { passive: true });
