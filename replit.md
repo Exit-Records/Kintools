@@ -16,6 +16,22 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Artifacts
+
+### `artifacts/kin-qr-builder` — Kin QR Builder (KIN-005)
+
+A privacy-first QR code generator for the Kin ecosystem. Single-page React app, no backend.
+
+- Creator: dBridge · Catalog: KIN-005
+- Input types: URL, Text, Email, Phone, Wi-Fi, Contact (vCard)
+- Live QR generation as you type using the `qrcode` library
+- Export: PNG, SVG, Copy to clipboard, Print
+- Options: size slider, error correction (L/M/Q/H), foreground/background colour pickers, quiet zone toggle
+- Contrast ratio warning if colours are too similar for reliable scanning
+- PWA: service worker + manifest included
+- All processing is in-browser — no data leaves the device
+- Preview path: `/`
+
 ## Structure
 
 ```text

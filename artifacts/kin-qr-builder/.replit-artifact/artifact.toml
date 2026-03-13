@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Kin QR Builder"
+version = "1.0.0"
+id = "artifacts/kin-qr-builder"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 24421
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/kin-qr-builder run dev"
+
+[services.env]
+PORT = "24421"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/kin-qr-builder", "run", "build"]
+publicDir = "artifacts/kin-qr-builder/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
