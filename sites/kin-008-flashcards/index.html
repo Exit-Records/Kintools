@@ -1059,33 +1059,43 @@ function showCard() {
   const pct = total > 0 ? (seen / total * 100) : 0;
   document.getElementById('study-progress-fill').style.width = pct + '%';
 
-  // Reset flip
-  const fc = document.getElementById('flashcard');
-  fc.classList.remove('flipped');
+  // Hide answer buttons immediately
+  const ansDiv = document.getElementById('answer-buttons');
+  ansDiv.style.opacity = '0';
+  ansDiv.style.pointerEvents = 'none';
+  document.getElementById('btn-hard').classList.toggle('hidden', !study.confidenceMode);
 
-  // Render front
+  const fc = document.getElementById('flashcard');
   const frontEl = document.getElementById('card-front-text');
+  const backEl = document.getElementById('card-back-text');
+
+  function setBackContent() {
+    if (card.type === 'cloze') {
+      backEl.innerHTML = renderClozeReveal(card.front);
+    } else {
+      backEl.textContent = card.back || '—';
+    }
+  }
+
+  // Always safe to update front immediately — it's hidden while back is showing
   if (card.type === 'cloze') {
     frontEl.innerHTML = renderClozeBlank(card.front);
   } else {
     frontEl.textContent = card.front;
   }
 
-  // Render back
-  const backEl = document.getElementById('card-back-text');
-  if (card.type === 'cloze') {
-    backEl.innerHTML = renderClozeReveal(card.front);
+  if (fc.classList.contains('flipped')) {
+    // Flip back first; update back content only after animation ends
+    // so the next card's answer never flashes during the rotation
+    fc.classList.remove('flipped');
+    const onEnd = () => {
+      fc.removeEventListener('transitionend', onEnd);
+      setBackContent();
+    };
+    fc.addEventListener('transitionend', onEnd);
   } else {
-    backEl.textContent = card.back || '—';
+    setBackContent();
   }
-
-  // Hide answer buttons until flipped
-  const ansDiv = document.getElementById('answer-buttons');
-  ansDiv.style.opacity = '0';
-  ansDiv.style.pointerEvents = 'none';
-
-  // Show/hide Hard button based on mode
-  document.getElementById('btn-hard').classList.toggle('hidden', !study.confidenceMode);
 }
 
 function flipCard() {
