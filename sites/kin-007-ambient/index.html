@@ -380,64 +380,80 @@
 
 // ═══════════════════════════════════════════════════════════════
 //  NODE DEFINITIONS  (x, y normalised −1..+1; centre = loudest)
+//  8 nodes: 5 nature sounds + 3 noise types arranged as a ring
+//  Nature: top half  |  Noise: left / bottom / right
 // ═══════════════════════════════════════════════════════════════
 const NODES = {
   wind:   { label: 'Wind',   icon: '💨', color: '#7aa8c8', x:  0.00, y: -0.75 },
   rain:   { label: 'Rain',   icon: '🌧', color: '#4a9fd4', x: -0.53, y: -0.45 },
   waves:  { label: 'Waves',  icon: '🌊', color: '#3a8fc0', x:  0.53, y: -0.45 },
-  fire:   { label: 'Fire',   icon: '🔥', color: '#e07840', x: -0.53, y:  0.45 },
-  forest: { label: 'Forest', icon: '🌲', color: '#3ecf8e', x:  0.53, y:  0.45 },
-  noise:  { label: 'Noise',  icon: '~',  color: '#8892a4', x:  0.00, y:  0.75 },
+  fire:   { label: 'Fire',   icon: '🔥', color: '#e07840', x: -0.62, y:  0.28 },
+  forest: { label: 'Forest', icon: '🌲', color: '#3ecf8e', x:  0.62, y:  0.28 },
+  white:  { label: 'White',  icon: '○',  color: '#c8d8e8', x: -0.53, y:  0.62 },
+  pink:   { label: 'Pink',   icon: '◑',  color: '#d4a0b8', x:  0.00, y:  0.80 },
+  brown:  { label: 'Brown',  icon: '●',  color: '#b08060', x:  0.53, y:  0.62 },
 };
 
 const PRESETS = {
   'deep-sleep': {
-    noise:  [  0.00,  0.20 ],
+    brown:  [  0.00,  0.22 ],
+    pink:   [  0.00,  0.55 ],
+    white:  [ -0.82,  0.72 ],
     rain:   [ -0.22, -0.18 ],
     waves:  [  0.32, -0.20 ],
-    wind:   [  0.00, -0.72 ],
-    fire:   [ -0.82,  0.60 ],
-    forest: [  0.82,  0.60 ],
+    wind:   [  0.00, -0.78 ],
+    fire:   [ -0.88,  0.35 ],
+    forest: [  0.88,  0.35 ],
   },
   'storm-night': {
     wind:   [  0.00, -0.12 ],
     rain:   [ -0.10, -0.15 ],
     waves:  [  0.38, -0.28 ],
-    noise:  [  0.00,  0.50 ],
-    fire:   [ -0.82,  0.60 ],
-    forest: [  0.82,  0.60 ],
+    brown:  [  0.00,  0.45 ],
+    pink:   [  0.00,  0.72 ],
+    white:  [ -0.82,  0.72 ],
+    fire:   [ -0.88,  0.35 ],
+    forest: [  0.88,  0.35 ],
   },
   'ocean-calm': {
     waves:  [  0.12, -0.10 ],
     wind:   [  0.00, -0.30 ],
     rain:   [ -0.35, -0.25 ],
-    noise:  [  0.00,  0.42 ],
-    fire:   [ -0.85,  0.60 ],
-    forest: [  0.85,  0.60 ],
+    brown:  [  0.00,  0.40 ],
+    pink:   [  0.00,  0.75 ],
+    white:  [ -0.82,  0.72 ],
+    fire:   [ -0.88,  0.35 ],
+    forest: [  0.88,  0.35 ],
   },
   'fireplace': {
     fire:   [ -0.12,  0.12 ],
-    noise:  [  0.00,  0.35 ],
+    brown:  [  0.38,  0.55 ],
     forest: [  0.35,  0.22 ],
     rain:   [ -0.82, -0.50 ],
     wind:   [  0.00, -0.88 ],
     waves:  [  0.82, -0.50 ],
+    pink:   [  0.00,  0.75 ],
+    white:  [ -0.82,  0.72 ],
   },
   'focus': {
-    noise:  [  0.00,  0.15 ],
+    brown:  [  0.38,  0.48 ],
+    pink:   [ -0.35,  0.58 ],
+    white:  [ -0.82,  0.72 ],
     rain:   [ -0.28, -0.22 ],
     wind:   [  0.00, -0.62 ],
-    fire:   [ -0.85,  0.58 ],
-    waves:  [  0.85, -0.48 ],
-    forest: [  0.85,  0.58 ],
+    fire:   [ -0.88,  0.35 ],
+    waves:  [  0.88, -0.48 ],
+    forest: [  0.88,  0.35 ],
   },
   'forest': {
     forest: [  0.18,  0.18 ],
     rain:   [ -0.22, -0.20 ],
     wind:   [  0.00, -0.38 ],
+    brown:  [  0.38,  0.55 ],
+    pink:   [  0.00,  0.72 ],
+    white:  [ -0.82,  0.72 ],
     waves:  [  0.82, -0.48 ],
-    fire:   [ -0.85,  0.58 ],
-    noise:  [  0.00,  0.62 ],
+    fire:   [ -0.88,  0.35 ],
   },
 };
 
@@ -492,7 +508,9 @@ function initAudio() {
 
 function makeSource(key, audioCtx) {
   switch (key) {
-    case 'noise':  return makeBrownNoise(audioCtx);
+    case 'white':  return makeWhiteNoise(audioCtx);
+    case 'pink':   return makePinkNoise(audioCtx);
+    case 'brown':  return makeBrownNoise(audioCtx);
     case 'rain':   return makeRain(audioCtx);
     case 'wind':   return makeWind(audioCtx);
     case 'waves':  return makeWaves(audioCtx);
@@ -502,8 +520,38 @@ function makeSource(key, audioCtx) {
   }
 }
 
+function makeWhiteNoise(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) out[i] = (Math.random() * 2 - 1) * 0.45;
+  };
+  sp.connect(audioCtx.createGain());
+  return { out: sp };
+}
+
+function makePinkNoise(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 5.5;
+      b6 = w * 0.115926;
+    }
+  };
+  sp.connect(audioCtx.createGain());
+  return { out: sp };
+}
+
 function makeBrownNoise(audioCtx) {
-  const buf = audioCtx.sampleRate * 2;
   const sp = audioCtx.createScriptProcessor(4096, 1, 1);
   let lastOut = 0;
   sp.onaudioprocess = e => {
@@ -515,7 +563,7 @@ function makeBrownNoise(audioCtx) {
       out[i] *= 3.5;
     }
   };
-  sp.connect(audioCtx.createGain()); // keep alive
+  sp.connect(audioCtx.createGain());
   return { out: sp };
 }
 
@@ -896,9 +944,11 @@ function resetMix() {
     wind:   [  0.00, -0.75 ],
     rain:   [ -0.53, -0.45 ],
     waves:  [  0.53, -0.45 ],
-    fire:   [ -0.53,  0.45 ],
-    forest: [  0.53,  0.45 ],
-    noise:  [  0.00,  0.75 ],
+    fire:   [ -0.62,  0.28 ],
+    forest: [  0.62,  0.28 ],
+    white:  [ -0.53,  0.62 ],
+    pink:   [  0.00,  0.80 ],
+    brown:  [  0.53,  0.62 ],
   };
   for (const [key, pos] of Object.entries(REST)) {
     NODES[key].x = pos[0]; NODES[key].y = pos[1];
