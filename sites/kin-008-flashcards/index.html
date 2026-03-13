@@ -134,7 +134,15 @@
       border-radius: 2px; margin-top: 10px; overflow: hidden;
     }
     .deck-card-progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s; }
-    .deck-card-arrow { color: var(--muted); font-size: 18px; margin-left: 12px; flex-shrink: 0; }
+    .deck-delete-btn {
+      width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); background: transparent;
+      transition: color 0.15s, background 0.15s;
+      cursor: pointer; border: none;
+    }
+    .deck-delete-btn:hover { color: var(--red); background: #2a1010; }
+    .deck-card-arrow { color: var(--muted); font-size: 18px; margin-left: 4px; flex-shrink: 0; cursor: pointer; }
 
     .empty-state {
       text-align: center; padding: 60px 20px; color: var(--muted);
@@ -839,7 +847,7 @@ function renderHome() {
     const known = deck.cards.filter(c => c.state === 'known').length;
     const pct = total ? Math.round(known / total * 100) : 0;
 
-    const el = document.createElement('button');
+    const el = document.createElement('div');
     el.className = 'deck-card';
     el.innerHTML = `
       <div class="deck-card-info">
@@ -849,8 +857,22 @@ function renderHome() {
           <div class="deck-card-progress-fill" style="width:${pct}%"></div>
         </div>
       </div>
+      <button class="deck-delete-btn" data-id="${deck.id}" title="Delete deck">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 2h5M2 4h11M4 4l.75 8.5h5.5L11 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <span class="deck-card-arrow">›</span>`;
-    el.addEventListener('click', () => renderDeck(deck.id));
+    el.querySelector('.deck-card-info').addEventListener('click', () => renderDeck(deck.id));
+    el.querySelector('.deck-card-arrow').addEventListener('click', () => renderDeck(deck.id));
+    el.querySelector('.deck-delete-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      showConfirm('Delete Deck', `Delete "${deck.name}" and all its cards? This cannot be undone.`, () => {
+        deleteDeck(deck.id);
+        toast('Deck deleted');
+        renderHome();
+      });
+    });
     grid.appendChild(el);
   });
 }
