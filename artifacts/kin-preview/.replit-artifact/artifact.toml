@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/kin-preview/"
+title = "Kin Static Preview"
+version = "1.0.0"
+id = "artifacts/kin-preview"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 18754
+name = "web"
+paths = ["/kin-preview/"]
+
+[services.development]
+run = "pnpm --filter @workspace/kin-preview run dev"
+
+[services.env]
+PORT = "18754"
+BASE_PATH = "/kin-preview/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/kin-preview", "run", "build"]
+publicDir = "artifacts/kin-preview/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
