@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ambient Mixer — KIN-007</title>
-  <meta name="description" content="Privacy-first ambient sound mixer. All audio generated locally in your browser. No streaming, no tracking." />
+  <meta name="description" content="Privacy-first ambient sound mixer. Drag sounds toward the listener to mix. All audio generated locally." />
   <meta property="og:title" content="Ambient Mixer" />
-  <meta property="og:description" content="White noise, pink noise, rain, wind, waves and fire — all generated locally. Free forever." />
+  <meta property="og:description" content="Radial ambient sound mixer — drag sounds around the listener. Fully local. No streaming, no tracking." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,12 +22,9 @@
       --green:    #3ecf8e;
       --amber:    #f59e0b;
       --red:      #ef4444;
-      --track-h:  4px;
-      --thumb-sz: 18px;
     }
 
     html, body { height: 100%; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -39,7 +36,7 @@
       flex-direction: column;
     }
 
-    /* ── Welcome overlay ─────────────────────────────────── */
+    /* ── Welcome ─────────────────────────────────── */
     #welcome {
       position: fixed; inset: 0; z-index: 100;
       background: var(--bg);
@@ -48,15 +45,12 @@
       gap: 24px; padding: 24px; text-align: center;
     }
     #welcome .logo { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); }
-    #welcome .logo .logo-id { text-transform: uppercase; letter-spacing: 0.2em; }
     #welcome h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 300; letter-spacing: -0.5px; }
     #welcome h1 span { color: var(--accent2); }
     #welcome p { color: var(--muted); max-width: 380px; font-size: 15px; }
     #btn-start {
-      margin-top: 8px;
-      padding: 16px 48px;
-      background: var(--accent);
-      color: #fff;
+      margin-top: 8px; padding: 16px 48px;
+      background: var(--accent); color: #fff;
       border: none; border-radius: 50px;
       font-size: 16px; font-weight: 500;
       cursor: pointer; letter-spacing: 0.02em;
@@ -66,33 +60,35 @@
     #btn-start:active { transform: scale(0.98); }
     #welcome .tagline { font-size: 12px; color: var(--muted); opacity: 0.7; }
 
-    /* ── App shell ───────────────────────────────────────── */
-    #app { display: none; flex-direction: column; flex: 1; max-width: 760px; width: 100%; margin: 0 auto; padding: 20px 16px 32px; gap: 16px; }
+    /* ── App shell ───────────────────────────────── */
+    #app {
+      display: none; flex-direction: column; flex: 1;
+      max-width: 680px; width: 100%; margin: 0 auto;
+      padding: 16px 16px 32px; gap: 14px;
+    }
 
-    /* ── Header ──────────────────────────────────────────── */
+    /* ── Header ──────────────────────────────────── */
     .app-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px; border-bottom: 1px solid var(--border);
     }
-    .app-header .brand { display: flex; flex-direction: column; gap: 2px; }
-    .app-header .brand-name { font-size: 18px; font-weight: 500; letter-spacing: -0.3px; }
-    .app-header .brand-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+    .brand { display: flex; flex-direction: column; gap: 2px; }
+    .brand-name { font-size: 18px; font-weight: 500; letter-spacing: -0.3px; }
+    .brand-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.12em; }
     .kin-badge {
       font-size: 10px; font-weight: 600; letter-spacing: 0.15em;
       color: var(--accent); border: 1px solid var(--accent);
       padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
     }
 
-    /* ── Panels ───────────────────────────────────────────── */
+    /* ── Panels ───────────────────────────────────── */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
+      border-radius: 12px; overflow: hidden;
     }
     .panel-header {
-      padding: 12px 16px 10px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
       font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--muted);
@@ -100,66 +96,49 @@
     }
     .panel-body { padding: 14px 16px; }
 
-    /* ── Mixer grid ───────────────────────────────────────── */
-    .mixer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 500px) { .mixer-grid { grid-template-columns: 1fr; } }
-
-    /* ── Channel strip ────────────────────────────────────── */
-    .channel {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 0;
+    /* ── Field canvas ─────────────────────────────── */
+    #field-wrap {
+      display: flex; justify-content: center;
+      position: relative;
     }
-    .channel:not(:last-child) { border-bottom: 1px solid var(--border); }
-
-    .ch-toggle {
-      width: 32px; height: 18px; border-radius: 9px;
-      background: var(--border); border: none;
-      cursor: pointer; position: relative; flex-shrink: 0;
-      transition: background 0.2s;
+    #field {
+      border-radius: 50%;
+      cursor: default;
+      touch-action: none;
+      display: block;
     }
-    .ch-toggle::after {
-      content: ''; position: absolute;
-      width: 12px; height: 12px; border-radius: 50%;
-      background: #fff; top: 3px; left: 3px;
-      transition: transform 0.2s;
+    .field-hint {
+      text-align: center; font-size: 11px; color: var(--muted);
+      margin-top: 6px; letter-spacing: 0.05em;
     }
-    .ch-toggle.on { background: var(--accent); }
-    .ch-toggle.on::after { transform: translateX(14px); }
 
-    .ch-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
-    .ch-label { font-size: 12px; font-weight: 500; flex-shrink: 0; width: 48px; }
-
-    .ch-slider {
+    /* ── Controls panel ───────────────────────────── */
+    .master-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .master-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); width: 56px; flex-shrink: 0;
+    }
+    #master-slider {
       flex: 1; -webkit-appearance: none; appearance: none;
-      height: var(--track-h); border-radius: 2px;
+      height: 4px; border-radius: 2px;
       background: var(--border); outline: none; cursor: pointer;
-      transition: opacity 0.2s;
     }
-    .ch-slider::-webkit-slider-thumb {
+    #master-slider::-webkit-slider-thumb {
       -webkit-appearance: none; appearance: none;
-      width: var(--thumb-sz); height: var(--thumb-sz);
-      border-radius: 50%; background: var(--accent2);
-      cursor: pointer; transition: transform 0.1s;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent2); cursor: pointer;
     }
-    .ch-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-    .ch-slider::-moz-range-thumb {
-      width: var(--thumb-sz); height: var(--thumb-sz);
-      border-radius: 50%; background: var(--accent2);
-      border: none; cursor: pointer;
+    #master-slider::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent2); border: none;
     }
-    .ch-slider.muted { opacity: 0.35; pointer-events: none; }
-
-    .ch-val { font-size: 11px; color: var(--muted); width: 28px; text-align: right; flex-shrink: 0; }
-
-    /* ── Master section ───────────────────────────────────── */
-    .master-row { display: flex; align-items: center; gap: 10px; padding: 12px 0 8px; }
-    .master-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); width: 58px; flex-shrink: 0; }
-    #master-slider { flex: 1; }
-    #master-val { font-size: 11px; color: var(--muted); width: 28px; text-align: right; flex-shrink: 0; }
+    #master-val { font-size: 11px; color: var(--muted); width: 28px; text-align: right; }
 
     .transport {
-      display: flex; gap: 8px; flex-wrap: wrap; padding-top: 8px;
-      border-top: 1px solid var(--border);
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding-top: 12px; border-top: 1px solid var(--border);
     }
     .btn {
       padding: 9px 20px; border-radius: 8px; border: none;
@@ -176,7 +155,7 @@
     .btn-danger { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
     .btn-danger:hover { border-color: var(--red); color: var(--red); }
 
-    /* ── Presets ──────────────────────────────────────────── */
+    /* ── Presets ──────────────────────────────────── */
     .preset-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .preset-btn {
       padding: 8px 16px; border-radius: 20px;
@@ -188,14 +167,14 @@
     .preset-btn:hover { border-color: var(--accent); color: var(--accent2); }
     .preset-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    /* ── Timer ────────────────────────────────────────────── */
+    /* ── Timer ────────────────────────────────────── */
     .timer-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .timer-btn {
       padding: 7px 14px; border-radius: 8px;
       background: var(--surface2); color: var(--text);
       border: 1px solid var(--border); cursor: pointer;
       font-size: 12px; font-weight: 500;
-      transition: background 0.15s, border-color 0.15s;
+      transition: all 0.15s;
     }
     .timer-btn:hover { border-color: var(--accent); color: var(--accent2); }
     .timer-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -205,11 +184,11 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* ── Options row (drift, mix code) ────────────────────── */
+    /* ── Options row ──────────────────────────────── */
     .options-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .options-row > .panel { flex: 1; min-width: 160px; }
 
-    /* ── Drift toggle ─────────────────────────────────────── */
+    /* ── Drift toggle ─────────────────────────────── */
     .drift-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .drift-info { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .toggle-pill {
@@ -227,62 +206,49 @@
     .toggle-pill.on { background: var(--green); }
     .toggle-pill.on::after { transform: translateX(20px); }
 
-    /* ── Mix code ─────────────────────────────────────────── */
+    /* ── Mix code ─────────────────────────────────── */
     .mix-code-area { display: flex; flex-direction: column; gap: 8px; }
-    .mix-code-input-row { display: flex; gap: 6px; }
+    .mix-code-row { display: flex; gap: 6px; }
     #mix-code-display {
       flex: 1; padding: 8px 10px;
       background: var(--surface2); border: 1px solid var(--border);
       border-radius: 6px; color: var(--accent2);
-      font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace;
-      letter-spacing: 0.05em;
+      font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 0.04em; outline: none;
     }
     .btn-sm {
-      padding: 7px 12px; border-radius: 6px; border: none;
+      padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border);
       font-size: 12px; font-weight: 500; cursor: pointer;
       background: var(--surface2); color: var(--muted);
-      border: 1px solid var(--border);
       transition: all 0.15s;
     }
     .btn-sm:hover { border-color: var(--accent); color: var(--accent2); }
-    #mix-paste-row { display: flex; gap: 6px; }
     #mix-paste-input {
       flex: 1; padding: 7px 10px;
       background: var(--surface2); border: 1px solid var(--border);
       border-radius: 6px; color: var(--text);
-      font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
       outline: none;
     }
     #mix-paste-input:focus { border-color: var(--accent); }
     #mix-paste-input::placeholder { color: var(--muted); }
 
-    /* ── VU bars (visual feedback) ─────────────────────────── */
-    .vu-bar-wrap { display: flex; gap: 2px; align-items: flex-end; height: 12px; }
-    .vu-bar {
-      width: 3px; border-radius: 1px;
-      background: var(--accent);
-      transition: height 0.1s ease;
-      min-height: 2px;
-    }
-
-    /* ── Footer ───────────────────────────────────────────── */
+    /* ── Footer ───────────────────────────────────── */
     footer {
       margin-top: auto; padding: 16px;
       text-align: center; font-size: 11px; color: var(--muted);
-      border-top: 1px solid var(--border);
-      line-height: 1.8;
+      border-top: 1px solid var(--border); line-height: 1.8;
     }
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent2); }
 
-    /* ── Toast ─────────────────────────────────────────────── */
+    /* ── Toast ─────────────────────────────────────── */
     #toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       background: var(--surface2); border: 1px solid var(--border);
       color: var(--text); padding: 10px 20px; border-radius: 20px;
       font-size: 13px; pointer-events: none;
-      opacity: 0; transition: opacity 0.3s;
-      z-index: 200;
+      opacity: 0; transition: opacity 0.3s; z-index: 200;
     }
     #toast.show { opacity: 1; }
   </style>
@@ -291,9 +257,9 @@
 
 <!-- ═══ Welcome ═══════════════════════════════════════════════ -->
 <div id="welcome">
-  <span class="logo"><span class="logo-id">KIN-007</span> · dBridge</span>
+  <span class="logo">KIN-007 · <span style="font-style:normal">dBridge</span></span>
   <h1>Ambient<br><span>Mixer</span></h1>
-  <p>White noise, rain, wind, waves and fire — all generated locally in your browser. No streaming, no tracking.</p>
+  <p>Drag sounds toward the listener to mix them. All audio generated locally — no streaming, no tracking.</p>
   <button id="btn-start">Start Relaxing</button>
   <span class="tagline">Audio starts on first interaction &nbsp;·&nbsp; Works offline</span>
 </div>
@@ -301,7 +267,6 @@
 <!-- ═══ App ════════════════════════════════════════════════════ -->
 <div id="app">
 
-  <!-- Header -->
   <header class="app-header">
     <div class="brand">
       <span class="brand-name">Ambient Mixer</span>
@@ -310,95 +275,24 @@
     <span class="kin-badge">KIN-007</span>
   </header>
 
-  <!-- Mixer -->
-  <div class="mixer-grid">
-    <!-- Noise panel -->
-    <div class="panel">
-      <div class="panel-header">
-        <span>Noise</span>
-        <div class="vu-bar-wrap" id="vu-noise">
-          <div class="vu-bar" style="height:4px"></div>
-          <div class="vu-bar" style="height:7px"></div>
-          <div class="vu-bar" style="height:4px"></div>
-          <div class="vu-bar" style="height:6px"></div>
-        </div>
+  <!-- Radial Sound Field -->
+  <div class="panel">
+    <div class="panel-header">Sound Field</div>
+    <div class="panel-body" style="padding: 16px;">
+      <div id="field-wrap">
+        <canvas id="field"></canvas>
       </div>
-      <div class="panel-body">
-        <div class="channel" data-ch="white">
-          <button class="ch-toggle" data-ch="white" title="Toggle White Noise"></button>
-          <span class="ch-icon">○</span>
-          <span class="ch-label">White</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="0" data-ch="white" />
-          <span class="ch-val" data-ch="white">0</span>
-        </div>
-        <div class="channel" data-ch="pink">
-          <button class="ch-toggle" data-ch="pink" title="Toggle Pink Noise"></button>
-          <span class="ch-icon">◑</span>
-          <span class="ch-label">Pink</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="0" data-ch="pink" />
-          <span class="ch-val" data-ch="pink">0</span>
-        </div>
-        <div class="channel" data-ch="brown">
-          <button class="ch-toggle" data-ch="brown" title="Toggle Brown Noise"></button>
-          <span class="ch-icon">●</span>
-          <span class="ch-label">Brown</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="40" data-ch="brown" />
-          <span class="ch-val" data-ch="brown">40</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Nature panel -->
-    <div class="panel">
-      <div class="panel-header">
-        <span>Nature</span>
-        <div class="vu-bar-wrap" id="vu-nature">
-          <div class="vu-bar" style="height:4px"></div>
-          <div class="vu-bar" style="height:7px"></div>
-          <div class="vu-bar" style="height:4px"></div>
-          <div class="vu-bar" style="height:6px"></div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="channel" data-ch="rain">
-          <button class="ch-toggle" data-ch="rain" title="Toggle Rain"></button>
-          <span class="ch-icon">🌧</span>
-          <span class="ch-label">Rain</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="30" data-ch="rain" />
-          <span class="ch-val" data-ch="rain">30</span>
-        </div>
-        <div class="channel" data-ch="wind">
-          <button class="ch-toggle" data-ch="wind" title="Toggle Wind"></button>
-          <span class="ch-icon">💨</span>
-          <span class="ch-label">Wind</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="10" data-ch="wind" />
-          <span class="ch-val" data-ch="wind">10</span>
-        </div>
-        <div class="channel" data-ch="waves">
-          <button class="ch-toggle" data-ch="waves" title="Toggle Ocean Waves"></button>
-          <span class="ch-icon">🌊</span>
-          <span class="ch-label">Waves</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="0" data-ch="waves" />
-          <span class="ch-val" data-ch="waves">0</span>
-        </div>
-        <div class="channel" data-ch="fire">
-          <button class="ch-toggle" data-ch="fire" title="Toggle Fire"></button>
-          <span class="ch-icon">🔥</span>
-          <span class="ch-label">Fire</span>
-          <input class="ch-slider muted" type="range" min="0" max="100" value="0" data-ch="fire" />
-          <span class="ch-val" data-ch="fire">0</span>
-        </div>
-      </div>
+      <p class="field-hint">Drag sounds toward the centre to increase volume</p>
     </div>
   </div>
 
-  <!-- Master -->
+  <!-- Controls -->
   <div class="panel">
     <div class="panel-header">Master</div>
     <div class="panel-body">
       <div class="master-row">
         <span class="master-label">Volume</span>
-        <input class="ch-slider" type="range" id="master-slider" min="0" max="100" value="75" />
+        <input type="range" id="master-slider" min="0" max="100" value="75" />
         <span id="master-val">75</span>
       </div>
       <div class="transport">
@@ -449,9 +343,9 @@
         <div class="drift-row">
           <div>
             <div style="font-size:13px;font-weight:500;">Slow variation</div>
-            <div class="drift-info">Levels drift ±5% every 3–8 min</div>
+            <div class="drift-info">Nodes drift gently over time</div>
           </div>
-          <button class="toggle-pill" id="drift-toggle" title="Toggle Drift Mode"></button>
+          <button class="toggle-pill" id="drift-toggle"></button>
         </div>
       </div>
     </div>
@@ -460,11 +354,11 @@
       <div class="panel-header">Mix Code</div>
       <div class="panel-body">
         <div class="mix-code-area">
-          <div class="mix-code-input-row">
+          <div class="mix-code-row">
             <input id="mix-code-display" type="text" readonly value="KINMIX: —" />
             <button class="btn-sm" id="btn-copy-code">Copy</button>
           </div>
-          <div id="mix-paste-row">
+          <div class="mix-code-row">
             <input id="mix-paste-input" type="text" placeholder="Paste a KINMIX code…" />
             <button class="btn-sm" id="btn-load-code">Load</button>
           </div>
@@ -475,7 +369,7 @@
 
   <footer>
     All audio is generated locally in your browser · No tracking · No streaming · Works offline<br>
-    <a href="https://kin.tools">kin.tools</a> &nbsp;·&nbsp; KIN-007 &nbsp;·&nbsp; dBridge
+    <a href="https://kin.tools">kin.tools</a> &nbsp;·&nbsp; KIN-007 &nbsp;·&nbsp; <span style="font-style:normal">dBridge</span>
   </footer>
 </div>
 
@@ -485,18 +379,71 @@
 'use strict';
 
 // ═══════════════════════════════════════════════════════════════
-//  STATE
+//  NODE DEFINITIONS  (x, y normalised −1..+1; centre = loudest)
 // ═══════════════════════════════════════════════════════════════
-const channels = {
-  white: { active: false, volume: 0,  gain: null },
-  pink:  { active: false, volume: 0,  gain: null },
-  brown: { active: false, volume: 40, gain: null },
-  rain:  { active: false, volume: 30, gain: null },
-  wind:  { active: false, volume: 10, gain: null },
-  waves: { active: false, volume: 0,  gain: null },
-  fire:  { active: false, volume: 0,  gain: null },
+const NODES = {
+  wind:   { label: 'Wind',   icon: '💨', color: '#7aa8c8', x:  0.00, y: -0.75 },
+  rain:   { label: 'Rain',   icon: '🌧', color: '#4a9fd4', x: -0.53, y: -0.45 },
+  waves:  { label: 'Waves',  icon: '🌊', color: '#3a8fc0', x:  0.53, y: -0.45 },
+  fire:   { label: 'Fire',   icon: '🔥', color: '#e07840', x: -0.53, y:  0.45 },
+  forest: { label: 'Forest', icon: '🌲', color: '#3ecf8e', x:  0.53, y:  0.45 },
+  noise:  { label: 'Noise',  icon: '~',  color: '#8892a4', x:  0.00, y:  0.75 },
 };
 
+const PRESETS = {
+  'deep-sleep': {
+    noise:  [  0.00,  0.20 ],
+    rain:   [ -0.22, -0.18 ],
+    waves:  [  0.32, -0.20 ],
+    wind:   [  0.00, -0.72 ],
+    fire:   [ -0.82,  0.60 ],
+    forest: [  0.82,  0.60 ],
+  },
+  'storm-night': {
+    wind:   [  0.00, -0.12 ],
+    rain:   [ -0.10, -0.15 ],
+    waves:  [  0.38, -0.28 ],
+    noise:  [  0.00,  0.50 ],
+    fire:   [ -0.82,  0.60 ],
+    forest: [  0.82,  0.60 ],
+  },
+  'ocean-calm': {
+    waves:  [  0.12, -0.10 ],
+    wind:   [  0.00, -0.30 ],
+    rain:   [ -0.35, -0.25 ],
+    noise:  [  0.00,  0.42 ],
+    fire:   [ -0.85,  0.60 ],
+    forest: [  0.85,  0.60 ],
+  },
+  'fireplace': {
+    fire:   [ -0.12,  0.12 ],
+    noise:  [  0.00,  0.35 ],
+    forest: [  0.35,  0.22 ],
+    rain:   [ -0.82, -0.50 ],
+    wind:   [  0.00, -0.88 ],
+    waves:  [  0.82, -0.50 ],
+  },
+  'focus': {
+    noise:  [  0.00,  0.15 ],
+    rain:   [ -0.28, -0.22 ],
+    wind:   [  0.00, -0.62 ],
+    fire:   [ -0.85,  0.58 ],
+    waves:  [  0.85, -0.48 ],
+    forest: [  0.85,  0.58 ],
+  },
+  'forest': {
+    forest: [  0.18,  0.18 ],
+    rain:   [ -0.22, -0.20 ],
+    wind:   [  0.00, -0.38 ],
+    waves:  [  0.82, -0.48 ],
+    fire:   [ -0.85,  0.58 ],
+    noise:  [  0.00,  0.62 ],
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
 const state = {
   playing: false,
   masterVolume: 75,
@@ -505,556 +452,571 @@ const state = {
   timerEnd: null,
   timerInterval: null,
   driftInterval: null,
+  driftPhases: {},
   activePreset: null,
 };
 
-let ctx = null;
-let masterGain = null;
-let compressor = null;
+let ctx = null, masterGain = null, compressor = null;
+let dragging = null;
+let pulsePhase = 0;
+let animFrame = null;
 
 // ═══════════════════════════════════════════════════════════════
 //  AUDIO ENGINE
 // ═══════════════════════════════════════════════════════════════
-
 function initAudio() {
   if (ctx) return;
   ctx = new (window.AudioContext || window.webkitAudioContext)();
 
   compressor = ctx.createDynamicsCompressor();
   compressor.threshold.value = -24;
-  compressor.knee.value      = 30;
-  compressor.ratio.value     = 4;
-  compressor.attack.value    = 0.003;
-  compressor.release.value   = 0.25;
+  compressor.knee.value = 30;
+  compressor.ratio.value = 4;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.25;
   compressor.connect(ctx.destination);
 
   masterGain = ctx.createGain();
   masterGain.gain.value = state.masterVolume / 100 * 0.8;
   masterGain.connect(compressor);
 
-  // Build each channel
-  buildChannel('white');
-  buildChannel('pink');
-  buildChannel('brown');
-  buildChannel('rain');
-  buildChannel('wind');
-  buildChannel('waves');
-  buildChannel('fire');
-
-  // Apply initial volumes
-  Object.keys(channels).forEach(id => {
-    setChannelGain(id, channels[id].volume, channels[id].active);
-  });
+  for (const key of Object.keys(NODES)) {
+    const node = NODES[key];
+    node.gainNode = ctx.createGain();
+    node.gainNode.gain.value = 0;
+    node.gainNode.connect(masterGain);
+    node.source = makeSource(key, ctx);
+    node.source.out.connect(node.gainNode);
+  }
 }
 
-/* ── Noise generator (ScriptProcessor for inline single-file use) ── */
-function createNoiseNode(type) {
-  const bufSize = 4096;
-  // eslint-disable-next-line no-deprecated
-  const node = ctx.createScriptProcessor(bufSize, 1, 1);
-  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-  let lastBrown = 0;
+function makeSource(key, audioCtx) {
+  switch (key) {
+    case 'noise':  return makeBrownNoise(audioCtx);
+    case 'rain':   return makeRain(audioCtx);
+    case 'wind':   return makeWind(audioCtx);
+    case 'waves':  return makeWaves(audioCtx);
+    case 'fire':   return makeFire(audioCtx);
+    case 'forest': return makeForest(audioCtx);
+    default:       return makeBrownNoise(audioCtx);
+  }
+}
 
-  node.onaudioprocess = (e) => {
+function makeBrownNoise(audioCtx) {
+  const buf = audioCtx.sampleRate * 2;
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let lastOut = 0;
+  sp.onaudioprocess = e => {
     const out = e.outputBuffer.getChannelData(0);
-    for (let i = 0; i < bufSize; i++) {
+    for (let i = 0; i < out.length; i++) {
       const w = Math.random() * 2 - 1;
-      if (type === 'white') {
-        out[i] = w * 0.5;
-      } else if (type === 'pink') {
-        b0 = 0.99886 * b0 + w * 0.0555179;
-        b1 = 0.99332 * b1 + w * 0.0750759;
-        b2 = 0.96900 * b2 + w * 0.1538520;
-        b3 = 0.86650 * b3 + w * 0.3104856;
-        b4 = 0.55000 * b4 + w * 0.5329522;
-        b5 = -0.7616 * b5 - w * 0.0168980;
-        out[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
-        b6 = w * 0.115926;
-      } else if (type === 'brown') {
-        lastBrown = (lastBrown + 0.02 * w) / 1.02;
-        out[i] = lastBrown * 3.5;
-      }
+      out[i] = (lastOut + 0.02 * w) / 1.02;
+      lastOut = out[i];
+      out[i] *= 3.5;
     }
   };
-  // Connect to dummy destination to keep it alive
-  node.connect(ctx.createGain());
-  return node;
+  sp.connect(audioCtx.createGain()); // keep alive
+  return { out: sp };
 }
 
-/* ── Build a channel graph ── */
-function buildChannel(id) {
-  const ch = channels[id];
-  const g = ctx.createGain();
-  g.gain.value = 0;
-  ch.gain = g;
-  g.connect(masterGain);
-
-  if (id === 'white' || id === 'pink' || id === 'brown') {
-    const noise = createNoiseNode(id);
-    noise.connect(g);
-    return;
-  }
-
-  // Ambient channels: shaped noise
-  if (id === 'rain') {
-    // Rain: white noise → BandPass (hiss) + LowPass (rumble)
-    const src = createNoiseNode('white');
-    const hiss = ctx.createBiquadFilter();
-    hiss.type = 'bandpass'; hiss.frequency.value = 2800; hiss.Q.value = 0.4;
-    const rumble = ctx.createBiquadFilter();
-    rumble.type = 'lowpass'; rumble.frequency.value = 280;
-    const hissGain = ctx.createGain(); hissGain.gain.value = 0.7;
-    const rumbleGain = ctx.createGain(); rumbleGain.gain.value = 0.35;
-    src.connect(hiss); hiss.connect(hissGain); hissGain.connect(g);
-    src.connect(rumble); rumble.connect(rumbleGain); rumbleGain.connect(g);
-    // Gentle LFO for variation
-    const lfo = ctx.createOscillator();
-    lfo.frequency.value = 0.12;
-    const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.04;
-    lfo.connect(lfoGain); lfoGain.connect(g.gain);
-    lfo.start();
-    return;
-  }
-
-  if (id === 'wind') {
-    // Wind: white noise → LowPass with slow LFO on freq + amp
-    const src = createNoiseNode('white');
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 500;
-    const lpGain = ctx.createGain(); lpGain.gain.value = 0.9;
-    src.connect(lp); lp.connect(lpGain); lpGain.connect(g);
-
-    // LFO on amplitude (slow gusting)
-    const lfoAmp = ctx.createOscillator();
-    lfoAmp.frequency.value = 0.08;
-    const lfoAmpG = ctx.createGain(); lfoAmpG.gain.value = 0.12;
-    lfoAmp.connect(lfoAmpG); lfoAmpG.connect(g.gain);
-    lfoAmp.start();
-
-    // LFO on filter freq (wind pitch shifting)
-    const lfoFreq = ctx.createOscillator();
-    lfoFreq.frequency.value = 0.05;
-    const lfoFreqG = ctx.createGain(); lfoFreqG.gain.value = 200;
-    lfoFreq.connect(lfoFreqG); lfoFreqG.connect(lp.frequency);
-    lfoFreq.start();
-    return;
-  }
-
-  if (id === 'waves') {
-    // Ocean: pink noise → LowPass with very slow swell LFO
-    const src = createNoiseNode('pink');
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 350;
-    const lpGain = ctx.createGain(); lpGain.gain.value = 1.2;
-    src.connect(lp); lp.connect(lpGain); lpGain.connect(g);
-
-    // Very slow wave swell LFO (~10s period)
-    const lfoSwell = ctx.createOscillator();
-    lfoSwell.frequency.value = 0.09;
-    const lfoSwellG = ctx.createGain(); lfoSwellG.gain.value = 0.35;
-    lfoSwell.connect(lfoSwellG); lfoSwellG.connect(g.gain);
-    lfoSwell.start();
-
-    // Higher-freq breaking component
-    const srcH = createNoiseNode('white');
-    const hpBreak = ctx.createBiquadFilter();
-    hpBreak.type = 'bandpass'; hpBreak.frequency.value = 1800; hpBreak.Q.value = 0.3;
-    const breakGain = ctx.createGain(); breakGain.gain.value = 0.2;
-    const lfoBreak = ctx.createOscillator();
-    lfoBreak.frequency.value = 0.09;
-    lfoBreak.type = 'sawtooth';
-    const lfoBreakG = ctx.createGain(); lfoBreakG.gain.value = 0.15;
-    srcH.connect(hpBreak); hpBreak.connect(breakGain); breakGain.connect(g);
-    lfoBreak.connect(lfoBreakG); lfoBreakG.connect(breakGain.gain);
-    lfoBreak.start();
-    return;
-  }
-
-  if (id === 'fire') {
-    // Fire: brown noise base + white noise crackle
-    const srcB = createNoiseNode('brown');
-    const bpBase = ctx.createBiquadFilter();
-    bpBase.type = 'bandpass'; bpBase.frequency.value = 500; bpBase.Q.value = 0.6;
-    const baseGain = ctx.createGain(); baseGain.gain.value = 1.1;
-    srcB.connect(bpBase); bpBase.connect(baseGain); baseGain.connect(g);
-
-    // Crackle: white noise high-pass, randomly modulated
-    const srcW = createNoiseNode('white');
-    const hpCrackle = ctx.createBiquadFilter();
-    hpCrackle.type = 'highpass'; hpCrackle.frequency.value = 2200;
-    const crackleGain = ctx.createGain(); crackleGain.gain.value = 0.08;
-    srcW.connect(hpCrackle); hpCrackle.connect(crackleGain); crackleGain.connect(g);
-
-    // LFO for flicker
-    const lfoFlicker = ctx.createOscillator();
-    lfoFlicker.frequency.value = 0.7;
-    lfoFlicker.type = 'sawtooth';
-    const lfoFG = ctx.createGain(); lfoFG.gain.value = 0.08;
-    lfoFlicker.connect(lfoFG); lfoFG.connect(g.gain);
-    lfoFlicker.start();
-    return;
-  }
+function makeRain(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 5.5;
+      b6 = w * 0.115926;
+    }
+  };
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'bandpass'; lp.frequency.value = 1100; lp.Q.value = 0.8;
+  sp.connect(lp);
+  return { out: lp };
 }
 
-/* ── Set channel gain ── */
-function setChannelGain(id, volume, active) {
-  if (!ctx || !channels[id].gain) return;
-  const val = active ? (volume / 100) * 0.85 : 0;
-  const g = channels[id].gain.gain;
-  g.cancelScheduledValues(ctx.currentTime);
-  g.linearRampToValueAtTime(val, ctx.currentTime + 0.04);
+function makeWind(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) out[i] = Math.random() * 2 - 1;
+  };
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 400; lp.Q.value = 1.0;
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 0.08;
+  const lfoG = audioCtx.createGain();
+  lfoG.gain.value = 200;
+  lfo.connect(lfoG); lfoG.connect(lp.frequency);
+  lfo.start();
+  sp.connect(lp);
+  return { out: lp };
 }
 
-/* ── Master gain ── */
-function setMasterGain(vol) {
-  if (!masterGain) return;
-  masterGain.gain.cancelScheduledValues(ctx.currentTime);
-  masterGain.gain.linearRampToValueAtTime(vol / 100 * 0.8, ctx.currentTime + 0.05);
+function makeWaves(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 5.5;
+      b6 = w * 0.115926;
+    }
+  };
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 600; lp.Q.value = 0.5;
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 0.12;
+  const lfoG = audioCtx.createGain();
+  lfoG.gain.value = 0.4;
+  const baseG = audioCtx.createGain();
+  baseG.gain.value = 0.6;
+  lfo.connect(lfoG); lfoG.connect(baseG.gain);
+  sp.connect(lp); lp.connect(baseG);
+  lfo.start();
+  return { out: baseG };
 }
 
-/* ── Fade out (for sleep timer) ── */
-function fadeOut(durationSec, cb) {
-  if (!masterGain) return;
-  const now = ctx.currentTime;
-  masterGain.gain.cancelScheduledValues(now);
-  masterGain.gain.setValueAtTime(masterGain.gain.value, now);
-  masterGain.gain.linearRampToValueAtTime(0, now + durationSec);
-  setTimeout(cb, durationSec * 1000);
+function makeFire(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let lastOut = 0, crackle = 0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      out[i] = (lastOut + 0.02 * w) / 1.02;
+      lastOut = out[i];
+      if (Math.random() < 0.003) crackle = (Math.random() - 0.5) * 1.2;
+      else crackle *= 0.98;
+      out[i] = out[i] * 2.5 + crackle;
+    }
+  };
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 900; lp.Q.value = 0.4;
+  sp.connect(lp);
+  return { out: lp };
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  UI SYNC
-// ═══════════════════════════════════════════════════════════════
-
-function syncChannelUI(id) {
-  const ch = channels[id];
-  const toggle = document.querySelector(`.ch-toggle[data-ch="${id}"]`);
-  const slider = document.querySelector(`.ch-slider[data-ch="${id}"]`);
-  const val    = document.querySelector(`.ch-val[data-ch="${id}"]`);
-
-  toggle.classList.toggle('on', ch.active);
-  slider.classList.toggle('muted', !ch.active);
-  slider.value = ch.volume;
-  val.textContent = ch.volume;
+function makeForest(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 5.5;
+      b6 = w * 0.115926;
+    }
+  };
+  const bp = audioCtx.createBiquadFilter();
+  bp.type = 'bandpass'; bp.frequency.value = 500; bp.Q.value = 1.5;
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 0.15;
+  const lfoG = audioCtx.createGain();
+  lfoG.gain.value = 0.3;
+  const baseG = audioCtx.createGain();
+  baseG.gain.value = 0.7;
+  lfo.connect(lfoG); lfoG.connect(baseG.gain);
+  sp.connect(bp); bp.connect(baseG);
+  lfo.start();
+  return { out: baseG };
 }
-
-function syncMasterUI() {
-  document.getElementById('master-slider').value = state.masterVolume;
-  document.getElementById('master-val').textContent = state.masterVolume;
-}
-
-function syncPlayUI() {
-  const btn = document.getElementById('btn-play');
-  btn.classList.toggle('playing', state.playing);
-  btn.innerHTML = state.playing ? '⏸ &nbsp;Pause' : '▶ &nbsp;Play';
-}
-
-function updateMixCode() {
-  const parts = [];
-  const map = { white:'W', pink:'P', brown:'B', rain:'R', wind:'N', waves:'A', fire:'F' };
-  Object.entries(channels).forEach(([id, ch]) => {
-    if (ch.active && ch.volume > 0) parts.push(map[id] + ch.volume);
-  });
-  const code = parts.length ? 'KINMIX: ' + parts.join(' ') : 'KINMIX: —';
-  document.getElementById('mix-code-display').value = code;
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  CHANNEL ACTIONS
-// ═══════════════════════════════════════════════════════════════
-
-function toggleChannel(id) {
-  channels[id].active = !channels[id].active;
-  setChannelGain(id, channels[id].volume, channels[id].active);
-  syncChannelUI(id);
-  updateMixCode();
-  clearPreset();
-}
-
-function setChannelVolume(id, vol) {
-  channels[id].volume = vol;
-  if (channels[id].active) setChannelGain(id, vol, true);
-  document.querySelector(`.ch-val[data-ch="${id}"]`).textContent = vol;
-  updateMixCode();
-  clearPreset();
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  PLAY / PAUSE
-// ═══════════════════════════════════════════════════════════════
 
 function play() {
   if (!ctx) initAudio();
   if (ctx.state === 'suspended') ctx.resume();
   state.playing = true;
-  Object.keys(channels).forEach(id => {
-    setChannelGain(id, channels[id].volume, channels[id].active);
-  });
-  setMasterGain(state.masterVolume);
-  syncPlayUI();
+  updateGains();
+  document.getElementById('btn-play').textContent = '⏸  Pause';
+  document.getElementById('btn-play').classList.add('playing');
 }
 
 function pause() {
   state.playing = false;
-  if (masterGain) {
-    masterGain.gain.cancelScheduledValues(ctx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
-  }
-  syncPlayUI();
+  if (ctx) ctx.suspend();
+  document.getElementById('btn-play').textContent = '▶ \u00a0Play';
+  document.getElementById('btn-play').classList.remove('playing');
 }
+
+function getGain(key) {
+  const n = NODES[key];
+  const dist = Math.hypot(n.x, n.y);
+  return Math.max(0, 1 - dist);
+}
+
+function updateGains() {
+  if (!ctx) return;
+  for (const key of Object.keys(NODES)) {
+    const n = NODES[key];
+    if (!n.gainNode) continue;
+    const g = state.playing ? getGain(key) * (state.masterVolume / 100) * 0.9 : 0;
+    n.gainNode.gain.setTargetAtTime(g, ctx.currentTime, 0.08);
+  }
+  updateMixCode();
+}
+
+function setMasterGain(v) {
+  if (!ctx || !masterGain) return;
+  masterGain.gain.setTargetAtTime(v / 100 * 0.8, ctx.currentTime, 0.05);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CANVAS RENDERING
+// ═══════════════════════════════════════════════════════════════
+const canvas = document.getElementById('field');
+const c = canvas.getContext('2d');
+let cx = 0, cy = 0, fieldR = 0;
+
+function resizeCanvas() {
+  const wrap = document.getElementById('field-wrap');
+  const size = Math.min(wrap.clientWidth, 400);
+  const dpr = window.devicePixelRatio || 1;
+  canvas.style.width  = size + 'px';
+  canvas.style.height = size + 'px';
+  canvas.width  = size * dpr;
+  canvas.height = size * dpr;
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = size / 2;
+  cy = size / 2;
+  fieldR = size / 2 - 28;
+}
+
+function hexToRgba(hex, a) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a.toFixed(3)})`;
+}
+
+function drawFrame() {
+  c.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Outer clip circle (fills canvas area)
+  c.save();
+  c.beginPath(); c.arc(cx, cy, fieldR + 6, 0, Math.PI * 2); c.clip();
+  c.fillStyle = '#0a0e14'; c.fill();
+  c.restore();
+
+  // Concentric rings
+  const rings = [0.33, 0.66, 1.0];
+  for (const f of rings) {
+    c.beginPath(); c.arc(cx, cy, fieldR * f, 0, Math.PI * 2);
+    c.strokeStyle = f === 1 ? 'rgba(42,50,65,0.9)' : 'rgba(42,50,65,0.4)';
+    c.lineWidth = f === 1 ? 1.5 : 0.8;
+    c.stroke();
+  }
+
+  // Faint cross lines
+  c.strokeStyle = 'rgba(42,50,65,0.25)'; c.lineWidth = 0.8;
+  c.beginPath(); c.moveTo(cx, cy - fieldR); c.lineTo(cx, cy + fieldR); c.stroke();
+  c.beginPath(); c.moveTo(cx - fieldR, cy); c.lineTo(cx + fieldR, cy); c.stroke();
+
+  // Lines from listener to active nodes
+  for (const [key, n] of Object.entries(NODES)) {
+    const g = getGain(key);
+    if (g < 0.04) continue;
+    const nx = cx + n.x * fieldR;
+    const ny = cy + n.y * fieldR;
+    c.beginPath(); c.moveTo(cx, cy); c.lineTo(nx, ny);
+    c.strokeStyle = hexToRgba(n.color, g * 0.35);
+    c.lineWidth = 1; c.setLineDash([3, 5]); c.stroke(); c.setLineDash([]);
+  }
+
+  // Listener (centre dot)
+  const pulse = 0.5 + 0.5 * Math.sin(pulsePhase);
+  if (state.playing) {
+    const maxGain = Math.max(...Object.keys(NODES).map(k => getGain(k)));
+    const glowR = 14 + pulse * 10 * maxGain;
+    const grad = c.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+    grad.addColorStop(0, `rgba(74,127,165,${(0.35 * maxGain).toFixed(3)})`);
+    grad.addColorStop(1, 'rgba(74,127,165,0)');
+    c.beginPath(); c.arc(cx, cy, glowR, 0, Math.PI * 2);
+    c.fillStyle = grad; c.fill();
+  }
+  c.beginPath(); c.arc(cx, cy, 7, 0, Math.PI * 2);
+  c.fillStyle = '#4a7fa5'; c.fill();
+  c.beginPath(); c.arc(cx, cy, 3.5, 0, Math.PI * 2);
+  c.fillStyle = '#c8dff0'; c.fill();
+
+  // Nodes
+  for (const [key, n] of Object.entries(NODES)) {
+    const nx = cx + n.x * fieldR;
+    const ny = cy + n.y * fieldR;
+    const g = getGain(key);
+    const alpha = 0.25 + g * 0.75;
+    const isActive = dragging === key;
+    const r = isActive ? 20 : 16;
+
+    // Glow
+    if (g > 0.06) {
+      const gr = c.createRadialGradient(nx, ny, 0, nx, ny, r + 12 * g);
+      gr.addColorStop(0, hexToRgba(n.color, 0.28 * g));
+      gr.addColorStop(1, hexToRgba(n.color, 0));
+      c.beginPath(); c.arc(nx, ny, r + 12 * g, 0, Math.PI * 2);
+      c.fillStyle = gr; c.fill();
+    }
+
+    // Node circle
+    c.beginPath(); c.arc(nx, ny, r, 0, Math.PI * 2);
+    c.fillStyle = hexToRgba(n.color, alpha * 0.18 + (isActive ? 0.12 : 0));
+    c.fill();
+    c.strokeStyle = hexToRgba(n.color, Math.min(1, alpha + 0.1));
+    c.lineWidth = isActive ? 2 : 1.5;
+    c.stroke();
+
+    // Icon
+    c.font = '13px serif';
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.globalAlpha = alpha;
+    if (n.icon === '~') {
+      c.font = 'bold 13px -apple-system, system-ui, sans-serif';
+      c.fillStyle = n.color;
+      c.fillText('~', nx, ny);
+    } else {
+      c.fillText(n.icon, nx, ny);
+    }
+    c.globalAlpha = 1;
+
+    // Label
+    c.font = '10px -apple-system, system-ui, sans-serif';
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    c.fillStyle = hexToRgba('#c8d6e8', Math.min(1, alpha * 1.1));
+    c.fillText(n.label, nx, ny + r + 3);
+
+    // Volume % when active enough
+    if (g > 0.05) {
+      const pct = Math.round(g * 100);
+      c.font = '9px -apple-system, system-ui, sans-serif';
+      c.fillStyle = hexToRgba(n.color, alpha * 0.85);
+      c.fillText(pct + '%', nx, ny + r + 14);
+    }
+  }
+}
+
+function animate() {
+  pulsePhase += 0.025;
+  drawFrame();
+  animFrame = requestAnimationFrame(animate);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DRAG INTERACTION
+// ═══════════════════════════════════════════════════════════════
+function hitTest(ex, ey) {
+  for (const [key, n] of Object.entries(NODES)) {
+    const nx = cx + n.x * fieldR;
+    const ny = cy + n.y * fieldR;
+    if (Math.hypot(ex - nx, ey - ny) < 24) return key;
+  }
+  return null;
+}
+
+function eventXY(e) {
+  const rect = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return [src.clientX - rect.left, src.clientY - rect.top];
+}
+
+function moveNode(ex, ey) {
+  if (!dragging) return;
+  const n = NODES[dragging];
+  let dx = (ex - cx) / fieldR;
+  let dy = (ey - cy) / fieldR;
+  const d = Math.hypot(dx, dy);
+  if (d > 1) { dx /= d; dy /= d; }
+  n.x = dx; n.y = dy;
+  updateGains();
+  state.activePreset = null;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+canvas.addEventListener('mousedown',  e => { const [x,y] = eventXY(e); dragging = hitTest(x,y); });
+canvas.addEventListener('mousemove',  e => { if (dragging) { const [x,y] = eventXY(e); moveNode(x,y); } });
+canvas.addEventListener('mouseup',    () => { dragging = null; });
+canvas.addEventListener('mouseleave', () => { dragging = null; });
+
+canvas.addEventListener('touchstart', e => { e.preventDefault(); const [x,y] = eventXY(e); dragging = hitTest(x,y); }, { passive: false });
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (dragging) { const [x,y] = eventXY(e); moveNode(x,y); } }, { passive: false });
+canvas.addEventListener('touchend',   e => { e.preventDefault(); dragging = null; }, { passive: false });
 
 // ═══════════════════════════════════════════════════════════════
 //  PRESETS
 // ═══════════════════════════════════════════════════════════════
-
-const PRESETS = {
-  'deep-sleep':  { brown:50, rain:35, wind:0,  white:0,  pink:0,  waves:0, fire:0  },
-  'storm-night': { wind:45,  rain:55, brown:20, white:0,  pink:0,  waves:0, fire:0  },
-  'ocean-calm':  { waves:60, pink:25, rain:0,   wind:10,  white:0, brown:0, fire:0  },
-  'fireplace':   { fire:55,  brown:30, wind:15, white:0,  pink:0,  rain:0,  waves:0 },
-  'focus':       { pink:40,  white:25, brown:0, rain:20,  wind:0,  waves:0, fire:0  },
-  'forest':      { rain:20,  wind:25,  brown:15,white:0,  pink:10, waves:0, fire:0  },
-};
-
 function applyPreset(name) {
   const p = PRESETS[name];
   if (!p) return;
+  for (const [key, pos] of Object.entries(p)) {
+    if (NODES[key]) { NODES[key].x = pos[0]; NODES[key].y = pos[1]; }
+  }
+  updateGains();
+  updateMixCode();
   state.activePreset = name;
-
-  Object.entries(p).forEach(([id, vol]) => {
-    channels[id].volume = vol;
-    channels[id].active = vol > 0;
-    if (ctx) setChannelGain(id, vol, channels[id].active);
-    syncChannelUI(id);
-  });
-
   document.querySelectorAll('.preset-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.preset === name);
   });
-
-  updateMixCode();
-  if (!state.playing) play();
 }
 
-function clearPreset() {
+// ═══════════════════════════════════════════════════════════════
+//  SHUFFLE + RESET
+// ═══════════════════════════════════════════════════════════════
+function shuffleMix() {
+  for (const [key, n] of Object.entries(NODES)) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = 0.1 + Math.random() * 0.75;
+    n.x = Math.cos(angle) * dist;
+    n.y = Math.sin(angle) * dist;
+  }
+  updateGains(); updateMixCode();
+  state.activePreset = null;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+function resetMix() {
+  const REST = {
+    wind:   [  0.00, -0.75 ],
+    rain:   [ -0.53, -0.45 ],
+    waves:  [  0.53, -0.45 ],
+    fire:   [ -0.53,  0.45 ],
+    forest: [  0.53,  0.45 ],
+    noise:  [  0.00,  0.75 ],
+  };
+  for (const [key, pos] of Object.entries(REST)) {
+    NODES[key].x = pos[0]; NODES[key].y = pos[1];
+  }
+  if (state.playing) pause();
+  updateGains(); updateMixCode();
   state.activePreset = null;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  SHUFFLE / RESET
+//  DRIFT MODE
 // ═══════════════════════════════════════════════════════════════
+let driftT = 0;
+const driftBase = {};
 
-function shuffleMix() {
-  const ids = Object.keys(channels);
-  // Pick 2–4 channels randomly
-  const count = 2 + Math.floor(Math.random() * 3);
-  const chosen = ids.sort(() => Math.random() - 0.5).slice(0, count);
-
-  ids.forEach(id => {
-    const inChosen = chosen.includes(id);
-    const vol = inChosen ? 15 + Math.floor(Math.random() * 55) : 0;
-    channels[id].volume = vol;
-    channels[id].active = inChosen;
-    if (ctx) setChannelGain(id, vol, inChosen);
-    syncChannelUI(id);
-  });
-
-  clearPreset();
-  updateMixCode();
-  if (!state.playing) play();
+function startDrift() {
+  for (const key of Object.keys(NODES)) {
+    driftBase[key] = { x: NODES[key].x, y: NODES[key].y, ph: Math.random() * Math.PI * 2 };
+  }
+  driftT = 0;
+  state.driftInterval = setInterval(() => {
+    driftT += 0.4;
+    for (const [key, n] of Object.entries(NODES)) {
+      const b = driftBase[key];
+      let nx = b.x + Math.cos(driftT * 0.055 + b.ph) * 0.09;
+      let ny = b.y + Math.sin(driftT * 0.071 + b.ph + 1.2) * 0.09;
+      const d = Math.hypot(nx, ny);
+      if (d > 0.98) { nx *= 0.98/d; ny *= 0.98/d; }
+      n.x = nx; n.y = ny;
+    }
+    updateGains();
+  }, 500);
 }
 
-function resetMix() {
-  Object.keys(channels).forEach(id => {
-    channels[id].volume = 0;
-    channels[id].active = false;
-    if (ctx) setChannelGain(id, 0, false);
-    syncChannelUI(id);
-  });
-  state.masterVolume = 75;
-  if (masterGain) setMasterGain(75);
-  syncMasterUI();
-  clearPreset();
-  stopTimer();
-  updateMixCode();
+function stopDrift() {
+  clearInterval(state.driftInterval);
+  state.driftInterval = null;
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  SLEEP TIMER
 // ═══════════════════════════════════════════════════════════════
-
 function startTimer(minutes) {
-  stopTimer();
-  if (minutes === 0) {
-    updateTimerDisplay();
-    return;
-  }
+  clearInterval(state.timerInterval);
   state.timerMinutes = minutes;
-  state.timerEnd = Date.now() + minutes * 60000;
-
-  state.timerInterval = setInterval(() => {
-    const remaining = state.timerEnd - Date.now();
-    if (remaining <= 10000 && remaining > 0) {
-      updateTimerDisplay(remaining);
-    } else if (remaining <= 0) {
-      stopTimer();
-      fadeOut(10, () => {
-        state.playing = false;
-        syncPlayUI();
-      });
-    } else {
-      updateTimerDisplay(remaining);
-    }
-  }, 1000);
-
-  updateTimerDisplay(minutes * 60000);
+  const disp = document.getElementById('timer-display');
   document.querySelectorAll('.timer-btn').forEach(b => {
     b.classList.toggle('active', Number(b.dataset.minutes) === minutes);
   });
-}
-
-function stopTimer() {
-  if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
-  state.timerEnd = null;
-  document.querySelectorAll('.timer-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.timer-btn[data-minutes="0"]').classList.add('active');
-  updateTimerDisplay();
-}
-
-function updateTimerDisplay(ms) {
-  const el = document.getElementById('timer-display');
-  if (!ms || ms <= 0) { el.textContent = ''; return; }
-  const s = Math.ceil(ms / 1000);
-  const m = Math.floor(s / 60), sec = s % 60;
-  el.textContent = m + ':' + String(sec).padStart(2, '0');
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  DRIFT MODE
-// ═══════════════════════════════════════════════════════════════
-
-function startDrift() {
-  if (state.driftInterval) return;
-  state.driftInterval = setInterval(() => {
-    if (!ctx || !state.playing) return;
-    Object.entries(channels).forEach(([id, ch]) => {
-      if (!ch.active || ch.volume === 0) return;
-      const delta = (Math.random() - 0.5) * 10; // ±5
-      const next = Math.max(5, Math.min(100, ch.volume + delta));
-      ch.volume = Math.round(next);
-      setChannelGain(id, ch.volume, ch.active);
-      syncChannelUI(id);
-    });
-    updateMixCode();
-  }, 20000 + Math.random() * 160000); // every 20s–3min
-}
-
-function stopDrift() {
-  if (state.driftInterval) { clearInterval(state.driftInterval); state.driftInterval = null; }
+  if (!minutes) { disp.textContent = ''; return; }
+  state.timerEnd = Date.now() + minutes * 60000;
+  state.timerInterval = setInterval(() => {
+    const left = state.timerEnd - Date.now();
+    if (left <= 0) {
+      clearInterval(state.timerInterval);
+      disp.textContent = '';
+      pause();
+      showToast('Sleep timer ended');
+      return;
+    }
+    const m = Math.floor(left / 60000);
+    const s = Math.floor((left % 60000) / 1000);
+    disp.textContent = m + ':' + String(s).padStart(2,'0');
+  }, 500);
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  MIX CODE
 // ═══════════════════════════════════════════════════════════════
-
-function loadMixCode(raw) {
-  const code = raw.trim().toUpperCase().replace(/^KINMIX:\s*/, '');
-  const map = { W:'white', P:'pink', B:'brown', R:'rain', N:'wind', A:'waves', F:'fire' };
-  const re = /([WPBRNAF])(\d+)/g;
-  let m, found = false;
-
-  // Reset all
-  Object.keys(channels).forEach(id => { channels[id].active = false; channels[id].volume = 0; });
-
-  while ((m = re.exec(code)) !== null) {
-    const id = map[m[1]];
-    if (id) {
-      channels[id].volume = Math.min(100, Number(m[2]));
-      channels[id].active = channels[id].volume > 0;
-      found = true;
-    }
-  }
-
-  if (!found) { showToast('Invalid mix code'); return; }
-
-  Object.keys(channels).forEach(id => {
-    if (ctx) setChannelGain(id, channels[id].volume, channels[id].active);
-    syncChannelUI(id);
+function updateMixCode() {
+  const parts = Object.entries(NODES).map(([k,n]) => {
+    const x = Math.round(n.x * 100);
+    const y = Math.round(n.y * 100);
+    return `${k}:${x},${y}`;
   });
-  clearPreset();
-  updateMixCode();
-  if (!state.playing) play();
-  showToast('Mix loaded');
+  document.getElementById('mix-code-display').value = 'KINMIX:' + parts.join(';');
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  VU ANIMATION
-// ═══════════════════════════════════════════════════════════════
-
-let vuFrame = null;
-function animateVU() {
-  const noiseActive = ['white','pink','brown'].some(id => channels[id].active && channels[id].volume > 0);
-  const natureActive = ['rain','wind','waves','fire'].some(id => channels[id].active && channels[id].volume > 0);
-
-  ['vu-noise','vu-nature'].forEach((vuId, i) => {
-    const active = i === 0 ? noiseActive : natureActive;
-    const bars = document.querySelectorAll(`#${vuId} .vu-bar`);
-    bars.forEach(bar => {
-      const h = active && state.playing ? 2 + Math.random() * 10 : 2;
-      bar.style.height = h + 'px';
-    });
-  });
-
-  vuFrame = requestAnimationFrame(animateVU);
+function loadMixCode(raw) {
+  const m = raw.match(/KINMIX:(.+)/i);
+  if (!m) { showToast('Invalid KINMIX code'); return; }
+  const parts = m[1].split(';');
+  for (const p of parts) {
+    const [key, coords] = p.split(':');
+    if (!key || !coords || !NODES[key]) continue;
+    const [x, y] = coords.split(',').map(Number);
+    if (!isNaN(x) && !isNaN(y)) {
+      NODES[key].x = Math.max(-1, Math.min(1, x / 100));
+      NODES[key].y = Math.max(-1, Math.min(1, y / 100));
+    }
+  }
+  updateGains(); updateMixCode();
+  showToast('Mix loaded');
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  TOAST
 // ═══════════════════════════════════════════════════════════════
-
 let toastTimeout = null;
 function showToast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  if (toastTimeout) clearTimeout(toastTimeout);
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => el.classList.remove('show'), 2200);
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  EVENT LISTENERS
+//  BOOT
 // ═══════════════════════════════════════════════════════════════
-
 document.getElementById('btn-start').addEventListener('click', () => {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   applyPreset('deep-sleep');
-  animateVU();
+  animate();
 });
 
-// Channel toggles
-document.querySelectorAll('.ch-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (!ctx) initAudio();
-    toggleChannel(btn.dataset.ch);
-  });
-});
-
-// Channel sliders
-document.querySelectorAll('.ch-slider[data-ch]').forEach(slider => {
-  slider.addEventListener('input', () => {
-    if (!ctx) initAudio();
-    setChannelVolume(slider.dataset.ch, Number(slider.value));
-  });
-});
-
-// Master slider
-document.getElementById('master-slider').addEventListener('input', (e) => {
-  state.masterVolume = Number(e.target.value);
-  document.getElementById('master-val').textContent = state.masterVolume;
-  if (ctx && state.playing) setMasterGain(state.masterVolume);
-});
+window.addEventListener('resize', () => { resizeCanvas(); });
 
 // Play/Pause
 document.getElementById('btn-play').addEventListener('click', () => {
@@ -1065,14 +1027,19 @@ document.getElementById('btn-play').addEventListener('click', () => {
 // Shuffle
 document.getElementById('btn-shuffle').addEventListener('click', () => {
   if (!ctx) initAudio();
-  shuffleMix();
-  showToast('Shuffled mix');
+  shuffleMix(); showToast('Mix shuffled');
 });
 
 // Reset
 document.getElementById('btn-reset').addEventListener('click', () => {
-  resetMix();
-  showToast('Mix reset');
+  resetMix(); showToast('Mix reset');
+});
+
+// Master volume
+document.getElementById('master-slider').addEventListener('input', e => {
+  state.masterVolume = Number(e.target.value);
+  document.getElementById('master-val').textContent = state.masterVolume;
+  setMasterGain(state.masterVolume);
 });
 
 // Presets
@@ -1088,7 +1055,7 @@ document.querySelectorAll('.timer-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const m = Number(btn.dataset.minutes);
     startTimer(m);
-    if (m > 0) showToast(`Timer set for ${m < 60 ? m + ' min' : m / 60 + ' hour' + (m > 60 ? 's' : '')}`);
+    if (m) showToast(`Timer set for ${m < 60 ? m + ' min' : (m/60) + ' hour' + (m > 60 ? 's' : '')}`);
   });
 });
 
@@ -1103,11 +1070,8 @@ document.getElementById('drift-toggle').addEventListener('click', () => {
 // Copy mix code
 document.getElementById('btn-copy-code').addEventListener('click', () => {
   const code = document.getElementById('mix-code-display').value;
-  if (code.includes('—')) { showToast('Nothing playing'); return; }
   navigator.clipboard.writeText(code).then(() => showToast('Copied!')).catch(() => {
-    // Fallback
-    const el = document.getElementById('mix-code-display');
-    el.select(); document.execCommand('copy');
+    document.getElementById('mix-code-display').select(); document.execCommand('copy');
     showToast('Copied!');
   });
 });
@@ -1120,12 +1084,19 @@ document.getElementById('btn-load-code').addEventListener('click', () => {
   loadMixCode(raw);
   document.getElementById('mix-paste-input').value = '';
 });
-document.getElementById('mix-paste-input').addEventListener('keydown', (e) => {
+document.getElementById('mix-paste-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-load-code').click();
 });
 
-// Mark ∞ timer active by default
+// Mark ∞ as default
 document.querySelector('.timer-btn[data-minutes="0"]').classList.add('active');
+
+// Init canvas on load
+window.addEventListener('load', () => {
+  resizeCanvas();
+  // Draw static frame so canvas isn't blank before start
+  drawFrame();
+});
 </script>
 </body>
 </html>
