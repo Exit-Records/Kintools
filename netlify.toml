@@ -1,11 +1,11 @@
 [build]
-  base      = "artifacts/kin-qr-builder"
-  command   = "pnpm install --frozen-lockfile && pnpm run build"
-  publish   = "dist/public"
+  command = "pnpm install && pnpm --filter @workspace/kin-qr-builder run build"
+  publish = "artifacts/kin-qr-builder/dist/public"
 
 [build.environment]
-  BASE_PATH = "/"
-  NODE_VERSION = "20"
+  NODE_VERSION  = "20"
+  PNPM_VERSION  = "10"
+  BASE_PATH     = "/"
 
 [[redirects]]
   from   = "/*"
