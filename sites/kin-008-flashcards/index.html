@@ -651,9 +651,104 @@
 // ═══════════════════════════════════════════════════════════════
 const STORE_KEY = 'kin008_flashcards';
 
+// ── Starter decks (seeded once on first load) ───────────────
+const STARTER_DECKS = [
+  { name: 'World Capitals', cards: [
+    ['France','Paris'],['Germany','Berlin'],['Italy','Rome'],['Spain','Madrid'],
+    ['Japan','Tokyo'],['China','Beijing'],['Thailand','Bangkok'],['Australia','Canberra'],
+    ['Canada','Ottawa'],['Brazil','Brasilia'],['Egypt','Cairo'],
+    ['Argentina','Buenos Aires'],['South Korea','Seoul'],
+    ['Indonesia','Jakarta'],['Turkey','Ankara'],
+  ]},
+  { name: 'Countries and Currencies', cards: [
+    ['United States','Dollar'],['Japan','Yen'],['United Kingdom','Pound'],
+    ['Thailand','Baht'],['China','Yuan'],['India','Rupee'],
+    ['South Korea','Won'],['European Union','Euro'],['Mexico','Peso'],['Brazil','Real'],
+  ]},
+  { name: 'Spanish Basics', cards: [
+    ['Hello','Hola'],['Goodbye','Adios'],['Thank you','Gracias'],['Please','Por favor'],
+    ['Yes','Sí'],['No','No'],['Dog','Perro'],['Cat','Gato'],['House','Casa'],
+    ['Water','Agua'],['Food','Comida'],['Friend','Amigo'],['Family','Familia'],
+    ['Street','Calle'],['Book','Libro'],
+  ]},
+  { name: 'French Basics', cards: [
+    ['Hello','Bonjour'],['Goodbye','Au revoir'],['Thank you','Merci'],
+    ["Please","S'il vous plaît"],['Yes','Oui'],['No','Non'],
+    ['Dog','Chien'],['Cat','Chat'],['House','Maison'],
+    ['Water','Eau'],['Food','Nourriture'],['Friend','Ami'],
+  ]},
+  { name: 'Music Theory', cards: [
+    ['Tempo','Speed of a piece of music'],['BPM','Beats per minute'],
+    ['Scale','Ordered sequence of musical notes'],['Chord','Three or more notes played together'],
+    ['Major scale','A scale with a bright sound'],['Minor scale','A scale with a darker sound'],
+    ['Octave','Interval of eight notes'],['Harmony','Combination of notes played together'],
+    ['Melody','Main musical line'],['Rhythm','Pattern of beats'],
+  ]},
+  { name: 'General Knowledge', cards: [
+    ['Water freezes at','0°C'],['The largest planet in the solar system','Jupiter'],
+    ['The fastest land animal','Cheetah'],['The chemical symbol for gold','Au'],
+    ['The author of 1984','George Orwell'],['The tallest mountain on Earth','Mount Everest'],
+    ['The largest ocean','Pacific Ocean'],['The first man on the Moon','Neil Armstrong'],
+  ]},
+  { name: 'Solar System', cards: [
+    ['Closest planet to the Sun','Mercury'],['Largest planet','Jupiter'],
+    ['Planet known as the Red Planet','Mars'],['Planet with prominent rings','Saturn'],
+    ['Our galaxy','Milky Way'],['The star at the center of our system','Sun'],
+  ]},
+  { name: 'Human Body', cards: [
+    ['Organ that pumps blood','Heart'],['Largest organ in the body','Skin'],
+    ['Organ responsible for breathing','Lungs'],['Bone protecting the brain','Skull'],
+    ['Organ that filters blood','Kidneys'],['Part of the body used for hearing','Ears'],
+  ]},
+  { name: 'Programming Basics', cards: [
+    ['HTML','Structure of web pages'],['CSS','Styling for web pages'],
+    ['JavaScript','Programming language for web interaction'],
+    ['Variable','A container for storing data'],
+    ['Function','A reusable block of code'],['Array','A list of values'],
+  ]},
+  { name: 'Keyboard Shortcuts', cards: [
+    ['Copy','Ctrl+C or Cmd+C'],['Paste','Ctrl+V or Cmd+V'],['Cut','Ctrl+X or Cmd+X'],
+    ['Undo','Ctrl+Z or Cmd+Z'],['Redo','Ctrl+Y or Cmd+Shift+Z'],
+    ['Save','Ctrl+S or Cmd+S'],['Select All','Ctrl+A or Cmd+A'],['Find','Ctrl+F or Cmd+F'],
+  ]},
+  { name: 'Geography Basics', cards: [
+    ['Largest continent','Asia'],['Largest desert','Sahara'],
+    ['Longest river','Nile'],['Highest mountain range','Himalayas'],
+    ['Largest country by area','Russia'],
+  ]},
+  { name: 'Famous Scientists', cards: [
+    ['Theory of relativity','Albert Einstein'],['Law of gravity','Isaac Newton'],
+    ['Evolution by natural selection','Charles Darwin'],
+    ['Radioactivity research','Marie Curie'],
+    ['Electric light bulb development','Thomas Edison'],
+  ]},
+];
+
+function seedStarterDecks(data) {
+  let t = Date.now();
+  STARTER_DECKS.forEach(deck => {
+    const id = (t++).toString(36);
+    data.decks[id] = {
+      id, name: deck.name, created: t,
+      cards: deck.cards.map(([front, back]) => ({
+        id: (t++).toString(36),
+        front, back,
+        type: /\{\{.+?\}\}/.test(front) ? 'cloze' : 'standard',
+        state: 'new', ease: 1,
+      })),
+    };
+  });
+  return data;
+}
+
 function loadData() {
   try {
-    return JSON.parse(localStorage.getItem(STORE_KEY)) || { decks: {} };
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return JSON.parse(raw);
+    // First visit — seed starter decks
+    const fresh = seedStarterDecks({ decks: {} });
+    localStorage.setItem(STORE_KEY, JSON.stringify(fresh));
+    return fresh;
   } catch { return { decks: {} }; }
 }
 function saveData() {
