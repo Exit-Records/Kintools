@@ -334,6 +334,98 @@ Apply to the main wrapper:
 
 ---
 
+## PWA — install to home screen + offline
+
+Every Kin tool must be installable to a phone's home screen and work offline after the first visit. Because each tool is a single HTML file, both the manifest and the service worker are inlined — no separate files needed.
+
+### Meta tags (add to `<head>`)
+
+```html
+<!-- PWA / install -->
+<meta name="theme-color" content="#111110" id="theme-color-meta">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="[Tool Name]">
+
+<!-- Inline manifest via data URI -->
+<link rel="manifest" id="manifest-link">
+```
+
+### Inline manifest + service worker (add to `<script>`)
+
+Paste this block into your `<script>` tag. Fill in `TOOL_NAME`, `KIN_NUMBER`, `THEME_COLOR`, and `CACHE_NAME`.
+
+```js
+// ---- PWA SETUP ----
+const TOOL_NAME  = '[Tool Name]';       // e.g. "Unit Price Calculator"
+const KIN_NUMBER = 'KIN-0XX';          // e.g. "KIN-011"
+const CACHE_NAME = 'kin-0xx-v1';       // e.g. "kin-011-v1"
+const THEME_DARK  = '#111110';
+const THEME_LIGHT = '#FAFAF7';
+
+// Inline manifest
+const manifest = {
+  name: `${TOOL_NAME} — Kin`,
+  short_name: TOOL_NAME,
+  description: `${KIN_NUMBER} · Free, offline, no accounts.`,
+  start_url: './',
+  display: 'standalone',
+  background_color: THEME_DARK,
+  theme_color: THEME_DARK,
+  icons: [
+    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='120' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
+    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='320' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml' }
+  ]
+};
+document.getElementById('manifest-link').setAttribute('href',
+  'data:application/json,' + encodeURIComponent(JSON.stringify(manifest)));
+
+// Update theme-color meta when dark/light toggles
+function updateThemeMeta(dark) {
+  document.getElementById('theme-color-meta').setAttribute('content', dark ? THEME_DARK : THEME_LIGHT);
+  manifest.background_color = dark ? THEME_DARK : THEME_LIGHT;
+  manifest.theme_color       = dark ? THEME_DARK : THEME_LIGHT;
+}
+
+// Inline service worker via Blob URL (enables offline after first visit)
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = '${CACHE_NAME}';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll([self.location.href])));
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return res;
+      })));
+    });`;
+  const swBlob = new Blob([swCode], { type: 'text/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+}
+// ---- END PWA SETUP ----
+```
+
+**Wire the theme toggle to `updateThemeMeta`** — call it inside your existing toggle handler:
+
+```js
+themeBtn.addEventListener('click', () => {
+  isDark = !isDark;
+  document.documentElement.classList.toggle('light', !isDark);
+  themeBtn.textContent = isDark ? '☀️' : '🌙';
+  updateThemeMeta(isDark); // add this line
+});
+```
+
+---
+
 ## Full file structure
 
 ```html
