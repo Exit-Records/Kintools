@@ -16,6 +16,65 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
 
+## Kin Ecosystem — Rules & Gotchas
+
+### Landing page — TWO copies, always edit both
+The repo has two copies of the landing page:
+| File | Purpose |
+|---|---|
+| `index.html` (repo root) | **What Netlify actually deploys** — this is the live site |
+| `sites/kin-landing/index.html` | Local preview server only (served by kin-preview) |
+
+**Always edit both files together.** The root file is the source of truth for production. When adding a new tool card, apply changes to `index.html` first, then sync `sites/kin-landing/index.html`.
+
+When adding a new KIN tool to the landing page checklist:
+- [ ] Add `--hb-N` CSS variable to `:root`
+- [ ] Add `nth-child(N)` animation-delay entry
+- [ ] Update `catalog-count` span (e.g. "11 tools" → "12 tools")
+- [ ] Add the tool card before the closing `</div>` of `.catalog`
+- [ ] Push the **root** `index.html` to GitHub (triggers Netlify deploy)
+- [ ] Sync `sites/kin-landing/index.html` (for local preview)
+
+### Adding a tool to the local kin-preview server
+React apps (KIN-004+) build with absolute `/assets/` paths which break under the preview's subpath. After building and copying to `sites/`:
+```bash
+NODE_ENV=production pnpm --filter @workspace/<slug> run build
+mkdir -p sites/<folder>
+cp -r artifacts/<slug>/dist/public/. sites/<folder>/
+# Fix absolute asset paths → relative so they work under /kin-preview/<folder>/
+sed -i 's|src="/assets/|src="./assets/|g; s|href="/assets/|href="./assets/|g; s|href="/manifest.json"|href="./manifest.json"|g' sites/<folder>/index.html
+```
+Tools using `viteSingleFile` (KIN-004) produce one self-contained HTML — no path fix needed, just copy the single file.
+
+### GitHub push rules
+- **Never push in parallel** — concurrent PUTs to the same repo cause 409 SHA conflicts. Always `await` each push before starting the next.
+- Always fetch the current SHA before a PUT — never assume the file doesn't exist.
+- Push order for multi-file changes: dependencies first (e.g. `netlify.toml` before `index.html`).
+
+### Service worker cache busting
+Tools with an external `sw.js` (KIN-003, KIN-004, KIN-005) cache aggressively. After any significant change, bump the cache version string inside `sw.js` (e.g. `kin-bpm-v1` → `kin-bpm-v2`). Without this, users see stale content until the old SW expires.
+
+### Creator name
+Always `dBridge` — lowercase **d**, uppercase **B**. No exceptions.
+
+### Tool catalogue (current)
+| # | Name | Netlify URL | Type |
+|---|---|---|---|
+| KIN-001 | Ukulele Tuner | mayatuner.netlify.app | Static HTML |
+| KIN-002 | Metronome | kinmetronome.netlify.app | Static HTML |
+| KIN-003 | BPM Counter | kinbpm.netlify.app | Static HTML + SW |
+| KIN-004 | Colour Picker | kincolour.netlify.app | React/Vite |
+| KIN-005 | QR Builder | kinqr.netlify.app | React/Vite |
+| KIN-006 | Classroom Timer | kinclasstimer.netlify.app | React/Vite |
+| KIN-007 | Ambient Mixer | kinambientmix.netlify.app | Static HTML |
+| KIN-008 | Flashcards | kinflashcards.netlify.app | Static HTML |
+| KIN-009 | Jet Lag Planner | kinjetlag.netlify.app | Static HTML |
+| KIN-010 | Audio Calculators | kinaudiocalc.netlify.app | Static HTML |
+| KIN-011 | Unit Price Calc | kinunitcalc.netlify.app | Static HTML |
+| KIN-012 | Name Picker | kinnamepick.netlify.app | Static HTML |
+
+---
+
 ## Netlify Deployment — Lessons Learned
 
 When deploying any Kin tool from this monorepo to Netlify, apply these fixes upfront:
