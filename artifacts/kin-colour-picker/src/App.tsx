@@ -365,6 +365,7 @@ export default function App() {
     const saved = localStorage.getItem("kin004-theme");
     return saved ? saved === "dark" : false;
   });
+  const [cvdMode, setCvdMode] = useState<string>("none");
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", !isDark);
@@ -502,6 +503,21 @@ export default function App() {
   const passAAA = bestContrast >= 7;
   const passAALarge = bestContrast >= 3;
 
+  const cvdModes = [
+    { id: "none",          label: "Normal" },
+    { id: "deuteranopia",  label: "Deuteranopia" },
+    { id: "protanopia",    label: "Protanopia" },
+    { id: "tritanopia",    label: "Tritanopia" },
+    { id: "achromatopsia", label: "Achromatopsia" },
+  ];
+
+  const cvdFilters: Record<string, string> = {
+    deuteranopia:  "0.367 0.861 -0.228 0 0  0.280 0.673  0.047 0 0  -0.012 0.043 0.969 0 0  0 0 0 1 0",
+    protanopia:    "0.152 1.053 -0.205 0 0  0.115 0.786  0.099 0 0  0.004 -0.014 1.010 0 0  0 0 0 1 0",
+    tritanopia:    "1.256 -0.077 -0.179 0 0  -0.078 0.931  0.148 0 0  0.005  0.691  0.304 0 0  0 0 0 1 0",
+    achromatopsia: "0.299 0.587  0.114 0 0  0.299 0.587  0.114 0 0  0.299  0.587  0.114 0 0  0 0 0 1 0",
+  };
+
   return (
     <div style={{
       fontFamily: "'Georgia', 'Palatino Linotype', serif",
@@ -512,6 +528,16 @@ export default function App() {
       minHeight: "100vh",
       color: isDark ? "#e8e4dc" : "#2a2520",
     }}>
+      {/* SVG colour vision deficiency filter definitions */}
+      <svg aria-hidden="true" style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
+        <defs>
+          {Object.entries(cvdFilters).map(([id, matrix]) => (
+            <filter key={id} id={`cvd-${id}`} colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values={matrix} />
+            </filter>
+          ))}
+        </defs>
+      </svg>
       <button
         onClick={() => setIsDark(d => !d)}
         aria-label="Toggle light/dark mode"
@@ -529,6 +555,9 @@ export default function App() {
       </button>
 
       {/* ── Large Colour Preview ─────────────────────────────────────── */}
+      <div style={{
+        filter: cvdMode !== "none" ? `url(#cvd-${cvdMode})` : undefined,
+      }}>
       <div style={{
         background: activeHex,
         padding: "36px 24px 28px",
@@ -579,6 +608,34 @@ export default function App() {
           background: `linear-gradient(to right, ${palette.join(", ")})`,
         }} />
 
+        {/* CVD simulation strip */}
+        <div style={{ marginTop: 14, display: "flex", gap: 6, flexWrap: "wrap" }} role="group" aria-label="Colour vision simulation">
+          {cvdModes.map(({ id, label }) => (
+            <button
+              key={id}
+              onClick={() => setCvdMode(id)}
+              aria-pressed={cvdMode === id}
+              style={{
+                fontSize: 10,
+                fontFamily: "system-ui, sans-serif",
+                fontWeight: cvdMode === id ? 700 : 400,
+                letterSpacing: "0.04em",
+                padding: "4px 9px",
+                borderRadius: 100,
+                border: "1.5px solid",
+                borderColor: cvdMode === id ? textColor : "rgba(128,128,128,0.35)",
+                background: cvdMode === id ? textColor : "transparent",
+                color: cvdMode === id ? activeHex : textColor,
+                cursor: "pointer",
+                opacity: cvdMode === id ? 1 : 0.7,
+                transition: "all 0.15s",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         {/* Actions */}
         <div style={{ display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
           <button onClick={randomColour} style={btnStyle("#fff", "rgba(0,0,0,0.15)", textColor === "#f5f5f5" ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.12)")}>
@@ -603,6 +660,7 @@ export default function App() {
           }}>{paletteExport}</div>
         )}
       </div>
+      </div>{/* end CVD filter wrapper */}
 
       <div style={{ padding: "0 20px" }}>
 
