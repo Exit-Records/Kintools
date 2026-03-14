@@ -367,7 +367,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.classList.toggle("light", !isDark);
     localStorage.setItem("kin004-theme", isDark ? "dark" : "light");
   }, [isDark]);
 
@@ -518,7 +518,7 @@ export default function App() {
         style={{
           position: "fixed", top: 14, right: 14, zIndex: 999,
           width: 36, height: 36, borderRadius: 8,
-          background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
+          background: isDark ? "#2a2520" : "#faf9f7",
           border: `1px solid ${isDark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.12)"}`,
           cursor: "pointer", fontSize: 16,
           display: "flex", alignItems: "center", justifyContent: "center",
