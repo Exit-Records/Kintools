@@ -1,0 +1,324 @@
+# KIN-0XX — Random Name Picker
+
+A minimal browser tool that randomly selects one or more names from a pasted list.
+
+Useful for classrooms, workshops, meetings, games, raffles, and group selection.
+
+Users paste names, choose how many winners to pick, and click Pick.
+
+Optional shuffle animation briefly cycles through names before revealing the result.
+
+---
+
+# Core Purpose
+
+Quickly select random names from a list.
+
+Target interaction time: under 5 seconds.
+
+---
+
+# Interface Layout
+
+Title
+
+Paste Names  
+[ textarea ]
+
+Options  
+Shuffle animation (toggle)  
+Remove winners after pick (toggle)
+
+Number of winners  
+[ numeric input ]
+
+Pick Names Button
+
+Results Display
+
+Recent Picks
+
+Reset Button
+
+---
+
+# Name Input
+
+Large textarea allowing pasted lists.
+
+Accepted formats:
+
+New line list
+
+Alice  
+Bob  
+Charlie  
+Dana
+
+Comma separated
+
+Alice, Bob, Charlie, Dana
+
+Mixed input should work.
+
+Processing rules:
+
+• trim whitespace  
+• ignore empty entries  
+• support up to ~500 names  
+
+---
+
+# Number of Winners
+
+Numeric input.
+
+Default value:
+
+1
+
+Minimum:
+
+1
+
+Maximum:
+
+length of list
+
+Example:
+
+Pick 3 names from a class of 20.
+
+Results display as a list.
+
+---
+
+# Pick Button
+
+Primary interaction.
+
+Steps:
+
+1. Parse textarea input  
+2. Clean list  
+3. Validate at least one name exists  
+4. Determine winner count  
+5. Randomly select names  
+6. Display results
+
+Random selection must avoid duplicates unless duplicates exist in the list.
+
+---
+
+# Randomness
+
+Primary method:
+
+crypto.getRandomValues()
+
+Fallback:
+
+Math.random()
+
+This ensures fair randomness.
+
+---
+
+# Shuffle Animation
+
+Optional toggle.
+
+When enabled:
+
+Names rapidly cycle in the result display for approximately 1.5 seconds.
+
+Example animation sequence:
+
+Alice  
+Bob  
+Charlie  
+Dana  
+Alice  
+Bob  
+
+Final result appears after animation.
+
+Animation approach:
+
+• requestAnimationFrame or interval timer  
+• fast text updates  
+• lightweight DOM updates only
+
+Must remain smooth even with 200+ names.
+
+---
+
+# Result Display
+
+Large centered card.
+
+Example:
+
+Selected Names
+
+Charlie  
+Dana  
+Alice
+
+Display rules:
+
+• large readable text  
+• vertical list for multiple winners  
+• subtle fade-in effect
+
+---
+
+# Remove Winners Option
+
+Checkbox:
+
+Remove winners after pick
+
+When enabled:
+
+Selected names are automatically removed from the source list.
+
+This supports:
+
+• classroom cold calling  
+• raffle drawing  
+• turn-taking
+
+Textarea updates live after removal.
+
+---
+
+# Recent Picks
+
+Display last 10 results.
+
+Example:
+
+Recent Picks
+
+Charlie  
+Dana  
+Alice
+
+List resets when page reloads.
+
+No persistent storage.
+
+---
+
+# Reset Button
+
+Clears:
+
+• name list  
+• results  
+• history
+
+Resets winner count to default.
+
+---
+
+# Error Handling
+
+If no valid names exist:
+
+Show message:
+
+Add at least one name
+
+If requested winners exceed list size:
+
+Clamp winners to list length.
+
+---
+
+# Performance Targets
+
+Supports:
+
+5–500 names.
+
+Shuffle animation must remain responsive.
+
+Avoid expensive operations or heavy DOM manipulation.
+
+---
+
+# Accessibility
+
+Keyboard shortcuts:
+
+Enter → Pick names  
+Shift + Enter → Pick without animation
+
+Result area should use ARIA live region so screen readers announce the selected name.
+
+---
+
+# Mobile Design
+
+Responsive layout.
+
+Textarea occupies most width.
+
+Buttons large enough for touch interaction.
+
+Result card scales text for readability.
+
+---
+
+# Metadata
+
+KIN Catalog ID: KIN-0XX  
+Tool Name: Random Name Picker  
+Category: Utility  
+Creator: Kin
+
+Short description:
+
+Pick one or more names at random from a list.
+
+---
+
+# File Requirements
+
+Single HTML file.
+
+All HTML, CSS, and JavaScript inline.
+
+No frameworks.
+
+No analytics.
+
+No tracking.
+
+No external resources.
+
+Offline compatible after first load.
+
+---
+
+# Future Enhancements (Optional)
+
+Wheel picker mode.
+
+Group generator:
+
+Split names into teams automatically.
+
+Import names from clipboard.
+
+Copy results button.
+
+Export results.
+
+---
+
+# Expected Output File
+
+KIN-0XX-random-name-picker.html
