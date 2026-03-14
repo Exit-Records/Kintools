@@ -4,8 +4,8 @@
   "description": "Tap the beat. Get the BPM. A simple, accurate tempo counter for DJs, musicians and runners.",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#1a1714",
-  "background_color": "#1a1714",
+  "theme_color": "#f5f7fa",
+  "background_color": "#f5f7fa",
   "start_url": "/",
   "scope": "/",
   "icons": [

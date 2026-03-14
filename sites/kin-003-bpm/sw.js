@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kin-003-bpm-v1';
+const CACHE_NAME = 'kin-003-bpm-v2';
 
 const ASSETS_TO_CACHE = [
   '/',
