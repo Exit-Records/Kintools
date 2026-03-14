@@ -429,14 +429,12 @@
 
     <!-- Form -->
     <form
-      name="tool-submission"
-      method="POST"
-      data-netlify="true"
       id="submit-form"
       class="form-section"
       novalidate
     >
-      <input type="hidden" name="form-name" value="tool-submission" />
+      <input type="hidden" name="access_key" value="bee35860-0b11-4196-89d4-2ec55bc8b269" />
+      <input type="hidden" name="subject" value="New Kin tool submission" />
 
       <div class="field">
         <label for="f-name">Name</label>
@@ -572,7 +570,7 @@
 
     try {
       const formData = new FormData(form);
-      await fetch('/submit.html', {
+      await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData).toString(),
