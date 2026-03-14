@@ -1,0 +1,58 @@
+12:05:00 AM: Netlify Build                                                 
+12:05:00 AM: ────────────────────────────────────────────────────────────────
+12:05:00 AM: ​
+12:05:00 AM: ❯ Version
+12:05:00 AM:   @netlify/build 35.8.7
+12:05:00 AM: ​
+12:05:00 AM: ❯ Flags
+12:05:00 AM:   accountId: 686a992f6cc0e25ff69a12f4
+12:05:00 AM:   baseRelDir: true
+12:05:00 AM:   buildId: 69b5952a5d704b26e3c55739
+12:05:00 AM:   deployId: 69b5952a5d704b26e3c5573b
+12:05:00 AM:   packagePath: artifacts/kin-colour-picker
+12:05:00 AM: ​
+12:05:00 AM: ❯ Current directory
+12:05:00 AM:   /opt/build/repo
+12:05:00 AM: ​
+12:05:00 AM: ❯ Config file
+12:05:00 AM:   /opt/build/repo/artifacts/kin-colour-picker/netlify.toml
+12:05:00 AM: ​
+12:05:00 AM: ❯ Context
+12:05:00 AM:   production
+12:05:00 AM: ​
+12:05:00 AM: build.command from netlify.toml                               
+12:05:00 AM: ────────────────────────────────────────────────────────────────
+12:05:00 AM: ​
+12:05:00 AM: $ cd ../../ && pnpm install && pnpm --filter @workspace/kin-colour-picker run build
+12:05:00 AM:  ERR_PNPM_NO_PKG_MANIFEST  No package.json found in /opt
+12:05:00 AM: ​
+12:05:00 AM: "build.command" failed                                        
+12:05:00 AM: ────────────────────────────────────────────────────────────────
+12:05:00 AM: ​
+12:05:00 AM:   Error message
+12:05:00 AM:   Command failed with exit code 1: cd ../../ && pnpm install && pnpm --filter @workspace/kin-colour-picker run build (https://ntl.fyi/exit-code-1)
+12:05:00 AM: ​
+12:05:00 AM:   Error location
+12:05:00 AM:   In build.command from netlify.toml:
+12:05:00 AM:   cd ../../ && pnpm install && pnpm --filter @workspace/kin-colour-picker run build
+12:05:00 AM: ​
+12:05:00 AM:   Resolved config
+12:05:00 AM:   build:
+12:05:00 AM:     command: cd ../../ && pnpm install && pnpm --filter @workspace/kin-colour-picker
+12:05:00 AM:       run build
+12:05:00 AM:     commandOrigin: config
+12:05:00 AM:     environment:
+12:05:00 AM:       - NODE_VERSION
+12:05:00 AM:       - PNPM_VERSION
+12:05:00 AM:       - BASE_PATH
+12:05:00 AM:     publish: /opt/build/repo/dist/public
+12:05:00 AM:     publishOrigin: config
+12:05:00 AM:   redirects:
+12:05:00 AM:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+12:05:00 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+12:05:00 AM: Failing build: Failed to build site
+12:05:01 AM: Finished processing build request in 16.542s
+12:05:00 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)

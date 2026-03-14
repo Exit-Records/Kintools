@@ -1,5 +1,5 @@
 [build]
-  command = "cd ../../ && pnpm install && pnpm --filter @workspace/kin-colour-picker run build"
+  command = "pnpm install && pnpm run build"
   publish = "dist/public"
 
 [build.environment]
