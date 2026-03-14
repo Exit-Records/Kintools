@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "vUU61iOqy_-ucw1IuJx-2"
+uri = "file://sites/kin-build-prompt/KIN-BUILD-PROMPT.md"
+type = "text"
+title = "KIN-BUILD-PROMPT.md"

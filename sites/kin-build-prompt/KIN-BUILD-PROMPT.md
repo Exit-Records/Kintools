@@ -14,7 +14,6 @@ Fill in the section marked **[YOUR APP]** below, then paste this entire file as 
 
 **Tool name:** _(e.g. Unit Price Calculator)_
 **Category:** _(e.g. Music / Shopping / Education / Visual / Travel / Everyday)_
-**Catalog number:** _(e.g. KIN-012 — check the Kin catalog for the next available number)_
 **Your name:** _(this appears as the creator credit)_
 
 ---
@@ -155,7 +154,7 @@ Every tool starts with this header pattern inside `.wrap`:
 
 ```html
 <div class="kin-header">
-  <div class="kin-label">KIN-0XX</div>
+  <div class="kin-label">Kin</div>
   <h1 class="kin-title">Tool Name</h1>
   <p class="kin-sub">One sentence describing what it does.</p>
 </div>
@@ -196,7 +195,7 @@ Every tool ends with this footer inside `.wrap`:
 ```html
 <footer class="kin-footer">
   <div class="foot-brand">Kin</div>
-  <div class="foot-meta">KIN-0XX · Tool Name<br>by CreatorName · No tracking · Works offline</div>
+  <div class="foot-meta">[Tool Name]<br>by [Creator] · No tracking · Works offline</div>
 </footer>
 ```
 
@@ -353,13 +352,12 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 
 ### Inline manifest + service worker (add to `<script>`)
 
-Paste this block into your `<script>` tag. Fill in `TOOL_NAME`, `KIN_NUMBER`, `THEME_COLOR`, and `CACHE_NAME`.
+Paste this block into your `<script>` tag. Fill in `TOOL_NAME` and `CACHE_NAME`.
 
 ```js
 // ---- PWA SETUP ----
 const TOOL_NAME  = '[Tool Name]';       // e.g. "Unit Price Calculator"
-const KIN_NUMBER = 'KIN-0XX';          // e.g. "KIN-011"
-const CACHE_NAME = 'kin-0xx-v1';       // e.g. "kin-011-v1"
+const CACHE_NAME = 'kin-tool-v1';      // e.g. "kin-unit-price-v1" — unique per tool
 const THEME_DARK  = '#111110';
 const THEME_LIGHT = '#FAFAF7';
 
@@ -367,7 +365,7 @@ const THEME_LIGHT = '#FAFAF7';
 const manifest = {
   name: `${TOOL_NAME} — Kin`,
   short_name: TOOL_NAME,
-  description: `${KIN_NUMBER} · Free, offline, no accounts.`,
+  description: `Free, offline, no accounts.`,
   start_url: './',
   display: 'standalone',
   background_color: THEME_DARK,
@@ -450,7 +448,7 @@ themeBtn.addEventListener('click', () => {
   <div class="wrap">
 
     <div class="kin-header">
-      <div class="kin-label">KIN-0XX</div>
+      <div class="kin-label">Kin</div>
       <h1 class="kin-title">[Tool Name]</h1>
       <p class="kin-sub">[One sentence description.]</p>
     </div>
@@ -459,7 +457,7 @@ themeBtn.addEventListener('click', () => {
 
     <footer class="kin-footer">
       <div class="foot-brand">Kin</div>
-      <div class="foot-meta">KIN-0XX · [Tool Name]<br>by [Creator] · No tracking · Works offline</div>
+      <div class="foot-meta">[Tool Name]<br>by [Creator] · No tracking · Works offline</div>
     </footer>
 
   </div>
