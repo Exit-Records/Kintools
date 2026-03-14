@@ -677,10 +677,13 @@
   pickBtn.addEventListener('click', () => doPick(false));
 
   // ---- KEYBOARD SHORTCUTS ----
+  // Inside textarea: Ctrl/Cmd+Enter = pick, Enter = new line (normal)
+  // Outside textarea: Enter = pick, Shift+Enter = pick without animation
   document.addEventListener('keydown', e => {
     if (e.target === nameInput) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doPick(false); }
-      if (e.key === 'Enter' && e.shiftKey)  { e.preventDefault(); doPick(true);  }
+      const mod = e.ctrlKey || e.metaKey;
+      if (e.key === 'Enter' && mod && !e.shiftKey) { e.preventDefault(); doPick(false); }
+      if (e.key === 'Enter' && mod && e.shiftKey)  { e.preventDefault(); doPick(true);  }
     } else {
       if (e.key === 'Enter' && !e.shiftKey) doPick(false);
       if (e.key === 'Enter' && e.shiftKey)  doPick(true);
