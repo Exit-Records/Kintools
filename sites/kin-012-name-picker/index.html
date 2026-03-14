@@ -332,7 +332,14 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    max-height: 260px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
   }
+  #history-list::-webkit-scrollbar { width: 4px; }
+  #history-list::-webkit-scrollbar-track { background: transparent; }
+  #history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   .history-item {
     background: var(--surface);
@@ -624,12 +631,13 @@
     }
     recentSection.style.display = 'block';
     historyList.innerHTML = '';
-    history.forEach((picked, i) => {
+    history.forEach((picked) => {
       const item = document.createElement('div');
       item.className = 'history-item';
       item.innerHTML = `<strong>${picked.join(', ')}</strong>`;
       historyList.appendChild(item);
     });
+    historyList.scrollTop = 0;
   }
 
   // ---- PICK ----
