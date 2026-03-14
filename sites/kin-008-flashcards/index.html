@@ -24,6 +24,34 @@
       --radius:   12px;
     }
 
+    html.light {
+      --bg:       #f5f7fa;
+      --surface:  #ffffff;
+      --surface2: #eef0f5;
+      --surface3: #e4e8f2;
+      --border:   #dde1ec;
+      --accent:   #3a6a8a;
+      --accent2:  #4a8aaa;
+      --text:     #1a1f2e;
+      --muted:    #5a6680;
+      --green:    #1a8a5a;
+      --amber:    #c47d00;
+      --red:      #c03030;
+    }
+    html.light .ans-btn.know { background: rgba(26,138,90,0.15); border-color: #1a8a5a; color: #1a8a5a; }
+    html.light .ans-btn.dontknow { background: rgba(192,48,48,0.12); border-color: #c03030; color: #c03030; }
+    html.light .ans-btn.hard { background: rgba(196,125,0,0.12); border-color: #c47d00; color: #c47d00; }
+    html.light .deck-delete-btn:hover { background: rgba(192,48,48,0.12); border-color: #c03030; }
+    #theme-btn {
+      position: fixed; top: 14px; right: 14px; z-index: 999;
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #theme-btn:hover { border-color: var(--accent); color: var(--accent2); }
+
     html, body { height: 100%; }
     body {
       background: var(--bg);
@@ -75,7 +103,7 @@
       color: var(--accent); border: 1px solid var(--accent);
       border-radius: 4px; padding: 2px 7px;
     }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .header-actions { display: flex; gap: 8px; align-items: center; padding-right: 46px; }
     .btn-icon {
       width: 36px; height: 36px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
@@ -1463,6 +1491,23 @@ document.querySelectorAll('.modal-backdrop').forEach(bd => {
       if (study.flipped && study.confidenceMode) handleAnswer('hard');
     }
   }, { passive: true });
+})();
+
+// ═══════════════════════════════════════════════════════════════
+//  THEME TOGGLE
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  const btn = document.createElement('button');
+  btn.id = 'theme-btn'; btn.setAttribute('aria-label', 'Toggle theme');
+  const saved = localStorage.getItem('kin008-theme');
+  if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+  else { btn.textContent = '☀️'; }
+  document.body.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light');
+    btn.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('kin008-theme', isLight ? 'light' : 'dark');
+  });
 })();
 
 // ═══════════════════════════════════════════════════════════════

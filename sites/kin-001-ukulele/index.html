@@ -35,6 +35,36 @@
       --radius: 16px;
     }
 
+    html.dark {
+      --cream: #0d1117;
+      --cream-mid: #161b24;
+      --cream-dark: #2a3241;
+      --ink: #e2e8f0;
+      --ink-mid: #c0c8d4;
+      --ink-soft: #6b7c93;
+      --amber: #d4a853;
+      --amber-light: #e8ba6a;
+      --green: #3ecf8e;
+      --green-light: #4ab87e;
+      --red: #ef6666;
+      --card-bg: #161b24;
+      --shadow: 0 2px 12px rgba(0,0,0,0.4);
+      --shadow-deep: 0 4px 24px rgba(0,0,0,0.6);
+    }
+    html.dark .error-msg {
+      background: rgba(239,68,68,0.1);
+      border-color: rgba(239,68,68,0.3);
+    }
+    #theme-btn {
+      position: fixed; top: 14px; right: 14px; z-index: 999;
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--cream-mid); border: 1px solid var(--cream-dark);
+      color: var(--ink-soft); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #theme-btn:hover { background: var(--cream-dark); }
+
     html, body {
       height: 100%;
       background: var(--cream);
@@ -488,6 +518,8 @@
 </head>
 <body>
 
+  <button id="theme-btn" aria-label="Toggle theme">🌙</button>
+
   <header>
     <span class="kin-wordmark">Kin</span>
     <h1>Ukulele Tuner</h1>
@@ -901,6 +933,18 @@
     setTuning(TUNINGS[0]);
     renderTuningButtons();
     resetDisplay();
+
+    // ─── Theme toggle ─────────────────────────────────────────────────────────
+    (function() {
+      const btn = document.getElementById('theme-btn');
+      const saved = localStorage.getItem('kin001-theme');
+      if (saved === 'dark') { document.documentElement.classList.add('dark'); btn.textContent = '☀️'; }
+      btn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        btn.textContent = isDark ? '☀️' : '🌙';
+        localStorage.setItem('kin001-theme', isDark ? 'dark' : 'light');
+      });
+    })();
   </script>
 </body>
 </html>

@@ -39,6 +39,29 @@
       --font-mono: 'DM Mono', 'Courier New', monospace;
     }
 
+    html.light {
+      --bg:            #f5f7fa;
+      --surface:       #ffffff;
+      --surface-hi:    #f0f2f5;
+      --border:        #dde1ec;
+      --text-primary:  #1a1f2e;
+      --text-secondary:#5a6680;
+      --text-dim:      #8a96aa;
+      --accent:        #c8943a;
+      --accent-glow:   rgba(200,148,58,0.15);
+      --accent-dim:    rgba(200,148,58,0.08);
+      --tap-active:    #d4a853;
+    }
+    #theme-btn {
+      position: fixed; top: 14px; right: 14px; z-index: 999;
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--surface-hi); border: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #theme-btn:hover { background: var(--border); }
+
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -292,6 +315,8 @@
 </head>
 <body>
 
+<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+
 <div class="app-shell">
   <header class="app-header">
     <span class="kin-wordmark">Kin</span>
@@ -439,6 +464,18 @@
       });
     });
   }
+
+  // Theme toggle
+  (function() {
+    const btn = document.getElementById('theme-btn');
+    const saved = localStorage.getItem('kin003-theme');
+    if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+    btn.addEventListener('click', () => {
+      const isLight = document.documentElement.classList.toggle('light');
+      btn.textContent = isLight ? '🌙' : '☀️';
+      localStorage.setItem('kin003-theme', isLight ? 'light' : 'dark');
+    });
+  })();
 </script>
 
 </body>

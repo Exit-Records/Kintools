@@ -24,6 +24,29 @@
       --red:      #ef4444;
     }
 
+    html.light {
+      --bg:       #f5f7fa;
+      --surface:  #ffffff;
+      --surface2: #eef0f5;
+      --border:   #dde1ec;
+      --accent:   #3a6a8a;
+      --accent2:  #4a8aaa;
+      --text:     #1a1f2e;
+      --muted:    #5a6680;
+      --green:    #1a9e6a;
+      --amber:    #c47d00;
+      --red:      #d03030;
+    }
+    #theme-btn {
+      position: fixed; top: 14px; right: 14px; z-index: 999;
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #theme-btn:hover { border-color: var(--accent); color: var(--accent2); }
+
     html, body { height: 100%; }
     body {
       background: var(--bg);
@@ -254,6 +277,8 @@
   </style>
 </head>
 <body>
+
+<button id="theme-btn" aria-label="Toggle theme">☀️</button>
 
 <!-- ═══ Welcome ═══════════════════════════════════════════════ -->
 <div id="welcome">
@@ -756,26 +781,36 @@ function hexToRgba(hex, a) {
   return `rgba(${r},${g},${b},${a.toFixed(3)})`;
 }
 
+function getCanvasTheme() {
+  const light = document.documentElement.classList.contains('light');
+  return {
+    bg:    light ? '#eef0f5' : '#0a0e14',
+    ring:  light ? 'rgba(180,190,215,' : 'rgba(42,50,65,',
+    label: light ? '#4a5570' : '#c8d6e8',
+  };
+}
+
 function drawFrame() {
   c.clearRect(0, 0, canvas.width, canvas.height);
+  const ct = getCanvasTheme();
 
   // Outer clip circle (fills canvas area)
   c.save();
   c.beginPath(); c.arc(cx, cy, fieldR + 6, 0, Math.PI * 2); c.clip();
-  c.fillStyle = '#0a0e14'; c.fill();
+  c.fillStyle = ct.bg; c.fill();
   c.restore();
 
   // Concentric rings
   const rings = [0.33, 0.66, 1.0];
   for (const f of rings) {
     c.beginPath(); c.arc(cx, cy, fieldR * f, 0, Math.PI * 2);
-    c.strokeStyle = f === 1 ? 'rgba(42,50,65,0.9)' : 'rgba(42,50,65,0.4)';
+    c.strokeStyle = f === 1 ? ct.ring + '0.9)' : ct.ring + '0.4)';
     c.lineWidth = f === 1 ? 1.5 : 0.8;
     c.stroke();
   }
 
   // Faint cross lines
-  c.strokeStyle = 'rgba(42,50,65,0.25)'; c.lineWidth = 0.8;
+  c.strokeStyle = ct.ring + '0.25)'; c.lineWidth = 0.8;
   c.beginPath(); c.moveTo(cx, cy - fieldR); c.lineTo(cx, cy + fieldR); c.stroke();
   c.beginPath(); c.moveTo(cx - fieldR, cy); c.lineTo(cx + fieldR, cy); c.stroke();
 
@@ -848,7 +883,7 @@ function drawFrame() {
     // Label
     c.font = '10px -apple-system, system-ui, sans-serif';
     c.textAlign = 'center'; c.textBaseline = 'top';
-    c.fillStyle = hexToRgba('#c8d6e8', Math.min(1, alpha * 1.1));
+    c.fillStyle = hexToRgba(ct.label, Math.min(1, alpha * 1.1));
     c.fillText(n.label, nx, ny + r + 3);
 
     // Volume % when active enough
@@ -1148,6 +1183,19 @@ window.addEventListener('load', () => {
   // Draw static frame so canvas isn't blank before start
   drawFrame();
 });
+
+// Theme toggle
+(function() {
+  const btn = document.getElementById('theme-btn');
+  const saved = localStorage.getItem('kin007-theme');
+  if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light');
+    btn.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('kin007-theme', isLight ? 'light' : 'dark');
+    drawFrame();
+  });
+})();
 </script>
 </body>
 </html>
