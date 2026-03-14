@@ -22,6 +22,47 @@
       --amber:    #f59e0b;
       --red:      #ef4444;
       --purple:   #a78bfa;
+      /* Timeline bands */
+      --band-sleep:         rgba(59, 130, 246, 0.55);
+      --band-sleep-label:   #bfdbfe;
+      --band-sun:           rgba(234, 179, 8,  0.75);
+      --band-sun-label:     #fef08a;
+      --band-avoid:         rgba(239, 68,  68, 0.5);
+      --band-avoid-label:   #fca5a5;
+      --band-fatigue:       rgba(239, 68,  68, 0.85);
+      --band-fatigue-label: #ffffff;
+      /* Cards */
+      --fatigue-bg: #1c0f0f; --fatigue-border: #5a2020; --fatigue-body: #d4a0a0;
+      --sun-bg:     #1a1508; --sun-border:     #5a4010; --sun-body:     #c4a060;
+      --arrival-bg: #0f1d2e; --today-bg:       #0d2214;
+    }
+
+    html.light {
+      --bg:       #f0f4f8;
+      --surface:  #ffffff;
+      --surface2: #f1f5f9;
+      --surface3: #e8edf4;
+      --border:   #cbd5e1;
+      --accent:   #2563eb;
+      --accent2:  #1d4ed8;
+      --text:     #1e293b;
+      --muted:    #64748b;
+      --green:    #059669;
+      --amber:    #d97706;
+      --red:      #dc2626;
+      /* Timeline bands */
+      --band-sleep:         rgba(37, 99,  235, 0.2);
+      --band-sleep-label:   #1d4ed8;
+      --band-sun:           rgba(202, 138, 4,  0.22);
+      --band-sun-label:     #92400e;
+      --band-avoid:         rgba(220, 38,  38, 0.18);
+      --band-avoid-label:   #991b1b;
+      --band-fatigue:       rgba(220, 38,  38, 0.28);
+      --band-fatigue-label: #7f1d1d;
+      /* Cards */
+      --fatigue-bg: #fff5f5; --fatigue-border: #fca5a5; --fatigue-body: #7f1d1d;
+      --sun-bg:     #fffbeb; --sun-border:     #fde68a; --sun-body:     #78350f;
+      --arrival-bg: #eff6ff; --today-bg:       #f0fdf4;
     }
 
     html, body { min-height: 100%; }
@@ -119,23 +160,36 @@
     }
     .timeline-row { margin-bottom: 10px; }
     .timeline-label {
-      font-size: 11px; color: var(--muted); margin-bottom: 4px;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .timeline-sublabel {
+      font-size: 10px; color: var(--muted); font-weight: 400;
     }
     .timeline-track {
-      position: relative; height: 36px; border-radius: 6px;
-      background: var(--surface2); min-width: 560px; overflow: hidden;
+      position: relative; height: 44px; border-radius: 8px;
+      background: var(--surface2); min-width: 600px; overflow: hidden;
+      border: 1px solid var(--border);
     }
     .timeline-band {
       position: absolute; top: 0; height: 100%;
-      border-radius: 3px; opacity: 0.85;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
     }
-    .band-sleep   { background: #1e3a5f; }
-    .band-sun     { background: #78350f; }
-    .band-avoid   { background: #3b0f0f; }
-    .band-fatigue { background: #5c1a1a; border: 1px solid var(--red); opacity: 1; }
+    .band-sleep   { background: var(--band-sleep); }
+    .band-sun     { background: var(--band-sun); }
+    .band-avoid   { background: var(--band-avoid); }
+    .band-fatigue { background: var(--band-fatigue); border-right: 2px solid var(--red); border-left: 2px solid var(--red); }
+    .band-label {
+      font-size: 10px; font-weight: 700; white-space: nowrap;
+      letter-spacing: 0.04em; pointer-events: none; padding: 0 4px;
+    }
+    .band-sleep   .band-label { color: var(--band-sleep-label); }
+    .band-sun     .band-label { color: var(--band-sun-label); }
+    .band-avoid   .band-label { color: var(--band-avoid-label); }
+    .band-fatigue .band-label { color: var(--band-fatigue-label); }
     .timeline-hours {
-      display: flex; min-width: 560px; margin-top: 4px;
+      display: flex; min-width: 600px; margin-top: 3px;
     }
     .timeline-hour {
       flex: 1; text-align: center; font-size: 10px; color: var(--muted);
@@ -143,33 +197,32 @@
       min-width: 0;
     }
     .timeline-hour:first-child { border-left: none; }
-    .timeline-hour.now { color: var(--accent2); font-weight: 600; }
 
     .legend {
-      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;
+      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px;
     }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-    .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
     /* ── Fatigue warning ─────────────────────── */
     .fatigue-card {
-      background: #1c0f0f; border: 1px solid #3d1515;
+      background: var(--fatigue-bg); border: 1px solid var(--fatigue-border);
       border-radius: 12px; padding: 16px 18px;
       display: flex; gap: 14px; align-items: flex-start;
     }
     .fatigue-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
     .fatigue-title { font-size: 14px; font-weight: 600; color: var(--red); margin-bottom: 4px; }
-    .fatigue-body  { font-size: 13px; color: #d4a0a0; line-height: 1.5; }
+    .fatigue-body  { font-size: 13px; color: var(--fatigue-body); line-height: 1.5; }
 
     /* ── Sunlight card ───────────────────────── */
     .sunlight-card {
-      background: #1a1508; border: 1px solid #3d2e0f;
+      background: var(--sun-bg); border: 1px solid var(--sun-border);
       border-radius: 12px; padding: 16px 18px;
       display: flex; gap: 14px; align-items: flex-start;
     }
     .sunlight-icon  { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
     .sunlight-title { font-size: 14px; font-weight: 600; color: var(--amber); margin-bottom: 4px; }
-    .sunlight-body  { font-size: 13px; color: #c4a060; line-height: 1.5; }
+    .sunlight-body  { font-size: 13px; color: var(--sun-body); line-height: 1.5; }
 
     /* ── Day plan cards ──────────────────────── */
     .day-cards { display: flex; flex-direction: column; gap: 10px; }
@@ -178,10 +231,10 @@
       border-radius: 12px; padding: 14px 16px;
     }
     .day-card.arrival {
-      background: #0f1d2e; border-color: var(--accent);
+      background: var(--arrival-bg); border-color: var(--accent);
     }
     .day-card.today {
-      background: #0d2214; border-color: var(--green);
+      background: var(--today-bg); border-color: var(--green);
     }
     .day-card-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -222,6 +275,19 @@
     }
     .btn-save:hover { border-color: var(--accent); }
 
+    /* ── Mode toggle ─────────────────────────── */
+    .btn-mode {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 12px; cursor: pointer;
+      font: inherit; font-size: 13px; color: var(--muted);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-mode:hover { border-color: var(--accent); color: var(--text); }
+
+    /* Light-mode input chrome fix */
+    html.light select, html.light input[type="time"] { color-scheme: light; }
+    html:not(.light) select, html:not(.light) input[type="time"] { color-scheme: dark; }
+
     /* ── Print layout ─────────────────────────── */
     @media print {
       .kin-header, .form-card, .btn-save, .btn-generate, .optional-toggle { display: none !important; }
@@ -242,7 +308,10 @@
     <div class="brand-name">Jet Lag Planner</div>
     <div class="brand-sub">KIN-009 · <span style="text-transform:none">d</span>Bridge</div>
   </div>
-  <span class="kin-badge">KIN-009</span>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="btn-mode" id="btn-mode" title="Toggle light/dark mode">☀️ Light</button>
+    <span class="kin-badge">KIN-009</span>
+  </div>
 </header>
 
 <div class="page">
@@ -538,15 +607,20 @@ function pct(h) {
   return (h / 24 * 100).toFixed(3) + '%';
 }
 
-function bandStyle(start, end, cls) {
+function bandStyle(start, end, cls, label = '') {
   start = ((start % 24) + 24) % 24;
   end   = ((end   % 24) + 24) % 24;
+  const inner = label ? `<span class="band-label">${label}</span>` : '';
   if (end > start) {
-    return `<div class="timeline-band ${cls}" style="left:${pct(start)};width:${pct(end - start)}"></div>`;
+    const w = end - start;
+    // Only show label if band is wide enough (≥1.5 hrs)
+    const lbl = w >= 1.5 ? inner : '';
+    return `<div class="timeline-band ${cls}" style="left:${pct(start)};width:${pct(w)}">${lbl}</div>`;
   } else {
-    // Wraps midnight — draw two segments
-    return `<div class="timeline-band ${cls}" style="left:${pct(start)};width:${pct(24 - start)}"></div>`
-         + `<div class="timeline-band ${cls}" style="left:0;width:${pct(end)}"></div>`;
+    // Wraps midnight — draw two segments; put label on whichever segment is wider
+    const w1 = 24 - start, w2 = end;
+    return `<div class="timeline-band ${cls}" style="left:${pct(start)};width:${pct(w1)}">${w1 >= w2 && w1 >= 1.5 ? inner : ''}</div>`
+         + `<div class="timeline-band ${cls}" style="left:0;width:${pct(w2)}">${w2 > w1 && w2 >= 1.5 ? inner : ''}</div>`;
   }
 }
 
@@ -557,17 +631,15 @@ function renderTimeline(p) {
   ).join('');
 
   // Top track — recommended target schedule (destination local time)
-  // Sleep = same time of day as usual (e.g. 23:00 dest), sunlight, avoid-light
   const destBands =
-    bandStyle(p.sleepHour,  p.wakeHour,  'band-sleep') +
-    bandStyle(p.sunStart,   p.sunEnd,    'band-sun')   +
-    bandStyle(p.avoidStart, p.avoidEnd,  'band-avoid');
+    bandStyle(p.sleepHour,  p.wakeHour,  'band-sleep',  'Sleep') +
+    bandStyle(p.sunStart,   p.sunEnd,    'band-sun',    '☀ Sunlight') +
+    bandStyle(p.avoidStart, p.avoidEnd,  'band-avoid',  'Dim light');
 
-  // Bottom track — body clock's CURRENT state mapped to destination time
-  // (shows the mismatch: e.g. body tries to sleep 06:00–14:00 Bangkok when arriving from London)
+  // Bottom track — body clock's current state in destination time (shows the mismatch)
   const bodyBands =
-    bandStyle(p.sleepDest, p.wakeDest,       'band-sleep') +
-    bandStyle(p.nadirDest, p.nadirDest + 2,  'band-fatigue');
+    bandStyle(p.sleepDest, p.wakeDest,      'band-sleep',   'Body sleep') +
+    bandStyle(p.nadirDest, p.nadirDest + 2, 'band-fatigue', '⚠ Fatigue');
 
   // Body clock hour labels (destination hour N = body clock hour N - delta)
   const bodyHourTicks = hours.map(h => {
@@ -578,20 +650,20 @@ function renderTimeline(p) {
 
   document.getElementById('timeline-wrap').innerHTML = `
     <div class="timeline-row">
-      <div class="timeline-label">Target schedule — destination local time</div>
+      <div class="timeline-label">Target schedule <span class="timeline-sublabel">— destination local time</span></div>
       <div class="timeline-track">${destBands}</div>
       <div class="timeline-hours">${hourTicks}</div>
     </div>
-    <div class="timeline-row" style="margin-top:16px">
-      <div class="timeline-label">Your body clock — destination time &nbsp;<span style="font-size:10px;color:var(--muted)">(shows the mismatch)</span></div>
+    <div class="timeline-row" style="margin-top:18px">
+      <div class="timeline-label">Body clock <span class="timeline-sublabel">— your origin time mapped to destination (the mismatch)</span></div>
       <div class="timeline-track">${bodyBands}</div>
       <div class="timeline-hours">${bodyHourTicks}</div>
     </div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#1e3a5f;opacity:1"></div> Sleep</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#78350f"></div> Sunlight (target)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#3b0f0f"></div> Avoid bright light</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#5c1a1a;border:1px solid var(--red)"></div> Fatigue window (body clock)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--band-sleep)"></div> Sleep</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--band-sun)"></div> Sunlight</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--band-avoid)"></div> Dim light</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--band-fatigue);border:1px solid var(--red)"></div> Fatigue window</div>
     </div>`;
 }
 
@@ -702,8 +774,20 @@ function render(p, originName, destName, arrivalHour) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  EVENTS
+//  EVENTS & MODE TOGGLE
 // ═══════════════════════════════════════════════════════════════
+(function() {
+  const btn = document.getElementById('btn-mode');
+  const saved = localStorage.getItem('kin-mode');
+  if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙 Dark'; }
+
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light');
+    btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
+    localStorage.setItem('kin-mode', isLight ? 'light' : 'dark');
+  });
+})();
+
 document.getElementById('toggle-optional').addEventListener('click', function() {
   const sec = document.getElementById('optional-section');
   const hidden = sec.style.display === 'none';
