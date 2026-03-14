@@ -1,0 +1,154 @@
+12:12:39 AM: Waiting for other deploys from your team to complete. Check the queue: https://app.netlify.com/teams/exit-records/builds
+12:13:14 AM: build-image version: 207bd4d38e2cd3af6515aa37c5942e41499b616a (noble-new-builds)
+12:13:14 AM: buildbot version: 420ff06ebdfb3fd8215b1a0a158ab916a07fe5a9
+12:13:14 AM: Fetching cached dependencies
+12:13:14 AM: Failed to fetch cache, continuing with build
+12:13:14 AM: Starting to prepare the repo for build
+12:13:14 AM: No cached dependencies found. Cloning fresh repo
+12:13:14 AM: git clone --filter=blob:none https://github.com/Exit-Records/Kintools
+12:13:14 AM: Preparing Git Reference refs/heads/main
+12:13:15 AM: Custom build command detected. Proceeding with the specified command: 'pnpm install && pnpm run build'
+12:13:16 AM: Installing dependencies
+12:13:16 AM: mise ~/.config/mise/config.toml tools: python@3.14.3
+12:13:16 AM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+12:13:16 AM: mise ~/.config/mise/config.toml tools: go@1.26.0
+12:13:17 AM: Downloading and installing node v20.20.1...
+12:13:17 AM: Downloading https://nodejs.org/dist/v20.20.1/node-v20.20.1-linux-x64.tar.xz...
+12:13:17 AM: Computing checksum with sha256sum
+12:13:17 AM: Checksums matched!
+12:13:19 AM: Now using node v20.20.1 (npm v10.8.2)
+12:13:19 AM: Enabling Node.js Corepack
+12:13:20 AM: Found pnpm version (10.30.2) that doesn't match expected (10)
+Preparing pnpm@10 for immediate activation...
+12:13:21 AM: pnpm workspaces detected
+12:13:21 AM: Installing npm packages using pnpm version 10.30.2
+12:13:21 AM: Scope: all 12 workspace projects
+12:13:21 AM: Lockfile is up to date, resolution step is skipped
+12:13:21 AM: Progress: resolved 1, reused 0, downloaded 0, added 0
+12:13:21 AM: Packages: +488
+12:13:21 AM: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+12:13:22 AM: Progress: resolved 488, reused 0, downloaded 168, added 106
+12:13:23 AM: Progress: resolved 488, reused 0, downloaded 190, added 114
+12:13:24 AM: Progress: resolved 488, reused 0, downloaded 316, added 182
+12:13:25 AM: Progress: resolved 488, reused 0, downloaded 488, added 404
+12:13:25 AM: Progress: resolved 488, reused 0, downloaded 488, added 488, done
+12:13:26 AM: .../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+12:13:26 AM: .../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+12:13:26 AM: dependencies:
+12:13:26 AM: + @replit/connectors-sdk 0.2.0
+12:13:26 AM: devDependencies:
+12:13:26 AM: + prettier 3.8.1
+12:13:26 AM: + typescript 5.9.3
+12:13:26 AM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+12:13:26 AM: . preinstall: Done
+12:13:26 AM: Done in 5.3s using pnpm v10.30.2
+12:13:26 AM: npm packages installed using pnpm
+12:13:27 AM: Successfully installed dependencies
+12:13:27 AM: Detected 0 framework(s)
+12:13:27 AM: Starting build script
+12:13:28 AM: Section completed: initializing
+12:13:30 AM: ​
+12:13:30 AM: Netlify Build                                                 
+12:13:30 AM: ────────────────────────────────────────────────────────────────
+12:13:30 AM: ​
+12:13:30 AM: ❯ Version
+12:13:30 AM:   @netlify/build 35.8.7
+12:13:30 AM: ​
+12:13:30 AM: ❯ Flags
+12:13:30 AM:   accountId: 686a992f6cc0e25ff69a12f4
+12:13:30 AM:   baseRelDir: true
+12:13:30 AM:   buildId: 69b5970769a13ff7e217eb1b
+12:13:30 AM:   deployId: 69b5970769a13ff7e217eb1d
+12:13:30 AM:   packagePath: artifacts/kin-colour-picker
+12:13:30 AM: ​
+12:13:30 AM: ❯ Current directory
+12:13:30 AM:   /opt/build/repo
+12:13:30 AM: ​
+12:13:30 AM: ❯ Config file
+12:13:30 AM:   /opt/build/repo/artifacts/kin-colour-picker/netlify.toml
+12:13:30 AM: ​
+12:13:30 AM: ❯ Context
+12:13:30 AM:   production
+12:13:30 AM: ​
+12:13:30 AM: build.command from netlify.toml                               
+12:13:30 AM: ────────────────────────────────────────────────────────────────
+12:13:30 AM: ​
+12:13:30 AM: $ pnpm install && pnpm run build
+12:13:30 AM: Scope: all 12 workspace projects
+12:13:30 AM: Lockfile is up to date, resolution step is skipped
+12:13:30 AM: Already up to date
+12:13:31 AM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+12:13:31 AM: . preinstall: Done
+12:13:32 AM: Done in 1.7s using pnpm v10.30.2
+12:13:32 AM: > workspace@0.0.0 build /opt/build/repo
+12:13:32 AM: > pnpm run typecheck && pnpm -r --if-present run build
+12:13:32 AM: > workspace@0.0.0 typecheck /opt/build/repo
+12:13:32 AM: > pnpm run typecheck:libs && pnpm -r --filter "./artifacts/**" --filter "./scripts" --if-present run typecheck
+12:13:33 AM: > workspace@0.0.0 typecheck:libs /opt/build/repo
+12:13:33 AM: > tsc --build
+12:13:35 AM: Scope: 7 of 12 workspace projects
+12:13:35 AM: artifacts/api-server typecheck$ tsc -p tsconfig.json --noEmit
+12:13:35 AM: artifacts/kin-classroom-timer typecheck$ tsc -p tsconfig.json --noEmit
+12:13:35 AM: artifacts/kin-colour-picker typecheck$ tsc -p tsconfig.json --noEmit
+12:13:37 AM: artifacts/api-server typecheck: Done
+12:13:37 AM: artifacts/kin-qr-builder typecheck$ tsc -p tsconfig.json --noEmit
+12:13:44 AM: artifacts/kin-classroom-timer typecheck: Done
+12:13:44 AM: artifacts/mockup-sandbox typecheck$ tsc -p tsconfig.json --noEmit
+12:13:44 AM: artifacts/kin-colour-picker typecheck: Done
+12:13:44 AM: scripts typecheck$ tsc -p tsconfig.json --noEmit
+12:13:45 AM: scripts typecheck: Done
+12:13:45 AM: artifacts/kin-qr-builder typecheck: Done
+12:13:48 AM: artifacts/mockup-sandbox typecheck: Done
+12:13:49 AM: Scope: 11 of 12 workspace projects
+12:13:49 AM: artifacts/kin-classroom-timer build$ vite build --config vite.config.ts
+12:13:49 AM: artifacts/mockup-sandbox build$ vite build
+12:13:49 AM: artifacts/kin-colour-picker build$ vite build --config vite.config.ts
+12:13:49 AM: artifacts/kin-colour-picker build: vite v7.3.1 building client environment for production...
+12:13:49 AM: artifacts/mockup-sandbox build: failed to load config from /opt/build/repo/artifacts/mockup-sandbox/vite.config.ts
+12:13:49 AM: artifacts/mockup-sandbox build: error during build:
+12:13:49 AM: artifacts/mockup-sandbox build: Error: PORT environment variable is required but was not provided.
+12:13:49 AM: artifacts/mockup-sandbox build:     at file:///opt/build/repo/artifacts/mockup-sandbox/node_modules/.vite-temp/vite.config.ts.timestamp-1773508429569-0c209c9c43dd9.mjs:145:9
+12:13:49 AM: artifacts/mockup-sandbox build:     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async loadConfigFromBundledFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35909:12)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async bundleAndLoadConfigFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35797:17)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async loadConfigFromFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35764:42)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async resolveConfig (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35413:22)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async createBuilder (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:33875:19)
+12:13:49 AM: artifacts/mockup-sandbox build:     at async CAC.<anonymous> (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/cli.js:629:10)
+12:13:49 AM: artifacts/mockup-sandbox build: Failed
+12:13:49 AM: /opt/build/repo/artifacts/mockup-sandbox:
+12:13:49 AM:  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/mockup-sandbox@2.0.0 build: `vite build`
+12:13:49 AM: Exit status 1
+12:13:49 AM: artifacts/kin-classroom-timer build: vite v7.3.1 building client environment for production...
+12:13:49 AM: artifacts/kin-colour-picker build: transforming...
+12:13:49 AM:  ELIFECYCLE  Command failed with exit code 1. (https://ntl.fyi/exit-code-1)
+12:13:49 AM: ​
+12:13:49 AM: "build.command" failed                                        
+12:13:49 AM: ────────────────────────────────────────────────────────────────
+12:13:49 AM: ​
+12:13:49 AM:   Error message
+12:13:49 AM:   Command failed with exit code 1: pnpm install && pnpm run build (https://ntl.fyi/exit-code-1)
+12:13:49 AM: ​
+12:13:49 AM:   Error location
+12:13:49 AM:   In build.command from netlify.toml:
+12:13:49 AM:   pnpm install && pnpm run build
+12:13:49 AM: ​
+12:13:49 AM:   Resolved config
+12:13:49 AM:   build:
+12:13:49 AM:     command: pnpm install && pnpm run build
+12:13:49 AM:     commandOrigin: config
+12:13:49 AM:     environment:
+12:13:49 AM:       - NODE_VERSION
+12:13:49 AM:       - PNPM_VERSION
+12:13:49 AM:       - BASE_PATH
+12:13:49 AM:     publish: /opt/build/repo/dist/public
+12:13:49 AM:     publishOrigin: config
+12:13:49 AM:   redirects:
+12:13:50 AM:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+12:13:50 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+12:13:50 AM: Failing build: Failed to build site
+12:13:50 AM: Finished processing build request in 36.302s
