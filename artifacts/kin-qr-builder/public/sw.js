@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kin-qr-builder-v1';
+const CACHE_NAME = 'kin-qr-builder-v2';
 const ASSETS = [
   '/',
   '/manifest.json'
