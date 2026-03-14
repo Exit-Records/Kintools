@@ -1,0 +1,33 @@
+12:11:07 AM: build-image version: 207bd4d38e2cd3af6515aa37c5942e41499b616a (noble-new-builds)
+12:11:07 AM: buildbot version: 420ff06ebdfb3fd8215b1a0a158ab916a07fe5a9
+12:11:07 AM: Fetching cached dependencies
+12:11:07 AM: Failed to fetch cache, continuing with build
+12:11:07 AM: Starting to prepare the repo for build
+12:11:08 AM: No cached dependencies found. Cloning fresh repo
+12:11:08 AM: git clone --filter=blob:none https://github.com/Exit-Records/Kintools
+12:11:08 AM: Preparing Git Reference refs/heads/main
+12:11:09 AM: Custom build command detected. Proceeding with the specified command: 'pnpm install && pnpm run build'
+12:11:09 AM: Installing dependencies
+12:11:09 AM: mise ~/.config/mise/config.toml tools: python@3.14.3
+12:11:09 AM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+12:11:10 AM: mise ~/.config/mise/config.toml tools: go@1.26.0
+12:11:10 AM: Downloading and installing node v20.20.1...
+12:11:10 AM: Downloading https://nodejs.org/dist/v20.20.1/node-v20.20.1-linux-x64.tar.xz...
+12:11:10 AM: Computing checksum with sha256sum
+12:11:10 AM: Checksums matched!
+12:11:13 AM: Now using node v20.20.1 (npm v10.8.2)
+12:11:13 AM: Enabling Node.js Corepack
+12:11:14 AM: Found pnpm version (10.30.2) that doesn't match expected (10)
+Preparing pnpm@10 for immediate activation...
+12:11:14 AM: pnpm workspaces detected
+12:11:14 AM: Installing npm packages using pnpm version 10.30.2
+12:11:15 AM: Scope: all 12 workspace projects
+12:11:15 AM:  ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with <ROOT>/artifacts/kin-colour-picker/package.json
+12:11:15 AM: Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install --no-frozen-lockfile"
+12:11:15 AM:   Failure reason:
+12:11:15 AM:   specifiers in the lockfile don't match specifiers in package.json:
+* 1 dependencies were removed: @workspace/api-client-react@workspace:*
+12:11:15 AM: Error during pnpm install
+12:11:15 AM: Failing build: Failed to install dependencies
+12:11:15 AM: Finished processing build request in 8.097s
+12:11:15 AM: Failed during stage 'Install dependencies': dependency_installation script returned non-zero exit code: 1
