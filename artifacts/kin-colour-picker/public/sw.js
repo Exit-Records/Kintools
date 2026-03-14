@@ -2,7 +2,7 @@
 // KIN-004 · dBridge
 // Caches all app assets on first visit for full offline capability.
 
-const CACHE_NAME = "kin-colour-picker-v1";
+const CACHE_NAME = "kin-colour-picker-v2";
 
 // Assets to pre-cache on install
 const PRECACHE_ASSETS = [
