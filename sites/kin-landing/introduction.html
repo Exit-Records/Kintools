@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kin — Everyday tools. No strings.</title>
+<meta name="description" content="Kin is a curated collection of simple, free web tools that work without subscriptions, accounts, or tracking.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --border: #E8E6E1;
+    --border-hover: #D0CEC8;
+    --text: #1A1A18;
+    --text-mid: #5C5B56;
+    --text-dim: #9C9A94;
+    --accent: #2D5A3D;
+    --accent-light: #E8F0EB;
+    --warm: #F5F0E8;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 0;
+  }
+
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  /* ---- PAGE ---- */
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 80px;
+    align-items: start;
+  }
+
+  /* ---- HERO ---- */
+  .doc-hero {
+    margin-bottom: 64px;
+  }
+
+  .doc-hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(38px, 6vw, 58px);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 18px;
+  }
+
+  .doc-hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .doc-hero .lead {
+    font-size: 18px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* ---- SECTIONS ---- */
+  .doc-section {
+    margin-bottom: 56px;
+  }
+
+  .doc-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+
+  .doc-section h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 18px;
+    line-height: 1.25;
+  }
+
+  .doc-section p {
+    font-size: 16px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    margin-bottom: 16px;
+    max-width: 640px;
+  }
+
+  .doc-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---- STANDARD LIST ---- */
+  .standard-block {
+    background: var(--warm);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    margin-top: 8px;
+  }
+
+  .standard-block ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .standard-block li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .standard-block li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.55;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  /* ---- RULE DIVIDER ---- */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 56px 0;
+  }
+
+  /* ---- CLOSING ---- */
+  .doc-closing {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    color: var(--text-mid);
+    font-style: italic;
+    line-height: 1.5;
+    padding-top: 8px;
+  }
+
+  /* ---- ASIDE / TOC ---- */
+  .toc {
+    position: sticky;
+    top: 40px;
+  }
+
+  .toc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .toc ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .toc a {
+    font-size: 13px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 5px 0;
+    display: block;
+    transition: color 0.15s;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
+  }
+
+  .toc a:hover {
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+
+  .toc-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .toc-cta {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .toc .btn-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .toc .btn-small:hover { opacity: 0.82; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  footer .foot-left {
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    color: var(--text-dim);
+  }
+
+  footer .foot-right {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ---- ANIMATION ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .page { animation: fadeUp 0.55s ease-out both; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 860px) {
+    .page {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .toc { display: none; }
+    .standard-block { padding: 28px 24px; }
+  }
+
+  @media (max-width: 600px) {
+    header { padding-top: 32px; }
+    .page { padding-top: 48px; padding-bottom: 64px; }
+    .doc-hero { margin-bottom: 48px; }
+    .doc-section { margin-bottom: 44px; }
+    .rule { margin: 44px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="./" class="logo">Kin</a>
+</header>
+
+<div class="page">
+  <main>
+
+    <!-- Hero -->
+    <div class="doc-hero">
+      <h1>Everyday tools.<br>No <em>strings</em>.</h1>
+      <p class="lead">Kin is a curated collection of simple, free web tools that work without subscriptions, accounts, or tracking. Small, useful things that you open in a browser, use, and close. Nothing more.</p>
+    </div>
+
+    <!-- What it is -->
+    <div class="doc-section" id="what">
+      <div class="section-label">What it is</div>
+      <p>Every tool on Kin is built by a real person whose name is on it. Every tool works offline once you have visited it. Every tool can be installed to your phone's home screen like a native app. No app store involved.</p>
+      <p>Kin is structured like a record label. There is a catalog. Each tool has a number, a creator credit, and a consistent visual identity. There is an editorial standard for what gets in. Not everything belongs, and that is the point. The curation is the value.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- Why it exists -->
+    <div class="doc-section" id="why">
+      <div class="section-label">Why it exists</div>
+      <p>At some point in the last decade, the simplest tools on your phone started asking for monthly payments. A tuner wants six euros a month. A flashlight app charges fifteen dollars a week to remove ads. A breathing exercise app costs seventy dollars a year. A period tracker sells your data to third parties. A calculator shows you a video ad before you can divide.</p>
+      <p>This is not a technology problem. These tools are trivially simple to build. What happened is a business model captured them. The subscription economy turned every small utility into a recurring revenue opportunity, and the app stores incentivised it.</p>
+      <p>Most people do not know there is an alternative. They assume if something is on their phone, it has to come from an app store, and if it comes from an app store, someone is going to charge them for it or monetise their attention. That assumption is wrong. Modern browsers can do almost everything a native app can do, including working offline, accessing the microphone and camera, running audio synthesis, and sitting on your home screen with its own icon.</p>
+      <p>Kin exists to make that alternative visible, trustworthy, and easy to find.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- What it isn't -->
+    <div class="doc-section" id="isnt">
+      <div class="section-label">What it isn't</div>
+      <p>Kin is not a platform. There are no user accounts, no social features, no feeds, no notifications, no engagement metrics. Nobody is trying to keep you on the site. You come, you find the tool, you use it, you leave.</p>
+      <p>Kin is not trying to replace professional software. It is not a free Photoshop or a free Ableton. It is the small, single-purpose tools that exist in the gaps between big applications. The things you reach for ten times a week that should never have been monetised in the first place.</p>
+      <p>Kin is not an open-source directory or a GitHub repository. Those exist and they serve developers well. Kin is for everyone else. The person who does not know what GitHub is but does know they are tired of being nickel-and-dimed for a timer.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- How it works -->
+    <div class="doc-section" id="how">
+      <div class="section-label">How it works</div>
+      <p>Someone builds a tool. It is browser-based, works on any device, runs offline, requires no account, collects no data. They submit it. A small editorial group reviews it. Does it work? Is it clean? Does it respect the user? Does it meet the standard? If yes, it joins the catalog. The creator keeps full ownership. Kin is the quality mark, not the rights holder.</p>
+      <p>The tools are free. There is no catch. No free tier with a premium upsell. No ads. No data collection. The tools are static files hosted for nearly zero cost. They could survive their creators walking away. An HTML file on a server is one of the most durable things on the internet.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- The label model -->
+    <div class="doc-section" id="label">
+      <div class="section-label">The label model</div>
+      <p>Kin borrows its structure from independent record labels. A label does not make all the music. It finds it, curates it, presents it with a consistent identity, and puts its name behind it. The label's reputation tells you what to expect before you have heard a note.</p>
+      <p>Each Kin tool is a release. It has a catalog number (KIN-001, KIN-002…). It has a creator credit. It has a cover in the house design. It sits in the catalog alongside everything else. When someone sees the Kin mark, they know: this is free, this is clean, this works, someone checked.</p>
+      <p>Contributors are not employees or contractors. They are artists on the roster. They built something good and it found a home.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- Who it's for -->
+    <div class="doc-section" id="for">
+      <div class="section-label">Who it's for</div>
+      <p>Everyone who has felt the friction. The parent downloading a tuner for their kid and being asked for a credit card. The freelancer paying for nine SaaS tools and using a fraction of each one. The teacher buying a classroom timer app out of their own pocket. The musician who needs a metronome that does not show an ad before the first beat. The maker who just wants to calculate a knitting gauge without creating an account.</p>
+      <p>These people are not looking for a movement. They are looking for a tuner that works. Kin meets them where they are.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- Who builds it -->
+    <div class="doc-section" id="who">
+      <div class="section-label">Who builds it</div>
+      <p>Kin is a collective. It starts small: a few people who understand the ethos and can build or commission simple tools to a shared standard. Over time, the circle grows. The editorial group stays small and trusted. New voices join by demonstrating they understand what the thing is, not by applying for a role.</p>
+      <p>The technical barrier to contributing is deliberately low. A single HTML file with some JavaScript can be a complete Kin tool. If you can build a web page, you can build a Kin app. The harder bar is quality and intent: does this tool genuinely help someone do something without asking for anything in return?</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- The standard -->
+    <div class="doc-section" id="standard">
+      <div class="section-label">The standard</div>
+      <p>Every Kin tool should:</p>
+      <div class="standard-block">
+        <ul>
+          <li>Work in any modern browser on any device</li>
+          <li>Require no account, login, or registration</li>
+          <li>Collect no data and include no tracking</li>
+          <li>Contain no ads, upsells, or monetisation of any kind</li>
+          <li>Work offline after the first visit</li>
+          <li>Be installable to a phone's home screen</li>
+          <li>Do one thing well</li>
+          <li>Credit its creator</li>
+        </ul>
+      </div>
+      <p style="margin-top: 20px;">These are not aspirational guidelines. They are the entry requirements.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- Closing -->
+    <p class="doc-closing">Kin. Everyday tools. No strings.</p>
+
+  </main>
+
+  <!-- Aside / TOC -->
+  <aside class="toc">
+    <div class="toc-label">Contents</div>
+    <ul>
+      <li><a href="#what">What it is</a></li>
+      <li><a href="#why">Why it exists</a></li>
+      <li><a href="#isnt">What it isn't</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#label">The label model</a></li>
+      <li><a href="#for">Who it's for</a></li>
+      <li><a href="#who">Who builds it</a></li>
+      <li><a href="#standard">The standard</a></li>
+    </ul>
+    <hr class="toc-divider">
+    <p class="toc-cta">Have a tool idea that fits the ethos?</p>
+    <a href="./submit/" class="btn-small">Submit a demo &rarr;</a>
+  </aside>
+</div>
+
+<footer>
+  <div class="foot-left">Kin</div>
+  <div class="foot-right">Free tools, built by people, for everyone.<br>No accounts. No tracking. No subscriptions. Ever.</div>
+</footer>
+
+</body>
+</html>
