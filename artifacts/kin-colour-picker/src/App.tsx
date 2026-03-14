@@ -361,6 +361,34 @@ export default function App() {
   const [paletteExport, setPaletteExport] = useState("");
   const [showPaletteExport, setShowPaletteExport] = useState(false);
   const [eyedropperSupported] = useState(() => "EyeDropper" in window);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("kin004-theme");
+    return saved ? saved === "dark" : false;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDark);
+    localStorage.setItem("kin004-theme", isDark ? "dark" : "light");
+  }, [isDark]);
+
+  const sectionStyle: React.CSSProperties = {
+    marginTop: 28,
+    paddingTop: 20,
+    borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)"}`,
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "8px 10px",
+    border: `1.5px solid ${isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}`,
+    borderRadius: 7,
+    fontSize: 12,
+    fontFamily: "monospace",
+    background: isDark ? "#2a2520" : "white",
+    color: isDark ? "#e8e4dc" : "#2a2520",
+    outline: "none",
+    boxSizing: "border-box",
+  };
 
   const activeHex = hslToHex(hue, sat, lit);
   const [ar, ag, ab] = hexToRgb(activeHex);
@@ -480,10 +508,25 @@ export default function App() {
       maxWidth: 480,
       margin: "0 auto",
       padding: "0 0 48px",
-      background: "#faf9f7",
+      background: isDark ? "#1a1714" : "#faf9f7",
       minHeight: "100vh",
-      color: "#2a2520",
+      color: isDark ? "#e8e4dc" : "#2a2520",
     }}>
+      <button
+        onClick={() => setIsDark(d => !d)}
+        aria-label="Toggle light/dark mode"
+        style={{
+          position: "fixed", top: 14, right: 14, zIndex: 999,
+          width: 36, height: 36, borderRadius: 8,
+          background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
+          border: `1px solid ${isDark ? "rgba(255,255,255,0.14)" : "rgba(0,0,0,0.12)"}`,
+          cursor: "pointer", fontSize: 16,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: isDark ? "#e8e4dc" : "#2a2520",
+        }}
+      >
+        {isDark ? "☀️" : "🌙"}
+      </button>
 
       {/* ── Large Colour Preview ─────────────────────────────────────── */}
       <div style={{
@@ -841,12 +884,6 @@ export default function App() {
 
 // ─── Shared Styles ────────────────────────────────────────────────────────────
 
-const sectionStyle: React.CSSProperties = {
-  marginTop: 28,
-  paddingTop: 20,
-  borderTop: "1px solid rgba(0,0,0,0.07)",
-};
-
 const labelStyle: React.CSSProperties = {
   fontSize: 10,
   letterSpacing: "0.1em",
@@ -861,19 +898,6 @@ const fieldLabel: React.CSSProperties = {
   color: "#999",
   marginBottom: 4,
   textTransform: "uppercase",
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "8px 10px",
-  border: "1.5px solid rgba(0,0,0,0.12)",
-  borderRadius: 7,
-  fontSize: 12,
-  fontFamily: "monospace",
-  background: "white",
-  color: "#2a2520",
-  outline: "none",
-  boxSizing: "border-box",
 };
 
 const sliderStyle: React.CSSProperties = {

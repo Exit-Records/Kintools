@@ -50,6 +50,14 @@ export default function App() {
   const [running, setRunning] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [chimeFired, setChimeFired] = useState(false);
+  const [isLight, setIsLight] = useState(() => {
+    const saved = localStorage.getItem("kin006-theme");
+    return saved === "light";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("kin006-theme", isLight ? "light" : "dark");
+  }, [isLight]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -176,12 +184,17 @@ export default function App() {
     : phase === "done"  ? "#e8402a"
     : "#888888";
 
-  const bgColour =
-    phase === "green" ? "#0a1f13"
-    : phase === "amber" ? "#1f1500"
-    : phase === "red"   ? "#1f0a07"
-    : phase === "done"  ? "#0d0605"
-    : "#111111";
+  const bgColour = isLight
+    ? phase === "green" ? "#e8f5ee"
+      : phase === "amber" ? "#fff8e4"
+      : phase === "red"   ? "#fde8e4"
+      : phase === "done"  ? "#fde8e4"
+      : "#f5f5f0"
+    : phase === "green" ? "#0a1f13"
+      : phase === "amber" ? "#1f1500"
+      : phase === "red"   ? "#1f0a07"
+      : phase === "done"  ? "#0d0605"
+      : "#111111";
 
   const statusText =
     isDone    ? "Time's up"
@@ -190,9 +203,9 @@ export default function App() {
     : "Ready";
 
   const inputStyle: React.CSSProperties = {
-    background: "#1c1c1c",
-    border: "1px solid #2a2a2a",
-    color: "#e8e4dc",
+    background: isLight ? "#e8e8e8" : "#1c1c1c",
+    border: `1px solid ${isLight ? "#cccccc" : "#2a2a2a"}`,
+    color: isLight ? "#1a1a1a" : "#e8e4dc",
     borderRadius: 8,
     fontSize: 15,
     fontFamily: "inherit",
@@ -217,7 +230,7 @@ export default function App() {
         justifyContent: "center",
         transition: "background 1.2s ease",
         fontFamily: "Georgia, 'Times New Roman', serif",
-        color: "#e8e4dc",
+        color: isLight ? "#1a1a1a" : "#e8e4dc",
         userSelect: "none",
         WebkitUserSelect: "none",
         padding: "32px 24px",
@@ -259,7 +272,7 @@ export default function App() {
             width: "100%",
             maxWidth: 640,
             height: 6,
-            background: "#2a2a2a",
+            background: isLight ? "#d0d0d0" : "#2a2a2a",
             borderRadius: 99,
             overflow: "hidden",
           }}
@@ -279,7 +292,7 @@ export default function App() {
         <div
           style={{
             fontSize: 13,
-            color: isDone ? phaseColour : "#666",
+            color: isDone ? phaseColour : (isLight ? "#555" : "#666"),
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             height: 20,
@@ -311,7 +324,7 @@ export default function App() {
               justifyContent: "center",
             }}
           >
-            <span style={{ fontSize: 13, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginRight: 4 }}>
+            <span style={{ fontSize: 13, color: isLight ? "#777" : "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginRight: 4 }}>
               min
             </span>
             {PRESETS.map(m => (
@@ -320,9 +333,9 @@ export default function App() {
                 onClick={() => handlePreset(m)}
                 disabled={running}
                 style={{
-                  background: selectedMins === m ? phaseColour : "#1c1c1c",
-                  border: `1px solid ${selectedMins === m ? phaseColour : "#2a2a2a"}`,
-                  color: selectedMins === m ? "#000" : "#e8e4dc",
+                  background: selectedMins === m ? phaseColour : (isLight ? "#e0e0e0" : "#1c1c1c"),
+                  border: `1px solid ${selectedMins === m ? phaseColour : (isLight ? "#cccccc" : "#2a2a2a")}`,
+                  color: selectedMins === m ? "#000" : (isLight ? "#1a1a1a" : "#e8e4dc"),
                   borderRadius: 8,
                   fontSize: 15,
                   fontFamily: "inherit",
@@ -341,7 +354,7 @@ export default function App() {
 
           {/* Custom min + sec inputs */}
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase" }}>Custom</span>
+            <span style={{ fontSize: 13, color: isLight ? "#777" : "#555", letterSpacing: "0.08em", textTransform: "uppercase" }}>Custom</span>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
               <input
                 type="number"
@@ -469,7 +482,7 @@ export default function App() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: soundOn ? "#3ddc84" : "#2a2a2a",
+                background: soundOn ? "#3ddc84" : (isLight ? "#d0d0d0" : "#2a2a2a"),
                 borderRadius: 99,
                 transition: "background 0.2s",
               }}
@@ -487,9 +500,26 @@ export default function App() {
               }}
             />
           </span>
-          <span style={{ fontSize: 14, color: "#666" }}>Chime at end</span>
+          <span style={{ fontSize: 14, color: isLight ? "#666" : "#888" }}>Chime at end</span>
         </label>
       </div>
+
+      {/* Theme toggle */}
+      <button
+        onClick={() => setIsLight(l => !l)}
+        aria-label="Toggle light/dark mode"
+        style={{
+          position: "fixed", top: 14, right: 14, zIndex: 999,
+          width: 36, height: 36, borderRadius: 8,
+          background: isLight ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.08)",
+          border: `1px solid ${isLight ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.14)"}`,
+          cursor: "pointer", fontSize: 16,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: isLight ? "#1a1a1a" : "#e8e4dc",
+        }}
+      >
+        {isLight ? "🌙" : "☀️"}
+      </button>
 
       {/* Footer */}
       <footer
@@ -500,15 +530,15 @@ export default function App() {
           right: 0,
           textAlign: "center",
           fontSize: 11,
-          color: "#444",
+          color: isLight ? "#666" : "#444",
           letterSpacing: "0.1em",
           userSelect: "none",
         }}
       >
         <span>Kin</span>
-        <span style={{ margin: "0 6px", color: "#333" }}>·</span>
-        <span>KIN-004</span>
-        <span style={{ margin: "0 6px", color: "#333" }}>·</span>
+        <span style={{ margin: "0 6px", color: isLight ? "#888" : "#333" }}>·</span>
+        <span>KIN-006</span>
+        <span style={{ margin: "0 6px", color: isLight ? "#888" : "#333" }}>·</span>
         <span>dBridge</span>
       </footer>
 

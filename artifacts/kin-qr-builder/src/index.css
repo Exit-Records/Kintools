@@ -53,6 +53,48 @@
   --radius: 0.5rem;
 }
 
+html.light {
+  --background: 40 20% 97%;
+  --foreground: 30 12% 15%;
+  --border: 36 15% 85%;
+  --input: 40 15% 94%;
+  --ring: 35 60% 50%;
+  --card: 40 15% 95%;
+  --card-foreground: 30 12% 15%;
+  --primary: 35 60% 50%;
+  --primary-foreground: 40 20% 97%;
+  --secondary: 36 15% 90%;
+  --secondary-foreground: 30 12% 25%;
+  --muted: 40 15% 92%;
+  --muted-foreground: 30 8% 50%;
+  --accent: 35 60% 50%;
+  --accent-foreground: 40 20% 97%;
+  --destructive: 0 62% 50%;
+  --destructive-foreground: 40 20% 97%;
+}
+
+.kin-theme-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 999;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.kin-theme-btn:hover {
+  border-color: hsl(var(--ring));
+}
+
 @layer base {
   * {
     border-color: hsl(var(--border));
@@ -168,6 +210,14 @@
   .kin-pill-inactive:hover {
     color: hsl(var(--foreground));
     background-color: hsl(30 8% 20%);
+  }
+
+  html.light .kin-pill-inactive:hover {
+    background-color: hsl(36 15% 86%);
+  }
+
+  html.light .kin-btn-secondary:hover {
+    background-color: hsl(36 15% 86%);
   }
 
   .kin-slider {

@@ -98,6 +98,15 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [wifi, setWifi] = useState<WifiFields>({ ssid: "", password: "", encryption: "WPA", hidden: false });
   const [contact, setContact] = useState<ContactFields>({ name: "", phone: "", email: "", website: "" });
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("kin005-theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("light", !isDark);
+    localStorage.setItem("kin005-theme", isDark ? "dark" : "light");
+  }, [isDark]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -186,7 +195,14 @@ export default function App() {
   const print = () => window.print();
 
   return (
-    <div className="min-h-screen" style={{ background: "hsl(30 8% 9%)" }}>
+    <div className="min-h-screen" style={{ background: "hsl(var(--background))" }}>
+      <button
+        className="kin-theme-btn"
+        onClick={() => setIsDark(d => !d)}
+        aria-label="Toggle light/dark mode"
+      >
+        {isDark ? "☀️" : "🌙"}
+      </button>
       {/* Print area */}
       <div className="print-area hidden print:flex">
         {qrDataUrl && <img src={qrDataUrl} alt="QR Code" style={{ width: 400, height: 400 }} />}
@@ -210,7 +226,7 @@ export default function App() {
               <rect x="16.5" y="20.5" width="2.5" height="2.5" rx="0.5" fill="hsl(30 8% 9%)" />
               <rect x="20.5" y="20.5" width="2.5" height="2.5" rx="0.5" fill="hsl(30 8% 9%)" />
             </svg>
-            <span className="text-base font-semibold tracking-tight" style={{ color: "hsl(36 20% 88%)" }}>Kin QR Builder</span>
+            <span className="text-base font-semibold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>Kin QR Builder</span>
             <span className="kin-label ml-auto" style={{ fontSize: "0.625rem" }}>KIN-005</span>
           </div>
           <p className="text-sm" style={{ color: "hsl(36 10% 55%)" }}>
@@ -374,7 +390,7 @@ export default function App() {
           ) : (
             <div
               className="flex items-center justify-center rounded-lg"
-              style={{ width: 240, height: 240, background: "hsl(30 8% 15%)", border: "1px dashed hsl(30 8% 25%)" }}
+              style={{ width: 240, height: 240, background: "hsl(var(--muted))", border: "1px dashed hsl(var(--border))" }}
             >
               <span className="text-sm" style={{ color: "hsl(36 10% 40%)" }}>Enter content above</span>
             </div>
@@ -535,7 +551,7 @@ export default function App() {
         {/* Privacy notice */}
         <div
           className="flex gap-3 px-4 py-3 rounded-lg"
-          style={{ background: "hsl(30 8% 12%)", border: "1px solid hsl(30 8% 16%)" }}
+          style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0" aria-hidden="true">
             <path d="M8 1.5C8 1.5 2.5 4 2.5 8.5V12l5.5 2.5L13.5 12V8.5C13.5 4 8 1.5 8 1.5Z" stroke="hsl(35 60% 55%)" strokeWidth="1.25" strokeLinejoin="round"/>
