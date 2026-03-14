@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Name Picker — Kin</title>
+<meta name="description" content="Pick one or more names at random from a list. Free, offline, no accounts.">
+<meta name="theme-color" content="#111110" id="theme-color-meta">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Name Picker">
+<link rel="manifest" id="manifest-link">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #111110;
+    --surface:     #1c1c1a;
+    --surface2:    #252522;
+    --border:      #2e2e2b;
+    --border-hover:#3d3d39;
+    --text:        #f0efe8;
+    --text-mid:    #9c9a90;
+    --text-dim:    #5c5b54;
+    --accent:      #7eb88a;
+    --accent-dim:  #2a4030;
+    --radius:      12px;
+    --radius-sm:   8px;
+  }
+
+  html.light {
+    --bg:          #FAFAF7;
+    --surface:     #FFFFFF;
+    --surface2:    #F3F2EE;
+    --border:      #E4E2DC;
+    --border-hover:#CCCAC2;
+    --text:        #1A1A18;
+    --text-mid:    #5C5B56;
+    --text-dim:    #9C9A94;
+    --accent:      #2D5A3D;
+    --accent-dim:  #E8F0EB;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- THEME TOGGLE ---- */
+  #theme-btn {
+    position: fixed;
+    top: 14px; right: 14px;
+    z-index: 999;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  #theme-btn:hover { border-color: var(--border-hover); }
+
+  /* ---- LAYOUT ---- */
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 52px 20px 80px;
+    animation: fadeUp 0.4s ease-out both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- HEADER ---- */
+  .kin-header { margin-bottom: 32px; }
+
+  .kin-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 8px;
+  }
+
+  .kin-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(26px, 6vw, 36px);
+    font-weight: 400; line-height: 1.1;
+    color: var(--text); margin-bottom: 8px;
+  }
+
+  .kin-sub { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+
+  /* ---- TEXTAREA ---- */
+  .field-label {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+
+  .field-label span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+
+  #name-input {
+    width: 100%;
+    min-height: 160px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    resize: vertical;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  #name-input::placeholder { color: var(--text-dim); }
+  #name-input:focus { outline: none; border-color: var(--accent); }
+
+  /* ---- OPTIONS ---- */
+  .options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .toggle-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 500;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    user-select: none;
+  }
+
+  .toggle-pill.on {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .toggle-pill input { display: none; }
+
+  .toggle-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+  .toggle-pill.on .toggle-dot { opacity: 1; }
+
+  /* ---- WINNER COUNT ---- */
+  .count-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .count-label {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .count-controls {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .count-btn {
+    width: 36px; height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--text-mid);
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .count-btn:hover { background: var(--surface2); color: var(--text); }
+
+  #winner-count {
+    width: 44px;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    height: 36px;
+    -moz-appearance: textfield;
+  }
+  #winner-count::-webkit-outer-spin-button,
+  #winner-count::-webkit-inner-spin-button { -webkit-appearance: none; }
+  #winner-count:focus { outline: none; }
+
+  /* ---- PICK BUTTON ---- */
+  #pick-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-bottom: 28px;
+  }
+  #pick-btn:hover { opacity: 0.86; }
+  #pick-btn:active { transform: scale(0.99); }
+  #pick-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ---- RESULT CARD ---- */
+  #result-card {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    display: none;
+    text-align: center;
+  }
+
+  #result-card.visible { display: block; }
+
+  .result-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    opacity: 0.75;
+  }
+
+  #result-names {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    color: var(--accent);
+    line-height: 1.4;
+  }
+
+  #result-names.shuffling {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-mid);
+    opacity: 0.7;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #result-names.revealed { animation: fadeIn 0.35s ease-out; }
+
+  /* ---- ERROR ---- */
+  #error-msg {
+    font-size: 13px;
+    color: #c8785a;
+    margin-bottom: 16px;
+    margin-top: -20px;
+    display: none;
+  }
+  #error-msg.visible { display: block; }
+
+  /* ---- RECENT PICKS ---- */
+  .recent-section { margin-bottom: 24px; }
+
+  .recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .section-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  #clear-history {
+    font-size: 11px;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.15s;
+  }
+  #clear-history:hover { color: var(--text-mid); }
+
+  #history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    animation: fadeIn 0.25s ease-out;
+  }
+
+  .history-item strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ---- RESET ---- */
+  #reset-btn {
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    margin-bottom: 28px;
+  }
+  #reset-btn:hover { border-color: var(--border-hover); color: var(--text-mid); }
+
+  /* ---- FOOTER ---- */
+  .kin-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .foot-brand {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    color: var(--text-dim);
+  }
+
+  .foot-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 480px) {
+    .options-row { gap: 8px; }
+    .toggle-pill { font-size: 12px; padding: 8px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="kin-header">
+    <div class="kin-label">KIN-012</div>
+    <h1 class="kin-title">Random Name Picker</h1>
+    <p class="kin-sub">Paste a list, pick a winner. Classrooms, raffles, meetings — any time you need fair random selection.</p>
+  </div>
+
+  <!-- Name input -->
+  <div class="field-label">
+    Names
+    <span id="name-count"></span>
+  </div>
+  <textarea
+    id="name-input"
+    placeholder="Alice&#10;Bob&#10;Charlie&#10;Dana&#10;&#10;(one per line, or comma-separated)"
+    aria-label="Paste names here"
+    spellcheck="false"
+  ></textarea>
+
+  <!-- Options -->
+  <div class="options-row">
+    <label class="toggle-pill on" id="pill-anim">
+      <input type="checkbox" id="opt-animate" checked>
+      <span class="toggle-dot">✦</span>
+      Shuffle animation
+    </label>
+    <label class="toggle-pill" id="pill-remove">
+      <input type="checkbox" id="opt-remove">
+      <span class="toggle-dot">✦</span>
+      Remove after pick
+    </label>
+  </div>
+
+  <!-- Winner count -->
+  <div class="count-row">
+    <span class="count-label">Pick</span>
+    <div class="count-controls">
+      <button class="count-btn" id="count-down" aria-label="Decrease">−</button>
+      <input type="number" id="winner-count" value="1" min="1" aria-label="Number of winners">
+      <button class="count-btn" id="count-up" aria-label="Increase">+</button>
+    </div>
+    <span class="count-label">name<span id="count-plural"></span></span>
+  </div>
+
+  <!-- Error -->
+  <div id="error-msg" role="alert"></div>
+
+  <!-- Pick button -->
+  <button id="pick-btn" aria-label="Pick names (Enter)">Pick</button>
+
+  <!-- Result card -->
+  <div id="result-card" role="region" aria-label="Selected names" aria-live="polite">
+    <div class="result-label">Selected</div>
+    <div id="result-names"></div>
+  </div>
+
+  <!-- Recent picks -->
+  <div class="recent-section" id="recent-section" style="display:none">
+    <div class="recent-header">
+      <div class="section-label">Recent picks</div>
+      <button id="clear-history">Clear</button>
+    </div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- Reset -->
+  <button id="reset-btn">Reset everything</button>
+
+  <!-- Footer -->
+  <footer class="kin-footer">
+    <div class="foot-brand">Kin</div>
+    <div class="foot-meta">KIN-012 · Random Name Picker<br>by dBridge · No tracking · Works offline</div>
+  </footer>
+
+</div>
+
+<script>
+  // ---- THEME ----
+  const themeBtn = document.getElementById('theme-btn');
+  let isDark = true;
+  themeBtn.addEventListener('click', () => {
+    isDark = !isDark;
+    document.documentElement.classList.toggle('light', !isDark);
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+    document.getElementById('theme-color-meta').setAttribute('content', isDark ? '#111110' : '#FAFAF7');
+  });
+
+  // ---- ELEMENTS ----
+  const nameInput    = document.getElementById('name-input');
+  const nameCount    = document.getElementById('name-count');
+  const optAnimate   = document.getElementById('opt-animate');
+  const optRemove    = document.getElementById('opt-remove');
+  const pillAnim     = document.getElementById('pill-anim');
+  const pillRemove   = document.getElementById('pill-remove');
+  const winnerCount  = document.getElementById('winner-count');
+  const countPlural  = document.getElementById('count-plural');
+  const pickBtn      = document.getElementById('pick-btn');
+  const resultCard   = document.getElementById('result-card');
+  const resultNames  = document.getElementById('result-names');
+  const errorMsg     = document.getElementById('error-msg');
+  const recentSection= document.getElementById('recent-section');
+  const historyList  = document.getElementById('history-list');
+  const clearHistory = document.getElementById('clear-history');
+  const resetBtn     = document.getElementById('reset-btn');
+  const countDown    = document.getElementById('count-down');
+  const countUp      = document.getElementById('count-up');
+
+  let history = [];
+  let shuffleTimer = null;
+
+  // ---- TOGGLE PILLS ----
+  [
+    { pill: pillAnim,   checkbox: optAnimate },
+    { pill: pillRemove, checkbox: optRemove  }
+  ].forEach(({ pill, checkbox }) => {
+    pill.addEventListener('click', () => {
+      checkbox.checked = !checkbox.checked;
+      pill.classList.toggle('on', checkbox.checked);
+    });
+  });
+
+  // ---- PARSE NAMES ----
+  function parseNames(text) {
+    return text
+      .split(/[\n,]+/)
+      .map(n => n.trim())
+      .filter(n => n.length > 0);
+  }
+
+  // ---- UPDATE COUNT DISPLAY ----
+  function updateNameCount() {
+    const names = parseNames(nameInput.value);
+    nameCount.textContent = names.length > 0 ? `${names.length} name${names.length !== 1 ? 's' : ''}` : '';
+    const n = parseInt(winnerCount.value) || 1;
+    winnerCount.max = Math.max(names.length, 1);
+    countPlural.textContent = n !== 1 ? 's' : '';
+  }
+
+  nameInput.addEventListener('input', updateNameCount);
+
+  // ---- WINNER COUNT CONTROLS ----
+  countDown.addEventListener('click', () => {
+    const v = parseInt(winnerCount.value) || 1;
+    if (v > 1) { winnerCount.value = v - 1; updateNameCount(); }
+  });
+
+  countUp.addEventListener('click', () => {
+    const names = parseNames(nameInput.value);
+    const v = parseInt(winnerCount.value) || 1;
+    if (v < Math.max(names.length, 1)) { winnerCount.value = v + 1; updateNameCount(); }
+  });
+
+  winnerCount.addEventListener('input', updateNameCount);
+
+  // ---- RANDOM (crypto first) ----
+  function secureRandom() {
+    const buf = new Uint32Array(1);
+    crypto.getRandomValues(buf);
+    return buf[0] / (0xFFFFFFFF + 1);
+  }
+
+  function pickRandom(arr, n) {
+    const pool = [...arr];
+    const result = [];
+    n = Math.min(n, pool.length);
+    for (let i = 0; i < n; i++) {
+      const idx = Math.floor(secureRandom() * pool.length);
+      result.push(pool.splice(idx, 1)[0]);
+    }
+    return result;
+  }
+
+  // ---- SHUFFLE ANIMATION ----
+  function runShuffle(names, winners, callback) {
+    const duration = 1500;
+    const start = performance.now();
+    let frame;
+
+    function step(now) {
+      const elapsed = now - start;
+      if (elapsed >= duration) {
+        clearInterval(frame);
+        callback();
+        return;
+      }
+      const pick = pickRandom(names, Math.min(winners, names.length));
+      resultNames.className = 'shuffling';
+      resultNames.textContent = pick.join(' · ');
+      frame = requestAnimationFrame(step);
+    }
+
+    resultCard.classList.add('visible');
+    resultNames.className = 'shuffling';
+    frame = requestAnimationFrame(step);
+
+    return () => cancelAnimationFrame(frame);
+  }
+
+  // ---- SHOW ERROR ----
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('visible');
+    setTimeout(() => errorMsg.classList.remove('visible'), 2800);
+  }
+
+  // ---- ADD TO HISTORY ----
+  function addToHistory(picked) {
+    history.unshift(picked);
+    if (history.length > 10) history.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    if (history.length === 0) {
+      recentSection.style.display = 'none';
+      return;
+    }
+    recentSection.style.display = 'block';
+    historyList.innerHTML = '';
+    history.forEach((picked, i) => {
+      const item = document.createElement('div');
+      item.className = 'history-item';
+      item.innerHTML = `<strong>${picked.join(', ')}</strong>`;
+      historyList.appendChild(item);
+    });
+  }
+
+  // ---- PICK ----
+  function doPick(skipAnimation) {
+    if (shuffleTimer) { shuffleTimer(); shuffleTimer = null; }
+
+    errorMsg.classList.remove('visible');
+
+    const names = parseNames(nameInput.value);
+    if (names.length === 0) {
+      showError('Add at least one name to get started.');
+      return;
+    }
+
+    const n = Math.min(parseInt(winnerCount.value) || 1, names.length);
+    winnerCount.value = n;
+
+    const picked = pickRandom(names, n);
+    addToHistory(picked);
+
+    const showResult = () => {
+      resultNames.className = 'revealed';
+      resultNames.textContent = picked.join('\n');
+      resultCard.classList.add('visible');
+
+      if (optRemove.checked) {
+        const remaining = names.filter(name => {
+          const idx = picked.indexOf(name);
+          if (idx !== -1) { picked.splice(idx, 1); return false; }
+          return true;
+        });
+        nameInput.value = remaining.join('\n');
+        updateNameCount();
+      }
+    };
+
+    if (!skipAnimation && optAnimate.checked && names.length > 1) {
+      resultCard.classList.add('visible');
+      shuffleTimer = runShuffle(names, n, showResult);
+    } else {
+      showResult();
+    }
+  }
+
+  pickBtn.addEventListener('click', () => doPick(false));
+
+  // ---- KEYBOARD SHORTCUTS ----
+  document.addEventListener('keydown', e => {
+    if (e.target === nameInput) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doPick(false); }
+      if (e.key === 'Enter' && e.shiftKey)  { e.preventDefault(); doPick(true);  }
+    } else {
+      if (e.key === 'Enter' && !e.shiftKey) doPick(false);
+      if (e.key === 'Enter' && e.shiftKey)  doPick(true);
+    }
+  });
+
+  // ---- CLEAR HISTORY ----
+  clearHistory.addEventListener('click', () => {
+    history = [];
+    renderHistory();
+  });
+
+  // ---- RESET ----
+  resetBtn.addEventListener('click', () => {
+    nameInput.value = '';
+    winnerCount.value = 1;
+    resultCard.classList.remove('visible');
+    resultNames.textContent = '';
+    history = [];
+    renderHistory();
+    updateNameCount();
+    errorMsg.classList.remove('visible');
+  });
+
+  // ---- PWA ----
+  const TOOL_NAME  = 'Random Name Picker';
+  const CACHE_NAME = 'kin-012-v1';
+  const THEME_DARK  = '#111110';
+  const THEME_LIGHT = '#FAFAF7';
+
+  const manifest = {
+    name: `${TOOL_NAME} — Kin`,
+    short_name: TOOL_NAME,
+    description: 'KIN-012 · Free, offline, no accounts.',
+    start_url: './',
+    display: 'standalone',
+    background_color: THEME_DARK,
+    theme_color: THEME_DARK,
+    icons: [
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='120' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='320' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml' }
+    ]
+  };
+  document.getElementById('manifest-link').setAttribute('href',
+    'data:application/json,' + encodeURIComponent(JSON.stringify(manifest)));
+
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      const CACHE = '${CACHE_NAME}';
+      self.addEventListener('install', e => {
+        self.skipWaiting();
+        e.waitUntil(caches.open(CACHE).then(c => c.addAll([self.location.href])));
+      });
+      self.addEventListener('activate', e => {
+        e.waitUntil(caches.keys().then(keys =>
+          Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+        ));
+      });
+      self.addEventListener('fetch', e => {
+        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        })));
+      });`;
+    const swBlob = new Blob([swCode], { type: 'text/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+  }
+
+  // ---- INIT ----
+  updateNameCount();
+</script>
+</body>
+</html>
