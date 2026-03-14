@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Price Calculator — Kin</title>
+<meta name="description" content="Find the true cost of products based on weight, volume, or quantity. Free, offline, no accounts.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap');
+
+  :root {
+    --bg: #111110;
+    --surface: #1c1c1a;
+    --surface2: #252522;
+    --border: #2e2e2b;
+    --border-hover: #3d3d39;
+    --text: #f0efe8;
+    --text-mid: #9c9a90;
+    --text-dim: #5c5b54;
+    --accent: #7eb88a;
+    --accent-dim: #2a4030;
+    --best: #7eb88a;
+    --best-dim: #1e3328;
+    --warn: #c8a46e;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html.light {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --surface2: #F3F2EE;
+    --border: #E4E2DC;
+    --border-hover: #CCCAC2;
+    --text: #1A1A18;
+    --text-mid: #5C5B56;
+    --text-dim: #9C9A94;
+    --accent: #2D5A3D;
+    --accent-dim: #E8F0EB;
+    --best: #2D5A3D;
+    --best-dim: #E8F0EB;
+    --warn: #8a6a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- THEME TOGGLE ---- */
+  #theme-btn {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 999;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  #theme-btn:hover { border-color: var(--border-hover); }
+
+  /* ---- LAYOUT ---- */
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 52px 20px 80px;
+  }
+
+  /* ---- HEADER ---- */
+  .kin-header {
+    margin-bottom: 36px;
+  }
+
+  .kin-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .kin-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(26px, 6vw, 36px);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .kin-sub {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* ---- MODE TABS ---- */
+  .mode-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 4px;
+  }
+
+  .mode-tab {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-mid);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mode-tab.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+
+  html.light .mode-tab.active { box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+  /* ---- PRODUCT CARDS ---- */
+  .products {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+
+  .product-card.best-value {
+    border-color: var(--best);
+    background: var(--best-dim);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .best-badge {
+    display: none;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--best);
+    letter-spacing: 0.04em;
+  }
+
+  .product-card.best-value .best-badge { display: block; }
+
+  .card-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .field-group.full { grid-column: 1 / -1; }
+
+  .field-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .field-group input,
+  .field-group select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 10px 12px;
+    width: 100%;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .product-card.best-value .field-group input,
+  .product-card.best-value .field-group select {
+    background: var(--bg);
+  }
+
+  html.light .product-card.best-value .field-group input,
+  html.light .product-card.best-value .field-group select {
+    background: var(--surface);
+  }
+
+  .field-group input::placeholder { color: var(--text-dim); }
+  .field-group input:focus,
+  .field-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .field-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239c9a90' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  .size-hint {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 3px;
+    min-height: 14px;
+    transition: color 0.2s;
+  }
+
+  .size-hint.parsed { color: var(--accent); }
+
+  /* ---- RESULT ROW ---- */
+  .result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .result-unit-price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  .product-card.best-value .result-unit-price { color: var(--best); }
+
+  .result-comparison {
+    font-size: 13px;
+    color: var(--text-mid);
+    text-align: right;
+  }
+
+  .result-comparison strong {
+    color: var(--warn);
+    font-weight: 600;
+  }
+
+  .product-card.best-value .result-comparison strong {
+    color: var(--best);
+  }
+
+  /* ---- ADD / REMOVE ---- */
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-mid);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+
+  .btn-ghost:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ---- SUMMARY ---- */
+  .summary-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 28px;
+    display: none;
+  }
+
+  .summary-box.visible { display: block; }
+
+  .summary-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .summary-row:last-child { border-bottom: none; }
+
+  .summary-name { color: var(--text-mid); }
+  .summary-price { font-weight: 600; color: var(--text); }
+  .summary-saving { font-size: 12px; color: var(--text-dim); }
+  .summary-row.winner .summary-name { color: var(--best); font-weight: 600; }
+  .summary-row.winner .summary-price { color: var(--best); }
+
+  /* ---- REVERSE MODE ---- */
+  .reverse-section {
+    display: none;
+  }
+
+  .reverse-section.active { display: block; }
+
+  .reverse-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .reverse-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mid);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .reverse-result {
+    background: var(--accent-dim);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    display: none;
+  }
+
+  .reverse-result.visible { display: block; }
+
+  .reverse-result-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .reverse-result-price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    color: var(--accent);
+  }
+
+  .reverse-result-sub {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-top: 6px;
+  }
+
+  /* ---- COMPARE SECTION ---- */
+  .compare-section { display: block; }
+  .compare-section.hidden { display: none; }
+
+  /* ---- FOOTER ---- */
+  .kin-footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .foot-brand {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px;
+    color: var(--text-dim);
+  }
+
+  .foot-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 480px) {
+    .card-fields { grid-template-columns: 1fr; }
+    .field-group.full { grid-column: auto; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wrap { animation: fadeUp 0.4s ease-out both; }
+</style>
+</head>
+<body>
+
+<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="kin-header">
+    <div class="kin-label">KIN-011</div>
+    <h1 class="kin-title">Unit Price Calculator</h1>
+    <p class="kin-sub">Find the real cost per unit. Compare packs, sizes, and formats instantly.</p>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs" role="tablist">
+    <button class="mode-tab active" data-mode="compare" role="tab">Compare</button>
+    <button class="mode-tab" data-mode="reverse" role="tab">Reverse</button>
+  </div>
+
+  <!-- Compare mode -->
+  <div class="compare-section" id="compare-section">
+
+    <div class="products" id="products-list">
+
+      <!-- Card A -->
+      <div class="product-card" data-card="0">
+        <div class="card-header">
+          <span class="card-label">Item A</span>
+          <span class="best-badge">✔ Best value</span>
+        </div>
+        <div class="card-fields">
+          <div class="field-group full">
+            <label>Product name (optional)</label>
+            <input type="text" class="f-name" placeholder="e.g. Coke 2L Bottle">
+          </div>
+          <div class="field-group">
+            <label>Price</label>
+            <input type="number" class="f-price" placeholder="3.20" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div class="field-group">
+            <label>Size</label>
+            <input type="text" class="f-size" placeholder="2L or 6x330ml">
+            <div class="size-hint"></div>
+          </div>
+          <div class="field-group full">
+            <label>Unit</label>
+            <select class="f-unit">
+              <option value="L">Litres (L)</option>
+              <option value="ml">Millilitres (ml)</option>
+              <option value="kg">Kilograms (kg)</option>
+              <option value="g">Grams (g)</option>
+              <option value="item">Per item</option>
+              <option value="m">Metres (m)</option>
+            </select>
+          </div>
+        </div>
+        <div class="result-row">
+          <div class="result-unit-price">—</div>
+          <div class="result-comparison"></div>
+        </div>
+      </div>
+
+      <!-- Card B -->
+      <div class="product-card" data-card="1">
+        <div class="card-header">
+          <span class="card-label">Item B</span>
+          <span class="best-badge">✔ Best value</span>
+        </div>
+        <div class="card-fields">
+          <div class="field-group full">
+            <label>Product name (optional)</label>
+            <input type="text" class="f-name" placeholder="e.g. Coke 6 Pack">
+          </div>
+          <div class="field-group">
+            <label>Price</label>
+            <input type="number" class="f-price" placeholder="4.50" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div class="field-group">
+            <label>Size</label>
+            <input type="text" class="f-size" placeholder="6x330ml or 1.98L">
+            <div class="size-hint"></div>
+          </div>
+          <div class="field-group full">
+            <label>Unit</label>
+            <select class="f-unit">
+              <option value="L">Litres (L)</option>
+              <option value="ml">Millilitres (ml)</option>
+              <option value="kg">Kilograms (kg)</option>
+              <option value="g">Grams (g)</option>
+              <option value="item">Per item</option>
+              <option value="m">Metres (m)</option>
+            </select>
+          </div>
+        </div>
+        <div class="result-row">
+          <div class="result-unit-price">—</div>
+          <div class="result-comparison"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Add / Remove -->
+    <div class="card-actions">
+      <button class="btn-ghost" id="btn-add">+ Add item</button>
+      <button class="btn-ghost" id="btn-remove" disabled>− Remove item</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-box" id="summary-box">
+      <div class="summary-title">Summary</div>
+      <div id="summary-rows"></div>
+    </div>
+
+  </div>
+
+  <!-- Reverse mode -->
+  <div class="reverse-section" id="reverse-section">
+    <div class="reverse-card">
+      <h3>Calculate price from unit cost</h3>
+      <div class="card-fields">
+        <div class="field-group">
+          <label>Unit price</label>
+          <input type="number" id="r-unit-price" placeholder="1.60" min="0" step="0.01" inputmode="decimal">
+        </div>
+        <div class="field-group">
+          <label>Per</label>
+          <select id="r-base-unit">
+            <option value="L">Litre (L)</option>
+            <option value="ml">ml</option>
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="item">item</option>
+            <option value="m">metre</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Product size</label>
+          <input type="text" id="r-size" placeholder="750ml or 3x250g">
+          <div class="size-hint" id="r-size-hint"></div>
+        </div>
+        <div class="field-group">
+          <label>Unit</label>
+          <select id="r-unit">
+            <option value="L">Litres (L)</option>
+            <option value="ml">ml</option>
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="item">item</option>
+            <option value="m">m</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="reverse-result" id="reverse-result">
+      <div class="reverse-result-label">Estimated price</div>
+      <div class="reverse-result-price" id="reverse-price"></div>
+      <div class="reverse-result-sub" id="reverse-sub"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="kin-footer">
+    <div class="foot-brand">Kin</div>
+    <div class="foot-meta">KIN-011 · Unit Price Calculator<br>by dBridge · No tracking · Works offline</div>
+  </footer>
+
+</div>
+
+<script>
+  // ---- THEME ----
+  const themeBtn = document.getElementById('theme-btn');
+  let isDark = true;
+  themeBtn.addEventListener('click', () => {
+    isDark = !isDark;
+    document.documentElement.classList.toggle('light', !isDark);
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  // ---- UNITS ----
+  // Convert any size value to the base unit for comparison
+  const BASE = { L: 'L', ml: 'L', kg: 'kg', g: 'kg', item: 'item', m: 'm' };
+  const TO_BASE = { L: 1, ml: 0.001, kg: 1, g: 0.001, item: 1, m: 1 };
+
+  function parseSize(str, unit) {
+    if (!str || !str.trim()) return null;
+    str = str.trim();
+
+    // Pack format: 6x330ml, 12x250g, 3x2L, 4x1.5kg etc.
+    const packMatch = str.match(/^(\d+(?:\.\d+)?)\s*[xX×]\s*(\d+(?:\.\d+)?)\s*(ml|g|L|l|kg|m)$/i);
+    if (packMatch) {
+      const qty = parseFloat(packMatch[1]);
+      const size = parseFloat(packMatch[2]);
+      const u = packMatch[3].toLowerCase() === 'l' ? 'L' : packMatch[3];
+      const totalInBase = qty * size * (TO_BASE[u] || 1);
+      return { totalInBase, baseUnit: BASE[u] || u, hint: `${qty} × ${size}${u} = ${fmt(totalInBase)} ${BASE[u] || u}` };
+    }
+
+    // Simple value + unit: 2L, 330ml, 1.5kg, 750g
+    const simpleMatch = str.match(/^(\d+(?:\.\d+)?)\s*(ml|g|L|l|kg|m)?$/i);
+    if (simpleMatch) {
+      const val = parseFloat(simpleMatch[1]);
+      const u = simpleMatch[2]
+        ? (simpleMatch[2].toLowerCase() === 'l' ? 'L' : simpleMatch[2])
+        : unit;
+      const totalInBase = val * (TO_BASE[u] || 1);
+      return { totalInBase, baseUnit: BASE[u] || u, hint: '' };
+    }
+
+    return null;
+  }
+
+  function fmt(n) {
+    if (n >= 1) return +n.toFixed(3) % 1 === 0 ? n.toFixed(0) : n.toPrecision(4).replace(/\.?0+$/, '');
+    return n.toPrecision(3).replace(/\.?0+$/, '');
+  }
+
+  function fmtPrice(n) {
+    return '£' + n.toFixed(2);
+  }
+
+  function fmtUnitPrice(price, totalInBase, baseUnit) {
+    const up = price / totalInBase;
+    return `${fmtPrice(up)} / ${baseUnit}`;
+  }
+
+  // ---- CARDS ----
+  const cardLabels = ['A', 'B', 'C'];
+  const productList = document.getElementById('products-list');
+
+  function getAllCards() {
+    return Array.from(productList.querySelectorAll('.product-card'));
+  }
+
+  function makeCard(idx) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.dataset.card = idx;
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-label">Item ${cardLabels[idx]}</span>
+        <span class="best-badge">✔ Best value</span>
+      </div>
+      <div class="card-fields">
+        <div class="field-group full">
+          <label>Product name (optional)</label>
+          <input type="text" class="f-name" placeholder="e.g. Product name">
+        </div>
+        <div class="field-group">
+          <label>Price</label>
+          <input type="number" class="f-price" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+        </div>
+        <div class="field-group">
+          <label>Size</label>
+          <input type="text" class="f-size" placeholder="2L or 6x330ml">
+          <div class="size-hint"></div>
+        </div>
+        <div class="field-group full">
+          <label>Unit</label>
+          <select class="f-unit">
+            <option value="L">Litres (L)</option>
+            <option value="ml">Millilitres (ml)</option>
+            <option value="kg">Kilograms (kg)</option>
+            <option value="g">Grams (g)</option>
+            <option value="item">Per item</option>
+            <option value="m">Metres (m)</option>
+          </select>
+        </div>
+      </div>
+      <div class="result-row">
+        <div class="result-unit-price">—</div>
+        <div class="result-comparison"></div>
+      </div>`;
+    return card;
+  }
+
+  function addCard() {
+    const cards = getAllCards();
+    if (cards.length >= 3) return;
+    const idx = cards.length;
+    const card = makeCard(idx);
+    productList.appendChild(card);
+    card.querySelectorAll('input, select').forEach(el => el.addEventListener('input', recalc));
+    updateButtons();
+    recalc();
+  }
+
+  function removeCard() {
+    const cards = getAllCards();
+    if (cards.length <= 2) return;
+    cards[cards.length - 1].remove();
+    updateButtons();
+    recalc();
+  }
+
+  function updateButtons() {
+    const n = getAllCards().length;
+    document.getElementById('btn-add').disabled = n >= 3;
+    document.getElementById('btn-remove').disabled = n <= 2;
+  }
+
+  document.getElementById('btn-add').addEventListener('click', addCard);
+  document.getElementById('btn-remove').addEventListener('click', removeCard);
+
+  // ---- RECALC ----
+  function recalc() {
+    const cards = getAllCards();
+    const results = cards.map(card => {
+      const price = parseFloat(card.querySelector('.f-price').value);
+      const sizeStr = card.querySelector('.f-size').value;
+      const unit = card.querySelector('.f-unit').value;
+      const hint = card.querySelector('.size-hint');
+      const parsed = parseSize(sizeStr, unit);
+
+      if (parsed) {
+        hint.textContent = parsed.hint;
+        hint.className = 'size-hint' + (parsed.hint ? ' parsed' : '');
+      } else {
+        hint.textContent = sizeStr && sizeStr.trim() ? 'Unrecognised format' : '';
+        hint.className = 'size-hint';
+      }
+
+      const valid = !isNaN(price) && price > 0 && parsed && parsed.totalInBase > 0;
+      const unitPriceEl = card.querySelector('.result-unit-price');
+      const compEl = card.querySelector('.result-comparison');
+
+      if (!valid) {
+        unitPriceEl.textContent = '—';
+        compEl.textContent = '';
+        return { card, valid: false, upPerBase: null, baseUnit: parsed ? parsed.baseUnit : BASE[unit] };
+      }
+
+      // Check same base unit consistency handled below
+      const upPerBase = price / parsed.totalInBase;
+      unitPriceEl.textContent = fmtUnitPrice(price, parsed.totalInBase, parsed.baseUnit);
+      return { card, valid: true, upPerBase, baseUnit: parsed.baseUnit };
+    });
+
+    // Clear best-value
+    cards.forEach(c => c.classList.remove('best-value'));
+
+    const valid = results.filter(r => r.valid);
+    const summary = document.getElementById('summary-box');
+    const summaryRows = document.getElementById('summary-rows');
+
+    if (valid.length < 2) {
+      summary.classList.remove('visible');
+      results.forEach(r => r.card.querySelector('.result-comparison').textContent = '');
+      return;
+    }
+
+    // Check all same base unit
+    const baseUnits = [...new Set(valid.map(r => r.baseUnit))];
+    const compatible = baseUnits.length === 1;
+
+    if (!compatible) {
+      valid.forEach(r => {
+        r.card.querySelector('.result-comparison').innerHTML = '<strong style="color:var(--warn)">Different units — can\'t compare</strong>';
+      });
+      summary.classList.remove('visible');
+      return;
+    }
+
+    const bestIdx = valid.reduce((bi, r, i) => r.upPerBase < valid[bi].upPerBase ? i : bi, 0);
+    const best = valid[bestIdx];
+    best.card.classList.add('best-value');
+
+    // Comparisons
+    valid.forEach((r, i) => {
+      const compEl = r.card.querySelector('.result-comparison');
+      if (i === bestIdx) {
+        compEl.innerHTML = '';
+      } else {
+        const pct = Math.round(((r.upPerBase - best.upPerBase) / best.upPerBase) * 100);
+        const name = best.card.querySelector('.f-name').value.trim() || `Item ${cardLabels[parseInt(best.card.dataset.card)]}`;
+        compEl.innerHTML = `<strong>${pct}% more</strong> than ${name}`;
+      }
+    });
+
+    // Summary
+    summaryRows.innerHTML = '';
+    const sorted = [...valid].sort((a, b) => a.upPerBase - b.upPerBase);
+    sorted.forEach((r, i) => {
+      const nameInput = r.card.querySelector('.f-name').value.trim();
+      const label = cardLabels[parseInt(r.card.dataset.card)];
+      const name = nameInput || `Item ${label}`;
+      const priceTxt = fmtUnitPrice(1, 1 / r.upPerBase, r.baseUnit);
+      const row = document.createElement('div');
+      row.className = 'summary-row' + (i === 0 ? ' winner' : '');
+      const savingPct = i === 0 ? '' : `${Math.round(((r.upPerBase - sorted[0].upPerBase) / sorted[0].upPerBase) * 100)}% more`;
+      row.innerHTML = `<span class="summary-name">${i === 0 ? '✔ ' : ''}${name}</span><span class="summary-price">${priceTxt}</span><span class="summary-saving">${savingPct}</span>`;
+      summaryRows.appendChild(row);
+    });
+    summary.classList.add('visible');
+  }
+
+  // Wire up initial cards
+  document.querySelectorAll('.product-card input, .product-card select').forEach(el => {
+    el.addEventListener('input', recalc);
+  });
+
+  // ---- REVERSE MODE ----
+  function calcReverse() {
+    const upVal = parseFloat(document.getElementById('r-unit-price').value);
+    const baseUnit = document.getElementById('r-base-unit').value;
+    const sizeStr = document.getElementById('r-size').value;
+    const unit = document.getElementById('r-unit').value;
+    const hint = document.getElementById('r-size-hint');
+    const result = document.getElementById('reverse-result');
+
+    const parsed = parseSize(sizeStr, unit);
+    if (parsed) {
+      hint.textContent = parsed.hint;
+      hint.className = 'size-hint' + (parsed.hint ? ' parsed' : '');
+    } else {
+      hint.textContent = sizeStr && sizeStr.trim() ? 'Unrecognised format' : '';
+      hint.className = 'size-hint';
+    }
+
+    if (!isNaN(upVal) && upVal > 0 && parsed && parsed.totalInBase > 0 && parsed.baseUnit === BASE[baseUnit]) {
+      const price = upVal * parsed.totalInBase;
+      document.getElementById('reverse-price').textContent = fmtPrice(price);
+      document.getElementById('reverse-sub').textContent = `${fmtPrice(upVal)} per ${baseUnit} × ${fmt(parsed.totalInBase)} ${parsed.baseUnit}`;
+      result.classList.add('visible');
+    } else {
+      result.classList.remove('visible');
+    }
+  }
+
+  ['r-unit-price', 'r-base-unit', 'r-size', 'r-unit'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calcReverse);
+  });
+
+  // ---- MODE TABS ----
+  document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.dataset.mode;
+      document.getElementById('compare-section').classList.toggle('hidden', mode !== 'compare');
+      document.getElementById('reverse-section').classList.toggle('active', mode === 'reverse');
+    });
+  });
+</script>
+</body>
+</html>
