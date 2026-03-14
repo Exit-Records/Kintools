@@ -694,7 +694,7 @@
 //  THEME
 // ═══════════════════════════════════════════════
 const themeBtn = document.getElementById('theme-btn');
-let dark = localStorage.getItem('kin011-theme') !== 'light';
+let dark = localStorage.getItem('kin011-theme') === 'dark';
 
 function applyTheme() {
   document.documentElement.classList.toggle('light', !dark);

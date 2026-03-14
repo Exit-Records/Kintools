@@ -1500,7 +1500,7 @@ document.querySelectorAll('.modal-backdrop').forEach(bd => {
   const btn = document.createElement('button');
   btn.id = 'theme-btn'; btn.setAttribute('aria-label', 'Toggle theme');
   const saved = localStorage.getItem('kin008-theme');
-  if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+  if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
   else { btn.textContent = '☀️'; }
   document.body.appendChild(btn);
   btn.addEventListener('click', () => {

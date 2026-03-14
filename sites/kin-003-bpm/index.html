@@ -315,7 +315,7 @@
 </head>
 <body>
 
-<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+<button id="theme-btn" aria-label="Toggle theme">🌙</button>
 
 <div class="app-shell">
   <header class="app-header">
@@ -469,7 +469,8 @@
   (function() {
     const btn = document.getElementById('theme-btn');
     const saved = localStorage.getItem('kin003-theme');
-    if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+    if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+    else { btn.textContent = '☀️'; }
     btn.addEventListener('click', () => {
       const isLight = document.documentElement.classList.toggle('light');
       btn.textContent = isLight ? '🌙' : '☀️';

@@ -100,7 +100,7 @@ export default function App() {
   const [contact, setContact] = useState<ContactFields>({ name: "", phone: "", email: "", website: "" });
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("kin005-theme");
-    return saved ? saved === "dark" : true;
+    return saved ? saved === "dark" : false;
   });
 
   useEffect(() => {
