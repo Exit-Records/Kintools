@@ -648,9 +648,9 @@
     winnerCount.value = n;
 
     const picked = pickRandom(names, n);
-    addToHistory(picked);
 
     const showResult = () => {
+      addToHistory(picked);
       resultNames.className = 'revealed';
       resultNames.textContent = picked.join('\n');
       resultCard.classList.add('visible');
