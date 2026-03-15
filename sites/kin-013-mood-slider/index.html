@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Mood Dot — Kin</title>
+<meta name="description" content="Ultra-minimal daily mood tracker. Slide to log, add a note. Everything stays in your browser.">
+<meta name="theme-color" id="theme-meta" content="#FAFAF7">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #FAFAF7;
+  --surface:  #FFFFFF;
+  --border:   #E8E4DC;
+  --text:     #1A1A18;
+  --text-mid: #5C5A54;
+  --text-dim: #9C9A94;
+}
+
+html.dark {
+  --bg:       #111110;
+  --surface:  #1C1C1A;
+  --border:   #2A2A27;
+  --text:     #E8E4DC;
+  --text-mid: #9C9A94;
+  --text-dim: #4A4A46;
+}
+
+/* Colour stops for the scale */
+:root {
+  --c-neg:  #B05252;   /* –5  */
+  --c-mid:  #8A8A84;   /* 0   */
+  --c-pos:  #3D7A58;   /* +5  */
+  --track-grad: linear-gradient(to right, #B05252, #B07A40, #8A8A84, #5A8A70, #3D7A58);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ── Toggle ─────────────────────────────── */
+#toggle {
+  position: fixed;
+  top: 14px; right: 14px;
+  z-index: 999;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* ── Wrapper ─────────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 56px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Header ──────────────────────────────── */
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.header .sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ── Section label ───────────────────────── */
+.label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+/* ── Value display ────────────────────────── */
+.value-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.value-number {
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  transition: color 0.12s;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.value-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  min-height: 16px;
+  transition: color 0.12s;
+}
+
+/* ── Slider ───────────────────────────────── */
+.slider-wrap {
+  position: relative;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track-grad);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--thumb-color, #8A8A84);
+  border: 3px solid var(--bg);
+  box-shadow: 0 1px 10px rgba(0,0,0,0.18);
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.12);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--thumb-color, #8A8A84);
+  border: 3px solid var(--bg);
+  box-shadow: 0 1px 10px rgba(0,0,0,0.18);
+  cursor: pointer;
+}
+
+.slider-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 2px;
+}
+
+.slider-scale span {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.slider-scale .s-neg { color: #B05252; opacity: 0.7; }
+.slider-scale .s-neu { color: var(--text-dim); }
+.slider-scale .s-pos { color: #3D7A58; opacity: 0.7; }
+
+/* ── Log hint ─────────────────────────────── */
+.log-hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 14px;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+.log-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Note ─────────────────────────────────── */
+.note-field {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 0.18s, background 0.2s;
+  line-height: 1.55;
+  min-height: 80px;
+}
+
+.note-field:focus { border-color: var(--text-dim); }
+.note-field::placeholder { color: var(--text-dim); }
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  padding: 0 2px;
+}
+
+.note-count { font-size: 11px; color: var(--text-dim); }
+
+.note-clear {
+  font-size: 11px;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  visibility: hidden;
+}
+
+.note-clear.visible { visibility: visible; }
+.note-clear:hover { color: var(--text-mid); }
+
+/* ── 7-Day Grid ───────────────────────────── */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.grid-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.grid-row.today {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.grid-day {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.grid-row.today .grid-day { color: var(--text-mid); }
+
+.grid-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.grid-date {
+  font-size: 12px;
+  color: var(--text-dim);
+  flex: 1;
+}
+
+.grid-row.today .grid-date { color: var(--text-mid); font-weight: 500; }
+
+.grid-val {
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-note-badge {
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.grid-note-badge.visible { opacity: 1; }
+
+/* ── Saved msg ────────────────────────────── */
+.saved-msg {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  height: 14px;
+  margin-top: -18px;
+}
+
+.saved-msg.show { opacity: 1; }
+
+/* ── Export ───────────────────────────────── */
+.export-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 13px 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+  font-family: inherit;
+}
+
+.export-btn:hover { border-color: var(--text-dim); color: var(--text); }
+
+/* ── Footer ───────────────────────────────── */
+footer {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+@media (max-width: 380px) {
+  .value-number { font-size: 42px; }
+}
+</style>
+</head>
+<body>
+
+<button id="toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">🌙</button>
+
+<div class="wrap">
+
+  <div class="header">
+    <h1>Mood Dot</h1>
+    <div class="sub" id="date-display"></div>
+  </div>
+
+  <div class="slider-section">
+    <div class="label">How are you feeling?</div>
+
+    <div class="value-display">
+      <div class="value-number" id="value-number">—</div>
+      <div class="value-label" id="value-label"></div>
+    </div>
+
+    <div class="slider-wrap">
+      <input type="range" id="mood-slider" min="-5" max="5" step="0.5" value="0"
+             aria-label="Mood from -5 to +5">
+      <div class="slider-scale">
+        <span class="s-neg">−5 &nbsp;Low</span>
+        <span class="s-neu">0</span>
+        <span class="s-pos">High &nbsp;+5</span>
+      </div>
+    </div>
+
+    <div class="log-hint" id="log-hint">Drag the slider to log today</div>
+  </div>
+
+  <div class="note-section">
+    <div class="label">Note <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;"> — optional</span></div>
+    <textarea class="note-field" id="note-field"
+              placeholder="Bad sleep, great meeting, stressful day…"
+              maxlength="200" rows="3"></textarea>
+    <div class="note-footer">
+      <span class="note-count" id="note-count">0 / 200</span>
+      <button class="note-clear" id="note-clear" onclick="clearNote()">Clear note</button>
+    </div>
+  </div>
+
+  <div class="grid-section">
+    <div class="label">Last 7 days</div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="saved-msg" id="saved-msg">Saved</div>
+
+  <button class="export-btn" onclick="exportNotes()">&#8593; Export mood notes</button>
+
+  <footer>
+    <span>Kin</span>&nbsp;·&nbsp;<span>KIN-013</span>&nbsp;·&nbsp;<span>dBridge</span>
+  </footer>
+
+</div>
+
+<script>
+var KEY   = 'kin-mood-slider';
+var THEME = 'kin-mood-dot-theme';
+
+var DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+var MOOD_STOPS = [
+  [0xB0, 0x52, 0x52],
+  [0xB0, 0x7A, 0x40],
+  [0x8A, 0x8A, 0x84],
+  [0x5A, 0x8A, 0x70],
+  [0x3D, 0x7A, 0x58],
+];
+
+var MOOD_LABELS = [
+  'Very low', 'Low', 'Low', 'Low–neutral', 'Neutral',
+  'Neutral–good', 'Good', 'Good', 'High', 'High', 'Very high'
+];
+
+var logged   = false;
+var noteTimer = null;
+
+/* ── Colour interpolation ─────────────────── */
+function moodColor(val) {
+  var t   = (val + 5) / 10;
+  var seg = t * 4;
+  var i   = Math.min(Math.floor(seg), 3);
+  var f   = seg - i;
+  var a   = MOOD_STOPS[i];
+  var b   = MOOD_STOPS[i + 1];
+  var r   = Math.round(a[0] + f * (b[0] - a[0]));
+  var g   = Math.round(a[1] + f * (b[1] - a[1]));
+  var bv  = Math.round(a[2] + f * (b[2] - a[2]));
+  return 'rgb(' + r + ',' + g + ',' + bv + ')';
+}
+
+function moodLabelFor(val) {
+  var idx = Math.round((val + 5) / 10 * 10);
+  return MOOD_LABELS[Math.max(0, Math.min(10, idx))];
+}
+
+/* ── Bootstrap ────────────────────────────── */
+(function () {
+  var saved = localStorage.getItem(THEME);
+  if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('toggle').textContent = '☀️';
+    document.getElementById('theme-meta').content = '#111110';
+  }
+
+  var now = new Date();
+  document.getElementById('date-display').textContent =
+    DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate();
+
+  var data  = loadData();
+  var today = getToday();
+
+  if (data[today] && data[today].val !== undefined) {
+    logged = true;
+    var v = data[today].val;
+    document.getElementById('mood-slider').value = v;
+    updateSliderUI(v);
+    document.getElementById('log-hint').classList.add('hidden');
+
+    var note = data[today].note || '';
+    document.getElementById('note-field').value = note;
+    updateNoteUI();
+  } else {
+    document.getElementById('value-number').style.color = 'var(--text-dim)';
+  }
+
+  renderGrid();
+
+  var slider = document.getElementById('mood-slider');
+  slider.addEventListener('input', function () {
+    var v = parseFloat(this.value);
+    logged = true;
+    document.getElementById('log-hint').classList.add('hidden');
+    updateSliderUI(v);
+    clearTimeout(slider._t);
+    slider._t = setTimeout(function () { saveMood(v); }, 300);
+  });
+
+  document.getElementById('note-field').addEventListener('input', function () {
+    updateNoteUI();
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(saveNote, 500);
+  });
+}());
+
+/* ── Slider UI ────────────────────────────── */
+function updateSliderUI(val) {
+  var color  = moodColor(val);
+  var label  = moodLabelFor(val);
+  var prefix = val > 0 ? '+' : '';
+  var display = val % 1 === 0 ? prefix + val.toFixed(0) : prefix + val.toFixed(1);
+
+  document.getElementById('value-number').textContent = display;
+  document.getElementById('value-number').style.color = color;
+  document.getElementById('value-label').textContent  = label;
+  document.getElementById('value-label').style.color  = color;
+  document.documentElement.style.setProperty('--thumb-color', color);
+}
+
+/* ── Data ─────────────────────────────────── */
+function getToday() { return new Date().toISOString().slice(0, 10); }
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function saveData(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+
+function showSaved() {
+  var el = document.getElementById('saved-msg');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function () { el.classList.remove('show'); }, 1600);
+}
+
+/* ── Theme ────────────────────────────────── */
+function toggleTheme() {
+  var dark = document.documentElement.classList.toggle('dark');
+  document.getElementById('toggle').textContent = dark ? '☀️' : '🌙';
+  document.getElementById('theme-meta').content = dark ? '#111110' : '#FAFAF7';
+  localStorage.setItem(THEME, dark ? 'dark' : 'light');
+}
+
+/* ── Save mood ────────────────────────────── */
+function saveMood(val) {
+  var data  = loadData();
+  var today = getToday();
+  if (!data[today]) data[today] = { val: null, note: '' };
+  data[today].val = val;
+  saveData(data);
+  renderGrid();
+  showSaved();
+}
+
+/* ── Note ─────────────────────────────────── */
+function saveNote() {
+  var note  = document.getElementById('note-field').value;
+  var data  = loadData();
+  var today = getToday();
+  if (!data[today]) data[today] = { val: null, note: '' };
+  data[today].note = note.trim();
+  saveData(data);
+  renderGrid();
+  showSaved();
+}
+
+function clearNote() {
+  document.getElementById('note-field').value = '';
+  updateNoteUI();
+  saveNote();
+}
+
+function updateNoteUI() {
+  var val = document.getElementById('note-field').value;
+  document.getElementById('note-count').textContent = val.length + ' / 200';
+  document.getElementById('note-clear').classList.toggle('visible', val.length > 0);
+}
+
+/* ── Grid ─────────────────────────────────── */
+function getLast7Days() {
+  var out   = [];
+  var today = new Date();
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(today);
+    d.setDate(today.getDate() - i);
+    out.push(d.toISOString().slice(0, 10));
+  }
+  return out;
+}
+
+function renderGrid() {
+  var data  = loadData();
+  var today = getToday();
+  var grid  = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  getLast7Days().forEach(function (dateStr) {
+    var entry   = data[dateStr] || null;
+    var d       = new Date(dateStr + 'T12:00:00');
+    var isToday = dateStr === today;
+    var hasVal  = entry && entry.val !== null && entry.val !== undefined;
+
+    var row = document.createElement('div');
+    row.className = 'grid-row' + (isToday ? ' today' : '');
+
+    var dayEl = document.createElement('div');
+    dayEl.className = 'grid-day';
+    dayEl.textContent = DAYS[d.getDay()];
+
+    var dotEl = document.createElement('div');
+    dotEl.className = 'grid-dot';
+    if (hasVal) {
+      dotEl.style.background = moodColor(entry.val);
+      dotEl.style.opacity    = '0.85';
+    }
+
+    var dateEl = document.createElement('div');
+    dateEl.className = 'grid-date';
+    dateEl.textContent = isToday ? 'Today' : MONTHS[d.getMonth()] + ' ' + d.getDate();
+
+    var valEl = document.createElement('div');
+    valEl.className = 'grid-val';
+    if (hasVal) {
+      var v = entry.val;
+      var prefix = v > 0 ? '+' : '';
+      valEl.textContent = v % 1 === 0 ? prefix + v.toFixed(0) : prefix + v.toFixed(1);
+      valEl.style.color = moodColor(v);
+    }
+
+    var noteEl = document.createElement('div');
+    noteEl.className = 'grid-note-badge' + (entry && entry.note ? ' visible' : '');
+    noteEl.textContent = '✎';
+
+    row.appendChild(dayEl);
+    row.appendChild(dotEl);
+    row.appendChild(dateEl);
+    row.appendChild(valEl);
+    row.appendChild(noteEl);
+    grid.appendChild(row);
+  });
+}
+
+/* ── Export ───────────────────────────────── */
+function exportNotes() {
+  var data    = loadData();
+  var entries = Object.entries(data)
+    .sort(function (a, b) { return a[0].localeCompare(b[0]); })
+    .filter(function (e) { return e[1].val !== null && e[1].val !== undefined; });
+
+  if (!entries.length) {
+    alert('No mood entries to export yet.');
+    return;
+  }
+
+  var lines = entries.map(function (e) {
+    var date  = e[0];
+    var v     = e[1];
+    var prefix = v.val > 0 ? '+' : '';
+    var valStr = v.val % 1 === 0 ? prefix + v.val.toFixed(0) : prefix + v.val.toFixed(1);
+    var parts = ['Date: ' + date, 'Mood: ' + valStr + ' (' + moodLabelFor(v.val) + ')'];
+    if (v.note) parts.push('Note: ' + v.note);
+    return parts.join('\n');
+  }).join('\n\n');
+
+  var blob = new Blob([lines], { type: 'text/plain' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = 'mood-dot-' + getToday() + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
