@@ -1,0 +1,15 @@
+{
+  "name": "KIN-017 · Decision Flip",
+  "short_name": "KIN-017",
+  "description": "Break decision paralysis in seconds. Paste your options, flip, get an answer.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "./",
+  "scope": "./",
+  "theme_color": "#7c3aed",
+  "background_color": "#7c3aed",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

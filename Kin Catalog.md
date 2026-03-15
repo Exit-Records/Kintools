@@ -227,4 +227,23 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 ---
 
-*Next tool: KIN-017*
+## KIN-017 · Decision Flip
+
+**URL:** https://kindecisionflip.netlify.app  
+**Netlify publish dir:** `sites/kin-017-decision-flip`
+
+**Summary:** Minimal decision-paralysis breaker. Paste a list of options (one per line), hit Decide, get a randomly selected result. Shuffle animation cycles through options before revealing. Supports multi-pick (select N unique items), remove-after-flip toggle. No storage of any kind — nothing persists between sessions.
+
+**Notes:**
+- Static HTML, single file.
+- Creator: Alice Anthony (not dBridge).
+- PWA support added (icon.svg, manifest.json, meta tags, canvas apple-touch-icon).
+- Color scheme: violet `#7c3aed` / `#5b21b6`; background `#f7f5ff`.
+- No localStorage — spec explicitly prohibits any storage.
+- Animation: slot-machine style, interval starts at 55ms and grows by ×1.09 per step, total ~1400ms.
+- Ctrl+Enter / Cmd+Enter in textarea triggers Decide.
+- Edge cases handled: empty input, single option (no randomization needed but still animates), duplicates treated as separate entries.
+
+---
+
+*Next tool: KIN-018*
