@@ -194,4 +194,20 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 ---
 
-*Next tool: KIN-015*
+## KIN-015 · Quiet Cycle
+
+**URL:** https://kinquietcycle.netlify.app  
+**Netlify publish dir:** `sites/kin-015-quiet-cycle`
+
+**Summary:** Period tracker and cycle predictor. Calendar view with period/predicted/fertile day highlights, fertility window toggle, PIN lock, panic delete (5 taps on header), export, and inline validation. Everything stays on the device.
+
+**Notes:**
+- Static HTML, single file.
+- PWA support added (icon.svg, manifest.json, meta tags, canvas apple-touch-icon).
+- Color scheme: purple `#7c5cbf` / `#5a3d8f`; period `#e8517a`; fertile `#0d9488`.
+- localStorage key: `kin-quiet-cycle`. PIN hashed with djb2 + salt `kin-qc-v1`.
+- **Timezone fix:** `ymd()` uses local date components (`getFullYear/getMonth/getDate`) — never `toISOString()` — to prevent infinite loops in UTC+ timezones.
+
+---
+
+*Next tool: KIN-016*
