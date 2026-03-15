@@ -292,11 +292,6 @@
       opacity: .8;
       animation: none;
     }
-    .result-divider {
-      width: 32px; height: 2px;
-      background: var(--accent-bd);
-      border-radius: 2px;
-    }
     .result-again {
       font-size: 12px;
       color: var(--subtle);
@@ -503,9 +498,6 @@ function showResult(chosen, done) {
     lbl.textContent = 'Selected';
     resultInner.appendChild(lbl);
 
-    const div = document.createElement('div');
-    div.className = 'result-divider';
-    resultInner.appendChild(div);
   } else {
     const lbl = document.createElement('div');
     lbl.className = 'result-label';
