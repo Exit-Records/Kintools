@@ -513,7 +513,7 @@ function save() { localStorage.setItem(SK, JSON.stringify(state)); }
 let state = load();
 
 // ── Date utils ─────────────────────────────────────────────
-function ymd(d) { return d.toISOString().slice(0, 10); }
+function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function fromYmd(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
 function daysBetween(a, b) { return Math.round((fromYmd(b) - fromYmd(a)) / 864e5); }
 function addDays(s, n) { const d = fromYmd(s); d.setDate(d.getDate()+n); return ymd(d); }
