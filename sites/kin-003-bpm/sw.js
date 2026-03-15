@@ -1,8 +1,9 @@
-const CACHE_NAME = 'kin-003-bpm-v2';
+const CACHE_NAME = 'kin-003-bpm-v3';
 
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
+  '/icon.svg',
 ];
 
 self.addEventListener('install', (event) => {
