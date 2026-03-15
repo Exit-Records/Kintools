@@ -443,6 +443,7 @@
       <label class="flbl" for="f-note">Notes <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
       <textarea class="finput ftxt" id="f-note" placeholder="cramps, mood, fatigue, headache…"></textarea>
     </div>
+    <p id="modal-err" style="font-size:13px;color:#dc2626;min-height:18px;margin-top:-4px;margin-bottom:6px"></p>
     <div class="sheet-foot">
       <button class="btn btn-secondary" id="modal-cancel" style="flex:1">Cancel</button>
       <button class="btn btn-primary" id="modal-save" style="flex:1">Save</button>
@@ -622,17 +623,12 @@ function renderHero() {
 function renderActive() {
   const a=activePeriod();
   const bar=document.getElementById('active-bar');
-  const btn=document.getElementById('btn-start');
   if(a) {
     bar.classList.remove('hidden');
     const d=daysAgo(a.start)+1;
     document.getElementById('active-txt').textContent=`Started ${fmtShort(a.start)} · Day ${d}`;
-    btn.innerHTML='+ Start New Period';
-    btn.disabled=true;
   } else {
     bar.classList.add('hidden');
-    btn.innerHTML='<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 4.5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Start Period';
-    btn.disabled=false;
   }
 }
 
@@ -686,7 +682,7 @@ function renderTimeline() {
 
 function renderEntries() {
   const el=document.getElementById('entry-list');
-  const sorted2=[...state.cycles].sort((a,b)=>b.start<a.start?-1:1);
+  const sorted2=[...state.cycles].sort((a,b)=>a.start>b.start?-1:a.start<b.start?1:0);
   if(!sorted2.length){el.innerHTML='<p class="entry-empty">No cycles logged yet.</p>';return;}
   el.innerHTML=sorted2.map(c=>{
     const len=c.end?daysBetween(c.start,c.end)+1:null;
@@ -724,6 +720,7 @@ function renderPinUI() {
 let editId=null;
 function openAdd(useToday=true){
   editId=null;
+  modalErr('');
   document.getElementById('modal-ttl').textContent='Log Period Start';
   document.getElementById('f-start').value=useToday?today():'';
   document.getElementById('f-end').value='';
@@ -732,6 +729,7 @@ function openAdd(useToday=true){
 }
 function openPast(){
   editId=null;
+  modalErr('');
   document.getElementById('modal-ttl').textContent='Add Past Entry';
   document.getElementById('f-start').value='';
   document.getElementById('f-end').value='';
@@ -741,6 +739,7 @@ function openPast(){
 function openEdit(id){
   const c=state.cycles.find(x=>x.id===id); if(!c) return;
   editId=id;
+  modalErr('');
   document.getElementById('modal-ttl').textContent='Edit Entry';
   document.getElementById('f-start').value=c.start||'';
   document.getElementById('f-end').value=c.end||'';
@@ -750,25 +749,28 @@ function openEdit(id){
 function openEndModal(){
   const a=activePeriod(); if(!a) return;
   editId=a.id;
+  modalErr('');
   document.getElementById('modal-ttl').textContent='Mark Period End';
   document.getElementById('f-start').value=a.start;
   document.getElementById('f-end').value=today();
   document.getElementById('f-note').value=a.note||'';
   openOv('ov-entry');
 }
+function modalErr(msg){ document.getElementById('modal-err').textContent=msg; }
 function saveModal(){
   const start=document.getElementById('f-start').value;
   const end=document.getElementById('f-end').value;
   const note=document.getElementById('f-note').value.trim();
-  if(!start){alert('Please enter a start date.');return;}
-  if(end&&end<start){alert('End date must be on or after the start date.');return;}
+  if(!start){ modalErr('Please enter a start date.'); return; }
+  if(end&&end<start){ modalErr('End date must be on or after start date.'); return; }
+  modalErr('');
   if(editId){
     const idx=state.cycles.findIndex(x=>x.id===editId);
     if(idx!==-1) state.cycles[idx]={...state.cycles[idx],start,end:end||'',note};
   } else {
     state.cycles.push({id:Date.now().toString(),start,end:end||'',note});
   }
-  save(); closeOv('ov-entry'); render();
+  save(); closeOv('ov-entry'); setTimeout(render, 50);
 }
 function delEntry(id){
   confirm2('Delete entry?','This cycle entry will be permanently removed.',()=>{
@@ -858,7 +860,7 @@ function init(){
   document.getElementById('pin-panic-tap').addEventListener('click',onPanicTap);
 
   // Buttons
-  document.getElementById('btn-start').addEventListener('click',()=>{ if(!activePeriod()) openAdd(); });
+  document.getElementById('btn-start').addEventListener('click',()=>openAdd());
   document.getElementById('btn-past').addEventListener('click',openPast);
   document.getElementById('btn-end').addEventListener('click',openEndModal);
 
