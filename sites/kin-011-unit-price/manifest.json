@@ -1,11 +1,11 @@
 {
-  "name": "KIN-005 · QR Code",
-  "short_name": "KIN-005",
-  "description": "Privacy-first QR code generator. Everything stays in your browser.",
+  "name": "KIN-011 · Unit Price Calc",
+  "short_name": "KIN-011",
+  "description": "Find the best value per unit instantly. Works offline, no account.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#6B5A2D",
-  "theme_color": "#6B5A2D",
+  "background_color": "#3D2A10",
+  "theme_color": "#3D2A10",
   "icons": [
     {
       "src": "./icon.svg",

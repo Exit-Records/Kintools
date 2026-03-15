@@ -1,11 +1,11 @@
 {
-  "name": "KIN-005 · QR Code",
-  "short_name": "KIN-005",
-  "description": "Privacy-first QR code generator. Everything stays in your browser.",
+  "name": "KIN-010 · Audio Calculators",
+  "short_name": "KIN-010",
+  "description": "18 calculators for musicians and sound engineers. Works offline.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#6B5A2D",
-  "theme_color": "#6B5A2D",
+  "background_color": "#1f1040",
+  "theme_color": "#1f1040",
   "icons": [
     {
       "src": "./icon.svg",

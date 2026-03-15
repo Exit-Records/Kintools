@@ -1,28 +1,22 @@
 {
-  "name": "BPM Counter — Kin",
-  "short_name": "BPM",
-  "description": "Tap the beat. Get the BPM. A simple, accurate tempo counter for DJs, musicians and runners.",
+  "name": "KIN-003 · BPM Counter",
+  "short_name": "KIN-003",
+  "description": "Tap the beat, get the BPM. Simple and accurate. Works offline.",
+  "start_url": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#f5f7fa",
-  "background_color": "#f5f7fa",
-  "start_url": "/",
-  "scope": "/",
+  "background_color": "#6B3D3D",
+  "theme_color": "#6B3D3D",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "maskable"
     }
   ]

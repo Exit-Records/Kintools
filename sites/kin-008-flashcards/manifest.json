@@ -1,11 +1,11 @@
 {
-  "name": "KIN-005 · QR Code",
-  "short_name": "KIN-005",
-  "description": "Privacy-first QR code generator. Everything stays in your browser.",
+  "name": "KIN-008 · Flashcards",
+  "short_name": "KIN-008",
+  "description": "Simple offline flashcards. Study anywhere, no account needed.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#6B5A2D",
-  "theme_color": "#6B5A2D",
+  "background_color": "#2D4A6B",
+  "theme_color": "#2D4A6B",
   "icons": [
     {
       "src": "./icon.svg",

@@ -1,11 +1,11 @@
 {
-  "name": "KIN-005 · QR Code",
-  "short_name": "KIN-005",
-  "description": "Privacy-first QR code generator. Everything stays in your browser.",
+  "name": "KIN-012 · Name Picker",
+  "short_name": "KIN-012",
+  "description": "Pick a random name from any list. Shuffle animation, history log. Works offline.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#6B5A2D",
-  "theme_color": "#6B5A2D",
+  "background_color": "#3D1A4A",
+  "theme_color": "#3D1A4A",
   "icons": [
     {
       "src": "./icon.svg",

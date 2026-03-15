@@ -10,6 +10,11 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Name Picker">
 <link rel="manifest" id="manifest-link">
+<meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KIN-012">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -765,5 +770,18 @@
   // ---- INIT ----
   updateNameCount();
 </script>
+<script>
+  (function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+  var ctx=c.getContext('2d');
+  var g=ctx.createLinearGradient(0,0,sz,sz);
+  g.addColorStop(0,'#3D1A4A');g.addColorStop(1,'#1f0d2e');
+  ctx.fillStyle=g;
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><rect x="10" y="12" width="28" height="6" rx="3" fill="white" opacity="0.35"/><rect x="10" y="21" width="28" height="6" rx="3" fill="white" opacity="1"/><rect x="10" y="30" width="28" height="6" rx="3" fill="white" opacity="0.35"/><circle cx="38" cy="24" r="5" fill="white" opacity="0.9"/><path d="M36 24l1.5 1.5L40 22" stroke="#3D1A4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
+  }catch(e){}})();
+  </script>
 </body>
 </html>

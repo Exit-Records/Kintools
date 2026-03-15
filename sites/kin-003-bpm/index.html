@@ -14,6 +14,11 @@
   <meta property="og:description" content="Tap the beat. Get the BPM." />
   <meta property="og:type" content="website" />
   <link rel="manifest" href="manifest.json" />
+<meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KIN-003">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -479,5 +484,18 @@
   })();
 </script>
 
+<script>
+  (function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+  var ctx=c.getContext('2d');
+  var g=ctx.createLinearGradient(0,0,sz,sz);
+  g.addColorStop(0,'#6B3D3D');g.addColorStop(1,'#4a2525');
+  ctx.fillStyle=g;
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" stroke="white" stroke-width="2"/><path d="M24 14v10l7 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8l4 4M36 8l-4 4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>';
+  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
+  }catch(e){}})();
+  </script>
 </body>
 </html>
