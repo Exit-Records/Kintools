@@ -48,6 +48,7 @@ Tools using `viteSingleFile` (KIN-004) produce one self-contained HTML — no pa
 
 ### GitHub push rules
 - **Preview before pushing** — always build, preview locally in the kin-preview server, and get user sign-off before pushing anything to GitHub.
+- **After pushing** — always tell the user the Netlify publish directory so they can configure the site immediately. For static HTML tools it is the folder containing `index.html` (e.g. `sites/kin-013-mood-slider`). For React/Vite tools it is `artifacts/<slug>/dist/public`.
 - **Never push in parallel** — concurrent PUTs to the same repo cause 409 SHA conflicts. Always `await` each push before starting the next.
 - Always fetch the current SHA before a PUT — never assume the file doesn't exist.
 - Push order for multi-file changes: dependencies first (e.g. `netlify.toml` before `index.html`).
