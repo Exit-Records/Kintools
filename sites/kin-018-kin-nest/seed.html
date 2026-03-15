@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seeding demo data…</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #f0fdf4; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .msg { text-align: center; color: #059669; }
+    .msg h2 { font-size: 20px; margin-bottom: 8px; }
+    .msg p  { font-size: 14px; color: #6b7280; }
+  </style>
+</head>
+<body>
+<div class="msg"><h2>Loading demo data…</h2><p>Redirecting to Kin Nest</p></div>
+<script>
+(function () {
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+
+  // Baby: Elowen, 17 weeks old today
+  const dobMs = Date.now() - 17 * 7 * 86400000;
+  const dob = new Date(dobMs);
+  const dobStr = dob.getFullYear() + '-' + String(dob.getMonth()+1).padStart(2,'0') + '-' + String(dob.getDate()).padStart(2,'0');
+
+  // Helpers
+  function dayStart(daysAgo) {
+    const d = new Date(); d.setHours(0,0,0,0);
+    return d.getTime() - daysAgo * 86400000;
+  }
+  function ts(daysAgo, h, m) { return dayStart(daysAgo) + h*3600000 + m*60000; }
+
+  const feeds = [];
+  const sleep = [];
+  const diapers = [];
+  const growth = [];
+
+  // ── 7 days of data ──────────────────────────────────────
+  // Pattern: 17-week-old, 3 naps/day
+  // Feeds: left/right breast alternating + evening bottle
+  // Sleep: overnight + 3 naps
+  // Diapers: 6-7/day
+
+  const DAY_PLANS = [
+    // daysAgo, [feed tuples: [h,m,type]], [sleep pairs: [[startH,startM],[endH,endM]]], [diaper times: [h,m,type]]
+    {
+      d: 6,
+      feeds: [[6,30,'left'],[9,15,'right'],[12,0,'left'],[14,45,'right'],[17,30,'left'],[20,0,'bottle'],[23,30,'right'],[3,45,'left']],
+      sleeps: [[7,0,8,25],[10,0,11,30],[13,15,14,0],[19,30,6,30]],  // last pair = overnight into next day
+      naps: [[7,0,8,25],[10,0,11,30],[13,15,14,0]],
+      overnight: [[19,30], [6,30]],
+      diapers: [[7,15,'wet'],[9,30,'dirty'],[11,45,'wet'],[14,0,'both'],[16,30,'wet'],[19,0,'wet'],[21,0,'wet']]
+    },
+    {
+      d: 5,
+      feeds: [[6,25,'right'],[9,10,'left'],[11,55,'right'],[14,50,'left'],[17,35,'right'],[20,15,'bottle'],[23,45,'left'],[4,0,'right']],
+      naps: [[7,5,8,35],[10,5,11,25],[13,20,14,5]],
+      overnight: [[19,40],[6,25]],
+      diapers: [[7,20,'wet'],[9,25,'both'],[11,40,'wet'],[14,5,'wet'],[16,25,'dirty'],[19,15,'wet'],[22,0,'wet']]
+    },
+    {
+      d: 4,
+      feeds: [[6,35,'left'],[9,20,'right'],[12,5,'left'],[14,55,'right'],[17,40,'left'],[20,10,'bottle'],[23,20,'right'],[3,30,'left']],
+      naps: [[7,10,8,50],[10,10,11,40],[13,30,14,15]],
+      overnight: [[19,45],[6,35]],
+      diapers: [[7,10,'wet'],[9,35,'wet'],[11,50,'both'],[14,20,'wet'],[16,40,'wet'],[19,20,'dirty'],[23,0,'wet']]
+    },
+    {
+      d: 3,
+      feeds: [[6,30,'right'],[9,0,'left'],[11,45,'right'],[14,40,'left'],[17,25,'right'],[20,5,'bottle'],[3,15,'right']],
+      naps: [[7,5,8,30],[9,55,11,20],[13,10,13,55]],
+      overnight: [[19,30],[6,30]],
+      diapers: [[7,25,'wet'],[9,15,'wet'],[12,0,'dirty'],[14,30,'wet'],[16,50,'both'],[19,30,'wet'],[22,30,'wet']]
+    },
+    {
+      d: 2,
+      feeds: [[6,40,'left'],[9,25,'right'],[12,10,'left'],[15,0,'right'],[17,45,'left'],[20,20,'bottle'],[23,50,'right'],[4,10,'left']],
+      naps: [[7,15,8,55],[10,20,11,50],[13,35,14,20]],
+      overnight: [[20,0],[6,40]],
+      diapers: [[7,30,'wet'],[9,40,'both'],[12,5,'wet'],[14,50,'wet'],[17,0,'wet'],[20,10,'dirty'],[23,0,'wet']]
+    },
+    {
+      d: 1,
+      feeds: [[6,35,'right'],[9,10,'left'],[11,50,'right'],[14,35,'left'],[17,20,'right'],[20,0,'bottle'],[23,30,'left'],[3,50,'right']],
+      naps: [[7,10,8,40],[10,5,11,35],[13,25,14,10]],
+      overnight: [[19,50],[6,35]],
+      diapers: [[7,15,'wet'],[9,20,'wet'],[11,55,'dirty'],[14,15,'wet'],[16,35,'wet'],[19,45,'both'],[22,45,'wet']]
+    },
+    {
+      d: 0,
+      feeds: [[6,30,'left'],[9,15,'right'],[12,0,'left'],[14,45,'right']],
+      naps: [[7,5,8,35],[10,10,11,40]],
+      overnight: null,
+      diapers: [[7,20,'wet'],[9,30,'wet'],[12,10,'both'],[14,50,'wet']]
+    }
+  ];
+
+  DAY_PLANS.forEach(plan => {
+    const d = plan.d;
+
+    // Feeds
+    plan.feeds.forEach(([h, m, type]) => {
+      const t = ts(d, h, m);
+      if (t <= Date.now()) feeds.push({ id: uid(), time: t, type, amount: '', notes: '' });
+    });
+
+    // Naps
+    plan.naps.forEach(([sh, sm, eh, em]) => {
+      const start = ts(d, sh, sm);
+      const end = ts(d, eh, em);
+      if (end <= Date.now()) sleep.push({ id: uid(), start, end });
+    });
+
+    // Overnight sleep: starts this day, ends previous day (daysAgo - 1)
+    if (plan.overnight) {
+      const [sh, sm] = plan.overnight[0];
+      const [eh, em] = plan.overnight[1];
+      const start = ts(d, sh, sm);
+      const end = ts(d - 1, eh, em);
+      if (end <= Date.now()) sleep.push({ id: uid(), start, end });
+    }
+
+    // Diapers
+    plan.diapers.forEach(([h, m, type]) => {
+      const t = ts(d, h, m);
+      if (t <= Date.now()) diapers.push({ id: uid(), time: t, type });
+    });
+  });
+
+  // Growth entries (3 over the past month)
+  growth.push({ id: uid(), date: ts(21, 9, 0), weight: '5.2', height: '57', head: '38.5' });
+  growth.push({ id: uid(), date: ts(14, 9, 0), weight: '5.6', height: '58.5', head: '39' });
+  growth.push({ id: uid(), date: ts(7,  9, 0), weight: '6.1', height: '60', head: '39.8' });
+
+  const state = {
+    baby: { name: 'Elowen', dob: dobStr },
+    settings: { nightAuto: true, remind: true, remindFreq: 'weekly', remindLast: Date.now() - 9 * 86400000 },
+    feeds, sleep, diapers, growth, medicine: []
+  };
+
+  localStorage.setItem('kin-nest', JSON.stringify(state));
+  window.location.href = './index.html';
+})();
+</script>
+</body>
+</html>
