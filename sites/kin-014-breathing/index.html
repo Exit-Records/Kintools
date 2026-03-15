@@ -6,6 +6,12 @@
 <title>Breathing Exercise — Kin</title>
 <meta name="description" content="Guided breathing for stress relief, focus and sleep. Box breathing, 4-7-8, and more. Works offline, no data stored.">
 <meta name="theme-color" id="theme-meta" content="#FAFAF7">
+<link rel="manifest" href="./manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KIN-014">
+<link rel="apple-touch-icon" id="apple-touch-icon">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -965,6 +971,53 @@ function fmtTime(secs) {
   var s = Math.floor(secs % 60);
   return m + ':' + (s < 10 ? '0' : '') + s;
 }
+
+/* ── Apple touch icon (canvas-generated PNG) ─── */
+(function () {
+  try {
+    var sz  = 180;
+    var c   = document.createElement('canvas');
+    c.width = sz; c.height = sz;
+    var ctx = c.getContext('2d');
+
+    /* Background gradient */
+    var grd = ctx.createLinearGradient(0, 0, sz, sz);
+    grd.addColorStop(0, '#1F3828');
+    grd.addColorStop(1, '#0a1a10');
+    ctx.fillStyle = grd;
+    /* Rounded rect (iOS clips anyway, but looks nicer elsewhere) */
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+    ctx.arcTo(sz, 0, sz, r, r);
+    ctx.lineTo(sz, sz - r);
+    ctx.arcTo(sz, sz, sz - r, sz, r);
+    ctx.lineTo(r, sz);
+    ctx.arcTo(0, sz, 0, sz - r, r);
+    ctx.lineTo(0, r);
+    ctx.arcTo(0, 0, r, 0, r);
+    ctx.closePath();
+    ctx.fill();
+
+    var cx = sz / 2, cy = sz / 2;
+
+    /* Outer ring */
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.arc(cx, cy, 76, 0, Math.PI * 2); ctx.stroke();
+
+    /* Middle ring */
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.arc(cx, cy, 54, 0, Math.PI * 2); ctx.stroke();
+
+    /* Inner filled circle */
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.beginPath(); ctx.arc(cx, cy, 29, 0, Math.PI * 2); ctx.fill();
+
+    document.getElementById('apple-touch-icon').href = c.toDataURL('image/png');
+  } catch (e) {}
+}());
 </script>
 </body>
 </html>

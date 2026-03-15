@@ -1,0 +1,23 @@
+{
+  "name": "KIN-014 · Breathing",
+  "short_name": "KIN-014",
+  "description": "Guided breathing for stress relief, focus and sleep. Works offline.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1F3828",
+  "theme_color": "#1F3828",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
