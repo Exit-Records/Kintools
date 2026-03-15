@@ -432,7 +432,8 @@
     <div class="sheet-handle"></div>
     <p class="sheet-ttl">Log Feed</p>
     <div class="type-grid" id="feed-type-grid">
-      <button class="type-btn sel" data-ft="breast" onclick="selFeedType(this)"><span class="type-icon">🤱</span><span class="type-lbl">Breast</span></button>
+      <button class="type-btn sel" data-ft="left" onclick="selFeedType(this)"><span class="type-icon">🤱</span><span class="type-lbl">Left</span></button>
+      <button class="type-btn" data-ft="right" onclick="selFeedType(this)"><span class="type-icon">🤱</span><span class="type-lbl">Right</span></button>
       <button class="type-btn" data-ft="bottle" onclick="selFeedType(this)"><span class="type-icon">🍼</span><span class="type-lbl">Bottle</span></button>
       <button class="type-btn" data-ft="pumped" onclick="selFeedType(this)"><span class="type-icon">🥛</span><span class="type-lbl">Pumped</span></button>
       <button class="type-btn" data-ft="formula" onclick="selFeedType(this)"><span class="type-icon">🧴</span><span class="type-lbl">Formula</span></button>
@@ -795,7 +796,11 @@ function renderDash() {
   document.getElementById('sleep-sub').textContent = active ? 'tap to wake' : 'tap to start';
 
   // Feed / diaper sub
-  const feedSub = sinceF !== null ? `${fmtDurMin(sinceF)} ago` : 'no logs yet';
+  const lastSide = lastBreastSide();
+  const nextSide = lastSide ? (lastSide === 'left' ? 'R' : 'L') : null;
+  const feedSub = sinceF !== null
+    ? `${fmtDurMin(sinceF)} ago${nextSide ? ` · try ${nextSide}` : ''}`
+    : 'no logs yet';
   document.getElementById('feed-sub').textContent = feedSub;
   const dcount = getDiapersTodayCount();
   document.getElementById('diaper-sub').textContent = dcount > 0 ? `${dcount} today` : 'none yet';
@@ -888,7 +893,7 @@ function renderTimeline() {
   events.sort((a,b) => a.time - b.time);
 
   const TYPE_LABELS = { feed: 'Feed', sleep: 'Sleep', wake: 'Woke', diaper: 'Diaper', growth: 'Measurement', medicine: 'Medicine' };
-  const FEED_LABELS = { breast: 'Breastfeed', bottle: 'Bottle', pumped: 'Pumped milk', formula: 'Formula', solids: 'Solids' };
+  const FEED_LABELS = { left: 'Left breast', right: 'Right breast', bottle: 'Bottle', pumped: 'Pumped milk', formula: 'Formula', solids: 'Solids' };
   const DIAPER_LABELS = { wet: 'Wet', dirty: 'Dirty', both: 'Wet & dirty' };
 
   const container = document.getElementById('tl-events');
@@ -973,7 +978,20 @@ function dismissReminder() {
 // ═══════════════════════════════════════════════════════════
 // Logging
 // ═══════════════════════════════════════════════════════════
-let _feedType = 'breast';
+let _feedType = 'left';
+
+function lastBreastSide() {
+  const breastFeeds = state.feeds.filter(f => f.type === 'left' || f.type === 'right').sort((a,b) => b.time - a.time);
+  if (!breastFeeds.length) return null;
+  return breastFeeds[0].type;
+}
+
+function suggestedSide() {
+  const last = lastBreastSide();
+  if (!last) return 'left';
+  return last === 'left' ? 'right' : 'left';
+}
+
 let _diaperType = 'wet';
 let _pressTimer = null;
 
@@ -989,12 +1007,12 @@ function setupLongPress(btnId, shortFn, longFn) {
 }
 
 function quickFeed() {
-  _feedType = 'breast';
+  _feedType = suggestedSide();
   logFeed(_feedType, '', '');
 }
 
 function openFeedModal() {
-  selFeedTypeByVal('breast');
+  selFeedTypeByVal(suggestedSide());
   document.getElementById('feed-amount').value = '';
   document.getElementById('feed-notes').value = '';
   openOv('ov-feed');
