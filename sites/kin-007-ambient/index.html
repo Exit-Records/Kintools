@@ -549,7 +549,10 @@ function initAudio() {
     const node = NODES[key];
     node.gainNode = ctx.createGain();
     node.gainNode.gain.value = 0;
-    node.gainNode.connect(masterGain);
+    node.panNode = ctx.createStereoPanner();
+    node.panNode.pan.value = node.x * 0.65;
+    node.gainNode.connect(node.panNode);
+    node.panNode.connect(masterGain);
     node.source = makeSource(key, ctx);
     node.source.out.connect(node.gainNode);
   }
@@ -850,6 +853,7 @@ function updateGains() {
     if (!n.gainNode) continue;
     const g = state.playing ? getGain(key) * (state.masterVolume / 100) * 0.9 : 0;
     n.gainNode.gain.setTargetAtTime(g, ctx.currentTime, 0.08);
+    if (n.panNode) n.panNode.pan.setTargetAtTime(n.x * 0.65, ctx.currentTime, 0.1);
   }
   updateMixCode();
 }
