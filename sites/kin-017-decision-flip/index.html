@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Decision Flip — KIN-017</title>
+  <meta name="description" content="Break decision paralysis in seconds. Paste your options, flip, get an answer. No account, no tracking.">
+  <meta name="theme-color" content="#7c3aed">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="KIN-017">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f5ff;
+      --card: #ffffff;
+      --border: #e4e0f8;
+      --fg: #1e1b4b;
+      --muted: #6b6a8e;
+      --subtle: #a5a3c2;
+      --accent: #7c3aed;
+      --accent-dk: #5b21b6;
+      --accent-lt: #f5f3ff;
+      --accent-md: #ddd6fe;
+      --accent-bd: #c4b5fd;
+      --r: 16px;
+      --r-sm: 10px;
+      --shadow: 0 2px 16px rgba(124,58,237,.08);
+      --shadow-lg: 0 8px 40px rgba(124,58,237,.18);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .kin-hdr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 20px 20px 0;
+    }
+    .kin-logo {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(124,58,237,.35);
+    }
+    .kin-ttl { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+    .kin-sub { font-size: 12px; color: var(--subtle); margin-left: 2px; }
+    .kin-num {
+      margin-left: auto;
+      font-size: 10px; font-weight: 600;
+      color: var(--accent);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      background: var(--accent-lt);
+      border: 1px solid var(--accent-bd);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── Main ────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 20px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── Textarea card ───────────────────────────────────── */
+    .input-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .input-card-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .input-lbl {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+    }
+    .opt-count {
+      font-size: 11px; font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-lt);
+      border: 1px solid var(--accent-bd);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .opt-ta {
+      width: 100%;
+      min-height: 200px;
+      max-height: 340px;
+      padding: 14px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--fg);
+      resize: vertical;
+      outline: none;
+    }
+    .opt-ta::placeholder { color: var(--subtle); }
+
+    /* ── Controls row ────────────────────────────────────── */
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Pick stepper */
+    .pick-group {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .pick-lbl {
+      padding: 0 10px;
+      font-size: 12px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+    .pick-btn {
+      width: 34px; height: 38px;
+      border: none; background: none;
+      cursor: pointer;
+      font-size: 16px; font-weight: 400;
+      color: var(--muted);
+      transition: color .13s, background .13s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pick-btn:hover { background: var(--accent-lt); color: var(--accent-dk); }
+    .pick-btn:active { transform: scale(.9); }
+    .pick-val {
+      width: 32px;
+      text-align: center;
+      font-size: 16px; font-weight: 700;
+      color: var(--fg);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      line-height: 38px;
+    }
+
+    /* Remove toggle */
+    .tog-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      flex: 1;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      box-shadow: var(--shadow);
+      padding: 0 12px;
+      height: 40px;
+    }
+    .tog-wrap input { position: absolute; width: 0; height: 0; opacity: 0; }
+    .tog-sw { position: relative; display: inline-block; width: 34px; height: 19px; flex-shrink: 0; }
+    .tog-track { position: absolute; inset: 0; background: var(--border); border-radius: 10px; transition: background .18s; }
+    .tog-wrap input:checked + .tog-sw .tog-track { background: var(--accent); }
+    .tog-thumb { position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .18s; }
+    .tog-wrap input:checked + .tog-sw .tog-thumb { transform: translateX(15px); }
+    .tog-text { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+    /* ── Decide button ───────────────────────────────────── */
+    .decide-btn {
+      width: 100%;
+      height: 58px;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #fff;
+      border: none;
+      border-radius: var(--r);
+      font-size: 18px; font-weight: 700;
+      letter-spacing: .3px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(124,58,237,.35);
+      transition: transform .13s, box-shadow .13s, opacity .13s;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      font-family: inherit;
+    }
+    .decide-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(124,58,237,.45);
+    }
+    .decide-btn:active:not(:disabled) { transform: translateY(0) scale(.98); }
+    .decide-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .decide-btn svg { flex-shrink: 0; }
+
+    /* ── Result card ─────────────────────────────────────── */
+    .result-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .result-card.has-result {
+      border-color: var(--accent-md);
+      box-shadow: var(--shadow-lg);
+    }
+    .result-card.spinning {
+      border-color: var(--accent-bd);
+    }
+    .result-empty {
+      color: var(--subtle);
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .result-empty svg { opacity: .3; }
+    .result-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--accent);
+    }
+    .result-items {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .result-item {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 800;
+      color: var(--fg);
+      letter-spacing: -.5px;
+      line-height: 1.2;
+      text-align: center;
+      word-break: break-word;
+      animation: popIn .28s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .result-item.spinning-text {
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 800;
+      color: var(--accent-dk);
+      opacity: .8;
+      animation: none;
+    }
+    .result-divider {
+      width: 32px; height: 2px;
+      background: var(--accent-bd);
+      border-radius: 2px;
+    }
+    .result-again {
+      font-size: 12px;
+      color: var(--subtle);
+      margin-top: 2px;
+    }
+    .err-msg {
+      font-size: 13px;
+      color: #e11d48;
+      font-weight: 500;
+      padding: 8px 14px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+    }
+
+    /* ── Animations ──────────────────────────────────────── */
+    @keyframes popIn {
+      from { transform: scale(.6) translateY(8px); opacity: 0; }
+      to   { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @keyframes spinPulse {
+      0%, 100% { opacity: .7; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .kin-ftr {
+      text-align: center;
+      padding: 16px 20px 24px;
+      font-size: 12px;
+      color: var(--subtle);
+      line-height: 2;
+      border-top: 1px solid var(--border);
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .kin-ftr a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 400px) {
+      .controls { gap: 8px; }
+      .tog-text { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="kin-hdr">
+    <div class="kin-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/>
+        <path d="M7.5 7.5c0-1 .7-1.8 1.5-1.8s1.5.8 1.5 1.8c0 .9-.8 1.4-1.5 2.4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="9" cy="12.8" r=".9" fill="white"/>
+      </svg>
+    </div>
+    <div>
+      <div class="kin-ttl">Decision Flip</div>
+      <div class="kin-sub">by Alice Anthony</div>
+    </div>
+    <span class="kin-num">KIN-017</span>
+  </header>
+
+  <main>
+
+    <!-- Textarea -->
+    <div class="input-card">
+      <div class="input-card-hdr">
+        <span class="input-lbl">Your Options</span>
+        <span class="opt-count" id="opt-count">0 options</span>
+      </div>
+      <textarea
+        id="opt-ta"
+        class="opt-ta"
+        placeholder="Type or paste options here — one per line:
+
+Pizza
+Burger
+Salad
+Sushi"
+        autofocus
+      ></textarea>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="pick-group">
+        <span class="pick-lbl">Pick</span>
+        <button class="pick-btn" id="pick-minus" aria-label="Fewer picks">−</button>
+        <span class="pick-val" id="pick-val">1</span>
+        <button class="pick-btn" id="pick-plus" aria-label="More picks">+</button>
+      </div>
+      <label class="tog-wrap">
+        <input type="checkbox" id="tog-remove">
+        <span class="tog-sw"><span class="tog-track"></span><span class="tog-thumb"></span></span>
+        <span class="tog-text">Remove after flip</span>
+      </label>
+    </div>
+
+    <!-- Decide button -->
+    <button class="decide-btn" id="decide-btn">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 6h11l-3-3m0 6l3 3M17 6l-3-3M3 14h11l-3-3m0 6l3 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Decide
+    </button>
+
+    <!-- Result -->
+    <div class="result-card" id="result-card">
+      <div class="result-empty" id="result-empty">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="2"/>
+          <path d="M13 13c0-1.7 1.3-3 3-3s3 1.3 3 3c0 1.6-1.5 2.5-3 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="22.5" r="1.5" fill="currentColor"/>
+        </svg>
+        Your result will appear here
+      </div>
+      <div id="result-inner" style="display:none; width:100%"></div>
+    </div>
+
+  </main>
+
+  <footer class="kin-ftr">
+    Decision Flip · KIN-017 · by Alice Anthony<br>
+    Part of the <a href="https://kintools.netlify.app">Kin</a> collection · No accounts · No tracking · Offline-ready
+  </footer>
+
+<script>
+// ── Elements ──────────────────────────────────────────────────────────────────
+const ta        = document.getElementById('opt-ta');
+const optCount  = document.getElementById('opt-count');
+const pickVal   = document.getElementById('pick-val');
+const pickMinus = document.getElementById('pick-minus');
+const pickPlus  = document.getElementById('pick-plus');
+const togRemove = document.getElementById('tog-remove');
+const decideBtn = document.getElementById('decide-btn');
+const resultCard   = document.getElementById('result-card');
+const resultEmpty  = document.getElementById('result-empty');
+const resultInner  = document.getElementById('result-inner');
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let picks    = 1;
+let spinning = false;
+
+// ── Option parsing ────────────────────────────────────────────────────────────
+function getOptions() {
+  return ta.value
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l.length > 0);
+}
+
+function updateCount() {
+  const n = getOptions().length;
+  optCount.textContent = n === 1 ? '1 option' : `${n} options`;
+  // Cap picks to available options
+  const maxP = Math.max(1, n);
+  if (picks > maxP) {
+    picks = maxP;
+    pickVal.textContent = picks;
+  }
+  pickPlus.disabled  = picks >= n;
+  pickMinus.disabled = picks <= 1;
+}
+
+ta.addEventListener('input', updateCount);
+updateCount();
+
+// ── Pick stepper ──────────────────────────────────────────────────────────────
+pickMinus.addEventListener('click', () => {
+  if (picks > 1) { picks--; pickVal.textContent = picks; updateCount(); }
+});
+pickPlus.addEventListener('click', () => {
+  const n = getOptions().length;
+  if (picks < n) { picks++; pickVal.textContent = picks; updateCount(); }
+});
+
+// ── Shuffle (Fisher-Yates) ────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── Show result ───────────────────────────────────────────────────────────────
+function showResult(chosen, done) {
+  resultEmpty.style.display = 'none';
+  resultInner.style.display = 'block';
+  resultCard.classList.toggle('has-result', done);
+  resultCard.classList.toggle('spinning', !done);
+
+  resultInner.innerHTML = '';
+
+  if (!done) {
+    // Spinning state: one large item cycling
+    const div = document.createElement('div');
+    div.className = 'result-item spinning-text';
+    div.style.animation = 'spinPulse .4s ease infinite';
+    div.textContent = chosen[0];
+    resultInner.appendChild(div);
+    return;
+  }
+
+  // Final result
+  if (chosen.length === 1) {
+    const lbl = document.createElement('div');
+    lbl.className = 'result-label';
+    lbl.textContent = 'Selected';
+    resultInner.appendChild(lbl);
+
+    const div = document.createElement('div');
+    div.className = 'result-divider';
+    resultInner.appendChild(div);
+  } else {
+    const lbl = document.createElement('div');
+    lbl.className = 'result-label';
+    lbl.textContent = `${chosen.length} Selected`;
+    resultInner.appendChild(lbl);
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = 'result-items';
+
+  chosen.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'result-item';
+    div.style.animationDelay = `${idx * 80}ms`;
+    div.textContent = item;
+    wrap.appendChild(div);
+
+    if (idx < chosen.length - 1) {
+      const sep = document.createElement('div');
+      sep.style.cssText = 'font-size:12px;color:var(--subtle);font-weight:500';
+      sep.textContent = '·';
+      wrap.appendChild(sep);
+    }
+  });
+
+  resultInner.appendChild(wrap);
+
+  const again = document.createElement('div');
+  again.className = 'result-again';
+  again.textContent = 'Flip again to re-decide';
+  resultInner.appendChild(again);
+}
+
+function showError(msg) {
+  resultEmpty.style.display = 'none';
+  resultInner.style.display = 'block';
+  resultCard.classList.remove('has-result', 'spinning');
+  resultInner.innerHTML = `<div class="err-msg">${msg}</div>`;
+}
+
+function showEmpty() {
+  resultEmpty.style.display = '';
+  resultInner.style.display = 'none';
+  resultCard.classList.remove('has-result', 'spinning');
+}
+
+// ── Decide ────────────────────────────────────────────────────────────────────
+decideBtn.addEventListener('click', decide);
+
+// Also allow Enter from textarea (Ctrl+Enter or Cmd+Enter)
+ta.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    decide();
+  }
+});
+
+function decide() {
+  if (spinning) return;
+
+  const opts = getOptions();
+
+  if (opts.length === 0) {
+    showError('Add at least one option to get started.');
+    return;
+  }
+
+  const numPicks = Math.min(picks, opts.length);
+  const chosen = shuffle(opts).slice(0, numPicks);
+
+  spinning = true;
+  decideBtn.disabled = true;
+  decideBtn.textContent = '…';
+
+  // Spin animation
+  const TOTAL    = 1400; // ms total
+  let elapsed    = 0;
+  let interval   = 55;   // start fast
+
+  function step() {
+    const rand = [opts[Math.floor(Math.random() * opts.length)]];
+    showResult(rand, false);
+    elapsed += interval;
+    interval = Math.min(interval * 1.09, 180);
+
+    if (elapsed < TOTAL) {
+      setTimeout(step, interval);
+    } else {
+      // Reveal
+      showResult(chosen, true);
+      spinning = false;
+      decideBtn.disabled = false;
+      decideBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M3 6h11l-3-3m0 6l3 3M17 6l-3-3M3 14h11l-3-3m0 6l3 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg> Decide`;
+
+      // Remove chosen from textarea if toggle is on
+      if (togRemove.checked) {
+        removeChosen(chosen);
+      }
+    }
+  }
+
+  step();
+}
+
+// ── Remove after pick ─────────────────────────────────────────────────────────
+function removeChosen(chosen) {
+  const lines = ta.value.split('\n');
+  const toRemove = [...chosen]; // consume one occurrence per chosen item
+
+  const remaining = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const idx = toRemove.indexOf(trimmed);
+    if (idx !== -1) {
+      toRemove.splice(idx, 1); // remove one occurrence
+    } else {
+      remaining.push(line);
+    }
+  }
+
+  ta.value = remaining.join('\n');
+  updateCount();
+}
+</script>
+
+<script>
+// Apple touch icon (violet gradient + question mark icon)
+(function () {
+  try {
+    var sz = 180, c = document.createElement('canvas');
+    c.width = sz; c.height = sz;
+    var ctx = c.getContext('2d');
+    var g = ctx.createLinearGradient(0, 0, sz, sz);
+    g.addColorStop(0, '#a78bfa'); g.addColorStop(1, '#7c3aed');
+    ctx.fillStyle = g;
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+    ctx.arcTo(sz, 0, sz, r, r); ctx.lineTo(sz, sz - r);
+    ctx.arcTo(sz, sz, sz - r, sz, r); ctx.lineTo(r, sz);
+    ctx.arcTo(0, sz, 0, sz - r, r); ctx.lineTo(0, r);
+    ctx.arcTo(0, 0, r, 0, r); ctx.closePath(); ctx.fill();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 18 18" fill="none">' +
+      '<circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/>' +
+      '<path d="M7.5 7.5c0-1 .7-1.8 1.5-1.8s1.5.8 1.5 1.8c0 .9-.8 1.4-1.5 2.4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<circle cx="9" cy="12.8" r=".9" fill="white"/>' +
+      '</svg>';
+    var img = new Image();
+    var blob = new Blob([svg], { type: 'image/svg+xml' });
+    var url = URL.createObjectURL(blob);
+    img.onload = function () {
+      ctx.drawImage(img, 42, 42, 96, 96);
+      URL.revokeObjectURL(url);
+      var el = document.getElementById('apple-touch-icon');
+      if (el) el.href = c.toDataURL('image/png');
+    };
+    img.src = url;
+  } catch (e) {}
+})();
+</script>
+
+</body>
+</html>

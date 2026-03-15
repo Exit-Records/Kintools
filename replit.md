@@ -146,6 +146,7 @@ Always `dBridge` — lowercase **d**, uppercase **B**. No exceptions.
 | KIN-014 | Breathing Exercise | kinbreathing.netlify.app | Static HTML |
 | KIN-015 | Quiet Cycle | kinquietcycle.netlify.app | Static HTML |
 | KIN-016 | Recipe Scaler | kinrecipescaler.netlify.app | Static HTML |
+| KIN-017 | Decision Flip | kindecisionflip.netlify.app | Static HTML |
 
 ---
 

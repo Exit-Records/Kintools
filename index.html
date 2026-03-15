@@ -39,6 +39,7 @@
     --hb-14: #1F3828;
     --hb-15: #5a3d8f;
     --hb-16: #7c4d0f;
+    --hb-17: #4c1d95;
   }
 
   body {
@@ -405,6 +406,7 @@
   .release:nth-child(14) { animation-delay: 0.85s; }
   .release:nth-child(15) { animation-delay: 0.9s; }
   .release:nth-child(16) { animation-delay: 0.95s; }
+  .release:nth-child(17) { animation-delay: 1.0s; }
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 600px) {
@@ -445,7 +447,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">16 tools</span>
+  <span class="catalog-count">17 tools</span>
 </div>
 
 <div class="catalog">
@@ -795,6 +797,29 @@
       <div class="release-creator">by dBridge</div>
       <div class="release-desc">Paste ingredients, set servings, get adjusted quantities instantly. Fraction support, unit auto-conversion, ingredient locking. Nothing sent anywhere.</div>
       <div class="release-replaces">Replaces <span>recipe scaling apps that require sign-up</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-017: Decision Flip -->
+  <a href="https://kindecisionflip.netlify.app/" target="_blank" rel="noopener" class="release">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-17), #2e1065);"></div>
+      <span class="cover-category">Wellness</span>
+      <span class="cover-number">KIN-017</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="18" stroke="white" stroke-width="2.5"/>
+          <path d="M20 20c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.2-2 3.5-4 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="34" r="2.2" fill="white"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Decision Flip</div>
+      <div class="release-creator">by Alice Anthony</div>
+      <div class="release-desc">Break decision paralysis in seconds. Paste your options, hit Decide, get an answer. Shuffle animation, multi-pick, remove-after-flip. Nothing saved, nothing sent.</div>
+      <div class="release-replaces">Replaces <span>overthinking</span></div>
     </div>
   </a>
 
