@@ -30,30 +30,6 @@
 }
 
 :root {
-  --background: 30 8% 9%;
-  --foreground: 36 20% 88%;
-  --border: 30 8% 18%;
-  --input: 30 8% 15%;
-  --ring: 35 60% 55%;
-  --card: 30 8% 12%;
-  --card-foreground: 36 20% 88%;
-  --primary: 35 60% 55%;
-  --primary-foreground: 30 8% 9%;
-  --secondary: 30 8% 18%;
-  --secondary-foreground: 36 20% 80%;
-  --muted: 30 8% 15%;
-  --muted-foreground: 36 10% 55%;
-  --accent: 35 60% 55%;
-  --accent-foreground: 30 8% 9%;
-  --destructive: 0 62% 50%;
-  --destructive-foreground: 36 20% 95%;
-
-  --app-font-sans: 'DM Sans', system-ui, sans-serif;
-  --app-font-mono: 'DM Mono', monospace;
-  --radius: 0.5rem;
-}
-
-html.light {
   --background: 40 20% 97%;
   --foreground: 30 12% 15%;
   --border: 36 15% 85%;
@@ -71,6 +47,30 @@ html.light {
   --accent-foreground: 40 20% 97%;
   --destructive: 0 62% 50%;
   --destructive-foreground: 40 20% 97%;
+
+  --app-font-sans: 'DM Sans', system-ui, sans-serif;
+  --app-font-mono: 'DM Mono', monospace;
+  --radius: 0.5rem;
+}
+
+html.dark {
+  --background: 30 8% 9%;
+  --foreground: 36 20% 88%;
+  --border: 30 8% 18%;
+  --input: 30 8% 15%;
+  --ring: 35 60% 55%;
+  --card: 30 8% 12%;
+  --card-foreground: 36 20% 88%;
+  --primary: 35 60% 55%;
+  --primary-foreground: 30 8% 9%;
+  --secondary: 30 8% 18%;
+  --secondary-foreground: 36 20% 80%;
+  --muted: 30 8% 15%;
+  --muted-foreground: 36 10% 55%;
+  --accent: 35 60% 55%;
+  --accent-foreground: 30 8% 9%;
+  --destructive: 0 62% 50%;
+  --destructive-foreground: 36 20% 95%;
 }
 
 .kin-theme-btn {

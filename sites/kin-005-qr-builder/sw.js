@@ -1,7 +1,8 @@
-const CACHE_NAME = 'kin-qr-builder-v2';
+const CACHE_NAME = 'kin-qr-builder-v3';
 const ASSETS = [
   '/',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon.svg'
 ];
 
 self.addEventListener('install', (event) => {

@@ -104,7 +104,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("light", !isDark);
+    document.documentElement.classList.toggle("dark", isDark);
     localStorage.setItem("kin005-theme", isDark ? "dark" : "light");
   }, [isDark]);
 
@@ -227,7 +227,6 @@ export default function App() {
               <rect x="20.5" y="20.5" width="2.5" height="2.5" rx="0.5" fill="hsl(30 8% 9%)" />
             </svg>
             <span className="text-base font-semibold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>Kin QR Builder</span>
-            <span className="kin-label ml-auto" style={{ fontSize: "0.625rem" }}>KIN-005</span>
           </div>
           <p className="text-sm" style={{ color: "hsl(36 10% 55%)" }}>
             Privacy-first QR code generator. Everything stays in your browser.
