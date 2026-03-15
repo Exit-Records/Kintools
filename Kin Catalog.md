@@ -210,4 +210,21 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 ---
 
-*Next tool: KIN-016*
+## KIN-016 · Recipe Scaler
+
+**URL:** https://kinrecipescaler.netlify.app  
+**Netlify publish dir:** `sites/kin-016-recipe-scaler`
+
+**Summary:** Scale any recipe to any number of servings. Paste ingredients, choose original and target servings, get adjusted quantities instantly. Fraction-aware (⅛, ¼, ⅓, ½ etc.), supports unicode and ASCII fractions on input. Per-ingredient lock, auto unit conversion (tsp→tbsp, g→kg, etc.), combine duplicates toggle, copy to clipboard.
+
+**Notes:**
+- Static HTML, single file.
+- PWA support added (icon.svg, manifest.json, meta tags, canvas apple-touch-icon).
+- Color scheme: amber `#b45309` / `#78350f`; background `#fffbeb`.
+- localStorage key: `kin-016-rs` (stores format, precision, autoConvert, combine preferences only — no ingredient data).
+- Quick ×2, ×3, ÷2, ÷3 buttons multiply from original servings.
+- Ingredient locking disabled in combine-duplicates mode.
+
+---
+
+*Next tool: KIN-017*

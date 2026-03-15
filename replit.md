@@ -144,6 +144,8 @@ Always `dBridge` — lowercase **d**, uppercase **B**. No exceptions.
 | KIN-012 | Name Picker | kinnamepick.netlify.app | Static HTML |
 | KIN-013 | Mood Slider | kinmoodslider.netlify.app | Static HTML |
 | KIN-014 | Breathing Exercise | kinbreathing.netlify.app | Static HTML |
+| KIN-015 | Quiet Cycle | kinquietcycle.netlify.app | Static HTML |
+| KIN-016 | Recipe Scaler | kinrecipescaler.netlify.app | Static HTML |
 
 ---
 
