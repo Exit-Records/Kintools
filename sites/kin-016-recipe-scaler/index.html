@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Recipe Scaler — KIN-016</title>
+  <meta name="description" content="Scale any recipe to any number of servings. Paste ingredients, set servings, get adjusted quantities instantly. No account, no tracking.">
+  <meta name="theme-color" content="#b45309">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="KIN-016">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #faf9f7;
+      --card: #ffffff;
+      --border: #e8e0d4;
+      --fg: #1c1917;
+      --muted: #78716c;
+      --subtle: #a8a29e;
+      --accent: #b45309;
+      --accent-dk: #78350f;
+      --accent-lt: #fffbeb;
+      --accent-md: #fde68a;
+      --accent-bd: #fcd34d;
+      --r: 14px;
+      --r-sm: 8px;
+      --shadow: 0 2px 12px rgba(120,53,15,.08);
+    }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    #app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 16px 56px;
+    }
+    .kin-hdr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 14px;
+    }
+    .kin-logo {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(180,83,9,.3);
+    }
+    .kin-ttl { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+    .kin-num {
+      margin-left: auto;
+      font-size: 10px; font-weight: 600;
+      color: var(--accent);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      background: var(--accent-lt);
+      border: 1px solid var(--accent-bd);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* Controls row */
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .serv-group { display: flex; align-items: center; gap: 8px; }
+    .serv-lbl {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      white-space: nowrap;
+    }
+    .serv-input {
+      width: 62px; height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      text-align: center;
+      font-size: 20px; font-weight: 700;
+      color: var(--accent-dk);
+      background: var(--accent-lt);
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+      -moz-appearance: textfield;
+    }
+    .serv-input::-webkit-outer-spin-button,
+    .serv-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .serv-input:focus { border-color: var(--accent); }
+    .arrow { color: var(--subtle); font-size: 18px; user-select: none; }
+    .vsep { width: 1px; height: 30px; background: var(--border); flex-shrink: 0; }
+    .quick-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+    .qbtn {
+      height: 32px; padding: 0 11px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      transition: all .13s;
+      font-family: inherit;
+    }
+    .qbtn:hover { border-color: var(--accent-bd); color: var(--accent-dk); background: var(--accent-lt); }
+    .qbtn:active { transform: scale(.95); }
+    .ratio-pill {
+      margin-left: auto;
+      font-size: 12px; font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-lt);
+      border: 1px solid var(--accent-bd);
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      min-width: 52px;
+      text-align: center;
+      transition: opacity .2s;
+    }
+
+    /* Options bar */
+    .opts {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .opt-grp { display: flex; align-items: center; gap: 6px; }
+    .opt-lbl {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      white-space: nowrap;
+    }
+    .opt-sel {
+      height: 30px; padding: 0 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 13px; font-family: inherit;
+      background: var(--bg); color: var(--fg);
+      outline: none; cursor: pointer;
+    }
+    .opt-sel:focus { border-color: var(--accent); }
+    .tog-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .tog-wrap input { position: absolute; width: 0; height: 0; opacity: 0; }
+    .tog-sw {
+      position: relative;
+      display: inline-block;
+      width: 34px; height: 19px;
+      flex-shrink: 0;
+    }
+    .tog-track {
+      position: absolute; inset: 0;
+      background: var(--border);
+      border-radius: 10px;
+      transition: background .18s;
+    }
+    .tog-wrap input:checked + .tog-sw .tog-track { background: var(--accent); }
+    .tog-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 15px; height: 15px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,.22);
+      transition: transform .18s;
+    }
+    .tog-wrap input:checked + .tog-sw .tog-thumb { transform: translateX(15px); }
+    .tog-text { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+    /* Panels */
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 620px) {
+      .panels { grid-template-columns: 1fr; }
+      .panels .panel:first-child { min-height: 200px; }
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-ttl {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+    .panel-acts { display: flex; gap: 5px; }
+    .sm-btn {
+      height: 26px; padding: 0 10px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: none;
+      color: var(--muted);
+      font-size: 12px; font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .13s;
+    }
+    .sm-btn:hover { border-color: var(--accent-bd); color: var(--accent-dk); background: var(--accent-lt); }
+
+    /* Input panel */
+    .ing-ta {
+      flex: 1;
+      padding: 12px 14px;
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--fg);
+      resize: none;
+      outline: none;
+      min-height: 300px;
+    }
+    .ing-ta::placeholder { color: var(--subtle); font-style: italic; }
+
+    /* Output panel */
+    .out-body {
+      flex: 1;
+      padding: 10px 12px;
+      overflow-y: auto;
+      min-height: 300px;
+    }
+    .out-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 200px;
+      color: var(--subtle);
+      font-size: 13px;
+      gap: 6px;
+      text-align: center;
+    }
+    .out-empty svg { opacity: .35; }
+    .out-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 0;
+      border-bottom: 1px solid transparent;
+      min-height: 30px;
+    }
+    .out-line:hover { border-bottom-color: var(--border); }
+    .out-line.locked-line .out-qty { opacity: .5; }
+    .out-line.locked-line .out-unit { opacity: .5; }
+    .lock-btn {
+      width: 24px; height: 24px;
+      border: none; background: none;
+      cursor: pointer;
+      color: var(--subtle);
+      font-size: 12px;
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .13s, color .13s;
+      padding: 0;
+    }
+    .lock-btn:hover { background: var(--accent-lt); color: var(--accent); }
+    .lock-btn.is-locked { color: var(--accent); }
+    .out-qty {
+      font-size: 15px; font-weight: 700;
+      color: var(--accent-dk);
+      min-width: 38px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .out-unit {
+      font-size: 12px; font-weight: 500;
+      color: var(--accent);
+      min-width: 38px;
+    }
+    .out-name {
+      font-size: 13px;
+      color: var(--fg);
+      flex: 1;
+    }
+    .out-passthru {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      flex: 1;
+      padding-left: 29px;
+    }
+    .combined-tag {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      background: var(--accent-md);
+      color: var(--accent-dk);
+      border-radius: 3px;
+      padding: 1px 4px;
+      flex-shrink: 0;
+    }
+    .out-footer {
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 5px;
+      height: 34px; padding: 0 14px;
+      border-radius: 100px;
+      font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(.96); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-ghost {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { border-color: var(--accent-bd); color: var(--accent-dk); background: var(--accent-lt); }
+    .copy-msg {
+      font-size: 12px; color: var(--accent);
+      opacity: 0; transition: opacity .25s;
+      font-weight: 500;
+    }
+    .copy-msg.show { opacity: 1; }
+
+    /* Footer */
+    .kin-ftr {
+      text-align: center;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--subtle);
+      line-height: 2;
+    }
+    .kin-ftr a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .controls { gap: 8px; }
+      .opts { gap: 8px; }
+      .vsep { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <header class="kin-hdr">
+    <div class="kin-logo">
+      <svg width="19" height="19" viewBox="0 0 18 18" fill="none">
+        <path d="M4 3h10l2.5 13H1.5L4 3z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+        <line x1="5" y1="6.5" x2="8.5" y2="6.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/>
+        <line x1="4.5" y1="9.5" x2="8.5" y2="9.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/>
+        <line x1="4" y1="12.5" x2="8.5" y2="12.5" stroke="white" stroke-width="1.1" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="kin-ttl">Recipe Scaler</span>
+    <span class="kin-num">KIN-016</span>
+  </header>
+
+  <!-- Servings + quick buttons -->
+  <div class="controls">
+    <div class="serv-group">
+      <span class="serv-lbl">Serves</span>
+      <input type="number" id="orig-serv" class="serv-input" value="4" min="0.1" max="9999" step="1" inputmode="decimal">
+      <span class="arrow">→</span>
+      <input type="number" id="tgt-serv" class="serv-input" value="4" min="0.1" max="9999" step="1" inputmode="decimal">
+    </div>
+    <div class="vsep"></div>
+    <div class="quick-btns">
+      <button class="qbtn" data-mul="2">×2</button>
+      <button class="qbtn" data-mul="3">×3</button>
+      <button class="qbtn" data-mul="0.5">÷2</button>
+      <button class="qbtn" data-mul="0.3333">÷3</button>
+    </div>
+    <div id="ratio-pill" class="ratio-pill" style="opacity:0">—</div>
+  </div>
+
+  <!-- Options -->
+  <div class="opts">
+    <div class="opt-grp">
+      <span class="opt-lbl">Format</span>
+      <select id="sel-format" class="opt-sel">
+        <option value="frac">Fractions (¾)</option>
+        <option value="dec">Decimal (0.75)</option>
+      </select>
+    </div>
+    <div class="opt-grp">
+      <span class="opt-lbl">Precision</span>
+      <select id="sel-prec" class="opt-sel">
+        <option value="cook">Cooking (⅛ steps)</option>
+        <option value="qtr">Nearest ¼</option>
+        <option value="exact">Exact</option>
+      </select>
+    </div>
+    <label class="tog-wrap">
+      <input type="checkbox" id="tog-convert">
+      <span class="tog-sw"><span class="tog-track"></span><span class="tog-thumb"></span></span>
+      <span class="tog-text">Auto-convert units</span>
+    </label>
+    <label class="tog-wrap">
+      <input type="checkbox" id="tog-combine">
+      <span class="tog-sw"><span class="tog-track"></span><span class="tog-thumb"></span></span>
+      <span class="tog-text">Combine duplicates</span>
+    </label>
+  </div>
+
+  <!-- Two panels -->
+  <div class="panels">
+    <!-- Input -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="panel-ttl">Ingredients</span>
+        <div class="panel-acts">
+          <button class="sm-btn" id="btn-example">Example</button>
+          <button class="sm-btn" id="btn-clear">Clear</button>
+        </div>
+      </div>
+      <textarea id="ing-input" class="ing-ta" spellcheck="false" placeholder="Paste ingredients here, one per line:
+
+2 cups flour
+1½ cups milk
+2 eggs
+1 tbsp sugar
+½ tsp salt
+100g butter"></textarea>
+    </div>
+
+    <!-- Output -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="panel-ttl">Scaled Recipe</span>
+        <div id="lock-hint" style="font-size:11px;color:var(--subtle)">🔒 click to lock</div>
+      </div>
+      <div class="out-body" id="out-body">
+        <div class="out-empty">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M9 6h18l5 22H4L9 6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="11" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10" y1="19" x2="17" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="9" y1="25" x2="17" y2="25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Paste ingredients on the left
+        </div>
+      </div>
+      <div class="out-footer">
+        <button class="btn btn-primary" id="btn-copy">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <rect x="5" y="1" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 5H2a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Copy
+        </button>
+        <button class="btn btn-ghost" id="btn-unlock" style="font-size:12px;height:30px;padding:0 11px">Unlock all</button>
+        <span class="copy-msg" id="copy-msg">Copied!</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="kin-ftr">
+    Recipe Scaler · KIN-016 · by dBridge<br>
+    Part of the <a href="https://kintools.netlify.app">Kin</a> collection · No accounts · No tracking · Offline-ready
+  </footer>
+
+</div><!-- #app -->
+
+<script>
+// ── Settings ──────────────────────────────────────────────────────────────────
+const SK = 'kin-016-rs';
+let cfg = { format: 'frac', prec: 'cook', autoConvert: false, combine: false };
+try { Object.assign(cfg, JSON.parse(localStorage.getItem(SK) || '{}')); } catch {}
+function saveCfg() {
+  try { localStorage.setItem(SK, JSON.stringify(cfg)); } catch {}
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let parsed = []; // { qty:number|null, unit:string|null, name:string, orig:string }
+let locks  = new Set(); // indices into parsed[]
+
+// ── Unit registry ─────────────────────────────────────────────────────────────
+const UNIT_DEF = {
+  tsp:   ['teaspoons','teaspoon','tsps','tsp'],
+  tbsp:  ['tablespoons','tablespoon','tbsps','tbsp','tbs'],
+  cup:   ['cups','cup','c'],
+  oz:    ['ounces','ounce','oz'],
+  lb:    ['pounds','pound','lbs','lb'],
+  g:     ['grams','gram','gr','g'],
+  kg:    ['kilograms','kilogram','kg'],
+  ml:    ['milliliters','millilitres','milliliter','millilitre','mL','ml'],
+  l:     ['liters','litres','liter','litre','L','l'],
+  clove: ['cloves','clove'],
+  can:   ['cans','can'],
+  piece: ['pieces','piece','pcs','pc'],
+  stick: ['sticks','stick'],
+  pinch: ['pinches','pinch'],
+  bunch: ['bunches','bunch'],
+  head:  ['heads','head'],
+  sprig: ['sprigs','sprig'],
+  slice: ['slices','slice'],
+  pkg:   ['packages','package','pkg'],
+  pt:    ['pints','pint','pt'],
+  qt:    ['quarts','quart','qt'],
+  gal:   ['gallons','gallon','gal'],
+};
+
+const UMAP = {}; // variant → canonical
+for (const [c, vs] of Object.entries(UNIT_DEF)) {
+  for (const v of vs) UMAP[v.toLowerCase()] = c;
+}
+// Build regex: longest variants first to avoid partial matches
+const URES = Object.keys(UMAP)
+  .sort((a,b) => b.length - a.length)
+  .map(u => u.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))
+  .join('|');
+const UNIT_RE = new RegExp(`^(${URES})(?=[\\s.,;()]|$)`, 'i');
+
+// Plural/singular display labels
+const ULABEL = {
+  tsp:'tsp', tbsp:'tbsp', cup:{s:'cup',p:'cups'}, oz:'oz', lb:'lb',
+  g:'g', kg:'kg', ml:'ml', l:'L',
+  clove:{s:'clove',p:'cloves'}, can:{s:'can',p:'cans'},
+  piece:{s:'piece',p:'pieces'}, stick:{s:'stick',p:'sticks'},
+  pinch:{s:'pinch',p:'pinches'}, bunch:{s:'bunch',p:'bunches'},
+  head:{s:'head',p:'heads'}, sprig:{s:'sprig',p:'sprigs'},
+  slice:{s:'slice',p:'slices'}, pkg:'pkg',
+  pt:'pt', qt:'qt', gal:{s:'gallon',p:'gallons'},
+};
+function unitLabel(canon, qty) {
+  const d = ULABEL[canon];
+  if (!d) return canon;
+  if (typeof d === 'string') return d;
+  return qty === 1 ? d.s : d.p;
+}
+
+// ── Unicode fraction map ──────────────────────────────────────────────────────
+const UNIFRAC = {'½':'1/2','¼':'1/4','¾':'3/4','⅓':'1/3','⅔':'2/3',
+                 '⅛':'1/8','⅜':'3/8','⅝':'5/8','⅞':'7/8'};
+function toAscii(s) {
+  for (const [k,v] of Object.entries(UNIFRAC)) s = s.split(k).join(' '+v+' ');
+  return s.trim();
+}
+
+// ── Quantity parser ───────────────────────────────────────────────────────────
+function evalFrac(s) {
+  s = s.trim();
+  const m = s.match(/^(\d+)\s*\/\s*(\d+)$/);
+  if (m) return parseInt(m[1]) / parseInt(m[2]);
+  return parseFloat(s) || 0;
+}
+function parseQtyStr(s) {
+  s = toAscii(s).trim();
+  // Mixed number: "1 1/2"
+  const mix = s.match(/^(\d+)\s+(\d+\s*\/\s*\d+)$/);
+  if (mix) return parseInt(mix[1]) + evalFrac(mix[2]);
+  // Fraction: "1/2"
+  if (/^\d+\s*\/\s*\d+$/.test(s)) return evalFrac(s);
+  // Decimal / integer
+  return parseFloat(s) || 0;
+}
+
+// Regex to grab a leading quantity (int, decimal, fraction, unicode frac, mixed)
+// We work on the ascii-converted string
+const QTY_RE = /^(\d+(?:\.\d+)?(?:\s+\d+\s*\/\s*\d+)?|\d+\s*\/\s*\d+)/;
+
+function parseIngredientLine(raw) {
+  const line = raw.trim();
+  if (!line) return null;
+
+  let work = toAscii(line);
+
+  const qm = work.match(QTY_RE);
+  if (!qm) {
+    // No leading quantity — pass through (headers, instructions, etc.)
+    return { qty: null, unit: null, name: line };
+  }
+
+  const qty = parseQtyStr(qm[1]);
+  let rest = work.slice(qm[0].length).trimStart();
+
+  // Strip optional leading comma/dot
+  rest = rest.replace(/^[,.]\s*/, '');
+
+  // Try to match unit
+  const um = rest.match(UNIT_RE);
+  let unit = null;
+  if (um) {
+    unit = UMAP[um[1].toLowerCase()] || null;
+    rest = rest.slice(um[0].length).trimStart();
+  }
+
+  // Strip leading punctuation from name
+  rest = rest.replace(/^[,\-–—]\s*/, '').trim();
+
+  return { qty, unit, name: rest, orig: line };
+}
+
+// ── Precision / formatting ────────────────────────────────────────────────────
+const COOK_SNAPS = [0, 1/8, 1/4, 1/3, 3/8, 1/2, 5/8, 2/3, 3/4, 7/8, 1];
+
+function applyPrec(v, prec) {
+  if (!isFinite(v) || v < 0) return 0;
+  if (prec === 'exact') return v;
+  if (prec === 'qtr') return Math.round(v * 4) / 4;
+  // cook: snap fractional part to nearest cooking snap
+  const whole = Math.floor(v);
+  const frac = v - whole;
+  let best = 0, bestD = Infinity;
+  for (const s of COOK_SNAPS) {
+    const d = Math.abs(frac - s);
+    if (d < bestD) { bestD = d; best = s; }
+  }
+  if (best === 1) return whole + 1;
+  return whole + best;
+}
+
+const FRAC_LIST = [
+  [0,''], [1/8,'⅛'], [1/4,'¼'], [1/3,'⅓'], [3/8,'⅜'],
+  [1/2,'½'], [5/8,'⅝'], [2/3,'⅔'], [3/4,'¾'], [7/8,'⅞'],
+];
+
+function fmtFrac(v) {
+  if (v <= 0) return '0';
+  const whole = Math.floor(v);
+  const frac = v - whole;
+  if (frac < 0.005) return `${whole || 0}`;
+  if (frac > 0.994) return `${whole + 1}`;
+  let bestSym = '', bestD = Infinity;
+  for (const [f, sym] of FRAC_LIST) {
+    const d = Math.abs(frac - f);
+    if (d < bestD) { bestD = d; bestSym = sym; }
+  }
+  if (!bestSym) return whole > 0 ? `${whole}` : '0';
+  return whole > 0 ? `${whole}${bestSym}` : bestSym;
+}
+
+function fmtDec(v) {
+  if (v <= 0) return '0';
+  if (Number.isInteger(v)) return `${v}`;
+  const s = v.toFixed(3);
+  return parseFloat(s).toString();
+}
+
+function formatQty(v, fmt) {
+  return fmt === 'dec' ? fmtDec(v) : fmtFrac(v);
+}
+
+// ── Auto unit conversion ──────────────────────────────────────────────────────
+// Up-conversions only (small → large), applied when qty hits threshold
+const UP_CONV = [
+  { from:'tsp',  to:'tbsp', factor:3,    thresh:3   },
+  { from:'tbsp', to:'cup',  factor:16,   thresh:4   },
+  { from:'g',    to:'kg',   factor:1000, thresh:1000 },
+  { from:'ml',   to:'l',    factor:1000, thresh:1000 },
+  { from:'oz',   to:'lb',   factor:16,   thresh:16  },
+];
+
+function autoConv(qty, unit) {
+  if (!unit) return { qty, unit };
+  for (const r of UP_CONV) {
+    if (unit === r.from && qty >= r.thresh) {
+      return { qty: qty / r.factor, unit: r.to };
+    }
+  }
+  return { qty, unit };
+}
+
+// ── Scaling logic ─────────────────────────────────────────────────────────────
+function getFactor() {
+  const orig = parseFloat($('orig-serv').value) || 1;
+  const tgt  = parseFloat($('tgt-serv').value)  || 1;
+  return tgt / orig;
+}
+
+function getScaled() {
+  const factor = getFactor();
+  return parsed.map((p, i) => {
+    if (p.qty === null) return { ...p, scaledQty: null, scaledUnit: null };
+    const locked = locks.has(i);
+    const raw = locked ? p.qty : p.qty * factor;
+    const rounded = applyPrec(raw, cfg.prec);
+    const { qty: sq, unit: su } = cfg.autoConvert
+      ? autoConv(rounded, p.unit)
+      : { qty: rounded, unit: p.unit };
+    return { ...p, scaledQty: sq, scaledUnit: su, locked, origIdx: i };
+  });
+}
+
+// ── Combine duplicates ────────────────────────────────────────────────────────
+function combineScaled(lines) {
+  const seen = new Map();
+  const order = [];
+  lines.forEach(l => {
+    if (l.scaledQty === null) { order.push(l); return; }
+    const key = `${l.scaledUnit || ''}|${l.name.toLowerCase().trim()}`;
+    if (seen.has(key)) {
+      seen.get(key).total += l.scaledQty;
+      seen.get(key).count++;
+    } else {
+      const entry = { line: l, total: l.scaledQty, count: 1 };
+      seen.set(key, entry);
+      order.push({ _combined: true, key, entry });
+    }
+  });
+  return order.map(item => {
+    if (!item._combined) return item;
+    const { line, total, count } = item.entry;
+    const rounded = applyPrec(total, cfg.prec);
+    const { qty: sq, unit: su } = cfg.autoConvert
+      ? autoConv(rounded, line.scaledUnit)
+      : { qty: rounded, unit: line.scaledUnit };
+    return { ...line, scaledQty: sq, scaledUnit: su, count };
+  });
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function $ (id) { return document.getElementById(id); }
+
+function render() {
+  const scaled = getScaled();
+  const lines  = cfg.combine ? combineScaled(scaled) : scaled;
+  const body   = $('out-body');
+  const factor = getFactor();
+
+  // Ratio pill
+  const pill = $('ratio-pill');
+  if (factor === 1) {
+    pill.style.opacity = '0';
+  } else {
+    const label = factor < 1
+      ? `÷${fmtDec(1/factor)}`
+      : `×${fmtDec(factor)}`;
+    pill.textContent = label;
+    pill.style.opacity = '1';
+  }
+
+  // Lock hint: hide when combine is on
+  $('lock-hint').style.display = cfg.combine ? 'none' : '';
+
+  if (!parsed.length) {
+    body.innerHTML = `<div class="out-empty">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M9 6h18l5 22H4L9 6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <line x1="11" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="10" y1="19" x2="17" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="9" y1="25" x2="17" y2="25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Paste ingredients on the left</div>`;
+    return;
+  }
+
+  body.innerHTML = '';
+  lines.forEach((l, i) => {
+    const div = document.createElement('div');
+    div.className = 'out-line';
+
+    if (l.scaledQty === null) {
+      // Pass-through line
+      const sp = document.createElement('span');
+      sp.className = 'out-passthru';
+      sp.textContent = l.name || l.orig;
+      div.appendChild(sp);
+    } else {
+      if (!cfg.combine) {
+        // Lock button
+        const btn = document.createElement('button');
+        btn.className = 'lock-btn' + (l.locked ? ' is-locked' : '');
+        btn.title = l.locked ? 'Unlock (will scale again)' : 'Lock (keep original amount)';
+        btn.textContent = l.locked ? '🔒' : '🔓';
+        btn.addEventListener('click', () => {
+          const idx = l.origIdx;
+          locks.has(idx) ? locks.delete(idx) : locks.add(idx);
+          render();
+        });
+        div.appendChild(btn);
+        if (l.locked) div.classList.add('locked-line');
+      } else {
+        // Spacer for consistent layout
+        const sp = document.createElement('span');
+        sp.style.width = '29px'; sp.style.flexShrink = '0';
+        div.appendChild(sp);
+      }
+
+      // Quantity
+      const qty = document.createElement('span');
+      qty.className = 'out-qty';
+      qty.textContent = formatQty(l.scaledQty, cfg.format);
+      div.appendChild(qty);
+
+      // Unit
+      const unit = document.createElement('span');
+      unit.className = 'out-unit';
+      unit.textContent = l.scaledUnit ? unitLabel(l.scaledUnit, l.scaledQty) : '';
+      div.appendChild(unit);
+
+      // Name
+      const name = document.createElement('span');
+      name.className = 'out-name';
+      name.textContent = l.name || '';
+      div.appendChild(name);
+
+      // Combined badge
+      if (l.count > 1) {
+        const badge = document.createElement('span');
+        badge.className = 'combined-tag';
+        badge.textContent = `×${l.count} combined`;
+        div.appendChild(badge);
+      }
+    }
+
+    body.appendChild(div);
+  });
+}
+
+// ── Copy ──────────────────────────────────────────────────────────────────────
+function copyResult() {
+  const scaled = getScaled();
+  const lines  = cfg.combine ? combineScaled(scaled) : scaled;
+  const text = lines.map(l => {
+    if (l.scaledQty === null) return l.name || l.orig;
+    const q  = formatQty(l.scaledQty, cfg.format);
+    const u  = l.scaledUnit ? unitLabel(l.scaledUnit, l.scaledQty) + ' ' : '';
+    return `${q} ${u}${l.name || ''}`.trim();
+  }).join('\n');
+
+  const flash = () => {
+    const el = $('copy-msg');
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1800);
+  };
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(flash).catch(() => legacyCopy(text, flash));
+  } else {
+    legacyCopy(text, flash);
+  }
+}
+function legacyCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); } catch {}
+  document.body.removeChild(ta);
+  cb();
+}
+
+// ── Parse + re-render on input ────────────────────────────────────────────────
+function parseAndRender() {
+  const lines = $('ing-input').value.split('\n');
+  const newParsed = lines.map(parseIngredientLine).filter(Boolean);
+  // Prune locks that are now out of range
+  for (const idx of locks) {
+    if (idx >= newParsed.length) locks.delete(idx);
+  }
+  parsed = newParsed;
+  render();
+}
+
+// ── Events ────────────────────────────────────────────────────────────────────
+$('ing-input').addEventListener('input', parseAndRender);
+$('orig-serv').addEventListener('input', render);
+$('tgt-serv').addEventListener('input', render);
+
+// Quick multiply / divide buttons — always relative to original servings
+document.querySelectorAll('.qbtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mul = parseFloat(btn.dataset.mul);
+    const orig = parseFloat($('orig-serv').value) || 1;
+    const result = orig * mul;
+    $('tgt-serv').value = result < 1 ? result.toFixed(1) : Math.round(result);
+    render();
+  });
+});
+
+$('sel-format').addEventListener('change', e => { cfg.format = e.target.value; saveCfg(); render(); });
+$('sel-prec').addEventListener('change',   e => { cfg.prec   = e.target.value; saveCfg(); render(); });
+$('tog-convert').addEventListener('change', e => { cfg.autoConvert = e.target.checked; saveCfg(); render(); });
+$('tog-combine').addEventListener('change', e => { cfg.combine = e.target.checked; saveCfg(); render(); });
+
+$('btn-copy').addEventListener('click', copyResult);
+$('btn-unlock').addEventListener('click', () => { locks.clear(); render(); });
+
+const EXAMPLE = `2 cups flour
+1½ cups milk
+2 eggs
+1 tbsp sugar
+½ tsp salt
+2 tsp baking powder
+50g butter`;
+
+$('btn-example').addEventListener('click', () => {
+  $('ing-input').value = EXAMPLE;
+  $('orig-serv').value = 4;
+  $('tgt-serv').value  = 6;
+  parseAndRender();
+});
+
+$('btn-clear').addEventListener('click', () => {
+  $('ing-input').value = '';
+  locks.clear();
+  parsed = [];
+  render();
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(function init() {
+  $('sel-format').value = cfg.format;
+  $('sel-prec').value   = cfg.prec;
+  $('tog-convert').checked = cfg.autoConvert;
+  $('tog-combine').checked = cfg.combine;
+  parseAndRender();
+})();
+</script>
+
+<script>
+// Apple touch icon (canvas-generated, amber gradient + measuring cup)
+(function () {
+  try {
+    var sz = 180, c = document.createElement('canvas');
+    c.width = sz; c.height = sz;
+    var ctx = c.getContext('2d');
+    var g = ctx.createLinearGradient(0, 0, sz, sz);
+    g.addColorStop(0, '#f59e0b'); g.addColorStop(1, '#b45309');
+    ctx.fillStyle = g;
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+    ctx.arcTo(sz, 0, sz, r, r); ctx.lineTo(sz, sz - r);
+    ctx.arcTo(sz, sz, sz - r, sz, r); ctx.lineTo(r, sz);
+    ctx.arcTo(0, sz, 0, sz - r, r); ctx.lineTo(0, r);
+    ctx.arcTo(0, 0, r, 0, r); ctx.closePath(); ctx.fill();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 18 18" fill="none">' +
+      '<path d="M4 3h10l2.5 13H1.5L4 3z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<line x1="5" y1="6.5" x2="8.5" y2="6.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>' +
+      '<line x1="4.5" y1="9.5" x2="8.5" y2="9.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>' +
+      '<line x1="4" y1="12.5" x2="8.5" y2="12.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>' +
+      '</svg>';
+    var img = new Image();
+    var blob = new Blob([svg], { type: 'image/svg+xml' });
+    var url = URL.createObjectURL(blob);
+    img.onload = function () {
+      ctx.drawImage(img, 42, 42, 96, 96);
+      URL.revokeObjectURL(url);
+      var el = document.getElementById('apple-touch-icon');
+      if (el) el.href = c.toDataURL('image/png');
+    };
+    img.src = url;
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
