@@ -388,6 +388,30 @@
   .principles { animation-delay: 0.1s; }
   .catalog-header { animation-delay: 0.15s; }
 
+  /* ── Suggest an App ── */
+  .suggest-pill { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; z-index: 900; box-shadow: 0 4px 20px rgba(0,0,0,0.15); letter-spacing: 0.01em; transition: transform 0.15s, box-shadow 0.15s; font-family: inherit; }
+  .suggest-pill:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.22); }
+  .suggest-overlay { position: fixed; inset: 0; background: rgba(26,26,24,0.6); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .suggest-overlay.open { opacity: 1; pointer-events: all; }
+  .suggest-sheet { position: relative; background: var(--bg); border-radius: 20px 20px 0 0; padding: 28px 28px 52px; width: 100%; max-width: 540px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); max-height: 90vh; overflow-y: auto; }
+  .suggest-overlay.open .suggest-sheet { transform: translateY(0); }
+  .suggest-handle { width: 36px; height: 4px; background: var(--text-dim); border-radius: 2px; margin: 0 auto 20px; opacity: 0.4; }
+  .suggest-close { position: absolute; top: 20px; right: 22px; background: none; border: none; font-size: 22px; color: var(--text-dim); cursor: pointer; line-height: 1; padding: 0; }
+  .suggest-title { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--text); margin: 0 0 5px; }
+  .suggest-sub { font-size: 13px; color: var(--text-mid); margin: 0 0 20px; line-height: 1.6; }
+  .sug-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sug-field { margin-bottom: 14px; }
+  .sug-label { display: block; font-size: 11px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .sug-input, .sug-textarea { width: 100%; border: 1.5px solid #e0dfd8; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #fff; box-sizing: border-box; outline: none; transition: border-color 0.15s; }
+  .sug-input:focus, .sug-textarea:focus { border-color: var(--accent); }
+  .sug-textarea { resize: vertical; min-height: 80px; }
+  .sug-submit { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 6px; font-family: inherit; transition: opacity 0.15s; }
+  .sug-submit:hover { opacity: 0.85; }
+  .sug-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+  .sug-thanks { text-align: center; padding: 24px 0 8px; display: none; }
+  .sug-thanks h3 { font-family: 'Instrument Serif', serif; font-size: 24px; color: var(--text); margin: 0 0 8px; }
+  .sug-thanks p { font-size: 14px; color: var(--text-mid); margin: 0; }
+
   .release {
     animation: fadeUp 0.5s ease-out both;
   }
@@ -863,6 +887,74 @@
   <div class="foot-left">Kin</div>
   <div class="foot-right">Free tools, built by people, for everyone.<br>No accounts. No tracking. No subscriptions. Ever.</div>
 </footer>
+
+<button class="suggest-pill" onclick="openSuggest()">Suggest an app →</button>
+
+<div class="suggest-overlay" id="suggest-overlay" onclick="closeSuggestIfBg(event)">
+  <div class="suggest-sheet">
+    <button class="suggest-close" onclick="closeSuggest()">×</button>
+    <div class="suggest-handle"></div>
+    <h2 class="suggest-title">Suggest an app</h2>
+    <p class="suggest-sub">Got an idea for a simple, free tool that helps people without asking for anything in return? We'd love to hear it.</p>
+    <form id="suggest-form">
+      <input type="hidden" name="access_key" value="bee35860-0b11-4196-89d4-2ec55bc8b269">
+      <input type="hidden" name="subject" value="Kin — App Suggestion">
+      <div class="sug-row">
+        <div class="sug-field">
+          <label class="sug-label" for="sug-name">Your name</label>
+          <input class="sug-input" id="sug-name" name="name" type="text" placeholder="Alice" required>
+        </div>
+        <div class="sug-field">
+          <label class="sug-label" for="sug-email">Your email</label>
+          <input class="sug-input" id="sug-email" name="email" type="email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="sug-field">
+        <label class="sug-label" for="sug-idea">What's the idea?</label>
+        <input class="sug-input" id="sug-idea" name="app_idea" type="text" placeholder="e.g. A simple sleep tracker" required>
+      </div>
+      <div class="sug-field">
+        <label class="sug-label" for="sug-problem">What problem does it solve?</label>
+        <textarea class="sug-textarea" id="sug-problem" name="problem" placeholder="Who does it help, and what does it do for them?" required></textarea>
+      </div>
+      <button class="sug-submit" id="sug-submit-btn" type="submit">Send suggestion →</button>
+    </form>
+    <div class="sug-thanks" id="sug-thanks">
+      <h3>Thanks 🌿</h3>
+      <p>We've received your idea and will read it carefully.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openSuggest() {
+  document.getElementById('suggest-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSuggest() {
+  document.getElementById('suggest-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeSuggestIfBg(e) {
+  if (e.target === document.getElementById('suggest-overlay')) closeSuggest();
+}
+document.getElementById('suggest-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('sug-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(this)).toString(),
+    });
+  } catch(_) {}
+  document.getElementById('suggest-form').style.display = 'none';
+  document.getElementById('sug-thanks').style.display = 'block';
+  setTimeout(closeSuggest, 2800);
+});
+</script>
 
 </body>
 </html>
