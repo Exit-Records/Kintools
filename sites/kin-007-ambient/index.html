@@ -489,6 +489,23 @@ const PRESETS = {
 };
 
 // ═══════════════════════════════════════════════════════════════
+//  REVERB CONFIGURATIONS  (one per preset)
+//  duration  = IR length in seconds (controls tail length)
+//  decay     = envelope curve steepness (higher = faster decay)
+//  wet       = reverb return level (0..1)
+//  preDelay  = ms before reverb starts (creates sense of distance)
+// ═══════════════════════════════════════════════════════════════
+const REVERB_CONFIGS = {
+  'deep-sleep': { duration: 5.0, decay: 1.0, wet: 0.50, preDelay: 0.065 },
+  'storm-night': { duration: 3.8, decay: 1.4, wet: 0.42, preDelay: 0.045 },
+  'ocean-calm':  { duration: 4.5, decay: 1.1, wet: 0.48, preDelay: 0.055 },
+  'fireplace':   { duration: 1.6, decay: 2.8, wet: 0.22, preDelay: 0.018 },
+  'focus':       { duration: 1.2, decay: 3.2, wet: 0.16, preDelay: 0.012 },
+  'forest':      { duration: 3.2, decay: 1.6, wet: 0.38, preDelay: 0.038 },
+};
+const REVERB_DEFAULT = { duration: 2.0, decay: 2.0, wet: 0.30, preDelay: 0.030 };
+
+// ═══════════════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════════════
 const state = {
@@ -504,6 +521,7 @@ const state = {
 };
 
 let ctx = null, masterGain = null, compressor = null;
+let reverbSend = null, reverbPreDelay = null, reverbConvolver = null, reverbHP = null, reverbWet = null;
 let dragging = null;
 let pulsePhase = 0;
 let animFrame = null;
@@ -535,6 +553,8 @@ function initAudio() {
     node.source = makeSource(key, ctx);
     node.source.out.connect(node.gainNode);
   }
+
+  initReverb(REVERB_DEFAULT);
 }
 
 function makeSource(key, audioCtx) {
@@ -615,26 +635,45 @@ function makeRain(audioCtx) {
       b6 = w * 0.115926;
     }
   };
-  const lp = audioCtx.createBiquadFilter();
-  lp.type = 'bandpass'; lp.frequency.value = 1100; lp.Q.value = 0.8;
-  sp.connect(lp);
-  return { out: lp };
+  const mid = audioCtx.createBiquadFilter();
+  mid.type = 'bandpass'; mid.frequency.value = 1400; mid.Q.value = 0.6;
+  const hi = audioCtx.createBiquadFilter();
+  hi.type = 'peaking'; hi.frequency.value = 3200; hi.gain.value = 7; hi.Q.value = 1.2;
+  const rumble = audioCtx.createBiquadFilter();
+  rumble.type = 'lowshelf'; rumble.frequency.value = 180; rumble.gain.value = 4;
+  const mix = audioCtx.createGain();
+  mix.gain.value = 0.9;
+  sp.connect(mid); mid.connect(hi); hi.connect(rumble); rumble.connect(mix);
+  return { out: mix };
 }
 
 function makeWind(audioCtx) {
   const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
   sp.onaudioprocess = e => {
     const out = e.outputBuffer.getChannelData(0);
-    for (let i = 0; i < out.length; i++) out[i] = Math.random() * 2 - 1;
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179; b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520; b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522; b5 = -0.7616*b5 - w*0.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) / 5.5;
+      b6 = w * 0.115926;
+    }
   };
   const lp = audioCtx.createBiquadFilter();
-  lp.type = 'lowpass'; lp.frequency.value = 400; lp.Q.value = 1.0;
-  const lfo = audioCtx.createOscillator();
-  lfo.frequency.value = 0.08;
-  const lfoG = audioCtx.createGain();
-  lfoG.gain.value = 200;
-  lfo.connect(lfoG); lfoG.connect(lp.frequency);
-  lfo.start();
+  lp.type = 'lowpass'; lp.frequency.value = 280; lp.Q.value = 0.7;
+  const lfoSlow = audioCtx.createOscillator();
+  lfoSlow.frequency.value = 0.04;
+  const lfoFast = audioCtx.createOscillator();
+  lfoFast.frequency.value = 0.17;
+  const lfoGS = audioCtx.createGain();
+  lfoGS.gain.value = 140;
+  const lfoGF = audioCtx.createGain();
+  lfoGF.gain.value = 60;
+  lfoSlow.connect(lfoGS); lfoGS.connect(lp.frequency);
+  lfoFast.connect(lfoGF); lfoGF.connect(lp.frequency);
+  lfoSlow.start(); lfoFast.start();
   sp.connect(lp);
   return { out: lp };
 }
@@ -657,16 +696,22 @@ function makeWaves(audioCtx) {
     }
   };
   const lp = audioCtx.createBiquadFilter();
-  lp.type = 'lowpass'; lp.frequency.value = 600; lp.Q.value = 0.5;
-  const lfo = audioCtx.createOscillator();
-  lfo.frequency.value = 0.12;
-  const lfoG = audioCtx.createGain();
-  lfoG.gain.value = 0.4;
+  lp.type = 'lowpass'; lp.frequency.value = 480; lp.Q.value = 0.4;
   const baseG = audioCtx.createGain();
-  baseG.gain.value = 0.6;
-  lfo.connect(lfoG); lfoG.connect(baseG.gain);
+  baseG.gain.value = 0.55;
+  const swellLfo = audioCtx.createOscillator();
+  swellLfo.frequency.value = 0.07;
+  const swellG = audioCtx.createGain();
+  swellG.gain.value = 0.38;
+  const breakLfo = audioCtx.createOscillator();
+  breakLfo.frequency.value = 0.19;
+  breakLfo.type = 'sine';
+  const breakG = audioCtx.createGain();
+  breakG.gain.value = 0.10;
+  swellLfo.connect(swellG); swellG.connect(baseG.gain);
+  breakLfo.connect(breakG); breakG.connect(baseG.gain);
+  swellLfo.start(); breakLfo.start();
   sp.connect(lp); lp.connect(baseG);
-  lfo.start();
   return { out: baseG };
 }
 
@@ -719,6 +764,61 @@ function makeForest(audioCtx) {
   sp.connect(bp); bp.connect(baseG);
   lfo.start();
   return { out: baseG };
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  REVERB ENGINE
+//  Synthetic impulse response — no external files needed.
+//  Signal path:
+//    masterGain → reverbSend → reverbPreDelay → reverbConvolver
+//                 → reverbHP → reverbWet → compressor (wet)
+//    masterGain → compressor (dry, existing path)
+// ═══════════════════════════════════════════════════════════════
+function makeIR(audioCtx, duration, decay) {
+  const sr  = audioCtx.sampleRate;
+  const len = Math.round(sr * duration);
+  const buf = audioCtx.createBuffer(2, len, sr);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      const t = i / len;
+      d[i] = (Math.random() * 2 - 1) * Math.pow(Math.max(0, 1 - t), decay);
+    }
+  }
+  return buf;
+}
+
+function initReverb(cfg) {
+  reverbSend = ctx.createGain();
+  reverbSend.gain.value = 0.75;
+
+  reverbPreDelay = ctx.createDelay(0.5);
+  reverbPreDelay.delayTime.value = cfg.preDelay;
+
+  reverbConvolver = ctx.createConvolver();
+  reverbConvolver.buffer = makeIR(ctx, cfg.duration, cfg.decay);
+
+  reverbHP = ctx.createBiquadFilter();
+  reverbHP.type = 'highpass';
+  reverbHP.frequency.value = 120;
+
+  reverbWet = ctx.createGain();
+  reverbWet.gain.value = cfg.wet;
+
+  masterGain.connect(reverbSend);
+  reverbSend.connect(reverbPreDelay);
+  reverbPreDelay.connect(reverbConvolver);
+  reverbConvolver.connect(reverbHP);
+  reverbHP.connect(reverbWet);
+  reverbWet.connect(compressor);
+}
+
+function updateReverb(name) {
+  if (!ctx || !reverbConvolver || !reverbWet) return;
+  const cfg = REVERB_CONFIGS[name] || REVERB_DEFAULT;
+  reverbWet.gain.setTargetAtTime(cfg.wet, ctx.currentTime, 0.8);
+  reverbPreDelay.delayTime.setTargetAtTime(cfg.preDelay, ctx.currentTime, 0.5);
+  reverbConvolver.buffer = makeIR(ctx, cfg.duration, cfg.decay);
 }
 
 function play() {
@@ -959,6 +1059,7 @@ function applyPreset(name) {
   }
   updateGains();
   updateMixCode();
+  updateReverb(name);
   state.activePreset = name;
   document.querySelectorAll('.preset-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.preset === name);
