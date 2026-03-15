@@ -47,6 +47,7 @@ sed -i 's|src="/assets/|src="./assets/|g; s|href="/assets/|href="./assets/|g; s|
 Tools using `viteSingleFile` (KIN-004) produce one self-contained HTML — no path fix needed, just copy the single file.
 
 ### GitHub push rules
+- **Preview before pushing** — always build, preview locally in the kin-preview server, and get user sign-off before pushing anything to GitHub.
 - **Never push in parallel** — concurrent PUTs to the same repo cause 409 SHA conflicts. Always `await` each push before starting the next.
 - Always fetch the current SHA before a PUT — never assume the file doesn't exist.
 - Push order for multi-file changes: dependencies first (e.g. `netlify.toml` before `index.html`).
