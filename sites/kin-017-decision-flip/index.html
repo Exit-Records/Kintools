@@ -229,7 +229,6 @@
     }
     .decide-btn:active:not(:disabled) { transform: translateY(0) scale(.98); }
     .decide-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-    .decide-btn svg { flex-shrink: 0; }
 
     /* ── Result card ─────────────────────────────────────── */
     .result-card {
@@ -339,7 +338,6 @@
 
     @media (max-width: 400px) {
       .controls { gap: 8px; }
-      .tog-text { display: none; }
     }
   </style>
 </head>
@@ -397,12 +395,7 @@ Sushi"
     </div>
 
     <!-- Decide button -->
-    <button class="decide-btn" id="decide-btn">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M3 6h11l-3-3m0 6l3 3M17 6l-3-3M3 14h11l-3-3m0 6l3 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Decide
-    </button>
+    <button class="decide-btn" id="decide-btn">Decide</button>
 
     <!-- Result -->
     <div class="result-card" id="result-card">
@@ -605,9 +598,7 @@ function decide() {
       showResult(chosen, true);
       spinning = false;
       decideBtn.disabled = false;
-      decideBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M3 6h11l-3-3m0 6l3 3M17 6l-3-3M3 14h11l-3-3m0 6l3 3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg> Decide`;
+      decideBtn.textContent = 'Decide';
 
       // Remove chosen from textarea if toggle is on
       if (togRemove.checked) {
