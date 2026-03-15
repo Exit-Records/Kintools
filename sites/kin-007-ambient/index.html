@@ -554,7 +554,7 @@ function initAudio() {
     node.source.out.connect(node.gainNode);
   }
 
-  initReverb(REVERB_DEFAULT);
+  try { initReverb(REVERB_DEFAULT); } catch(e) { console.warn('[KIN-007] Reverb init failed:', e); }
 }
 
 function makeSource(key, audioCtx) {
