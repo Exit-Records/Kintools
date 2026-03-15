@@ -35,6 +35,74 @@ When adding a new KIN tool to the landing page checklist:
 - [ ] Push the **root** `index.html` to GitHub (triggers Netlify deploy)
 - [ ] Sync `sites/kin-landing/index.html` (for local preview)
 
+### PWA / Add to Home Screen — REQUIRED on every new tool
+
+Every new Kin tool **must** ship with home screen support. Apply this at build time, before pushing to GitHub.
+
+**Three files to create in `sites/kin-NNN-<slug>/`:**
+
+#### 1. `icon.svg`
+Use the tool's landing page card design — gradient background + the card SVG icon centred at scale 5.33×:
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="<--hb-N value>"/>
+      <stop offset="100%" stop-color="<card gradient end colour>"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g transform="translate(128,128) scale(5.33)"><!-- card SVG inner paths here --></g>
+</svg>
+```
+
+#### 2. `manifest.json`
+```json
+{
+  "name": "KIN-NNN · Tool Name",
+  "short_name": "KIN-NNN",
+  "description": "One-line description. Works offline.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "<--hb-N value>",
+  "theme_color": "<--hb-N value>",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
+```
+
+#### 3. HTML `<head>` meta tags (add after `<title>`)
+```html
+<link rel="manifest" href="./manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KIN-NNN">
+<link rel="apple-touch-icon" id="apple-touch-icon">
+```
+
+#### 4. Canvas apple-touch-icon generator (add before `</body>`)
+Generates a 180×180 PNG at runtime — required for iOS "Add to Home Screen".
+```html
+<script>
+(function(){try{
+var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+var ctx=c.getContext('2d');
+var g=ctx.createLinearGradient(0,0,sz,sz);
+g.addColorStop(0,'<c1>');g.addColorStop(1,'<c2>');
+ctx.fillStyle=g;
+var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><!-- inner SVG paths --></svg>';
+var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
+}catch(e){}})();
+</script>
+```
+
+**Short name rule:** Always `KIN-NNN` (e.g. `KIN-015`). This is what appears under the icon on the home screen.
+
 ### Adding a tool to the local kin-preview server
 React apps (KIN-004+) build with absolute `/assets/` paths which break under the preview's subpath. After building and copying to `sites/`:
 ```bash
