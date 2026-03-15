@@ -38,6 +38,29 @@
     max-width: 1080px;
     margin: 0 auto;
     padding: 48px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .nav-tab:hover {
+    border-color: var(--border-hover);
+    color: var(--text);
   }
 
   .logo {
@@ -406,6 +429,7 @@
 
 <header>
   <a href="./" class="logo">Kin</a>
+  <a href="./" class="nav-tab">← Catalog</a>
 </header>
 
 <div class="page">
