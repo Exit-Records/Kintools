@@ -233,6 +233,32 @@
     @keyframes panic { 0%,100%{background:var(--bg)} 50%{background:#fee2e2} }
     body.panic { animation: panic .4s; }
 
+    /* ── Export reminder banner ── */
+    .remind-banner {
+      display: flex; align-items: center; gap: 12px;
+      background: #fffbeb; border: 1px solid #fde68a;
+      border-left: 4px solid #f59e0b;
+      border-radius: var(--r-sm); padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .remind-banner-icon { font-size: 20px; flex-shrink: 0; line-height: 1; }
+    .remind-banner-body { flex: 1; min-width: 0; }
+    .remind-banner-ttl { font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 2px; }
+    .remind-banner-sub { font-size: 12px; color: #a16207; }
+    .remind-banner-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .remind-btn-export { background: #f59e0b; color: #fff; border: none; border-radius: 8px; padding: 7px 13px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .remind-btn-export:hover { background: #d97706; }
+    .remind-btn-dismiss { background: none; border: none; font-size: 18px; color: #a16207; cursor: pointer; padding: 2px 4px; line-height: 1; font-family: inherit; }
+
+    /* ── Remind freq pills ── */
+    .remind-freq-wrap { display: flex; gap: 6px; margin-top: 10px; }
+    .remind-pill {
+      flex: 1; padding: 7px; border-radius: 8px; border: 1.5px solid var(--border);
+      background: var(--bg); font-size: 12px; font-weight: 600; color: var(--muted);
+      cursor: pointer; text-align: center; font-family: inherit; transition: all .15s;
+    }
+    .remind-pill.active { border-color: var(--accent); color: var(--accent); background: #f5f0ff; }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -296,6 +322,19 @@
     <p class="hero-lbl" id="hero-lbl">Next Period</p>
     <p class="hero-date empty" id="hero-date">Log your first cycle</p>
     <p class="hero-sub" id="hero-sub">to see your prediction</p>
+  </div>
+
+  <!-- Export reminder banner -->
+  <div class="remind-banner hidden" id="remind-banner">
+    <div class="remind-banner-icon">💾</div>
+    <div class="remind-banner-body">
+      <p class="remind-banner-ttl">Time to back up your data</p>
+      <p class="remind-banner-sub">Export your cycle history to keep it safe</p>
+    </div>
+    <div class="remind-banner-actions">
+      <button class="remind-btn-export" id="btn-remind-export">Export</button>
+      <button class="remind-btn-dismiss" id="btn-remind-dismiss" title="Dismiss">✕</button>
+    </div>
   </div>
 
   <!-- Active period banner -->
@@ -393,6 +432,22 @@
         <input type="checkbox" id="tog-pin">
         <span class="tog-track"></span><span class="tog-thumb"></span>
       </label>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <p class="setting-lbl">Export reminders</p>
+        <p class="setting-sub" id="remind-sub">Get reminded to back up your data</p>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="tog-remind">
+        <span class="tog-track"></span><span class="tog-thumb"></span>
+      </label>
+    </div>
+
+    <div id="remind-freq-wrap" class="remind-freq-wrap hidden">
+      <button class="remind-pill active" id="pill-weekly" data-freq="weekly">Weekly</button>
+      <button class="remind-pill" id="pill-monthly" data-freq="monthly">Monthly</button>
     </div>
 
     <div class="setting-btns">
@@ -507,7 +562,7 @@ function load() {
     const d = JSON.parse(localStorage.getItem(SK));
     if (d && Array.isArray(d.cycles)) return d;
   } catch {}
-  return { cycles: [], settings: { fertility: false, pin: null } };
+  return { cycles: [], settings: { fertility: false, pin: null, remind: false, remindFreq: 'weekly', remindLast: 0 } };
 }
 function save() { localStorage.setItem(SK, JSON.stringify(state)); }
 let state = load();
@@ -598,6 +653,15 @@ function render() {
   renderTimeline(); renderEntries(); renderFertile(); renderPinUI();
   document.getElementById('tog-fertility').checked=!!state.settings.fertility;
   document.getElementById('tog-pin').checked=!!state.settings.pin;
+  document.getElementById('tog-remind').checked=!!state.settings.remind;
+  document.getElementById('remind-freq-wrap').classList.toggle('hidden', !state.settings.remind);
+  const freq = state.settings.remindFreq || 'weekly';
+  document.getElementById('pill-weekly').classList.toggle('active', freq==='weekly');
+  document.getElementById('pill-monthly').classList.toggle('active', freq==='monthly');
+  const last = state.settings.remindLast||0;
+  document.getElementById('remind-sub').textContent = state.settings.remind
+    ? (last ? `Last exported ${Math.floor((Date.now()-last)/864e5)} day(s) ago` : 'Get reminded to back up your data')
+    : 'Get reminded to back up your data';
 }
 
 function renderHero() {
@@ -844,6 +908,19 @@ function exportData(){
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));
   a.download='quiet-cycle-data.txt'; a.click();
+  state.settings.remindLast=Date.now(); save();
+  document.getElementById('remind-banner').classList.add('hidden');
+  render();
+}
+
+// ── Export reminder check ───────────────────────────────────
+function checkReminder() {
+  if (!state.settings.remind) return;
+  const freq = state.settings.remindFreq === 'monthly' ? 30 : 7;
+  const ms = freq * 864e5;
+  const last = state.settings.remindLast || 0;
+  const due = (Date.now() - last) >= ms;
+  document.getElementById('remind-banner').classList.toggle('hidden', !due);
 }
 
 // ═══════════════ INIT ══════════════════════════════════════
@@ -903,9 +980,31 @@ function init(){
   document.getElementById('btn-export').addEventListener('click',exportData);
   document.getElementById('btn-nuke').addEventListener('click',()=>{
     confirm2('Delete all data?','All cycle history and settings will be permanently erased. This cannot be undone.',()=>{
-      state={cycles:[],settings:{fertility:false,pin:null}}; save(); render();
+      state={cycles:[],settings:{fertility:false,pin:null,remind:false,remindFreq:'weekly',remindLast:0}}; save(); render();
+      document.getElementById('remind-banner').classList.add('hidden');
     });
   });
+
+  // Export reminder toggle
+  document.getElementById('tog-remind').addEventListener('change',e=>{
+    state.settings.remind=e.target.checked; save(); render(); checkReminder();
+  });
+
+  // Frequency pills
+  document.querySelectorAll('.remind-pill').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      state.settings.remindFreq=btn.dataset.freq; save(); render(); checkReminder();
+    });
+  });
+
+  // Banner buttons
+  document.getElementById('btn-remind-export').addEventListener('click',exportData);
+  document.getElementById('btn-remind-dismiss').addEventListener('click',()=>{
+    state.settings.remindLast=Date.now(); save(); render();
+    document.getElementById('remind-banner').classList.add('hidden');
+  });
+
+  checkReminder();
 }
 init();
 </script>
