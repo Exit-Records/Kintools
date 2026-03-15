@@ -75,6 +75,7 @@ Always `dBridge` — lowercase **d**, uppercase **B**. No exceptions.
 | KIN-011 | Unit Price Calc | kinunitcalc.netlify.app | Static HTML |
 | KIN-012 | Name Picker | kinnamepick.netlify.app | Static HTML |
 | KIN-013 | Mood Slider | kinmoodslider.netlify.app | Static HTML |
+| KIN-014 | Breathing Exercise | kinbreathing.netlify.app | Static HTML |
 
 ---
 

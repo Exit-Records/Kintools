@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Breathing Exercise — Kin</title>
+<meta name="description" content="Guided breathing for stress relief, focus and sleep. Box breathing, 4-7-8, and more. Works offline, no data stored.">
+<meta name="theme-color" id="theme-meta" content="#FAFAF7">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #FAFAF7;
+  --surface:  #FFFFFF;
+  --border:   #E8E4DC;
+  --text:     #1A1A18;
+  --text-mid: #5C5A54;
+  --text-dim: #9C9A94;
+}
+
+html.dark {
+  --bg:       #111110;
+  --surface:  #1C1C1A;
+  --border:   #2A2A27;
+  --text:     #E8E4DC;
+  --text-mid: #9C9A94;
+  --text-dim: #4A4A46;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.8s ease, color 0.2s;
+}
+
+#toggle {
+  position: fixed;
+  top: 14px; right: 14px;
+  z-index: 999;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 52px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Header ────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.header .sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.streak-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.streak-num {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-dim);
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.streak-num.active { color: #5BAD85; }
+
+.streak-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ── Quick presets (Enhancement 4) ─────────── */
+.quick-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.quick-row {
+  display: flex;
+  gap: 8px;
+}
+
+.quick-btn {
+  flex: 1;
+  padding: 9px 8px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  line-height: 1.3;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.quick-btn:hover { border-color: var(--text-dim); color: var(--text); }
+.quick-btn .q-name { display: block; }
+.quick-btn .q-sub { display: block; font-size: 9px; font-weight: 500; color: var(--text-dim); margin-top: 1px; }
+
+/* ── Breathing area ────────────────────────── */
+.breath-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 0 8px;
+  position: relative;
+}
+
+.anim-wrap {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Circle mode */
+.breath-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--border);
+  transform: scale(0.38);
+  transition: background 0.6s ease;
+  will-change: transform;
+}
+
+/* Ring mode */
+.ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+}
+
+.ring-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 9;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 659.73;
+  stroke-dashoffset: 659.73;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.phase-info {
+  text-align: center;
+  min-height: 56px;
+}
+
+.phase-label {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-dim);
+  line-height: 1;
+  transition: color 0.4s;
+}
+
+.phase-secs {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 5px;
+  font-variant-numeric: tabular-nums;
+  min-height: 18px;
+}
+
+/* ── Session timer ──────────────────────────── */
+.timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.timer-display {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  min-width: 52px;
+  text-align: center;
+}
+
+/* ── Pattern & duration selectors ──────────── */
+.select-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pattern-select {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239C9A94' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px;
+  transition: border-color 0.15s;
+}
+
+.pattern-select:focus { border-color: var(--text-dim); }
+
+.dur-pills {
+  display: flex;
+  gap: 6px;
+}
+
+.dur-pill {
+  flex: 1;
+  padding: 9px 4px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.dur-pill.active, .dur-pill:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+/* ── Custom inputs ──────────────────────────── */
+.custom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 6px;
+  display: none;
+}
+
+.custom-row.visible { display: grid; }
+
+.custom-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.custom-field label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.custom-field input {
+  width: 100%;
+  padding: 8px 6px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.custom-field input:focus { border-color: var(--text-dim); }
+
+/* ── Controls ───────────────────────────────── */
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary {
+  flex: 2;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+  letter-spacing: -0.01em;
+}
+
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-mid);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
+
+/* ── Toggles ────────────────────────────────── */
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tog {
+  flex: 1;
+  min-width: 60px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: all 0.15s;
+}
+
+.tog.on {
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface);
+}
+
+/* ── Completion ─────────────────────────────── */
+.complete-card {
+  display: none;
+  padding: 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  text-align: center;
+  gap: 6px;
+  flex-direction: column;
+}
+
+.complete-card.show { display: flex; }
+
+.complete-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #5BAD85;
+}
+
+.complete-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* ── Saved msg ──────────────────────────────── */
+.saved-msg {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  height: 14px;
+  margin-top: -16px;
+}
+
+.saved-msg.show { opacity: 1; }
+
+/* ── Footer ─────────────────────────────────── */
+footer {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breath-circle { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<button id="toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">🌙</button>
+
+<div class="wrap">
+
+  <div class="header">
+    <div>
+      <h1>Breathing Exercise</h1>
+      <div class="sub" id="date-display"></div>
+    </div>
+    <div class="streak-badge" title="Daily session streak">
+      <div class="streak-num" id="streak-num">0</div>
+      <div class="streak-label">day streak</div>
+    </div>
+  </div>
+
+  <!-- Quick Presets (Enhancement 4) -->
+  <div class="quick-presets">
+    <div class="quick-label">Quick start</div>
+    <div class="quick-row">
+      <button class="quick-btn" onclick="applyPreset('anxiety')">
+        <span class="q-name">Anxiety</span>
+        <span class="q-sub">4-7-8 · 1 min</span>
+      </button>
+      <button class="quick-btn" onclick="applyPreset('focus')">
+        <span class="q-name">Focus Reset</span>
+        <span class="q-sub">Rhythmic · 3 min</span>
+      </button>
+      <button class="quick-btn" onclick="applyPreset('sleep')">
+        <span class="q-name">Pre-Sleep</span>
+        <span class="q-sub">Wind-down · 5 min</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Breathing animation -->
+  <div class="breath-area">
+    <div class="anim-wrap" id="anim-wrap">
+      <div class="breath-circle" id="breath-circle"></div>
+      <svg class="ring-svg" id="ring-svg" viewBox="0 0 220 220" style="display:none" aria-hidden="true">
+        <circle cx="110" cy="110" r="105" class="ring-track"/>
+        <circle cx="110" cy="110" r="105" class="ring-progress" id="ring-progress"/>
+      </svg>
+    </div>
+    <div class="phase-info">
+      <div class="phase-label" id="phase-label">Ready</div>
+      <div class="phase-secs" id="phase-secs"></div>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-row">
+    <div class="timer-display" id="timer-display">—</div>
+  </div>
+
+  <!-- Pattern + duration -->
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <select class="pattern-select" id="pattern-select" onchange="onPatternChange()">
+      <option value="box">Box Breathing (4-4-4-4)</option>
+      <option value="478">4-7-8 Breathing</option>
+      <option value="adhd">ADHD Focus Reset</option>
+      <option value="sleep">Sleep Wind-Down</option>
+      <option value="custom">Custom</option>
+    </select>
+    <div class="dur-pills">
+      <button class="dur-pill" data-dur="1"  onclick="setDur(1)">1 min</button>
+      <button class="dur-pill" data-dur="3"  onclick="setDur(3)">3 min</button>
+      <button class="dur-pill active" data-dur="5" onclick="setDur(5)">5 min</button>
+      <button class="dur-pill" data-dur="10" onclick="setDur(10)">10 min</button>
+      <button class="dur-pill" data-dur="0"  onclick="setDur(0)">∞</button>
+    </div>
+  </div>
+
+  <!-- Custom inputs -->
+  <div class="custom-row" id="custom-row">
+    <div class="custom-field">
+      <label>Inhale</label>
+      <input type="number" id="c-inhale" value="4" min="1" max="30" oninput="updateCustom()">
+    </div>
+    <div class="custom-field">
+      <label>Hold</label>
+      <input type="number" id="c-hold1" value="0" min="0" max="30" oninput="updateCustom()">
+    </div>
+    <div class="custom-field">
+      <label>Exhale</label>
+      <input type="number" id="c-exhale" value="4" min="1" max="30" oninput="updateCustom()">
+    </div>
+    <div class="custom-field">
+      <label>Hold</label>
+      <input type="number" id="c-hold2" value="0" min="0" max="30" oninput="updateCustom()">
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn-primary" id="btn-start" onclick="startPause()">Start</button>
+    <button class="btn-secondary" onclick="reset()">Reset</button>
+  </div>
+
+  <!-- Toggles -->
+  <div class="toggle-row">
+    <button class="tog" id="tog-audio"  onclick="toggleOpt('audio')">Audio</button>
+    <button class="tog" id="tog-haptic" onclick="toggleOpt('haptic')">Haptic</button>
+    <button class="tog" id="tog-voice"  onclick="toggleOpt('voice')">Voice</button>
+    <button class="tog" id="tog-ring"   onclick="toggleOpt('ring')">Ring Mode</button>
+  </div>
+
+  <!-- Completion -->
+  <div class="complete-card" id="complete-card">
+    <div class="complete-title">Session Complete</div>
+    <div class="complete-sub" id="complete-sub"></div>
+  </div>
+
+  <div class="saved-msg" id="saved-msg">Streak updated</div>
+
+  <footer>
+    <span>Kin</span>&nbsp;·&nbsp;<span>KIN-014</span>&nbsp;·&nbsp;<span>dBridge</span>
+  </footer>
+
+</div>
+
+<script>
+/* ── Constants ───────────────────────────────── */
+var PATTERNS = {
+  box:    { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
+  '478':  { inhale: 4, hold1: 7, exhale: 8, hold2: 0 },
+  adhd:   { inhale: 3, hold1: 0, exhale: 3, hold2: 0 },
+  sleep:  { inhale: 4, hold1: 0, exhale: 6, hold2: 2 },
+  custom: { inhale: 4, hold1: 0, exhale: 4, hold2: 0 },
+};
+
+var QUICK_PRESETS = {
+  anxiety: { pattern: '478',   dur: 1 },
+  focus:   { pattern: 'adhd',  dur: 3 },
+  sleep:   { pattern: 'sleep', dur: 5 },
+};
+
+var PHASE_NAMES  = { inhale: 'Inhale', hold1: 'Hold', exhale: 'Exhale', hold2: 'Hold' };
+var PHASE_COLORS = { inhale: '#5B9BD5', hold1: '#9B7DD5', exhale: '#5BAD85', hold2: '#9B7DD5' };
+
+var CIRC = 2 * Math.PI * 105; // ≈659.73
+var MIN_SCALE = 0.38;
+var MAX_SCALE = 1.0;
+var DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── State ───────────────────────────────────── */
+var st = {
+  running: false,
+  paused: false,
+  phaseIdx: 0,
+  phaseStart: 0,
+  sessionStart: 0,
+  sessionDur: 5 * 60, // seconds, 0 = infinite
+  patternKey: 'box',
+  audio: false,
+  haptic: false,
+  voice: false,
+  ring: false,
+  raf: null,
+  audioCtx: null,
+  darkMode: false,
+};
+
+/* ── Bootstrap ───────────────────────────────── */
+(function () {
+  var saved = localStorage.getItem('kin-breath-theme');
+  if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('toggle').textContent = '☀️';
+    document.getElementById('theme-meta').content = '#111110';
+    st.darkMode = true;
+  }
+
+  var now = new Date();
+  document.getElementById('date-display').textContent =
+    DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate();
+
+  updateStreakDisplay();
+  setDur(5);
+}());
+
+/* ── Streak (Enhancement 2) ──────────────────── */
+function loadStreak() {
+  try { return JSON.parse(localStorage.getItem('kin-breath-streak') || '{"count":0,"last":""}'); }
+  catch { return { count: 0, last: '' }; }
+}
+
+function updateStreakDisplay() {
+  var s = loadStreak();
+  var el = document.getElementById('streak-num');
+  el.textContent = s.count;
+  el.classList.toggle('active', s.count > 0);
+}
+
+function completeSession() {
+  var today = new Date().toISOString().slice(0, 10);
+  var s     = loadStreak();
+  var prev  = new Date(); prev.setDate(prev.getDate() - 1);
+  var yday  = prev.toISOString().slice(0, 10);
+
+  if (s.last !== today) {
+    s.count = (s.last === yday) ? s.count + 1 : 1;
+    s.last  = today;
+    localStorage.setItem('kin-breath-streak', JSON.stringify(s));
+    showSaved();
+  }
+  updateStreakDisplay();
+
+  document.getElementById('complete-card').classList.add('show');
+  document.getElementById('complete-sub').textContent =
+    s.count + '-day streak. Well done.';
+  document.getElementById('btn-start').textContent = 'Start';
+  document.getElementById('phase-label').textContent = 'Done';
+  document.getElementById('phase-label').style.color = '#5BAD85';
+  document.getElementById('phase-secs').textContent  = '';
+  playTone(330, 0.5, 0.6);
+  speak('Session complete');
+  st.running = false;
+  st.paused  = false;
+  resetBackground();
+}
+
+function showSaved() {
+  var el = document.getElementById('saved-msg');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function () { el.classList.remove('show'); }, 2000);
+}
+
+/* ── Theme ───────────────────────────────────── */
+function toggleTheme() {
+  var dark = document.documentElement.classList.toggle('dark');
+  st.darkMode = dark;
+  document.getElementById('toggle').textContent = dark ? '☀️' : '🌙';
+  document.getElementById('theme-meta').content = dark ? '#111110' : '#FAFAF7';
+  localStorage.setItem('kin-breath-theme', dark ? 'dark' : 'light');
+}
+
+/* ── Phases ──────────────────────────────────── */
+function getPhases() {
+  var p = PATTERNS[st.patternKey];
+  var phases = [];
+  phases.push({ key: 'inhale', dur: p.inhale });
+  if (p.hold1 > 0) phases.push({ key: 'hold1', dur: p.hold1 });
+  phases.push({ key: 'exhale', dur: p.exhale });
+  if (p.hold2 > 0) phases.push({ key: 'hold2', dur: p.hold2 });
+  return phases;
+}
+
+/* ── Animation ───────────────────────────────── */
+function easeInOut(t) {
+  return -(Math.cos(Math.PI * t) - 1) / 2;
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function updateVisuals(phaseKey, progress, reducedMotion) {
+  var color  = PHASE_COLORS[phaseKey];
+  var eased  = reducedMotion ? (progress < 0.5 ? 0 : 1) : easeInOut(progress);
+  var scale;
+
+  if      (phaseKey === 'inhale') scale = lerp(MIN_SCALE, MAX_SCALE, eased);
+  else if (phaseKey === 'hold1')  scale = MAX_SCALE;
+  else if (phaseKey === 'exhale') scale = lerp(MAX_SCALE, MIN_SCALE, eased);
+  else                            scale = MIN_SCALE;
+
+  /* Circle */
+  var circle = document.getElementById('breath-circle');
+  circle.style.transform  = 'scale(' + scale + ')';
+  circle.style.background = color;
+  circle.style.boxShadow  = '0 0 ' + Math.round(scale * 50) + 'px ' + color + '50';
+
+  /* Ring */
+  var ringP = phaseKey === 'inhale' ? eased :
+              phaseKey === 'hold1'  ? 1     :
+              phaseKey === 'exhale' ? 1 - eased : 0;
+  var ringEl = document.getElementById('ring-progress');
+  ringEl.style.strokeDashoffset = (CIRC * (1 - ringP)).toFixed(2);
+  ringEl.style.stroke = color;
+
+  /* Phase label */
+  var labelEl = document.getElementById('phase-label');
+  labelEl.textContent = PHASE_NAMES[phaseKey];
+  labelEl.style.color = color;
+
+  /* Ambient background (Enhancement 3) */
+  var tints = {
+    inhale: st.darkMode ? '10,21,32'  : '91,155,213',
+    hold1:  st.darkMode ? '21,10,32'  : '155,125,213',
+    exhale: st.darkMode ? '10,26,16'  : '91,173,133',
+    hold2:  st.darkMode ? '21,10,32'  : '155,125,213',
+  };
+  var alpha = (scale * 0.14).toFixed(3);
+  document.body.style.background =
+    'radial-gradient(ellipse 65% 55% at 50% 42%, rgba(' + tints[phaseKey] + ',' + alpha + ') 0%, var(--bg) 72%)';
+}
+
+function resetBackground() {
+  document.body.style.background = 'var(--bg)';
+  var circle = document.getElementById('breath-circle');
+  circle.style.background = 'var(--border)';
+  circle.style.boxShadow  = 'none';
+  circle.style.transform  = 'scale(' + MIN_SCALE + ')';
+  document.getElementById('ring-progress').style.strokeDashoffset = CIRC.toFixed(2);
+  document.getElementById('ring-progress').style.stroke = 'var(--border)';
+}
+
+function loop(ts) {
+  if (!st.running) return;
+
+  var phases  = getPhases();
+  var phase   = phases[st.phaseIdx];
+  var elapsed = (ts - st.phaseStart) / 1000;
+  var progress = Math.min(elapsed / phase.dur, 1);
+  var reduced  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  updateVisuals(phase.key, progress, reduced);
+
+  /* Seconds countdown in current phase */
+  var secsLeft = Math.max(0, Math.ceil(phase.dur - elapsed));
+  document.getElementById('phase-secs').textContent = secsLeft + 's';
+
+  /* Session countdown */
+  if (st.sessionDur > 0) {
+    var sessElapsed = (ts - st.sessionStart) / 1000;
+    var sessLeft = Math.max(0, st.sessionDur - sessElapsed);
+    document.getElementById('timer-display').textContent = fmtTime(sessLeft);
+    if (sessLeft <= 0) {
+      completeSession();
+      return;
+    }
+  }
+
+  /* Phase transition */
+  if (elapsed >= phase.dur) {
+    var nextIdx  = (st.phaseIdx + 1) % phases.length;
+    var nextPhase = phases[nextIdx];
+    st.phaseIdx  = nextIdx;
+    st.phaseStart = ts - (elapsed - phase.dur) * 1000;
+    triggerCues(nextPhase.key);
+  }
+
+  st.raf = requestAnimationFrame(loop);
+}
+
+/* ── Cues ────────────────────────────────────── */
+function triggerCues(phaseKey) {
+  var freqs = { inhale: 523, hold1: 440, exhale: 349, hold2: 330 };
+  if (st.audio)  playTone(freqs[phaseKey] || 440, 0.15, 0.3);
+  if (st.haptic && navigator.vibrate) navigator.vibrate(40);
+  if (st.voice)  speak(PHASE_NAMES[phaseKey]);
+}
+
+/* ── Audio (Web Audio API) ───────────────────── */
+function getAudioCtx() {
+  if (!st.audioCtx) {
+    st.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return st.audioCtx;
+}
+
+function playTone(freq, vol, dur) {
+  try {
+    var ctx  = getAudioCtx();
+    var osc  = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.04);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur + 0.05);
+  } catch (e) {}
+}
+
+/* ── Voice synthesis (Enhancement 1) ────────── */
+function speak(text) {
+  if (!st.voice || !window.speechSynthesis) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.82;
+  u.pitch = 1;
+  u.volume = 0.8;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+/* ── Controls ────────────────────────────────── */
+function startPause() {
+  if (st.running) {
+    /* Pause */
+    st.running = false;
+    st.paused  = true;
+    cancelAnimationFrame(st.raf);
+    document.getElementById('btn-start').textContent = 'Resume';
+    document.getElementById('phase-label').textContent = 'Paused';
+    document.getElementById('phase-label').style.color = 'var(--text-dim)';
+    document.getElementById('phase-secs').textContent  = '';
+    resetBackground();
+  } else if (st.paused) {
+    /* Resume */
+    st.phaseStart  = performance.now();
+    st.running     = true;
+    st.paused      = false;
+    document.getElementById('btn-start').textContent = 'Pause';
+    st.raf = requestAnimationFrame(loop);
+  } else {
+    /* Start fresh */
+    var phases = getPhases();
+    st.phaseIdx   = 0;
+    st.phaseStart = performance.now();
+    st.sessionStart = performance.now();
+    st.running = true;
+    st.paused  = false;
+    document.getElementById('complete-card').classList.remove('show');
+    document.getElementById('btn-start').textContent = 'Pause';
+    if (st.sessionDur > 0) {
+      document.getElementById('timer-display').textContent = fmtTime(st.sessionDur);
+    } else {
+      document.getElementById('timer-display').textContent = '∞';
+    }
+    triggerCues(phases[0].key);
+    st.raf = requestAnimationFrame(loop);
+  }
+}
+
+function reset() {
+  st.running = false;
+  st.paused  = false;
+  st.phaseIdx = 0;
+  cancelAnimationFrame(st.raf);
+  document.getElementById('btn-start').textContent = 'Start';
+  document.getElementById('phase-label').textContent = 'Ready';
+  document.getElementById('phase-label').style.color = 'var(--text-dim)';
+  document.getElementById('phase-secs').textContent  = '';
+  document.getElementById('timer-display').textContent = st.sessionDur > 0 ? fmtTime(st.sessionDur) : '—';
+  document.getElementById('complete-card').classList.remove('show');
+  resetBackground();
+}
+
+/* ── Pattern & duration ──────────────────────── */
+function onPatternChange() {
+  var sel = document.getElementById('pattern-select').value;
+  st.patternKey = sel;
+  if (st.running) reset();
+  document.getElementById('custom-row').classList.toggle('visible', sel === 'custom');
+}
+
+function updateCustom() {
+  PATTERNS.custom.inhale = parseInt(document.getElementById('c-inhale').value) || 4;
+  PATTERNS.custom.hold1  = parseInt(document.getElementById('c-hold1').value)  || 0;
+  PATTERNS.custom.exhale = parseInt(document.getElementById('c-exhale').value) || 4;
+  PATTERNS.custom.hold2  = parseInt(document.getElementById('c-hold2').value)  || 0;
+}
+
+function setDur(mins) {
+  st.sessionDur = mins * 60;
+  document.querySelectorAll('.dur-pill').forEach(function (b) {
+    b.classList.toggle('active', parseInt(b.dataset.dur) === mins);
+  });
+  document.getElementById('timer-display').textContent = mins > 0 ? fmtTime(mins * 60) : '—';
+  if (st.running) reset();
+}
+
+function applyPreset(key) {
+  var preset = QUICK_PRESETS[key];
+  var sel    = document.getElementById('pattern-select');
+  sel.value  = preset.pattern;
+  st.patternKey = preset.pattern;
+  document.getElementById('custom-row').classList.remove('visible');
+  setDur(preset.dur);
+  if (st.running || st.paused) reset();
+}
+
+/* ── Toggles ─────────────────────────────────── */
+function toggleOpt(opt) {
+  st[opt] = !st[opt];
+  document.getElementById('tog-' + opt).classList.toggle('on', st[opt]);
+
+  if (opt === 'ring') {
+    document.getElementById('breath-circle').style.display = st.ring ? 'none'  : '';
+    document.getElementById('ring-svg').style.display      = st.ring ? ''      : 'none';
+  }
+
+  if (opt === 'audio' && st.audio) {
+    getAudioCtx();
+    playTone(440, 0.1, 0.2);
+  }
+}
+
+/* ── Keyboard ────────────────────────────────── */
+document.addEventListener('keydown', function (e) {
+  if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
+    e.preventDefault();
+    startPause();
+  }
+});
+
+/* ── Helpers ─────────────────────────────────── */
+function fmtTime(secs) {
+  var m = Math.floor(secs / 60);
+  var s = Math.floor(secs % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+</script>
+</body>
+</html>
