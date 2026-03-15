@@ -246,4 +246,24 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 ---
 
-*Next tool: KIN-018*
+## KIN-018 · Kin Nest
+
+**URL:** https://kinnest.netlify.app  
+**Netlify publish dir:** `sites/kin-018-kin-nest`
+
+**Summary:** Baby routine tracker for exhausted parents. One-tap logging for feeds (5 types: breast, bottle, pumped, formula, solids), sleep (tap to start/stop), and diapers (wet/dirty/both). Dashboard shows last feed, awake time, next nap prediction, and fussiness risk score. Intelligence layer includes wake window calculator (age-adjusted), nap predictor, sleep debt tracker, meltdown scorer, daily reassurance, and routine stability indicator. Growth log, timeline view, auto night mode (20:00–06:00), export reminder, JSON export, self-contained HTML report with SVG charts, and JSON import. All data stays local.
+
+**Notes:**
+- Single HTML file, PWA (manifest.json, icon.svg, canvas apple-touch-icon).
+- Creator: Alice Anthony & dBridge.
+- Category: Wellness (per brief; spec says Parenting/Health).
+- Color scheme: emerald green `#059669` / `#047857`; background `#f0fdf4`.
+- Long-press on Feed → type picker modal; long-press on Diaper → type picker modal.
+- Night mode auto-switches at 20:00–06:00; manual override via Settings toggle.
+- HTML export generates self-contained report with SVG bar/line charts (no libraries).
+- `remindLast` timestamp updated on both export types and on banner dismiss.
+- State schema: `{ baby, settings, feeds, sleep, diapers, growth, medicine }`.
+
+---
+
+*Next tool: KIN-019*

@@ -1,0 +1,12 @@
+{
+  "name": "Kin Nest",
+  "short_name": "Kin Nest",
+  "description": "Baby routine tracker — feeds, sleep, diapers and daily insights.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0fdf4",
+  "theme_color": "#059669",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
