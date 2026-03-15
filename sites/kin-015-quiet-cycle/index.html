@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Quiet Cycle — KIN-015</title>
+  <meta name="description" content="Private menstrual cycle tracker. Period prediction, symptom notes, fertility estimate. Your data never leaves your device.">
+  <meta name="theme-color" content="#7c5cbf">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KIN-015">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf9f7;
+      --card: #ffffff;
+      --border: #ede8f0;
+      --fg: #1c1917;
+      --muted: #78716c;
+      --subtle: #a89ab8;
+      --accent: #7c5cbf;
+      --accent-dk: #5a3d8f;
+      --accent-lt: #f0eaf8;
+      --accent-md: #d4c4ee;
+      --period: #e8517a;
+      --period-lt: #fde8ef;
+      --period-dk: #b83060;
+      --fertile: #0d9488;
+      --fertile-lt: #ccfbf1;
+      --r: 14px;
+      --r-sm: 8px;
+      --shadow: 0 2px 12px rgba(90,61,143,.08);
+      --shadow-md: 0 4px 24px rgba(90,61,143,.16);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #app {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── Header ── */
+    .kin-hdr { display: flex; align-items: center; gap: 10px; padding: 4px 0 6px; user-select: none; cursor: default; }
+    .kin-logo { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .kin-ttl { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+    .kin-num { margin-left: auto; font-size: 10px; font-weight: 500; color: var(--subtle); letter-spacing: .5px; text-transform: uppercase; background: var(--accent-lt); padding: 2px 7px; border-radius: 20px; }
+
+    /* ── Cards ── */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; box-shadow: var(--shadow); }
+
+    /* ── Hero ── */
+    .hero { background: linear-gradient(135deg, var(--accent), var(--accent-dk)); border-radius: var(--r); padding: 24px; color: #fff; text-align: center; box-shadow: var(--shadow-md); }
+    .hero-lbl { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; opacity: .7; margin-bottom: 6px; }
+    .hero-date { font-size: 36px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 5px; }
+    .hero-date.empty { font-size: 18px; font-weight: 500; letter-spacing: 0; opacity: .85; }
+    .hero-sub { font-size: 14px; opacity: .72; }
+
+    /* ── Active period banner ── */
+    .active-bar { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--period-lt); border: 1px solid #f5b8cc; border-radius: var(--r); }
+    .active-pulse { width: 8px; height: 8px; background: var(--period); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(232,81,122,.2); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 3px rgba(232,81,122,.2)} 50%{box-shadow:0 0 0 6px rgba(232,81,122,.1)} }
+    .active-info { flex: 1; }
+    .active-lbl { font-size: 11px; font-weight: 700; color: var(--period-dk); text-transform: uppercase; letter-spacing: .5px; }
+    .active-txt { font-size: 13px; color: var(--period-dk); }
+
+    /* ── Buttons ── */
+    .row { display: flex; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 18px; height: 44px; border-radius: 100px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; transition: opacity .15s, transform .1s; white-space: nowrap; font-family: inherit; }
+    .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .4; cursor: default; pointer-events: none; }
+    .btn-primary { background: var(--accent); color: #fff; flex: 1; }
+    .btn-secondary { background: var(--accent-lt); color: var(--accent); flex: 1; }
+    .btn-period { background: var(--period); color: #fff; font-size: 13px; padding: 0 14px; height: 36px; flex-shrink: 0; border-radius: 100px; border: none; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity .15s, transform .1s; }
+    .btn-period:active { transform: scale(.97); }
+    .btn-danger { background: #fee2e2; color: #dc2626; }
+    .btn-ghost { background: none; color: var(--muted); }
+    .btn-sm { height: 34px; padding: 0 14px; font-size: 13px; }
+
+    /* ── Section title ── */
+    .sec-ttl { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px; }
+
+    /* ── Calendar ── */
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .cal-mo { font-size: 15px; font-weight: 600; }
+    .cal-arr { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 16px; transition: background .15s; }
+    .cal-arr:hover { background: var(--accent-lt); color: var(--accent); }
+    .cal-wds { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 3px; }
+    .cal-wd { font-size: 11px; font-weight: 600; color: var(--subtle); padding: 3px 0; text-transform: uppercase; letter-spacing: .2px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 50%; position: relative; }
+    .cal-day.today { font-weight: 700; color: var(--accent); }
+    .cal-day.today::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
+    .cal-day.period { background: var(--period-lt); color: var(--period-dk); font-weight: 600; }
+    .cal-day.period-start { background: var(--period); color: #fff; font-weight: 700; border-radius: 50%; }
+    .cal-day.predicted { background: var(--accent-lt); color: var(--accent); }
+    .cal-day.fertile { background: var(--fertile-lt); color: var(--fertile); }
+    .cal-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+    .leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .leg-dot.p { background: var(--period); }
+    .leg-dot.pr { background: var(--accent-md); }
+    .leg-dot.f { background: var(--fertile); }
+
+    /* ── Stats ── */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat { background: var(--accent-lt); border-radius: var(--r-sm); padding: 14px; }
+    .stat-lbl { font-size: 11px; font-weight: 500; color: var(--subtle); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+    .stat-val { font-size: 24px; font-weight: 700; color: var(--accent-dk); line-height: 1; }
+    .stat-u { font-size: 13px; color: var(--subtle); margin-left: 1px; }
+    .notice { margin-top: 12px; padding: 11px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--r-sm); font-size: 13px; color: #92400e; line-height: 1.5; }
+
+    /* ── Fertile card ── */
+    .fertile-card { margin-top: 10px; background: var(--fertile-lt); border: 1px solid #99f6e4; border-radius: var(--r-sm); padding: 14px; }
+    .fertile-ttl { font-size: 11px; font-weight: 700; color: #065f46; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .fertile-dates { font-size: 16px; font-weight: 600; color: #047857; }
+    .fertile-ov { font-size: 13px; color: #065f46; margin-top: 2px; }
+    .fertile-disc { font-size: 11px; color: #6b7280; margin-top: 8px; font-style: italic; }
+
+    /* ── Timeline ── */
+    .tl-list { display: flex; flex-direction: column; gap: 9px; }
+    .tl-row { display: flex; align-items: center; gap: 10px; }
+    .tl-lbl { font-size: 12px; color: var(--muted); width: 48px; flex-shrink: 0; }
+    .tl-track { flex: 1; height: 9px; background: var(--border); border-radius: 5px; overflow: hidden; }
+    .tl-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dk)); border-radius: 5px; transition: width .4s ease; }
+    .tl-val { font-size: 12px; color: var(--muted); width: 26px; text-align: right; flex-shrink: 0; }
+    .tl-empty { font-size: 13px; color: var(--subtle); }
+
+    /* ── Entry list ── */
+    .entry-list { display: flex; flex-direction: column; gap: 8px; }
+    .entry { display: flex; align-items: center; gap: 10px; padding: 11px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-sm); }
+    .entry-dot { width: 8px; height: 8px; background: var(--period); border-radius: 50%; flex-shrink: 0; }
+    .entry-info { flex: 1; min-width: 0; }
+    .entry-date { font-size: 14px; font-weight: 600; }
+    .entry-meta { font-size: 12px; color: var(--muted); }
+    .entry-acts { display: flex; gap: 3px; }
+    .entry-btn { width: 28px; height: 28px; border-radius: 6px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--subtle); font-size: 14px; transition: background .15s; }
+    .entry-btn:hover { background: var(--border); }
+    .entry-btn.del:hover { background: #fee2e2; color: #dc2626; }
+    .entry-empty { font-size: 13px; color: var(--subtle); }
+
+    /* ── Settings ── */
+    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .setting-row:last-of-type { border-bottom: none; }
+    .setting-lbl { font-size: 14px; }
+    .setting-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .toggle { position: relative; width: 44px; height: 24px; cursor: pointer; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .tog-track { position: absolute; inset: 0; background: var(--border); border-radius: 12px; transition: background .2s; }
+    .toggle input:checked ~ .tog-track { background: var(--accent); }
+    .tog-thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .2s; }
+    .toggle input:checked ~ .tog-thumb { transform: translateX(20px); }
+    .setting-btns { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 14px; }
+
+    /* ── Privacy panel ── */
+    .privacy { background: var(--accent-lt); border: 1px solid var(--accent-md); border-radius: var(--r); padding: 20px; }
+    .privacy-ttl { font-size: 12px; font-weight: 700; color: var(--accent-dk); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+    .privacy-tag { font-size: 14px; color: var(--accent-dk); margin-bottom: 10px; line-height: 1.4; }
+    .privacy-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .privacy-list li { font-size: 13px; color: var(--accent-dk); opacity: .85; }
+    .privacy-list li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
+    .privacy-note { font-size: 12px; color: var(--subtle); margin-top: 10px; }
+
+    /* ── Footer ── */
+    .kin-ftr { text-align: center; padding: 16px 0 0; font-size: 12px; color: var(--subtle); line-height: 1.9; border-top: 1px solid var(--border); }
+
+    /* ── Overlay / modals ── */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .overlay.open { opacity: 1; pointer-events: all; }
+    .sheet { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-width: 480px; padding: 20px; transform: translateY(100%); transition: transform .28s cubic-bezier(.4,0,.2,1); }
+    .overlay.open .sheet { transform: translateY(0); }
+    .sheet-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 18px; }
+    .sheet-ttl { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+    .fgrp { margin-bottom: 14px; }
+    .flbl { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; display: block; }
+    .finput { width: 100%; height: 44px; border-radius: var(--r-sm); border: 1.5px solid var(--border); background: var(--bg); padding: 0 12px; font-size: 15px; font-family: inherit; color: var(--fg); outline: none; transition: border-color .15s; }
+    .finput:focus { border-color: var(--accent); }
+    .ftxt { height: 76px; padding: 10px 12px; resize: none; line-height: 1.4; }
+    .sheet-foot { display: flex; gap: 10px; margin-top: 18px; }
+
+    /* ── Centred dialog (confirm, pin-setup) ── */
+    .dialog { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .dialog.open { opacity: 1; pointer-events: all; }
+    .dialog-card { background: #fff; border-radius: 18px; padding: 24px; width: 100%; max-width: 320px; text-align: center; }
+    .dialog-ttl { font-size: 17px; font-weight: 700; margin-bottom: 7px; }
+    .dialog-body { font-size: 14px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+    .dialog-row { display: flex; gap: 10px; }
+
+    /* ── PIN lock screen ── */
+    #pin-screen { position: fixed; inset: 0; background: linear-gradient(160deg, var(--accent), var(--accent-dk)); z-index: 300; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; }
+    .pin-logo-wrap { margin-bottom: 28px; cursor: default; text-align: center; }
+    .pin-logo-icon { width: 56px; height: 56px; background: rgba(255,255,255,.15); border-radius: 14px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .pin-app-name { font-size: 20px; font-weight: 700; color: #fff; }
+    .pin-subtitle { font-size: 14px; color: rgba(255,255,255,.65); margin-top: 3px; }
+    .pin-dots { display: flex; gap: 14px; margin: 24px 0 8px; }
+    .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.5); background: transparent; transition: background .15s; }
+    .pin-dot.filled { background: #fff; border-color: #fff; }
+    @keyframes pin-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    .pin-error { font-size: 13px; color: rgba(255,200,200,.9); height: 20px; text-align: center; margin-bottom: 14px; }
+    .pin-kp { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; width: 100%; max-width: 264px; }
+    .pin-k { height: 64px; border-radius: 12px; border: none; background: rgba(255,255,255,.15); color: #fff; font-size: 22px; font-weight: 600; cursor: pointer; transition: background .1s, transform .1s; font-family: inherit; }
+    .pin-k:active { background: rgba(255,255,255,.3); transform: scale(.95); }
+    .pin-k.del { font-size: 16px; }
+    .pin-k.blank { pointer-events: none; background: transparent; }
+
+    /* ── PIN setup keypad ── */
+    .s-dots { display: flex; gap: 12px; justify-content: center; margin-bottom: 18px; }
+    .s-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border); background: transparent; transition: background .15s; }
+    .s-dot.filled { background: var(--accent); border-color: var(--accent); }
+    .s-kp { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; max-width: 252px; margin: 0 auto 16px; }
+    .s-k { height: 54px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); color: var(--fg); font-size: 20px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background .1s, transform .1s; }
+    .s-k:active { background: var(--accent-lt); transform: scale(.97); }
+    .s-k.del { font-size: 14px; color: var(--muted); }
+    .s-k.blank { pointer-events: none; background: transparent; border-color: transparent; }
+
+    /* ── Panic flash ── */
+    @keyframes panic { 0%,100%{background:var(--bg)} 50%{background:#fee2e2} }
+    body.panic { animation: panic .4s; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PIN LOCK SCREEN                                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="pin-screen" class="hidden">
+  <div class="pin-logo-wrap" id="pin-panic-tap">
+    <div class="pin-logo-icon">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <circle cx="15" cy="15" r="9" stroke="white" stroke-width="2"/>
+        <circle cx="15" cy="6" r="2" fill="white"/>
+        <line x1="15" y1="15" x2="15" y2="6" stroke="white" stroke-width="2"/>
+      </svg>
+    </div>
+    <p class="pin-app-name">Quiet Cycle</p>
+    <p class="pin-subtitle">Enter your PIN to continue</p>
+  </div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <p class="pin-error" id="pin-err"></p>
+  <div class="pin-kp">
+    <button class="pin-k" data-d="1">1</button>
+    <button class="pin-k" data-d="2">2</button>
+    <button class="pin-k" data-d="3">3</button>
+    <button class="pin-k" data-d="4">4</button>
+    <button class="pin-k" data-d="5">5</button>
+    <button class="pin-k" data-d="6">6</button>
+    <button class="pin-k" data-d="7">7</button>
+    <button class="pin-k" data-d="8">8</button>
+    <button class="pin-k" data-d="9">9</button>
+    <button class="pin-k blank"></button>
+    <button class="pin-k" data-d="0">0</button>
+    <button class="pin-k del" id="pin-del">⌫</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- MAIN APP                                                -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <header class="kin-hdr" id="hdr-tap">
+    <div class="kin-logo">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="6" stroke="white" stroke-width="1.5"/>
+        <circle cx="9" cy="3" r="1.5" fill="white"/>
+        <line x1="9" y1="9" x2="9" y2="3" stroke="white" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <span class="kin-ttl">Quiet Cycle</span>
+    <span class="kin-num">KIN-015</span>
+  </header>
+
+  <!-- Hero: next period prediction -->
+  <div class="hero">
+    <p class="hero-lbl" id="hero-lbl">Next Period</p>
+    <p class="hero-date empty" id="hero-date">Log your first cycle</p>
+    <p class="hero-sub" id="hero-sub">to see your prediction</p>
+  </div>
+
+  <!-- Active period banner -->
+  <div class="active-bar hidden" id="active-bar">
+    <div class="active-pulse"></div>
+    <div class="active-info">
+      <p class="active-lbl">Period active</p>
+      <p class="active-txt" id="active-txt"></p>
+    </div>
+    <button class="btn-period" id="btn-end">Mark end</button>
+  </div>
+
+  <!-- Actions -->
+  <div class="row">
+    <button class="btn btn-primary" id="btn-start">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 4.5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Start Period
+    </button>
+    <button class="btn btn-secondary" id="btn-past">+ Add Past Entry</button>
+  </div>
+
+  <!-- Calendar -->
+  <div class="card">
+    <div class="cal-nav">
+      <button class="cal-arr" id="cal-prev">‹</button>
+      <span class="cal-mo" id="cal-mo"></span>
+      <button class="cal-arr" id="cal-next">›</button>
+    </div>
+    <div class="cal-wds">
+      <div class="cal-wd">Su</div><div class="cal-wd">Mo</div><div class="cal-wd">Tu</div>
+      <div class="cal-wd">We</div><div class="cal-wd">Th</div><div class="cal-wd">Fr</div><div class="cal-wd">Sa</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <span class="leg"><span class="leg-dot p"></span>Period</span>
+      <span class="leg"><span class="leg-dot pr"></span>Predicted</span>
+      <span class="leg hidden" id="leg-fertile"><span class="leg-dot f"></span>Fertile</span>
+    </div>
+  </div>
+
+  <!-- Statistics -->
+  <div class="card">
+    <p class="sec-ttl">Statistics</p>
+    <div class="stats-grid">
+      <div class="stat"><p class="stat-lbl">Average</p><p class="stat-val" id="s-avg">—</p></div>
+      <div class="stat"><p class="stat-lbl">Shortest</p><p class="stat-val" id="s-min">—</p></div>
+      <div class="stat"><p class="stat-lbl">Longest</p><p class="stat-val" id="s-max">—</p></div>
+      <div class="stat"><p class="stat-lbl">Tracked</p><p class="stat-val" id="s-cnt">0</p></div>
+    </div>
+    <div class="notice hidden" id="irregular">⚠ Cycle variability detected. Your cycles vary by more than 7 days — worth tracking over time.</div>
+  </div>
+
+  <!-- Cycle timeline -->
+  <div class="card">
+    <p class="sec-ttl">Cycle History</p>
+    <div class="tl-list" id="tl-list"><p class="tl-empty">Log two or more cycles to see your history.</p></div>
+  </div>
+
+  <!-- Cycle log -->
+  <div class="card">
+    <p class="sec-ttl">Cycle Log</p>
+    <div class="entry-list" id="entry-list"><p class="entry-empty">No cycles logged yet.</p></div>
+  </div>
+
+  <!-- Options -->
+  <div class="card">
+    <p class="sec-ttl">Options</p>
+
+    <div class="setting-row">
+      <div>
+        <p class="setting-lbl">Fertility estimate</p>
+        <p class="setting-sub">Show ovulation &amp; fertile window</p>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="tog-fertility">
+        <span class="tog-track"></span><span class="tog-thumb"></span>
+      </label>
+    </div>
+
+    <div id="fertile-wrap" class="hidden">
+      <div class="fertile-card">
+        <p class="fertile-ttl">Fertile Window</p>
+        <p class="fertile-dates" id="fertile-dates">—</p>
+        <p class="fertile-ov" id="fertile-ov"></p>
+        <p class="fertile-disc">Estimates only. Not medical advice. Fertility varies by individual.</p>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <p class="setting-lbl">PIN lock</p>
+        <p class="setting-sub" id="pin-sub">Protect with a 4-digit PIN</p>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="tog-pin">
+        <span class="tog-track"></span><span class="tog-thumb"></span>
+      </label>
+    </div>
+
+    <div class="setting-btns">
+      <button class="btn btn-secondary btn-sm" id="btn-export">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v7m0 0L4 5.5m2.5 2.5L9 5.5M1 10.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export data
+      </button>
+      <button class="btn btn-danger btn-sm" id="btn-nuke">Delete all data</button>
+    </div>
+  </div>
+
+  <!-- Privacy panel -->
+  <div class="privacy">
+    <p class="privacy-ttl">Privacy Guarantee</p>
+    <p class="privacy-tag">Your reproductive health data stays on your device — always.</p>
+    <ul class="privacy-list">
+      <li>No servers or cloud storage</li>
+      <li>No accounts required</li>
+      <li>No analytics or trackers</li>
+      <li>No data sharing</li>
+      <li>Works fully offline</li>
+    </ul>
+    <p class="privacy-note">You can verify this by viewing the page source.</p>
+  </div>
+
+  <footer class="kin-ftr">
+    <div>Quiet Cycle · KIN-015 by dBridge</div>
+    <div>Local-only health tool · No accounts · No tracking</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ENTRY MODAL (bottom sheet)                              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="overlay" id="ov-entry">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2 class="sheet-ttl" id="modal-ttl">Log Period Start</h2>
+    <div class="fgrp">
+      <label class="flbl" for="f-start">Period start date</label>
+      <input type="date" class="finput" id="f-start">
+    </div>
+    <div class="fgrp">
+      <label class="flbl" for="f-end">Period end date <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input type="date" class="finput" id="f-end">
+    </div>
+    <div class="fgrp">
+      <label class="flbl" for="f-note">Notes <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <textarea class="finput ftxt" id="f-note" placeholder="cramps, mood, fatigue, headache…"></textarea>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn btn-secondary" id="modal-cancel" style="flex:1">Cancel</button>
+      <button class="btn btn-primary" id="modal-save" style="flex:1">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- CONFIRM DIALOG                                          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="dialog" id="dlg-confirm">
+  <div class="dialog-card">
+    <h2 class="dialog-ttl" id="dlg-ttl">Delete entry?</h2>
+    <p class="dialog-body" id="dlg-body">This cannot be undone.</p>
+    <div class="dialog-row">
+      <button class="btn btn-secondary" id="dlg-cancel" style="flex:1">Cancel</button>
+      <button class="btn btn-danger" id="dlg-ok" style="flex:1">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PIN SETUP DIALOG                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="dialog" id="dlg-pin-setup">
+  <div class="dialog-card" style="max-width:300px">
+    <h2 class="dialog-ttl" id="ps-ttl">Set PIN</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px" id="ps-step">Enter a 4-digit PIN</p>
+    <div class="s-dots" id="s-dots">
+      <div class="s-dot"></div><div class="s-dot"></div>
+      <div class="s-dot"></div><div class="s-dot"></div>
+    </div>
+    <div class="s-kp">
+      <button class="s-k" data-sd="1">1</button>
+      <button class="s-k" data-sd="2">2</button>
+      <button class="s-k" data-sd="3">3</button>
+      <button class="s-k" data-sd="4">4</button>
+      <button class="s-k" data-sd="5">5</button>
+      <button class="s-k" data-sd="6">6</button>
+      <button class="s-k" data-sd="7">7</button>
+      <button class="s-k" data-sd="8">8</button>
+      <button class="s-k" data-sd="9">9</button>
+      <button class="s-k blank"></button>
+      <button class="s-k" data-sd="0">0</button>
+      <button class="s-k del" id="ps-del">⌫</button>
+    </div>
+    <button class="btn btn-ghost" id="ps-cancel" style="width:100%;font-size:14px">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  QUIET CYCLE — KIN-015 · by dBridge
+// ═══════════════════════════════════════════════════════════
+
+const SK = 'kin-quiet-cycle';
+
+// ── State ──────────────────────────────────────────────────
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SK));
+    if (d && Array.isArray(d.cycles)) return d;
+  } catch {}
+  return { cycles: [], settings: { fertility: false, pin: null } };
+}
+function save() { localStorage.setItem(SK, JSON.stringify(state)); }
+let state = load();
+
+// ── Date utils ─────────────────────────────────────────────
+function ymd(d) { return d.toISOString().slice(0, 10); }
+function fromYmd(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
+function daysBetween(a, b) { return Math.round((fromYmd(b) - fromYmd(a)) / 864e5); }
+function addDays(s, n) { const d = fromYmd(s); d.setDate(d.getDate()+n); return ymd(d); }
+function today() { return ymd(new Date()); }
+function daysUntil(s) { return daysBetween(today(), s); }
+function daysAgo(s) { return daysBetween(s, today()); }
+function fmtShort(s) { if (!s) return '—'; return fromYmd(s).toLocaleDateString(undefined, {month:'short',day:'numeric'}); }
+function fmtFull(s) { if (!s) return '—'; return fromYmd(s).toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'}); }
+
+// ── Cycle calcs ────────────────────────────────────────────
+function sorted() { return [...state.cycles].filter(c=>c.start).sort((a,b)=>a.start<b.start?-1:1); }
+function activePeriod() { const s=sorted(); const l=s[s.length-1]; return (l && !l.end) ? l : null; }
+function intervals() {
+  const s=sorted(); if(s.length<2) return [];
+  const iv=[]; for(let i=1;i<s.length;i++) iv.push(daysBetween(s[i-1].start,s[i].start));
+  return iv;
+}
+function avgLen() { const iv=intervals(); return iv.length ? Math.round(iv.reduce((a,b)=>a+b,0)/iv.length) : null; }
+function nextPeriod() { const s=sorted(); const avg=avgLen(); return (s.length>=2&&avg) ? addDays(s[s.length-1].start,avg) : null; }
+function getStats() {
+  const iv=intervals(); if(!iv.length) return null;
+  return { avg:Math.round(iv.reduce((a,b)=>a+b,0)/iv.length), min:Math.min(...iv), max:Math.max(...iv), count:sorted().length, irregular:Math.max(...iv)-Math.min(...iv)>7 };
+}
+function fertileWindow() {
+  const next=nextPeriod(); if(!next) return null;
+  const ov=addDays(next,-14);
+  return { start:addDays(ov,-2), end:addDays(ov,1), ov };
+}
+
+// ── Calendar day sets ──────────────────────────────────────
+function periodDays() {
+  const days=new Set(), starts=new Set();
+  for(const c of state.cycles) {
+    if(!c.start) continue;
+    starts.add(c.start);
+    if(c.end) { let d=c.start; while(d<=c.end){ days.add(d); d=addDays(d,1); } }
+    else { days.add(c.start); }
+  }
+  return {days,starts};
+}
+function predictedDays() {
+  const next=nextPeriod(); if(!next) return new Set();
+  const s=new Set(); for(let i=0;i<5;i++) s.add(addDays(next,i)); return s;
+}
+function fertileDays() {
+  const fw=fertileWindow(); if(!fw||!state.settings.fertility) return new Set();
+  const s=new Set(); let d=fw.start; while(d<=fw.end){ s.add(d); d=addDays(d,1); } return s;
+}
+
+// ── Hash ───────────────────────────────────────────────────
+function hashPin(p) {
+  let h=5381, s=p+'kin-qc-v1';
+  for(let i=0;i<s.length;i++) h=(Math.imul(h,33)^s.charCodeAt(i))>>>0;
+  return h.toString(36).padStart(7,'0');
+}
+
+// ── Calendar state ─────────────────────────────────────────
+let calY=new Date().getFullYear(), calM=new Date().getMonth();
+const MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ── Panic delete ───────────────────────────────────────────
+let panicN=0, panicT=null;
+function onPanicTap() {
+  panicN++;
+  clearTimeout(panicT);
+  panicT=setTimeout(()=>panicN=0,2000);
+  if(panicN>=5) {
+    panicN=0;
+    localStorage.removeItem(SK);
+    state={cycles:[],settings:{fertility:false,pin:null}};
+    document.body.classList.add('panic');
+    setTimeout(()=>document.body.classList.remove('panic'),450);
+    document.getElementById('pin-screen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    render();
+  }
+}
+
+// ═══════════════ RENDER ════════════════════════════════════
+function render() {
+  renderHero(); renderActive(); renderCal(); renderStats();
+  renderTimeline(); renderEntries(); renderFertile(); renderPinUI();
+  document.getElementById('tog-fertility').checked=!!state.settings.fertility;
+  document.getElementById('tog-pin').checked=!!state.settings.pin;
+}
+
+function renderHero() {
+  const next=nextPeriod();
+  const el=document.getElementById('hero-date');
+  const sub=document.getElementById('hero-sub');
+  const lbl=document.getElementById('hero-lbl');
+  if(!next) {
+    el.textContent=sorted().length===1?'One more cycle needed':'Log your first cycle';
+    el.classList.add('empty');
+    sub.textContent='to see your prediction';
+    lbl.textContent='Next Period';
+    return;
+  }
+  el.classList.remove('empty');
+  lbl.textContent='Next Period';
+  const d=daysUntil(next);
+  if(d===0){ el.textContent='Today'; sub.textContent='Expected today'; }
+  else if(d>0){ el.textContent=fmtShort(next); sub.textContent=`in ${d} day${d===1?'':'s'}`; }
+  else { el.textContent=fmtShort(next); sub.textContent=`${Math.abs(d)} day${Math.abs(d)===1?'':'s'} ago`; }
+}
+
+function renderActive() {
+  const a=activePeriod();
+  const bar=document.getElementById('active-bar');
+  const btn=document.getElementById('btn-start');
+  if(a) {
+    bar.classList.remove('hidden');
+    const d=daysAgo(a.start)+1;
+    document.getElementById('active-txt').textContent=`Started ${fmtShort(a.start)} · Day ${d}`;
+    btn.innerHTML='+ Start New Period';
+    btn.disabled=true;
+  } else {
+    bar.classList.add('hidden');
+    btn.innerHTML='<svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M7.5 4.5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Start Period';
+    btn.disabled=false;
+  }
+}
+
+function renderCal() {
+  document.getElementById('cal-mo').textContent=`${MO[calM]} ${calY}`;
+  const pd=periodDays(), pred=predictedDays(), fert=fertileDays(), tod=today();
+  const first=new Date(calY,calM,1).getDay();
+  const dim=new Date(calY,calM+1,0).getDate();
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-day';grid.appendChild(e);}
+  for(let d=1;d<=dim;d++){
+    const s=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const c=document.createElement('div');
+    c.className='cal-day';
+    c.textContent=d;
+    if(pd.starts.has(s)) c.classList.add('period-start');
+    else if(pd.days.has(s)) c.classList.add('period');
+    else if(fert.has(s)) c.classList.add('fertile');
+    else if(pred.has(s)) c.classList.add('predicted');
+    if(s===tod) c.classList.add('today');
+    grid.appendChild(c);
+  }
+  document.getElementById('leg-fertile').classList.toggle('hidden',!state.settings.fertility);
+}
+
+function renderStats() {
+  const st=getStats();
+  document.getElementById('s-cnt').textContent=state.cycles.length;
+  if(!st){['s-avg','s-min','s-max'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('irregular').classList.add('hidden'); return;}
+  document.getElementById('s-avg').innerHTML=`${st.avg}<span class="stat-u">d</span>`;
+  document.getElementById('s-min').innerHTML=`${st.min}<span class="stat-u">d</span>`;
+  document.getElementById('s-max').innerHTML=`${st.max}<span class="stat-u">d</span>`;
+  document.getElementById('irregular').classList.toggle('hidden',!st.irregular);
+}
+
+function renderTimeline() {
+  const iv=intervals(), s=sorted();
+  const el=document.getElementById('tl-list');
+  if(!iv.length){el.innerHTML='<p class="tl-empty">Log two or more cycles to see your history.</p>';return;}
+  const maxV=Math.max(...iv,1);
+  const rows=[];
+  for(let i=s.length-1;i>=1&&rows.length<6;i--) rows.push({date:s[i].start,len:daysBetween(s[i-1].start,s[i].start)});
+  el.innerHTML=rows.map(r=>`<div class="tl-row">
+    <span class="tl-lbl">${fmtShort(r.date)}</span>
+    <div class="tl-track"><div class="tl-fill" style="width:${Math.round(r.len/maxV*100)}%"></div></div>
+    <span class="tl-val">${r.len}d</span>
+  </div>`).join('');
+}
+
+function renderEntries() {
+  const el=document.getElementById('entry-list');
+  const sorted2=[...state.cycles].sort((a,b)=>b.start<a.start?-1:1);
+  if(!sorted2.length){el.innerHTML='<p class="entry-empty">No cycles logged yet.</p>';return;}
+  el.innerHTML=sorted2.map(c=>{
+    const len=c.end?daysBetween(c.start,c.end)+1:null;
+    const meta=[len?`${len} day${len!==1?'s':''}`:(c.end?'':'ongoing'),c.note||''].filter(Boolean).join(' · ');
+    return `<div class="entry">
+      <div class="entry-dot"></div>
+      <div class="entry-info">
+        <p class="entry-date">${fmtFull(c.start)}</p>
+        <p class="entry-meta">${meta||'—'}</p>
+      </div>
+      <div class="entry-acts">
+        <button class="entry-btn" onclick="openEdit('${c.id}')" title="Edit">✏️</button>
+        <button class="entry-btn del" onclick="delEntry('${c.id}')" title="Delete">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFertile() {
+  const show=!!state.settings.fertility;
+  document.getElementById('fertile-wrap').classList.toggle('hidden',!show);
+  if(!show) return;
+  const fw=fertileWindow();
+  if(!fw){document.getElementById('fertile-dates').textContent='Log more cycles to estimate';document.getElementById('fertile-ov').textContent='';return;}
+  document.getElementById('fertile-dates').textContent=`${fmtShort(fw.start)} – ${fmtShort(fw.end)}`;
+  document.getElementById('fertile-ov').textContent=`Ovulation approx ${fmtShort(fw.ov)}`;
+}
+
+function renderPinUI() {
+  document.getElementById('pin-sub').textContent=state.settings.pin?'PIN enabled':'Protect with a 4-digit PIN';
+  document.getElementById('tog-pin').checked=!!state.settings.pin;
+}
+
+// ═══════════════ MODAL ═════════════════════════════════════
+let editId=null;
+function openAdd(useToday=true){
+  editId=null;
+  document.getElementById('modal-ttl').textContent='Log Period Start';
+  document.getElementById('f-start').value=useToday?today():'';
+  document.getElementById('f-end').value='';
+  document.getElementById('f-note').value='';
+  openOv('ov-entry');
+}
+function openPast(){
+  editId=null;
+  document.getElementById('modal-ttl').textContent='Add Past Entry';
+  document.getElementById('f-start').value='';
+  document.getElementById('f-end').value='';
+  document.getElementById('f-note').value='';
+  openOv('ov-entry');
+}
+function openEdit(id){
+  const c=state.cycles.find(x=>x.id===id); if(!c) return;
+  editId=id;
+  document.getElementById('modal-ttl').textContent='Edit Entry';
+  document.getElementById('f-start').value=c.start||'';
+  document.getElementById('f-end').value=c.end||'';
+  document.getElementById('f-note').value=c.note||'';
+  openOv('ov-entry');
+}
+function openEndModal(){
+  const a=activePeriod(); if(!a) return;
+  editId=a.id;
+  document.getElementById('modal-ttl').textContent='Mark Period End';
+  document.getElementById('f-start').value=a.start;
+  document.getElementById('f-end').value=today();
+  document.getElementById('f-note').value=a.note||'';
+  openOv('ov-entry');
+}
+function saveModal(){
+  const start=document.getElementById('f-start').value;
+  const end=document.getElementById('f-end').value;
+  const note=document.getElementById('f-note').value.trim();
+  if(!start){alert('Please enter a start date.');return;}
+  if(end&&end<start){alert('End date must be on or after the start date.');return;}
+  if(editId){
+    const idx=state.cycles.findIndex(x=>x.id===editId);
+    if(idx!==-1) state.cycles[idx]={...state.cycles[idx],start,end:end||'',note};
+  } else {
+    state.cycles.push({id:Date.now().toString(),start,end:end||'',note});
+  }
+  save(); closeOv('ov-entry'); render();
+}
+function delEntry(id){
+  confirm2('Delete entry?','This cycle entry will be permanently removed.',()=>{
+    state.cycles=state.cycles.filter(c=>c.id!==id); save(); render();
+  });
+}
+
+// ── Overlay helpers ────────────────────────────────────────
+function openOv(id){document.getElementById(id).classList.add('open');}
+function closeOv(id){document.getElementById(id).classList.remove('open');}
+
+// ── Confirm dialog ─────────────────────────────────────────
+let confirmCb=null;
+function confirm2(ttl,body,cb){
+  document.getElementById('dlg-ttl').textContent=ttl;
+  document.getElementById('dlg-body').textContent=body;
+  confirmCb=cb;
+  openOv('dlg-confirm');
+}
+
+// ═══════════════ PIN ENTRY ═════════════════════════════════
+let pinBuf='';
+function pinDigit(d){ if(pinBuf.length>=4) return; pinBuf+=d; updPinDots(); if(pinBuf.length===4) setTimeout(verifyPin,120); }
+function pinDel(){ pinBuf=pinBuf.slice(0,-1); updPinDots(); document.getElementById('pin-err').textContent=''; }
+function updPinDots(){
+  document.querySelectorAll('#pin-dots .pin-dot').forEach((el,i)=>el.classList.toggle('filled',i<pinBuf.length));
+}
+function verifyPin(){
+  if(hashPin(pinBuf)===state.settings.pin){
+    document.getElementById('pin-screen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+  } else {
+    document.getElementById('pin-err').textContent='Incorrect PIN';
+    document.querySelectorAll('#pin-dots .pin-dot').forEach(d=>{
+      d.style.animation='none'; requestAnimationFrame(()=>{d.style.animation='pin-shake .3s';});
+    });
+    pinBuf=''; updPinDots();
+  }
+}
+
+// ═══════════════ PIN SETUP ═════════════════════════════════
+let psBuf='', psStep=0, psFirst='';
+function psDigit(d){
+  if(psBuf.length>=4) return; psBuf+=d;
+  document.querySelectorAll('#s-dots .s-dot').forEach((el,i)=>el.classList.toggle('filled',i<psBuf.length));
+  if(psBuf.length===4) setTimeout(psAdvance,200);
+}
+function psDel(){
+  psBuf=psBuf.slice(0,-1);
+  document.querySelectorAll('#s-dots .s-dot').forEach((el,i)=>el.classList.toggle('filled',i<psBuf.length));
+}
+function psAdvance(){
+  if(psStep===0){ psFirst=psBuf; psBuf=''; psStep=1; document.getElementById('ps-step').textContent='Confirm your PIN'; document.querySelectorAll('#s-dots .s-dot').forEach(d=>d.classList.remove('filled')); }
+  else {
+    if(psBuf===psFirst){ state.settings.pin=hashPin(psBuf); save(); closeOv('dlg-pin-setup'); psReset(); render(); }
+    else { document.getElementById('ps-step').textContent='PINs did not match — try again'; psBuf=''; psStep=0; psFirst=''; document.querySelectorAll('#s-dots .s-dot').forEach(d=>d.classList.remove('filled')); setTimeout(()=>document.getElementById('ps-step').textContent='Enter a 4-digit PIN',1600); }
+  }
+}
+function psReset(){ psBuf=''; psStep=0; psFirst=''; document.querySelectorAll('#s-dots .s-dot').forEach(d=>d.classList.remove('filled')); document.getElementById('ps-step').textContent='Enter a 4-digit PIN'; }
+
+// ═══════════════ EXPORT ════════════════════════════════════
+function exportData(){
+  const cc=[...state.cycles].sort((a,b)=>a.start<b.start?-1:1);
+  let t=`Quiet Cycle — KIN-015 · Cycle Log\nExported: ${new Date().toLocaleString()}\n\n`;
+  if(!cc.length){ t+='No cycles logged.\n'; }
+  else {
+    for(const c of cc){ t+=`Start: ${c.start}`; if(c.end) t+=`  End: ${c.end}`; if(c.note) t+=`  Note: ${c.note}`; t+='\n'; }
+    const st=getStats();
+    if(st) t+=`\nAverage cycle: ${st.avg} days\nTracked cycles: ${st.count}\n`;
+  }
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));
+  a.download='quiet-cycle-data.txt'; a.click();
+}
+
+// ═══════════════ INIT ══════════════════════════════════════
+function init(){
+  if(state.settings.pin){
+    document.getElementById('pin-screen').classList.remove('hidden');
+    document.getElementById('app').classList.add('hidden');
+  }
+  calY=new Date().getFullYear(); calM=new Date().getMonth();
+  render();
+
+  // Panic taps
+  document.getElementById('hdr-tap').addEventListener('click',onPanicTap);
+  document.getElementById('pin-panic-tap').addEventListener('click',onPanicTap);
+
+  // Buttons
+  document.getElementById('btn-start').addEventListener('click',()=>{ if(!activePeriod()) openAdd(); });
+  document.getElementById('btn-past').addEventListener('click',openPast);
+  document.getElementById('btn-end').addEventListener('click',openEndModal);
+
+  // Entry modal
+  document.getElementById('modal-cancel').addEventListener('click',()=>closeOv('ov-entry'));
+  document.getElementById('modal-save').addEventListener('click',saveModal);
+  document.getElementById('ov-entry').addEventListener('click',e=>{ if(e.target===document.getElementById('ov-entry')) closeOv('ov-entry'); });
+
+  // Confirm
+  document.getElementById('dlg-cancel').addEventListener('click',()=>closeOv('dlg-confirm'));
+  document.getElementById('dlg-ok').addEventListener('click',()=>{ closeOv('dlg-confirm'); if(confirmCb){confirmCb();confirmCb=null;} });
+
+  // Calendar
+  document.getElementById('cal-prev').addEventListener('click',()=>{ calM--; if(calM<0){calM=11;calY--;} renderCal(); });
+  document.getElementById('cal-next').addEventListener('click',()=>{ calM++; if(calM>11){calM=0;calY++;} renderCal(); });
+
+  // Fertility toggle
+  document.getElementById('tog-fertility').addEventListener('change',e=>{ state.settings.fertility=e.target.checked; save(); render(); });
+
+  // PIN toggle
+  document.getElementById('tog-pin').addEventListener('change',e=>{
+    if(e.target.checked && !state.settings.pin){ psReset(); openOv('dlg-pin-setup'); }
+    else if(!e.target.checked && state.settings.pin){
+      confirm2('Remove PIN?','Your PIN protection will be removed.',()=>{ state.settings.pin=null; save(); render(); });
+      setTimeout(()=>document.getElementById('tog-pin').checked=!!state.settings.pin,50);
+    }
+  });
+
+  // PIN setup
+  document.querySelectorAll('.s-k[data-sd]').forEach(b=>b.addEventListener('click',()=>psDigit(b.dataset.sd)));
+  document.getElementById('ps-del').addEventListener('click',psDel);
+  document.getElementById('ps-cancel').addEventListener('click',()=>{ closeOv('dlg-pin-setup'); psReset(); document.getElementById('tog-pin').checked=!!state.settings.pin; });
+  document.getElementById('dlg-pin-setup').addEventListener('click',e=>{ if(e.target===document.getElementById('dlg-pin-setup')){closeOv('dlg-pin-setup');psReset();document.getElementById('tog-pin').checked=!!state.settings.pin;} });
+
+  // PIN lock screen
+  document.querySelectorAll('.pin-k[data-d]').forEach(b=>b.addEventListener('click',()=>pinDigit(b.dataset.d)));
+  document.getElementById('pin-del').addEventListener('click',pinDel);
+
+  // Export / delete all
+  document.getElementById('btn-export').addEventListener('click',exportData);
+  document.getElementById('btn-nuke').addEventListener('click',()=>{
+    confirm2('Delete all data?','All cycle history and settings will be permanently erased. This cannot be undone.',()=>{
+      state={cycles:[],settings:{fertility:false,pin:null}}; save(); render();
+    });
+  });
+}
+init();
+</script>
+
+<script>
+(function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+  var ctx=c.getContext('2d');
+  var g=ctx.createLinearGradient(0,0,sz,sz);
+  g.addColorStop(0,'#7c5cbf');g.addColorStop(1,'#5a3d8f');
+  ctx.fillStyle=g;
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 18 18"><circle cx="9" cy="9" r="6" stroke="white" stroke-width="1.5" fill="none"/><circle cx="9" cy="3" r="1.5" fill="white"/><line x1="9" y1="9" x2="9" y2="3" stroke="white" stroke-width="1.5"/></svg>';
+  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};
+  img.src=url;
+}catch(e){}})();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "KIN-015 · Quiet Cycle",
+  "short_name": "KIN-015",
+  "description": "Private menstrual cycle tracker. Period prediction, symptom notes, fertility estimate. Your data never leaves your device.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "./",
+  "scope": "./",
+  "theme_color": "#7c5cbf",
+  "background_color": "#7c5cbf",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
