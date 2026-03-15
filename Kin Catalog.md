@@ -248,7 +248,7 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 ## KIN-018 · Kin Nest
 
-**URL:** https://kinnest.netlify.app  
+**URL:** https://kinnestapp.netlify.app  
 **Netlify publish dir:** `sites/kin-018-kin-nest`
 
 **Summary:** Baby routine tracker for exhausted parents. One-tap logging for feeds (5 types: breast, bottle, pumped, formula, solids), sleep (tap to start/stop), and diapers (wet/dirty/both). Dashboard shows last feed, awake time, next nap prediction, and fussiness risk score. Intelligence layer includes wake window calculator (age-adjusted), nap predictor, sleep debt tracker, meltdown scorer, daily reassurance, and routine stability indicator. Growth log, timeline view, auto night mode (20:00–06:00), export reminder, JSON export, self-contained HTML report with SVG charts, and JSON import. All data stays local.
