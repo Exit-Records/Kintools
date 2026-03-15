@@ -1,25 +1,17 @@
 {
-  "name": "Kin Colour Picker",
-  "short_name": "Colour",
-  "description": "A curated colour picker tool by Kin — KIN-004",
+  "name": "KIN-004 · Colour Picker",
+  "short_name": "KIN-004",
+  "description": "Pick colours visually or by hex/rgb. Generate palettes, simulate colour blindness. Works offline.",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/",
   "scope": "/",
-  "theme_color": "#faf9f7",
-  "background_color": "#faf9f7",
+  "theme_color": "#3D5A6B",
+  "background_color": "#3D5A6B",
   "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/icon.svg",           "sizes": "any",     "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon.svg",           "sizes": "any",     "type": "image/svg+xml", "purpose": "maskable" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
