@@ -41,6 +41,7 @@
     --hb-16: #7c4d0f;
     --hb-17: #4c1d95;
     --hb-18: #065f46;
+    --hb-19: #1a3f5c;
   }
 
   body {
@@ -433,6 +434,7 @@
   .release:nth-child(16) { animation-delay: 0.95s; }
   .release:nth-child(17) { animation-delay: 1.0s; }
   .release:nth-child(18) { animation-delay: 1.05s; }
+  .release:nth-child(19) { animation-delay: 1.10s; }
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 600px) {
@@ -473,7 +475,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">18 tools</span>
+  <span class="catalog-count">19 tools</span>
 </div>
 
 <div class="catalog">
@@ -869,6 +871,31 @@
       <div class="release-creator">by Alice and Darren</div>
       <div class="release-desc">Baby routine tracker for exhausted parents. Log feeds, sleep, and diapers in under 2 seconds. Wake windows, nap predictions, meltdown risk, daily reassurance, and data export. Nothing leaves your device.</div>
       <div class="release-replaces">Replaces <span>baby tracking apps that want your data</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-019: Markdown Download -->
+  <a href="https://kinmarkdowndl.netlify.app/" target="_blank" rel="noopener" class="release">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-19), #0b1e2d);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-019</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="8" y="4" width="24" height="30" rx="3" stroke="white" stroke-width="2" opacity="0.6"/>
+          <line x1="14" y1="13" x2="26" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <line x1="14" y1="25" x2="20" y2="25" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          <path d="M32 28 L32 44 M26 38 L32 44 L38 38" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Markdown Download</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Write or paste text and download it as a .md file instantly. Name your file, see live word and character counts, copy to clipboard. No editor needed, no account, nothing saved server-side.</div>
+      <div class="release-replaces">Replaces <span>opening a code editor just to save a quick .md file</span></div>
     </div>
   </a>
 

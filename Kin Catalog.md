@@ -266,4 +266,20 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-019*
+## KIN-019 · Markdown Download
+
+**URL:** https://kinmarkdowndl.netlify.app  
+**Netlify publish dir:** `sites/kin-019-markdown-download`
+
+**Summary:** Write or paste text and download it as a .md file. Name the file, see live word and character counts, copy to clipboard. Runs entirely in the browser — no accounts, no data sent anywhere, works offline.
+
+**Notes:**
+- Static HTML, single file. PWA support (manifest.json, icon.svg, inline service worker).
+- Creator: Darren. Category: Utility.
+- Color scheme: dark teal `#1a3f5c` / `#0b1e2d`; tool accent: `#7eb88a`.
+- Tab key inserts two spaces in the textarea; not caught by browser default.
+- Download uses Blob + object URL; fallback copy via `execCommand`.
+
+---
+
+*Next tool: KIN-020*

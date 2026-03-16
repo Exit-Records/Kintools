@@ -1,0 +1,12 @@
+{
+  "name": "Markdown Download — Kin",
+  "short_name": "MD Download",
+  "description": "Write or paste text and download as .md. Free, offline, no accounts.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111110",
+  "theme_color": "#111110",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
