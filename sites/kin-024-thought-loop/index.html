@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5f0eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thought Loop">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<title>KIN-024 — Thought Loop — Kin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+--bg: #f5f0eb;
+--bg-card: #ffffff;
+--text: #1a1a1a;
+--text-muted: #7a7570;
+--text-light: #a09a94;
+--border: #e5ddd5;
+--accent-act: #c44b2b;
+--accent-schedule: #b08d3e;
+--accent-release: #4a7c6f;
+--accent-notmine: #6b7b8d;
+--shadow: rgba(0,0,0,0.04);
+--radius: 12px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+font-size: 16px;
+-webkit-text-size-adjust: 100%;
+}
+
+body {
+font-family: 'DM Sans', sans-serif;
+font-weight: 300;
+background: #f5f0eb;
+color: #1a1a1a;
+min-height: 100vh;
+min-height: 100dvh;
+padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+line-height: 1.6;
+-webkit-font-smoothing: antialiased;
+}
+
+body.dark {
+background: #1a1917 !important;
+color: #e0dbd5 !important;
+}
+
+body.dark .card {
+background: #252422 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .header-title {
+color: #e0dbd5 !important;
+}
+
+body.dark .header-sub {
+color: #8a857e !important;
+}
+
+body.dark textarea {
+background: #1a1917 !important;
+color: #e0dbd5 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark textarea::placeholder {
+color: #5a5650 !important;
+}
+
+body.dark .question-text {
+color: #e0dbd5 !important;
+}
+
+body.dark .question-sub {
+color: #8a857e !important;
+}
+
+body.dark .btn-yes, body.dark .btn-no {
+background: #2a2825 !important;
+color: #c0bab3 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .btn-yes:hover, body.dark .btn-no:hover,
+body.dark .btn-yes.selected, body.dark .btn-no.selected {
+background: #353330 !important;
+color: #e0dbd5 !important;
+border-color: #4a4743 !important;
+}
+
+body.dark .verdict-card {
+background: #252422 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .verdict-explanation {
+color: #a09a94 !important;
+}
+
+body.dark .reframe-textarea {
+background: #1a1917 !important;
+color: #e0dbd5 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .reframe-textarea::placeholder {
+color: #5a5650 !important;
+}
+
+body.dark .history-entry {
+background: #252422 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .history-thought {
+color: #c0bab3 !important;
+}
+
+body.dark .history-date {
+color: #6a6560 !important;
+}
+
+body.dark .pattern-stat {
+background: #252422 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .pattern-label {
+color: #8a857e !important;
+}
+
+body.dark .pattern-value {
+color: #e0dbd5 !important;
+}
+
+body.dark .nav-btn {
+color: #8a857e !important;
+}
+
+body.dark .nav-btn.active {
+color: #e0dbd5 !important;
+}
+
+body.dark .theme-toggle {
+color: #8a857e !important;
+}
+
+body.dark .settings-label {
+color: #c0bab3 !important;
+}
+
+body.dark .settings-desc {
+color: #7a7570 !important;
+}
+
+body.dark .toggle-track {
+background: #3a3733 !important;
+}
+
+body.dark .mode-btn {
+background: #2a2825 !important;
+color: #8a857e !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .mode-btn.active {
+background: #353330 !important;
+color: #e0dbd5 !important;
+border-color: #4a4743 !important;
+}
+
+body.dark .empty-state {
+color: #5a5650 !important;
+}
+
+body.dark .schedule-input {
+background: #1a1917 !important;
+color: #e0dbd5 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .due-reminder {
+background: #252422 !important;
+border-color: #3a3733 !important;
+}
+
+body.dark .due-reminder-thought {
+color: #c0bab3 !important;
+}
+
+body.dark .export-btn {
+background: #2a2825 !important;
+color: #c0bab3 !important;
+border-color: #3a3733 !important;
+}
+
+.app {
+max-width: 480px;
+margin: 0 auto;
+padding: 20px 16px 100px;
+}
+
+.header {
+text-align: center;
+padding: 24px 0 20px;
+}
+
+.header-title {
+font-family: 'DM Serif Text', serif;
+font-size: 1.75rem;
+font-weight: 400;
+letter-spacing: -0.02em;
+color: #1a1a1a;
+}
+
+.header-sub {
+font-size: 0.8rem;
+color: #7a7570;
+margin-top: 4px;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+}
+
+.theme-toggle {
+position: fixed;
+top: calc(16px + env(safe-area-inset-top));
+right: calc(16px + env(safe-area-inset-right));
+background: none;
+border: none;
+font-size: 1.2rem;
+cursor: pointer;
+color: #7a7570;
+min-height: 44px;
+min-width: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 100;
+-webkit-appearance: none;
+}
+
+.card {
+background: #ffffff;
+border: 1px solid #e5ddd5;
+border-radius: var(--radius);
+padding: 24px;
+margin-bottom: 16px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+textarea {
+width: 100%;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+padding: 16px;
+font-family: 'DM Sans', sans-serif;
+font-size: 16px;
+font-weight: 300;
+line-height: 1.6;
+resize: none;
+background: #faf8f5;
+color: #1a1a1a;
+min-height: 120px;
+-webkit-appearance: none;
+transition: border-color 0.2s;
+}
+
+textarea:focus {
+outline: none;
+border-color: #b0a89e;
+}
+
+textarea::placeholder {
+color: #b0a89e;
+}
+
+.question-card {
+opacity: 0;
+transform: translateY(8px);
+animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+to { opacity: 1; transform: translateY(0); }
+}
+
+.question-text {
+font-family: 'DM Serif Text', serif;
+font-size: 1.1rem;
+margin-bottom: 4px;
+color: #1a1a1a;
+}
+
+.question-sub {
+font-size: 0.8rem;
+color: #a09a94;
+margin-bottom: 16px;
+}
+
+.btn-row {
+display: flex;
+gap: 10px;
+}
+
+.btn-yes, .btn-no {
+flex: 1;
+padding: 14px;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+background: #faf8f5;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.9rem;
+font-weight: 400;
+color: #7a7570;
+cursor: pointer;
+min-height: 48px;
+-webkit-appearance: none;
+transition: all 0.2s;
+}
+
+.btn-yes:hover, .btn-no:hover {
+background: #f0ebe5;
+color: #1a1a1a;
+}
+
+.btn-yes.selected, .btn-no.selected {
+background: #f0ebe5;
+color: #1a1a1a;
+border-color: #c0b8ae;
+}
+
+.not-mine-row {
+margin-top: 12px;
+padding-top: 12px;
+border-top: 1px solid #f0ebe5;
+}
+
+.not-mine-btn {
+width: 100%;
+padding: 12px;
+border: 1px dashed #d5cdc5;
+border-radius: 8px;
+background: transparent;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.85rem;
+color: #a09a94;
+cursor: pointer;
+min-height: 44px;
+-webkit-appearance: none;
+transition: all 0.2s;
+}
+
+.not-mine-btn:hover {
+border-color: #b0a89e;
+color: #7a7570;
+}
+
+.verdict-card {
+background: #ffffff;
+border: 1px solid #e5ddd5;
+border-radius: var(--radius);
+padding: 28px 24px;
+margin-bottom: 16px;
+text-align: center;
+opacity: 0;
+animation: fadeUp 0.5s ease 0.1s forwards;
+}
+
+.verdict-label {
+font-family: 'DM Serif Text', serif;
+font-size: 2rem;
+font-weight: 400;
+letter-spacing: -0.02em;
+margin-bottom: 8px;
+}
+
+.verdict-act { color: #c44b2b; }
+.verdict-schedule { color: #b08d3e; }
+.verdict-release { color: #4a7c6f; }
+.verdict-notmine { color: #6b7b8d; }
+
+.verdict-explanation {
+font-size: 0.9rem;
+color: #7a7570;
+line-height: 1.5;
+max-width: 320px;
+margin: 0 auto;
+}
+
+.reframe-section {
+margin-top: 20px;
+padding-top: 20px;
+border-top: 1px solid #f0ebe5;
+text-align: left;
+}
+
+.reframe-prompt {
+font-size: 0.85rem;
+color: #a09a94;
+margin-bottom: 10px;
+font-style: italic;
+}
+
+.reframe-textarea {
+width: 100%;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+padding: 14px;
+font-family: 'DM Sans', sans-serif;
+font-size: 16px;
+font-weight: 300;
+line-height: 1.5;
+resize: none;
+background: #faf8f5;
+color: #1a1a1a;
+min-height: 80px;
+-webkit-appearance: none;
+}
+
+.reframe-textarea:focus {
+outline: none;
+border-color: #b0a89e;
+}
+
+.reframe-textarea::placeholder {
+color: #c0b8ae;
+}
+
+.schedule-section {
+margin-top: 16px;
+text-align: left;
+}
+
+.schedule-label {
+font-size: 0.85rem;
+color: #a09a94;
+margin-bottom: 8px;
+}
+
+.schedule-input {
+width: 100%;
+padding: 12px 14px;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+font-family: 'DM Sans', sans-serif;
+font-size: 16px;
+background: #faf8f5;
+color: #1a1a1a;
+-webkit-appearance: none;
+min-height: 44px;
+}
+
+.schedule-input:focus {
+outline: none;
+border-color: #b0a89e;
+}
+
+.action-row {
+display: flex;
+gap: 10px;
+margin-top: 20px;
+}
+
+.btn-primary {
+flex: 1;
+padding: 14px;
+border: none;
+border-radius: 8px;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.9rem;
+font-weight: 400;
+cursor: pointer;
+min-height: 48px;
+-webkit-appearance: none;
+transition: opacity 0.2s;
+}
+
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-save {
+background: #1a1a1a;
+color: #f5f0eb;
+}
+
+body.dark .btn-save {
+background: #e0dbd5 !important;
+color: #1a1917 !important;
+}
+
+.btn-clear {
+background: transparent;
+color: #a09a94;
+border: 1px solid #e5ddd5;
+}
+
+body.dark .btn-clear {
+background: transparent !important;
+color: #8a857e !important;
+border-color: #3a3733 !important;
+}
+
+/* Due reminders */
+.due-reminder {
+background: #fffbf0;
+border: 1px solid #e8dcc0;
+border-radius: var(--radius);
+padding: 16px 20px;
+margin-bottom: 16px;
+opacity: 0;
+animation: fadeUp 0.4s ease forwards;
+}
+
+body.dark .due-reminder {
+background: #2a2820 !important;
+border-color: #3a3525 !important;
+}
+
+.due-reminder-label {
+font-size: 0.75rem;
+text-transform: uppercase;
+letter-spacing: 0.06em;
+color: #b08d3e;
+margin-bottom: 6px;
+}
+
+.due-reminder-thought {
+font-size: 0.9rem;
+color: #4a4540;
+line-height: 1.5;
+}
+
+.due-reminder-actions {
+display: flex;
+gap: 8px;
+margin-top: 12px;
+}
+
+.due-btn {
+padding: 8px 16px;
+border: 1px solid #e5ddd5;
+border-radius: 6px;
+background: transparent;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.8rem;
+color: #7a7570;
+cursor: pointer;
+min-height: 44px;
+-webkit-appearance: none;
+transition: all 0.2s;
+}
+
+.due-btn:hover {
+background: #f0ebe5;
+}
+
+body.dark .due-btn {
+border-color: #3a3733 !important;
+color: #8a857e !important;
+}
+
+/* Patterns */
+.patterns-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-bottom: 20px;
+}
+
+.pattern-stat {
+background: #ffffff;
+border: 1px solid #e5ddd5;
+border-radius: 10px;
+padding: 16px;
+text-align: center;
+}
+
+.pattern-value {
+font-family: 'DM Serif Text', serif;
+font-size: 1.5rem;
+color: #1a1a1a;
+}
+
+.pattern-label {
+font-size: 0.75rem;
+color: #a09a94;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+margin-top: 2px;
+}
+
+/* History */
+.history-entry {
+background: #ffffff;
+border: 1px solid #e5ddd5;
+border-radius: 10px;
+padding: 16px;
+margin-bottom: 10px;
+}
+
+.history-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 6px;
+}
+
+.history-verdict {
+font-family: 'DM Serif Text', serif;
+font-size: 0.9rem;
+font-weight: 400;
+}
+
+.history-date {
+font-size: 0.75rem;
+color: #b0a89e;
+}
+
+.history-thought {
+font-size: 0.85rem;
+color: #5a5550;
+line-height: 1.5;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+}
+
+.history-mode {
+font-size: 0.7rem;
+color: #c0b8ae;
+margin-top: 4px;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+}
+
+/* Nav */
+.bottom-nav {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background: #f5f0eb;
+border-top: 1px solid #e5ddd5;
+display: flex;
+justify-content: center;
+gap: 0;
+padding: 0 0 env(safe-area-inset-bottom);
+z-index: 99;
+}
+
+body.dark .bottom-nav {
+background: #1a1917 !important;
+border-color: #2a2825 !important;
+}
+
+.nav-btn {
+flex: 1;
+max-width: 120px;
+padding: 12px 0;
+background: none;
+border: none;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.7rem;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+color: #b0a89e;
+cursor: pointer;
+min-height: 52px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+-webkit-appearance: none;
+transition: color 0.2s;
+}
+
+.nav-btn.active {
+color: #1a1a1a;
+}
+
+.nav-icon {
+font-size: 1.1rem;
+}
+
+/* Mode selector */
+.mode-selector {
+display: flex;
+gap: 8px;
+margin-bottom: 20px;
+}
+
+.mode-btn {
+flex: 1;
+padding: 10px;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+background: #faf8f5;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.8rem;
+color: #a09a94;
+cursor: pointer;
+min-height: 44px;
+-webkit-appearance: none;
+transition: all 0.2s;
+text-align: center;
+}
+
+.mode-btn.active {
+background: #1a1a1a;
+color: #f5f0eb;
+border-color: #1a1a1a;
+}
+
+body.dark .mode-btn.active {
+background: #e0dbd5 !important;
+color: #1a1917 !important;
+border-color: #e0dbd5 !important;
+}
+
+/* Settings */
+.settings-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 16px 0;
+border-bottom: 1px solid #f0ebe5;
+}
+
+body.dark .settings-row {
+border-color: #2a2825 !important;
+}
+
+.settings-label {
+font-size: 0.9rem;
+color: #1a1a1a;
+}
+
+.settings-desc {
+font-size: 0.78rem;
+color: #a09a94;
+margin-top: 2px;
+}
+
+.toggle-track {
+width: 44px;
+height: 26px;
+border-radius: 13px;
+background: #ddd8d0;
+position: relative;
+cursor: pointer;
+transition: background 0.2s;
+flex-shrink: 0;
+min-height: 44px;
+display: flex;
+align-items: center;
+}
+
+.toggle-track.on {
+background: #4a7c6f;
+}
+
+.toggle-thumb {
+width: 22px;
+height: 22px;
+border-radius: 50%;
+background: white;
+position: absolute;
+left: 2px;
+transition: left 0.2s;
+box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.toggle-track.on .toggle-thumb {
+left: 20px;
+}
+
+.export-btn {
+width: 100%;
+padding: 14px;
+border: 1px solid #e5ddd5;
+border-radius: 8px;
+background: #faf8f5;
+font-family: 'DM Sans', sans-serif;
+font-size: 0.9rem;
+color: #7a7570;
+cursor: pointer;
+min-height: 48px;
+-webkit-appearance: none;
+margin-top: 20px;
+transition: all 0.2s;
+}
+
+.export-btn:hover {
+background: #f0ebe5;
+}
+
+.empty-state {
+text-align: center;
+color: #c0b8ae;
+padding: 40px 20px;
+font-size: 0.9rem;
+line-height: 1.6;
+}
+
+/* Friction overlay */
+.friction-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.6);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 200;
+opacity: 0;
+animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+.friction-content {
+text-align: center;
+color: #f5f0eb;
+padding: 40px;
+}
+
+.friction-timer {
+font-family: 'DM Serif Text', serif;
+font-size: 3rem;
+margin-bottom: 12px;
+}
+
+.friction-hint {
+font-size: 0.85rem;
+color: rgba(245,240,235,0.6);
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+</style>
+
+<script>
+(function(){
+  var m={name:"KIN-024 Thought Loop",short_name:"KIN-024",start_url:".",display:"standalone",background_color:"#f5f0eb",theme_color:"#f5f0eb"};
+  var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+  var lk=document.createElement("link");lk.rel="manifest";lk.href=URL.createObjectURL(b);document.head.appendChild(lk);
+})();
+(function(){
+  var c=document.createElement("canvas");c.width=180;c.height=180;
+  var ctx=c.getContext("2d");
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+  var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,"#4a5e72");g.addColorStop(1,"#2d3e52");ctx.fillStyle=g;ctx.fill();
+  ctx.fillStyle="rgba(255,255,255,0.9)";ctx.font="bold 46px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("TL",90,94);
+  var el=document.getElementById("apple-touch-icon");if(el)el.href=c.toDataURL("image/png");
+})();
+if("serviceWorker" in navigator){
+  var _sw="const C='kin024-v1';self.addEventListener('install',function(){self.skipWaiting();});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
+}
+</script>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+
+<div class="app">
+  <!-- WRITE SCREEN -->
+  <div class="screen active" id="screen-write">
+    <div class="header">
+      <div class="header-title">Thought Loop</div>
+      <div class="header-sub" id="mode-label">What's circling?</div>
+    </div>
+
+<!-- Due reminders -->
+<div id="due-reminders"></div>
+
+<!-- Mode selector -->
+<div class="mode-selector">
+  <button class="mode-btn active" onclick="setMode('now')" id="mode-now">Now</button>
+  <button class="mode-btn" onclick="setMode('morning')" id="mode-morning">Morning</button>
+  <button class="mode-btn" onclick="setMode('evening')" id="mode-evening">Evening</button>
+</div>
+
+<div class="card">
+  <textarea id="thought-input" placeholder="" rows="4"></textarea>
+  <button class="btn-primary btn-save" id="begin-btn" style="margin-top:14px;display:none;" onclick="startQuestions()">Begin</button>
+</div>
+
+<div id="questions-container"></div>
+<div id="verdict-container"></div>
+
+  </div>
+
+  <!-- PATTERNS SCREEN -->
+
+  <div class="screen" id="screen-patterns">
+    <div class="header">
+      <div class="header-title">Patterns</div>
+      <div class="header-sub">What you're seeing</div>
+    </div>
+    <div id="patterns-content"></div>
+  </div>
+
+  <!-- HISTORY SCREEN -->
+
+  <div class="screen" id="screen-history">
+    <div class="header">
+      <div class="header-title">History</div>
+      <div class="header-sub">Past entries</div>
+    </div>
+    <div id="history-content"></div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+
+  <div class="screen" id="screen-settings">
+    <div class="header">
+      <div class="header-title">Settings</div>
+      <div class="header-sub">Adjust the tool</div>
+    </div>
+
+<div class="settings-row">
+  <div>
+    <div class="settings-label">Friction pause</div>
+    <div class="settings-desc">30s pause before questions appear</div>
+  </div>
+  <div class="toggle-track" id="toggle-friction" onclick="toggleSetting('friction')">
+    <div class="toggle-thumb"></div>
+  </div>
+</div>
+
+<div class="settings-row">
+  <div>
+    <div class="settings-label">"Not mine" option</div>
+    <div class="settings-desc">Shortcut for absorbed problems</div>
+  </div>
+  <div class="toggle-track on" id="toggle-notmine" onclick="toggleSetting('notmine')">
+    <div class="toggle-thumb"></div>
+  </div>
+</div>
+
+<div class="settings-row">
+  <div>
+    <div class="settings-label">Reframe on Release</div>
+    <div class="settings-desc">Write it as someone else's situation</div>
+  </div>
+  <div class="toggle-track on" id="toggle-reframe" onclick="toggleSetting('reframe')">
+    <div class="toggle-thumb"></div>
+  </div>
+</div>
+
+<button class="export-btn" onclick="exportEntries()">Copy all entries as text</button>
+
+<button class="export-btn" onclick="clearAllData()" style="color:#c44b2b;border-color:#c44b2b40;">Clear all data</button>
+
+  </div>
+</div>
+
+<!-- Bottom nav -->
+
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('write')" id="nav-write">
+    <span class="nav-icon">&#9998;</span>
+    Write
+  </button>
+  <button class="nav-btn" onclick="showScreen('patterns')" id="nav-patterns">
+    <span class="nav-icon">&#9673;</span>
+    Patterns
+  </button>
+  <button class="nav-btn" onclick="showScreen('history')" id="nav-history">
+    <span class="nav-icon">&#8801;</span>
+    History
+  </button>
+  <button class="nav-btn" onclick="showScreen('settings')" id="nav-settings">
+    <span class="nav-icon">&#9881;</span>
+    Settings
+  </button>
+</div>
+
+<!-- Friction overlay -->
+
+<div class="friction-overlay" id="friction-overlay" style="display:none;">
+  <div class="friction-content">
+    <div class="friction-timer" id="friction-timer">30</div>
+    <div class="friction-hint">Sit with it for a moment</div>
+  </div>
+</div>
+
+<script>
+  // State
+  let currentMode = 'now';
+  let currentStep = 0; // 0=write, 1=q1, 2=q2, 3=q3, 4=verdict
+  let answers = {};
+  let settings = {
+    friction: false,
+    notmine: true,
+    reframe: true,
+    darkMode: false
+  };
+
+  const STORAGE_KEY = 'thoughtloop_entries';
+  const SETTINGS_KEY = 'thoughtloop_settings';
+
+  // Questions per mode
+  const questions = {
+    now: [
+      { q: 'Is this happening right now?', sub: 'Not might happen. Not happened before. Right now.', key: 'happening' },
+      { q: 'Can you act on it today?', sub: 'A real, concrete action. Not thinking about it more.', key: 'canact' },
+      { q: 'Is this speculation?', sub: 'A story about something that hasn\'t occurred yet.', key: 'speculation' }
+    ],
+    morning: [
+      { q: 'Are you bracing for something specific?', sub: 'A real event today, or a feeling about the day.', key: 'happening' },
+      { q: 'Can you prepare for it in one step?', sub: 'Something you can do before it arrives.', key: 'canact' },
+      { q: 'Are you rehearsing a scenario?', sub: 'Running a future conversation or outcome in your head.', key: 'speculation' }
+    ],
+    evening: [
+      { q: 'Did this actually happen today?', sub: 'Something that occurred, not something you feared.', key: 'happening' },
+      { q: 'Is there still something to do about it?', sub: 'An action left, or is the day done.', key: 'canact' },
+      { q: 'Are you replaying it on loop?', sub: 'Going over it again without reaching a different conclusion.', key: 'speculation' }
+    ]
+  };
+
+  // Init
+  function init() {
+    loadSettings();
+    applyTheme();
+    checkDueReminders();
+  }
+
+  function loadSettings() {
+    try {
+      const saved = localStorage.getItem(SETTINGS_KEY);
+      if (saved) settings = { ...settings, ...JSON.parse(saved) };
+    } catch(e) {}
+    updateSettingsUI();
+  }
+
+  function saveSettings() {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch(e) {}
+  }
+
+  function updateSettingsUI() {
+    document.getElementById('toggle-friction').className = 'toggle-track' + (settings.friction ? ' on' : '');
+    document.getElementById('toggle-notmine').className = 'toggle-track' + (settings.notmine ? ' on' : '');
+    document.getElementById('toggle-reframe').className = 'toggle-track' + (settings.reframe ? ' on' : '');
+  }
+
+  function toggleSetting(key) {
+    settings[key] = !settings[key];
+    saveSettings();
+    updateSettingsUI();
+  }
+
+  // Theme
+  function toggleTheme() {
+    settings.darkMode = !settings.darkMode;
+    saveSettings();
+    applyTheme();
+  }
+
+  function applyTheme() {
+    if (settings.darkMode) {
+      document.body.classList.add('dark');
+      document.querySelector('.theme-toggle').textContent = '☀️';
+      document.querySelector('meta[name="theme-color"]').content = '#1a1917';
+    } else {
+      document.body.classList.remove('dark');
+      document.querySelector('.theme-toggle').textContent = '🌙';
+      document.querySelector('meta[name="theme-color"]').content = '#f5f0eb';
+    }
+  }
+
+  // Mode
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('mode-' + mode).classList.add('active');
+
+    const labels = {
+      now: 'What\'s circling?',
+      morning: 'What are you bracing for?',
+      evening: 'What stuck with you?'
+    };
+    document.getElementById('mode-label').textContent = labels[mode];
+    resetFlow();
+    startPlaceholderRotation();
+  }
+
+  // Navigation
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('nav-' + name).classList.add('active');
+
+    if (name === 'patterns') renderPatterns();
+    if (name === 'history') renderHistory();
+  }
+
+  // Flow
+  function resetFlow() {
+    currentStep = 0;
+    answers = {};
+    document.getElementById('questions-container').innerHTML = '';
+    document.getElementById('verdict-container').innerHTML = '';
+  }
+
+  // Show begin button when there's enough text
+  document.getElementById('thought-input').addEventListener('input', function() {
+    const btn = document.getElementById('begin-btn');
+    if (this.value.trim().length > 3 && currentStep === 0) {
+      btn.style.display = 'block';
+    } else if (currentStep === 0) {
+      btn.style.display = 'none';
+    }
+  });
+
+  function startQuestions() {
+    if (currentStep !== 0) return;
+    const thought = document.getElementById('thought-input').value.trim();
+    if (!thought) return;
+
+    document.getElementById('begin-btn').style.display = 'none';
+
+    if (settings.friction) {
+      showFriction(() => { currentStep = 1; showQuestion(0); });
+    } else {
+      currentStep = 1;
+      showQuestion(0);
+    }
+  }
+
+  function showFriction(callback) {
+    const overlay = document.getElementById('friction-overlay');
+    const timer = document.getElementById('friction-timer');
+    overlay.style.display = 'flex';
+    let count = 30;
+    timer.textContent = count;
+
+    const interval = setInterval(() => {
+      count--;
+      timer.textContent = count;
+      if (count <= 0) {
+        clearInterval(interval);
+        overlay.style.display = 'none';
+        callback();
+      }
+    }, 1000);
+  }
+
+  function showQuestion(index) {
+    const qs = questions[currentMode];
+    if (index >= qs.length) {
+      showVerdict();
+      return;
+    }
+
+    const q = qs[index];
+    const container = document.getElementById('questions-container');
+
+    let html = `<div class="card question-card" style="animation-delay:${index * 0.05}s">
+      <div class="question-text">${q.q}</div>
+      <div class="question-sub">${q.sub}</div>
+      <div class="btn-row">
+        <button class="btn-yes" onclick="answerQuestion(${index}, true, this)">Yes</button>
+        <button class="btn-no" onclick="answerQuestion(${index}, false, this)">No</button>
+      </div>`;
+
+    // "Not mine" on first question only
+    if (index === 0 && settings.notmine) {
+      html += `<div class="not-mine-row">
+        <button class="not-mine-btn" onclick="notMine()">This isn't my situation to solve</button>
+      </div>`;
+    }
+
+    html += `</div>`;
+    container.innerHTML += html;
+
+    // Scroll to question
+    setTimeout(() => {
+      const cards = container.querySelectorAll('.question-card');
+      const last = cards[cards.length - 1];
+      if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }
+
+  function answerQuestion(index, value, btn) {
+    const q = questions[currentMode][index];
+    answers[q.key] = value;
+
+    // Visual feedback
+    const row = btn.parentElement;
+    row.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    row.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
+
+    currentStep = index + 2;
+    setTimeout(() => showQuestion(index + 1), 300);
+  }
+
+  function notMine() {
+    answers.notmine = true;
+    showVerdictResult('notmine');
+  }
+
+  function showVerdict() {
+    let verdict;
+    const { happening, canact, speculation } = answers;
+
+    if (currentMode === 'now') {
+      if (happening && canact) verdict = 'act';
+      else if (!happening && speculation) verdict = 'release';
+      else if (canact && !happening) verdict = 'schedule';
+      else if (happening && !canact) verdict = 'release';
+      else if (!speculation && !canact) verdict = 'release';
+      else verdict = 'schedule';
+    } else if (currentMode === 'morning') {
+      if (happening && canact) verdict = 'act';
+      else if (speculation) verdict = 'release';
+      else if (canact) verdict = 'schedule';
+      else verdict = 'release';
+    } else {
+      // evening
+      if (happening && canact) verdict = 'schedule';
+      else if (!happening) verdict = 'release';
+      else if (happening && !canact) verdict = 'release';
+      else verdict = 'release';
+    }
+
+    showVerdictResult(verdict);
+  }
+
+  function showVerdictResult(verdict) {
+    const explanations = {
+      act: 'This is real and within reach. Do something about it now, even if it\'s small.',
+      schedule: 'This matters, but not right now. Pick a time and come back to it.',
+      release: 'This is a loop, not a task. You\'ve been here before. Let it pass.',
+      notmine: 'This isn\'t yours to carry. Someone else\'s situation, absorbed into your thinking.'
+    };
+
+    const labels = { act: 'Act', schedule: 'Schedule', release: 'Release', notmine: 'Not Yours' };
+
+    let html = `<div class="verdict-card">
+      <div class="verdict-label verdict-${verdict}">${labels[verdict]}</div>
+      <div class="verdict-explanation">${explanations[verdict]}</div>`;
+
+    // Reframe for release
+    if (verdict === 'release' && settings.reframe) {
+      html += `<div class="reframe-section">
+        <div class="reframe-prompt">Try writing this as if it's someone else's situation:</div>
+        <textarea class="reframe-textarea" id="reframe-input" placeholder="A person I know is worried about..." rows="3"></textarea>
+
+  </div>`;
+}
+
+// Schedule date
+if (verdict === 'schedule') {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrow2 = tomorrow; const dateStr = tomorrow2.getFullYear() + '-' + String(tomorrow2.getMonth()+1).padStart(2,'0') + '-' + String(tomorrow2.getDate()).padStart(2,'0');
+  html += `<div class="schedule-section">
+    <div class="schedule-label">Revisit on:</div>
+    <input type="date" class="schedule-input" id="schedule-date" value="${dateStr}" min="${dateStr}">
+  </div>`;
+}
+
+html += `<div class="action-row">
+  <button class="btn-primary btn-save" onclick="saveEntry('${verdict}')">Save</button>
+  <button class="btn-primary btn-clear" onclick="startOver()">Start over</button>
+</div>`;
+
+html += `</div>`;
+document.getElementById('verdict-container').innerHTML = html;
+
+setTimeout(() => {
+  document.querySelector('.verdict-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}, 150);
+
+}
+
+function saveEntry(verdict) {
+const thought = document.getElementById('thought-input').value.trim();
+const reframeEl = document.getElementById('reframe-input');
+const scheduleEl = document.getElementById('schedule-date');
+
+const entry = {
+  id: Date.now(),
+  thought,
+  verdict,
+  mode: currentMode,
+  answers: { ...answers },
+  reframe: reframeEl ? reframeEl.value.trim() : '',
+  scheduleDate: scheduleEl ? scheduleEl.value : '',
+  date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+  timestamp: new Date().toISOString()
+};
+
+const entries = getEntries();
+entries.unshift(entry);
+try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+
+startOver();
+
+}
+
+function startOver() {
+document.getElementById('thought-input').value = '';
+resetFlow();
+window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function getEntries() {
+try {
+return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+} catch(e) { return []; }
+}
+
+// Due reminders
+function checkDueReminders() {
+const entries = getEntries();
+const _d = new Date(); const today = _d.getFullYear() + '-' + String(_d.getMonth()+1).padStart(2,'0') + '-' + String(_d.getDate()).padStart(2,'0');
+const due = entries.filter(e => e.verdict === 'schedule' && e.scheduleDate && e.scheduleDate <= today && !e.dismissed);
+
+const container = document.getElementById('due-reminders');
+if (due.length === 0) { container.innerHTML = ''; return; }
+
+container.innerHTML = due.map(e => `
+  <div class="due-reminder">
+    <div class="due-reminder-label">Scheduled for today</div>
+    <div class="due-reminder-thought">${escapeHtml(e.thought)}</div>
+    <div class="due-reminder-actions">
+      <button class="due-btn" onclick="dismissReminder(${e.id}, true)">Still relevant</button>
+      <button class="due-btn" onclick="dismissReminder(${e.id}, false)">Dissolved</button>
+    </div>
+  </div>
+`).join('');
+
+}
+
+function dismissReminder(id, stillRelevant) {
+const entries = getEntries();
+const entry = entries.find(e => e.id === id);
+if (entry) {
+entry.dismissed = true;
+entry.dissolvedOnRevisit = !stillRelevant;
+try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+}
+checkDueReminders();
+
+if (stillRelevant) {
+  document.getElementById('thought-input').value = entry ? entry.thought : '';
+}
+
+}
+
+// Patterns
+function renderPatterns() {
+const entries = getEntries();
+const container = document.getElementById('patterns-content');
+
+if (entries.length < 3) {
+  container.innerHTML = `<div class="empty-state">Log a few more thoughts<br>and patterns will appear here.</div>`;
+  return;
+}
+
+const total = entries.length;
+const acts = entries.filter(e => e.verdict === 'act').length;
+const schedules = entries.filter(e => e.verdict === 'schedule').length;
+const releases = entries.filter(e => e.verdict === 'release').length;
+const notMines = entries.filter(e => e.verdict === 'notmine').length;
+const speculations = entries.filter(e => e.answers && e.answers.speculation).length;
+
+const dissolved = entries.filter(e => e.dissolvedOnRevisit === true).length;
+const scheduledTotal = entries.filter(e => e.verdict === 'schedule').length;
+
+// Week count
+const weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 7);
+const thisWeek = entries.filter(e => new Date(e.timestamp) > weekAgo).length;
+
+let html = `<div class="patterns-grid">
+  <div class="pattern-stat">
+    <div class="pattern-value">${total}</div>
+    <div class="pattern-label">Total entries</div>
+  </div>
+  <div class="pattern-stat">
+    <div class="pattern-value">${thisWeek}</div>
+    <div class="pattern-label">This week</div>
+  </div>
+  <div class="pattern-stat">
+    <div class="pattern-value verdict-act">${acts}</div>
+    <div class="pattern-label">Act</div>
+  </div>
+  <div class="pattern-stat">
+    <div class="pattern-value verdict-schedule">${schedules}</div>
+    <div class="pattern-label">Schedule</div>
+  </div>
+  <div class="pattern-stat">
+    <div class="pattern-value verdict-release">${releases}</div>
+    <div class="pattern-label">Release</div>
+  </div>
+  <div class="pattern-stat">
+    <div class="pattern-value verdict-notmine">${notMines}</div>
+    <div class="pattern-label">Not yours</div>
+  </div>
+</div>`;
+
+if (total >= 5) {
+  const specPct = Math.round((speculations / total) * 100);
+  const relPct = Math.round((releases / total) * 100);
+  let insight = '';
+
+  if (specPct > 60) {
+    insight = `${specPct}% of your entries are speculation. Most of what you worry about hasn't happened.`;
+  } else if (relPct > 60) {
+    insight = `${relPct}% released. You're good at recognizing loops. Trust that.`;
+  } else if (notMines > total * 0.3) {
+    insight = `You absorb other people's problems often. The boundary recognition is working.`;
+  } else if (acts > total * 0.4) {
+    insight = `You act on most things you log. The friction isn't indecision, it's prioritization.`;
+  }
+
+  if (dissolved > 0 && scheduledTotal > 0) {
+    const dissolvePct = Math.round((dissolved / scheduledTotal) * 100);
+    insight += insight ? ' ' : '';
+    insight += `${dissolvePct}% of scheduled thoughts dissolved before their revisit date.`;
+  }
+
+  if (insight) {
+    html += `<div class="card"><div class="verdict-explanation" style="text-align:left">${insight}</div></div>`;
+  }
+}
+
+container.innerHTML = html;
+
+}
+
+// History
+function renderHistory() {
+const entries = getEntries();
+const container = document.getElementById('history-content');
+
+if (entries.length === 0) {
+  container.innerHTML = `<div class="empty-state">No entries yet.</div>`;
+  return;
+}
+
+const colors = { act: '#c44b2b', schedule: '#b08d3e', release: '#4a7c6f', notmine: '#6b7b8d' };
+const labels = { act: 'Act', schedule: 'Schedule', release: 'Release', notmine: 'Not Yours' };
+
+container.innerHTML = entries.slice(0, 50).map(e => `
+  <div class="history-entry">
+    <div class="history-header">
+      <div class="history-verdict" style="color:${colors[e.verdict]}">${labels[e.verdict]}</div>
+      <div class="history-date">${e.date}</div>
+    </div>
+    <div class="history-thought">${escapeHtml(e.thought)}</div>
+    ${e.mode && e.mode !== 'now' ? `<div class="history-mode">${e.mode}</div>` : ''}
+    ${e.dissolvedOnRevisit === true ? `<div class="history-mode" style="color:#4a7c6f">dissolved on revisit</div>` : ''}
+    ${e.dissolvedOnRevisit === false ? `<div class="history-mode" style="color:#b08d3e">still relevant on revisit</div>` : ''}
+  </div>
+`).join('');
+
+}
+
+// Export
+function exportEntries() {
+const entries = getEntries();
+if (entries.length === 0) return;
+
+const labels = { act: 'ACT', schedule: 'SCHEDULE', release: 'RELEASE', notmine: 'NOT YOURS' };
+
+const text = entries.map(e => {
+  let line = `[${e.date}] ${labels[e.verdict]} | ${e.thought}`;
+  if (e.mode && e.mode !== 'now') line += ` (${e.mode})`;
+  if (e.reframe) line += `\n  Reframe: ${e.reframe}`;
+  if (e.scheduleDate) line += `\n  Revisit: ${e.scheduleDate}`;
+  if (e.dissolvedOnRevisit === true) line += `\n  -> Dissolved`;
+  if (e.dissolvedOnRevisit === false) line += `\n  -> Still relevant`;
+  return line;
+}).join('\n\n');
+
+navigator.clipboard.writeText(text).then(() => {
+  const btn = document.querySelector('.export-btn');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied';
+  setTimeout(() => btn.textContent = orig, 2000);
+}).catch(() => {});
+
+}
+
+function clearAllData() {
+if (confirm('Clear all entries and settings? This cannot be undone.')) {
+localStorage.removeItem(STORAGE_KEY);
+localStorage.removeItem(SETTINGS_KEY);
+settings = { friction: false, notmine: true, reframe: true, darkMode: false };
+updateSettingsUI();
+applyTheme();
+startOver();
+}
+}
+
+function escapeHtml(str) {
+const div = document.createElement('div');
+div.textContent = str;
+return div.innerHTML;
+}
+
+// Rotating placeholder examples
+const placeholders = {
+now: [
+"A conversation I keep replaying…",
+"Something I need to respond to but haven't…",
+"A decision I keep going back and forth on…",
+"Something someone said that stuck…",
+"A thing I committed to that I'm second-guessing…",
+"Something I can't quite name but it's there…"
+],
+morning: [
+"Something coming today that I'm already rehearsing…",
+"A conversation I know I need to have…",
+"A task I keep pushing to tomorrow…",
+"Something about today that feels heavy before it starts…"
+],
+evening: [
+"Something from today I keep revisiting…",
+"A moment that went differently than I expected…",
+"Something I didn't get to and it's nagging…",
+"A reaction I'm still reading into…"
+]
+};
+
+let placeholderIndex = 0;
+let placeholderInterval = null;
+
+function startPlaceholderRotation() {
+const input = document.getElementById('thought-input');
+const examples = placeholders[currentMode];
+placeholderIndex = Math.floor(Math.random() * examples.length);
+input.placeholder = examples[placeholderIndex];
+
+clearInterval(placeholderInterval);
+placeholderInterval = setInterval(() => {
+  if (input.value.length > 0 || document.activeElement === input) return;
+  placeholderIndex = (placeholderIndex + 1) % examples.length;
+  input.style.transition = 'opacity 0.3s';
+  input.style.opacity = '0.5';
+  setTimeout(() => {
+    input.placeholder = examples[placeholderIndex];
+    input.style.opacity = '1';
+  }, 300);
+}, 4000);
+
+}
+
+// Pause rotation when focused, resume when blurred empty
+document.getElementById('thought-input').addEventListener('focus', () => {
+clearInterval(placeholderInterval);
+});
+document.getElementById('thought-input').addEventListener('blur', function() {
+if (this.value.length === 0 && currentStep === 0) startPlaceholderRotation();
+});
+
+init();
+startPlaceholderRotation();
+</script>
+
+
+<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
+  KIN-024 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
+</footer>
+</body>
+</html>

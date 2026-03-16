@@ -350,4 +350,21 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-024*
+## KIN-024 · Thought Loop
+
+**URL:** TBC (Netlify deploy pending)
+**Netlify publish dir:** `sites/kin-024-thought-loop`
+
+**Summary:** Mindfulness thought-sorting tool that guides a user through three structured questions about a circling thought and returns one of four verdicts: Act (real and actionable now), Schedule (matters but not today), Release (a loop, not a task), or Not Yours (absorbed someone else's problem). Supports three timed modes — Now, Morning, Evening — each with tailored questions. Optional friction pause (30s countdown before questions appear). Reframe section on Release verdict lets you write the thought as someone else's situation. Schedule verdict prompts a revisit date; due reminders appear on the write screen. Patterns screen shows breakdown of verdicts and auto-generated insights (e.g. "X% of entries are speculation"). History screen lists last 50 entries with verdict colour-coding. Export all entries as plain text via clipboard.
+
+**Notes:**
+- Single HTML file. PWA (Blob manifest, apple-touch-icon canvas — slate-blue gradient `#4a5e72` / `#2d3e52`, "TL" initials, Blob SW `kin024-v1`).
+- Creator: Darren. Category: Wellbeing.
+- Color scheme: warm cream bg `#f5f0eb`; verdicts: terracotta Act `#c44b2b`, amber Schedule `#b08d3e`, sage Release `#4a7c6f`, slate Not Yours `#6b7b8d`.
+- Fonts: DM Serif Text (headings/verdicts) + DM Sans (body/UI).
+- Data stored in localStorage (`thoughtloop_entries`, `thoughtloop_settings`). Light mode default. `body.dark` class pattern.
+- Fixed: en-dashes in CSS vars, broken universal selector `- {}`, markdown fences, `toISOString()` timezone bug (schedule date and due-reminder today check), dark mode toggle direction (moon in light, sun in dark).
+
+---
+
+*Next tool: KIN-025*
