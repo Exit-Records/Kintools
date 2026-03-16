@@ -2,9 +2,9 @@
 
 This project is a pnpm workspace monorepo utilizing TypeScript for building a collection of web tools, collectively known as the "Kin Ecosystem." The primary goal is to provide a robust, scalable, and maintainable platform for developing and deploying these tools. The project emphasizes a privacy-first approach, with all processing occurring client-side. The vision is to expand the ecosystem with more privacy-conscious and user-centric applications.
 
-**Current tools: KIN-001 through KIN-021 (21 tools). Next: KIN-022.**
+**Current tools: KIN-001 through KIN-022 (22 tools). Next: KIN-023.**
 
-Latest: KIN-021 · Text Counter — `sites/kin-021-text-counter/` — `https://kintextcounter.netlify.app`
+Latest: KIN-022 · Fair Share — `sites/kin-022-fair-share/` — `https://kinfairshare.netlify.app`
 
 ## User Preferences
 

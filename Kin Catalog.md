@@ -317,4 +317,21 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-022*
+## KIN-022 · Fair Share
+
+**URL:** https://kinfairshare.netlify.app
+**Netlify publish dir:** `sites/kin-022-fair-share`
+
+**Summary:** Privacy-first shared expense splitter. Create multiple groups, each with named participants and a currency symbol. Log expenses with title, amount, date, category (General/Food/Drinks/Travel/Accommodation/Activities/Shopping/Rent/Utilities/Equipment), paid-by, and split method (equal, unequal, percentage, shares). Balance view calculates net position per person and uses a greedy debt-simplification algorithm to suggest the minimum number of payments to settle up. Export group as `.fairshare.json`, copy a plain-text summary to clipboard, or import/merge groups from file. Quick Tools tab: tip calculator with preset % chips (10/15/18/20) and per-person split, plus a three-mode percentage calculator (X% of Y, X is ?% of Y, % change). Data stored in IndexedDB with localStorage fallback.
+
+**Notes:**
+- Single HTML file. PWA (icon.svg, inline manifest, inline service worker `fairshare-v1`).
+- Creator: Darren. Category: Utility.
+- Color scheme: forest green `#2d5a3f` / `#1a3628`; warm cream bg `#f5f0eb`; accent `#1a1a1a`.
+- Fonts: DM Sans (UI) + DM Mono (numbers/balances).
+- Data persists on device via IndexedDB (localStorage fallback) — unlike most Kin tools which store nothing.
+- Light mode default. Service worker fixed from unsupported `data:` URI to `Blob` pattern.
+
+---
+
+*Next tool: KIN-023*
