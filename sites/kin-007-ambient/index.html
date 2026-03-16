@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ambient Mixer — KIN-007</title>
-  <link rel="manifest" href="./manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KIN-007 — Ambient Mixer — Kin</title>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="KIN-007">
-  <link rel="apple-touch-icon" id="apple-touch-icon">
-  <meta name="description" content="Privacy-first ambient sound mixer. Drag sounds toward the listener to mix. All audio generated locally." />
-  <meta property="og:title" content="Ambient Mixer" />
-  <meta property="og:description" content="Radial ambient sound mixer — drag sounds around the listener. Fully local. No streaming, no tracking." />
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
+  <link rel="manifest" id="manifest-link" href="">
+  <meta name="description" content="Ambient sound mixer. Drag sounds toward the listener to mix. All audio generated locally — no streaming, no tracking." />
+  <meta property="og:title" content="Ambient Mixer — KIN-007" />
+  <meta property="og:description" content="Drag sounds around the listener. All audio generated locally. Fully offline." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,12 +60,13 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       font-size: 14px;
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     /* ── Welcome ─────────────────────────────────── */
@@ -81,9 +85,11 @@
       margin-top: 8px; padding: 16px 48px;
       background: var(--accent); color: #fff;
       border: none; border-radius: 50px;
+      font-family: 'DM Sans', system-ui, sans-serif;
       font-size: 16px; font-weight: 500;
       cursor: pointer; letter-spacing: 0.02em;
       transition: background 0.2s, transform 0.1s;
+      min-height: 44px;
     }
     #btn-start:hover { background: var(--accent2); transform: scale(1.02); }
     #btn-start:active { transform: scale(0.98); }
@@ -171,9 +177,11 @@
     }
     .btn {
       padding: 9px 20px; border-radius: 8px; border: none;
+      font-family: 'DM Sans', system-ui, sans-serif;
       font-size: 13px; font-weight: 500; cursor: pointer;
       transition: background 0.15s, transform 0.1s;
       display: flex; align-items: center; gap: 6px;
+      min-height: 44px;
     }
     .btn:active { transform: scale(0.97); }
     .btn-primary { background: var(--accent); color: #fff; }
@@ -190,8 +198,10 @@
       padding: 8px 16px; border-radius: 20px;
       background: var(--surface2); color: var(--text);
       border: 1px solid var(--border); cursor: pointer;
+      font-family: 'DM Sans', system-ui, sans-serif;
       font-size: 12px; font-weight: 500;
       transition: background 0.15s, border-color 0.15s;
+      min-height: 44px;
     }
     .preset-btn:hover { border-color: var(--accent); color: var(--accent2); }
     .preset-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -202,8 +212,9 @@
       padding: 7px 14px; border-radius: 8px;
       background: var(--surface2); color: var(--text);
       border: 1px solid var(--border); cursor: pointer;
+      font-family: 'DM Sans', system-ui, sans-serif;
       font-size: 12px; font-weight: 500;
-      transition: all 0.15s;
+      transition: all 0.15s; min-height: 44px;
     }
     .timer-btn:hover { border-color: var(--accent); color: var(--accent2); }
     .timer-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -247,17 +258,18 @@
     }
     .btn-sm {
       padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border);
+      font-family: 'DM Sans', system-ui, sans-serif;
       font-size: 12px; font-weight: 500; cursor: pointer;
       background: var(--surface2); color: var(--muted);
-      transition: all 0.15s;
+      transition: all 0.15s; min-height: 44px;
     }
     .btn-sm:hover { border-color: var(--accent); color: var(--accent2); }
     #mix-paste-input {
       flex: 1; padding: 7px 10px;
       background: var(--surface2); border: 1px solid var(--border);
       border-radius: 6px; color: var(--text);
-      font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
-      outline: none;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px; outline: none; min-height: 44px;
     }
     #mix-paste-input:focus { border-color: var(--accent); }
     #mix-paste-input::placeholder { color: var(--muted); }
@@ -345,6 +357,8 @@
         <button class="preset-btn" data-preset="fireplace">🔥 Fireplace</button>
         <button class="preset-btn" data-preset="focus">🎯 Focus</button>
         <button class="preset-btn" data-preset="forest">🌲 Forest</button>
+        <button class="preset-btn" data-preset="night-garden">🌿 Night Garden</button>
+        <button class="preset-btn" data-preset="mountain-stream">🏔 Mountain Stream</button>
       </div>
     </div>
   </div>
@@ -411,97 +425,132 @@
 
 // ═══════════════════════════════════════════════════════════════
 //  NODE DEFINITIONS  (x, y normalised −1..+1; centre = loudest)
-//  8 nodes: 5 nature sounds + 3 noise types arranged as a ring
-//  Nature: top half  |  Noise: left / bottom / right
+//  10 nodes arranged as an even ring — 5 nature + 3 noise + 2 new
 // ═══════════════════════════════════════════════════════════════
 const NODES = {
   wind:   { label: 'Wind',   icon: '💨', color: '#7aa8c8', x:  0.00, y: -0.75 },
-  rain:   { label: 'Rain',   icon: '🌧', color: '#4a9fd4', x: -0.53, y: -0.45 },
-  waves:  { label: 'Waves',  icon: '🌊', color: '#3a8fc0', x:  0.53, y: -0.45 },
-  fire:   { label: 'Fire',   icon: '🔥', color: '#e07840', x: -0.62, y:  0.28 },
-  forest: { label: 'Forest', icon: '🌲', color: '#3ecf8e', x:  0.62, y:  0.28 },
-  white:  { label: 'White',  icon: '○',  color: '#c8d8e8', x: -0.53, y:  0.62 },
-  pink:   { label: 'Pink',   icon: '◑',  color: '#d4a0b8', x:  0.00, y:  0.80 },
-  brown:  { label: 'Brown',  icon: '●',  color: '#b08060', x:  0.53, y:  0.62 },
+  night:  { label: 'Night',  icon: '🦗', color: '#9b8fc8', x:  0.46, y: -0.63 },
+  waves:  { label: 'Waves',  icon: '🌊', color: '#3a8fc0', x:  0.74, y: -0.24 },
+  stream: { label: 'Stream', icon: '💧', color: '#3ab8c0', x:  0.74, y:  0.24 },
+  forest: { label: 'Forest', icon: '🌲', color: '#3ecf8e', x:  0.46, y:  0.63 },
+  brown:  { label: 'Brown',  icon: '●',  color: '#b08060', x:  0.00, y:  0.80 },
+  pink:   { label: 'Pink',   icon: '◑',  color: '#d4a0b8', x: -0.46, y:  0.63 },
+  white:  { label: 'White',  icon: '○',  color: '#c8d8e8', x: -0.74, y:  0.24 },
+  fire:   { label: 'Fire',   icon: '🔥', color: '#e07840', x: -0.74, y: -0.24 },
+  rain:   { label: 'Rain',   icon: '🌧', color: '#4a9fd4', x: -0.46, y: -0.63 },
 };
 
 const PRESETS = {
   'deep-sleep': {
+    wind:   [  0.00, -0.88 ],
+    night:  [ -0.22, -0.32 ],
+    waves:  [  0.32, -0.20 ],
+    stream: [  0.86,  0.30 ],
+    forest: [  0.86,  0.65 ],
     brown:  [  0.00,  0.22 ],
     pink:   [  0.00,  0.55 ],
-    white:  [ -0.82,  0.72 ],
+    white:  [ -0.55,  0.35 ],
+    fire:   [ -0.86,  0.65 ],
     rain:   [ -0.22, -0.18 ],
-    waves:  [  0.32, -0.20 ],
-    wind:   [  0.00, -0.78 ],
-    fire:   [ -0.88,  0.35 ],
-    forest: [  0.88,  0.35 ],
   },
   'storm-night': {
     wind:   [  0.00, -0.12 ],
-    rain:   [ -0.10, -0.15 ],
+    night:  [  0.86, -0.65 ],
     waves:  [  0.38, -0.28 ],
+    stream: [  0.86,  0.30 ],
+    forest: [  0.86,  0.65 ],
     brown:  [  0.00,  0.45 ],
     pink:   [  0.00,  0.72 ],
-    white:  [ -0.82,  0.72 ],
-    fire:   [ -0.88,  0.35 ],
-    forest: [  0.88,  0.35 ],
+    white:  [ -0.55,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
+    rain:   [ -0.10, -0.15 ],
   },
   'ocean-calm': {
-    waves:  [  0.12, -0.10 ],
     wind:   [  0.00, -0.30 ],
-    rain:   [ -0.35, -0.25 ],
+    night:  [  0.86, -0.65 ],
+    waves:  [  0.12, -0.10 ],
+    stream: [  0.45, -0.30 ],
+    forest: [  0.86,  0.65 ],
     brown:  [  0.00,  0.40 ],
     pink:   [  0.00,  0.75 ],
-    white:  [ -0.82,  0.72 ],
-    fire:   [ -0.88,  0.35 ],
-    forest: [  0.88,  0.35 ],
+    white:  [ -0.55,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
+    rain:   [ -0.35, -0.25 ],
   },
   'fireplace': {
-    fire:   [ -0.12,  0.12 ],
-    brown:  [  0.38,  0.55 ],
-    forest: [  0.35,  0.22 ],
-    rain:   [ -0.82, -0.50 ],
     wind:   [  0.00, -0.88 ],
+    night:  [  0.86, -0.65 ],
     waves:  [  0.82, -0.50 ],
+    stream: [  0.86,  0.30 ],
+    forest: [  0.35,  0.22 ],
+    brown:  [  0.38,  0.55 ],
     pink:   [  0.00,  0.75 ],
-    white:  [ -0.82,  0.72 ],
+    white:  [ -0.82,  0.30 ],
+    fire:   [ -0.12,  0.12 ],
+    rain:   [ -0.82, -0.50 ],
   },
   'focus': {
+    wind:   [  0.00, -0.62 ],
+    night:  [  0.86, -0.65 ],
+    waves:  [  0.86, -0.30 ],
+    stream: [  0.86,  0.30 ],
+    forest: [  0.86,  0.65 ],
     brown:  [  0.38,  0.48 ],
     pink:   [ -0.35,  0.58 ],
-    white:  [ -0.82,  0.72 ],
+    white:  [ -0.55,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
     rain:   [ -0.28, -0.22 ],
-    wind:   [  0.00, -0.62 ],
-    fire:   [ -0.88,  0.35 ],
-    waves:  [  0.88, -0.48 ],
-    forest: [  0.88,  0.35 ],
   },
   'forest': {
-    forest: [  0.18,  0.18 ],
-    rain:   [ -0.22, -0.20 ],
     wind:   [  0.00, -0.38 ],
+    night:  [  0.86, -0.65 ],
+    waves:  [  0.82, -0.48 ],
+    stream: [  0.35,  0.30 ],
+    forest: [  0.18,  0.18 ],
     brown:  [  0.38,  0.55 ],
     pink:   [  0.00,  0.72 ],
-    white:  [ -0.82,  0.72 ],
-    waves:  [  0.82, -0.48 ],
-    fire:   [ -0.88,  0.35 ],
+    white:  [ -0.82,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
+    rain:   [ -0.22, -0.20 ],
+  },
+  'night-garden': {
+    wind:   [  0.00, -0.55 ],
+    night:  [  0.18, -0.15 ],
+    waves:  [  0.86, -0.30 ],
+    stream: [  0.28,  0.25 ],
+    forest: [  0.40,  0.55 ],
+    brown:  [  0.00,  0.50 ],
+    pink:   [ -0.35,  0.55 ],
+    white:  [ -0.82,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
+    rain:   [ -0.42, -0.52 ],
+  },
+  'mountain-stream': {
+    wind:   [  0.00, -0.42 ],
+    night:  [  0.86, -0.65 ],
+    waves:  [  0.86, -0.30 ],
+    stream: [  0.15,  0.10 ],
+    forest: [  0.22,  0.32 ],
+    brown:  [  0.00,  0.65 ],
+    pink:   [ -0.46,  0.55 ],
+    white:  [ -0.82,  0.30 ],
+    fire:   [ -0.86,  0.65 ],
+    rain:   [ -0.30, -0.35 ],
   },
 };
 
 // ═══════════════════════════════════════════════════════════════
-//  REVERB CONFIGURATIONS  (one per preset)
-//  duration  = IR length in seconds (controls tail length)
-//  decay     = envelope curve steepness (higher = faster decay)
-//  wet       = reverb return level (0..1)
-//  preDelay  = ms before reverb starts (creates sense of distance)
+//  REVERB CONFIGURATIONS
 // ═══════════════════════════════════════════════════════════════
 const REVERB_CONFIGS = {
-  'deep-sleep': { duration: 5.0, decay: 1.0, wet: 0.50, preDelay: 0.065 },
-  'storm-night': { duration: 3.8, decay: 1.4, wet: 0.42, preDelay: 0.045 },
-  'ocean-calm':  { duration: 4.5, decay: 1.1, wet: 0.48, preDelay: 0.055 },
-  'fireplace':   { duration: 1.6, decay: 2.8, wet: 0.22, preDelay: 0.018 },
-  'focus':       { duration: 1.2, decay: 3.2, wet: 0.16, preDelay: 0.012 },
-  'forest':      { duration: 3.2, decay: 1.6, wet: 0.38, preDelay: 0.038 },
+  'deep-sleep':      { duration: 5.0, decay: 1.0, wet: 0.50, preDelay: 0.065 },
+  'storm-night':     { duration: 3.8, decay: 1.4, wet: 0.42, preDelay: 0.045 },
+  'ocean-calm':      { duration: 4.5, decay: 1.1, wet: 0.48, preDelay: 0.055 },
+  'fireplace':       { duration: 1.6, decay: 2.8, wet: 0.22, preDelay: 0.018 },
+  'focus':           { duration: 1.2, decay: 3.2, wet: 0.16, preDelay: 0.012 },
+  'forest':          { duration: 3.2, decay: 1.6, wet: 0.38, preDelay: 0.038 },
+  'night-garden':    { duration: 4.0, decay: 1.2, wet: 0.45, preDelay: 0.050 },
+  'mountain-stream': { duration: 3.5, decay: 1.5, wet: 0.40, preDelay: 0.042 },
 };
 const REVERB_DEFAULT = { duration: 2.0, decay: 2.0, wet: 0.30, preDelay: 0.030 };
 
@@ -570,6 +619,8 @@ function makeSource(key, audioCtx) {
     case 'waves':  return makeWaves(audioCtx);
     case 'fire':   return makeFire(audioCtx);
     case 'forest': return makeForest(audioCtx);
+    case 'night':  return makeNight(audioCtx);
+    case 'stream': return makeStream(audioCtx);
     default:       return makeBrownNoise(audioCtx);
   }
 }
@@ -769,13 +820,82 @@ function makeForest(audioCtx) {
   return { out: baseG };
 }
 
+// Night — narrow bandpass noise at ~4 kHz, double-LFO modulated
+// to create cricket chirp texture (fast inner rate) + burst rhythm (slow outer rate)
+function makeNight(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+      out[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)/5.5; b6=w*0.115926;
+    }
+  };
+  // Narrow bandpass centred on cricket frequency
+  const bp = audioCtx.createBiquadFilter();
+  bp.type = 'bandpass'; bp.frequency.value = 4000; bp.Q.value = 14;
+  // Fast chirp texture (~20 Hz)
+  const chirpOsc = audioCtx.createOscillator();
+  chirpOsc.frequency.value = 20;
+  const chirpAmt = audioCtx.createGain();
+  chirpAmt.gain.value = 0.20;
+  // Slow burst rhythm (~0.65 Hz — one cricket "phrase" per ~1.5 s)
+  const burstOsc = audioCtx.createOscillator();
+  burstOsc.frequency.value = 0.65;
+  const burstAmt = audioCtx.createGain();
+  burstAmt.gain.value = 0.28;
+  const nightGain = audioCtx.createGain();
+  nightGain.gain.value = 0.50;
+  chirpOsc.connect(chirpAmt); chirpAmt.connect(nightGain.gain);
+  burstOsc.connect(burstAmt); burstAmt.connect(nightGain.gain);
+  chirpOsc.start(); burstOsc.start();
+  sp.connect(bp); bp.connect(nightGain);
+  return { out: nightGain };
+}
+
+// Stream — pink-ish noise filtered to mid-high band,
+// with two slightly different LFO rates to create irregular bubbling texture
+function makeStream(audioCtx) {
+  const sp = audioCtx.createScriptProcessor(4096, 1, 1);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  sp.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759;
+      b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856;
+      b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+      out[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)/5.5; b6=w*0.115926;
+    }
+  };
+  const bp = audioCtx.createBiquadFilter();
+  bp.type = 'bandpass'; bp.frequency.value = 700; bp.Q.value = 0.4;
+  const peak = audioCtx.createBiquadFilter();
+  peak.type = 'peaking'; peak.frequency.value = 2200; peak.gain.value = 8; peak.Q.value = 1.5;
+  // Two irregular LFO rates for babbling, non-mechanical texture
+  const bubLfo1 = audioCtx.createOscillator();
+  bubLfo1.frequency.value = 4.1;
+  const bubAmt1 = audioCtx.createGain();
+  bubAmt1.gain.value = 0.20;
+  const bubLfo2 = audioCtx.createOscillator();
+  bubLfo2.frequency.value = 6.7;
+  const bubAmt2 = audioCtx.createGain();
+  bubAmt2.gain.value = 0.14;
+  const streamGain = audioCtx.createGain();
+  streamGain.gain.value = 0.62;
+  bubLfo1.connect(bubAmt1); bubAmt1.connect(streamGain.gain);
+  bubLfo2.connect(bubAmt2); bubAmt2.connect(streamGain.gain);
+  bubLfo1.start(); bubLfo2.start();
+  sp.connect(bp); bp.connect(peak); peak.connect(streamGain);
+  return { out: streamGain };
+}
+
 // ═══════════════════════════════════════════════════════════════
 //  REVERB ENGINE
-//  Synthetic impulse response — no external files needed.
-//  Signal path:
-//    masterGain → reverbSend → reverbPreDelay → reverbConvolver
-//                 → reverbHP → reverbWet → compressor (wet)
-//    masterGain → compressor (dry, existing path)
 // ═══════════════════════════════════════════════════════════════
 function makeIR(audioCtx, duration, decay) {
   const sr  = audioCtx.sampleRate;
@@ -794,20 +914,15 @@ function makeIR(audioCtx, duration, decay) {
 function initReverb(cfg) {
   reverbSend = ctx.createGain();
   reverbSend.gain.value = 0.75;
-
   reverbPreDelay = ctx.createDelay(0.5);
   reverbPreDelay.delayTime.value = cfg.preDelay;
-
   reverbConvolver = ctx.createConvolver();
   reverbConvolver.buffer = makeIR(ctx, cfg.duration, cfg.decay);
-
   reverbHP = ctx.createBiquadFilter();
   reverbHP.type = 'highpass';
   reverbHP.frequency.value = 120;
-
   reverbWet = ctx.createGain();
   reverbWet.gain.value = cfg.wet;
-
   masterGain.connect(reverbSend);
   reverbSend.connect(reverbPreDelay);
   reverbPreDelay.connect(reverbConvolver);
@@ -904,13 +1019,11 @@ function drawFrame() {
   c.clearRect(0, 0, canvas.width, canvas.height);
   const ct = getCanvasTheme();
 
-  // Outer clip circle (fills canvas area)
   c.save();
   c.beginPath(); c.arc(cx, cy, fieldR + 6, 0, Math.PI * 2); c.clip();
   c.fillStyle = ct.bg; c.fill();
   c.restore();
 
-  // Concentric rings
   const rings = [0.33, 0.66, 1.0];
   for (const f of rings) {
     c.beginPath(); c.arc(cx, cy, fieldR * f, 0, Math.PI * 2);
@@ -919,12 +1032,10 @@ function drawFrame() {
     c.stroke();
   }
 
-  // Faint cross lines
   c.strokeStyle = ct.ring + '0.25)'; c.lineWidth = 0.8;
   c.beginPath(); c.moveTo(cx, cy - fieldR); c.lineTo(cx, cy + fieldR); c.stroke();
   c.beginPath(); c.moveTo(cx - fieldR, cy); c.lineTo(cx + fieldR, cy); c.stroke();
 
-  // Lines from listener to active nodes
   for (const [key, n] of Object.entries(NODES)) {
     const g = getGain(key);
     if (g < 0.04) continue;
@@ -935,7 +1046,6 @@ function drawFrame() {
     c.lineWidth = 1; c.setLineDash([3, 5]); c.stroke(); c.setLineDash([]);
   }
 
-  // Listener (centre dot)
   const pulse = 0.5 + 0.5 * Math.sin(pulsePhase);
   if (state.playing) {
     const maxGain = Math.max(...Object.keys(NODES).map(k => getGain(k)));
@@ -951,7 +1061,6 @@ function drawFrame() {
   c.beginPath(); c.arc(cx, cy, 3.5, 0, Math.PI * 2);
   c.fillStyle = '#c8dff0'; c.fill();
 
-  // Nodes
   for (const [key, n] of Object.entries(NODES)) {
     const nx = cx + n.x * fieldR;
     const ny = cy + n.y * fieldR;
@@ -960,7 +1069,6 @@ function drawFrame() {
     const isActive = dragging === key;
     const r = isActive ? 20 : 16;
 
-    // Glow
     if (g > 0.06) {
       const gr = c.createRadialGradient(nx, ny, 0, nx, ny, r + 12 * g);
       gr.addColorStop(0, hexToRgba(n.color, 0.28 * g));
@@ -969,7 +1077,6 @@ function drawFrame() {
       c.fillStyle = gr; c.fill();
     }
 
-    // Node circle
     c.beginPath(); c.arc(nx, ny, r, 0, Math.PI * 2);
     c.fillStyle = hexToRgba(n.color, alpha * 0.18 + (isActive ? 0.12 : 0));
     c.fill();
@@ -977,26 +1084,17 @@ function drawFrame() {
     c.lineWidth = isActive ? 2 : 1.5;
     c.stroke();
 
-    // Icon
     c.font = '13px serif';
     c.textAlign = 'center'; c.textBaseline = 'middle';
     c.globalAlpha = alpha;
-    if (n.icon === '~') {
-      c.font = 'bold 13px -apple-system, system-ui, sans-serif';
-      c.fillStyle = n.color;
-      c.fillText('~', nx, ny);
-    } else {
-      c.fillText(n.icon, nx, ny);
-    }
+    c.fillText(n.icon, nx, ny);
     c.globalAlpha = 1;
 
-    // Label
     c.font = '10px -apple-system, system-ui, sans-serif';
     c.textAlign = 'center'; c.textBaseline = 'top';
     c.fillStyle = hexToRgba(ct.label, Math.min(1, alpha * 1.1));
     c.fillText(n.label, nx, ny + r + 3);
 
-    // Volume % when active enough
     if (g > 0.05) {
       const pct = Math.round(g * 100);
       c.font = '9px -apple-system, system-ui, sans-serif';
@@ -1045,12 +1143,12 @@ function moveNode(ex, ey) {
 
 canvas.addEventListener('mousedown',  e => { const [x,y] = eventXY(e); dragging = hitTest(x,y); });
 canvas.addEventListener('mousemove',  e => { if (dragging) { const [x,y] = eventXY(e); moveNode(x,y); } });
-canvas.addEventListener('mouseup',    () => { dragging = null; });
-canvas.addEventListener('mouseleave', () => { dragging = null; });
+canvas.addEventListener('mouseup',    () => { if (dragging) { saveMix(); } dragging = null; });
+canvas.addEventListener('mouseleave', () => { if (dragging) { saveMix(); } dragging = null; });
 
 canvas.addEventListener('touchstart', e => { e.preventDefault(); const [x,y] = eventXY(e); dragging = hitTest(x,y); }, { passive: false });
 canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (dragging) { const [x,y] = eventXY(e); moveNode(x,y); } }, { passive: false });
-canvas.addEventListener('touchend',   e => { e.preventDefault(); dragging = null; }, { passive: false });
+canvas.addEventListener('touchend',   e => { e.preventDefault(); if (dragging) { saveMix(); } dragging = null; }, { passive: false });
 
 // ═══════════════════════════════════════════════════════════════
 //  PRESETS
@@ -1068,6 +1166,7 @@ function applyPreset(name) {
   document.querySelectorAll('.preset-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.preset === name);
   });
+  saveMix();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1080,27 +1179,17 @@ function shuffleMix() {
     n.x = Math.cos(angle) * dist;
     n.y = Math.sin(angle) * dist;
   }
-  updateGains(); updateMixCode();
+  updateGains(); updateMixCode(); saveMix();
   state.activePreset = null;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
 }
 
 function resetMix() {
-  const REST = {
-    wind:   [  0.00, -0.75 ],
-    rain:   [ -0.53, -0.45 ],
-    waves:  [  0.53, -0.45 ],
-    fire:   [ -0.62,  0.28 ],
-    forest: [  0.62,  0.28 ],
-    white:  [ -0.53,  0.62 ],
-    pink:   [  0.00,  0.80 ],
-    brown:  [  0.53,  0.62 ],
-  };
-  for (const [key, pos] of Object.entries(REST)) {
-    NODES[key].x = pos[0]; NODES[key].y = pos[1];
+  for (const [key, n] of Object.entries(NODES)) {
+    n.x = NODES[key]._rx; n.y = NODES[key]._ry;
   }
   if (state.playing) pause();
-  updateGains(); updateMixCode();
+  updateGains(); updateMixCode(); saveMix();
   state.activePreset = null;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
 }
@@ -1187,8 +1276,46 @@ function loadMixCode(raw) {
       NODES[key].y = Math.max(-1, Math.min(1, y / 100));
     }
   }
-  updateGains(); updateMixCode();
+  updateGains(); updateMixCode(); saveMix();
   showToast('Mix loaded');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MIX PERSISTENCE
+// ═══════════════════════════════════════════════════════════════
+function saveMix() {
+  try {
+    const positions = {};
+    for (const [key, n] of Object.entries(NODES)) positions[key] = [n.x, n.y];
+    localStorage.setItem('kin007-mix', JSON.stringify({
+      positions,
+      volume: state.masterVolume,
+      drift: state.drift,
+    }));
+  } catch(e) {}
+}
+
+function restoreMix() {
+  try {
+    const raw = localStorage.getItem('kin007-mix');
+    if (!raw) return false;
+    const saved = JSON.parse(raw);
+    if (saved.positions) {
+      for (const [key, pos] of Object.entries(saved.positions)) {
+        if (NODES[key]) { NODES[key].x = pos[0]; NODES[key].y = pos[1]; }
+      }
+    }
+    if (saved.volume !== undefined) {
+      state.masterVolume = saved.volume;
+      document.getElementById('master-slider').value = saved.volume;
+      document.getElementById('master-val').textContent = saved.volume;
+    }
+    if (saved.drift) {
+      state.drift = true;
+      document.getElementById('drift-toggle').classList.add('on');
+    }
+    return true;
+  } catch(e) { return false; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1205,11 +1332,17 @@ function showToast(msg) {
 // ═══════════════════════════════════════════════════════════════
 //  BOOT
 // ═══════════════════════════════════════════════════════════════
+
+// Store initial ring positions so reset always returns to them
+for (const [key, n] of Object.entries(NODES)) { n._rx = n.x; n._ry = n.y; }
+
 document.getElementById('btn-start').addEventListener('click', () => {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   resizeCanvas();
-  applyPreset('deep-sleep');
+  const hasSaved = restoreMix();
+  if (!hasSaved) applyPreset('deep-sleep');
+  else { updateGains(); updateMixCode(); }
   animate();
 });
 
@@ -1237,6 +1370,7 @@ document.getElementById('master-slider').addEventListener('input', e => {
   state.masterVolume = Number(e.target.value);
   document.getElementById('master-val').textContent = state.masterVolume;
   setMasterGain(state.masterVolume);
+  saveMix();
 });
 
 // Presets
@@ -1261,6 +1395,7 @@ document.getElementById('drift-toggle').addEventListener('click', () => {
   state.drift = !state.drift;
   document.getElementById('drift-toggle').classList.toggle('on', state.drift);
   state.drift ? startDrift() : stopDrift();
+  saveMix();
   showToast(state.drift ? 'Drift on' : 'Drift off');
 });
 
@@ -1285,22 +1420,22 @@ document.getElementById('mix-paste-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-load-code').click();
 });
 
-// Mark ∞ as default
+// Mark ∞ as default active
 document.querySelector('.timer-btn[data-minutes="0"]').classList.add('active');
 
-// Init canvas on load
-window.addEventListener('load', () => {
-  resizeCanvas();
-  // Draw static frame so canvas isn't blank before start
-  drawFrame();
-});
+// Init canvas on load (draw static frame so canvas isn't blank before start)
+window.addEventListener('load', () => { resizeCanvas(); drawFrame(); });
 
 // Theme toggle
 (function() {
   const btn = document.getElementById('theme-btn');
   const saved = localStorage.getItem('kin007-theme');
-  if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
-  else { btn.textContent = '☀️'; }
+  if (saved === 'dark') {
+    document.documentElement.classList.remove('light');
+    btn.textContent = '☀️';
+  } else {
+    btn.textContent = '🌙';
+  }
   btn.addEventListener('click', () => {
     const isLight = document.documentElement.classList.toggle('light');
     btn.textContent = isLight ? '🌙' : '☀️';
@@ -1310,18 +1445,95 @@ window.addEventListener('load', () => {
 })();
 </script>
 
-  <script>
-  (function(){try{
-  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
-  var ctx=c.getContext('2d');
-  var g=ctx.createLinearGradient(0,0,sz,sz);
-  g.addColorStop(0,'#5A3D4A');g.addColorStop(1,'#1a2a3d');
-  ctx.fillStyle=g;
-  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
-  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><circle cx="24" cy="24" r="3" fill="white" opacity="0.9"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="1.5" opacity="0.6"/><circle cx="24" cy="24" r="14" stroke="white" stroke-width="1.5" opacity="0.35"/><path d="M12 24c0 2 1 5 3 7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/><path d="M36 24c0-2-1-5-3-7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/></svg>';
-  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
-  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
-  }catch(e){}})();
-  </script>
+<script>
+// ── Blob manifest ───────────────────────────────────────────────
+(function() {
+  const sz = 192;
+  const mkIcon = (size) => {
+    const cv = document.createElement('canvas');
+    cv.width = size; cv.height = size;
+    const x = cv.getContext('2d');
+    const g = x.createLinearGradient(0, 0, size, size);
+    g.addColorStop(0, '#5A3D4A'); g.addColorStop(1, '#1a2a3d');
+    x.fillStyle = g;
+    const r = size * 0.2;
+    x.beginPath(); x.moveTo(r,0); x.lineTo(size-r,0); x.arcTo(size,0,size,r,r);
+    x.lineTo(size,size-r); x.arcTo(size,size,size-r,size,r);
+    x.lineTo(r,size); x.arcTo(0,size,0,size-r,r);
+    x.lineTo(0,r); x.arcTo(0,0,r,0,r); x.closePath(); x.fill();
+    const ic = size * 0.53;
+    const io = (size - ic) / 2;
+    const svgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="' + ic + '" height="' + ic + '" viewBox="0 0 48 48"><circle cx="24" cy="24" r="3" fill="white" opacity="0.9"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="1.5" opacity="0.6"/><circle cx="24" cy="24" r="14" stroke="white" stroke-width="1.5" opacity="0.35"/><path d="M12 24c0 2 1 5 3 7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/><path d="M36 24c0-2-1-5-3-7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/></svg>';
+    return { cv, x, io, ic, svgStr };
+  };
+
+  const { cv: cv192, x: x192, io: io192, ic: ic192, svgStr } = mkIcon(192);
+  const { cv: cv512, x: x512, io: io512, ic: ic512 } = mkIcon(512);
+
+  const img192 = new Image();
+  const img512 = new Image();
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  img192.onload = function() {
+    x192.drawImage(img192, io192, io192, ic192, ic192);
+    img512.onload = function() {
+      x512.drawImage(img512, io512, io512, ic512, ic512);
+      URL.revokeObjectURL(url);
+      const icon192 = cv192.toDataURL('image/png');
+      const icon512 = cv512.toDataURL('image/png');
+      const manifest = {
+        name: 'Ambient Mixer',
+        short_name: 'KIN-007',
+        description: 'Ambient sound mixer — all audio generated locally, no streaming, no tracking.',
+        start_url: './',
+        display: 'standalone',
+        background_color: '#f5f7fa',
+        theme_color: '#4a7fa5',
+        icons: [
+          { src: icon192, sizes: '192x192', type: 'image/png' },
+          { src: icon512, sizes: '512x512', type: 'image/png' },
+        ]
+      };
+      const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      const mUrl = URL.createObjectURL(mBlob);
+      document.getElementById('manifest-link').href = mUrl;
+    };
+    img512.src = url;
+  };
+  img192.src = url;
+})();
+
+// ── Apple touch icon ─────────────────────────────────────────────
+(function() {
+  try {
+    var sz=180, cv=document.createElement('canvas');
+    cv.width=sz; cv.height=sz;
+    var x=cv.getContext('2d');
+    var g=x.createLinearGradient(0,0,sz,sz);
+    g.addColorStop(0,'#5A3D4A'); g.addColorStop(1,'#1a2a3d');
+    x.fillStyle=g;
+    var r=36; x.beginPath(); x.moveTo(r,0); x.lineTo(sz-r,0); x.arcTo(sz,0,sz,r,r);
+    x.lineTo(sz,sz-r); x.arcTo(sz,sz,sz-r,sz,r); x.lineTo(r,sz); x.arcTo(0,sz,0,sz-r,r);
+    x.lineTo(0,r); x.arcTo(0,0,r,0,r); x.closePath(); x.fill();
+    var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><circle cx="24" cy="24" r="3" fill="white" opacity="0.9"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="1.5" opacity="0.6"/><circle cx="24" cy="24" r="14" stroke="white" stroke-width="1.5" opacity="0.35"/><path d="M12 24c0 2 1 5 3 7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/><path d="M36 24c0-2-1-5-3-7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/></svg>';
+    var img=new Image(), blob=new Blob([svgStr],{type:'image/svg+xml'}), burl=URL.createObjectURL(blob);
+    img.onload=function(){x.drawImage(img,42,42,96,96); URL.revokeObjectURL(burl); var el=document.getElementById('apple-touch-icon'); if(el) el.href=cv.toDataURL('image/png');};
+    img.src=burl;
+  } catch(e) {}
+})();
+
+// ── Service worker ───────────────────────────────────────────────
+(function() {
+  if (!('serviceWorker' in navigator)) return;
+  const SW = `const CACHE='kin007-v2';const ASSETS=['./'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{if(resp.ok){const c=resp.clone();caches.open(CACHE).then(ca=>ca.put(e.request,c));}return resp;})));});`;
+  const blob = new Blob([SW], { type: 'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(() => {});
+})();
+</script>
 </body>
 </html>
