@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KIN JSON — Kin</title>
+<title>KIN JSON -- Kin</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="KIN JSON">
@@ -35,8 +35,8 @@
 --type-boolean: #7C3AED;
 --type-null: #9B978F;
 --type-key: #1A1A1A;
---mono: ‘JetBrains Mono’, monospace;
---sans: ‘DM Sans’, sans-serif;
+--mono: 'JetBrains Mono', monospace;
+--sans: 'DM Sans', sans-serif;
 --radius: 8px;
 --radius-lg: 12px;
 }
@@ -984,9 +984,9 @@ attachEvents();
 }
 
 function renderDiffMode() {
-let html = ‘<div class="workspace" style="grid-template-columns:1fr">’;
-html += ‘<div class="panel">’;
-html += ‘<div class="panel-header"><span class="panel-label">Diff</span></div>’;
+let html = '<div class="workspace" style="grid-template-columns:1fr">';
+html += '<div class="panel">';
+html += '<div class="panel-header"><span class="panel-label">Diff</span></div>';
 
 html += '<div class="diff-workspace">';
 html += '<div><div class="diff-header">A (before)</div><textarea id="diff-a" placeholder="Paste first JSON...">' + esc(state.diffA) + '</textarea></div>';
@@ -1032,13 +1032,13 @@ return html;
 }
 
 function attachEvents() {
-const input = document.getElementById(‘input’);
+const input = document.getElementById('input');
 if (input) {
-input.addEventListener(‘input’, e => {
+input.addEventListener('input', e => {
 state.input = e.target.value;
 render();
 // Restore cursor
-const el = document.getElementById(‘input’);
+const el = document.getElementById('input');
 if (el) { el.focus(); el.selectionStart = el.selectionEnd = e.target.selectionStart; }
 });
 
@@ -1161,7 +1161,7 @@ if (pathBar) {
 
 // Plain text TS (for copy)
 function jsonToTSPlain(obj, name) {
-name = name || ‘Root’;
+name = name || 'Root';
 const interfaces = [];
 
 function inferType(val, propName) {
@@ -1207,7 +1207,7 @@ return interfaces.join('\n\n');
 }
 
 // Service worker registration for PWA
-if (‘serviceWorker’ in navigator) {
+if ('serviceWorker' in navigator) {
 // Minimal inline SW not possible from single file, but manifest is enough for Add to Home Screen
 }
 
