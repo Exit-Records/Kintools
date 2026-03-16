@@ -284,7 +284,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ## KIN-020 · Password Generator
 
-**URL:** https://kinpwgen.netlify.app *(placeholder — update after Netlify deploy)*
+**URL:** https://kinpassgen.netlify.app
 **Netlify publish dir:** `sites/kin-020-password-generator`
 
 **Summary:** Fast, private password generator. Password mode: length slider (8–128), uppercase/lowercase/numbers/symbols toggles, ambiguous-character exclusion (0/O, 1/l/I), pronounceable mode (CV patterns), advanced include/exclude fields. Passphrase mode: 3–8 words from ~900-word bundled wordlist, configurable separator, capitalise options, optional digit+symbol injection. Strength indicator: entropy in bits, time-to-crack at 1B guesses/sec, colour bar. Batch: up to 20 passwords at once with individual and copy-all. Session history (no localStorage). Keyboard shortcuts: Space=regenerate, Cmd+Enter=copy. Nothing stored anywhere.

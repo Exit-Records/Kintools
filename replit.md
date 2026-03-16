@@ -4,7 +4,7 @@ This project is a pnpm workspace monorepo utilizing TypeScript for building a co
 
 **Current tools: KIN-001 through KIN-020 (20 tools). Next: KIN-021.**
 
-Latest: KIN-020 · Password Generator — `sites/kin-020-password-generator/` — URL TBD after Netlify deploy
+Latest: KIN-020 · Password Generator — `sites/kin-020-password-generator/` — `https://kinpassgen.netlify.app`
 
 ## User Preferences
 
