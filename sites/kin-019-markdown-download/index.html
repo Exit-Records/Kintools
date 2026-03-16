@@ -2,34 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markdown Download — Kin</title>
-  <meta name="description" content="Write or paste text and download it as a .md file. Free, offline, no accounts. KIN-019 by Darren for Kin.">
-  <meta name="theme-color" content="#111110" id="theme-color-meta">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KIN-019 — Markdown Download — Kin</title>
+  <meta name="description" content="Write or paste text and download it as a .md file. Free, offline, no accounts.">
+  <meta name="theme-color" content="#FAFAF7" id="theme-color-meta">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Markdown Download">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
   <link rel="manifest" id="manifest-link">
-  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:          #111110;
-      --surface:     #1c1c1a;
-      --surface2:    #252522;
-      --border:      #2e2e2b;
-      --border-hover:#3d3d39;
-      --text:        #f0efe8;
-      --text-mid:    #9c9a90;
-      --text-dim:    #5c5b54;
-      --accent:      #7eb88a;
-      --accent-dim:  #2a4030;
-      --radius:      12px;
-      --radius-sm:   8px;
-    }
-
-    html.light {
       --bg:          #FAFAF7;
       --surface:     #FFFFFF;
       --surface2:    #F3F2EE;
@@ -40,7 +25,54 @@
       --text-dim:    #9C9A94;
       --accent:      #2D5A3D;
       --accent-dim:  #E8F0EB;
+      --radius:      12px;
+      --radius-sm:   8px;
     }
+
+    body.dark { background: #111110 !important; color: #f0efe8 !important; }
+    body.dark .wrap { color: #f0efe8 !important; }
+    body.dark .kin-label { color: #5c5b54 !important; }
+    body.dark .kin-title { color: #f0efe8 !important; }
+    body.dark .kin-sub { color: #9c9a90 !important; }
+    body.dark .section-label { color: #5c5b54 !important; }
+    body.dark .filename-ext { color: #5c5b54 !important; }
+    body.dark input,
+    body.dark textarea {
+      background: #252522 !important;
+      border-color: #2e2e2b !important;
+      color: #f0efe8 !important;
+    }
+    body.dark input::placeholder,
+    body.dark textarea::placeholder { color: #5c5b54 !important; }
+    body.dark input:focus,
+    body.dark textarea:focus { border-color: #7eb88a !important; }
+    body.dark .btn-primary {
+      background: #f0efe8 !important;
+      color: #111110 !important;
+    }
+    body.dark .btn-ghost {
+      border-color: #2e2e2b !important;
+      color: #9c9a90 !important;
+    }
+    body.dark .btn-ghost:hover {
+      border-color: #3d3d39 !important;
+      color: #f0efe8 !important;
+    }
+    body.dark .meta { color: #5c5b54 !important; }
+    body.dark .toast {
+      background: #1c1c1a !important;
+      border-color: #2e2e2b !important;
+      color: #f0efe8 !important;
+    }
+    body.dark #theme-btn {
+      background: #1c1c1a !important;
+      border-color: #2e2e2b !important;
+      color: #f0efe8 !important;
+    }
+    body.dark #theme-btn:hover { border-color: #3d3d39 !important; }
+    body.dark .kin-footer { border-top-color: #2e2e2b !important; }
+    body.dark .foot-brand { color: #5c5b54 !important; }
+    body.dark .foot-meta { color: #5c5b54 !important; }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -50,6 +82,7 @@
       color: var(--text);
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
     @keyframes fadeUp {
@@ -66,11 +99,12 @@
 
     #theme-btn {
       position: fixed;
-      top: 14px;
-      right: 14px;
+      top: calc(14px + env(safe-area-inset-top));
+      right: calc(14px + env(safe-area-inset-right));
       z-index: 999;
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
       border-radius: 50%;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -78,7 +112,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
+      line-height: 1;
       transition: border-color 0.2s, background 0.2s;
     }
     #theme-btn:hover { border-color: var(--border-hover); }
@@ -125,9 +160,7 @@
       margin-bottom: 16px;
     }
 
-    .filename-row input {
-      flex: 1;
-    }
+    .filename-row input { flex: 1; }
 
     .filename-ext {
       font-size: 14px;
@@ -142,9 +175,10 @@
       border-radius: var(--radius-sm);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       padding: 10px 12px;
       width: 100%;
+      min-height: 44px;
       transition: border-color 0.15s;
       -webkit-appearance: none;
       appearance: none;
@@ -161,7 +195,7 @@
       min-height: 320px;
       resize: vertical;
       line-height: 1.7;
-      font-size: 14px;
+      font-size: 16px;
       font-family: 'DM Sans', monospace;
       tab-size: 2;
     }
@@ -179,6 +213,7 @@
       justify-content: center;
       gap: 8px;
       padding: 12px 24px;
+      min-height: 44px;
       background: var(--text);
       color: var(--bg);
       border: none;
@@ -200,7 +235,8 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       font-weight: 500;
-      padding: 8px 18px;
+      padding: 10px 18px;
+      min-height: 44px;
       cursor: pointer;
       transition: border-color 0.15s, color 0.15s;
     }
@@ -216,7 +252,7 @@
 
     .toast {
       position: fixed;
-      bottom: 24px;
+      bottom: calc(24px + env(safe-area-inset-bottom));
       left: 50%;
       transform: translateX(-50%) translateY(20px);
       background: var(--surface);
@@ -263,218 +299,242 @@
 </head>
 <body>
 
-<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+  <button id="theme-btn" aria-label="Toggle theme">
+    <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
 
-<div class="wrap">
+  <div class="wrap">
 
-  <div class="kin-header">
-    <div class="kin-label">KIN-019 · Darren</div>
-    <h1 class="kin-title">Markdown Download</h1>
-    <p class="kin-sub">Write or paste text and download it as a .md file.</p>
+    <div class="kin-header">
+      <div class="kin-label">Kin</div>
+      <h1 class="kin-title">Markdown Download</h1>
+      <p class="kin-sub">Write or paste text and download it as a .md file.</p>
+    </div>
+
+    <div class="section-label">Filename</div>
+    <div class="filename-row">
+      <input type="text" id="filename" placeholder="untitled" autocomplete="off" spellcheck="false">
+      <span class="filename-ext">.md</span>
+    </div>
+
+    <div class="section-label">Content</div>
+    <textarea id="content" placeholder="Write or paste your markdown here..."></textarea>
+
+    <div class="meta">
+      <span id="word-count">0 words</span>
+      <span id="char-count">0 characters</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" id="download-btn" disabled>Download .md</button>
+      <button class="btn-ghost" id="copy-btn">Copy text</button>
+      <button class="btn-ghost" id="clear-btn">Clear</button>
+    </div>
+
+    <footer class="kin-footer">
+      <div class="foot-brand">Kin</div>
+      <div class="foot-meta">KIN-019 · Markdown Download<br>by Darren · No tracking · Works offline</div>
+    </footer>
+
   </div>
 
-  <div class="section-label">Filename</div>
-  <div class="filename-row">
-    <input type="text" id="filename" placeholder="untitled" autocomplete="off" spellcheck="false">
-    <span class="filename-ext">.md</span>
-  </div>
+  <div class="toast" id="toast"></div>
 
-  <div class="section-label">Content</div>
-  <textarea id="content" placeholder="Write or paste your markdown here..."></textarea>
+  <script>
+    const THEME_DARK  = '#111110';
+    const THEME_LIGHT = '#FAFAF7';
+    const CACHE_NAME  = 'kin019-v1';
+    const TOOL_NAME   = 'Markdown Download';
 
-  <div class="meta">
-    <span id="word-count">0 words</span>
-    <span id="char-count">0 characters</span>
-  </div>
+    const themeBtn = document.getElementById('theme-btn');
+    const sunIcon  = document.getElementById('theme-icon-sun');
+    const moonIcon = document.getElementById('theme-icon-moon');
 
-  <div class="actions">
-    <button class="btn-primary" id="download-btn" disabled>Download .md</button>
-    <button class="btn-ghost" id="copy-btn">Copy text</button>
-    <button class="btn-ghost" id="clear-btn">Clear</button>
-  </div>
-
-  <footer class="kin-footer">
-    <div class="foot-brand">Kin</div>
-    <div class="foot-meta">Markdown Download · KIN-019 · by Darren<br>No tracking · Works offline</div>
-  </footer>
-
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-  const themeBtn = document.getElementById('theme-btn');
-  let isDark = false;
-  const THEME_DARK = '#111110';
-  const THEME_LIGHT = '#FAFAF7';
-
-  document.documentElement.classList.add('light');
-  themeBtn.textContent = '🌙';
-  document.getElementById('theme-color-meta').setAttribute('content', THEME_LIGHT);
-
-  function updateThemeMeta(dark) {
-    document.getElementById('theme-color-meta').setAttribute('content', dark ? THEME_DARK : THEME_LIGHT);
-  }
-
-  themeBtn.addEventListener('click', () => {
-    isDark = !isDark;
-    document.documentElement.classList.toggle('light', !isDark);
-    themeBtn.textContent = isDark ? '☀️' : '🌙';
-    updateThemeMeta(isDark);
-  });
-
-  const content  = document.getElementById('content');
-  const filename = document.getElementById('filename');
-  const downloadBtn = document.getElementById('download-btn');
-  const copyBtn  = document.getElementById('copy-btn');
-  const clearBtn = document.getElementById('clear-btn');
-  const wordCount = document.getElementById('word-count');
-  const charCount = document.getElementById('char-count');
-  const toast    = document.getElementById('toast');
-
-  let toastTimer;
-  function showToast(msg) {
-    clearTimeout(toastTimer);
-    toast.textContent = msg;
-    toast.classList.add('show');
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
-  }
-
-  function updateCounts() {
-    const text  = content.value;
-    const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-    const chars = text.length;
-    wordCount.textContent = words + ' word' + (words !== 1 ? 's' : '');
-    charCount.textContent = chars + ' character' + (chars !== 1 ? 's' : '');
-    downloadBtn.disabled  = text.trim() === '';
-  }
-
-  content.addEventListener('input', updateCounts);
-
-  content.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const start = content.selectionStart;
-      const end   = content.selectionEnd;
-      content.value = content.value.substring(0, start) + '  ' + content.value.substring(end);
-      content.selectionStart = content.selectionEnd = start + 2;
-      updateCounts();
-    }
-  });
-
-  downloadBtn.addEventListener('click', () => {
-    const text = content.value;
-    if (!text.trim()) return;
-    const name = (filename.value.trim() || 'untitled') + '.md';
-    const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('Downloaded ' + name);
-  });
-
-  copyBtn.addEventListener('click', () => {
-    if (!content.value.trim()) { showToast('Nothing to copy'); return; }
-    navigator.clipboard.writeText(content.value).then(() => {
-      showToast('Copied to clipboard');
-    }).catch(() => {
-      content.select();
-      document.execCommand('copy');
-      showToast('Copied to clipboard');
-    });
-  });
-
-  clearBtn.addEventListener('click', () => {
-    if (!content.value.trim()) return;
-    content.value  = '';
-    filename.value = '';
-    updateCounts();
-    content.focus();
-    showToast('Cleared');
-  });
-
-  // PWA
-  const TOOL_NAME  = 'Markdown Download';
-  const CACHE_NAME = 'kin-md-download-v1';
-
-  const manifest = {
-    name: TOOL_NAME + ' — Kin',
-    short_name: TOOL_NAME,
-    description: 'Write or paste text and download as .md. Free, offline, no accounts.',
-    start_url: './',
-    display: 'standalone',
-    background_color: THEME_DARK,
-    theme_color: THEME_DARK,
-    icons: [
-      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='120' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
-      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='320' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml' }
-    ]
-  };
-  document.getElementById('manifest-link').setAttribute('href',
-    'data:application/json,' + encodeURIComponent(JSON.stringify(manifest)));
-
-  // Apple touch icon — matches landing page cover
-  (function () {
-    try {
-      var sz = 180, c = document.createElement('canvas');
-      c.width = sz; c.height = sz;
-      var ctx = c.getContext('2d');
-      var g = ctx.createLinearGradient(0, 0, sz, sz);
-      g.addColorStop(0, '#1a3f5c'); g.addColorStop(1, '#0b1e2d');
-      ctx.fillStyle = g;
-      var r = 36;
-      ctx.beginPath();
-      ctx.moveTo(r,0); ctx.lineTo(sz-r,0); ctx.arcTo(sz,0,sz,r,r);
-      ctx.lineTo(sz,sz-r); ctx.arcTo(sz,sz,sz-r,sz,r);
-      ctx.lineTo(r,sz); ctx.arcTo(0,sz,0,sz-r,r);
-      ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r); ctx.closePath(); ctx.fill();
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48" fill="none">' +
-        '<rect x="8" y="4" width="24" height="30" rx="3" stroke="white" stroke-width="2" opacity="0.7"/>' +
-        '<line x1="14" y1="13" x2="26" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>' +
-        '<line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>' +
-        '<path d="M32 28 L32 44 M26 38 L32 44 L38 38" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '</svg>';
-      var img = new Image();
-      var blob = new Blob([svg], { type: 'image/svg+xml' });
-      var url = URL.createObjectURL(blob);
-      img.onload = function () {
-        ctx.drawImage(img, 42, 42, 96, 96);
-        URL.revokeObjectURL(url);
+    // Apple-touch-icon: green gradient, "MD" initials
+    (function () {
+      try {
+        var sz = 180;
+        var c = document.createElement('canvas');
+        c.width = c.height = sz;
+        var ctx = c.getContext('2d');
+        var g = ctx.createLinearGradient(0, 0, sz, sz);
+        g.addColorStop(0, '#2D5A3D');
+        g.addColorStop(1, '#1a3628');
+        ctx.fillStyle = g;
+        var r = sz * 0.18;
+        ctx.beginPath();
+        ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+        ctx.quadraticCurveTo(sz, 0, sz, r);
+        ctx.lineTo(sz, sz - r);
+        ctx.quadraticCurveTo(sz, sz, sz - r, sz);
+        ctx.lineTo(r, sz);
+        ctx.quadraticCurveTo(0, sz, 0, sz - r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#f0efe8';
+        ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('MD', sz / 2, sz * 0.52);
         var el = document.getElementById('apple-touch-icon');
         if (el) el.href = c.toDataURL('image/png');
-      };
-      img.src = url;
-    } catch (e) {}
-  })();
+      } catch (e) {}
+    })();
 
-  if ('serviceWorker' in navigator) {
-    const swCode = `
-      const CACHE = '${CACHE_NAME}';
-      self.addEventListener('install', e => {
-        self.skipWaiting();
-        e.waitUntil(caches.open(CACHE).then(c => c.addAll([self.location.href])));
+    // Blob manifest with canvas PNG icons
+    (function () {
+      try {
+        function makeIcon(sz) {
+          var c = document.createElement('canvas');
+          c.width = c.height = sz;
+          var ctx = c.getContext('2d');
+          var g = ctx.createLinearGradient(0, 0, sz, sz);
+          g.addColorStop(0, '#2D5A3D');
+          g.addColorStop(1, '#1a3628');
+          ctx.fillStyle = g;
+          var r = sz * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+          ctx.quadraticCurveTo(sz, 0, sz, r);
+          ctx.lineTo(sz, sz - r);
+          ctx.quadraticCurveTo(sz, sz, sz - r, sz);
+          ctx.lineTo(r, sz);
+          ctx.quadraticCurveTo(0, sz, 0, sz - r);
+          ctx.lineTo(0, r);
+          ctx.quadraticCurveTo(0, 0, r, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = '#f0efe8';
+          ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('MD', sz / 2, sz * 0.52);
+          return c.toDataURL('image/png');
+        }
+        var manifest = {
+          name: TOOL_NAME + ' — Kin',
+          short_name: TOOL_NAME,
+          description: 'Write or paste text and download as .md. Free, offline, no accounts.',
+          start_url: './',
+          display: 'standalone',
+          background_color: THEME_LIGHT,
+          theme_color: THEME_LIGHT,
+          icons: [
+            { src: makeIcon(192), sizes: '192x192', type: 'image/png' },
+            { src: makeIcon(512), sizes: '512x512', type: 'image/png' }
+          ]
+        };
+        var blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+      } catch (e) {}
+    })();
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      sunIcon.style.display  = dark ? 'block' : 'none';
+      moonIcon.style.display = dark ? 'none'  : 'block';
+      document.getElementById('theme-color-meta').setAttribute('content', dark ? THEME_DARK : THEME_LIGHT);
+      try { localStorage.setItem('kin019-theme', dark ? 'dark' : 'light'); } catch(e) {}
+    }
+
+    var isDark = false;
+    try {
+      if (localStorage.getItem('kin019-theme') === 'dark') isDark = true;
+    } catch(e) {}
+    applyTheme(isDark);
+
+    themeBtn.addEventListener('click', function () {
+      isDark = !isDark;
+      applyTheme(isDark);
+    });
+
+    var content     = document.getElementById('content');
+    var filename    = document.getElementById('filename');
+    var downloadBtn = document.getElementById('download-btn');
+    var copyBtn     = document.getElementById('copy-btn');
+    var clearBtn    = document.getElementById('clear-btn');
+    var wordCount   = document.getElementById('word-count');
+    var charCount   = document.getElementById('char-count');
+    var toast       = document.getElementById('toast');
+
+    var toastTimer;
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2000);
+    }
+
+    function updateCounts() {
+      var text  = content.value;
+      var words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+      var chars = text.length;
+      wordCount.textContent = words + ' word' + (words !== 1 ? 's' : '');
+      charCount.textContent = chars + ' character' + (chars !== 1 ? 's' : '');
+      downloadBtn.disabled  = text.trim() === '';
+    }
+
+    content.addEventListener('input', updateCounts);
+
+    content.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var start = content.selectionStart;
+        var end   = content.selectionEnd;
+        content.value = content.value.substring(0, start) + '  ' + content.value.substring(end);
+        content.selectionStart = content.selectionEnd = start + 2;
+        updateCounts();
+      }
+    });
+
+    downloadBtn.addEventListener('click', function () {
+      var text = content.value;
+      if (!text.trim()) return;
+      var name = (filename.value.trim() || 'untitled') + '.md';
+      var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+      var url  = URL.createObjectURL(blob);
+      var a    = document.createElement('a');
+      a.href     = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded ' + name);
+    });
+
+    copyBtn.addEventListener('click', function () {
+      if (!content.value.trim()) { showToast('Nothing to copy'); return; }
+      navigator.clipboard.writeText(content.value).then(function () {
+        showToast('Copied to clipboard');
+      }).catch(function () {
+        content.select();
+        document.execCommand('copy');
+        showToast('Copied to clipboard');
       });
-      self.addEventListener('activate', e => {
-        e.waitUntil(caches.keys().then(keys =>
-          Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-        ));
-      });
-      self.addEventListener('fetch', e => {
-        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-          return res;
-        })));
-      });`;
-    const swBlob = new Blob([swCode], { type: 'text/javascript' });
-    navigator.serviceWorker.register(URL.createObjectURL(swBlob));
-  }
-</script>
+    });
+
+    clearBtn.addEventListener('click', function () {
+      if (!content.value.trim()) return;
+      content.value  = '';
+      filename.value = '';
+      updateCounts();
+      content.focus();
+      showToast('Cleared');
+    });
+
+    if ('serviceWorker' in navigator) {
+      var swCode = 'const CACHE="' + CACHE_NAME + '";' +
+        'self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href])));});' +
+        'self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));});' +
+        'self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));return res;})));});';
+      var swBlob = new Blob([swCode], { type: 'text/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+    }
+  </script>
 
 </body>
 </html>
