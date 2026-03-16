@@ -236,7 +236,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 **Notes:**
 - Static HTML, single file.
-- Creator: Alice Anthony (not Darren).
+- Creator: Alice (not Darren).
 - PWA support added (icon.svg, manifest.json, meta tags, canvas apple-touch-icon).
 - Color scheme: violet `#7c3aed` / `#5b21b6`; background `#f7f5ff`.
 - No localStorage — spec explicitly prohibits any storage.
