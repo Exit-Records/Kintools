@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIN JSON — Kin</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="KIN JSON">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<meta name="theme-color" id="theme-color-meta" content="#f2f0EC">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+--bg: #f2f0EC;
+--surface: #FFFFFF;
+--surface-alt: #E8E6E1;
+--border: #D4D1CA;
+--border-focus: #1A1A1A;
+--text: #1A1A1A;
+--text-secondary: #6B6860;
+--text-tertiary: #9B978F;
+--accent: #1A1A1A;
+--error: #C4392D;
+--error-bg: #FEF2F1;
+--error-border: #F0B8B4;
+--success: #2D7D46;
+--success-bg: #F0F8F3;
+--type-string: #8B6914;
+--type-number: #2563EB;
+--type-boolean: #7C3AED;
+--type-null: #9B978F;
+--type-key: #1A1A1A;
+--mono: ‘JetBrains Mono’, monospace;
+--sans: ‘DM Sans’, sans-serif;
+--radius: 8px;
+--radius-lg: 12px;
+}
+
+body {
+font-family: var(--sans);
+background: var(--bg);
+color: var(--text);
+min-height: 100dvh;
+-webkit-font-smoothing: antialiased;
+}
+
+.app {
+max-width: 1400px;
+margin: 0 auto;
+padding: 24px 20px;
+}
+
+header {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+margin-bottom: 20px;
+flex-wrap: wrap;
+gap: 12px;
+}
+
+.logo {
+font-family: var(--mono);
+font-weight: 700;
+font-size: 15px;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--text);
+}
+
+.logo span {
+color: var(--text-tertiary);
+font-weight: 400;
+}
+
+.toolbar {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+
+.btn {
+font-family: var(--mono);
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 0.03em;
+padding: 7px 14px;
+border: 1px solid var(--border);
+border-radius: var(--radius);
+background: var(--surface);
+color: var(--text);
+cursor: pointer;
+transition: all 0.15s ease;
+white-space: nowrap;
+user-select: none;
+}
+
+.btn:hover { border-color: var(--border-focus); background: var(--surface); }
+.btn:active { transform: scale(0.97); }
+.btn.active { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.btn.accent { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.btn.accent:hover { opacity: 0.85; }
+
+.workspace {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+min-height: calc(100dvh - 140px);
+}
+
+@media (max-width: 800px) {
+.workspace { grid-template-columns: 1fr; min-height: auto; }
+.panel { min-height: 40vh; }
+}
+
+.panel {
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+.panel-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 12px 16px;
+border-bottom: 1px solid var(--border);
+flex-shrink: 0;
+}
+
+.panel-label {
+font-family: var(--mono);
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--text-tertiary);
+}
+
+.panel-meta {
+font-family: var(--mono);
+font-size: 10px;
+color: var(--text-tertiary);
+display: flex;
+gap: 12px;
+}
+
+.panel-body {
+flex: 1;
+overflow: auto;
+position: relative;
+}
+
+textarea {
+width: 100%;
+height: 100%;
+min-height: 300px;
+padding: 16px;
+border: none;
+outline: none;
+resize: none;
+font-family: var(--mono);
+font-size: 13px;
+line-height: 1.7;
+color: var(--text);
+background: transparent;
+tab-size: 2;
+}
+
+textarea::placeholder { color: var(--text-tertiary); }
+
+.output-area {
+padding: 16px;
+font-family: var(--mono);
+font-size: 13px;
+line-height: 1.7;
+white-space: pre-wrap;
+word-break: break-word;
+}
+
+/* Syntax highlighting */
+.json-key { color: var(--type-key); font-weight: 500; }
+.json-string { color: var(--type-string); }
+.json-number { color: var(--type-number); }
+.json-boolean { color: var(--type-boolean); }
+.json-null { color: var(--type-null); font-style: italic; }
+.json-bracket { color: var(--text-tertiary); }
+.json-comma { color: var(--text-tertiary); }
+
+/* Tree view */
+.tree-node { padding-left: 0; }
+.tree-node .tree-node { padding-left: 20px; }
+
+.tree-row {
+display: flex;
+align-items: baseline;
+gap: 4px;
+padding: 1px 0;
+cursor: default;
+border-radius: 3px;
+}
+
+.tree-row:hover { background: var(--surface-alt); }
+
+.tree-toggle {
+width: 16px;
+height: 16px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(--text-tertiary);
+font-size: 10px;
+flex-shrink: 0;
+user-select: none;
+transition: transform 0.15s ease;
+}
+
+.tree-toggle.collapsed { transform: rotate(-90deg); }
+.tree-toggle.leaf { visibility: hidden; }
+
+.tree-key {
+color: var(--type-key);
+font-weight: 500;
+cursor: pointer;
+}
+
+.tree-key:hover { text-decoration: underline; }
+
+.tree-value { margin-left: 4px; }
+.tree-count { color: var(--text-tertiary); font-size: 11px; margin-left: 4px; }
+
+.tree-children { overflow: hidden; }
+.tree-children.hidden { display: none; }
+
+/* Path bar */
+.path-bar {
+padding: 8px 16px;
+border-top: 1px solid var(--border);
+font-family: var(--mono);
+font-size: 11px;
+color: var(--text-secondary);
+background: var(--surface-alt);
+display: flex;
+align-items: center;
+gap: 8px;
+min-height: 36px;
+flex-shrink: 0;
+cursor: pointer;
+transition: background 0.15s ease;
+}
+
+.path-bar:hover { background: var(--border); }
+.path-bar .path-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.path-bar .copy-hint { color: var(--text-tertiary); font-size: 10px; }
+
+/* Error display */
+.error-banner {
+padding: 10px 16px;
+background: var(--error-bg);
+border-bottom: 1px solid var(--error-border);
+font-family: var(--mono);
+font-size: 11px;
+color: var(--error);
+display: flex;
+align-items: flex-start;
+gap: 8px;
+flex-shrink: 0;
+}
+
+.error-banner .error-icon { flex-shrink: 0; margin-top: 1px; }
+.error-banner .error-text { flex: 1; line-height: 1.5; }
+
+.error-line {
+background: var(--error-bg);
+display: inline;
+}
+
+/* Search bar */
+.search-bar {
+padding: 8px 16px;
+border-bottom: 1px solid var(--border);
+display: flex;
+gap: 8px;
+align-items: center;
+flex-shrink: 0;
+}
+
+.search-bar input {
+flex: 1;
+font-family: var(--mono);
+font-size: 12px;
+padding: 6px 10px;
+border: 1px solid var(--border);
+border-radius: 6px;
+outline: none;
+background: var(--bg);
+color: var(--text);
+}
+
+.search-bar input:focus { border-color: var(--border-focus); }
+
+.search-count {
+font-family: var(--mono);
+font-size: 10px;
+color: var(--text-tertiary);
+white-space: nowrap;
+}
+
+.search-match { background: #FEF08A; border-radius: 2px; padding: 0 1px; }
+
+/* Tabs */
+.tab-group {
+display: flex;
+gap: 2px;
+background: var(--surface-alt);
+border-radius: 6px;
+padding: 2px;
+}
+
+.tab {
+font-family: var(--mono);
+font-size: 10px;
+font-weight: 500;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+padding: 5px 10px;
+border: none;
+border-radius: 4px;
+background: transparent;
+color: var(--text-tertiary);
+cursor: pointer;
+transition: all 0.15s ease;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+
+/* Stats bar */
+.stats-bar {
+padding: 8px 16px;
+border-top: 1px solid var(--border);
+font-family: var(--mono);
+font-size: 10px;
+color: var(--text-tertiary);
+display: flex;
+gap: 16px;
+flex-wrap: wrap;
+flex-shrink: 0;
+}
+
+/* Query bar */
+.query-bar {
+padding: 8px 16px;
+border-bottom: 1px solid var(--border);
+display: flex;
+gap: 8px;
+align-items: center;
+flex-shrink: 0;
+}
+
+.query-bar input {
+flex: 1;
+font-family: var(--mono);
+font-size: 12px;
+padding: 6px 10px;
+border: 1px solid var(--border);
+border-radius: 6px;
+outline: none;
+background: var(--bg);
+color: var(--text);
+}
+
+.query-bar input:focus { border-color: var(--border-focus); }
+
+/* TypeScript output */
+.ts-output {
+padding: 16px;
+font-family: var(--mono);
+font-size: 13px;
+line-height: 1.7;
+white-space: pre-wrap;
+color: var(--text);
+}
+
+.ts-keyword { color: var(--type-boolean); font-weight: 500; }
+.ts-type { color: var(--type-number); }
+.ts-prop { color: var(--type-key); }
+
+/* Toast */
+.toast {
+position: fixed;
+bottom: 24px;
+left: 50%;
+transform: translateX(-50%) translateY(80px);
+background: var(--accent);
+color: var(--surface);
+font-family: var(--mono);
+font-size: 11px;
+padding: 10px 20px;
+border-radius: var(--radius);
+opacity: 0;
+transition: all 0.3s ease;
+z-index: 100;
+pointer-events: none;
+}
+
+.toast.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+
+/* Diff mode */
+.diff-workspace {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0;
+}
+
+.diff-workspace > div {
+border-right: 1px solid var(--border);
+}
+
+.diff-workspace > div:last-child { border-right: none; }
+
+.diff-workspace textarea {
+min-height: 200px;
+}
+
+.diff-header {
+font-family: var(--mono);
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--text-tertiary);
+padding: 8px 16px;
+border-bottom: 1px solid var(--border);
+}
+
+.diff-result {
+padding: 16px;
+font-family: var(--mono);
+font-size: 12px;
+line-height: 1.7;
+}
+
+.diff-added { background: #DCFCE7; color: #166534; }
+.diff-removed { background: #FEE2E2; color: #991B1B; }
+.diff-changed { background: #FEF9C3; color: #854D0E; }
+.diff-unchanged { color: var(--text-tertiary); }
+
+.diff-path { font-weight: 600; color: var(--text); margin-right: 8px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+</style>
+
+
+  <script>
+  // Inline manifest
+  (function() {
+    const manifest = { name: 'KIN JSON', short_name: 'KIN JSON', start_url: '.', display: 'standalone', background_color: '#f2f0EC', theme_color: '#f2f0EC', icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml' }] };
+    const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = url;
+    document.head.appendChild(link);
+  })();
+
+  // Apple touch icon
+  (function() {
+    const c = document.createElement('canvas');
+    c.width = 180; c.height = 180;
+    const ctx = c.getContext('2d');
+    const r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r, 0); ctx.lineTo(180 - r, 0);
+    ctx.quadraticCurveTo(180, 0, 180, r);
+    ctx.lineTo(180, 180 - r);
+    ctx.quadraticCurveTo(180, 180, 180 - r, 180);
+    ctx.lineTo(r, 180);
+    ctx.quadraticCurveTo(0, 180, 0, 180 - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, 180, 180);
+    grad.addColorStop(0, '#4b3a7c');
+    grad.addColorStop(1, '#2d1f5e');
+    ctx.fillStyle = grad;
+    ctx.fill();
+    // Draw {} icon
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = 'bold 80px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('{}', 90, 94);
+    const link = document.getElementById('apple-touch-icon');
+    if (link) link.href = c.toDataURL('image/png');
+  })();
+
+  // Service worker
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      const CACHE = 'kin-json-v1';
+      self.addEventListener('install', e => { self.skipWaiting(); });
+      self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))); });
+      self.addEventListener('fetch', e => {
+        if (e.request.method !== 'GET') return;
+        e.respondWith(caches.open(CACHE).then(c => c.match(e.request).then(r => r || fetch(e.request).then(res => { c.put(e.request, res.clone()); return res; }))));
+      });
+    `;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(blob));
+  }
+  </script>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+
+  <footer style="text-align:center;padding:20px 16px 32px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;color:#9B978F">
+    KIN-023 &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
+  </footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- State ----
+  let state = {
+    input: '',
+    parsed: null,
+    error: null,
+    mode: 'formatted', // formatted | tree | ts | diff
+    viewTab: 'raw', // raw | tree
+    indent: 2,
+    sortKeys: false,
+    searchTerm: '',
+    queryPath: '',
+    selectedPath: '',
+    diffA: '',
+    diffB: '',
+  };
+
+  // ---- Utilities ----
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => toast('Copied'));
+  }
+
+  function tryParse(str) {
+    if (!str.trim()) return { parsed: null, error: null };
+    try {
+      // Try to fix common issues first
+      let fixed = str;
+      // Try as-is first
+      try {
+        return { parsed: JSON.parse(fixed), error: null, fixed: false };
+      } catch(e) {
+        // Try fixing trailing commas
+        fixed = fixed.replace(/,\s*([\]}])/g, '$1');
+        // Try fixing single quotes
+        fixed = fixed.replace(/'/g, '"');
+        // Try fixing unquoted keys
+        fixed = fixed.replace(/(\{|,)\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":');
+        try {
+          return { parsed: JSON.parse(fixed), error: null, fixed: true };
+        } catch(e2) {
+          // Return original error
+          const match = e.message.match(/position\s+(\d+)/i);
+          let position = match ? parseInt(match[1]) : null;
+          let line = null, col = null;
+          if (position !== null) {
+            const before = str.substring(0, position);
+            line = (before.match(/\n/g) || []).length + 1;
+            col = position - before.lastIndexOf('\n');
+          }
+          return { parsed: null, error: { message: e.message, position, line, col } };
+        }
+      }
+    } catch(e) {
+      return { parsed: null, error: { message: e.message } };
+    }
+  }
+
+  function getStats(obj) {
+    let keys = 0, depth = 0, arrays = 0, objects = 0, strings = 0, numbers = 0, booleans = 0, nulls = 0;
+    function walk(v, d) {
+      if (d > depth) depth = d;
+      if (v === null) { nulls++; return; }
+      if (Array.isArray(v)) { arrays++; v.forEach(i => walk(i, d + 1)); return; }
+      if (typeof v === 'object') {
+        objects++;
+        const k = Object.keys(v);
+        keys += k.length;
+        k.forEach(key => walk(v[key], d + 1));
+        return;
+      }
+      if (typeof v === 'string') strings++;
+      else if (typeof v === 'number') numbers++;
+      else if (typeof v === 'boolean') booleans++;
+    }
+    walk(obj, 0);
+    const bytes = new Blob([JSON.stringify(obj)]).size;
+    return { keys, depth, arrays, objects, strings, numbers, booleans, nulls, bytes };
+  }
+
+  function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+    return (b / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function sortKeysDeep(obj) {
+    if (obj === null || typeof obj !== 'object') return obj;
+    if (Array.isArray(obj)) return obj.map(sortKeysDeep);
+    const sorted = {};
+    Object.keys(obj).sort().forEach(k => { sorted[k] = sortKeysDeep(obj[k]); });
+    return sorted;
+  }
+
+  function queryJson(obj, path) {
+    if (!path.trim()) return obj;
+    const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
+    let current = obj;
+    for (const part of parts) {
+      if (current === null || current === undefined) return undefined;
+      if (Array.isArray(current)) {
+        const idx = parseInt(part);
+        if (isNaN(idx)) return undefined;
+        current = current[idx];
+      } else if (typeof current === 'object') {
+        current = current[part];
+      } else {
+        return undefined;
+      }
+    }
+    return current;
+  }
+
+  // ---- Syntax highlighting ----
+  function syntaxHighlight(json) {
+    if (typeof json !== 'string') json = JSON.stringify(json, null, state.indent);
+    return json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        function(match) {
+          let cls = 'json-number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'json-key';
+            } else {
+              cls = 'json-string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'json-boolean';
+          } else if (/null/.test(match)) {
+            cls = 'json-null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        })
+      .replace(/([{}[\]])/g, '<span class="json-bracket">$1</span>')
+      .replace(/(,)\s*\n/g, '<span class="json-comma">,</span>\n');
+  }
+
+  // ---- Tree view builder ----
+  function buildTree(obj, key, path, isLast) {
+    const fullPath = path ? (typeof key === 'number' ? path + '[' + key + ']' : path + '.' + key) : (key !== null ? key : '');
+    const id = 'tree-' + fullPath.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Math.random().toString(36).substr(2, 4);
+
+    if (obj === null) {
+      return treeLeaf(key, '<span class="json-null">null</span>', fullPath, isLast);
+    }
+    if (typeof obj === 'boolean') {
+      return treeLeaf(key, '<span class="json-boolean">' + obj + '</span>', fullPath, isLast);
+    }
+    if (typeof obj === 'number') {
+      return treeLeaf(key, '<span class="json-number">' + obj + '</span>', fullPath, isLast);
+    }
+    if (typeof obj === 'string') {
+      const escaped = obj.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const display = escaped.length > 80 ? escaped.substring(0, 80) + '...' : escaped;
+      return treeLeaf(key, '<span class="json-string">"' + display + '"</span>', fullPath, isLast);
+    }
+
+    const isArr = Array.isArray(obj);
+    const entries = isArr ? obj : Object.entries(obj);
+    const count = isArr ? obj.length : Object.keys(obj).length;
+    const bracket = isArr ? ['[', ']'] : ['{', '}'];
+
+    let html = '<div class="tree-node">';
+    html += '<div class="tree-row">';
+    html += '<span class="tree-toggle" data-target="' + id + '">&#9660;</span>';
+    if (key !== null) {
+      html += '<span class="tree-key" data-path="' + esc(fullPath) + '">' + esc(String(key)) + '</span>: ';
+    }
+    html += '<span class="json-bracket">' + bracket[0] + '</span>';
+    html += '<span class="tree-count">' + count + (count === 1 ? ' item' : ' items') + '</span>';
+    html += '</div>';
+    html += '<div class="tree-children" id="' + id + '">';
+
+    if (isArr) {
+      obj.forEach((item, i) => { html += buildTree(item, i, fullPath, i === obj.length - 1); });
+    } else {
+      const keys = Object.keys(obj);
+      keys.forEach((k, i) => { html += buildTree(obj[k], k, fullPath, i === keys.length - 1); });
+    }
+
+    html += '</div>';
+    html += '<div class="tree-row"><span class="tree-toggle leaf"></span><span class="json-bracket">' + bracket[1] + '</span></div>';
+    html += '</div>';
+    return html;
+  }
+
+  function treeLeaf(key, valueHtml, path, isLast) {
+    let html = '<div class="tree-node"><div class="tree-row">';
+    html += '<span class="tree-toggle leaf"></span>';
+    if (key !== null) {
+      html += '<span class="tree-key" data-path="' + esc(path) + '">' + esc(String(key)) + '</span>: ';
+    }
+    html += '<span class="tree-value">' + valueHtml + '</span>';
+    html += '</div></div>';
+    return html;
+  }
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  // ---- TypeScript generator ----
+  function jsonToTS(obj, name, indent) {
+    name = name || 'Root';
+    indent = indent || 0;
+    const pad = '  '.repeat(indent);
+    const interfaces = [];
+
+    function inferType(val, propName) {
+      if (val === null) return 'null';
+      if (Array.isArray(val)) {
+        if (val.length === 0) return 'unknown[]';
+        const types = [...new Set(val.map(v => inferType(v, propName)))];
+        if (types.length === 1) return types[0] + '[]';
+        return '(' + types.join(' | ') + ')[]';
+      }
+      if (typeof val === 'object') {
+        const iName = capitalize(propName || 'Object');
+        generateInterface(val, iName);
+        return iName;
+      }
+      return typeof val;
+    }
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1).replace(/[^a-zA-Z0-9]/g, ''); }
+
+    function generateInterface(obj, name) {
+      const lines = [];
+      lines.push('<span class="ts-keyword">interface</span> <span class="ts-type">' + esc(name) + '</span> {');
+      for (const [key, val] of Object.entries(obj)) {
+        const type = inferType(val, key);
+        const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : '"' + key + '"';
+        lines.push('  <span class="ts-prop">' + esc(safeKey) + '</span>: <span class="ts-type">' + esc(type) + '</span>;');
+      }
+      lines.push('}');
+      interfaces.push(lines.join('\n'));
+    }
+
+    if (Array.isArray(obj)) {
+      if (obj.length > 0 && typeof obj[0] === 'object' && obj[0] !== null) {
+        generateInterface(obj[0], name);
+        interfaces.push('\n<span class="ts-keyword">type</span> <span class="ts-type">' + esc(name) + 'List</span> = <span class="ts-type">' + esc(name) + '[]</span>;');
+      } else {
+        const type = obj.length > 0 ? inferType(obj[0], 'item') : 'unknown';
+        interfaces.push('<span class="ts-keyword">type</span> <span class="ts-type">' + esc(name) + '</span> = <span class="ts-type">' + esc(type) + '[]</span>;');
+      }
+    } else if (typeof obj === 'object' && obj !== null) {
+      generateInterface(obj, name);
+    } else {
+      interfaces.push('<span class="ts-keyword">type</span> <span class="ts-type">' + esc(name) + '</span> = <span class="ts-type">' + esc(typeof obj) + '</span>;');
+    }
+
+    return interfaces.join('\n\n');
+  }
+
+  // ---- Diff ----
+  function diffJson(a, b, path) {
+    path = path || '';
+    const results = [];
+
+    if (a === b) return results;
+    if (a === null || b === null || typeof a !== typeof b || typeof a !== 'object') {
+      results.push({ type: 'changed', path: path || '(root)', from: a, to: b });
+      return results;
+    }
+
+    const isArrA = Array.isArray(a), isArrB = Array.isArray(b);
+    if (isArrA !== isArrB) {
+      results.push({ type: 'changed', path: path || '(root)', from: a, to: b });
+      return results;
+    }
+
+    if (isArrA) {
+      const maxLen = Math.max(a.length, b.length);
+      for (let i = 0; i < maxLen; i++) {
+        const p = path + '[' + i + ']';
+        if (i >= a.length) {
+          results.push({ type: 'added', path: p, value: b[i] });
+        } else if (i >= b.length) {
+          results.push({ type: 'removed', path: p, value: a[i] });
+        } else {
+          results.push(...diffJson(a[i], b[i], p));
+        }
+      }
+    } else {
+      const allKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+      for (const key of allKeys) {
+        const p = path ? path + '.' + key : key;
+        if (!(key in a)) {
+          results.push({ type: 'added', path: p, value: b[key] });
+        } else if (!(key in b)) {
+          results.push({ type: 'removed', path: p, value: a[key] });
+        } else {
+          results.push(...diffJson(a[key], b[key], p));
+        }
+      }
+    }
+    return results;
+  }
+
+  function truncateValue(v) {
+    const s = JSON.stringify(v);
+    return s.length > 60 ? s.substring(0, 60) + '...' : s;
+  }
+
+  // ---- Render ----
+  function render() {
+    const app = document.getElementById('app');
+    const result = tryParse(state.input);
+    state.parsed = result.parsed;
+    state.error = result.error;
+
+    let outputObj = state.parsed;
+    if (outputObj !== null && state.sortKeys) outputObj = sortKeysDeep(outputObj);
+
+    // Query filter
+    let queriedObj = outputObj;
+    let queryError = null;
+    if (state.queryPath && outputObj !== null) {
+      const qr = queryJson(outputObj, state.queryPath);
+      if (qr === undefined) {
+        queryError = 'Path not found';
+      } else {
+        queriedObj = qr;
+      }
+    }
+
+    const stats = outputObj !== null ? getStats(outputObj) : null;
+
+    let html = '';
+
+    // Header
+    html += '<header>';
+    html += '<div class="logo">KIN <span>JSON</span> <span style="font-weight:400;opacity:0.4;font-size:11px;letter-spacing:0.04em">· 023 · by Darren</span></div>';
+    html += '<div class="toolbar">';
+    html += '<button class="btn' + (state.mode === 'formatted' ? ' active' : '') + '" data-mode="formatted">Format</button>';
+    html += '<button class="btn' + (state.mode === 'tree' ? ' active' : '') + '" data-mode="tree">Tree</button>';
+    html += '<button class="btn' + (state.mode === 'ts' ? ' active' : '') + '" data-mode="ts">TypeScript</button>';
+    html += '<button class="btn' + (state.mode === 'diff' ? ' active' : '') + '" data-mode="diff">Diff</button>';
+    html += '<span style="width:1px;background:var(--border);margin:0 4px"></span>';
+    html += '<button class="btn" id="btn-paste">Paste</button>';
+    html += '<button class="btn" id="btn-minify">Minify</button>';
+    html += '<button class="btn' + (state.sortKeys ? ' active' : '') + '" id="btn-sort">Sort keys</button>';
+    html += '<button class="btn accent" id="btn-copy">Copy output</button>';
+    html += '</div>';
+    html += '</header>';
+
+    if (state.mode === 'diff') {
+      html += renderDiffMode();
+    } else {
+      html += '<div class="workspace">';
+
+      // Input panel
+      html += '<div class="panel">';
+      html += '<div class="panel-header"><span class="panel-label">Input</span>';
+      if (state.input && result.fixed) {
+        html += '<span style="font-family:var(--mono);font-size:10px;color:var(--success)">Auto-fixed</span>';
+      }
+      html += '</div>';
+      if (state.error) {
+        html += '<div class="error-banner">';
+        html += '<span class="error-icon">&#x2716;</span>';
+        html += '<span class="error-text">' + esc(state.error.message);
+        if (state.error.line) html += ' (line ' + state.error.line + ', col ' + state.error.col + ')';
+        html += '</span>';
+        html += '</div>';
+      }
+      html += '<div class="panel-body"><textarea id="input" placeholder="Paste JSON here...">' + esc(state.input) + '</textarea></div>';
+
+  if (stats) {
+    html += '<div class="stats-bar">';
+    html += '<span>' + formatBytes(stats.bytes) + '</span>';
+    html += '<span>' + stats.keys + ' keys</span>';
+    html += '<span>depth ' + stats.depth + '</span>';
+    html += '<span>' + stats.objects + ' obj</span>';
+    html += '<span>' + stats.arrays + ' arr</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Output panel
+  html += '<div class="panel">';
+  html += '<div class="panel-header"><span class="panel-label">Output</span>';
+  html += '<div class="panel-meta">';
+  if (state.mode === 'formatted') {
+    html += '<div class="tab-group">';
+    html += '<button class="tab' + (state.indent === 2 ? ' active' : '') + '" data-indent="2">2sp</button>';
+    html += '<button class="tab' + (state.indent === 4 ? ' active' : '') + '" data-indent="4">4sp</button>';
+    html += '<button class="tab' + (state.indent === 1 ? ' active' : '') + '" data-indent="1">tab</button>';
+    html += '</div>';
+  }
+  html += '</div></div>';
+
+  // Query bar
+  if (state.mode === 'formatted' || state.mode === 'tree') {
+    html += '<div class="query-bar">';
+    html += '<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary)">&#36;</span>';
+    html += '<input type="text" id="query-input" placeholder="Query: data.users[0].name" value="' + esc(state.queryPath) + '">';
+    if (queryError) html += '<span style="font-family:var(--mono);font-size:10px;color:var(--error)">' + esc(queryError) + '</span>';
+    html += '</div>';
+  }
+
+  // Search bar (tree mode)
+  if (state.mode === 'tree') {
+    html += '<div class="search-bar">';
+    html += '<input type="text" id="search-input" placeholder="Search keys or values..." value="' + esc(state.searchTerm) + '">';
+    html += '</div>';
+  }
+
+  // Output body
+  html += '<div class="panel-body">';
+  if (queriedObj !== null && state.mode === 'formatted') {
+    const indentChar = state.indent === 1 ? '\t' : state.indent;
+    const jsonStr = JSON.stringify(queriedObj, null, indentChar);
+    html += '<div class="output-area">' + syntaxHighlight(jsonStr) + '</div>';
+  } else if (queriedObj !== null && state.mode === 'tree') {
+    html += '<div class="output-area" id="tree-container">' + buildTree(queriedObj, null, '', true) + '</div>';
+  } else if (queriedObj !== null && state.mode === 'ts') {
+    html += '<div class="ts-output">' + jsonToTS(queriedObj) + '</div>';
+  } else if (state.error) {
+    html += '<div class="output-area" style="color:var(--text-tertiary)">Fix errors in input to see output</div>';
+  } else {
+    html += '<div class="output-area" style="color:var(--text-tertiary)">Paste JSON in the input panel</div>';
+  }
+  html += '</div>';
+
+  // Path bar
+  if (state.selectedPath) {
+    html += '<div class="path-bar" id="path-bar"><span class="path-text">' + esc(state.selectedPath) + '</span><span class="copy-hint">click to copy</span></div>';
+  }
+
+  html += '</div>'; // panel
+  html += '</div>'; // workspace
+}
+
+app.innerHTML = html;
+attachEvents();
+
+}
+
+function renderDiffMode() {
+let html = ‘<div class="workspace" style="grid-template-columns:1fr">’;
+html += ‘<div class="panel">’;
+html += ‘<div class="panel-header"><span class="panel-label">Diff</span></div>’;
+
+html += '<div class="diff-workspace">';
+html += '<div><div class="diff-header">A (before)</div><textarea id="diff-a" placeholder="Paste first JSON...">' + esc(state.diffA) + '</textarea></div>';
+html += '<div><div class="diff-header">B (after)</div><textarea id="diff-b" placeholder="Paste second JSON...">' + esc(state.diffB) + '</textarea></div>';
+html += '</div>';
+
+// Diff results
+const parseA = tryParse(state.diffA);
+const parseB = tryParse(state.diffB);
+
+if (parseA.parsed !== null && parseB.parsed !== null) {
+  const diffs = diffJson(parseA.parsed, parseB.parsed);
+  html += '<div style="border-top:1px solid var(--border)">';
+  if (diffs.length === 0) {
+    html += '<div class="diff-result" style="color:var(--success)">No differences found</div>';
+  } else {
+    html += '<div class="diff-result">';
+    html += '<div style="margin-bottom:8px;color:var(--text-tertiary);font-size:11px">' + diffs.length + ' difference' + (diffs.length !== 1 ? 's' : '') + '</div>';
+    diffs.forEach(d => {
+      if (d.type === 'added') {
+        html += '<div class="diff-added" style="padding:4px 8px;margin:2px 0;border-radius:4px"><span class="diff-path">' + esc(d.path) + '</span> + ' + esc(truncateValue(d.value)) + '</div>';
+      } else if (d.type === 'removed') {
+        html += '<div class="diff-removed" style="padding:4px 8px;margin:2px 0;border-radius:4px"><span class="diff-path">' + esc(d.path) + '</span> - ' + esc(truncateValue(d.value)) + '</div>';
+      } else {
+        html += '<div class="diff-changed" style="padding:4px 8px;margin:2px 0;border-radius:4px"><span class="diff-path">' + esc(d.path) + '</span> ' + esc(truncateValue(d.from)) + ' &rarr; ' + esc(truncateValue(d.to)) + '</div>';
+      }
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+} else if (state.diffA || state.diffB) {
+  html += '<div style="border-top:1px solid var(--border)">';
+  html += '<div class="diff-result" style="color:var(--text-tertiary)">';
+  if (parseA.error) html += 'A: ' + esc(parseA.error.message) + '<br>';
+  if (parseB.error) html += 'B: ' + esc(parseB.error.message);
+  if (!state.diffA || !state.diffB) html += 'Paste JSON in both panels to compare';
+  html += '</div></div>';
+}
+
+html += '</div></div>';
+return html;
+
+}
+
+function attachEvents() {
+const input = document.getElementById(‘input’);
+if (input) {
+input.addEventListener(‘input’, e => {
+state.input = e.target.value;
+render();
+// Restore cursor
+const el = document.getElementById(‘input’);
+if (el) { el.focus(); el.selectionStart = el.selectionEnd = e.target.selectionStart; }
+});
+
+  // Tab key support
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      input.value = input.value.substring(0, start) + '  ' + input.value.substring(end);
+      input.selectionStart = input.selectionEnd = start + 2;
+      state.input = input.value;
+    }
+  });
+}
+
+// Diff textareas
+const diffA = document.getElementById('diff-a');
+const diffB = document.getElementById('diff-b');
+if (diffA) diffA.addEventListener('input', e => { state.diffA = e.target.value; render(); document.getElementById('diff-a').focus(); });
+if (diffB) diffB.addEventListener('input', e => { state.diffB = e.target.value; render(); document.getElementById('diff-b').focus(); });
+
+// Mode buttons
+document.querySelectorAll('[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => { state.mode = btn.dataset.mode; render(); });
+});
+
+// Indent tabs
+document.querySelectorAll('[data-indent]').forEach(btn => {
+  btn.addEventListener('click', () => { state.indent = parseInt(btn.dataset.indent); render(); });
+});
+
+// Paste button
+const pasteBtn = document.getElementById('btn-paste');
+if (pasteBtn) {
+  pasteBtn.addEventListener('click', () => {
+    navigator.clipboard.readText().then(text => {
+      state.input = text;
+      render();
+    }).catch(() => toast('Clipboard access denied'));
+  });
+}
+
+// Minify button
+const minBtn = document.getElementById('btn-minify');
+if (minBtn) {
+  minBtn.addEventListener('click', () => {
+    if (state.parsed) {
+      const minified = JSON.stringify(state.parsed);
+      state.input = minified;
+      render();
+    }
+  });
+}
+
+// Sort keys button
+const sortBtn = document.getElementById('btn-sort');
+if (sortBtn) {
+  sortBtn.addEventListener('click', () => { state.sortKeys = !state.sortKeys; render(); });
+}
+
+// Copy output
+const copyBtn = document.getElementById('btn-copy');
+if (copyBtn) {
+  copyBtn.addEventListener('click', () => {
+    if (state.mode === 'ts' && state.parsed) {
+      // Copy plain text TS
+      const plain = jsonToTSPlain(state.parsed);
+      copyToClipboard(plain);
+    } else if (state.parsed) {
+      let obj = state.sortKeys ? sortKeysDeep(state.parsed) : state.parsed;
+      if (state.queryPath) {
+        const q = queryJson(obj, state.queryPath);
+        if (q !== undefined) obj = q;
+      }
+      const indentChar = state.indent === 1 ? '\t' : state.indent;
+      copyToClipboard(JSON.stringify(obj, null, indentChar));
+    }
+  });
+}
+
+// Query input
+const queryInput = document.getElementById('query-input');
+if (queryInput) {
+  queryInput.addEventListener('input', e => { state.queryPath = e.target.value; render(); document.getElementById('query-input').focus(); });
+}
+
+// Search input
+const searchInput = document.getElementById('search-input');
+if (searchInput) {
+  searchInput.addEventListener('input', e => { state.searchTerm = e.target.value; /* Could highlight matches */ });
+}
+
+// Tree toggle
+document.querySelectorAll('.tree-toggle:not(.leaf)').forEach(toggle => {
+  toggle.addEventListener('click', () => {
+    const target = document.getElementById(toggle.dataset.target);
+    if (target) {
+      target.classList.toggle('hidden');
+      toggle.classList.toggle('collapsed');
+    }
+  });
+});
+
+// Tree key click -> path
+document.querySelectorAll('.tree-key[data-path]').forEach(key => {
+  key.addEventListener('click', () => {
+    state.selectedPath = key.dataset.path;
+    render();
+  });
+});
+
+// Path bar click -> copy
+const pathBar = document.getElementById('path-bar');
+if (pathBar) {
+  pathBar.addEventListener('click', () => copyToClipboard(state.selectedPath));
+}
+
+}
+
+// Plain text TS (for copy)
+function jsonToTSPlain(obj, name) {
+name = name || ‘Root’;
+const interfaces = [];
+
+function inferType(val, propName) {
+  if (val === null) return 'null';
+  if (Array.isArray(val)) {
+    if (val.length === 0) return 'unknown[]';
+    const types = [...new Set(val.map(v => inferType(v, propName)))];
+    if (types.length === 1) return types[0] + '[]';
+    return '(' + types.join(' | ') + ')[]';
+  }
+  if (typeof val === 'object') {
+    const iName = capitalize(propName || 'Object');
+    generateInterface(val, iName);
+    return iName;
+  }
+  return typeof val;
+}
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1).replace(/[^a-zA-Z0-9]/g, ''); }
+
+function generateInterface(obj, name) {
+  const lines = ['interface ' + name + ' {'];
+  for (const [key, val] of Object.entries(obj)) {
+    const type = inferType(val, key);
+    const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : '"' + key + '"';
+    lines.push('  ' + safeKey + ': ' + type + ';');
+  }
+  lines.push('}');
+  interfaces.push(lines.join('\n'));
+}
+
+if (Array.isArray(obj)) {
+  if (obj.length > 0 && typeof obj[0] === 'object' && obj[0] !== null) {
+    generateInterface(obj[0], name);
+    interfaces.push('type ' + name + 'List = ' + name + '[];');
+  }
+} else if (typeof obj === 'object' && obj !== null) {
+  generateInterface(obj, name);
+}
+
+return interfaces.join('\n\n');
+
+}
+
+// Service worker registration for PWA
+if (‘serviceWorker’ in navigator) {
+// Minimal inline SW not possible from single file, but manifest is enough for Add to Home Screen
+}
+
+// Initial render
+render();
+})();
+</script>
+
+</body>
+</html>
