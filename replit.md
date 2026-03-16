@@ -4,7 +4,7 @@ This project is a pnpm workspace monorepo utilizing TypeScript for building a co
 
 **Current tools: KIN-001 through KIN-025 (25 tools). Next: KIN-026.**
 
-Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — URL TBC
+Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — `https://kinstretch.netlify.app`
 
 ## User Preferences
 
