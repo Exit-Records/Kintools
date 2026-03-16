@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KIN-025 — Stretch — Kin</title>
+  <meta name="description" content="Guided stretching routines. Morning, desk break, post-run, bedtime, and chair-based. Free, offline, no accounts.">
+  <meta name="theme-color" content="#f5f0eb" id="theme-color-meta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Stretch">
+  <link rel="apple-touch-icon" id="apple-touch-icon">
+  <link rel="manifest" id="manifest-link">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg: #f5f0eb;
+      --surface: #ede8e2;
+      --text: #2c2825;
+      --text-secondary: #6b6560;
+      --accent: #c45d3e;
+      --accent-soft: #e8c4b8;
+      --border: #d9d3cc;
+      --progress-bg: #d9d3cc;
+      --progress-fill: #c45d3e;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.dark { background: #1a1816 !important; color: #e8e2dc !important; }
+    body.dark .surface { background: #252220 !important; }
+    body.dark .border-c { border-color: #3a3633 !important; }
+    body.dark .text-secondary { color: #9b9590 !important; }
+    body.dark .card { background: #252220 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important; }
+    body.dark .routine-card { background: #252220 !important; border-color: #3a3633 !important; }
+    body.dark .routine-card:active { background: #2e2a27 !important; }
+    body.dark .stretch-item { border-color: #3a3633 !important; }
+    body.dark .stretch-item.active { background: #2e2a27 !important; border-color: #c45d3e !important; }
+    body.dark .btn-secondary { background: #252220 !important; color: #e8e2dc !important; border-color: #3a3633 !important; }
+    body.dark .btn-secondary:active { background: #2e2a27 !important; }
+    body.dark .progress-bg { background: #3a3633 !important; }
+    body.dark .tier-btn { background: #252220 !important; color: #9b9590 !important; border-color: #3a3633 !important; }
+    body.dark .tier-btn.active { background: #c45d3e !important; color: #fff !important; border-color: #c45d3e !important; }
+    body.dark .theme-toggle { color: #9b9590 !important; }
+    body.dark .preview-item { border-color: #3a3633 !important; }
+    body.dark .modification { background: #2e2a27 !important; color: #9b9590 !important; }
+    body.dark .header-bar { border-color: #3a3633 !important; }
+    body.dark .log-item { border-color: #3a3633 !important; }
+    body.dark .log-empty { color: #6b6560 !important; }
+    body.dark .routine-desc { color: #9b9590 !important; }
+    body.dark .routine-meta { color: #6b6560 !important; }
+    body.dark .stretch-count { color: #9b9590 !important; }
+    body.dark .timer-display { color: #e8e2dc !important; }
+    body.dark .stretch-name { color: #e8e2dc !important; }
+    body.dark .stretch-desc { color: #9b9590 !important; }
+    body.dark .stretch-mod { color: #6b6560 !important; }
+    body.dark .routine-title-active { color: #e8e2dc !important; }
+    body.dark .nav-btn { color: #9b9590 !important; }
+    body.dark .nav-btn:active { background: #2e2a27 !important; }
+    body.dark .complete-screen { background: #1a1816 !important; }
+    body.dark .history-btn { color: #9b9590 !important; }
+
+    .app { max-width: 420px; margin: 0 auto; padding: 16px; padding-bottom: 32px; }
+
+    /* Header */
+    .header-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+    }
+    .header-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .theme-toggle, .history-btn {
+      background: none; border: none; cursor: pointer; padding: 8px;
+      font-size: 18px; color: var(--text-secondary); min-height: 44px; min-width: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Routine cards */
+    .routine-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; margin-bottom: 10px; cursor: pointer; transition: background 0.15s;
+      min-height: 44px; -webkit-appearance: none;
+    }
+    .routine-card:active { background: var(--border); }
+    .routine-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+    .routine-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 6px; }
+    .routine-meta { font-size: 13px; color: var(--text-secondary); opacity: 0.7; }
+
+    /* Tier selector */
+    .tier-selector { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tier-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+    .tier-btn {
+      flex: 1; padding: 10px 8px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); font-size: 14px; font-weight: 500; cursor: pointer;
+      text-align: center; color: var(--text-secondary); min-height: 44px;
+      transition: all 0.15s; -webkit-appearance: none;
+    }
+    .tier-btn.active {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+
+    /* Preview screen */
+    .preview-header { margin-bottom: 16px; }
+    .preview-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .preview-subtitle { font-size: 14px; color: var(--text-secondary); }
+    .preview-list { margin-bottom: 20px; }
+    .preview-item {
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: baseline;
+    }
+    .preview-num { font-size: 13px; color: var(--text-secondary); min-width: 20px; font-weight: 500; }
+    .preview-name { font-size: 15px; font-weight: 500; }
+    .preview-desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%; padding: 14px; border-radius: 10px; border: none;
+      background: var(--accent); color: #fff; font-size: 16px; font-weight: 600;
+      cursor: pointer; min-height: 48px; -webkit-appearance: none;
+    }
+    .btn-primary:active { opacity: 0.85; }
+    .btn-secondary {
+      width: 100%; padding: 14px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); font-size: 16px; font-weight: 500;
+      cursor: pointer; min-height: 48px; -webkit-appearance: none;
+    }
+    .btn-secondary:active { background: var(--border); }
+    .btn-row { display: flex; gap: 10px; margin-top: 12px; }
+    .btn-row .btn-secondary, .btn-row .btn-primary { flex: 1; }
+
+    /* Active stretch screen */
+    .active-screen { text-align: center; }
+    .routine-title-active {
+      font-size: 13px; font-weight: 500; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 24px;
+    }
+    .stretch-count { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+    .stretch-name { font-size: 24px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .stretch-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; max-width: 320px; margin-left: auto; margin-right: auto; }
+    .stretch-mod {
+      font-size: 13px; color: var(--text-secondary); opacity: 0.7;
+      font-style: italic; margin-bottom: 24px; max-width: 300px;
+      margin-left: auto; margin-right: auto;
+    }
+    .modification {
+      display: inline-block; background: var(--surface); border-radius: 6px;
+      padding: 6px 12px; font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 24px; font-style: italic;
+    }
+
+    /* Timer */
+    .timer-container { margin: 20px 0 28px; }
+    .timer-display { font-size: 56px; font-weight: 300; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .progress-bar { height: 4px; border-radius: 2px; background: var(--progress-bg); margin-top: 12px; overflow: hidden; }
+    .progress-bg { background: var(--progress-bg); }
+    .progress-fill { height: 100%; background: var(--progress-fill); border-radius: 2px; transition: width 0.3s linear; }
+
+    /* Nav buttons */
+    .stretch-nav { display: flex; justify-content: center; gap: 16px; margin-top: 20px; }
+    .nav-btn {
+      background: none; border: none; cursor: pointer; padding: 12px 20px;
+      font-size: 14px; font-weight: 500; color: var(--text-secondary);
+      min-height: 44px; min-width: 44px; border-radius: 8px;
+      -webkit-appearance: none;
+    }
+    .nav-btn:active { background: var(--surface); }
+
+    /* Complete screen */
+    .complete-screen { text-align: center; padding-top: 60px; }
+    .complete-icon { font-size: 48px; margin-bottom: 16px; }
+    .complete-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+    .complete-detail { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+
+    /* History */
+    .log-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .log-routine { font-size: 15px; font-weight: 500; }
+    .log-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .log-empty { text-align: center; padding: 40px 0; color: var(--text-secondary); font-size: 15px; }
+
+    .screen { display: none; }
+    .screen.visible { display: block; }
+
+    .back-btn {
+      background: none; border: none; cursor: pointer; padding: 8px 0;
+      font-size: 15px; color: var(--text-secondary); margin-bottom: 16px;
+      min-height: 44px; display: flex; align-items: center; gap: 4px;
+      -webkit-appearance: none;
+    }
+
+    .pause-state { font-size: 14px; color: var(--accent); font-weight: 500; margin-top: 8px; }
+
+    .kin-footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    body.dark .kin-footer { border-top-color: #3a3633 !important; }
+    .foot-brand { font-size: 15px; color: var(--text-secondary); font-weight: 500; }
+    .foot-meta { font-size: 11px; color: var(--text-secondary); text-align: right; line-height: 1.7; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- HOME SCREEN -->
+    <div id="screen-home" class="screen visible">
+      <div class="header-bar">
+        <div class="header-title">Stretch</div>
+        <div class="header-right">
+          <button class="history-btn" onclick="showHistory()" aria-label="History">&#9776;</button>
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" id="themeBtn">&#9789;</button>
+        </div>
+      </div>
+
+      <div class="tier-label">Hold time</div>
+      <div class="tier-selector">
+        <button class="tier-btn" data-tier="short" onclick="setTier('short')">Short</button>
+        <button class="tier-btn active" data-tier="normal" onclick="setTier('normal')">Normal</button>
+        <button class="tier-btn" data-tier="long" onclick="setTier('long')">Long</button>
+      </div>
+
+      <div id="routine-list"></div>
+
+      <footer class="kin-footer">
+        <div class="foot-brand">Kin</div>
+        <div class="foot-meta">KIN-025 · Stretch<br>by Darren · No tracking · Works offline</div>
+      </footer>
+    </div>
+
+    <!-- PREVIEW SCREEN -->
+    <div id="screen-preview" class="screen">
+      <button class="back-btn" onclick="showHome()">&#8592; Back</button>
+      <div class="preview-header">
+        <div class="preview-title" id="preview-title"></div>
+        <div class="preview-subtitle" id="preview-subtitle"></div>
+      </div>
+      <div class="preview-list" id="preview-list"></div>
+      <button class="btn-primary" onclick="startRoutine()">Start routine</button>
+    </div>
+
+    <!-- ACTIVE SCREEN -->
+    <div id="screen-active" class="screen">
+      <div class="active-screen">
+        <div class="routine-title-active" id="active-routine-name"></div>
+        <div class="stretch-count" id="active-count"></div>
+        <div class="stretch-name" id="active-stretch-name"></div>
+        <div class="stretch-desc" id="active-stretch-desc"></div>
+        <div class="stretch-mod" id="active-stretch-mod"></div>
+        <div class="timer-container">
+          <div class="timer-display" id="timer-display">0:30</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+        <button class="btn-primary" id="pause-btn" onclick="togglePause()">Pause</button>
+        <div class="stretch-nav">
+          <button class="nav-btn" id="prev-btn" onclick="prevStretch()">&#8592; Previous</button>
+          <button class="nav-btn" id="skip-btn" onclick="nextStretch()">Skip &#8594;</button>
+        </div>
+        <div style="margin-top: 20px;">
+          <button class="back-btn" onclick="confirmQuit()" style="margin: 0 auto;">Stop routine</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETE SCREEN -->
+    <div id="screen-complete" class="screen">
+      <div class="complete-screen">
+        <div class="complete-icon">&#10003;</div>
+        <div class="complete-title">Done</div>
+        <div class="complete-detail" id="complete-detail"></div>
+        <button class="btn-primary" onclick="showHome()">Back to routines</button>
+      </div>
+    </div>
+
+    <!-- HISTORY SCREEN -->
+    <div id="screen-history" class="screen">
+      <button class="back-btn" onclick="showHome()">&#8592; Back</button>
+      <div class="preview-header">
+        <div class="preview-title">History</div>
+        <div class="preview-subtitle">Completed routines</div>
+      </div>
+      <div id="history-list"></div>
+      <div style="margin-top: 20px;">
+        <button class="btn-secondary" onclick="clearHistory()">Clear history</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---- ROUTINE DATA ----
+    const ROUTINES = [
+      {
+        id: 'morning',
+        name: 'Morning',
+        desc: 'Undo sleep posture, get blood moving. Done barefoot, next to the bed.',
+        stretches: [
+          {
+            name: 'Standing side bend (left)',
+            desc: 'Feet hip-width apart, reach your right arm overhead and lean left. Opens the lateral chain from hip to fingertips.',
+            mod: 'Keep feet wide for balance, or hold a door frame with the other hand.',
+            seconds: true
+          },
+          {
+            name: 'Standing side bend (right)',
+            desc: 'Same position, lean right. Let gravity pull you into the stretch rather than forcing it.',
+            mod: 'Hold a chair or wall if balance is an issue.',
+            seconds: true
+          },
+          {
+            name: 'Cat-cow',
+            desc: 'On all fours, alternate between arching and rounding the spine. 6-8 slow cycles, led by your breath.',
+            mod: 'Can be done seated in a chair, hands on knees, rolling the spine forward and back.',
+            reps: true, fixedTime: 40
+          },
+          {
+            name: "Child's pose",
+            desc: 'Knees wide, sit hips back toward heels, arms extended forward. Decompresses the lower back.',
+            mod: 'Place a pillow between thighs and calves if knees are stiff. Or fold forward in a chair.',
+            seconds: true
+          },
+          {
+            name: 'Downward dog',
+            desc: 'Hands and feet on the floor, hips high. Pedal the feet gently. Lengthens hamstrings and calves.',
+            mod: 'Place hands on a chair seat or wall at waist height for a half-dog instead.',
+            seconds: true
+          },
+          {
+            name: 'Low lunge (left)',
+            desc: 'Left foot forward, right knee down. Sink hips forward. Opens hip flexors that shorten overnight.',
+            mod: 'Keep the back knee on a folded towel. Or do a standing lunge with hands on a chair.',
+            seconds: true
+          },
+          {
+            name: 'Low lunge (right)',
+            desc: 'Right foot forward, left knee down. Keep your torso upright and breathe into the stretch.',
+            mod: 'Same modifications as left side. Go only as deep as is comfortable.',
+            seconds: true
+          },
+          {
+            name: 'Standing forward fold',
+            desc: 'Feet hip-width, fold forward from the hips. Let head and arms hang. Full posterior chain release.',
+            mod: 'Bend knees as much as needed. Rest hands on shins or a chair rather than reaching for the floor.',
+            seconds: true
+          },
+          {
+            name: 'Chest opener',
+            desc: 'Clasp hands behind your back, lift arms gently. Counters the foetal sleep position.',
+            mod: "If you can't clasp hands, hold a towel between them. Or press palms into a door frame.",
+            seconds: true
+          },
+          {
+            name: 'Neck rolls',
+            desc: 'Slow, gentle half-circles from ear to ear, chin dropping toward the chest. Both directions.',
+            mod: 'Keep the movement small. Never roll the head backward, only side to side through the front.',
+            reps: true, fixedTime: 30
+          }
+        ]
+      },
+      {
+        id: 'desk',
+        name: 'Desk break',
+        desc: 'Counteract sitting. Limited space, no floor work, doable in work clothes.',
+        stretches: [
+          {
+            name: 'Standing chest opener',
+            desc: 'Hands clasped behind your back or arms in a doorframe. Push chest forward. Reverses the forward hunch.',
+            mod: 'Press one forearm against a wall at shoulder height and rotate away from it.',
+            seconds: true
+          },
+          {
+            name: 'Neck side stretch (left)',
+            desc: 'Tilt left ear toward left shoulder, gentle hand pressure on the right side of the head. Direct screen-tension release.',
+            mod: 'Skip the hand pressure. Just let the weight of the head do the work.',
+            seconds: true
+          },
+          {
+            name: 'Neck side stretch (right)',
+            desc: 'Same stretch, right side. Keep the opposite shoulder dropped and relaxed.',
+            mod: 'Sit on your left hand to anchor the shoulder down if it keeps creeping up.',
+            seconds: true
+          },
+          {
+            name: 'Seated spinal twist (left)',
+            desc: 'Seated, cross left leg over right, twist torso left with right elbow outside the left knee. Rotational mobility.',
+            mod: 'Skip the leg cross. Just twist with both feet flat on the floor, hand on the opposite knee.',
+            seconds: true
+          },
+          {
+            name: 'Seated spinal twist (right)',
+            desc: 'Same twist, right side. Lead with the ribcage, not the shoulders.',
+            mod: 'Same modification. Twist only as far as feels comfortable.',
+            seconds: true
+          },
+          {
+            name: 'Standing quad stretch (left)',
+            desc: 'Stand on right leg, pull left heel toward glute. Opens hip flexors and quads locked short from the chair.',
+            mod: 'Hold a desk or wall. Or do a gentle standing lunge instead if balance is difficult.',
+            seconds: true
+          },
+          {
+            name: 'Standing quad stretch (right)',
+            desc: 'Same stretch, right side. Keep knees close together and pelvis tucked.',
+            mod: 'Same as left side. A wall touch for balance is completely fine.',
+            seconds: true
+          },
+          {
+            name: 'Wrist and forearm stretch (left)',
+            desc: 'Extend left arm, palm up, pull fingers back with right hand. Keyboard and mouse specific.',
+            mod: 'Press fingertips gently into the desk surface instead of pulling with the other hand.',
+            seconds: true
+          },
+          {
+            name: 'Wrist and forearm stretch (right)',
+            desc: "Same stretch, right side. Also rotate the wrist in slow circles between sides.",
+            mod: "Go lighter on pressure. Any sensation is enough, it doesn't need to be intense.",
+            seconds: true
+          },
+          {
+            name: 'Shoulder shrugs and rolls',
+            desc: 'Shrug shoulders to ears, hold, drop. Then roll forward and backward. Resets the traps.',
+            mod: 'Perfectly doable seated. Focus on the exhale as you drop the shoulders.',
+            reps: true, fixedTime: 30
+          },
+          {
+            name: 'Standing calf raises',
+            desc: 'Rise onto toes slowly, lower slowly. 8-10 reps. Gets circulation moving in the lower legs.',
+            mod: 'Hold a desk edge for stability. Can be done seated by lifting heels off the floor.',
+            reps: true, fixedTime: 35
+          }
+        ]
+      },
+      {
+        id: 'postrun',
+        name: 'Post-run',
+        desc: 'Targeted recovery for runners. Floor-based, assumes warm muscles. Longer holds.',
+        stretches: [
+          {
+            name: 'Standing quad stretch (left)',
+            desc: 'Stand on right leg, pull left heel to glute. Quads are the most loaded running muscle, address first.',
+            mod: 'Hold a wall. Or lie on your side and pull the heel back from there.',
+            seconds: true
+          },
+          {
+            name: 'Standing quad stretch (right)',
+            desc: 'Same stretch, right side. Keep the standing knee soft, not locked.',
+            mod: 'Same as left. Side-lying is often more comfortable after a hard run.',
+            seconds: true
+          },
+          {
+            name: 'Calf stretch against wall (left)',
+            desc: "Hands on wall, left leg back, heel grounded. Lean in. Calves and Achilles, the runner's weak point.",
+            mod: 'Use a step or kerb edge. Or press the ball of the foot into the wall from standing.',
+            seconds: true
+          },
+          {
+            name: 'Calf stretch against wall (right)',
+            desc: 'Same stretch, right side. Slightly bend the back knee to shift emphasis to the soleus.',
+            mod: 'Same modification. Go gently on the Achilles.',
+            seconds: true
+          },
+          {
+            name: 'Low lunge, back knee down (left)',
+            desc: 'Left foot forward, right knee on the ground. Sink hips forward. Deep hip flexor release.',
+            mod: 'Pad the back knee with a folded towel. Hands on the front knee for support.',
+            seconds: true
+          },
+          {
+            name: 'Low lunge, back knee down (right)',
+            desc: 'Same position, right foot forward. Keep the front knee over the ankle, not past the toes.',
+            mod: 'Same as left. A cushion under the knee makes this sustainable.',
+            seconds: true
+          },
+          {
+            name: 'Pigeon pose (left)',
+            desc: 'Left shin across the front, right leg extended back. Fold forward. Glutes and deep rotators.',
+            mod: 'Do figure-four on your back instead. Same muscle group, no knee pressure.',
+            seconds: true, multiplier: 1.3
+          },
+          {
+            name: 'Pigeon pose (right)',
+            desc: 'Same position, right side forward. Let gravity deepen the stretch over time.',
+            mod: 'Figure-four on your back is the standing alternative. Use it freely.',
+            seconds: true, multiplier: 1.3
+          },
+          {
+            name: 'Seated hamstring stretch (left)',
+            desc: 'One leg extended, reach toward the foot. Isolated posterior chain on the left side.',
+            mod: "Loop a towel around the foot and pull gently. Don't worry about touching the toes.",
+            seconds: true
+          },
+          {
+            name: 'Seated hamstring stretch (right)',
+            desc: 'Same stretch, right side. Hinge from the hips, not by rounding the back.',
+            mod: 'Same towel technique. Keep the knee slightly bent if needed.',
+            seconds: true
+          },
+          {
+            name: 'Supine spinal twist (left)',
+            desc: 'On your back, knees to the left, arms wide. Decompresses the lower back after impact.',
+            mod: "Place a pillow between the knees, or don't let knees drop all the way to the floor.",
+            seconds: true
+          },
+          {
+            name: 'Supine spinal twist (right)',
+            desc: 'Same twist, knees to the right. Let the opposite shoulder stay grounded.',
+            mod: 'Same pillow modification. Gravity does the work here.',
+            seconds: true
+          },
+          {
+            name: 'Figure-four stretch (left)',
+            desc: 'On your back, left ankle on right knee, pull right thigh toward you. Targets the piriformis.',
+            mod: 'Keep the right foot on the floor instead of pulling the knee in. Still effective.',
+            seconds: true
+          },
+          {
+            name: 'Figure-four stretch (right)',
+            desc: 'Same position, right ankle on left knee. Breathe into the outer hip.',
+            mod: 'Same floor-foot modification. Avoid pulling aggressively.',
+            seconds: true
+          },
+          {
+            name: 'Seated forward fold',
+            desc: 'Both legs extended, fold forward. Full hamstring and lower back to close the sequence.',
+            mod: 'Bend both knees. Rest hands on shins. The shape matters more than the depth.',
+            seconds: true
+          }
+        ]
+      },
+      {
+        id: 'bedtime',
+        name: 'Bedtime',
+        desc: 'Wind down for sleep. All floor-based, slow transitions, longer holds. Pairs with slow breathing.',
+        stretches: [
+          {
+            name: 'Seated neck release',
+            desc: "Chin to chest, gentle movement side to side. Drains the day's accumulated screen tension.",
+            mod: 'Do this in bed, propped against pillows. No pressure from the hands.',
+            seconds: true
+          },
+          {
+            name: 'Seated side bend (left)',
+            desc: 'Seated cross-legged, reach right arm overhead, lean left. Opens the ribs for deeper breathing.',
+            mod: 'Sit on a cushion to elevate the hips. Or do this in a chair.',
+            seconds: true
+          },
+          {
+            name: 'Seated side bend (right)',
+            desc: 'Same stretch, lean right. Keep both sit bones grounded.',
+            mod: 'Same as left side. Even a small lean is effective.',
+            seconds: true
+          },
+          {
+            name: 'Cat-cow (slow)',
+            desc: 'On all fours, very slow spinal articulation. 6-8 cycles. The tempo here is completely different from morning.',
+            mod: 'Seated version works well here too. Let it be almost meditative.',
+            reps: true, fixedTime: 50
+          },
+          {
+            name: "Child's pose (extended)",
+            desc: 'Knees wide, arms forward, forehead down. Hold longer than feels necessary. Grounding and compressive.',
+            mod: 'Pillow under the chest and head. Or sit back in a chair and fold over a desk.',
+            seconds: true, multiplier: 1.5
+          },
+          {
+            name: 'Supine spinal twist (left)',
+            desc: 'On your back, knees to the left. Arms wide. Wrings out lower back tension from the day.',
+            mod: 'Pillow between the knees. Let the twist be gentle and passive.',
+            seconds: true
+          },
+          {
+            name: 'Supine spinal twist (right)',
+            desc: 'Same twist, right side. Close your eyes. Focus on the exhale.',
+            mod: 'Same pillow. No need to force the knees to the floor.',
+            seconds: true
+          },
+          {
+            name: 'Legs up the wall',
+            desc: 'Lie on your back, legs up a wall or headboard. Reverses circulation, calms the nervous system.',
+            mod: "No wall access? Lie flat with knees bent, feet on the bed. Similar effect.",
+            seconds: true, multiplier: 1.5
+          },
+          {
+            name: 'Supine butterfly',
+            desc: 'Soles of feet together, knees fall open. Opens inner thighs and hips passively.',
+            mod: "Place pillows under both knees so they're supported. No effort required.",
+            seconds: true, multiplier: 1.3
+          },
+          {
+            name: 'Savasana',
+            desc: 'Flat on your back, arms at your sides, eyes closed. Full stillness. Transition to sleep.',
+            mod: 'Pillow under the knees if the lower back is uncomfortable. This is just lying still.',
+            fixedTime: 90, fixedAlways: true
+          }
+        ]
+      },
+      {
+        id: 'chair',
+        name: 'Chair-based',
+        desc: 'Everything seated. No floor work, no standing balance. Recovery, accessibility, or office-friendly.',
+        stretches: [
+          {
+            name: 'Seated neck release',
+            desc: 'Chin to chest, slow movement ear to ear. Let the weight of your head create the stretch.',
+            mod: 'Reduce the range. Even a small drop of the chin is enough.',
+            seconds: true
+          },
+          {
+            name: 'Seated neck side stretch (left)',
+            desc: 'Left ear toward left shoulder, optional gentle hand pressure. Hold steady.',
+            mod: 'No hand pressure. Let gravity alone do the work.',
+            seconds: true
+          },
+          {
+            name: 'Seated neck side stretch (right)',
+            desc: 'Same stretch, right side. Keep the opposite shoulder dropped and still.',
+            mod: 'Sit on the opposite hand to keep the shoulder from lifting.',
+            seconds: true
+          },
+          {
+            name: 'Seated chest opener',
+            desc: 'Clasp hands behind the chair back, push chest forward, squeeze shoulder blades together.',
+            mod: 'Just pull shoulders back without clasping. Or press palms into the chair seat behind you.',
+            seconds: true
+          },
+          {
+            name: 'Seated cat-cow',
+            desc: 'Hands on knees, alternate between rounding and arching the spine. 6-8 slow cycles with breath.',
+            mod: 'Make the movement as small as you need. Focus on the breath pairing.',
+            reps: true, fixedTime: 40
+          },
+          {
+            name: 'Seated spinal twist (left)',
+            desc: 'Both feet flat, twist torso left. Right hand on left knee, left hand behind you. Rotational release.',
+            mod: 'Twist only as far as is comfortable. Lead with the eyes first, then the chest.',
+            seconds: true
+          },
+          {
+            name: 'Seated spinal twist (right)',
+            desc: 'Same twist, right side. Keep both sit bones evenly weighted on the chair.',
+            mod: 'Same as left. Smaller range is perfectly fine.',
+            seconds: true
+          },
+          {
+            name: 'Seated figure-four (left)',
+            desc: 'Left ankle on right knee, sit tall, lean slightly forward. Opens the glute and outer hip.',
+            mod: "Don't lean forward. Just the ankle-on-knee position is a stretch for many people.",
+            seconds: true
+          },
+          {
+            name: 'Seated figure-four (right)',
+            desc: 'Same position, right ankle on left knee. Keep the raised foot flexed to protect the knee.',
+            mod: 'Same as left. Adjust the angle of the lean to control intensity.',
+            seconds: true
+          },
+          {
+            name: 'Seated forward fold',
+            desc: 'Feet flat, fold forward from the hips and let arms hang. Releases lower back and stretches hamstrings.',
+            mod: 'Fold only partway. Rest forearms on thighs if going all the way down is too much.',
+            seconds: true
+          },
+          {
+            name: 'Wrist circles and stretch',
+            desc: 'Circle both wrists slowly, then extend one arm, pull fingers back. Repeat both sides.',
+            mod: 'Press fingertips into the desk surface instead. Gentler on the wrist joint.',
+            reps: true, fixedTime: 30
+          },
+          {
+            name: 'Ankle circles',
+            desc: 'Extend one leg, circle the ankle slowly. Both directions, both sides. Gets the lower legs moving.',
+            mod: 'Keep the foot on the floor and just roll from heel to toe if lifting is uncomfortable.',
+            reps: true, fixedTime: 30
+          },
+          {
+            name: 'Seated shoulder shrugs',
+            desc: 'Shrug shoulders to ears, hold 3 seconds, drop with an exhale. 6-8 reps. Resets trap tension.',
+            mod: 'Lighter shrug. The drop and exhale are the important part.',
+            reps: true, fixedTime: 30
+          }
+        ]
+      }
+    ];
+
+    // ---- STATE ----
+    var currentTier = 'normal';
+    var currentRoutine = null;
+    var currentStretchIndex = 0;
+    var timerInterval = null;
+    var timeRemaining = 0;
+    var totalTime = 0;
+    var isPaused = false;
+    var audioCtx = null;
+
+    var TIER_MULTIPLIERS = { short: 0.5, normal: 1, long: 1.5 };
+    var TIER_BASE = { short: 15, normal: 30, long: 45 };
+
+    // ---- AUDIO ----
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    function playTone(freq, duration, type) {
+      try {
+        var ctx = getAudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = type || 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function playTransition() { playTone(660, 0.3, 'sine'); setTimeout(function(){ playTone(880, 0.3, 'sine'); }, 150); }
+    function playComplete() { playTone(523, 0.2, 'sine'); setTimeout(function(){ playTone(659, 0.2, 'sine'); }, 150); setTimeout(function(){ playTone(784, 0.4, 'sine'); }, 300); }
+
+    // ---- THEME ----
+    function initTheme() {
+      var saved = localStorage.getItem('kin025-theme');
+      if (saved === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('theme-color-meta').content = '#1a1816';
+        document.getElementById('themeBtn').innerHTML = '&#9788;';
+      }
+    }
+
+    function toggleTheme() {
+      var isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('kin025-theme', isDark ? 'dark' : 'light');
+      document.getElementById('theme-color-meta').content = isDark ? '#1a1816' : '#f5f0eb';
+      document.getElementById('themeBtn').innerHTML = isDark ? '&#9788;' : '&#9789;';
+    }
+
+    // ---- SCREENS ----
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('visible'); });
+      document.getElementById('screen-' + id).classList.add('visible');
+      window.scrollTo(0, 0);
+    }
+
+    function showHome() {
+      stopTimer();
+      currentRoutine = null;
+      currentStretchIndex = 0;
+      showScreen('home');
+    }
+
+    // ---- TIER ----
+    function setTier(tier) {
+      currentTier = tier;
+      document.querySelectorAll('.tier-btn').forEach(function(b){
+        b.classList.toggle('active', b.dataset.tier === tier);
+      });
+    }
+
+    // ---- ROUTINE LIST ----
+    function renderRoutines() {
+      var container = document.getElementById('routine-list');
+      container.innerHTML = ROUTINES.map(function(r, i) {
+        var time = estimateTime(r);
+        return '<div class="routine-card" onclick="showPreview(' + i + ')">' +
+          '<div class="routine-name">' + r.name + '</div>' +
+          '<div class="routine-desc">' + r.desc + '</div>' +
+          '<div class="routine-meta">' + r.stretches.length + ' stretches &middot; ~' + time + ' min</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    function estimateTime(routine) {
+      var total = 0;
+      routine.stretches.forEach(function(s) {
+        if (s.fixedAlways) { total += s.fixedTime; }
+        else if (s.reps || s.fixedTime) { total += (s.fixedTime || 30); }
+        else {
+          var base = TIER_BASE[currentTier];
+          if (s.multiplier) base = Math.round(base * s.multiplier);
+          total += base;
+        }
+      });
+      return Math.round(total / 60);
+    }
+
+    // ---- PREVIEW ----
+    function showPreview(index) {
+      currentRoutine = ROUTINES[index];
+      currentStretchIndex = 0;
+      var time = estimateTime(currentRoutine);
+      document.getElementById('preview-title').textContent = currentRoutine.name;
+      document.getElementById('preview-subtitle').textContent = currentRoutine.stretches.length + ' stretches \u00b7 ~' + time + ' min at ' + currentTier + ' pace';
+
+      var list = document.getElementById('preview-list');
+      list.innerHTML = currentRoutine.stretches.map(function(s, i) {
+        return '<div class="preview-item">' +
+          '<div class="preview-num">' + (i + 1) + '</div>' +
+          '<div>' +
+            '<div class="preview-name">' + s.name + '</div>' +
+            '<div class="preview-desc">' + s.desc + '</div>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+
+      showScreen('preview');
+    }
+
+    // ---- ACTIVE ROUTINE ----
+    function startRoutine() {
+      currentStretchIndex = 0;
+      isPaused = false;
+      showScreen('active');
+      loadStretch();
+    }
+
+    function getStretchDuration(stretch) {
+      if (stretch.fixedAlways) return stretch.fixedTime;
+      if (stretch.fixedTime) return stretch.fixedTime;
+      var base = TIER_BASE[currentTier];
+      if (stretch.multiplier) base = Math.round(base * stretch.multiplier);
+      return base;
+    }
+
+    function loadStretch() {
+      var stretch = currentRoutine.stretches[currentStretchIndex];
+      var total = currentRoutine.stretches.length;
+
+      document.getElementById('active-routine-name').textContent = currentRoutine.name;
+      document.getElementById('active-count').textContent = (currentStretchIndex + 1) + ' of ' + total;
+      document.getElementById('active-stretch-name').textContent = stretch.name;
+      document.getElementById('active-stretch-desc').textContent = stretch.desc;
+      document.getElementById('active-stretch-mod').textContent = stretch.mod || '';
+
+      document.getElementById('prev-btn').style.visibility = currentStretchIndex === 0 ? 'hidden' : 'visible';
+      document.getElementById('skip-btn').textContent = currentStretchIndex === total - 1 ? 'Finish \u2192' : 'Skip \u2192';
+
+      totalTime = getStretchDuration(stretch);
+      timeRemaining = totalTime;
+      isPaused = false;
+      document.getElementById('pause-btn').textContent = 'Pause';
+
+      updateTimerDisplay();
+      startTimer();
+
+      if (currentStretchIndex > 0) playTransition();
+    }
+
+    function startTimer() {
+      stopTimer();
+      timerInterval = setInterval(function() {
+        if (!isPaused) {
+          timeRemaining--;
+          updateTimerDisplay();
+          if (timeRemaining <= 0) {
+            stopTimer();
+            if (currentStretchIndex < currentRoutine.stretches.length - 1) {
+              nextStretch();
+            } else {
+              completeRoutine();
+            }
+          }
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    }
+
+    function updateTimerDisplay() {
+      var mins = Math.floor(timeRemaining / 60);
+      var secs = timeRemaining % 60;
+      document.getElementById('timer-display').textContent = mins + ':' + secs.toString().padStart(2, '0');
+      var pct = totalTime > 0 ? ((totalTime - timeRemaining) / totalTime) * 100 : 0;
+      document.getElementById('progress-fill').style.width = pct + '%';
+    }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      document.getElementById('pause-btn').textContent = isPaused ? 'Resume' : 'Pause';
+    }
+
+    function nextStretch() {
+      stopTimer();
+      if (currentStretchIndex < currentRoutine.stretches.length - 1) {
+        currentStretchIndex++;
+        loadStretch();
+      } else {
+        completeRoutine();
+      }
+    }
+
+    function prevStretch() {
+      stopTimer();
+      if (currentStretchIndex > 0) {
+        currentStretchIndex--;
+        loadStretch();
+      }
+    }
+
+    function confirmQuit() {
+      if (confirm('Stop this routine?')) showHome();
+    }
+
+    function completeRoutine() {
+      stopTimer();
+      playComplete();
+
+      var log = JSON.parse(localStorage.getItem('kin025-log') || '[]');
+      var now = new Date();
+      log.unshift({
+        routine: currentRoutine.name,
+        tier: currentTier,
+        date: now.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }),
+        time: now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
+        ts: now.getTime()
+      });
+      if (log.length > 50) log.length = 50;
+      localStorage.setItem('kin025-log', JSON.stringify(log));
+
+      var time = estimateTime(currentRoutine);
+      document.getElementById('complete-detail').textContent = currentRoutine.name + ' \u00b7 ' + currentTier + ' pace \u00b7 ~' + time + ' min';
+      showScreen('complete');
+    }
+
+    // ---- HISTORY ----
+    function showHistory() {
+      var log = JSON.parse(localStorage.getItem('kin025-log') || '[]');
+      var container = document.getElementById('history-list');
+
+      if (log.length === 0) {
+        container.innerHTML = '<div class="log-empty">No completed routines yet.</div>';
+      } else {
+        container.innerHTML = log.map(function(l) {
+          return '<div class="log-item">' +
+            '<div class="log-routine">' + l.routine + ' &middot; ' + l.tier + '</div>' +
+            '<div class="log-date">' + l.date + ' at ' + l.time + '</div>' +
+            '</div>';
+        }).join('');
+      }
+      showScreen('history');
+    }
+
+    function clearHistory() {
+      if (confirm('Clear all history?')) {
+        localStorage.removeItem('kin025-log');
+        showHistory();
+      }
+    }
+
+    // ---- VISIBILITY API ----
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden && audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    });
+
+    // ---- PWA: Apple-touch-icon ----
+    (function() {
+      try {
+        var sz = 180;
+        var c = document.createElement('canvas');
+        c.width = c.height = sz;
+        var ctx = c.getContext('2d');
+        var g = ctx.createLinearGradient(0, 0, sz, sz);
+        g.addColorStop(0, '#c45d3e');
+        g.addColorStop(1, '#8b3a28');
+        ctx.fillStyle = g;
+        var r = sz * 0.18;
+        ctx.beginPath();
+        ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+        ctx.quadraticCurveTo(sz, 0, sz, r);
+        ctx.lineTo(sz, sz - r);
+        ctx.quadraticCurveTo(sz, sz, sz - r, sz);
+        ctx.lineTo(r, sz);
+        ctx.quadraticCurveTo(0, sz, 0, sz - r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('ST', sz / 2, sz * 0.52);
+        var el = document.getElementById('apple-touch-icon');
+        if (el) el.href = c.toDataURL('image/png');
+      } catch(e) {}
+    })();
+
+    // ---- PWA: Blob manifest ----
+    (function() {
+      try {
+        function makeIcon(sz) {
+          var c = document.createElement('canvas');
+          c.width = c.height = sz;
+          var ctx = c.getContext('2d');
+          var g = ctx.createLinearGradient(0, 0, sz, sz);
+          g.addColorStop(0, '#c45d3e');
+          g.addColorStop(1, '#8b3a28');
+          ctx.fillStyle = g;
+          var r = sz * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(r, 0); ctx.lineTo(sz - r, 0);
+          ctx.quadraticCurveTo(sz, 0, sz, r);
+          ctx.lineTo(sz, sz - r);
+          ctx.quadraticCurveTo(sz, sz, sz - r, sz);
+          ctx.lineTo(r, sz);
+          ctx.quadraticCurveTo(0, sz, 0, sz - r);
+          ctx.lineTo(0, r);
+          ctx.quadraticCurveTo(0, 0, r, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('ST', sz / 2, sz * 0.52);
+          return c.toDataURL('image/png');
+        }
+        var manifest = {
+          name: 'Stretch — Kin',
+          short_name: 'Stretch',
+          description: 'Guided stretching routines. Free, offline, no accounts.',
+          start_url: './',
+          display: 'standalone',
+          background_color: '#f5f0eb',
+          theme_color: '#f5f0eb',
+          icons: [
+            { src: makeIcon(192), sizes: '192x192', type: 'image/png' },
+            { src: makeIcon(512), sizes: '512x512', type: 'image/png' }
+          ]
+        };
+        var blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+      } catch(e) {}
+    })();
+
+    // ---- PWA: Service worker ----
+    if ('serviceWorker' in navigator) {
+      var swCode = 'const CACHE="kin025-v1";' +
+        'self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.location.href])));});' +
+        'self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));});' +
+        'self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));return res;})));});';
+      var swBlob = new Blob([swCode], { type: 'text/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+    }
+
+    // ---- INIT ----
+    initTheme();
+    renderRoutines();
+  </script>
+
+</body>
+</html>

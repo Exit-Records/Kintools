@@ -2,9 +2,9 @@
 
 This project is a pnpm workspace monorepo utilizing TypeScript for building a collection of web tools, collectively known as the "Kin Ecosystem." The primary goal is to provide a robust, scalable, and maintainable platform for developing and deploying these tools. The project emphasizes a privacy-first approach, with all processing occurring client-side. The vision is to expand the ecosystem with more privacy-conscious and user-centric applications.
 
-**Current tools: KIN-001 through KIN-024 (24 tools). Next: KIN-025.**
+**Current tools: KIN-001 through KIN-025 (25 tools). Next: KIN-026.**
 
-Latest: KIN-024 · Thought Loop — `sites/kin-024-thought-loop/` — `https://kinthoughtloop.netlify.app`
+Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — URL TBC
 
 ## User Preferences
 

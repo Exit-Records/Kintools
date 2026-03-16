@@ -367,4 +367,21 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-025*
+## KIN-025 · Stretch
+
+**URL:** TBC (Netlify deploy pending)
+**Netlify publish dir:** `sites/kin-025-stretch`
+
+**Summary:** Guided stretching tool with five routines: Morning (undo sleep posture, 10 stretches), Desk Break (no floor work, 11 stretches), Post-run (floor-based recovery, 15 stretches), Bedtime (passive long-holds, 10 stretches), Chair-based (fully seated, 13 stretches). Three hold-time tiers: Short (15s base), Normal (30s), Long (45s). Certain stretches have a `multiplier` (e.g. pigeon pose ×1.3) or `fixedTime` / `fixedAlways` (e.g. Savasana always 90s regardless of tier). Each stretch has a modification for accessibility. Audio cues on transition and completion (Web Audio API tones). Timer counts down with a progress bar. Pause/Resume, Previous, Skip controls. History screen logs last 50 completed routines with routine name, tier, date, and time. Estimated duration shown on the home card and preview screen.
+
+**Notes:**
+- Single HTML file. PWA (Blob manifest, apple-touch-icon canvas — terracotta gradient `#c45d3e / #8b3a28`, "ST" initials, Blob SW `kin025-v1`).
+- Creator: Darren. Category: Wellbeing.
+- Color scheme: warm cream bg `#f5f0eb`; surface `#ede8e2`; accent terracotta `#c45d3e`.
+- Font: system-ui stack (-apple-system, BlinkMacSystemFont, Segoe UI, system-ui).
+- Data stored in localStorage (`kin025-theme`, `kin025-log`). Light mode default.
+- Fixed: en-dashes in CSS vars (source used `–bg` instead of `--bg`), markdown fences stripped from pasted source.
+
+---
+
+*Next tool: KIN-026*
