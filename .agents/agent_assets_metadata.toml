@@ -6,3 +6,9 @@ id = "vUU61iOqy_-ucw1IuJx-2"
 uri = "file://sites/kin-build-prompt/KIN-BUILD-PROMPT.md"
 type = "text"
 title = "KIN-BUILD-PROMPT.md"
+
+[[outputs]]
+id = "p7Oum3Kr0zUOC_5_xtfIr"
+uri = "file://Kin Build Rules.md"
+type = "text"
+title = "Kin Build Rules — updated to KIN-023"

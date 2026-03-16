@@ -1,209 +1,428 @@
 # Kin Build Rules
 
-A single source of truth for building, updating, and deploying tools in the Kin ecosystem.
+> Single source of truth for building, updating, and deploying tools in the Kin Ecosystem.
+> Current as of KIN-023. Next tool: KIN-024.
 
 ---
 
-## 1. General
+## 1. Project Context
 
-- Every Kin tool is a **single self-contained HTML file** with no external runtime dependencies.
-- All processing is **client-side only** — nothing stored server-side, nothing sent anywhere.
-- Tools live in `sites/kin-NNN-tool-name/index.html` within the monorepo.
-- The current count is **KIN-001 through KIN-020**. Next is **KIN-021**.
+- **Repo:** `Exit-Records/Kintools` (GitHub, private)
+- **Deployment:** Netlify — each tool is its own Netlify site, a single `index.html` file
+- **Tools completed:** KIN-001 through KIN-023
+- **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
+- **Creator:** Always `Darren` unless explicitly specified otherwise
+  - KIN-017 = Alice
+  - KIN-018 = Alice and Darren
 
 ---
 
 ## 2. Workflow Order
 
-1. Build locally → preview in Replit → get user sign-off
-2. Only then push to GitHub
-3. User deploys to Netlify independently and provides the live URL — **never guess Netlify URLs**
+1. Apply all transforms to the source file locally
+2. Run syntax checks — do not push a broken file
+3. Push to GitHub via the Git Data API
+4. User deploys to Netlify independently and provides the live URL
+5. **Never guess a Netlify URL** — wait for the user to confirm
 
 ---
 
-## 3. Files to Update on Every New Tool
+## 3. Files to Update for Every New Tool
 
-Always update all four locations when adding a new tool:
-
-| File | What to update |
+| File | What changes |
 |---|---|
-| `index.html` (root) | New release card, count, `--hb-NN` color, nth-child delay |
-| `sites/kin-landing/index.html` | Same as above — keep both in sync at all times |
-| `Kin Catalog.md` | New entry with full spec |
+| `index.html` (root) | New release card, tool count string, `--hb-NN` colour, nth-child animation delay |
+| `sites/kin-landing/index.html` | Identical changes — always keep both in sync |
+| `Kin Catalog.md` | Full tool entry (number, name, URL, summary, tech notes) |
 | `replit.md` | Update current tool count and latest tool reference |
 
 Both landing pages must always be identical. Never update one without the other.
 
 ---
 
-## 4. Landing Page Release Cards
+## 4. Standard Transforms — Apply to Every Pasted File
 
-Each new tool card follows this structure:
+Apply every step in order before writing the output file.
 
-```html
-<!-- KIN-NNN: Tool Name -->
-<a href="https://[netlify-url]/" target="_blank" rel="noopener" class="release">
-  <div class="release-cover">
-    <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-NN), [darker-shade]);"></div>
-    <span class="cover-category">Utility</span>
-    <span class="cover-number">KIN-NNN</span>
-    <div class="cover-icon"><!-- SVG icon --></div>
-    <span class="kin-mark">Kin</span>
-  </div>
-  <div class="release-info">
-    <div class="release-name">Tool Name</div>
-    <div class="release-creator">by Darren</div>
-    <div class="release-desc">Brief description in the style of other cards — short, conversational sentences, no feature-list dumps.</div>
-    <div class="release-replaces">Replaces <span>thing it replaces</span></div>
-  </div>
-</a>
+### 4.1 Strip markdown fences
+
+Remove any ` ``` ` lines accidentally embedded in the pasted source:
+
+```js
+src = src.split('\n').filter(l => l.trim() !== '```').join('\n');
 ```
 
-**Description style:** Short punchy sentences matching the tone of existing cards. Never comma-separated feature lists. Compare against existing cards before writing.
+### 4.2 Fix curly / smart quotes
+
+Curly quotes inside JS strings cause syntax errors:
+
+```js
+src = src.replace(/\u2018/g, "'").replace(/\u2019/g, "'");
+src = src.replace(/\u201C/g, '"').replace(/\u201D/g, '"');
+```
+
+### 4.3 Fix CSS en dashes
+
+CSS custom properties pasted from rich text often use `–` (U+2013) instead of `--`:
+
+```js
+src = src.replace(/\u2013([a-zA-Z])/g, '--$1');
+```
+
+### 4.4 Fix the broken universal CSS selector
+
+Copy-paste often drops the `*` and produces `- {` instead of `*, *::before, *::after {`:
+
+```js
+src = src.replace(/^- \{/m, '*, *::before, *::after {');
+```
+
+### 4.5 `@import` must be first in `<style>`
+
+CSS `@import` is silently ignored if it appears after any other rule inside `<style>`. Move it to the top of the style block if needed.
+
+### 4.6 The `String.replace()` dollar-sign trap — CRITICAL
+
+When calling `.replace(needle, replacementString)`, any `$'`, `$`` `, `$&`, `$1`–`$9` in the replacement string triggers special substitution behaviour and corrupts the output. This has happened before and is hard to debug.
+
+**Rule: whenever the replacement contains `$` (CSS variables, JS expressions, dollar currency), always use a function:**
+
+```js
+// WRONG — corrupts output if replacement contains $' or $`
+src = src.replace('</head>', pwaScript + '\n</head>');
+
+// CORRECT — function form, no special substitution
+src = src.replace('</head>', () => pwaScript + '\n</head>');
+```
+
+Apply the function form to every `.replace()` call whose replacement string may contain a `$`.
+
+### 4.7 Service workers — never use `data:` URIs
+
+`data:text/javascript;...` URIs are rejected by browsers for service worker scope. Always use a Blob URL:
+
+```js
+var _sw = "const C='kin0NN-v1';" + "/* ... sw code ... */";
+navigator.serviceWorker.register(
+  URL.createObjectURL(new Blob([_sw], {type: 'application/javascript'}))
+).catch(function(){});
+```
+
+Build the SW code string by concatenation, not template literals, if there is any risk of `$` characters appearing in the code.
+
+### 4.8 Service worker replacement — avoid regex for block replacement
+
+If replacing an existing SW block inside a pasted file, do not use a regex like `[\s\S]*?\}` — the non-greedy `}` matches the first closing brace inside the block and corrupts surrounding code.
+
+Use exact string matching instead:
+
+```js
+const idx = src.indexOf(exactOldBlock);
+if (idx !== -1) src = src.slice(0, idx) + newBlock + src.slice(idx + exactOldBlock.length);
+```
+
+### 4.9 Timezone-safe date strings
+
+`toISOString()` returns UTC and shows the wrong day for users west of UTC. Always build dates from local parts:
+
+```js
+const d = new Date();
+const iso = d.getFullYear() + '-' +
+  String(d.getMonth()+1).padStart(2,'0') + '-' +
+  String(d.getDate()).padStart(2,'0');
+```
 
 ---
 
-## 5. Colors and Animation Delays
+## 5. Required HTML Changes
 
-Each tool gets a unique CSS custom property and nth-child animation delay. Continue the sequence:
+### 5.1 `<html>` tag
+
+```html
+<html lang="en" class="light">
+```
+
+Always add `class="light"` so the default light state is explicit.
+
+### 5.2 `<title>`
+
+Format: `KIN-NNN — Tool Name — Kin`
+
+```html
+<title>KIN-022 — Fair Share — Kin</title>
+```
+
+### 5.3 Viewport with safe-area support
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+```
+
+### 5.4 Theme colour
+
+Default to the light background. Give it an `id` so JS can update it when dark mode activates:
+
+```html
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+```
+
+### 5.5 Remove base64 manifest
+
+Delete any `<link rel="manifest" href="data:application/json;base64,...">`. Replace with the Blob pattern (Section 7).
+
+### 5.6 Add apple-touch-icon placeholder
+
+```html
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Short Name">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+```
+
+The `href` is populated at runtime by the canvas script (Section 7).
+
+---
+
+## 6. Default Light Mode
+
+All new tools must open in light mode. Dark is never the default.
+
+| Element | Light-mode value |
+|---|---|
+| `<html>` | `class="light"` |
+| Theme-color meta | Light background hex |
+| JS dark flag | `let dark = false` |
+| Toggle button | `🌙` (moon = press to go dark) |
+| localStorage | Read key on init; default to `'light'` if absent |
+
+**Dark mode approach** — three patterns are in use across the Kin tools. Preserve whichever pattern the source uses:
+
+- `body.dark` class (used in KIN-020, KIN-021)
+- `[data-theme="dark"]` attribute on `<html>` (used in some tools)
+- `html.dark` / `html.light` class toggle (used in KIN-022, KIN-023)
+
+**localStorage key** must be tool-specific, e.g. `kin022-theme`, `kin023-theme`, to avoid cross-tool interference.
+
+---
+
+## 7. PWA Script Block
+
+Inject this `<script>` block immediately before `</head>`. Use the function form of `.replace()`:
+
+```js
+src = src.replace('</head>', () => pwaScript + '\n</head>');
+```
+
+Template:
+
+```html
+<script>
+(function(){
+  /* Blob manifest */
+  var m = {
+    name: "KIN-NNN Tool Name",
+    short_name: "Tool Name",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#f5f4f0",
+    theme_color: "#f5f4f0"
+  };
+  var b = new Blob([JSON.stringify(m)], {type: "application/json"});
+  var lk = document.createElement("link");
+  lk.rel = "manifest";
+  lk.href = URL.createObjectURL(b);
+  document.head.appendChild(lk);
+})();
+
+(function(){
+  /* Apple touch icon — 180×180 rounded rect in tool gradient colours */
+  var c = document.createElement("canvas"); c.width = 180; c.height = 180;
+  var ctx = c.getContext("2d");
+  var r = 36;
+  ctx.beginPath();
+  ctx.moveTo(r,0); ctx.lineTo(180-r,0); ctx.quadraticCurveTo(180,0,180,r);
+  ctx.lineTo(180,180-r); ctx.quadraticCurveTo(180,180,180-r,180);
+  ctx.lineTo(r,180); ctx.quadraticCurveTo(0,180,0,180-r);
+  ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();
+  var g = ctx.createLinearGradient(0,0,180,180);
+  g.addColorStop(0,"#TOOL_COLOR_1");
+  g.addColorStop(1,"#TOOL_COLOR_2");
+  ctx.fillStyle = g; ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+  ctx.font = "bold 46px sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("AB",90,94);   /* 2-letter initials for the tool */
+  var el = document.getElementById("apple-touch-icon");
+  if (el) el.href = c.toDataURL("image/png");
+})();
+
+if ("serviceWorker" in navigator) {
+  var _sw =
+    "const C='kin0NN-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
+```
+
+**Gradient colours:** Use the tool's landing page card gradient colours (`--hb-NN` accent, and its darker shade). If the tool has its own `--accent` CSS variable, match that.
+
+**Initials:** 2-letter abbreviation of the tool name (e.g. `FS` for Fair Share, `PG` for PassGen, `MD` for Markdown Download).
+
+---
+
+## 8. Footer
+
+Add immediately before `</body>`. Use the function form of `.replace()`:
+
+```js
+src = src.replace('</body>', () => footer + '\n</body>');
+```
+
+Template:
+
+```html
+<footer style="text-align:center;padding:16px 16px 32px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9c9c96">
+  KIN-NNN &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
+</footer>
+```
+
+---
+
+## 9. Mobile Optimisation Checklist
+
+Every tool must pass all of these before shipping:
+
+| Item | Requirement |
+|---|---|
+| Touch targets | All tappable elements ≥ 44px height (`min-height: 44px`) |
+| Viewport | `viewport-fit=cover` in the meta viewport tag |
+| Safe-area padding | Body or container uses `env(safe-area-inset-*)` |
+| Input font size | `font-size: 16px` minimum on all `<input>` and `<select>` — prevents iOS auto-zoom |
+| Tap highlight | `-webkit-tap-highlight-color: transparent` on interactive elements |
+| Appearance reset | `-webkit-appearance: none` on buttons, inputs, selects |
+| Horizontal scroll rows | `-webkit-overflow-scrolling: touch` on scroll containers |
+
+---
+
+## 10. Syntax Verification — Mandatory Before Push
+
+After all transforms, check every `<script>` block for syntax errors. Using Node.js `vm`:
+
+```js
+const vm = await import('vm');
+const blocks = [...src.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+for (const [, code] of blocks) {
+  try { new vm.Script(code); }
+  catch (e) {
+    // Log e.message (includes line:col), show context lines, and fix before proceeding
+    throw e;
+  }
+}
+```
+
+Also verify structural integrity:
+- `src.indexOf('</head>') < src.indexOf('<body>')` — head closes before body opens
+- Script open/close count matches: `(src.match(/<script>/g)||[]).length === (src.match(/<\/script>/g)||[]).length`
+- No `data:application/json;base64` manifest remaining
+- Title contains the correct `KIN-NNN` number
+- No leftover KIN-NNN references from the source that should have been updated (e.g. old localStorage keys)
+
+---
+
+## 11. Landing Page — New Tool Card
+
+Add to both `index.html` (root) and `sites/kin-landing/index.html`.
+
+### Colour and animation delay sequence
 
 | Tool | Variable | nth-child delay |
 |---|---|---|
-| KIN-019 | `--hb-19` | `1.10s` |
-| KIN-020 | `--hb-20` | `1.15s` |
 | KIN-021 | `--hb-21` | `1.20s` |
 | KIN-022 | `--hb-22` | `1.25s` |
+| KIN-023 | `--hb-23` | `1.30s` |
+| KIN-024 | `--hb-24` | `1.35s` |
 
-Pattern: delay = `1.10s + (N-19) * 0.05s`. Choose a new color for each `--hb-NN` variable.
+Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each new `--hb-NN` variable.
 
----
+### Card HTML structure
 
-## 6. Creator Attribution
-
-- Default creator is always **Darren** unless the user explicitly specifies someone else.
-- Creator appears in three places inside the tool file: meta description, the `kin-label` div, and the `foot-meta` div.
-- Creator also appears in both landing page cards and in `Kin Catalog.md`.
-- Known exceptions: KIN-017 = Alice, KIN-018 = Alice and Darren.
-
----
-
-## 7. Default Theme — Light Mode
-
-All new tools must open in **light mode**. Dark is never the default unless the spec explicitly requires it.
-
-Checklist:
-- `<html class="light">` — not `dark`
-- `<meta name="theme-color" content="[light value]" id="theme-color-meta">` — use the light background color
-- In JS: `let dark = false`
-- Toggle button starts as `🌙` (moon = switch to dark)
-
----
-
-## 8. PWA — Required on Every Tool
-
-Every tool must include full PWA support. If pasted code is missing any of these, add them before shipping.
-
-### Required files alongside `index.html`:
-- `icon.svg` — the tool's icon, used by the manifest
-- `manifest.json` — name, short_name (KIN-NNN format), icons, display, theme_color
-
-### Required in `<head>`:
 ```html
-<link rel="manifest" id="manifest-link">
-<link rel="apple-touch-icon" id="apple-touch-icon" href="">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Short Name">
+<div class="card" style="--c:var(--hb-NN)" onclick="location.href='https://NETLIFY_URL.netlify.app'">
+  <div class="icon">EMOJI</div>
+  <div class="name">KIN-NNN</div>
+  <div class="tool-name">Tool Name</div>
+  <div class="desc">Short conversational description. One or two sentences. No feature-dump lists.</div>
+</div>
 ```
 
-### Apple touch icon canvas script (CRITICAL — add automatically if missing):
+**Description style:** Match the tone of existing cards — short, plain sentences. Avoid comma-separated feature lists.
 
-If pasted code does not include the apple-touch-icon canvas script, **always add it**. It must be added before the service worker registration block:
+Also update the tool count string in both landing pages from `"NN tools"` to `"NN+1 tools"`.
+
+---
+
+## 12. GitHub Push Pattern
+
+Use the Git Data API (not CLI git). Steps in order:
+
+```
+GET  /repos/{owner}/{repo}/git/refs/heads/main         → headSha
+GET  /repos/{owner}/{repo}/git/commits/{headSha}        → baseTreeSha
+POST /repos/{owner}/{repo}/git/blobs                    → blobSha (one per file)
+POST /repos/{owner}/{repo}/git/trees                    → treeSha
+POST /repos/{owner}/{repo}/git/commits                  → commitSha
+PATCH /repos/{owner}/{repo}/git/refs/heads/main         → update ref to commitSha
+```
+
+Commit message format:
+```
+KIN-NNN Tool Name: brief one-line summary
+
+- bullet detail 1
+- bullet detail 2
+```
+
+---
+
+## 13. Web3Forms
+
+- Access key: `bee35860-0b11-4196-89d4-2ec55bc8b269`
+- Destination email: `dbridge@mac.com`
+
+---
+
+## 14. Service Worker Cache Versioning
+
+After significant updates to an existing tool, bump the cache version string to force cache invalidation:
 
 ```js
-(function () {
-  try {
-    var sz = 180, c = document.createElement('canvas');
-    c.width = sz; c.height = sz;
-    var ctx = c.getContext('2d');
-    var g = ctx.createLinearGradient(0, 0, sz, sz);
-    g.addColorStop(0, '[tool gradient start]');
-    g.addColorStop(1, '[tool gradient end]');
-    ctx.fillStyle = g;
-    var r = 36;
-    ctx.beginPath();
-    ctx.moveTo(r,0); ctx.lineTo(sz-r,0); ctx.arcTo(sz,0,sz,r,r);
-    ctx.lineTo(sz,sz-r); ctx.arcTo(sz,sz,sz-r,sz,r);
-    ctx.lineTo(r,sz); ctx.arcTo(0,sz,0,sz-r,r);
-    ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r); ctx.closePath(); ctx.fill();
-    var svg = '<!-- tool icon SVG string, 96x96 -->';
-    var img = new Image();
-    var blob = new Blob([svg], { type: 'image/svg+xml' });
-    var url = URL.createObjectURL(blob);
-    img.onload = function () {
-      ctx.drawImage(img, 42, 42, 96, 96);
-      URL.revokeObjectURL(url);
-      var el = document.getElementById('apple-touch-icon');
-      if (el) el.href = c.toDataURL('image/png');
-    };
-    img.src = url;
-  } catch (e) {}
-})();
-```
-
-- Gradient colors must match the tool's landing page cover card colors.
-- The SVG icon must match the cover card icon.
-- Icon drawn at 96×96, offset 42px from top-left (centers it on the 180×180 canvas).
-
----
-
-## 9. Dates — Timezone Bug Prevention
-
-Never use `toISOString()` for user-visible dates — it returns UTC and will show the wrong date for users west of UTC.
-
-Always use local date components:
-```js
-const d = new Date();
-const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+// Before
+const C = 'kin022-v1';
+// After update
+const C = 'kin022-v2';
 ```
 
 ---
 
-## 10. Netlify URLs
+## 15. Common Pitfalls — Quick Reference
 
-- Never guess a Netlify URL. Always wait for the user to provide it after deploying.
-- Past wrong guesses serve as a reminder: `kinmarkdowndl` (KIN-019 wrong), `kinpwgen` (KIN-020 wrong).
-- Once provided, update both landing pages, `Kin Catalog.md`, and any in-tool references.
-
----
-
-## 11. GitHub Push Process
-
-Use the GitHub Git Data API (OAuth token via `listConnections('github')`). Steps:
-
-1. Get current HEAD SHA from `refs/heads/main`
-2. Get base tree SHA from the commit
-3. Create blobs for each changed file
-4. Create a new tree from the base tree + blob SHAs
-5. Create a commit pointing to the new tree
-6. PATCH `refs/heads/main` to the new commit SHA (`force: true`)
-
----
-
-## 12. Web3Forms
-
-- Key: `bee35860-0b11-4196-89d4-2ec55bc8b269`
-- Email: `dbridge@mac.com`
-
----
-
-## 13. Kin Catalog.md
-
-Every new tool gets a full entry including: tool number, name, URL, Netlify publish dir, summary paragraph, and notes (single file, PWA, creator, color scheme, category, any notable technical details).
-
----
-
-## 14. Service Workers
-
-- All tools include an inline service worker registered via `URL.createObjectURL(new Blob([...]))`.
-- After significant updates, bump the cache version string (e.g. `kin-toolname-v1` → `v2`) to force cache invalidation.
+| Symptom | Root cause | Fix |
+|---|---|---|
+| CSS custom properties do nothing | En dashes instead of double hyphens | Section 4.3 |
+| JS syntax error on page load | Curly quotes in string literals | Section 4.2 |
+| Manifest not found / ignored | `data:` base64 href | Replace with Blob (Section 7) |
+| Service worker fails to register | `data:text/javascript` scope rejected | Blob URL (Section 4.7) |
+| iOS home screen icon is blank | Missing `apple-touch-icon` link or canvas script | Sections 5.6, 7 |
+| Dark mode is the default | Missing `class="light"` or wrong JS initial state | Sections 5.1, 6 |
+| File body HTML appears inside a JS string | `$'` in `.replace()` replacement triggers substitution | Section 4.6 |
+| Service worker block replaced incorrectly | Regex `[\s\S]*?}` matches first brace | Section 4.8 |
+| Wrong date shown for users west of UTC | `toISOString()` returns UTC | Section 4.9 |
+| `@import` silently ignored | Not first rule in `<style>` | Section 4.5 |
+| Universal selector broken as `- {` | Copy-paste dropped the `*` | Section 4.4 |
+| Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
