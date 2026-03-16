@@ -299,4 +299,22 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-021*
+## KIN-021 · Text Counter
+
+**URL:** https://kintextcounter.netlify.app
+**Netlify publish dir:** `sites/kin-021-text-counter`
+
+**Summary:** Paste any text and get a full statistical breakdown instantly. Core stats: word count, character count (with and without spaces), sentence count, paragraph count, estimated reading time (238 wpm), speaking time (130 wpm). Readability: Flesch-Kincaid Grade Level and Reading Ease score, each with a plain-English description. Platform limits: X/Twitter (280), Instagram (2200), LinkedIn (3000), SMS (160) — each shown as a labelled progress bar that turns terracotta when over-limit. Keyword density: top 10 meaningful words (stopword-filtered, min 3 chars) shown as chips with count and percentage. Selection stats: select any passage in the textarea to see its word, character, and sentence count in a banner above the grid. Copy Stats button exports a dated plain-text summary to clipboard. No localStorage, no server calls, nothing persisted.
+
+**Notes:**
+- Single HTML file. PWA (icon.svg, inline manifest, inline service worker `kin-textcounter-v1`).
+- Creator: Darren. Category: Utility.
+- Color scheme: terracotta `#c45d3e` / `#8a3525`; warm cream light bg `#f5f0eb`; dark bg `#1a1614`.
+- Fonts: IBM Plex Sans (UI) + IBM Plex Mono (stats/numbers).
+- Readability uses approximate syllable counting (regex-based) + standard Flesch-Kincaid formulas.
+- CSS fix applied on import: `@import` moved to top of `<style>` block; en dash CSS variable refs corrected to double-hyphen.
+- Light mode default.
+
+---
+
+*Next tool: KIN-022*
