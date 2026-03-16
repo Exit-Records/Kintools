@@ -255,7 +255,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 **Notes:**
 - Single HTML file, PWA (manifest.json, icon.svg, canvas apple-touch-icon).
-- Creator: Alice Anthony & Darren.
+- Creator: Alice and Darren.
 - Category: Wellness (per brief; spec says Parenting/Health).
 - Color scheme: emerald green `#059669` / `#047857`; background `#f0fdf4`.
 - Long-press on Feed → type picker modal; long-press on Diaper → type picker modal.
