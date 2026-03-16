@@ -303,9 +303,13 @@
 
 <script>
   const themeBtn = document.getElementById('theme-btn');
-  let isDark = true;
+  let isDark = false;
   const THEME_DARK = '#111110';
   const THEME_LIGHT = '#FAFAF7';
+
+  document.documentElement.classList.add('light');
+  themeBtn.textContent = '🌙';
+  document.getElementById('theme-color-meta').setAttribute('content', THEME_LIGHT);
 
   function updateThemeMeta(dark) {
     document.getElementById('theme-color-meta').setAttribute('content', dark ? THEME_DARK : THEME_LIGHT);
