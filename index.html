@@ -42,6 +42,7 @@
     --hb-17: #4c1d95;
     --hb-18: #065f46;
     --hb-19: #1a3f5c;
+    --hb-20: #1a2744;
   }
 
   body {
@@ -435,6 +436,7 @@
   .release:nth-child(17) { animation-delay: 1.0s; }
   .release:nth-child(18) { animation-delay: 1.05s; }
   .release:nth-child(19) { animation-delay: 1.10s; }
+  .release:nth-child(20) { animation-delay: 1.15s; }
 
   /* ---- RESPONSIVE ---- */
   @media (max-width: 600px) {
@@ -475,7 +477,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">19 tools</span>
+  <span class="catalog-count">20 tools</span>
 </div>
 
 <div class="catalog">
@@ -896,6 +898,30 @@
       <div class="release-creator">by Darren</div>
       <div class="release-desc">Write or paste text and download it as a .md file instantly. Name your file, see live word and character counts, copy to clipboard. No editor needed, no account, nothing saved server-side.</div>
       <div class="release-replaces">Replaces <span>opening a code editor just to save a quick .md file</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-020: Password Generator -->
+  <a href="https://kinpwgen.netlify.app/" target="_blank" rel="noopener" class="release">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-20), #0a1520);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-020</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="12" y="22" width="24" height="18" rx="3" stroke="white" stroke-width="2" opacity="0.75"/>
+          <path d="M16 22v-6a8 8 0 0 1 16 0v6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="31" r="2.5" fill="white" opacity="0.6"/>
+          <line x1="24" y1="33.5" x2="24" y2="37" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Password Generator</div>
+      <div class="release-creator">by dBridge</div>
+      <div class="release-desc">Fast, private password generator. Length slider, uppercase/lowercase/numbers/symbols toggles, passphrase mode with word count and separator options, strength indicator with entropy bits and time-to-crack estimate, batch generation up to 20, session history. Nothing stored.</div>
+      <div class="release-replaces">Replaces <span>ad-heavy password generator websites</span></div>
     </div>
   </a>
 

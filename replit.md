@@ -2,9 +2,9 @@
 
 This project is a pnpm workspace monorepo utilizing TypeScript for building a collection of web tools, collectively known as the "Kin Ecosystem." The primary goal is to provide a robust, scalable, and maintainable platform for developing and deploying these tools. The project emphasizes a privacy-first approach, with all processing occurring client-side. The vision is to expand the ecosystem with more privacy-conscious and user-centric applications.
 
-**Current tools: KIN-001 through KIN-019 (19 tools live). Next: KIN-020.**
+**Current tools: KIN-001 through KIN-020 (20 tools). Next: KIN-021.**
 
-Latest: KIN-019 · Markdown Download — `sites/kin-019-markdown-download/` — `https://kinmarkdownl.netlify.app`
+Latest: KIN-020 · Password Generator — `sites/kin-020-password-generator/` — URL TBD after Netlify deploy
 
 ## User Preferences
 
