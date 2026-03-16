@@ -541,8 +541,32 @@ line-height: 1.7;
   'use strict';
 
   // ---- State ----
+  const SAMPLE = JSON.stringify({
+    "user": {
+      "id": 1042,
+      "name": "Darren Bridge",
+      "email": "darren@example.com",
+      "active": true,
+      "role": null,
+      "preferences": {
+        "theme": "light",
+        "notifications": true,
+        "language": "en-AU"
+      }
+    },
+    "projects": [
+      { "id": 1, "name": "Kin Tools", "status": "active", "tools": 23 },
+      { "id": 2, "name": "Side Project", "status": "paused", "tools": 4 }
+    ],
+    "meta": {
+      "version": "1.0.0",
+      "generated": "2026-03-16",
+      "count": 2
+    }
+  }, null, 2);
+
   let state = {
-    input: '',
+    input: SAMPLE,
     parsed: null,
     error: null,
     mode: 'formatted', // formatted | tree | ts | diff
