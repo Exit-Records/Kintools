@@ -334,4 +334,20 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ---
 
-*Next tool: KIN-023*
+## KIN-023 · JSON
+
+**URL:** https://kinjson.netlify.app
+**Netlify publish dir:** `sites/kin-023-json`
+
+**Summary:** Browser-based JSON formatter, validator, and inspector. Four output modes: Formatted (syntax-highlighted with 2sp/4sp/tab indent options), Tree (collapsible node explorer with click-to-copy path), TypeScript (generates typed interfaces from the JSON shape), and Diff (side-by-side comparison of two JSON payloads with added/removed/changed highlighting). Additional features: auto-fix for common JSON errors (trailing commas, single quotes, unquoted keys), JSON path query bar (`$.data.users[0]`), sort keys alphabetically, minify, paste from clipboard, copy output. Stats bar shows byte size, key count, depth, object/array counts.
+
+**Notes:**
+- Single HTML file. PWA (icon.svg, inline manifest via Blob, inline service worker `kin-json-v1`).
+- Creator: Darren. Category: Developer.
+- Color scheme: deep indigo `#4b3a7c` / `#2d1f5e`; warm off-white bg `#f2f0EC`.
+- Fonts: JetBrains Mono (code/UI) + DM Sans (labels).
+- Light mode default. Fixed curly Unicode quotes (U+2018/2019) that caused JS syntax error.
+
+---
+
+*Next tool: KIN-024*
