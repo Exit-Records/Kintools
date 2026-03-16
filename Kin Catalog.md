@@ -291,7 +291,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 **Notes:**
 - Single HTML file. PWA (manifest.json, icon.svg, inline service worker).
-- Creator: dBridge. Category: Utility.
+- Creator: Darren. Category: Utility.
 - Color scheme: dark navy `#1a2744` / `#0a1520`; accent green `#4ade80`.
 - Wordlist: ~900 curated common English words, embedded as template literal.
 - All randomness via `crypto.getRandomValues()` with rejection sampling (no modulo bias).

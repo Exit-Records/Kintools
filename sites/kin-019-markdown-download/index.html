@@ -10,6 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Markdown Download">
   <link rel="manifest" id="manifest-link">
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
@@ -416,6 +417,40 @@
   };
   document.getElementById('manifest-link').setAttribute('href',
     'data:application/json,' + encodeURIComponent(JSON.stringify(manifest)));
+
+  // Apple touch icon — matches landing page cover
+  (function () {
+    try {
+      var sz = 180, c = document.createElement('canvas');
+      c.width = sz; c.height = sz;
+      var ctx = c.getContext('2d');
+      var g = ctx.createLinearGradient(0, 0, sz, sz);
+      g.addColorStop(0, '#1a3f5c'); g.addColorStop(1, '#0b1e2d');
+      ctx.fillStyle = g;
+      var r = 36;
+      ctx.beginPath();
+      ctx.moveTo(r,0); ctx.lineTo(sz-r,0); ctx.arcTo(sz,0,sz,r,r);
+      ctx.lineTo(sz,sz-r); ctx.arcTo(sz,sz,sz-r,sz,r);
+      ctx.lineTo(r,sz); ctx.arcTo(0,sz,0,sz-r,r);
+      ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r); ctx.closePath(); ctx.fill();
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48" fill="none">' +
+        '<rect x="8" y="4" width="24" height="30" rx="3" stroke="white" stroke-width="2" opacity="0.7"/>' +
+        '<line x1="14" y1="13" x2="26" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>' +
+        '<line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>' +
+        '<path d="M32 28 L32 44 M26 38 L32 44 L38 38" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>';
+      var img = new Image();
+      var blob = new Blob([svg], { type: 'image/svg+xml' });
+      var url = URL.createObjectURL(blob);
+      img.onload = function () {
+        ctx.drawImage(img, 42, 42, 96, 96);
+        URL.revokeObjectURL(url);
+        var el = document.getElementById('apple-touch-icon');
+        if (el) el.href = c.toDataURL('image/png');
+      };
+      img.src = url;
+    } catch (e) {}
+  })();
 
   if ('serviceWorker' in navigator) {
     const swCode = `

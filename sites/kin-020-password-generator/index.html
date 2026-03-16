@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Password Generator — Kin</title>
-  <meta name="description" content="Fast, private password generator. Runs entirely in your browser. No accounts, no tracking, no ads. KIN-020 by dBridge for Kin.">
+  <meta name="description" content="Fast, private password generator. Runs entirely in your browser. No accounts, no tracking, no ads. KIN-020 by Darren for Kin.">
   <meta name="theme-color" content="#f8f8fb" id="theme-color-meta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Password Gen">
   <link rel="manifest" id="manifest-link">
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -528,7 +529,7 @@
 
   <div class="header">
     <div>
-      <div class="kin-label">KIN-020 · dBridge</div>
+      <div class="kin-label">KIN-020 · Darren</div>
       <h1 class="kin-title">Password Generator</h1>
     </div>
     <button id="theme-btn" aria-label="Toggle theme">☀️</button>
@@ -697,7 +698,7 @@
 
   <footer class="kin-footer">
     <div class="foot-brand">Kin</div>
-    <div class="foot-meta">Password Generator · KIN-020 · by dBridge<br>No tracking · Works offline</div>
+    <div class="foot-meta">Password Generator · KIN-020 · by Darren<br>No tracking · Works offline</div>
   </footer>
 
 </div>
@@ -1130,6 +1131,39 @@ const manifest = {
 };
 document.getElementById('manifest-link').href =
   'data:application/json,' + encodeURIComponent(JSON.stringify(manifest));
+
+// Apple touch icon — matches landing page cover
+(function () {
+  try {
+    var sz = 180, c = document.createElement('canvas');
+    c.width = sz; c.height = sz;
+    var ctx = c.getContext('2d');
+    var g = ctx.createLinearGradient(0, 0, sz, sz);
+    g.addColorStop(0, '#1a2744'); g.addColorStop(1, '#0a1520');
+    ctx.fillStyle = g;
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r,0); ctx.lineTo(sz-r,0); ctx.arcTo(sz,0,sz,r,r);
+    ctx.lineTo(sz,sz-r); ctx.arcTo(sz,sz,sz-r,sz,r);
+    ctx.lineTo(r,sz); ctx.arcTo(0,sz,0,sz-r,r);
+    ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r); ctx.closePath(); ctx.fill();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48" fill="none">' +
+      '<rect x="12" y="22" width="24" height="18" rx="3" stroke="white" stroke-width="2" opacity="0.8"/>' +
+      '<path d="M16 22v-6a8 8 0 0 1 16 0v6" stroke="white" stroke-width="2" stroke-linecap="round"/>' +
+      '<circle cx="24" cy="31" r="2.5" fill="white" opacity="0.7"/>' +
+      '</svg>';
+    var img = new Image();
+    var blob = new Blob([svg], { type: 'image/svg+xml' });
+    var url = URL.createObjectURL(blob);
+    img.onload = function () {
+      ctx.drawImage(img, 42, 42, 96, 96);
+      URL.revokeObjectURL(url);
+      var el = document.getElementById('apple-touch-icon');
+      if (el) el.href = c.toDataURL('image/png');
+    };
+    img.src = url;
+  } catch (e) {}
+})();
 
 if ('serviceWorker' in navigator) {
   const sw = `const C='kin-pwgen-v1';
