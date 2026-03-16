@@ -1,0 +1,47 @@
+9:02:06 AM: build-image version: 207bd4d38e2cd3af6515aa37c5942e41499b616a (noble-new-builds)
+9:02:06 AM: buildbot version: 420ff06ebdfb3fd8215b1a0a158ab916a07fe5a9
+9:02:06 AM: Fetching cached dependencies
+9:02:07 AM: Failed to fetch cache, continuing with build
+9:02:07 AM: Starting to prepare the repo for build
+9:02:07 AM: No cached dependencies found. Cloning fresh repo
+9:02:07 AM: git clone --filter=blob:none https://github.com/Exit-Records/Kintools
+9:02:07 AM: Preparing Git Reference refs/heads/main
+9:02:09 AM: Installing dependencies
+9:02:09 AM: mise ~/.config/mise/config.toml tools: python@3.14.3
+9:02:09 AM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+9:02:09 AM: mise ~/.config/mise/config.toml tools: go@1.26.0
+9:02:09 AM: Downloading and installing node v22.22.1...
+9:02:10 AM: Downloading https://nodejs.org/dist/v22.22.1/node-v22.22.1-linux-x64.tar.xz...
+9:02:10 AM: Computing checksum with sha256sum
+9:02:10 AM: Checksums matched!
+9:02:13 AM: Now using node v22.22.1 (npm v10.9.4)
+9:02:13 AM: Enabling Node.js Corepack
+9:02:13 AM: pnpm workspaces detected
+9:02:13 AM: Installing npm packages using pnpm version 10.30.2
+9:02:14 AM: Scope: all 12 workspace projects
+9:02:14 AM: Lockfile is up to date, resolution step is skipped
+9:02:14 AM: Progress: resolved 1, reused 0, downloaded 0, added 0
+9:02:14 AM: Packages: +488
+9:02:14 AM: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+9:02:15 AM: Progress: resolved 488, reused 0, downloaded 176, added 137
+9:02:16 AM: Progress: resolved 488, reused 0, downloaded 194, added 145
+9:02:17 AM: Progress: resolved 488, reused 0, downloaded 282, added 189
+9:02:18 AM: Progress: resolved 488, reused 0, downloaded 487, added 409
+9:02:18 AM: Progress: resolved 488, reused 0, downloaded 488, added 488, done
+9:02:18 AM: .../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+9:02:18 AM: .../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+9:02:19 AM: dependencies:
+9:02:19 AM: + @replit/connectors-sdk 0.2.0
+9:02:19 AM: devDependencies:
+9:02:19 AM: + prettier 3.8.1
+9:02:19 AM: + typescript 5.9.3
+9:02:19 AM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+9:02:19 AM: . preinstall: Done
+9:02:19 AM: Done in 5.3s using pnpm v10.30.2
+9:02:19 AM: npm packages installed using pnpm
+9:02:19 AM: Successfully installed dependencies
+9:02:20 AM: Failed during stage 'building site': Deploy directory 'sites/kin-019-markdown-download' does not exist
+9:02:20 AM: Detected 0 framework(s)
+9:02:20 AM: No build steps found, continuing to publishing
+9:02:20 AM: Failing build: Failed to build site
+9:02:20 AM: Finished processing build request in 13.812s
