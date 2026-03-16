@@ -4,7 +4,7 @@ This project is a pnpm workspace monorepo utilizing TypeScript for building a co
 
 **Current tools: KIN-001 through KIN-019 (19 tools live). Next: KIN-020.**
 
-Latest: KIN-019 · Markdown Download — `sites/kin-019-markdown-download/` — `https://kinmarkdowndl.netlify.app`
+Latest: KIN-019 · Markdown Download — `sites/kin-019-markdown-download/` — `https://kinmarkdownl.netlify.app`
 
 ## User Preferences
 

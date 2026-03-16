@@ -268,7 +268,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ## KIN-019 · Markdown Download
 
-**URL:** https://kinmarkdowndl.netlify.app  
+**URL:** https://kinmarkdownl.netlify.app  
 **Netlify publish dir:** `sites/kin-019-markdown-download`
 
 **Summary:** Write or paste text and download it as a .md file. Name the file, see live word and character counts, copy to clipboard. Runs entirely in the browser — no accounts, no data sent anywhere, works offline.
