@@ -1,6 +1,6 @@
 # Kin Catalog
 
-A record of every tool in the Kin ecosystem by dBridge. Updated with each new release.
+A record of every tool in the Kin ecosystem by Darren. Updated with each new release.
 
 ---
 
@@ -236,7 +236,7 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 **Notes:**
 - Static HTML, single file.
-- Creator: Alice Anthony (not dBridge).
+- Creator: Alice Anthony (not Darren).
 - PWA support added (icon.svg, manifest.json, meta tags, canvas apple-touch-icon).
 - Color scheme: violet `#7c3aed` / `#5b21b6`; background `#f7f5ff`.
 - No localStorage — spec explicitly prohibits any storage.
@@ -255,7 +255,7 @@ A record of every tool in the Kin ecosystem by dBridge. Updated with each new re
 
 **Notes:**
 - Single HTML file, PWA (manifest.json, icon.svg, canvas apple-touch-icon).
-- Creator: Alice Anthony & dBridge.
+- Creator: Alice Anthony & Darren.
 - Category: Wellness (per brief; spec says Parenting/Health).
 - Color scheme: emerald green `#059669` / `#047857`; background `#f0fdf4`.
 - Long-press on Feed → type picker modal; long-press on Diaper → type picker modal.
