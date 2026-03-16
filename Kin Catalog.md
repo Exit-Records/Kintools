@@ -352,7 +352,7 @@ A record of every tool in the Kin ecosystem by Darren. Updated with each new rel
 
 ## KIN-024 · Thought Loop
 
-**URL:** TBC (Netlify deploy pending)
+**URL:** https://kinthoughtloop.netlify.app
 **Netlify publish dir:** `sites/kin-024-thought-loop`
 
 **Summary:** Mindfulness thought-sorting tool that guides a user through three structured questions about a circling thought and returns one of four verdicts: Act (real and actionable now), Schedule (matters but not today), Release (a loop, not a task), or Not Yours (absorbed someone else's problem). Supports three timed modes — Now, Morning, Evening — each with tailored questions. Optional friction pause (30s countdown before questions appear). Reframe section on Release verdict lets you write the thought as someone else's situation. Schedule verdict prompts a revisit date; due reminders appear on the write screen. Patterns screen shows breakdown of verdicts and auto-generated insights (e.g. "X% of entries are speculation"). History screen lists last 50 entries with verdict colour-coding. Export all entries as plain text via clipboard.

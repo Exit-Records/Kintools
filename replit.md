@@ -4,7 +4,7 @@ This project is a pnpm workspace monorepo utilizing TypeScript for building a co
 
 **Current tools: KIN-001 through KIN-024 (24 tools). Next: KIN-025.**
 
-Latest: KIN-024 · Thought Loop — `sites/kin-024-thought-loop/` — URL TBC
+Latest: KIN-024 · Thought Loop — `sites/kin-024-thought-loop/` — `https://kinthoughtloop.netlify.app`
 
 ## User Preferences
 
