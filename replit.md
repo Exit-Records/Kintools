@@ -59,8 +59,11 @@ Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — `https://kinstretch.
 <footer class="kin-footer">
   <div class="foot-brand">Kin</div>
   <div class="foot-meta">KIN-NNN · Tool Name<br>by Darren · No tracking · Works offline</div>
+  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
 </footer>
 ```
+
+The **Local Only · Verified** badge is mandatory on every tool, inside the footer. For tools that have no `<footer>` element, place the badge in a centred `<div>` immediately before `</body>`.
 
 ### Creator rule
 Always `Darren` unless the user explicitly specifies otherwise.
