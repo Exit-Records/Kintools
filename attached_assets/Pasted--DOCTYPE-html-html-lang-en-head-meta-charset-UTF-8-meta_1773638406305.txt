@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Fair Share</title>
+<meta name="description" content="Privacy-first shared expense splitter. No accounts, no servers, no tracking.">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Fair Share">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRmFpciBTaGFyZSIsInNob3J0X25hbWUiOiJGYWlyIFNoYXJlIiwiZGVzY3JpcHRpb24iOiJQcml2YWN5LWZpcnN0IHNoYXJlZCBleHBlbnNlIHNwbGl0dGVyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmNWYwZWIiLCJ0aGVtZV9jb2xvciI6IiMxYTFhMWEiLCJpY29ucyI6W119">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–bg: #f5f0eb;
+–bg-card: #ffffff;
+–bg-input: #faf8f5;
+–text: #1a1a1a;
+–text-dim: #6b635a;
+–text-faint: #a09889;
+–border: #e2dcd4;
+–border-focus: #1a1a1a;
+–accent: #1a1a1a;
+–accent-text: #f5f0eb;
+–positive: #2d6a4f;
+–negative: #c1292e;
+–positive-bg: #e8f5ee;
+–negative-bg: #fde8e8;
+–shadow: 0 1px 3px rgba(0,0,0,0.06);
+–shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+–radius: 10px;
+–radius-sm: 6px;
+–font: ‘DM Sans’, -apple-system, BlinkMacSystemFont, sans-serif;
+–font-mono: ‘DM Mono’, ‘SF Mono’, monospace;
+–safe-top: env(safe-area-inset-top, 0px);
+–safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@import url(‘https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap’);
+
+html { height: 100%; -webkit-text-size-adjust: 100%; }
+body {
+font-family: var(–font);
+background: var(–bg);
+color: var(–text);
+min-height: 100%;
+line-height: 1.5;
+-webkit-font-smoothing: antialiased;
+padding-top: var(–safe-top);
+padding-bottom: calc(68px + var(–safe-bottom));
+}
+
+/* Header */
+.header {
+position: sticky;
+top: 0;
+z-index: 100;
+background: var(–bg);
+border-bottom: 1px solid var(–border);
+padding: 14px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.header h1 {
+font-size: 18px;
+font-weight: 600;
+letter-spacing: -0.02em;
+}
+.header-sub {
+font-size: 12px;
+color: var(–text-dim);
+font-weight: 400;
+}
+
+/* Tab bar */
+.tab-bar {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+z-index: 100;
+background: var(–bg-card);
+border-top: 1px solid var(–border);
+display: flex;
+padding-bottom: var(–safe-bottom);
+}
+.tab-bar button {
+flex: 1;
+background: none;
+border: none;
+padding: 10px 4px 8px;
+font-family: var(–font);
+font-size: 10px;
+font-weight: 500;
+color: var(–text-faint);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 3px;
+cursor: pointer;
+transition: color 0.15s;
+}
+.tab-bar button.active { color: var(–accent); }
+.tab-bar button svg { width: 22px; height: 22px; }
+
+/* Content */
+.content { padding: 16px 20px 24px; max-width: 600px; margin: 0 auto; }
+.view { display: none; }
+.view.active { display: block; }
+
+/* Cards */
+.card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 16px;
+margin-bottom: 12px;
+box-shadow: var(–shadow);
+}
+.card-title {
+font-size: 15px;
+font-weight: 600;
+margin-bottom: 4px;
+}
+.card-sub {
+font-size: 13px;
+color: var(–text-dim);
+}
+
+/* Forms */
+.field { margin-bottom: 14px; }
+.field label {
+display: block;
+font-size: 12px;
+font-weight: 500;
+color: var(–text-dim);
+margin-bottom: 5px;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+}
+.field input, .field select, .field textarea {
+width: 100%;
+padding: 10px 12px;
+font-family: var(–font);
+font-size: 15px;
+background: var(–bg-input);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text);
+outline: none;
+transition: border-color 0.15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+border-color: var(–border-focus);
+}
+.field textarea { resize: vertical; min-height: 60px; }
+
+/* Buttons */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+padding: 10px 18px;
+font-family: var(–font);
+font-size: 14px;
+font-weight: 500;
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+background: var(–bg-card);
+color: var(–text);
+cursor: pointer;
+transition: all 0.15s;
+}
+.btn:hover { border-color: var(–accent); }
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+background: var(–accent);
+color: var(–accent-text);
+border-color: var(–accent);
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-danger { color: var(–negative); border-color: var(–negative); }
+.btn-danger:hover { background: var(–negative-bg); }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn-block { width: 100%; }
+
+/* Chips / tags */
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+padding: 6px 12px;
+font-size: 13px;
+font-weight: 500;
+border: 1px solid var(–border);
+border-radius: 20px;
+background: var(–bg-input);
+cursor: pointer;
+transition: all 0.15s;
+user-select: none;
+}
+.chip.selected {
+background: var(–accent);
+color: var(–accent-text);
+border-color: var(–accent);
+}
+
+/* Balance pills */
+.balance-positive {
+color: var(–positive);
+background: var(–positive-bg);
+padding: 2px 8px;
+border-radius: 4px;
+font-family: var(–font-mono);
+font-size: 14px;
+font-weight: 500;
+}
+.balance-negative {
+color: var(–negative);
+background: var(–negative-bg);
+padding: 2px 8px;
+border-radius: 4px;
+font-family: var(–font-mono);
+font-size: 14px;
+font-weight: 500;
+}
+
+/* List items */
+.list-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 12px 0;
+border-bottom: 1px solid var(–border);
+}
+.list-item:last-child { border-bottom: none; }
+
+/* Empty states */
+.empty {
+text-align: center;
+padding: 48px 20px;
+color: var(–text-faint);
+}
+.empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
+.empty p { font-size: 14px; }
+
+/* Modal / overlay */
+.overlay {
+display: none;
+position: fixed;
+inset: 0;
+z-index: 200;
+background: rgba(0,0,0,0.3);
+align-items: flex-end;
+justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+background: var(–bg-card);
+border-radius: var(–radius) var(–radius) 0 0;
+width: 100%;
+max-width: 600px;
+max-height: 85vh;
+overflow-y: auto;
+padding: 20px;
+animation: slideUp 0.2s ease-out;
+}
+@keyframes slideUp {
+from { transform: translateY(100%); }
+to { transform: translateY(0); }
+}
+.modal-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 16px;
+}
+.modal-header h2 { font-size: 17px; font-weight: 600; }
+.modal-close {
+width: 32px;
+height: 32px;
+border: none;
+background: var(–bg-input);
+border-radius: 50%;
+font-size: 18px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+color: var(–text-dim);
+}
+
+/* Split inputs */
+.split-row {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px 0;
+border-bottom: 1px solid var(–border);
+}
+.split-row:last-child { border-bottom: none; }
+.split-row .name { flex: 1; font-size: 14px; font-weight: 500; }
+.split-row input {
+width: 80px;
+padding: 6px 8px;
+font-family: var(–font-mono);
+font-size: 14px;
+text-align: right;
+background: var(–bg-input);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text);
+outline: none;
+}
+.split-row input:focus { border-color: var(–border-focus); }
+
+/* Payment arrows */
+.payment-card {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 12px;
+background: var(–bg-input);
+border-radius: var(–radius-sm);
+margin-bottom: 8px;
+font-size: 14px;
+}
+.payment-arrow {
+color: var(–text-faint);
+font-size: 16px;
+}
+.payment-amount {
+margin-left: auto;
+font-family: var(–font-mono);
+font-weight: 600;
+}
+
+/* Quick tools */
+.tool-section {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 16px;
+margin-bottom: 16px;
+box-shadow: var(–shadow);
+}
+.tool-section h3 {
+font-size: 14px;
+font-weight: 600;
+margin-bottom: 12px;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+color: var(–text-dim);
+}
+.tool-result {
+margin-top: 14px;
+padding: 14px;
+background: var(–bg-input);
+border-radius: var(–radius-sm);
+font-family: var(–font-mono);
+font-size: 15px;
+text-align: center;
+line-height: 1.8;
+}
+.tool-result .big {
+font-size: 28px;
+font-weight: 600;
+color: var(–accent);
+display: block;
+}
+.tool-row {
+display: flex;
+gap: 10px;
+align-items: flex-end;
+}
+.tool-row .field { flex: 1; margin-bottom: 0; }
+
+/* Preset chips for tip */
+.preset-row {
+display: flex;
+gap: 6px;
+margin-bottom: 14px;
+}
+.preset {
+flex: 1;
+padding: 8px 4px;
+text-align: center;
+font-family: var(–font-mono);
+font-size: 14px;
+font-weight: 500;
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+background: var(–bg-input);
+cursor: pointer;
+transition: all 0.15s;
+}
+.preset.selected {
+background: var(–accent);
+color: var(–accent-text);
+border-color: var(–accent);
+}
+
+/* Toast */
+.toast {
+position: fixed;
+bottom: 80px;
+left: 50%;
+transform: translateX(-50%) translateY(20px);
+background: var(–accent);
+color: var(–accent-text);
+padding: 10px 20px;
+border-radius: 8px;
+font-size: 13px;
+font-weight: 500;
+opacity: 0;
+transition: all 0.3s;
+z-index: 300;
+pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Group selector in header */
+.group-select {
+font-family: var(–font);
+font-size: 13px;
+padding: 4px 8px;
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+background: var(–bg-input);
+color: var(–text);
+max-width: 160px;
+}
+
+/* Expense list date headers */
+.date-header {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.06em;
+color: var(–text-faint);
+padding: 12px 0 6px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(8px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeIn 0.25s ease-out; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(–border); border-radius: 2px; }
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Fair Share</h1>
+    <span class="header-sub" id="headerSub">No group selected</span>
+  </div>
+  <select class="group-select" id="groupSelect" onchange="selectGroup(this.value)">
+    <option value="">Select group...</option>
+  </select>
+</div>
+
+<div class="content">
+  <!-- Groups View -->
+  <div class="view active" id="viewGroups">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-size:16px;font-weight:600;">Groups</h2>
+      <button class="btn btn-primary btn-sm" onclick="openGroupModal()">+ New Group</button>
+    </div>
+    <div id="groupList"></div>
+  </div>
+
+  <!-- Expenses View -->
+
+  <div class="view" id="viewExpenses">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-size:16px;font-weight:600;">Expenses</h2>
+      <button class="btn btn-primary btn-sm" onclick="openExpenseModal()">+ Add</button>
+    </div>
+    <div id="expenseList"></div>
+  </div>
+
+  <!-- Balances View -->
+
+  <div class="view" id="viewBalances">
+    <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;">Balances</h2>
+    <div id="balanceList"></div>
+    <div id="paymentSuggestions" style="margin-top:20px;"></div>
+  </div>
+
+  <!-- Quick Tools View -->
+
+  <div class="view" id="viewTools">
+    <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;">Quick Tools</h2>
+
+```
+<!-- Tip Calculator -->
+<div class="tool-section">
+  <h3>Tip Calculator</h3>
+  <div class="field">
+    <label>Bill Total</label>
+    <input type="number" id="tipBill" inputmode="decimal" placeholder="0.00" oninput="calcTip()">
+  </div>
+  <label style="display:block;font-size:12px;font-weight:500;color:var(--text-dim);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.04em;">Tip %</label>
+  <div class="preset-row">
+    <div class="preset" onclick="setTipPreset(10)">10%</div>
+    <div class="preset selected" onclick="setTipPreset(15)">15%</div>
+    <div class="preset" onclick="setTipPreset(18)">18%</div>
+    <div class="preset" onclick="setTipPreset(20)">20%</div>
+  </div>
+  <div class="field">
+    <label>Custom %</label>
+    <input type="number" id="tipPercent" inputmode="decimal" value="15" oninput="calcTip(); clearTipPresets()">
+  </div>
+  <div class="field">
+    <label>Split Between</label>
+    <input type="number" id="tipSplit" inputmode="numeric" value="1" min="1" oninput="calcTip()">
+  </div>
+  <div class="tool-result" id="tipResult" style="display:none;"></div>
+</div>
+
+<!-- Percentage Calculator -->
+<div class="tool-section">
+  <h3>Percentage Calculator</h3>
+  <div id="pcModeSelector" style="margin-bottom:14px;">
+    <div class="chip-row">
+      <div class="chip selected" onclick="setPcMode('of')">X% of Y</div>
+      <div class="chip" onclick="setPcMode('is')">X is ?% of Y</div>
+      <div class="chip" onclick="setPcMode('change')">% Change</div>
+    </div>
+  </div>
+  <div id="pcFields"></div>
+  <div class="tool-result" id="pcResult" style="display:none;"></div>
+</div>
+```
+
+  </div>
+
+  <!-- Export View -->
+
+  <div class="view" id="viewExport">
+    <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;">Export / Import</h2>
+    <div class="card">
+      <div class="card-title">Export Group</div>
+      <p class="card-sub" style="margin-bottom:12px;">Save as .fairshare.json</p>
+      <button class="btn btn-block" onclick="exportGroup()">Export JSON</button>
+      <button class="btn btn-block" style="margin-top:8px;" onclick="exportText()">Copy Text Summary</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Import Group</div>
+      <p class="card-sub" style="margin-bottom:12px;">Load from .fairshare.json</p>
+      <input type="file" id="importFile" accept=".json,.fairshare.json" style="display:none;" onchange="importGroup(event)">
+      <button class="btn btn-block" onclick="document.getElementById('importFile').click()">Choose File</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+
+<div class="tab-bar">
+  <button class="active" onclick="switchTab('Groups', this)" data-tab="viewGroups">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="3"/><path d="M9 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/><path d="M18 8v6M15 11h6"/></svg>
+    Groups
+  </button>
+  <button onclick="switchTab('Expenses', this)" data-tab="viewExpenses">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
+    Expenses
+  </button>
+  <button onclick="switchTab('Balances', this)" data-tab="viewBalances">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Balances
+  </button>
+  <button onclick="switchTab('Tools', this)" data-tab="viewTools">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+    Tools
+  </button>
+  <button onclick="switchTab('Export', this)" data-tab="viewExport">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export
+  </button>
+</div>
+
+<!-- Group Modal -->
+
+<div class="overlay" id="groupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="groupModalTitle">New Group</h2>
+      <button class="modal-close" onclick="closeModal('groupModal')">&times;</button>
+    </div>
+    <div class="field">
+      <label>Group Name</label>
+      <input type="text" id="groupName" placeholder="e.g. Tokyo Trip">
+    </div>
+    <div class="field">
+      <label>Currency Symbol</label>
+      <input type="text" id="groupCurrency" value="£" maxlength="3" placeholder="£">
+    </div>
+    <div class="field">
+      <label>Participants</label>
+      <div id="participantInputs"></div>
+      <button class="btn btn-sm" style="margin-top:8px;" onclick="addParticipantInput()">+ Add Person</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:20px;">
+      <button class="btn btn-block" onclick="closeModal('groupModal')">Cancel</button>
+      <button class="btn btn-primary btn-block" onclick="saveGroup()">Save</button>
+    </div>
+    <div id="groupDeleteBtn" style="display:none;margin-top:12px;">
+      <button class="btn btn-danger btn-block" onclick="deleteGroup()">Delete Group</button>
+    </div>
+  </div>
+</div>
+
+<!-- Expense Modal -->
+
+<div class="overlay" id="expenseModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="expenseModalTitle">Add Expense</h2>
+      <button class="modal-close" onclick="closeModal('expenseModal')">&times;</button>
+    </div>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="expTitle" placeholder="e.g. Dinner">
+    </div>
+    <div class="tool-row" style="margin-bottom:14px;">
+      <div class="field">
+        <label>Amount</label>
+        <input type="number" id="expAmount" inputmode="decimal" placeholder="0.00">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="expDate">
+      </div>
+    </div>
+    <div class="field">
+      <label>Paid By</label>
+      <select id="expPaidBy"></select>
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="expCategory">
+        <option value="General">General</option>
+        <option value="Food">Food</option>
+        <option value="Drinks">Drinks</option>
+        <option value="Travel">Travel</option>
+        <option value="Accommodation">Accommodation</option>
+        <option value="Activities">Activities</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Rent">Rent</option>
+        <option value="Utilities">Utilities</option>
+        <option value="Equipment">Equipment</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Split Between</label>
+      <div id="expParticipants" class="chip-row"></div>
+    </div>
+    <div class="field">
+      <label>Split Method</label>
+      <div class="chip-row" id="splitMethodChips">
+        <div class="chip selected" onclick="setSplitMethod('equal')">Equal</div>
+        <div class="chip" onclick="setSplitMethod('unequal')">Unequal</div>
+        <div class="chip" onclick="setSplitMethod('percentage')">Percentage</div>
+        <div class="chip" onclick="setSplitMethod('shares')">Shares</div>
+      </div>
+    </div>
+    <div id="splitDetails" style="display:none;"></div>
+    <div class="field">
+      <label>Note</label>
+      <textarea id="expNote" placeholder="Optional note..." rows="2"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn btn-block" onclick="closeModal('expenseModal')">Cancel</button>
+      <button class="btn btn-primary btn-block" onclick="saveExpense()">Save</button>
+    </div>
+    <div id="expDeleteBtn" style="display:none;margin-top:12px;">
+      <button class="btn btn-danger btn-block" onclick="deleteExpense()">Delete Expense</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── State ──
+let db = null;
+let state = { groups: [] };
+let activeGroupId = null;
+let editingGroupId = null;
+let editingExpenseId = null;
+let currentSplitMethod = 'equal';
+let currentPcMode = 'of';
+let tipPresetValue = 15;
+
+// ── DB ──
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('FairShareDB', 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('data')) {
+        db.createObjectStore('data', { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(); };
+    req.onerror = e => {
+      console.warn('IndexedDB failed, using localStorage fallback');
+      resolve();
+    };
+  });
+}
+
+async function saveState() {
+  if (db) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('data', 'readwrite');
+      tx.objectStore('data').put({ id: 'state', ...state });
+      tx.oncomplete = resolve;
+      tx.onerror = reject;
+    });
+  } else {
+    localStorage.setItem('fairshare_state', JSON.stringify(state));
+  }
+}
+
+async function loadState() {
+  if (db) {
+    return new Promise((resolve) => {
+      const tx = db.transaction('data', 'readonly');
+      const req = tx.objectStore('data').get('state');
+      req.onsuccess = () => {
+        if (req.result) {
+          const { id, ...rest } = req.result;
+          state = rest;
+        }
+        resolve();
+      };
+      req.onerror = () => resolve();
+    });
+  } else {
+    const saved = localStorage.getItem('fairshare_state');
+    if (saved) state = JSON.parse(saved);
+  }
+}
+
+// ── Utilities ──
+function uuid() {
+  return 'xxxx-xxxx'.replace(/x/g, () => ((Math.random() * 16) | 0).toString(16));
+}
+function fmt(n, currency) {
+  return currency + Math.abs(n).toFixed(2);
+}
+function localDate() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function getGroup(id) { return state.groups.find(g => g.id === id); }
+function getActiveGroup() { return getGroup(activeGroupId); }
+
+// ── Tab Switching ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+  const tabId = btn.getAttribute('data-tab');
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+  if (tabId === 'viewExpenses') renderExpenses();
+  if (tabId === 'viewBalances') renderBalances();
+  if (tabId === 'viewGroups') renderGroups();
+  if (tabId === 'viewTools') initToolsView();
+}
+
+// ── Groups ──
+function renderGroups() {
+  const el = document.getElementById('groupList');
+  if (!state.groups.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">&#9679;&#9679;&#9679;</div><p>No groups yet. Create one to start tracking expenses.</p></div>';
+    return;
+  }
+  el.innerHTML = state.groups.map(g => {
+    const count = g.expenses.length;
+    const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+    return `<div class="card animate-in" style="cursor:pointer;" onclick="selectGroup('${g.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="card-title">${esc(g.name)}</div>
+          <div class="card-sub">${g.participants.length} people &middot; ${count} expense${count !== 1 ? 's' : ''} &middot; ${g.currency}${total.toFixed(2)}</div>
+        </div>
+        <button class="btn btn-sm" onclick="event.stopPropagation();editGroup('${g.id}')">Edit</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderGroupSelect() {
+  const sel = document.getElementById('groupSelect');
+  sel.innerHTML = '<option value="">Select group...</option>' +
+    state.groups.map(g => `<option value="${g.id}" ${g.id === activeGroupId ? 'selected' : ''}>${esc(g.name)}</option>`).join('');
+  const sub = document.getElementById('headerSub');
+  const g = getActiveGroup();
+  sub.textContent = g ? `${g.participants.length} people · ${g.currency}` : 'No group selected';
+}
+
+function selectGroup(id) {
+  activeGroupId = id || null;
+  renderGroupSelect();
+  renderExpenses();
+  renderBalances();
+}
+
+function openGroupModal(editing) {
+  editingGroupId = editing || null;
+  const modal = document.getElementById('groupModal');
+  document.getElementById('groupModalTitle').textContent = editing ? 'Edit Group' : 'New Group';
+  document.getElementById('groupDeleteBtn').style.display = editing ? 'block' : 'none';
+
+  if (editing) {
+    const g = getGroup(editing);
+    document.getElementById('groupName').value = g.name;
+    document.getElementById('groupCurrency').value = g.currency;
+    renderParticipantInputs(g.participants.map(p => p.name));
+  } else {
+    document.getElementById('groupName').value = '';
+    document.getElementById('groupCurrency').value = '£';
+    renderParticipantInputs(['', '']);
+  }
+  modal.classList.add('open');
+}
+
+function editGroup(id) { openGroupModal(id); }
+
+function renderParticipantInputs(names) {
+  const el = document.getElementById('participantInputs');
+  el.innerHTML = names.map((n, i) =>
+    `<div style="display:flex;gap:6px;margin-bottom:6px;">
+      <input type="text" class="p-input" value="${esc(n)}" placeholder="Name" style="flex:1;padding:8px 10px;font-size:14px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);color:var(--text);outline:none;">
+      ${names.length > 2 ? `<button class="btn btn-sm btn-danger" onclick="removeParticipantInput(${i})" style="padding:6px 10px;">&times;</button>` : ''}
+    </div>`
+  ).join('');
+}
+
+function addParticipantInput() {
+  const inputs = [...document.querySelectorAll('.p-input')];
+  const names = inputs.map(i => i.value);
+  names.push('');
+  renderParticipantInputs(names);
+  const newInputs = document.querySelectorAll('.p-input');
+  newInputs[newInputs.length - 1].focus();
+}
+
+function removeParticipantInput(idx) {
+  const inputs = [...document.querySelectorAll('.p-input')];
+  const names = inputs.map(i => i.value).filter((_, i) => i !== idx);
+  renderParticipantInputs(names);
+}
+
+async function saveGroup() {
+  const name = document.getElementById('groupName').value.trim();
+  const currency = document.getElementById('groupCurrency').value.trim() || '£';
+  const inputs = [...document.querySelectorAll('.p-input')];
+  const names = inputs.map(i => i.value.trim()).filter(Boolean);
+
+  if (!name) { toast('Enter a group name'); return; }
+  if (names.length < 2) { toast('Add at least 2 people'); return; }
+
+  if (editingGroupId) {
+    const g = getGroup(editingGroupId);
+    g.name = name;
+    g.currency = currency;
+    // preserve existing participant IDs, add new ones
+    const existing = new Map(g.participants.map(p => [p.name, p.id]));
+    g.participants = names.map(n => ({ id: existing.get(n) || uuid(), name: n }));
+  } else {
+    const group = {
+      id: uuid(),
+      name,
+      currency,
+      participants: names.map(n => ({ id: uuid(), name: n })),
+      expenses: [],
+      created: new Date().toISOString()
+    };
+    state.groups.push(group);
+    activeGroupId = group.id;
+  }
+
+  await saveState();
+  closeModal('groupModal');
+  renderGroups();
+  renderGroupSelect();
+  toast(editingGroupId ? 'Group updated' : 'Group created');
+}
+
+async function deleteGroup() {
+  if (!editingGroupId) return;
+  if (!confirm('Delete this group and all its expenses?')) return;
+  state.groups = state.groups.filter(g => g.id !== editingGroupId);
+  if (activeGroupId === editingGroupId) activeGroupId = state.groups[0]?.id || null;
+  await saveState();
+  closeModal('groupModal');
+  renderGroups();
+  renderGroupSelect();
+  toast('Group deleted');
+}
+
+// ── Expenses ──
+function renderExpenses() {
+  const el = document.getElementById('expenseList');
+  const g = getActiveGroup();
+  if (!g) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">&#8594;</div><p>Select a group first</p></div>';
+    return;
+  }
+  if (!g.expenses.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">&#9711;</div><p>No expenses yet</p></div>';
+    return;
+  }
+
+  const sorted = [...g.expenses].sort((a, b) => b.date.localeCompare(a.date));
+  let html = '';
+  let lastDate = '';
+
+  sorted.forEach(exp => {
+    const d = exp.date || 'Unknown';
+    if (d !== lastDate) {
+      lastDate = d;
+      const dateObj = new Date(d + 'T00:00:00');
+      const formatted = dateObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      html += `<div class="date-header">${formatted}</div>`;
+    }
+    const payer = g.participants.find(p => p.id === exp.paidBy);
+    const participantNames = exp.participants.map(pid => {
+      const p = g.participants.find(pp => pp.id === pid);
+      return p ? p.name : '?';
+    });
+
+    html += `<div class="card animate-in" style="cursor:pointer;" onclick="editExpense('${exp.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="card-title">${esc(exp.title)}</div>
+          <div class="card-sub">${payer ? payer.name : '?'} paid &middot; ${exp.splitType} &middot; ${participantNames.join(', ')}</div>
+          ${exp.note ? `<div class="card-sub" style="margin-top:2px;font-style:italic;">${esc(exp.note)}</div>` : ''}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-mono);font-weight:600;font-size:16px;">${g.currency}${exp.amount.toFixed(2)}</div>
+          <div class="card-sub" style="font-size:11px;">${exp.category || ''}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function openExpenseModal(editing) {
+  const g = getActiveGroup();
+  if (!g) { toast('Select a group first'); return; }
+
+  editingExpenseId = editing || null;
+  document.getElementById('expenseModalTitle').textContent = editing ? 'Edit Expense' : 'Add Expense';
+  document.getElementById('expDeleteBtn').style.display = editing ? 'block' : 'none';
+
+  // Populate paid by
+  const paidBySelect = document.getElementById('expPaidBy');
+  paidBySelect.innerHTML = g.participants.map(p =>
+    `<option value="${p.id}">${esc(p.name)}</option>`
+  ).join('');
+
+  // Populate participants
+  const partEl = document.getElementById('expParticipants');
+  if (editing) {
+    const exp = g.expenses.find(e => e.id === editing);
+    document.getElementById('expTitle').value = exp.title;
+    document.getElementById('expAmount').value = exp.amount;
+    document.getElementById('expDate').value = exp.date;
+    paidBySelect.value = exp.paidBy;
+    document.getElementById('expCategory').value = exp.category || 'General';
+    document.getElementById('expNote').value = exp.note || '';
+    currentSplitMethod = exp.splitType;
+
+    partEl.innerHTML = g.participants.map(p =>
+      `<div class="chip ${exp.participants.includes(p.id) ? 'selected' : ''}" onclick="toggleExpParticipant(this, '${p.id}')" data-pid="${p.id}">${esc(p.name)}</div>`
+    ).join('');
+  } else {
+    document.getElementById('expTitle').value = '';
+    document.getElementById('expAmount').value = '';
+    document.getElementById('expDate').value = localDate();
+    document.getElementById('expCategory').value = 'General';
+    document.getElementById('expNote').value = '';
+    currentSplitMethod = 'equal';
+
+    partEl.innerHTML = g.participants.map(p =>
+      `<div class="chip selected" onclick="toggleExpParticipant(this, '${p.id}')" data-pid="${p.id}">${esc(p.name)}</div>`
+    ).join('');
+  }
+
+  // Split method chips
+  document.querySelectorAll('#splitMethodChips .chip').forEach(c => {
+    c.classList.toggle('selected', c.textContent.toLowerCase() === currentSplitMethod);
+  });
+
+  updateSplitDetails();
+  document.getElementById('expenseModal').classList.add('open');
+}
+
+function editExpense(id) { openExpenseModal(id); }
+
+function toggleExpParticipant(chip) {
+  chip.classList.toggle('selected');
+  updateSplitDetails();
+}
+
+function setSplitMethod(method) {
+  currentSplitMethod = method;
+  document.querySelectorAll('#splitMethodChips .chip').forEach(c => {
+    c.classList.toggle('selected', c.textContent.toLowerCase() === method);
+  });
+  updateSplitDetails();
+}
+
+function updateSplitDetails() {
+  const el = document.getElementById('splitDetails');
+  const g = getActiveGroup();
+  if (!g) return;
+
+  const selectedPids = [...document.querySelectorAll('#expParticipants .chip.selected')].map(c => c.getAttribute('data-pid'));
+
+  if (currentSplitMethod === 'equal' || selectedPids.length === 0) {
+    el.style.display = 'none';
+    return;
+  }
+
+  el.style.display = 'block';
+  const suffix = currentSplitMethod === 'percentage' ? '%' : currentSplitMethod === 'shares' ? ' shares' : '';
+  const placeholder = currentSplitMethod === 'percentage' ? '0' : currentSplitMethod === 'shares' ? '1' : '0.00';
+
+  el.innerHTML = selectedPids.map(pid => {
+    const p = g.participants.find(pp => pp.id === pid);
+    return `<div class="split-row">
+      <span class="name">${p ? p.name : '?'}</span>
+      <input type="number" data-split-pid="${pid}" inputmode="decimal" placeholder="${placeholder}" value="">
+      <span style="font-size:12px;color:var(--text-dim);width:50px;">${suffix}</span>
+    </div>`;
+  }).join('');
+}
+
+function getSelectedParticipants() {
+  return [...document.querySelectorAll('#expParticipants .chip.selected')].map(c => c.getAttribute('data-pid'));
+}
+
+function calculateSplits(amount, participants, method) {
+  const splits = {};
+  if (method === 'equal') {
+    const share = amount / participants.length;
+    participants.forEach(pid => splits[pid] = share);
+  } else if (method === 'unequal') {
+    document.querySelectorAll('[data-split-pid]').forEach(input => {
+      splits[input.getAttribute('data-split-pid')] = parseFloat(input.value) || 0;
+    });
+  } else if (method === 'percentage') {
+    document.querySelectorAll('[data-split-pid]').forEach(input => {
+      const pct = parseFloat(input.value) || 0;
+      splits[input.getAttribute('data-split-pid')] = amount * (pct / 100);
+    });
+  } else if (method === 'shares') {
+    let totalShares = 0;
+    const shareMap = {};
+    document.querySelectorAll('[data-split-pid]').forEach(input => {
+      const s = parseFloat(input.value) || 0;
+      shareMap[input.getAttribute('data-split-pid')] = s;
+      totalShares += s;
+    });
+    if (totalShares > 0) {
+      Object.keys(shareMap).forEach(pid => {
+        splits[pid] = amount * (shareMap[pid] / totalShares);
+      });
+    }
+  }
+  return splits;
+}
+
+async function saveExpense() {
+  const g = getActiveGroup();
+  if (!g) return;
+
+  const title = document.getElementById('expTitle').value.trim();
+  const amount = parseFloat(document.getElementById('expAmount').value);
+  const date = document.getElementById('expDate').value;
+  const paidBy = document.getElementById('expPaidBy').value;
+  const category = document.getElementById('expCategory').value;
+  const note = document.getElementById('expNote').value.trim();
+  const participants = getSelectedParticipants();
+
+  if (!title) { toast('Enter a title'); return; }
+  if (!amount || amount <= 0) { toast('Enter a valid amount'); return; }
+  if (!participants.length) { toast('Select at least one participant'); return; }
+
+  const splits = calculateSplits(amount, participants, currentSplitMethod);
+
+  const expense = {
+    id: editingExpenseId || uuid(),
+    title,
+    amount,
+    paidBy,
+    participants,
+    splitType: currentSplitMethod,
+    splits,
+    category,
+    date,
+    note
+  };
+
+  if (editingExpenseId) {
+    const idx = g.expenses.findIndex(e => e.id === editingExpenseId);
+    if (idx !== -1) g.expenses[idx] = expense;
+  } else {
+    g.expenses.push(expense);
+  }
+
+  await saveState();
+  closeModal('expenseModal');
+  renderExpenses();
+  toast(editingExpenseId ? 'Expense updated' : 'Expense added');
+}
+
+async function deleteExpense() {
+  if (!editingExpenseId) return;
+  const g = getActiveGroup();
+  if (!g) return;
+  if (!confirm('Delete this expense?')) return;
+  g.expenses = g.expenses.filter(e => e.id !== editingExpenseId);
+  await saveState();
+  closeModal('expenseModal');
+  renderExpenses();
+  toast('Expense deleted');
+}
+
+// ── Balances ──
+function calculateBalances(group) {
+  const balances = {};
+  group.participants.forEach(p => balances[p.id] = 0);
+
+  group.expenses.forEach(exp => {
+    balances[exp.paidBy] = (balances[exp.paidBy] || 0) + exp.amount;
+    const splits = exp.splits || {};
+    if (Object.keys(splits).length) {
+      Object.keys(splits).forEach(pid => {
+        balances[pid] = (balances[pid] || 0) - splits[pid];
+      });
+    } else {
+      // fallback equal split
+      const share = exp.amount / exp.participants.length;
+      exp.participants.forEach(pid => {
+        balances[pid] = (balances[pid] || 0) - share;
+      });
+    }
+  });
+
+  return balances;
+}
+
+function simplifyDebts(group) {
+  const balances = calculateBalances(group);
+  const creditors = [];
+  const debtors = [];
+
+  Object.entries(balances).forEach(([pid, bal]) => {
+    const rounded = Math.round(bal * 100) / 100;
+    if (rounded > 0.01) creditors.push({ pid, amount: rounded });
+    else if (rounded < -0.01) debtors.push({ pid, amount: -rounded });
+  });
+
+  creditors.sort((a, b) => b.amount - a.amount);
+  debtors.sort((a, b) => b.amount - a.amount);
+
+  const payments = [];
+  let ci = 0, di = 0;
+  while (ci < creditors.length && di < debtors.length) {
+    const pay = Math.min(creditors[ci].amount, debtors[di].amount);
+    if (pay > 0.01) {
+      payments.push({
+        from: debtors[di].pid,
+        to: creditors[ci].pid,
+        amount: Math.round(pay * 100) / 100
+      });
+    }
+    creditors[ci].amount -= pay;
+    debtors[di].amount -= pay;
+    if (creditors[ci].amount < 0.01) ci++;
+    if (debtors[di].amount < 0.01) di++;
+  }
+
+  return payments;
+}
+
+function renderBalances() {
+  const balEl = document.getElementById('balanceList');
+  const payEl = document.getElementById('paymentSuggestions');
+  const g = getActiveGroup();
+
+  if (!g) {
+    balEl.innerHTML = '<div class="empty"><div class="empty-icon">&#8594;</div><p>Select a group first</p></div>';
+    payEl.innerHTML = '';
+    return;
+  }
+  if (!g.expenses.length) {
+    balEl.innerHTML = '<div class="empty"><div class="empty-icon">&#9711;</div><p>No expenses to calculate</p></div>';
+    payEl.innerHTML = '';
+    return;
+  }
+
+  const balances = calculateBalances(g);
+  balEl.innerHTML = '<div class="card">' + g.participants.map(p => {
+    const bal = Math.round((balances[p.id] || 0) * 100) / 100;
+    const cls = bal >= 0 ? 'balance-positive' : 'balance-negative';
+    const sign = bal >= 0 ? '+' : '-';
+    return `<div class="list-item">
+      <span style="font-weight:500;">${esc(p.name)}</span>
+      <span class="${cls}">${sign}${g.currency}${Math.abs(bal).toFixed(2)}</span>
+    </div>`;
+  }).join('') + '</div>';
+
+  const payments = simplifyDebts(g);
+  if (!payments.length) {
+    payEl.innerHTML = '<div class="card"><p style="text-align:center;color:var(--text-dim);font-size:14px;">All settled up!</p></div>';
+    return;
+  }
+
+  payEl.innerHTML = '<h3 style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-dim);margin-bottom:10px;">Suggested Payments</h3>' +
+    payments.map(pay => {
+      const fromP = g.participants.find(p => p.id === pay.from);
+      const toP = g.participants.find(p => p.id === pay.to);
+      return `<div class="payment-card">
+        <span style="font-weight:500;">${fromP ? fromP.name : '?'}</span>
+        <span class="payment-arrow">&#8594;</span>
+        <span style="font-weight:500;">${toP ? toP.name : '?'}</span>
+        <span class="payment-amount">${g.currency}${pay.amount.toFixed(2)}</span>
+      </div>`;
+    }).join('');
+}
+
+// ── Export / Import ──
+function exportGroup() {
+  const g = getActiveGroup();
+  if (!g) { toast('Select a group first'); return; }
+  const data = JSON.stringify(g, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${g.name.replace(/[^a-zA-Z0-9]/g, '_')}.fairshare.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Exported');
+}
+
+function exportText() {
+  const g = getActiveGroup();
+  if (!g) { toast('Select a group first'); return; }
+
+  const balances = calculateBalances(g);
+  const payments = simplifyDebts(g);
+  const total = g.expenses.reduce((s, e) => s + e.amount, 0);
+
+  let text = `${g.name}\n`;
+  text += `Total: ${g.currency}${total.toFixed(2)}\n\n`;
+  text += `Balances\n`;
+  g.participants.forEach(p => {
+    const bal = Math.round((balances[p.id] || 0) * 100) / 100;
+    const sign = bal >= 0 ? '+' : '-';
+    text += `  ${p.name}: ${sign}${g.currency}${Math.abs(bal).toFixed(2)}\n`;
+  });
+
+  if (payments.length) {
+    text += `\nSuggested Payments\n`;
+    payments.forEach(pay => {
+      const from = g.participants.find(p => p.id === pay.from);
+      const to = g.participants.find(p => p.id === pay.to);
+      text += `  ${from ? from.name : '?'} → ${to ? to.name : '?'}: ${g.currency}${pay.amount.toFixed(2)}\n`;
+    });
+  }
+
+  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
+}
+
+async function importGroup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data.name || !data.participants) {
+      toast('Invalid file format');
+      return;
+    }
+    // check for duplicate by ID
+    const existing = state.groups.find(g => g.id === data.id);
+    if (existing) {
+      // merge expenses
+      data.expenses.forEach(exp => {
+        if (!existing.expenses.find(e => e.id === exp.id)) {
+          existing.expenses.push(exp);
+        }
+      });
+      toast('Merged into existing group');
+    } else {
+      state.groups.push(data);
+      activeGroupId = data.id;
+      toast('Group imported');
+    }
+    await saveState();
+    renderGroups();
+    renderGroupSelect();
+  } catch (e) {
+    toast('Failed to import');
+  }
+  event.target.value = '';
+}
+
+// ── Quick Tools ──
+function initToolsView() {
+  setPcMode(currentPcMode);
+}
+
+function setTipPreset(pct) {
+  tipPresetValue = pct;
+  document.getElementById('tipPercent').value = pct;
+  document.querySelectorAll('.preset').forEach(p => {
+    p.classList.toggle('selected', parseInt(p.textContent) === pct);
+  });
+  calcTip();
+}
+
+function clearTipPresets() {
+  tipPresetValue = null;
+  document.querySelectorAll('.preset').forEach(p => p.classList.remove('selected'));
+}
+
+function calcTip() {
+  const bill = parseFloat(document.getElementById('tipBill').value) || 0;
+  const pct = parseFloat(document.getElementById('tipPercent').value) || 0;
+  const split = parseInt(document.getElementById('tipSplit').value) || 1;
+  const el = document.getElementById('tipResult');
+
+  if (!bill) { el.style.display = 'none'; return; }
+
+  const tip = bill * (pct / 100);
+  const total = bill + tip;
+  const perPerson = total / split;
+
+  el.style.display = 'block';
+  el.innerHTML = `
+    Tip: <span class="big">${tip.toFixed(2)}</span>
+    Total: ${total.toFixed(2)}
+    ${split > 1 ? `<br>Per person: ${perPerson.toFixed(2)}` : ''}
+  `;
+}
+
+function setPcMode(mode) {
+  currentPcMode = mode;
+  document.querySelectorAll('#pcModeSelector .chip').forEach(c => {
+    c.classList.toggle('selected', c.getAttribute('onclick').includes(`'${mode}'`));
+  });
+
+  const el = document.getElementById('pcFields');
+  document.getElementById('pcResult').style.display = 'none';
+
+  if (mode === 'of') {
+    el.innerHTML = `
+      <div class="tool-row">
+        <div class="field"><label>Percentage</label><input type="number" id="pcA" inputmode="decimal" placeholder="15" oninput="calcPc()"></div>
+        <div class="field"><label>Of</label><input type="number" id="pcB" inputmode="decimal" placeholder="200" oninput="calcPc()"></div>
+      </div>`;
+  } else if (mode === 'is') {
+    el.innerHTML = `
+      <div class="tool-row">
+        <div class="field"><label>Value</label><input type="number" id="pcA" inputmode="decimal" placeholder="30" oninput="calcPc()"></div>
+        <div class="field"><label>Of Total</label><input type="number" id="pcB" inputmode="decimal" placeholder="200" oninput="calcPc()"></div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="tool-row">
+        <div class="field"><label>From</label><input type="number" id="pcA" inputmode="decimal" placeholder="80" oninput="calcPc()"></div>
+        <div class="field"><label>To</label><input type="number" id="pcB" inputmode="decimal" placeholder="100" oninput="calcPc()"></div>
+      </div>`;
+  }
+}
+
+function calcPc() {
+  const a = parseFloat(document.getElementById('pcA').value);
+  const b = parseFloat(document.getElementById('pcB').value);
+  const el = document.getElementById('pcResult');
+
+  if (isNaN(a) || isNaN(b)) { el.style.display = 'none'; return; }
+
+  let result;
+  if (currentPcMode === 'of') {
+    result = (a / 100) * b;
+    el.innerHTML = `${a}% of ${b} =<span class="big">${result.toFixed(2)}</span>`;
+  } else if (currentPcMode === 'is') {
+    if (b === 0) { el.style.display = 'none'; return; }
+    result = (a / b) * 100;
+    el.innerHTML = `${a} is<span class="big">${result.toFixed(2)}%</span>of ${b}`;
+  } else {
+    if (a === 0) { el.style.display = 'none'; return; }
+    result = ((b - a) / a) * 100;
+    const dir = result >= 0 ? 'increase' : 'decrease';
+    el.innerHTML = `${Math.abs(result).toFixed(2)}% ${dir}<span class="big">${result >= 0 ? '+' : ''}${result.toFixed(2)}%</span>`;
+  }
+  el.style.display = 'block';
+}
+
+// ── Modals ──
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+
+// ── Escape helper ──
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ── Init ──
+async function init() {
+  await openDB();
+  await loadState();
+  if (state.groups.length && !activeGroupId) {
+    activeGroupId = state.groups[0].id;
+  }
+  renderGroups();
+  renderGroupSelect();
+}
+
+init();
+
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  const sw = `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+    const CACHE = 'fairshare-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `)}`;
+  navigator.serviceWorker.register(sw, { scope: '/' }).catch(() => {});
+}
+</script>
+
+</body>
+</html>
