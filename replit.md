@@ -27,7 +27,8 @@ The system is structured as a pnpm monorepo with individual packages managing th
 - **Landing Page**: The project maintains two synchronized copies of `index.html` (root for deployment, `sites/kin-landing/index.html` for local preview) to ensure consistency between development and production environments.
 - **PWA Support**: Every new Kin tool *must* include Progressive Web Application (PWA) features, including `icon.svg`, `manifest.json`, and specific HTML meta tags for home screen installation. A JavaScript snippet generates a 180x180 PNG `apple-touch-icon` at runtime for iOS.
 - **Tool Naming**: Short names for PWA installations consistently follow the `KIN-NNN` format (e.g., `KIN-015`).
-- **Creator Name**: Always `Darren` with a lowercase 'd' and uppercase 'B'.
+- **Creator Name**: Always `Darren` unless explicitly specified otherwise by the user.
+- **Default Theme**: All new Kin tools MUST default to **light mode**. Set `class="light"` on `<html>`, theme-color meta to the light value, and `dark = false` in JS with button starting as `🌙`. Never default to dark unless the spec explicitly requires it.
 
 ### Technical Implementations:
 - **API Server (`@workspace/api-server`)**: An Express 5 server handling API requests, utilizing `@workspace/api-zod` for request/response validation and `@workspace/db` for data persistence.

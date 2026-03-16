@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Password Generator — Kin</title>
   <meta name="description" content="Fast, private password generator. Runs entirely in your browser. No accounts, no tracking, no ads. KIN-020 by dBridge for Kin.">
-  <meta name="theme-color" content="#0c0c0e" id="theme-color-meta">
+  <meta name="theme-color" content="#f8f8fb" id="theme-color-meta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Password Gen">
@@ -950,7 +950,8 @@ function toast(msg) {
 // Theme
 (function() {
   const btn = document.getElementById('theme-btn');
-  let dark = true;
+  let dark = false;
+  btn.textContent = '🌙';
   btn.addEventListener('click', () => {
     dark = !dark;
     document.documentElement.classList.toggle('light', !dark);
