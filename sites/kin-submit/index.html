@@ -531,7 +531,7 @@
 
       <div class="form-submit">
         <button type="submit" class="btn-submit" id="submit-btn">
-          Submit demo &rarr;
+          Submit idea &rarr;
         </button>
         <span class="submit-note">We read every submission.<br>We reply to the ones that fit.</span>
       </div>
@@ -587,6 +587,8 @@
       return;
     }
 
+    const link = form.querySelector('[name="link"]').value.trim();
+
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
@@ -602,7 +604,8 @@
           name: name,
           email: email,
           problem: problem,
-          offline: offline ? 'Yes' : 'No'
+          offline: offline ? 'Yes' : 'No',
+          link: link
         })
       });
     } catch (_) {
