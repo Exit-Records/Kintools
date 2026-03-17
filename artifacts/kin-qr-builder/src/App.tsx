@@ -98,6 +98,9 @@ export default function App() {
   const [copied, setCopied] = useState(false);
   const [wifi, setWifi] = useState<WifiFields>({ ssid: "", password: "", encryption: "WPA", hidden: false });
   const [contact, setContact] = useState<ContactFields>({ name: "", phone: "", email: "", website: "" });
+  const [bugOpen, setBugOpen] = useState(false);
+  const [bugSuccess, setBugSuccess] = useState(false);
+  const [bugAnon, setBugAnon] = useState(true);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("kin005-theme");
     return saved ? saved === "dark" : false;
@@ -195,6 +198,7 @@ export default function App() {
   const print = () => window.print();
 
   return (
+    <>
     <div className="min-h-screen" style={{ background: "hsl(var(--background))" }}>
       <button
         className="kin-theme-btn"
@@ -562,11 +566,97 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="flex justify-between items-center pt-2">
-          <span className="text-xs" style={{ color: "hsl(36 10% 35%)" }}>Kin · KIN-005</span>
-          <span className="text-xs" style={{ color: "hsl(36 10% 35%)" }}>dBridge</span>
-        </footer>
+        <div style={{ textAlign: "center", padding: "20px 0 8px", fontSize: 12, color: "hsl(36 10% 40%)" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 20, background: "rgba(46,160,67,0.1)", border: "1px solid rgba(46,160,67,0.25)", fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", color: "#2ea043", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif" }}>
+              <svg width="9" height="11" viewBox="0 0 9 11" fill="none"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fillOpacity="0.15" stroke="#2ea043" strokeWidth="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Local Only · Verified
+            </span>
+          </div>
+          <div>
+            <button onClick={() => { setBugOpen(true); setBugSuccess(false); }} style={{ background: "none", border: "none", padding: 0, color: "inherit", font: "inherit", opacity: 0.4, fontSize: 11, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "underline", textUnderlineOffset: 3 }}>Report a bug</button>
+          </div>
+          <div style={{ marginTop: 8, opacity: 0.5 }}>Kin · KIN-005 · dBridge</div>
+        </div>
       </div>
     </div>
+
+    {/* Bug report backdrop and sheet rendered outside scroll container */}
+    {/* Bug report backdrop */}
+    {bugOpen && (
+      <div onClick={() => setBugOpen(false)} style={{ display: "block", position: "fixed", inset: 0, zIndex: 901, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(2px)" }} />
+    )}
+
+    {/* Bug report sheet */}
+    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 902, background: "#17171f", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.08)", borderBottom: "none", padding: "0 20px 40px", boxShadow: "0 -8px 40px rgba(0,0,0,0.6)", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif", transform: bugOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 0.3s cubic-bezier(0.32,0.72,0,1)" }}>
+      {!bugSuccess ? (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", margin: "8px 0 20px" }}>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: 16, fontWeight: 600, margin: 0 }}>Report an issue</h2>
+              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, margin: "3px 0 0", letterSpacing: "0.04em" }}>KIN-005 — QR Code</p>
+            </div>
+            <button onClick={() => setBugOpen(false)} aria-label="Close" style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.07)", border: "none", color: "rgba(255,255,255,0.5)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: "none", minHeight: 0 }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            const data = new FormData(e.currentTarget);
+            const typeRaw = data.get("type") as string;
+            const formType = typeRaw === "bug" ? "Bug report" : typeRaw === "suggestion" ? "Suggestion" : "Other";
+            await fetch("https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec", {
+              method: "POST", mode: "no-cors",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ form_type: formType, subject: "KIN-005 — QR Code", app: "KIN-005", type: typeRaw, description: data.get("description") || "", name: bugAnon ? "Anonymous" : (data.get("name") || "Not provided"), email: bugAnon ? "Anonymous" : (data.get("email") || "Not provided") }),
+            }).catch(() => {});
+            setBugSuccess(true);
+          }}>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ display: "block", color: "rgba(255,255,255,0.5)", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 7 }}>Type</label>
+              <div style={{ position: "relative" }}>
+                <select name="type" style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 36px 10px 12px", color: "#fff", fontSize: 13, appearance: "none", cursor: "pointer", outline: "none", fontFamily: "inherit" }}>
+                  <option value="bug">🐛 Bug — something isn't working</option>
+                  <option value="suggestion">💡 Suggestion — an idea or request</option>
+                  <option value="other">💬 Other</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ display: "block", color: "rgba(255,255,255,0.5)", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 7 }}>What happened?</label>
+              <textarea name="description" rows={3} placeholder="Describe the issue or idea…" required style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", resize: "none", outline: "none", boxSizing: "border-box" }} />
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+              <div>
+                <div style={{ color: "#fff", fontSize: 13 }}>Send anonymously</div>
+                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginTop: 2 }}>No name or email needed</div>
+              </div>
+              <button type="button" onClick={() => setBugAnon(!bugAnon)} aria-pressed={bugAnon} style={{ width: 44, height: 26, borderRadius: 99, background: bugAnon ? "#5b5ef4" : "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", position: "relative", transition: "background 0.2s", flex: "none", minHeight: 0 }}>
+                <div style={{ position: "absolute", top: 3, left: bugAnon ? "calc(100% - 23px)" : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,0.3)", transition: "left 0.2s" }} />
+              </button>
+            </div>
+            {!bugAnon && (
+              <div style={{ marginBottom: 20, display: "flex", flexDirection: "column", gap: 10 }}>
+                <input type="text" name="name" placeholder="Your name (optional)" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none", width: "100%", boxSizing: "border-box" }} />
+                <input type="email" name="email" placeholder="Email for follow-up (optional)" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none", width: "100%", boxSizing: "border-box" }} />
+              </div>
+            )}
+            <button type="submit" style={{ width: "100%", padding: 13, borderRadius: 12, background: "#5b5ef4", border: "none", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.02em" }}>Send report</button>
+          </form>
+        </>
+      ) : (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+          <div style={{ textAlign: "center", padding: "28px 0 8px" }}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ display: "block", margin: "0 auto 16px" }}><circle cx="12" cy="12" r="11" stroke="#2ea043" strokeWidth="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: "0 0 8px" }}>Thanks for the report</h3>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, lineHeight: 1.5, margin: "0 0 28px" }}>We'll take a look. Your feedback<br/>helps make Kin better for everyone.</p>
+            <button onClick={() => setBugOpen(false)} style={{ padding: "11px 32px", borderRadius: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>Done</button>
+          </div>
+        </>
+      )}
+    </div>
+    </>
   );
 }
