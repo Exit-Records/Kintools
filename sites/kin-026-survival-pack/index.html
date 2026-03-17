@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#f7f7f5" id="meta-theme">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>KIN — Survival Pack</title>
+<title>KIN — Kin Ground</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -140,7 +140,7 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px v
   <button onclick="startFresh()">Start fresh</button>
 </div>
 <div class="header">
-  <h1>KIN / Survival Pack</h1>
+  <h1>KIN / Kin Ground</h1>
   <button class="icon-btn" id="theme-btn" aria-label="Toggle theme">🌙</button>
 </div>
 <nav id="tabs"></nav>
@@ -211,7 +211,7 @@ function render(){
 
 // SETUP
 function rSetup(){
-  viewEl.innerHTML='<div class="card" style="margin-top:24px"><h2 style="font-size:17px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px">KIN / Survival Pack</h2><p style="font-size:15px;color:var(--text-mid);margin-bottom:20px">A private tool to help you spend less and see clearly.</p><label>Monthly income</label><input type="number" inputmode="decimal" id="si" placeholder="Optional"><label>Hourly rate</label><input type="number" inputmode="decimal" id="sr" placeholder="Optional"><label>Currency symbol</label><input type="text" id="sc" value="'+esc(S.config.currency)+'" maxlength="3"><button class="btn-primary" id="sgo">Start</button><p style="font-size:12px;color:var(--text-light);margin-top:12px;text-align:center">All fields optional. Change these in settings anytime.</p></div>';
+  viewEl.innerHTML='<div class="card" style="margin-top:24px"><h2 style="font-size:17px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px">KIN / Kin Ground</h2><p style="font-size:15px;color:var(--text-mid);margin-bottom:20px">A private tool to help you spend less and see clearly.</p><label>Monthly income</label><input type="number" inputmode="decimal" id="si" placeholder="Optional"><label>Hourly rate</label><input type="number" inputmode="decimal" id="sr" placeholder="Optional"><label>Currency symbol</label><input type="text" id="sc" value="'+esc(S.config.currency)+'" maxlength="3"><button class="btn-primary" id="sgo">Start</button><p style="font-size:12px;color:var(--text-light);margin-top:12px;text-align:center">All fields optional. Change these in settings anytime.</p></div>';
   document.getElementById('sgo').addEventListener('click',function(){var i=parseFloat(document.getElementById('si').value),r=parseFloat(document.getElementById('sr').value),c=document.getElementById('sc').value.trim();if(!isNaN(i))S.config.income=i;if(!isNaN(r))S.config.hourlyRate=r;if(c)S.config.currency=c;save();localStorage.setItem(SUK,'1');render();});
 }
 
@@ -450,7 +450,7 @@ if('serviceWorker' in navigator){
       <div class="kin-br-head">
         <div>
           <h2>Report an issue</h2>
-          <p>KIN-026 — Survival Pack</p>
+          <p>KIN-026 — Kin Ground</p>
         </div>
         <button class="kin-br-close" id="kin-bug-close" aria-label="Close">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -524,7 +524,7 @@ if('serviceWorker' in navigator){
       var formType='bug';
       if(typeRaw.toLowerCase().indexOf('feature')!==-1)formType='idea';
       else if(typeRaw.toLowerCase().indexOf('other')!==-1)formType='app_suggestion';
-      fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({form_type:formType,subject:'KIN-026 — Survival Pack',app:'KIN-026',type:typeRaw,description:data.get('description')||'',name:anon?'Anonymous':(data.get('name')||'Not provided'),email:anon?'Anonymous':(data.get('email')||'Not provided')})}).catch(function(){});
+      fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({form_type:formType,subject:'KIN-026 — Kin Ground',app:'KIN-026',type:typeRaw,description:data.get('description')||'',name:anon?'Anonymous':(data.get('name')||'Not provided'),email:anon?'Anonymous':(data.get('email')||'Not provided')})}).catch(function(){});
       formView.style.display='none';
       successView.style.display='block';
     });
