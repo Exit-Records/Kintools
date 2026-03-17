@@ -1735,22 +1735,31 @@ self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWi
     extras.style.display = anon ? 'none' : 'flex';
   });
 
+  var SHEETS_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     var data = new FormData(form);
-    fetch('https://api.web3forms.com/submit', {
+
+    var typeRaw = data.get('type') || '';
+    var formType = 'bug';
+    if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
+    else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
+
+    fetch(SHEETS_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({
-        access_key: 'bee35860-0b11-4196-89d4-2ec55bc8b269',
-        subject: 'Kin Bug Report — KIN-007 Ambient Mixer',
-        app: 'KIN-007 — Ambient Mixer',
-        type: data.get('type'),
-        description: data.get('description'),
-        reporter_name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-        reporter_email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
-      }),
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        form_type: formType,
+        subject: 'KIN-007 — Ambient Mixer',
+        app: 'KIN-007',
+        type: typeRaw,
+        description: data.get('description') || '',
+        name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
+        email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+      })
     }).catch(function() {});
+
     formView.style.display = 'none';
     successView.style.display = 'block';
   });
