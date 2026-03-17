@@ -135,14 +135,226 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px v
 </head>
 <body>
 
-<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
+<div class="demo-bar" id="demo-bar">
+  <span>Demo mode — sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
+<div class="header">
+  <h1 style="text-transform:none">Kin Ground</h1>
+  <button class="icon-btn" id="theme-btn" aria-label="Toggle theme">🌙</button>
+</div>
+<nav id="tabs"></nav>
+<main id="view"></main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+var SK='kin_survival_pack',TK='kin_theme',SUK='kin_setup_done',SVK='kin_survival_mode';
+
+function empty(){return{version:1,config:{income:null,hourlyRate:null,currency:'£',referenceAnchors:[],bufferAlertMonths:2},costs:[],subscriptions:[],impulseItems:[],bufferHistory:[],savings:null,lastUpdated:null};}
+
+function demoData(){
+  var now=Date.now();
+  return{version:1,config:{income:2800,hourlyRate:14.50,currency:'£',referenceAnchors:[{id:'anc1',name:'Weekly shop',price:65},{id:'anc2',name:'Coffee',price:3.80},{id:'anc3',name:'Rent',price:1100}],bufferAlertMonths:2},
+  costs:[{id:'c1',name:'Rent',amount:1100,essential:true},{id:'c2',name:'Council tax',amount:145,essential:true},{id:'c3',name:'Gas & electric',amount:180,essential:true},{id:'c4',name:'Phone contract',amount:28,essential:true},{id:'c5',name:'Groceries',amount:280,essential:true},{id:'c6',name:'Transport',amount:95,essential:true},{id:'c7',name:'Takeaways',amount:60,essential:false},{id:'c8',name:'Clothes',amount:40,essential:false}],
+  subscriptions:[{id:'s1',name:'Netflix',cost:10.99,billingCycle:'monthly',category:'entertainment',active:true,addedAt:'2025-01-15T10:00:00'},{id:'s2',name:'Spotify',cost:10.99,billingCycle:'monthly',category:'entertainment',active:true,addedAt:'2025-02-01T10:00:00'},{id:'s3',name:'Amazon Prime',cost:95,billingCycle:'yearly',category:'shopping',active:true,addedAt:'2025-01-20T10:00:00'},{id:'s4',name:'Gym',cost:34.99,billingCycle:'monthly',category:'health',active:true,addedAt:'2025-03-01T10:00:00'},{id:'s5',name:'Adobe CC',cost:49.99,billingCycle:'monthly',category:'work',active:false,addedAt:'2024-06-01T10:00:00'},{id:'s6',name:'NowTV',cost:9.99,billingCycle:'monthly',category:'entertainment',active:false,addedAt:'2024-11-01T10:00:00'}],
+  impulseItems:[{id:'i1',name:'Air fryer',price:89.99,category:'',createdAt:new Date(now-10*36e5).toISOString().slice(0,19),delayHours:72,status:'pending',resolvedAt:null},{id:'i2',name:'Running shoes',price:125,category:'',createdAt:new Date(now-50*36e5).toISOString().slice(0,19),delayHours:72,status:'pending',resolvedAt:null},{id:'i3',name:'Wireless earbuds',price:59.99,category:'',createdAt:'2026-03-10T14:00:00',delayHours:72,status:'skipped',resolvedAt:'2026-03-13T14:00:00'},{id:'i4',name:'New jacket',price:85,category:'',createdAt:'2026-03-08T09:00:00',delayHours:72,status:'expired',resolvedAt:'2026-03-11T09:00:00'},{id:'i5',name:'Vinyl box set',price:42,category:'',createdAt:'2026-03-05T18:00:00',delayHours:72,status:'bought',resolvedAt:'2026-03-06T20:00:00'},{id:'i6',name:'Smart watch',price:199,category:'',createdAt:'2026-03-01T12:00:00',delayHours:72,status:'skipped',resolvedAt:'2026-03-04T12:00:00'},{id:'i7',name:'Desk lamp',price:35,category:'',createdAt:'2026-02-25T11:00:00',delayHours:72,status:'expired',resolvedAt:'2026-02-28T11:00:00'}],
+  bufferHistory:[{savings:4200,recordedAt:'2025-10-01T10:00:00'},{savings:3800,recordedAt:'2025-11-01T10:00:00'},{savings:3500,recordedAt:'2025-12-01T10:00:00'},{savings:3100,recordedAt:'2026-01-01T10:00:00'},{savings:3350,recordedAt:'2026-02-01T10:00:00'},{savings:3200,recordedAt:'2026-03-15T10:00:00'}],
+  savings:3200,lastUpdated:null};
+}
+
+var isDemo=new URLSearchParams(location.search).get('demo')==='true';
+var S;
+
+function load(){try{var r=localStorage.getItem(SK);if(!r)return null;var p=JSON.parse(r);if(!p.version)return null;var d=empty();return Object.assign({},d,p,{config:Object.assign({},d.config,p.config||{})});}catch(e){return null;}}
+
+function init(){if(isDemo){S=demoData();document.getElementById('demo-bar').classList.add('visible');}else{var saved=load();S=saved||empty();}}
+
+function save(){S.lastUpdated=lnow();localStorage.setItem(SK,JSON.stringify(S));}
+
+window.startFresh=function(){isDemo=false;S=empty();localStorage.removeItem(SK);localStorage.removeItem(SUK);localStorage.removeItem(SVK);document.getElementById('demo-bar').classList.remove('visible');if(history.replaceState)history.replaceState({},'',location.pathname);render();};
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function lnow(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+'T'+p2(d.getHours())+':'+p2(d.getMinutes())+':'+p2(d.getSeconds());}
+function p2(n){return n<10?'0'+n:''+n;}
+function CC(){return S.config.currency||'£';}
+function fmt(n){return n==null?'--':CC()+Number(n).toFixed(2);}
+function fmtI(n){return n==null?'--':CC()+Math.round(n);}
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function normM(s){var c=s.cost||0;switch(s.billingCycle){case'weekly':return c*4.33;case'quarterly':return c/3;case'yearly':return c/12;default:return c;}}
+function fmtMs(ms){var t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;return p2(h)+':'+p2(m)+':'+p2(s);}
+function rrow(l,v){return'<div class="result-row"><span class="result-label">'+l+'</span><span class="result-value">'+v+'</span></div>';}
+function sbox(v,l){return'<div class="stat-box"><div class="stat-val">'+v+'</div><div class="stat-lbl">'+l+'</div></div>';}
+var tT;function toast(m){var e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){e.classList.remove('show');},1800);}
+
+// Theme
+var thBtn=document.getElementById('theme-btn'),mTh=document.getElementById('meta-theme');
+function applyTheme(dk){document.body.classList.toggle('dark',dk);thBtn.textContent=dk?'☀️':'🌙';mTh.content=dk?'#121212':'#f7f7f5';localStorage.setItem(TK,dk?'dark':'light');}
+applyTheme(localStorage.getItem(TK)==='dark');
+thBtn.addEventListener('click',function(){applyTheme(!document.body.classList.contains('dark'));});
+
+// Tabs
+var TABS=[{id:'spend',l:'Spend'},{id:'budget',l:'Budget'},{id:'subs',l:'Subs'},{id:'delay',l:'Delay'},{id:'buffer',l:'Buffer'},{id:'pulse',l:'Pulse'},{id:'settings',l:'⚙'}];
+var aTab='spend',tabEl=document.getElementById('tabs'),viewEl=document.getElementById('view'),dTimer=null;
+
+function rTabs(){tabEl.innerHTML='';TABS.forEach(function(t){var b=document.createElement('button');b.textContent=t.l;if(t.id===aTab)b.className='active';b.addEventListener('click',function(){aTab=t.id;rTabs();render();});tabEl.appendChild(b);});}
+function goTab(id){aTab=id;rTabs();render();}
+function needsSetup(){return!isDemo&&S.config.income===null&&S.config.hourlyRate===null&&!localStorage.getItem(SUK);}
+
+function render(){
+  if(dTimer){clearInterval(dTimer);dTimer=null;}
+  if(needsSetup()){rSetup();return;}
+  ({spend:rSpend,budget:rBudget,subs:rSubs,delay:rDelay,buffer:rBuffer,pulse:rPulse,settings:rSettings})[aTab]();
+}
+
+// SETUP
+function rSetup(){
+  viewEl.innerHTML='<div class="card" style="margin-top:24px"><h2 style="font-size:17px;font-weight:700;letter-spacing:.5px;text-transform:none;margin-bottom:16px">Kin Ground</h2><p style="font-size:15px;color:var(--text-mid);margin-bottom:20px">A private tool to help you spend less and see clearly.</p><label>Monthly income</label><input type="number" inputmode="decimal" id="si" placeholder="Optional"><label>Hourly rate</label><input type="number" inputmode="decimal" id="sr" placeholder="Optional"><label>Currency symbol</label><input type="text" id="sc" value="'+esc(S.config.currency)+'" maxlength="3"><button class="btn-primary" id="sgo">Start</button><p style="font-size:12px;color:var(--text-light);margin-top:12px;text-align:center">All fields optional. Change these in settings anytime.</p></div>';
+  document.getElementById('sgo').addEventListener('click',function(){var i=parseFloat(document.getElementById('si').value),r=parseFloat(document.getElementById('sr').value),c=document.getElementById('sc').value.trim();if(!isNaN(i))S.config.income=i;if(!isNaN(r))S.config.hourlyRate=r;if(c)S.config.currency=c;save();localStorage.setItem(SUK,'1');render();});
+}
+
+// SPEND CHECK
+function rSpend(){
+  var inc=S.config.income,rate=S.config.hourlyRate,anc=S.config.referenceAnchors||[];
+  viewEl.innerHTML='<div class="card"><div class="card-title">Spend Check</div><input type="number" inputmode="decimal" id="sp" placeholder="Item price"'+(isDemo?' value="45"':'')+'><button class="btn-primary" id="sc-btn">Check</button><div id="sc-out"></div></div>'+(anc.length===0?'<div class="card"><div class="card-title">Reference Anchors</div><p style="font-size:13px;color:var(--text-light);cursor:pointer" id="sc-lnk">Set reference purchases in Settings to see contextual comparisons.</p></div>':'');
+  var lnk=document.getElementById('sc-lnk');if(lnk)lnk.onclick=function(){goTab('settings');};
+  function doChk(){var price=parseFloat(document.getElementById('sp').value);if(isNaN(price)||price<=0)return;var h='<div class="result-box">';if(inc){h+=rrow('% of daily budget',(price/(inc/30)*100).toFixed(1)+'%');h+=rrow('% of weekly budget',(price/(inc/4)*100).toFixed(1)+'%');}if(rate)h+=rrow('Hours worked',(price/rate).toFixed(1)+'h');if(!inc&&!rate)h+='<p style="font-size:13px;color:var(--text-light)">Set income or hourly rate in Settings for more context.</p>';h+='</div>';if(anc.length>0){h+='<div class="result-box" style="margin-top:10px">';anc.forEach(function(a){if(a.price>0)h+=rrow('vs '+esc(a.name),(price/a.price).toFixed(1)+'x');});h+='</div>';}document.getElementById('sc-out').innerHTML=h;}
+  document.getElementById('sc-btn').onclick=doChk;if(isDemo)doChk();
+}
+
+// BUDGET
+function rBudget(){
+  var inc=S.config.income,costs=S.costs||[],surv=localStorage.getItem(SVK)==='1';
+  var as=(S.subscriptions||[]).filter(function(s){return s.active;}),st=as.reduce(function(a,s){return a+normM(s);},0);
+  var vis=surv?costs.filter(function(c){return c.essential;}):costs;
+  var ct=vis.reduce(function(a,c){return a+(c.amount||0);},0),tot=ct+(surv?0:st),rem=inc?inc-tot:null;
+  var now=new Date(),dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),dl=dim-now.getDate()+1,ds=rem!=null&&dl>0?rem/dl:null;
+  var h='<div class="card"><div class="card-title">Budget</div>';
+  if(inc)h+='<div class="stat-grid">'+sbox(fmtI(rem),'Remaining')+sbox(ds!=null?fmtI(ds):'--','Daily safe / '+dl+'d left')+'</div>';
+  else h+='<p style="font-size:13px;color:var(--text-light);margin-bottom:14px;cursor:pointer" id="b-lnk">Set monthly income in Settings to see budget totals.</p>';
+  h+='<div class="toggle-row"><span class="toggle-label">Survival Mode</span><button class="toggle-sw'+(surv?' on':'')+'" id="sv-tog"></button></div></div>';
+  h+='<div class="card"><div class="card-title">Costs</div><div class="inline-form"><input type="text" id="cn" placeholder="Name" style="flex:2"><input type="number" inputmode="decimal" id="ca" placeholder="0" style="flex:1"></div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center"><label style="display:flex;align-items:center;gap:6px;margin:0;cursor:pointer"><input type="checkbox" id="ce" style="width:auto;min-height:auto;margin:0"> Essential</label><button class="btn-primary" id="c-add" style="flex:1">Add</button></div>';
+  if(vis.length===0&&as.length===0)h+='<div class="empty">No costs added yet.</div>';
+  vis.forEach(function(c){h+='<div class="list-item"><div><div class="li-name">'+esc(c.name)+(c.essential?' <span class="tag tag-amber">Essential</span>':'')+'</div><div class="li-detail">'+fmt(c.amount)+'/mo</div></div><div class="li-actions"><button class="icon-btn" data-rc="'+c.id+'">✕</button></div></div>';});
+  if(!surv&&as.length>0){h+='<div style="padding:10px 0 4px;font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.3px">From Subscriptions</div>';as.forEach(function(s){h+='<div class="list-item"><div><div class="li-name" style="color:var(--text-mid)">'+esc(s.name)+'</div><div class="li-detail">'+fmt(normM(s))+'/mo</div></div></div>';});}
+  h+='</div>';viewEl.innerHTML=h;
+  var bl=document.getElementById('b-lnk');if(bl)bl.onclick=function(){goTab('settings');};
+  document.getElementById('sv-tog').onclick=function(){localStorage.setItem(SVK,this.classList.contains('on')?'0':'1');rBudget();};
+  document.getElementById('c-add').onclick=function(){var n=document.getElementById('cn').value.trim(),a=parseFloat(document.getElementById('ca').value),e=document.getElementById('ce').checked;if(!n||isNaN(a))return;S.costs.push({id:uid(),name:n,amount:a,essential:e});save();rBudget();};
+  document.querySelectorAll('[data-rc]').forEach(function(b){b.onclick=function(){S.costs=S.costs.filter(function(c){return c.id!==b.dataset.rc;});save();rBudget();};});
+}
+
+// SUBS
+function rSubs(){
+  var subs=S.subscriptions||[],act=subs.filter(function(s){return s.active;}),inact=subs.filter(function(s){return!s.active;});
+  var mt=act.reduce(function(a,s){return a+normM(s);},0),ps=inact.reduce(function(a,s){return a+normM(s);},0);
+  var h='<div class="card"><div class="card-title">Subscriptions</div><div class="stat-grid">'+sbox(fmtI(mt),'Monthly')+sbox(fmtI(Math.round(mt*12)),'Yearly')+'</div>';
+  if(ps>0)h+='<div class="result-box">'+rrow('Potential savings (inactive)',fmt(ps)+'/mo')+'</div>';
+  h+='</div><div class="card"><div class="card-title">Add Subscription</div><input type="text" id="sn" placeholder="Name"><div style="display:flex;gap:8px"><input type="number" inputmode="decimal" id="sco" placeholder="Cost" style="flex:1"><select id="scy" style="flex:1"><option value="monthly">Monthly</option><option value="weekly">Weekly</option><option value="quarterly">Quarterly</option><option value="yearly">Yearly</option></select></div><button class="btn-primary" id="s-add">Add</button></div>';
+  function sl(arr,t){if(!arr.length)return'';var o='<div class="card"><div class="card-title">'+t+'</div>';arr.forEach(function(s){o+='<div class="list-item"><div><div class="li-name">'+esc(s.name)+'</div><div class="li-detail">'+fmt(s.cost)+'/'+s.billingCycle+' ('+fmt(normM(s))+'/mo)</div></div><div class="li-actions"><button class="icon-btn" data-ts="'+s.id+'">'+(s.active?'⏸':'▶')+'</button><button class="icon-btn" data-rs="'+s.id+'">✕</button></div></div>';});return o+'</div>';}
+  h+=sl(act,'Active')+sl(inact,'Inactive');
+  if(!subs.length)h+='<div class="card"><div class="empty">No subscriptions tracked yet.</div></div>';
+  viewEl.innerHTML=h;
+  document.getElementById('s-add').onclick=function(){var n=document.getElementById('sn').value.trim(),c=parseFloat(document.getElementById('sco').value),cy=document.getElementById('scy').value;if(!n||isNaN(c))return;S.subscriptions.push({id:uid(),name:n,cost:c,billingCycle:cy,category:'',active:true,addedAt:lnow()});save();rSubs();};
+  document.querySelectorAll('[data-ts]').forEach(function(b){b.onclick=function(){var s=S.subscriptions.find(function(x){return x.id===b.dataset.ts;});if(s){s.active=!s.active;save();rSubs();}};});
+  document.querySelectorAll('[data-rs]').forEach(function(b){b.onclick=function(){S.subscriptions=S.subscriptions.filter(function(x){return x.id!==b.dataset.rs;});save();rSubs();};});
+}
+
+// DELAY
+function rDelay(){
+  var items=S.impulseItems||[],now=Date.now(),ch=false;
+  items.forEach(function(it){if(it.status==='pending'){var cr=new Date(it.createdAt).getTime(),dl=(it.delayHours||72)*36e5;if(now-cr>=dl){it.status='expired';it.resolvedAt=lnow();ch=true;}}});
+  if(ch)save();
+  var pend=items.filter(function(i){return i.status==='pending';}),res=items.filter(function(i){return i.status!=='pending';});
+  var sv=res.filter(function(i){return i.status==='skipped'||i.status==='expired';}).reduce(function(a,i){return a+(i.price||0);},0);
+  var h='<div class="card"><div class="card-title">72-Hour Rule</div><input type="text" id="dn" placeholder="What do you want to buy?"><input type="number" inputmode="decimal" id="dp" placeholder="Price"><button class="btn-primary" id="d-add">Start Timer</button></div>';
+  if(sv>0)h+='<div class="card"><div class="stat-box" style="margin:0"><div class="stat-val" style="color:var(--accent)">'+fmtI(sv)+'</div><div class="stat-lbl">Money not spent</div></div></div>';
+  h+='<div class="card"><div class="card-title">Pending</div>';
+  if(!pend.length)h+='<div class="empty">No items waiting.</div>';
+  pend.forEach(function(it){var cr=new Date(it.createdAt).getTime(),dl=(it.delayHours||72)*36e5,rm=Math.max(0,dl-(now-cr));h+='<div class="list-item" style="flex-wrap:wrap"><div style="flex:1"><div class="li-name">'+esc(it.name)+' <span style="font-weight:400;color:var(--text-light)">'+fmt(it.price)+'</span></div><div class="countdown" data-tid="'+it.id+'" data-rem="'+rm+'">'+fmtMs(rm)+'</div></div><div class="li-actions" style="margin-top:4px"><button class="icon-btn" data-buy="'+it.id+'" title="Bought it">💸</button><button class="icon-btn" data-skip="'+it.id+'" title="Skipped">✕</button></div></div>';});
+  h+='</div>';
+  if(res.length){h+='<div class="card"><div class="card-title">History</div>';res.slice(-20).reverse().forEach(function(it){h+='<div class="list-item"><div><div class="li-name">'+esc(it.name)+' <span style="font-weight:400;color:var(--text-light)">'+fmt(it.price)+'</span></div></div><span class="tag '+(it.status==='bought'?'tag-red':'tag-green')+'">'+it.status+'</span></div>';});h+='</div>';}
+  viewEl.innerHTML=h;
+  if(pend.length){dTimer=setInterval(function(){var els=document.querySelectorAll('[data-tid]'),exp=false;els.forEach(function(el){var r=parseInt(el.dataset.rem)-1000;if(r<0)r=0;el.dataset.rem=r;el.textContent=fmtMs(r);if(r===0)exp=true;});if(exp){clearInterval(dTimer);rDelay();}},1000);}
+  document.getElementById('d-add').onclick=function(){var n=document.getElementById('dn').value.trim(),p=parseFloat(document.getElementById('dp').value);if(!n||isNaN(p))return;S.impulseItems.push({id:uid(),name:n,price:p,category:'',createdAt:lnow(),delayHours:72,status:'pending',resolvedAt:null});save();rDelay();};
+  document.querySelectorAll('[data-buy]').forEach(function(b){b.onclick=function(){var it=S.impulseItems.find(function(i){return i.id===b.dataset.buy;});if(it){it.status='bought';it.resolvedAt=lnow();save();rDelay();}};});
+  document.querySelectorAll('[data-skip]').forEach(function(b){b.onclick=function(){var it=S.impulseItems.find(function(i){return i.id===b.dataset.skip;});if(it){it.status='skipped';it.resolvedAt=lnow();save();rDelay();}};});
+}
+
+// BUFFER
+function rBuffer(){
+  var sv=S.savings,ec=(S.costs||[]).filter(function(c){return c.essential;}).reduce(function(a,c){return a+(c.amount||0);},0);
+  var hist=S.bufferHistory||[],al=S.config.bufferAlertMonths||2;
+  var h='<div class="card"><div class="card-title">Emergency Buffer</div><label>Total savings</label><input type="number" inputmode="decimal" id="bs" value="'+(sv!=null?sv:'')+'" placeholder="0"><label>Monthly essential spend</label><input type="number" inputmode="decimal" id="be" value="'+(ec||'')+'" placeholder="0"><button class="btn-primary" id="b-calc">Update</button><div id="b-out"></div></div>';
+  if(hist.length>=2){h+='<div class="card"><div class="card-title">Trend</div>';hist.slice(-6).forEach(function(e,i,arr){var ar='';if(i>0){var d=e.savings-arr[i-1].savings;ar=d>0?' ↑':d<0?' ↓':' →';}h+='<div class="list-item"><div class="li-detail">'+e.recordedAt.slice(0,10)+'</div><div class="result-value">'+fmtI(e.savings)+ar+'</div></div>';});h+='</div>';}
+  viewEl.innerHTML=h;
+  function calc(){var s=parseFloat(document.getElementById('bs').value),e=parseFloat(document.getElementById('be').value);if(isNaN(s))return;S.savings=s;var last=hist[hist.length-1];if(!last||last.savings!==s){S.bufferHistory.push({savings:s,recordedAt:lnow()});if(S.bufferHistory.length>12)S.bufferHistory.shift();}save();if(isNaN(e)||e<=0){document.getElementById('b-out').innerHTML='<div class="result-box"><p style="font-size:13px;color:var(--text-light)">Add essential costs in Budget or enter monthly essentials above.</p></div>';return;}var m=s/e,cls=m<al?'danger-box':m<al*2?'warn-box':'result-box';var o='<div class="'+cls+'">'+rrow('Months remaining',m.toFixed(1));if(m<al)o+='<p style="font-size:13px;font-weight:600;color:var(--danger);margin-top:8px">Below your '+al+'-month alert threshold.</p>';o+='</div>';document.getElementById('b-out').innerHTML=o;}
+  document.getElementById('b-calc').onclick=calc;if(sv!=null&&ec>0)calc();
+}
+
+// PULSE
+function rPulse(){
+  var inc=S.config.income,costs=S.costs||[],subs=S.subscriptions||[],items=S.impulseItems||[],sv=S.savings,hist=S.bufferHistory||[];
+  var ec=costs.filter(function(c){return c.essential;}).reduce(function(a,c){return a+(c.amount||0);},0);
+  var ct=costs.reduce(function(a,c){return a+(c.amount||0);},0);
+  var st=subs.filter(function(s){return s.active;}).reduce(function(a,s){return a+normM(s);},0);
+  var rem=inc?inc-ct-st:null,now=new Date(),dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),dl=dim-now.getDate()+1,ds=rem!=null?rem/dl:null;
+  var pend=items.filter(function(i){return i.status==='pending';}),ms=items.filter(function(i){return i.status==='skipped'||i.status==='expired';}).reduce(function(a,i){return a+(i.price||0);},0);
+  var wa=Date.now()-7*864e5,rr=items.filter(function(i){return i.status!=='pending'&&i.resolvedAt&&new Date(i.resolvedAt).getTime()>wa;});
+  var months=sv&&ec>0?sv/ec:null;var lt=hist.slice(-2),trend='';if(lt.length===2){var d=lt[1].savings-lt[0].savings;trend=d>0?'↑ Growing':d<0?'↓ Shrinking':'→ Stable';}
+  function sec(t,has,c,nav,last){return'<div class="pulse-section"'+(last?' style="border-bottom:none"':'')+'><div class="pulse-title">'+t+'</div>'+(has?c:'<div class="pulse-empty" data-nav="'+nav+'">No data yet. Tap to configure.</div>')+'</div>';}
+  var h='<div class="card"><div class="card-title">Weekly Pulse</div>';
+  h+=sec('Budget',!!inc,'<div class="pulse-val">Daily safe spend: '+fmtI(ds)+' ('+dl+' days left)</div>','settings');
+  h+=sec('Subscriptions',subs.length>0,'<div class="pulse-val">'+fmtI(st)+'/mo across '+subs.filter(function(s){return s.active;}).length+' active</div>'+(subs.filter(function(s){return!s.active;}).length>0?'<div style="font-size:13px;color:var(--warn)">'+subs.filter(function(s){return!s.active;}).length+' inactive flagged</div>':''),'subs');
+  h+=sec('72-Hour Rule',items.length>0,'<div class="pulse-val">'+pend.length+' pending, '+rr.length+' resolved this week</div>'+(ms>0?'<div style="font-size:13px;color:var(--accent);font-weight:600">Total saved: '+fmtI(ms)+'</div>':''),'delay');
+  h+=sec('Buffer',months!=null,'<div class="pulse-val">'+months.toFixed(1)+' months runway '+(trend?'<span style="font-size:13px;color:var(--text-light)">'+trend+'</span>':'')+'</div>','buffer',true);
+  h+='</div>';viewEl.innerHTML=h;
+  document.querySelectorAll('[data-nav]').forEach(function(el){el.onclick=function(){goTab(el.dataset.nav);};});
+}
+
+// SETTINGS
+function rSettings(){
+  var c=S.config,anc=c.referenceAnchors||[];
+  var h='<div class="card"><div class="card-title">Configuration</div><label>Monthly income</label><input type="number" inputmode="decimal" id="xi" value="'+(c.income!=null?c.income:'')+'" placeholder="0"><label>Hourly rate</label><input type="number" inputmode="decimal" id="xr" value="'+(c.hourlyRate!=null?c.hourlyRate:'')+'" placeholder="0"><label>Currency symbol</label><input type="text" id="xc" value="'+esc(c.currency||'£')+'" maxlength="3"><label>Buffer alert (months)</label><input type="number" inputmode="numeric" id="xa" value="'+(c.bufferAlertMonths||2)+'" min="1" max="24"><button class="btn-primary" id="x-save">Save</button></div>';
+  h+='<div class="card"><div class="card-title">Reference Anchors</div><p style="font-size:13px;color:var(--text-light);margin-bottom:12px">Purchases to compare against in Spend Check.</p><div class="inline-form"><input type="text" id="an" placeholder="Name" style="flex:2"><input type="number" inputmode="decimal" id="ap" placeholder="Price" style="flex:1"><button class="btn-secondary" id="a-add" style="padding:10px 14px">+</button></div>';
+  anc.forEach(function(a){h+='<div class="list-item"><div><div class="li-name">'+esc(a.name)+'</div><div class="li-detail">'+fmt(a.price)+'</div></div><button class="icon-btn" data-ra="'+a.id+'">✕</button></div>';});
+  h+='</div>';
+  h+='<div class="card"><div class="card-title">Data</div><div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn-secondary" id="d-exp" style="flex:1">Export JSON</button><button class="btn-secondary" id="d-imp-btn" style="flex:1">Import JSON</button></div><input type="file" id="d-imp" accept=".json" style="display:none"><div class="section-break"></div><button class="btn-secondary btn-danger" id="d-reset">'+(isDemo?'Exit demo & reset':'Reset All Data')+'</button></div>';
+  h+='<div class="footer">KIN-026 · by Darren · Part of the <a href="https://kin.tools" style="color:inherit">Kin catalog</a></div>';
+  viewEl.innerHTML=h;
+  document.getElementById('x-save').onclick=function(){var i=parseFloat(document.getElementById('xi').value),r=parseFloat(document.getElementById('xr').value),cu=document.getElementById('xc').value.trim(),a=parseInt(document.getElementById('xa').value);S.config.income=isNaN(i)?null:i;S.config.hourlyRate=isNaN(r)?null:r;if(cu)S.config.currency=cu;if(!isNaN(a)&&a>0)S.config.bufferAlertMonths=a;save();toast('Settings saved');};
+  document.getElementById('a-add').onclick=function(){var n=document.getElementById('an').value.trim(),p=parseFloat(document.getElementById('ap').value);if(!n||isNaN(p))return;if(!S.config.referenceAnchors)S.config.referenceAnchors=[];if(S.config.referenceAnchors.length>=3){toast('Max 3 anchors');return;}S.config.referenceAnchors.push({id:uid(),name:n,price:p});save();rSettings();};
+  document.querySelectorAll('[data-ra]').forEach(function(b){b.onclick=function(){S.config.referenceAnchors=S.config.referenceAnchors.filter(function(a){return a.id!==b.dataset.ra;});save();rSettings();};});
+  document.getElementById('d-exp').onclick=function(){var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a'),d=new Date();a.href=url;a.download='kin-survival-backup-'+d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+'.json';a.click();URL.revokeObjectURL(url);};
+  document.getElementById('d-imp-btn').onclick=function(){document.getElementById('d-imp').click();};
+  document.getElementById('d-imp').onchange=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){try{var imp=JSON.parse(ev.target.result);if(!imp.version){toast('Invalid backup file');return;}if(imp.version>S.version){toast('Backup from newer version');return;}var d=empty();S=Object.assign({},d,imp,{config:Object.assign({},d.config,imp.config||{})});save();toast('Data imported');rSettings();}catch(err){toast('Failed to read file');}};reader.readAsText(file);};
+  document.getElementById('d-reset').onclick=function(){if(confirm('This will delete all your data. Are you sure?'))startFresh();};
+}
+
+// Init
+init();rTabs();render();
+
+// Service Worker
+if('serviceWorker' in navigator){
+  var swCode='var CN="kin-survival-v1";self.addEventListener("install",function(e){e.waitUntil(caches.open(CN).then(function(c){return c.addAll(["./"])}))});self.addEventListener("fetch",function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))});';
+  var swBlob=new Blob([swCode],{type:'application/javascript'});
+  var swURL=URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(function(){
+    // Blob SW may fail in some environments; that's OK, app still works
+  });
+}
+
+})();
+</script>
+
+
+  <footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:var(--text-light,#888)">
   KIN-026 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
-
   <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
-
   <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
 </footer>
-  </div>
 
   <style>
     #kin-bug-backdrop {
