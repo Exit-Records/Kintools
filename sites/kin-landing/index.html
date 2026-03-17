@@ -1075,8 +1075,6 @@
     <h2 class="suggest-title">Suggest an app</h2>
     <p class="suggest-sub">Got an idea for a simple, free tool that helps people without asking for anything in return? We'd love to hear it.</p>
     <form id="suggest-form">
-      <input type="hidden" name="access_key" value="bee35860-0b11-4196-89d4-2ec55bc8b269">
-      <input type="hidden" name="subject" value="Kin — App Suggestion">
       <div class="sug-row">
         <div class="sug-field">
           <label class="sug-label" for="sug-name">Your name</label>
@@ -1122,10 +1120,19 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
   btn.disabled = true;
   btn.textContent = 'Sending…';
   try {
-    await fetch('https://api.web3forms.com/submit', {
+    const f = new FormData(this);
+    await fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(this)).toString(),
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        form_type: 'idea',
+        subject: 'Kin — App Suggestion',
+        app: 'Kin Landing',
+        description: f.get('app_idea') || '',
+        name: f.get('name') || '',
+        email: f.get('email') || '',
+        problem: f.get('problem') || ''
+      })
     });
   } catch(_) {}
   document.getElementById('suggest-form').style.display = 'none';
