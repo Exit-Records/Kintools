@@ -189,7 +189,20 @@ Always update both after a new tool is shipped.
 - GitHub repo: `Exit-Records/Kintools` (main branch)
 - Netlify publish dir per tool: `sites/kin-NNN-tool-name`
 - No build command — static HTML files served directly
-- Pushes via GitHub Git Data API (Blob → Tree → Commit → Patch ref)
+
+### GitHub push rule — CRITICAL
+**Always use the Git Tree API for pushes. Never use the Contents API (PUT per file).**
+Every Contents API PUT = one commit = one Netlify deploy per connected site (~27 sites).
+Multiple individual pushes in a session burn through Netlify credits fast.
+
+Correct approach — single batched commit for all files changed in a session:
+1. Create blobs for each changed file (`POST /repos/.../git/blobs`)
+2. Fetch current tree SHA (`GET /repos/.../git/ref/heads/main`)
+3. Create new tree with all blob SHAs (`POST /repos/.../git/trees`)
+4. Create commit pointing to new tree (`POST /repos/.../git/commits`)
+5. Update ref (`PATCH /repos/.../git/refs/heads/main`)
+
+This produces **1 commit → 1 deploy per site**, no matter how many files changed.
 
 ---
 
