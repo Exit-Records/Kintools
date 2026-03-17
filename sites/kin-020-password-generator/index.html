@@ -1669,6 +1669,225 @@ if("serviceWorker" in navigator){
   KIN-020 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
 
   <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
 </footer>
+
+  <!-- ── Bug report ──────────────────────────────────────────────── -->
+  <style>
+    #kin-bug-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 901;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(2px);
+    }
+    #kin-bug-sheet {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 902;
+      background: #17171f;
+      border-radius: 20px 20px 0 0;
+      border: 1px solid rgba(255,255,255,0.08); border-bottom: none;
+      padding: 0 20px 40px;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    #kin-bug-sheet.open { transform: translateY(0); }
+    #kin-bug-backdrop.open { display: block; }
+    .kin-br-handle { display: flex; justify-content: center; padding: 12px 0 4px; }
+    .kin-br-handle div { width: 36px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.15); }
+    .kin-br-head { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 20px; }
+    .kin-br-head h2 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
+    .kin-br-head p  { color: rgba(255,255,255,0.35); font-size: 11px; margin: 3px 0 0; letter-spacing: 0.04em; }
+    .kin-br-close {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.07); border: none;
+      color: rgba(255,255,255,0.5); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .kin-br-label { display: block; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 7px; }
+    .kin-br-field { margin-bottom: 14px; }
+    .kin-br-select-wrap { position: relative; }
+    .kin-br-select-wrap select {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      padding: 10px 36px 10px 12px; color: #fff; font-size: 13px;
+      appearance: none; cursor: pointer; outline: none; font-family: inherit;
+    }
+    .kin-br-select-wrap::after {
+      content: ''; position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      border: 5px solid transparent; border-top-color: rgba(255,255,255,0.4); margin-top: 3px;
+    }
+    .kin-br-ta {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      padding: 10px 12px; color: #fff; font-size: 13px; font-family: inherit;
+      resize: none; outline: none; box-sizing: border-box;
+    }
+    .kin-br-ta::placeholder { color: rgba(255,255,255,0.25); }
+    .kin-br-anon { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .kin-br-anon-text div:first-child { color: #fff; font-size: 13px; }
+    .kin-br-anon-text div:last-child  { color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px; }
+    .kin-br-toggle {
+      width: 44px; height: 26px; border-radius: 99px;
+      background: #5b5ef4; border: none; cursor: pointer;
+      position: relative; transition: background 0.2s; flex-shrink: 0;
+    }
+    .kin-br-toggle::after {
+      content: ''; position: absolute; top: 3px; left: calc(100% - 23px);
+      width: 20px; height: 20px; border-radius: 50%; background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: left 0.2s;
+    }
+    .kin-br-toggle.off { background: rgba(255,255,255,0.1); }
+    .kin-br-toggle.off::after { left: 3px; }
+    .kin-br-extras { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .kin-br-input {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 13px;
+      font-family: inherit; outline: none; width: 100%; box-sizing: border-box;
+    }
+    .kin-br-input::placeholder { color: rgba(255,255,255,0.25); }
+    .kin-br-submit {
+      width: 100%; padding: 13px; border-radius: 12px;
+      background: #5b5ef4; border: none; color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      letter-spacing: 0.02em;
+    }
+    .kin-br-success { text-align: center; padding: 28px 0 8px; }
+    .kin-br-success svg { display: block; margin: 0 auto 16px; }
+    .kin-br-success h3 { color: #fff; font-size: 17px; font-weight: 600; margin: 0 0 8px; }
+    .kin-br-success p  { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.5; margin: 0 0 28px; }
+    .kin-br-done {
+      padding: 11px 32px; border-radius: 10px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer; font-family: inherit;
+    }
+  </style>
+
+  <!-- Backdrop -->
+  <div id="kin-bug-backdrop"></div>
+
+  <!-- Bug report sheet -->
+  <div id="kin-bug-sheet">
+    <div id="kin-br-form-view">
+      <div class="kin-br-handle"><div></div></div>
+      <div class="kin-br-head">
+        <div>
+          <h2>Report an issue</h2>
+          <p>KIN-020 — Password Generator</p>
+        </div>
+        <button class="kin-br-close" id="kin-bug-close" aria-label="Close">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="kin-br-form">
+        <div class="kin-br-field">
+          <label class="kin-br-label">Type</label>
+          <div class="kin-br-select-wrap">
+            <select name="type">
+              <option value="bug">🐛 Bug — something isn't working</option>
+              <option value="suggestion">💡 Suggestion — an idea or request</option>
+              <option value="other">💬 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="kin-br-field">
+          <label class="kin-br-label">What happened?</label>
+          <textarea class="kin-br-ta" name="description" rows="3" placeholder="Describe the issue or idea…" required></textarea>
+        </div>
+        <div class="kin-br-anon">
+          <div class="kin-br-anon-text">
+            <div>Send anonymously</div>
+            <div>No name or email needed</div>
+          </div>
+          <button type="button" class="kin-br-toggle" id="kin-br-anon-toggle" aria-pressed="true"></button>
+        </div>
+        <div class="kin-br-extras" id="kin-br-extras" style="display:none">
+          <input class="kin-br-input" type="text" name="name" placeholder="Your name (optional)">
+          <input class="kin-br-input" type="email" name="email" placeholder="Email for follow-up (optional)">
+        </div>
+        <button type="submit" class="kin-br-submit">Send report</button>
+      </form>
+    </div>
+    <div id="kin-br-success-view" style="display:none">
+      <div class="kin-br-handle"><div></div></div>
+      <div class="kin-br-success">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#2ea043" stroke-width="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Thanks for the report</h3>
+        <p>We'll take a look. Your feedback<br>helps make Kin better for everyone.</p>
+        <button class="kin-br-done" id="kin-br-done">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var btn      = document.getElementById('kin-bug-btn');
+    var backdrop = document.getElementById('kin-bug-backdrop');
+    var sheet    = document.getElementById('kin-bug-sheet');
+    var closeBtn = document.getElementById('kin-bug-close');
+    var doneBtn  = document.getElementById('kin-br-done');
+    var form     = document.getElementById('kin-br-form');
+    var formView = document.getElementById('kin-br-form-view');
+    var successView = document.getElementById('kin-br-success-view');
+    var anonToggle = document.getElementById('kin-br-anon-toggle');
+    var extras   = document.getElementById('kin-br-extras');
+    var anon     = true;
+
+    function openSheet() {
+      backdrop.classList.add('open');
+      sheet.style.display = 'block';
+      requestAnimationFrame(function() { sheet.classList.add('open'); });
+    }
+    function closeSheet() {
+      sheet.classList.remove('open');
+      setTimeout(function() {
+        sheet.style.display = 'none';
+        backdrop.classList.remove('open');
+        form.reset();
+        formView.style.display = 'block';
+        successView.style.display = 'none';
+        anon = true;
+        anonToggle.classList.remove('off');
+        extras.style.display = 'none';
+      }, 300);
+    }
+
+    btn.addEventListener('click', openSheet);
+    backdrop.addEventListener('click', closeSheet);
+    closeBtn.addEventListener('click', closeSheet);
+    doneBtn.addEventListener('click', closeSheet);
+
+    anonToggle.addEventListener('click', function() {
+      anon = !anon;
+      anonToggle.classList.toggle('off', !anon);
+      extras.style.display = anon ? 'none' : 'flex';
+    });
+
+    var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec';
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      var typeRaw = data.get('type') || '';
+      var formType = 'bug';
+      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
+      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
+      fetch(SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          form_type: formType,
+          subject: 'KIN-020 — Password Generator',
+          app: 'KIN-020',
+          type: typeRaw,
+          description: data.get('description') || '',
+          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
+          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+        })
+      }).catch(function() {});
+      formView.style.display = 'none';
+      successView.style.display = 'block';
+    });
+  })();
+  </script>
 </body>
 </html>

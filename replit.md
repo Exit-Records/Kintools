@@ -65,6 +65,20 @@ Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — `https://kinstretch.
 
 The **Local Only · Verified** badge is mandatory on every tool, inside the footer. For tools that have no `<footer>` element, place the badge in a centred `<div>` immediately before `</body>`.
 
+### Report a bug link (every tool)
+
+Every tool must also include a **"Report a bug"** text link in the footer, immediately after the Local Only badge:
+
+```html
+<div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
+```
+
+Clicking it opens a slide-up bottom sheet with a form (type, description, anonymous toggle, optional name/email). Submissions go to Google Sheets via Apps Script:
+
+**Endpoint:** `https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec`
+
+The full CSS + HTML + JS block is in `Kin Build Rules.md` under "Bug report feature". The only per-tool variables are `kin` (e.g. `KIN-026`) and `name` (e.g. `Tool Name`) in the sheet header and the `subject`/`app` fields of the fetch payload.
+
 ### Creator rule
 Always `Darren` unless the user explicitly specifies otherwise.
 
