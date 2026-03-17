@@ -1,0 +1,334 @@
+# Kin Catalog — Copy Review
+
+Updated descriptions for all 25 tools. The aim: match the Kin voice (direct, human, no hype), stay clear for non-technical users, and let the “Replaces” line do the heavy lifting on context.
+
+Notes on general patterns across the current copy:
+
+- Some descriptions lean slightly technical (“chromatic tuner”, “GCEA standard”, “Flesch-Kincaid readability scores”) where plainer language would land better for most people
+- A few tools over-explain features that are better discovered than listed
+- The strongest descriptions already on the site (Quiet Cycle, Thought Loop, Kin Nest) set the tone — warm, honest, slightly wry. The weaker ones read more like feature specs
+- “Nothing sent anywhere” / “Nothing stored” / “Nothing leaves your device” appears in various forms — worth standardising to one or two phrases used consistently
+
+-----
+
+## KIN-001 — Ukulele Tuner
+
+**Current:**
+Chromatic tuner for ukulele. GCEA standard and other tunings. Listens through your mic and shows you which way to turn.
+
+**Suggested:**
+Tune your ukulele using your phone’s microphone. Standard and alternate tunings. Shows you which way to turn the peg. That’s it.
+
+**Why:** “Chromatic” and “GCEA standard” mean nothing to most ukulele beginners — and beginners are the people most likely reaching for a free tuner. Keep it in their language.
+
+-----
+
+## KIN-002 — Metronome
+
+**Current:**
+Simple Metronome with divisions and tap tempo.
+
+**Suggested:**
+Set a tempo, hear the click. Tap to find the BPM. Subdivisions if you need them. Works offline.
+
+**Why:** Current version is a bit bare. One extra line gives it warmth without overselling.
+
+-----
+
+## KIN-003 — BPM Counter
+
+**Current:**
+Tap a button to the beat, get the BPM. Simple as that. Useful for DJs, musicians, runners.
+
+**Suggested:**
+Tap along to anything playing and get the tempo. Useful for DJs, musicians, dancers, runners — anyone who needs to know how fast something is.
+
+**Why:** “Tap a button to the beat, get the BPM” is already good. Widening the audience slightly (dancers, “anyone”) and softening “Simple as that” which reads a little like it’s explaining why it’s not more complex.
+
+-----
+
+## KIN-004 — Colour Picker
+
+**Current:**
+Pick colours visually or paste hex/rgb values. Copy to clipboard. Generate simple palettes from any starting colour.
+
+**Suggested:**
+Find a colour, copy the code, build a palette. Paste a hex or RGB value if you have one, or just pick visually. Everything stays in your browser.
+
+**Why:** Leading with the action (“Find a colour”) rather than the method. Hex/RGB is fine to mention but shouldn’t lead — most people using this are grabbing a colour, not pasting a value.
+
+-----
+
+## KIN-005 — QR Code
+
+**Current:**
+Paste a URL, email, wifi, phone, contact or any text. Get a QR code. Download as PNG. Everything happens in your browser, nothing sent anywhere.
+
+**Suggested:**
+Turn any link, text, wifi password, or contact into a QR code. Download as an image. Everything happens in your browser, nothing sent anywhere.
+
+**Why:** The list format (URL, email, wifi, phone, contact) reads like a spec. “Any link, text, wifi password, or contact” covers the same ground in natural language.
+
+-----
+
+## KIN-006 — Classroom Timer
+
+**Current:**
+Full-screen countdown timer for classrooms. Green, amber, red phases as time runs down. Preset durations or set your own. Chime at the end.
+
+**Suggested:**
+Big, full-screen countdown for classrooms. Colour shifts from green to amber to red as time runs out. Pick a preset or set your own. Chime at the end.
+
+**Why:** Minor. “Big” is friendlier than “Full-screen” as a lead. “Colour shifts” paints the picture better than “phases”. The original is already solid.
+
+-----
+
+## KIN-007 — Ambient Mixer
+
+**Current:**
+White noise, pink noise, rain, wind, waves and fire — layered and mixed in your browser. Sleep timer, presets, and shareable mix codes.
+
+**Suggested:**
+Rain, wind, waves, fire, white noise and pink noise — layer and mix them however you like. Sleep timer included. Save presets or share a mix with someone.
+
+**Why:** Leading with the sounds people actually picture (rain, wind, waves) rather than technical terms (white noise, pink noise). “Shareable mix codes” is a nice feature but “share a mix with someone” says the same thing in human.
+
+-----
+
+## KIN-008 — Flashcards
+
+**Current:**
+Create decks, flip cards, track what you know. Saved in your browser. Your data stays on your device.
+
+**Suggested:**
+Make your own flashcard decks, flip through them, mark what you know. Saved in your browser. Your data stays on your device.
+
+**Why:** Very minor. “Make your own” is slightly warmer than “Create”. The rest is already clean.
+
+-----
+
+## KIN-009 — Jet Lag Planner
+
+**Current:**
+Enter your flight, get a circadian reset plan. Light timing, sleep schedule, fatigue windows and a daily adjustment guide. Works offline.
+
+**Suggested:**
+Enter where you’re flying from and to, get a plan to reset your body clock. When to seek light, when to sleep, when to expect the worst. Works offline.
+
+**Why:** “Circadian reset plan” is accurate but clinical. “Reset your body clock” is something anyone understands. “When to expect the worst” adds the honest, slightly wry Kin tone — jet lag is miserable, no need to be polite about it.
+
+-----
+
+## KIN-010 — Audio Calculators
+
+**Current:**
+18 calculators for music producers and sound engineers. BPM to delay, note to frequency, sample rate, latency, room modes, file size and more. One tool, no clutter.
+
+**Suggested:**
+18 calculators for anyone making or mixing music. Delay times, frequencies, sample rates, latency, room modes, file sizes and more — all in one place, no clutter.
+
+**Why:** “Music producers and sound engineers” narrows the audience unnecessarily. Someone recording a podcast or setting up a PA would use these too. The feature list is fine here because it’s a reference tool — people scan for the calculator they need.
+
+-----
+
+## KIN-011 — Unit Price Calculator
+
+**Current:**
+Find the real cost per unit of any product. Compare packs and sizes instantly — 6x330ml vs 2L bottle, 500g vs 1kg. Pack size parser, best value badge, reverse mode. No maths required.
+
+**Suggested:**
+Work out which size is actually cheaper. Compare any two packs — 6x330ml vs 2L, 500g vs 1kg — and see the real cost per unit. No maths required.
+
+**Why:** “Pack size parser, best value badge, reverse mode” is feature language that means little to someone standing in a supermarket aisle. The scenario (comparing two packs) is clearer than the mechanism. “Actually cheaper” has a nice everyday ring.
+
+-----
+
+## KIN-012 — Random Name Picker
+
+**Current:**
+Paste a list of names, pick one at random. Shuffle animation, history log, remove after pick. Great for classrooms, standups, and giveaways.
+
+**Suggested:**
+Paste a list of names, pick one at random. Keeps a history so nobody gets picked twice. Good for classrooms, team standups, raffles — anything that needs to be fair.
+
+**Why:** “Shuffle animation, history log, remove after pick” describes features. “Keeps a history so nobody gets picked twice” describes the benefit. “Anything that needs to be fair” gives it a bit of soul.
+
+-----
+
+## KIN-013 — Mood Slider
+
+**Current:**
+Slide a scale from −5 to +5 to log how you’re really feeling. Optional note, 7-day history, colour-coded by mood. Private, offline, no account needed.
+
+**Suggested:**
+Slide a scale to log how you’re really feeling. Add a note if you want. See your last seven days, colour-coded by mood. Private, offline, no account.
+
+**Why:** “−5 to +5” is implementation detail. The rest is already strong. Small tightening.
+
+-----
+
+## KIN-014 — Breathing Exercise
+
+**Current:**
+Box breathing, 4-7-8, ADHD reset, sleep wind-down. Expanding circle or ring guide, audio cues, voice prompts, daily streak. Fully offline.
+
+**Suggested:**
+Guided breathing exercises — box breathing, 4-7-8, ADHD reset, wind-down for sleep. Visual guide, audio cues, optional voice prompts. Fully offline, no account.
+
+**Why:** The technique names (box breathing, 4-7-8) are worth keeping — people search for them. “Expanding circle or ring guide” is a bit much for a description; “Visual guide” covers it. “Daily streak” removed — it’s a nice feature to discover, but mentioning it in copy risks sounding like the engagement-metric apps Kin exists to replace.
+
+-----
+
+## KIN-015 — Quiet Cycle
+
+**Current:**
+Track your cycle, predict your next period, log symptoms and notes. Calendar view, fertility window toggle, PIN lock, panic delete. Everything stays on your device.
+
+**Suggested:**
+Track your cycle, predict your next period, log symptoms and notes. PIN lock and panic delete if you need them. Everything stays on your device.
+
+**Why:** This one is already really well written. “Calendar view, fertility window toggle” are features better discovered than listed. “PIN lock and panic delete if you need them” keeps the most important trust signals and the careful “if you need them” acknowledges why those features exist without being heavy about it.
+
+-----
+
+## KIN-016 — Recipe Scaler
+
+**Current:**
+Paste ingredients, set servings, get adjusted quantities instantly. Fraction support, unit auto-conversion, ingredient locking. Nothing sent anywhere.
+
+**Suggested:**
+Paste a list of ingredients, change the number of servings, get the adjusted amounts. Handles fractions and unit conversions. Nothing sent anywhere.
+
+**Why:** “Ingredient locking” is a power-user feature that doesn’t need to be in the shop window. “Handles fractions and unit conversions” says the same as “Fraction support, unit auto-conversion” in plain language.
+
+-----
+
+## KIN-017 — Decision Flip
+
+**Current:**
+Break decision paralysis in seconds. Paste your options, hit Decide, get an answer. Shuffle animation, multi-pick, remove-after-flip. Nothing saved, nothing sent.
+
+**Suggested:**
+Stuck between options? Paste them in, hit Decide. One gets picked. Nothing saved, nothing sent.
+
+**Why:** “Break decision paralysis in seconds” is a bit self-help-speak for the Kin voice. “Stuck between options?” is more direct. “Shuffle animation, multi-pick, remove-after-flip” is feature listing again — the tool does one clear thing, let the description match.
+
+-----
+
+## KIN-018 — Kin Nest
+
+**Current:**
+Baby routine tracker for exhausted parents. Log feeds, sleep, and diapers in under 2 seconds. Wake windows, nap predictions, meltdown risk, daily reassurance, and data export. Nothing leaves your device.
+
+**Suggested:**
+Baby tracker for exhausted parents. Log feeds, sleep and nappies in under two seconds. Wake windows, nap predictions, and a daily note that says you’re doing fine. Nothing leaves your device.
+
+**Why:** Already one of the strongest descriptions. Small changes: “routine” removed (slightly clinical), “diapers” to “nappies” (Kin voice leans UK English — your call on this), “meltdown risk” dropped from the copy (it’s a great feature but reads alarming as a bullet point), “daily reassurance” rewritten as “a daily note that says you’re doing fine” which is warmer and more specific. “Data export” is a feature for the app page, not the catalog card.
+
+-----
+
+## KIN-019 — Markdown Download
+
+**Current:**
+Write or paste text and download it as a .md file instantly. Name your file, see live word and character counts, copy to clipboard. No editor needed, no account, nothing saved server-side.
+
+**Suggested:**
+Write or paste text and download it as a Markdown file. Word count, character count, copy to clipboard. No editor needed, no account, nothing saved.
+
+**Why:** “.md file” may confuse non-technical users. “Markdown file” is slightly clearer (and anyone who knows what Markdown is will understand). “Name your file” and “live” are unnecessary detail. Tightened.
+
+-----
+
+## KIN-020 — Password Generator
+
+**Current:**
+Generate strong passwords or memorable passphrases in your browser. Adjust length, character rules, and word count. Strength meter, batch mode, session history. Nothing stored.
+
+**Suggested:**
+Generate strong passwords or easy-to-remember passphrases in your browser. Adjust length, characters, and complexity. Strength meter included. Nothing stored, nothing sent.
+
+**Why:** “Memorable passphrases” to “easy-to-remember passphrases” is slightly more natural. “Batch mode, session history” are power features that clutter the catalog card. “Nothing stored, nothing sent” uses the emerging standard phrasing.
+
+-----
+
+## KIN-021 — Text Counter
+
+**Current:**
+Paste any text and get word count, character count, reading time, speaking time, Flesch-Kincaid readability scores, platform limit bars, and top keyword density. Select any passage for instant sub-stats. Nothing stored.
+
+**Suggested:**
+Paste any text and see word count, character count, reading time, and how readable it is. Highlights if you’re over platform limits. Select a passage to count just that part. Nothing stored.
+
+**Why:** “Flesch-Kincaid readability scores” is technical jargon most users won’t recognise. “How readable it is” covers the same ground. “Platform limit bars” becomes “Highlights if you’re over platform limits” — same info, natural phrasing. “Top keyword density” dropped from the card (it’s there when you need it).
+
+-----
+
+## KIN-022 — Fair Share
+
+**Current:**
+Split shared expenses without an account. Create groups, log costs, choose equal or custom splits, and see exactly who owes who. Tip calculator and percentage tools included. Data stays on your device.
+
+**Suggested:**
+Split shared costs without signing up for anything. Log what was spent, split it equally or however you like, and see who owes who. Tip calculator included. Data stays on your device.
+
+**Why:** “Create groups” is a feature, not a benefit. “Without an account” to “without signing up for anything” is warmer. “Choose equal or custom splits” to “split it equally or however you like” is more conversational.
+
+-----
+
+## KIN-023 — JSON
+
+**Current:**
+Paste any JSON and it formats, validates, and highlights it instantly. Browse the structure as a tree, generate TypeScript interfaces, diff two payloads, and query nested values by path. Nothing leaves your browser.
+
+**Suggested:**
+Paste JSON, get it formatted, validated and colour-highlighted. Browse the structure as a tree, compare two payloads, or query values by path. Nothing leaves your browser.
+
+**Why:** This one is a developer tool, so some technical language is expected and correct. “Generate TypeScript interfaces” is a feature worth mentioning but probably better on the app page than the catalog card — it narrows the perceived audience. “Diff” to “compare” is slightly friendlier without losing meaning.
+
+-----
+
+## KIN-024 — Thought Loop
+
+**Current:**
+Write down a thought that won’t quit. Three questions, four verdicts — Act, Schedule, Release, or Not Yours. History shows what you keep coming back to.
+
+**Suggested:**
+Write down a thought that won’t leave you alone. Answer three questions. Get a verdict: Act on it, Schedule it, Let it go, or recognise it’s Not Yours. History shows what you keep coming back to.
+
+**Why:** This is already one of the best descriptions in the catalog. Very small adjustments: “won’t quit” to “won’t leave you alone” (slightly more personal), and expanding the verdicts into a sentence rather than a list. “Release” to “Let it go” is plainer. The last line is perfect as-is.
+
+-----
+
+## KIN-025 — Stretch
+
+**Current:**
+Morning, desk break, post-run, bedtime, or chair-based. Set how long you hold. Timer counts down, audio cues you forward, every move has an easier version.
+
+**Suggested:**
+Pick a routine — morning, desk break, post-run, bedtime, or chair-based. Set your hold time. Audio cues move you through it, and every stretch has an easier version.
+
+**Why:** The current version starts mid-thought. “Pick a routine” gives it a clear entry point. “Timer counts down, audio cues you forward” is two features; “Audio cues move you through it” says both in one phrase. “Every move has an easier version” to “every stretch has an easier version” — more specific to what this actually is.
+
+-----
+
+## General recommendations
+
+**Standardise the privacy line.** Across the catalog, you currently have:
+
+- “Everything happens in your browser, nothing sent anywhere”
+- “Nothing stored”
+- “Nothing leaves your device”
+- “Nothing saved, nothing sent”
+- “Your data stays on your device”
+- “Nothing stored, nothing sent”
+- “Nothing saved server-side”
+
+Pick two or three of these and use them consistently. Suggested standard phrases:
+
+1. **“Nothing leaves your device.”** — for tools that store data locally (Flashcards, Mood Slider, Quiet Cycle, Nest)
+1. **“Nothing stored, nothing sent.”** — for tools that don’t save anything at all (Decision Flip, QR Code, Recipe Scaler)
+1. **“Everything happens in your browser.”** — as a warm alternative for either, when you want variety
+
+**Lead with the verb, not the noun.** The strongest descriptions start with what you *do* (“Tune your ukulele”, “Tap along to anything”, “Work out which size is cheaper”). The weaker ones start with what the tool *is* (“Chromatic tuner for ukulele”, “Full-screen countdown timer”). Shift toward action where possible.
+
+**Features vs benefits.** Catalog cards should describe what the tool does for you, not what it contains. Feature lists belong on the app page itself. The card is the sleeve notes, not the track listing.
