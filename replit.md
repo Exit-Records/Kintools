@@ -130,6 +130,13 @@ Always update both after a new tool is shipped.
 - Description style: short conversational sentences, plain English, no jargon
 - Never default new tools to dark mode
 
+### Demo preview pattern
+Whenever a tool gets a `?demo=true` mode, also update `artifacts/kin-preview/server.js` to:
+1. Add a named `/demo-NNN` redirect route (e.g. `/demo-008`) that 302s to `/kin-preview/kin-008-flashcards/?demo=true`
+2. Add a prominent button link in `buildIndex()` so it appears on the listing page — one tap from the Kin Static Preview thumbnail in the Replit mobile app
+
+This is necessary because the Replit mobile preview pane has no URL bar for typing query params.
+
 ---
 
 ## System architecture (monorepo)

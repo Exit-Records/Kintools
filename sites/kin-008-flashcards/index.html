@@ -499,9 +499,28 @@
       .study-options { flex-direction: column; gap: 12px; }
       .ans-btn { font-size: 13px; padding: 12px 6px; }
     }
+
+    /* Demo bar */
+    .demo-bar {
+      display: none; background: #1a2e22; padding: 10px 16px;
+      justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #1a4030; position: sticky; top: 0; z-index: 50;
+    }
+    .demo-bar.visible { display: flex; }
+    .demo-bar span { font-size: 13px; font-weight: 600; color: var(--green); }
+    .demo-bar button {
+      font-size: 13px; font-weight: 700; color: #fff; background: var(--green);
+      border: none; border-radius: 8px; padding: 6px 14px; cursor: pointer;
+      min-height: 32px; flex: none;
+    }
   </style>
 </head>
 <body>
+
+<div class="demo-bar" id="demo-bar">
+  <span>Demo mode — sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
 
 <!-- ══════════════════════════════════════════════
      HOME VIEW
@@ -707,6 +726,68 @@
 'use strict';
 
 // ═══════════════════════════════════════════════════════════════
+//  DEMO MODE
+// ═══════════════════════════════════════════════════════════════
+const isDemo = new URLSearchParams(location.search).get('demo') === 'true';
+
+function demoData() {
+  let t = 1700000000000; let i = 0;
+  function uid() { return (t + i++).toString(36); }
+
+  const d1 = uid();
+  const d2 = uid();
+  const d3 = uid();
+
+  return { seeded: true, decks: {
+    [d1]: { id: d1, name: 'Spanish Basics', created: t - 30 * 86400000, cards: [
+      { id: uid(), front: 'Hello',     back: 'Hola',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Goodbye',   back: 'Adiós',      type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Thank you', back: 'Gracias',    type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Please',    back: 'Por favor',  type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Yes',       back: 'Sí',         type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'No',        back: 'No',         type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Dog',       back: 'Perro',      type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Cat',       back: 'Gato',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'House',     back: 'Casa',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Water',     back: 'Agua',       type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Food',      back: 'Comida',     type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Friend',    back: 'Amigo',      type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Family',    back: 'Familia',    type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Street',    back: 'Calle',      type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Book',      back: 'Libro',      type: 'standard', state: 'new',      ease: 1 },
+    ]},
+    [d2]: { id: d2, name: 'World Capitals', created: t - 15 * 86400000, cards: [
+      { id: uid(), front: 'France',    back: 'Paris',    type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Germany',   back: 'Berlin',   type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Italy',     back: 'Rome',     type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Japan',     back: 'Tokyo',    type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Spain',     back: 'Madrid',   type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'China',     back: 'Beijing',  type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Australia', back: 'Canberra', type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Brazil',    back: 'Brasília', type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Egypt',     back: 'Cairo',    type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Canada',    back: 'Ottawa',   type: 'standard', state: 'new',      ease: 1 },
+    ]},
+    [d3]: { id: d3, name: 'Keyboard Shortcuts', created: t - 7 * 86400000, cards: [
+      { id: uid(), front: 'Copy',       back: 'Ctrl+C / Cmd+C',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Paste',      back: 'Ctrl+V / Cmd+V',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Cut',        back: 'Ctrl+X / Cmd+X',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Undo',       back: 'Ctrl+Z / Cmd+Z',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Save',       back: 'Ctrl+S / Cmd+S',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Select All', back: 'Ctrl+A / Cmd+A',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Find',       back: 'Ctrl+F / Cmd+F',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Redo',       back: 'Ctrl+Y / Cmd+Shift+Z', type: 'standard', state: 'learning', ease: 1 },
+    ]},
+  }};
+}
+
+window.startFresh = function() {
+  localStorage.removeItem('kin008_flashcards');
+  if (history.replaceState) history.replaceState({}, '', location.pathname);
+  location.reload();
+};
+
+// ═══════════════════════════════════════════════════════════════
 //  DATA LAYER
 // ═══════════════════════════════════════════════════════════════
 const STORE_KEY = 'kin008_flashcards';
@@ -814,6 +895,7 @@ function seedStarterDecks(data) {
 }
 
 function loadData() {
+  if (isDemo) return demoData();
   try {
     const raw = localStorage.getItem(STORE_KEY);
     const data = raw ? JSON.parse(raw) : { decks: {} };
@@ -826,6 +908,7 @@ function loadData() {
   } catch { return { decks: {} }; }
 }
 function saveData() {
+  if (isDemo) return;
   localStorage.setItem(STORE_KEY, JSON.stringify(db));
 }
 
@@ -1519,6 +1602,7 @@ document.querySelectorAll('.modal-backdrop').forEach(bd => {
 // ═══════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════
+if (isDemo) document.getElementById('demo-bar').classList.add('visible');
 renderHome();
 </script>
 
