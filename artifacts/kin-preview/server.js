@@ -43,6 +43,12 @@ function serve(req, res) {
     return;
   }
 
+  if (url === "/demo") {
+    res.writeHead(302, { Location: BASE_PATH + "/kin-008-flashcards/?demo=true" });
+    res.end();
+    return;
+  }
+
   try {
     const stat = fs.statSync(filePath);
     if (stat.isDirectory()) {
@@ -92,10 +98,12 @@ function buildIndex() {
     li { margin: .5rem 0; }
     a { color: #4f46e5; text-decoration: none; font-size: 1rem; }
     a:hover { text-decoration: underline; }
+    .demo-link { display:inline-block; margin-bottom:1.5rem; background:#1a4030; color:#4ade80; font-weight:700; padding:10px 20px; border-radius:10px; font-size:1rem; text-decoration:none; }
   </style>
 </head>
 <body>
   <h1>Kin Static Preview</h1>
+  <a class="demo-link" href="${BASE_PATH}/demo">▶ KIN-008 Flashcards Demo</a>
   <ul>${items}</ul>
 </body>
 </html>`;
