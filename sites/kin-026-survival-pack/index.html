@@ -140,7 +140,7 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px v
   <button onclick="startFresh()">Start fresh</button>
 </div>
 <div class="header">
-  <h1>KIN / Kin Ground</h1>
+  <h1 style="text-transform:none">Kin Ground</h1>
   <button class="icon-btn" id="theme-btn" aria-label="Toggle theme">🌙</button>
 </div>
 <nav id="tabs"></nav>
@@ -211,7 +211,7 @@ function render(){
 
 // SETUP
 function rSetup(){
-  viewEl.innerHTML='<div class="card" style="margin-top:24px"><h2 style="font-size:17px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px">KIN / Kin Ground</h2><p style="font-size:15px;color:var(--text-mid);margin-bottom:20px">A private tool to help you spend less and see clearly.</p><label>Monthly income</label><input type="number" inputmode="decimal" id="si" placeholder="Optional"><label>Hourly rate</label><input type="number" inputmode="decimal" id="sr" placeholder="Optional"><label>Currency symbol</label><input type="text" id="sc" value="'+esc(S.config.currency)+'" maxlength="3"><button class="btn-primary" id="sgo">Start</button><p style="font-size:12px;color:var(--text-light);margin-top:12px;text-align:center">All fields optional. Change these in settings anytime.</p></div>';
+  viewEl.innerHTML='<div class="card" style="margin-top:24px"><h2 style="font-size:17px;font-weight:700;letter-spacing:.5px;text-transform:none;margin-bottom:16px">Kin Ground</h2><p style="font-size:15px;color:var(--text-mid);margin-bottom:20px">A private tool to help you spend less and see clearly.</p><label>Monthly income</label><input type="number" inputmode="decimal" id="si" placeholder="Optional"><label>Hourly rate</label><input type="number" inputmode="decimal" id="sr" placeholder="Optional"><label>Currency symbol</label><input type="text" id="sc" value="'+esc(S.config.currency)+'" maxlength="3"><button class="btn-primary" id="sgo">Start</button><p style="font-size:12px;color:var(--text-light);margin-top:12px;text-align:center">All fields optional. Change these in settings anytime.</p></div>';
   document.getElementById('sgo').addEventListener('click',function(){var i=parseFloat(document.getElementById('si').value),r=parseFloat(document.getElementById('sr').value),c=document.getElementById('sc').value.trim();if(!isNaN(i))S.config.income=i;if(!isNaN(r))S.config.hourlyRate=r;if(c)S.config.currency=c;save();localStorage.setItem(SUK,'1');render();});
 }
 
