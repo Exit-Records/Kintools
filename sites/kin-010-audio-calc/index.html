@@ -203,13 +203,1071 @@
 <body>
 
 <header class="kin-header">
-  <footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
-  KIN-010 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
+  <div>
+    <div class="brand-name">Audio Calculators</div>
+    <div class="brand-sub">KIN-010 · Darren</div>
+  </div>
+  <div class="header-right">
+    <button class="theme-btn" id="theme-btn" aria-label="Toggle theme" title="Toggle light / dark">🌙</button>
+    <span class="kin-badge">KIN-010</span>
+  </div>
+</header>
 
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+<div class="selector-bar">
+  <div class="selector-label">Calculator</div>
+  <select class="calc-select" id="calc-select">
+    <optgroup label="Timing">
+      <option value="bpm-delay">BPM → Delay Time</option>
+      <option value="bpm-bar">BPM → Bar Length</option>
+      <option value="bpm-lfo">BPM → LFO Rate</option>
+      <option value="bpm-sample">BPM → Sample Length</option>
+    </optgroup>
+    <optgroup label="Frequency">
+      <option value="freq-note">Frequency → Musical Note</option>
+      <option value="note-freq">Musical Note → Frequency</option>
+      <option value="freq-period">Frequency → Period</option>
+      <option value="freq-wave">Frequency → Wavelength</option>
+    </optgroup>
+    <optgroup label="Phase &amp; Delay">
+      <option value="phase">Phase Offset Calculator</option>
+      <option value="dist-delay">Distance → Delay</option>
+      <option value="comb">Comb Filter Frequencies</option>
+    </optgroup>
+    <optgroup label="Digital Audio">
+      <option value="sample-rate">Sample Rate Converter</option>
+      <option value="nyquist">Sample Rate → Nyquist</option>
+      <option value="bit-depth">Bit Depth → Dynamic Range</option>
+      <option value="latency">Latency Calculator</option>
+      <option value="dur-samples">Duration → Samples</option>
+    </optgroup>
+    <optgroup label="Studio Acoustics">
+      <option value="room">Room Fundamental Frequency</option>
+    </optgroup>
+    <optgroup label="Data &amp; Files">
+      <option value="bitrate">Bitrate → File Size</option>
+    </optgroup>
+  </select>
+</div>
 
-  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-</footer>
+<div class="page">
+
+  <!-- ══════════════════════════════════════════
+       1. BPM → DELAY TIME
+  ══════════════════════════════════════════ -->
+  <section class="calc-section active" id="s-bpm-delay">
+    <div class="calc-title">BPM → Delay Time</div>
+    <div class="calc-desc">Convert tempo into delay and echo times across every note division. Use these values in delay plugins, reverb pre-delay, or LFO rates.</div>
+    <div class="inputs">
+      <div class="field">
+        <label>BPM</label>
+        <input type="number" id="d-bpm" value="120" min="1" max="999" step="1" />
+      </div>
+    </div>
+    <div class="table-card">
+      <table class="data-table" id="delay-table">
+        <thead><tr><th>Division</th><th>Milliseconds</th><th>Hz</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       2. BPM → BAR LENGTH
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-bpm-bar">
+    <div class="calc-title">BPM → Bar Length</div>
+    <div class="calc-desc">Calculate how long one or more bars last at your tempo. Useful for loop length planning, reverb tail design, and arrangement timing.</div>
+    <div class="inputs">
+      <div class="field"><label>BPM</label><input type="number" id="bar-bpm" value="120" min="1" max="999" /></div>
+      <div class="field">
+        <label>Time Signature</label>
+        <select class="field-select" id="bar-sig">
+          <option value="4">4/4</option><option value="3">3/4</option>
+          <option value="2">2/4</option><option value="6">6/8 (2 beats)</option>
+          <option value="5">5/4</option><option value="7">7/8 (3.5 beats)</option>
+        </select>
+      </div>
+      <div class="field"><label>Number of bars</label><input type="number" id="bar-count" value="1" min="1" max="128" /></div>
+    </div>
+    <div class="outputs" id="bar-out"></div>
+    <div class="info-box"><strong>Tip:</strong> use bar length to match reverb decay, set delay feedback tail, or verify a loop region in your DAW.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       3. BPM → LFO RATE
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-bpm-lfo">
+    <div class="calc-title">BPM → LFO Rate</div>
+    <div class="calc-desc">Find the LFO frequency in Hz for each note division at your tempo. Use when a modulator takes Hz instead of note values — filters, tremolo, vibrato, autopanning.</div>
+    <div class="inputs">
+      <div class="field"><label>BPM</label><input type="number" id="lfo-bpm" value="120" min="1" max="999" /></div>
+    </div>
+    <div class="table-card">
+      <table class="data-table" id="lfo-table">
+        <thead><tr><th>Division</th><th>Rate (Hz)</th><th>Period (ms)</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       4. BPM → SAMPLE LENGTH
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-bpm-sample">
+    <div class="calc-title">BPM → Sample Length</div>
+    <div class="calc-desc">Calculate exact loop duration in seconds and samples for any BPM and bar count.</div>
+    <div class="inputs">
+      <div class="field"><label>BPM</label><input type="number" id="sl-bpm" value="120" min="1" max="999" /></div>
+      <div class="field"><label>Bars</label><input type="number" id="sl-bars" value="4" min="1" max="128" /></div>
+      <div class="field">
+        <label>Sample Rate</label>
+        <select class="field-select" id="sl-sr">
+          <option value="44100">44,100 Hz</option>
+          <option value="48000" selected>48,000 Hz</option>
+          <option value="88200">88,200 Hz</option>
+          <option value="96000">96,000 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="sl-out"></div>
+    <div class="info-box"><strong>Formula:</strong> seconds = (60 / BPM) × (beats per bar × bars). Samples = seconds × sample rate.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       5. FREQUENCY → MUSICAL NOTE
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-freq-note">
+    <div class="calc-title">Frequency → Musical Note</div>
+    <div class="calc-desc">Find the nearest note name, MIDI number, and how many cents sharp or flat the input frequency is from that note.</div>
+    <div class="inputs">
+      <div class="field"><label>Frequency (Hz)</label><input type="number" id="fn-hz" value="440" min="1" max="22000" step="0.01" /></div>
+      <div class="field">
+        <label>Tuning reference</label>
+        <select class="field-select" id="fn-a4">
+          <option value="440">A4 = 440 Hz (standard)</option>
+          <option value="432">A4 = 432 Hz</option>
+          <option value="441">A4 = 441 Hz</option>
+          <option value="442">A4 = 442 Hz</option>
+          <option value="443">A4 = 443 Hz</option>
+          <option value="444">A4 = 444 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="fn-out"></div>
+    <div class="info-box"><strong>Cents deviation:</strong> ±50 cents = half a semitone. Positive = sharp, negative = flat.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       6. MUSICAL NOTE → FREQUENCY
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-note-freq">
+    <div class="calc-title">Musical Note → Frequency</div>
+    <div class="calc-desc">Look up the precise frequency of any note across any tuning reference.</div>
+    <div class="inputs note-row">
+      <div class="field">
+        <label>Note</label>
+        <select class="field-select" id="nf-note">
+          <option value="0">C</option><option value="1">C# / D♭</option>
+          <option value="2">D</option><option value="3">D# / E♭</option>
+          <option value="4">E</option><option value="5">F</option>
+          <option value="6">F# / G♭</option><option value="7">G</option>
+          <option value="8">G# / A♭</option><option value="9" selected>A</option>
+          <option value="10">A# / B♭</option><option value="11">B</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Octave</label>
+        <select class="field-select" id="nf-oct">
+          <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+          <option value="3">3</option><option value="4" selected>4</option>
+          <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tuning reference</label>
+        <select class="field-select" id="nf-a4">
+          <option value="440">A4 = 440 Hz</option>
+          <option value="432">A4 = 432 Hz</option>
+          <option value="441">A4 = 441 Hz</option>
+          <option value="442">A4 = 442 Hz</option>
+          <option value="443">A4 = 443 Hz</option>
+          <option value="444">A4 = 444 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="nf-out"></div>
+    <div class="table-card" id="nf-octave-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Same note — all octaves</div>
+      <table class="data-table" id="nf-table"><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       7. FREQUENCY → PERIOD
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-freq-period">
+    <div class="calc-title">Frequency → Period</div>
+    <div class="calc-desc">Convert a frequency to its waveform cycle duration. Useful for understanding timing relationships and setting exact delays to one cycle of a frequency.</div>
+    <div class="inputs">
+      <div class="field"><label>Frequency (Hz)</label><input type="number" id="fp-hz" value="1000" min="0.001" max="96000" step="1" /></div>
+    </div>
+    <div class="outputs" id="fp-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Common frequency periods</div>
+      <table class="data-table" id="fp-table"><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       8. FREQUENCY → WAVELENGTH
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-freq-wave">
+    <div class="calc-title">Frequency → Wavelength</div>
+    <div class="calc-desc">Calculate the physical wavelength of a sound. Essential for speaker placement, acoustic panel positioning, and understanding room resonances.</div>
+    <div class="inputs">
+      <div class="field"><label>Frequency (Hz)</label><input type="number" id="fw-hz" value="1000" min="1" max="96000" step="1" /></div>
+      <div class="field">
+        <label>Speed of sound</label>
+        <select class="field-select" id="fw-speed">
+          <option value="343">343 m/s — dry air 20°C</option>
+          <option value="346">346 m/s — warm air 25°C</option>
+          <option value="331">331 m/s — cold air 0°C</option>
+          <option value="340">340 m/s — studio average</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="fw-out"></div>
+    <div class="info-box"><strong>Quarter wavelength rule:</strong> acoustic panels are most effective at ¼ of the target frequency's wavelength from the reflective surface.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       9. PHASE OFFSET CALCULATOR
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-phase">
+    <div class="calc-title">Phase Offset Calculator</div>
+    <div class="calc-desc">Calculate the time delay needed to correct a phase offset between two signals. Use for microphone alignment, speaker time-alignment, and fixing comb filtering.</div>
+    <div class="inputs">
+      <div class="field"><label>Frequency (Hz)</label><input type="number" id="ph-hz" value="1000" min="1" max="24000" /></div>
+      <div class="field"><label>Phase offset (degrees)</label><input type="number" id="ph-deg" value="90" min="0" max="360" /></div>
+    </div>
+    <div class="outputs" id="ph-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Correction in samples</div>
+      <table class="data-table" id="ph-table"><tbody></tbody></table>
+    </div>
+    <div class="info-box"><strong>180°</strong> = polarity inversion. <strong>90°</strong> = quarter-cycle delay. Small offsets between mics cause comb filtering and hollow tone.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       10. DISTANCE → DELAY
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-dist-delay">
+    <div class="calc-title">Distance → Delay</div>
+    <div class="calc-desc">Calculate the delay introduced by the physical distance between a sound source and a microphone or speaker. Used for time-aligning speaker arrays and multi-mic setups.</div>
+    <div class="inputs">
+      <div class="field"><label>Distance</label><input type="number" id="dd-dist" value="1" min="0.001" step="0.01" /></div>
+      <div class="field">
+        <label>Unit</label>
+        <select class="field-select" id="dd-unit">
+          <option value="m">Metres</option>
+          <option value="ft">Feet</option>
+          <option value="cm">Centimetres</option>
+          <option value="in">Inches</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Speed of sound</label>
+        <select class="field-select" id="dd-speed">
+          <option value="343">343 m/s — 20°C</option>
+          <option value="346">346 m/s — 25°C</option>
+          <option value="331">331 m/s — 0°C</option>
+          <option value="340">340 m/s — studio</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="dd-out"></div>
+    <div class="info-box"><strong>Rule of thumb:</strong> every 34.3 cm (≈ 1 foot) of distance ≈ 1 ms of delay.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       11. COMB FILTER FREQUENCIES
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-comb">
+    <div class="calc-title">Comb Filter Frequencies</div>
+    <div class="calc-desc">Calculate where cancellation notches appear when a signal is summed with a delayed copy. Helps identify problem frequencies from reflections or misaligned mics.</div>
+    <div class="inputs">
+      <div class="field"><label>Delay (ms)</label><input type="number" id="cf-delay" value="3" min="0.001" step="0.1" /></div>
+    </div>
+    <div class="outputs" id="cf-out-main"></div>
+    <div class="table-card">
+      <table class="data-table" id="cf-table">
+        <thead><tr><th>Notch</th><th>Frequency</th><th>Wavelength</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="info-box"><strong>Each notch</strong> is an odd multiple of the first: 1×, 3×, 5×, 7× … treating the first notch frequency as the fundamental.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       12. SAMPLE RATE CONVERTER
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-sample-rate">
+    <div class="calc-title">Sample Rate Converter</div>
+    <div class="calc-desc">Compare sample counts and playback differences when moving audio between sample rates. Identifies pitch-shift risk when no SRC is applied.</div>
+    <div class="inputs">
+      <div class="field">
+        <label>Source sample rate</label>
+        <select class="field-select" id="src-rate">
+          <option value="22050">22,050 Hz</option>
+          <option value="44100" selected>44,100 Hz (CD)</option>
+          <option value="48000">48,000 Hz (video)</option>
+          <option value="88200">88,200 Hz</option>
+          <option value="96000">96,000 Hz</option>
+          <option value="192000">192,000 Hz</option>
+        </select>
+      </div>
+      <div class="field"><label>Duration (seconds)</label><input type="number" id="src-dur" value="180" min="0.001" step="1" /></div>
+    </div>
+    <div class="table-card">
+      <table class="data-table" id="src-table">
+        <thead><tr><th>Sample Rate</th><th>Samples</th><th>Playback at source rate</th><th>Pitch drift</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="info-box"><strong>Why it matters:</strong> a 44.1k file in a 48k session plays ~8.8% faster if not converted — roughly one semitone sharp.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       13. SAMPLE RATE → NYQUIST
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-nyquist">
+    <div class="calc-title">Sample Rate → Nyquist Frequency</div>
+    <div class="calc-desc">The Nyquist frequency is the highest frequency a digital system can represent — exactly half the sample rate. Frequencies above it cause aliasing.</div>
+    <div class="inputs">
+      <div class="field"><label>Sample Rate (Hz)</label><input type="number" id="ny-rate" value="44100" min="1000" step="100" /></div>
+    </div>
+    <div class="outputs" id="ny-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Common sample rates</div>
+      <table class="data-table" id="ny-table"><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       14. BIT DEPTH → DYNAMIC RANGE
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-bit-depth">
+    <div class="calc-title">Bit Depth → Dynamic Range</div>
+    <div class="calc-desc">Calculate the theoretical dynamic range available at a given bit depth. Each additional bit adds approximately 6 dB of headroom.</div>
+    <div class="inputs">
+      <div class="field"><label>Bit depth</label><input type="number" id="bd-bits" value="24" min="1" max="64" step="1" /></div>
+    </div>
+    <div class="outputs" id="bd-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Common bit depths</div>
+      <table class="data-table" id="bd-table"><tbody></tbody></table>
+    </div>
+    <div class="info-box"><strong>Formula:</strong> dynamic range = bit depth × 6.02 dB (+ 1.76 dB for sinusoidal signals). The human hearing range is roughly 120 dB.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       15. LATENCY CALCULATOR
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-latency">
+    <div class="calc-title">Latency Calculator</div>
+    <div class="calc-desc">Calculate audio interface roundtrip latency from buffer size and sample rate. Helps find the lowest safe buffer for your system.</div>
+    <div class="inputs">
+      <div class="field">
+        <label>Buffer size (samples)</label>
+        <select class="field-select" id="lat-buf">
+          <option value="32">32</option><option value="64">64</option>
+          <option value="128">128</option><option value="256" selected>256</option>
+          <option value="512">512</option><option value="1024">1024</option>
+          <option value="2048">2048</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sample rate</label>
+        <select class="field-select" id="lat-sr">
+          <option value="44100">44,100 Hz</option>
+          <option value="48000" selected>48,000 Hz</option>
+          <option value="88200">88,200 Hz</option>
+          <option value="96000">96,000 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="lat-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">All buffer sizes at this sample rate</div>
+      <table class="data-table" id="lat-table">
+        <thead><tr><th>Buffer</th><th>Latency (one-way)</th><th>Roundtrip</th><th>Usable for</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       16. DURATION → SAMPLES
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-dur-samples">
+    <div class="calc-title">Duration → Samples</div>
+    <div class="calc-desc">Convert a time duration into a sample count at any sample rate. Useful for setting exact loop points, fade lengths, and buffer allocation.</div>
+    <div class="inputs">
+      <div class="field"><label>Duration (seconds)</label><input type="number" id="ds-sec" value="3" min="0.001" step="0.001" /></div>
+      <div class="field">
+        <label>Sample rate</label>
+        <select class="field-select" id="ds-sr">
+          <option value="22050">22,050 Hz</option>
+          <option value="44100">44,100 Hz</option>
+          <option value="48000" selected>48,000 Hz</option>
+          <option value="88200">88,200 Hz</option>
+          <option value="96000">96,000 Hz</option>
+          <option value="192000">192,000 Hz</option>
+        </select>
+      </div>
+    </div>
+    <div class="outputs" id="ds-out"></div>
+    <div class="info-box"><strong>Formula:</strong> samples = duration × sample rate. For stereo, double the sample count for total frames.</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       17. ROOM FUNDAMENTAL FREQUENCY
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-room">
+    <div class="calc-title">Room Fundamental Frequency</div>
+    <div class="calc-desc">Calculate the fundamental axial resonant modes for each room dimension. These are the frequencies your room will naturally reinforce or cancel.</div>
+    <div class="inputs">
+      <div class="field"><label>Length</label><input type="number" id="rm-l" value="5" min="0.1" step="0.1" /></div>
+      <div class="field"><label>Width</label><input type="number" id="rm-w" value="4" min="0.1" step="0.1" /></div>
+      <div class="field"><label>Height</label><input type="number" id="rm-h" value="2.6" min="0.1" step="0.1" /></div>
+      <div class="field">
+        <label>Unit</label>
+        <select class="field-select" id="rm-unit">
+          <option value="m">Metres</option>
+          <option value="ft">Feet</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-card">
+      <table class="data-table" id="rm-table">
+        <thead><tr><th>Dimension</th><th>Mode 1</th><th>Mode 2</th><th>Mode 3</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="info-box"><strong>Formula:</strong> f = (speed of sound) / (2 × dimension). Each mode is a harmonic. Modes below ~300 Hz are audible as room resonances (standing waves).</div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       18. BITRATE → FILE SIZE
+  ══════════════════════════════════════════ -->
+  <section class="calc-section" id="s-bitrate">
+    <div class="calc-title">Bitrate → File Size</div>
+    <div class="calc-desc">Estimate how large an audio file will be from its bitrate and duration. Useful for storage planning, upload times, and streaming budgets.</div>
+    <div class="inputs">
+      <div class="field">
+        <label>Bitrate</label>
+        <select class="field-select" id="br-rate">
+          <option value="64">64 kbps — low MP3</option>
+          <option value="128">128 kbps — standard MP3</option>
+          <option value="192">192 kbps — good quality</option>
+          <option value="256">256 kbps — high quality</option>
+          <option value="320" selected>320 kbps — max MP3</option>
+          <option value="705.6">705.6 kbps — WAV 16-bit 44.1k mono</option>
+          <option value="1411.2">1411.2 kbps — WAV 16-bit 44.1k stereo</option>
+          <option value="2304">2304 kbps — WAV 24-bit 48k stereo</option>
+          <option value="4608">4608 kbps — WAV 24-bit 96k stereo</option>
+        </select>
+      </div>
+      <div class="field"><label>Custom kbps (overrides)</label><input type="number" id="br-custom" placeholder="optional" min="1" step="1" /></div>
+    </div>
+    <div class="inputs">
+      <div class="field"><label>Minutes</label><input type="number" id="br-min" value="3" min="0" max="999" /></div>
+      <div class="field"><label>Seconds</label><input type="number" id="br-sec" value="30" min="0" max="59" /></div>
+    </div>
+    <div class="outputs" id="br-out"></div>
+    <div class="table-card">
+      <div style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);">Format comparison at this duration</div>
+      <table class="data-table" id="br-table"><tbody></tbody></table>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════════════
+const themeBtn = document.getElementById('theme-btn');
+let dark = localStorage.getItem('kin011-theme') === 'dark';
+
+function applyTheme() {
+  document.documentElement.classList.toggle('light', !dark);
+  themeBtn.textContent = dark ? '☀️' : '🌙';
+  themeBtn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+}
+themeBtn.addEventListener('click', () => {
+  dark = !dark;
+  localStorage.setItem('kin011-theme', dark ? 'dark' : 'light');
+  applyTheme();
+});
+applyTheme();
+
+// ═══════════════════════════════════════════════
+//  CALCULATOR SWITCHING
+// ═══════════════════════════════════════════════
+const sel = document.getElementById('calc-select');
+const sections = document.querySelectorAll('.calc-section');
+
+const saved = localStorage.getItem('kin011-calc');
+if (saved) {
+  const opt = [...sel.options].find(o => o.value === saved);
+  if (opt) sel.value = saved;
+}
+
+function showSection(id) {
+  sections.forEach(s => s.classList.remove('active'));
+  const s = document.getElementById('s-' + id);
+  if (s) s.classList.add('active');
+  localStorage.setItem('kin011-calc', id);
+}
+
+sel.addEventListener('change', () => showSection(sel.value));
+showSection(sel.value);
+
+// ═══════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════
+function n(val, dec = 2) {
+  return Number(val).toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function nAuto(val) {
+  if (val >= 10000) return Math.round(val).toLocaleString('en-GB');
+  if (val >= 100)   return n(val, 1);
+  if (val >= 10)    return n(val, 2);
+  if (val >= 1)     return n(val, 3);
+  return n(val, 4);
+}
+
+function copyBtn(text) {
+  const b = document.createElement('button');
+  b.className = 'btn-copy'; b.textContent = 'Copy';
+  b.addEventListener('click', () => {
+    navigator.clipboard.writeText(String(text)).then(() => {
+      b.textContent = 'Copied!'; b.classList.add('copied');
+      setTimeout(() => { b.textContent = 'Copy'; b.classList.remove('copied'); }, 1400);
+    });
+  });
+  return b;
+}
+
+function outCard(label, value, unit = '', sub = '') {
+  return `<div class="output-card">
+    <div class="output-label">${label}</div>
+    <div class="output-value">${value}${unit ? '<span class="output-unit">' + unit + '</span>' : ''}</div>
+    ${sub ? '<div class="output-sub">' + sub + '</div>' : ''}
+  </div>`;
+}
+
+function live(ids, fn) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', fn);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  1. BPM → DELAY TIME
+// ═══════════════════════════════════════════════
+const DIVS = [
+  { name: '1 Bar (4/4)', f: 4,     sep: true },
+  { name: '1/1 Whole',   f: 4 },
+  { name: '1/2',         f: 2,     sep: true },
+  { name: '1/2 Dotted',  f: 3 },
+  { name: '1/2 Triplet', f: 4/3 },
+  { name: '1/4',         f: 1,     sep: true },
+  { name: '1/4 Dotted',  f: 1.5 },
+  { name: '1/4 Triplet', f: 2/3 },
+  { name: '1/8',         f: 0.5,   sep: true },
+  { name: '1/8 Dotted',  f: 0.75 },
+  { name: '1/8 Triplet', f: 1/3 },
+  { name: '1/16',        f: 0.25,  sep: true },
+  { name: '1/16 Dotted', f: 0.375 },
+  { name: '1/16 Triplet',f: 1/6 },
+  { name: '1/32',        f: 0.125, sep: true },
+];
+
+function renderDelay() {
+  const bpm = parseFloat(document.getElementById('d-bpm').value) || 120;
+  const q = 60000 / bpm;
+  const tb = document.querySelector('#delay-table tbody');
+  tb.innerHTML = '';
+  DIVS.forEach(d => {
+    const ms = q * d.f;
+    const hz = 1000 / ms;
+    const msStr = nAuto(ms);
+    const tr = document.createElement('tr');
+    if (d.sep) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${d.name}</td><td class="col-main">${msStr} ms</td><td class="col-sub">${nAuto(hz)} Hz</td><td></td>`;
+    tr.cells[3].appendChild(copyBtn(msStr));
+    tb.appendChild(tr);
+  });
+}
+live(['d-bpm'], renderDelay); renderDelay();
+
+// ═══════════════════════════════════════════════
+//  2. BPM → BAR LENGTH
+// ═══════════════════════════════════════════════
+function renderBar() {
+  const bpm   = parseFloat(document.getElementById('bar-bpm').value) || 120;
+  const beats = parseFloat(document.getElementById('bar-sig').value) || 4;
+  const bars  = parseFloat(document.getElementById('bar-count').value) || 1;
+  const sec = (60 / bpm) * beats * bars;
+  const ms  = sec * 1000;
+  const m = Math.floor(sec / 60), s = sec % 60;
+  document.getElementById('bar-out').innerHTML =
+    outCard('Duration', n(sec, 3), ' s', m > 0 ? `${m}m ${n(s,2)}s` : '') +
+    outCard('Duration', n(ms, 1), ' ms') +
+    outCard('Beat duration', n(60000/bpm, 2), ' ms', 'one beat');
+}
+live(['bar-bpm','bar-sig','bar-count'], renderBar); renderBar();
+
+// ═══════════════════════════════════════════════
+//  3. BPM → LFO RATE
+// ═══════════════════════════════════════════════
+const LFO_DIVS = [
+  { name: '1 Bar (4/4)', beats: 4,   sep: true },
+  { name: '1/1',         beats: 4 },
+  { name: '1/2',         beats: 2,   sep: true },
+  { name: '1/2 Dotted',  beats: 3 },
+  { name: '1/2 Triplet', beats: 4/3 },
+  { name: '1/4',         beats: 1,   sep: true },
+  { name: '1/4 Dotted',  beats: 1.5 },
+  { name: '1/4 Triplet', beats: 2/3 },
+  { name: '1/8',         beats: 0.5, sep: true },
+  { name: '1/8 Dotted',  beats: 0.75 },
+  { name: '1/8 Triplet', beats: 1/3 },
+  { name: '1/16',        beats: 0.25,sep: true },
+  { name: '1/32',        beats: 0.125,sep: true },
+];
+
+function renderLfo() {
+  const bpm = parseFloat(document.getElementById('lfo-bpm').value) || 120;
+  const tb = document.querySelector('#lfo-table tbody');
+  tb.innerHTML = '';
+  LFO_DIVS.forEach(d => {
+    const hz  = bpm / (60 * d.beats);
+    const ms  = 1000 / hz;
+    const hzStr = nAuto(hz);
+    const tr = document.createElement('tr');
+    if (d.sep) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${d.name}</td><td class="col-main">${hzStr} Hz</td><td class="col-sub">${nAuto(ms)} ms</td><td></td>`;
+    tr.cells[3].appendChild(copyBtn(hzStr));
+    tb.appendChild(tr);
+  });
+}
+live(['lfo-bpm'], renderLfo); renderLfo();
+
+// ═══════════════════════════════════════════════
+//  4. BPM → SAMPLE LENGTH
+// ═══════════════════════════════════════════════
+function renderSampleLen() {
+  const bpm  = parseFloat(document.getElementById('sl-bpm').value)  || 120;
+  const bars = parseFloat(document.getElementById('sl-bars').value) || 4;
+  const sr   = parseFloat(document.getElementById('sl-sr').value)   || 48000;
+  const sec  = (60 / bpm) * 4 * bars;
+  const samples = Math.round(sec * sr);
+  document.getElementById('sl-out').innerHTML =
+    outCard('Duration', n(sec, 4), ' s') +
+    outCard('Samples', samples.toLocaleString('en-GB'), '', `at ${(sr/1000)}k Hz`) +
+    outCard('Bars', bars, '', `at ${bpm} BPM`);
+}
+live(['sl-bpm','sl-bars','sl-sr'], renderSampleLen); renderSampleLen();
+
+// ═══════════════════════════════════════════════
+//  5. FREQUENCY → MUSICAL NOTE
+// ═══════════════════════════════════════════════
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function freqToMidi(hz, a4 = 440) {
+  return 12 * Math.log2(hz / a4) + 69;
+}
+function midiToFreq(midi, a4 = 440) {
+  return a4 * Math.pow(2, (midi - 69) / 12);
+}
+function midiToName(midi) {
+  const note = NOTE_NAMES[((midi % 12) + 12) % 12];
+  const oct  = Math.floor(midi / 12) - 1;
+  return { note, oct, name: note + oct };
+}
+
+function renderFreqNote() {
+  const hz = parseFloat(document.getElementById('fn-hz').value) || 440;
+  const a4 = parseFloat(document.getElementById('fn-a4').value) || 440;
+  const midiF  = freqToMidi(hz, a4);
+  const midi   = Math.round(midiF);
+  const { note, oct, name } = midiToName(midi);
+  const noteHz = midiToFreq(midi, a4);
+  const cents  = Math.round(1200 * Math.log2(hz / noteHz));
+  const sign   = cents >= 0 ? '+' : '';
+  document.getElementById('fn-out').innerHTML =
+    outCard('Note', name, '', `MIDI ${midi}`) +
+    outCard('Exact note freq', n(noteHz, 3), ' Hz') +
+    outCard('Cents deviation', `${sign}${cents}`, ' ¢', cents === 0 ? 'perfectly in tune' : cents > 0 ? 'sharp' : 'flat');
+}
+live(['fn-hz','fn-a4'], renderFreqNote); renderFreqNote();
+
+// ═══════════════════════════════════════════════
+//  6. MUSICAL NOTE → FREQUENCY
+// ═══════════════════════════════════════════════
+function renderNoteFreq() {
+  const noteIdx = parseInt(document.getElementById('nf-note').value);
+  const oct     = parseInt(document.getElementById('nf-oct').value);
+  const a4      = parseFloat(document.getElementById('nf-a4').value) || 440;
+  const midi    = (oct + 1) * 12 + noteIdx;
+  const hz      = midiToFreq(midi, a4);
+  const noteName = NOTE_NAMES[noteIdx];
+  document.getElementById('nf-out').innerHTML =
+    outCard('Frequency', n(hz, 3), ' Hz') +
+    outCard('MIDI note', midi, '') +
+    outCard('Period', n(1000/hz, 4), ' ms', 'one cycle');
+  const tb = document.querySelector('#nf-table tbody');
+  tb.innerHTML = '';
+  for (let o = 0; o <= 8; o++) {
+    const m = (o + 1) * 12 + noteIdx;
+    const f = midiToFreq(m, a4);
+    const tr = document.createElement('tr');
+    if (o === oct) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${noteName}${o}</td><td class="${o === oct ? 'col-hl' : 'col-main'}">${n(f, 3)} Hz</td><td class="col-sub">MIDI ${m}</td><td></td>`;
+    tr.cells[3].appendChild(copyBtn(n(f,3)));
+    tb.appendChild(tr);
+  }
+}
+live(['nf-note','nf-oct','nf-a4'], renderNoteFreq); renderNoteFreq();
+
+// ═══════════════════════════════════════════════
+//  7. FREQUENCY → PERIOD
+// ═══════════════════════════════════════════════
+const FREQ_REFS = [20,50,100,200,500,1000,2000,5000,10000,20000];
+
+function renderFreqPeriod() {
+  const hz = parseFloat(document.getElementById('fp-hz').value) || 1000;
+  const ms = 1000 / hz;
+  const us = ms * 1000;
+  document.getElementById('fp-out').innerHTML =
+    outCard('Period', ms >= 0.1 ? n(ms, 3) : n(us, 2), ms >= 0.1 ? ' ms' : ' μs') +
+    outCard('In microseconds', n(us, 2), ' μs') +
+    outCard('Frequency check', n(1000 / ms, 2), ' Hz', 'round-trip');
+  const tb = document.querySelector('#fp-table tbody');
+  tb.innerHTML = '';
+  FREQ_REFS.forEach(f => {
+    const p = 1000 / f;
+    const active = Math.abs(hz - f) < f * 0.05;
+    const tr = document.createElement('tr');
+    if (active) tr.className = 'group-row';
+    const label = f >= 1000 ? (f/1000) + ' kHz' : f + ' Hz';
+    tr.innerHTML = `<td class="col-name">${label}</td><td class="${active ? 'col-hl' : 'col-main'}">${n(p,3)} ms</td><td class="col-sub">${n(p*1000,1)} μs</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['fp-hz'], renderFreqPeriod); renderFreqPeriod();
+
+// ═══════════════════════════════════════════════
+//  8. FREQUENCY → WAVELENGTH
+// ═══════════════════════════════════════════════
+function renderFreqWave() {
+  const hz  = parseFloat(document.getElementById('fw-hz').value)    || 1000;
+  const spd = parseFloat(document.getElementById('fw-speed').value) || 343;
+  const wl  = spd / hz;
+  const ft  = wl * 3.28084;
+  document.getElementById('fw-out').innerHTML =
+    outCard('Wavelength', wl >= 1 ? n(wl,3) : n(wl*100,2), wl >= 1 ? ' m' : ' cm', `${n(ft,3)} ft`) +
+    outCard('¼ wavelength', wl/4 >= 1 ? n(wl/4,3) : n(wl/4*100,2), wl/4 >= 1 ? ' m' : ' cm', 'panel placement') +
+    outCard('Period', n(1000/hz,4), ' ms', '1 full cycle');
+}
+live(['fw-hz','fw-speed'], renderFreqWave); renderFreqWave();
+
+// ═══════════════════════════════════════════════
+//  9. PHASE OFFSET CALCULATOR
+// ═══════════════════════════════════════════════
+function renderPhase() {
+  const hz  = parseFloat(document.getElementById('ph-hz').value)  || 1000;
+  const deg = parseFloat(document.getElementById('ph-deg').value) || 90;
+  const periodMs = 1000 / hz;
+  const delayMs  = (deg / 360) * periodMs;
+  const delayM   = (delayMs / 1000) * 343;
+  document.getElementById('ph-out').innerHTML =
+    outCard('Delay correction', n(delayMs, delayMs < 0.1 ? 4 : 3), ' ms', `${n(delayMs*1000,1)} μs`) +
+    outCard('Distance equiv.', delayM >= 0.01 ? n(delayM,3) : n(delayM*100,2), delayM >= 0.01 ? ' m' : ' cm') +
+    outCard('Full cycle (period)', n(periodMs,3), ' ms');
+  const tb = document.querySelector('#ph-table tbody');
+  tb.innerHTML = '';
+  [44100,48000,88200,96000].forEach(r => {
+    const samples = (delayMs / 1000) * r;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="col-name">${r/1000}k Hz</td><td class="col-main">${n(samples,2)} samples</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['ph-hz','ph-deg'], renderPhase); renderPhase();
+
+// ═══════════════════════════════════════════════
+//  10. DISTANCE → DELAY
+// ═══════════════════════════════════════════════
+function renderDistDelay() {
+  const dist = parseFloat(document.getElementById('dd-dist').value) || 1;
+  const unit = document.getElementById('dd-unit').value;
+  const spd  = parseFloat(document.getElementById('dd-speed').value) || 343;
+  const factors = { m: 1, ft: 0.3048, cm: 0.01, in: 0.0254 };
+  const metres = dist * factors[unit];
+  const ms   = (metres / spd) * 1000;
+  const samp44 = Math.round(ms / 1000 * 44100);
+  const samp48 = Math.round(ms / 1000 * 48000);
+  document.getElementById('dd-out').innerHTML =
+    outCard('Delay', n(ms, 3), ' ms', `${n(ms*1000,1)} μs`) +
+    outCard('Samples @ 44.1k', samp44.toLocaleString('en-GB')) +
+    outCard('Samples @ 48k',   samp48.toLocaleString('en-GB'));
+}
+live(['dd-dist','dd-unit','dd-speed'], renderDistDelay); renderDistDelay();
+
+// ═══════════════════════════════════════════════
+//  11. COMB FILTER FREQUENCIES
+// ═══════════════════════════════════════════════
+function renderComb() {
+  const delayMs = parseFloat(document.getElementById('cf-delay').value) || 3;
+  const delayS  = delayMs / 1000;
+  const first   = 1 / (2 * delayS);
+  document.getElementById('cf-out-main').innerHTML =
+    outCard('First notch', n(first, 1), ' Hz', `every ${n(delayMs*2,2)} ms`) +
+    outCard('Delay input', n(delayMs, 2), ' ms', `${n(delayS*1000,2)} ms`);
+  const tb = document.querySelector('#cf-table tbody');
+  tb.innerHTML = '';
+  for (let i = 1; i <= 8; i++) {
+    const f  = (2*i - 1) * first;
+    const wl = 343 / f;
+    const tr = document.createElement('tr');
+    if (i === 1) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">Notch ${i}</td><td class="${i===1?'col-hl':'col-main'}">${n(f,1)} Hz</td><td class="col-sub">${wl>=1?n(wl,2)+' m':n(wl*100,1)+' cm'}</td>`;
+    tb.appendChild(tr);
+  }
+}
+live(['cf-delay'], renderComb); renderComb();
+
+// ═══════════════════════════════════════════════
+//  12. SAMPLE RATE CONVERTER
+// ═══════════════════════════════════════════════
+const ALL_SR = [22050,44100,48000,88200,96000,192000];
+const SR_LBL = {22050:'22,050 Hz',44100:'44,100 Hz (CD)',48000:'48,000 Hz (video)',88200:'88,200 Hz',96000:'96,000 Hz',192000:'192,000 Hz'};
+
+function renderSRC() {
+  const source  = parseFloat(document.getElementById('src-rate').value) || 44100;
+  const dur     = parseFloat(document.getElementById('src-dur').value)  || 180;
+  const srcSamp = Math.round(source * dur);
+  const tb = document.querySelector('#src-table tbody');
+  tb.innerHTML = '';
+  ALL_SR.forEach(r => {
+    const samples  = Math.round(r * dur);
+    const playback = srcSamp / r;
+    const diff     = playback - dur;
+    const cents    = Math.round(1200 * Math.log2(r / source));
+    const isSource = r === source;
+    const tr = document.createElement('tr');
+    if (isSource) tr.className = 'group-row';
+    const playStr = isSource ? `${n(dur,1)} s (source)` : `${n(playback,2)} s (${diff>0?'+':''}${n(diff,2)} s)`;
+    const pitchStr = isSource ? '—' : (cents>0?'+':'')+cents+' ¢';
+    tr.innerHTML = `
+      <td class="${isSource?'col-hl':'col-name'}">${SR_LBL[r]}${isSource?' ◀':''}</td>
+      <td class="col-main" style="font-variant-numeric:tabular-nums">${samples.toLocaleString('en-GB')}</td>
+      <td class="col-sub" style="font-variant-numeric:tabular-nums">${playStr}</td>
+      <td class="${Math.abs(cents)>10&&!isSource?'col-warn':'col-sub'}">${pitchStr}</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['src-rate','src-dur'], renderSRC); renderSRC();
+
+// ═══════════════════════════════════════════════
+//  13. NYQUIST
+// ═══════════════════════════════════════════════
+const NY_COMMON = [22050,44100,48000,88200,96000,176400,192000];
+
+function renderNyquist() {
+  const sr = parseFloat(document.getElementById('ny-rate').value) || 44100;
+  const ny = sr / 2;
+  document.getElementById('ny-out').innerHTML =
+    outCard('Nyquist frequency', n(ny/1000, 3), ' kHz', `${ny.toLocaleString('en-GB')} Hz`) +
+    outCard('Sample rate', n(sr/1000, 3), ' kHz') +
+    outCard('Max frequency', ny >= 20000 ? '✓ Full range' : `${n(ny/1000,1)} kHz`, '', ny < 20000 ? 'below 20 kHz hearing limit' : 'covers human hearing');
+  const tb = document.querySelector('#ny-table tbody');
+  tb.innerHTML = '';
+  NY_COMMON.forEach(r => {
+    const active = r === Math.round(sr / 100) * 100 || Math.abs(r - sr) < 50;
+    const tr = document.createElement('tr');
+    if (active) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${(r/1000)}k Hz</td><td class="${active?'col-hl':'col-main'}">${n(r/2/1000,3)} kHz</td><td class="col-sub">${r/2 >= 20000 ? 'Full range' : (r/2/1000).toFixed(2)+' kHz'}</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['ny-rate'], renderNyquist); renderNyquist();
+
+// ═══════════════════════════════════════════════
+//  14. BIT DEPTH → DYNAMIC RANGE
+// ═══════════════════════════════════════════════
+const BD_COMMON = [8,16,20,24,32,64];
+
+function renderBitDepth() {
+  const bits = parseFloat(document.getElementById('bd-bits').value) || 24;
+  const dr   = bits * 6.02;
+  const drSin = dr + 1.76;
+  document.getElementById('bd-out').innerHTML =
+    outCard('Dynamic range', n(dr, 1), ' dB', 'theoretical') +
+    outCard('Sinusoidal signal', n(drSin, 1), ' dB', '+1.76 dB correction') +
+    outCard('Noise floor', '-' + n(dr, 1), ' dBFS');
+  const tb = document.querySelector('#bd-table tbody');
+  tb.innerHTML = '';
+  BD_COMMON.forEach(b => {
+    const active = b === Math.round(bits);
+    const tr = document.createElement('tr');
+    if (active) tr.className = 'group-row';
+    const label = {8:'8-bit',16:'16-bit (CD)',20:'20-bit',24:'24-bit (studio)',32:'32-bit float',64:'64-bit double'}[b] || b+'-bit';
+    tr.innerHTML = `<td class="col-name">${label}</td><td class="${active?'col-hl':'col-main'}">${n(b*6.02,1)} dB</td><td class="col-sub">${b} bits</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['bd-bits'], renderBitDepth); renderBitDepth();
+
+// ═══════════════════════════════════════════════
+//  15. LATENCY CALCULATOR
+// ═══════════════════════════════════════════════
+const LAT_BUFS = [32,64,128,256,512,1024,2048];
+
+function latUsage(ms) {
+  if (ms < 3)  return 'Live performance';
+  if (ms < 6)  return 'Tracking / monitoring';
+  if (ms < 15) return 'Mixing';
+  if (ms < 30) return 'Editing / mastering';
+  return 'Bouncing / export only';
+}
+
+function renderLatency() {
+  const buf = parseFloat(document.getElementById('lat-buf').value) || 256;
+  const sr  = parseFloat(document.getElementById('lat-sr').value)  || 48000;
+  const ms  = (buf / sr) * 1000;
+  document.getElementById('lat-out').innerHTML =
+    outCard('One-way latency', n(ms, 3), ' ms') +
+    outCard('Roundtrip', n(ms * 2, 3), ' ms', 'input → output → input') +
+    outCard('Best use', latUsage(ms), '', '');
+  const tb = document.querySelector('#lat-table tbody');
+  tb.innerHTML = '';
+  LAT_BUFS.forEach(b => {
+    const m = (b / sr) * 1000;
+    const active = b === buf;
+    const tr = document.createElement('tr');
+    if (active) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${b}</td><td class="${active?'col-hl':'col-main'}">${n(m,3)} ms</td><td class="col-sub">${n(m*2,3)} ms</td><td class="col-sub" style="font-size:12px">${latUsage(m)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['lat-buf','lat-sr'], renderLatency); renderLatency();
+
+// ═══════════════════════════════════════════════
+//  16. DURATION → SAMPLES
+// ═══════════════════════════════════════════════
+function renderDurSamples() {
+  const sec  = parseFloat(document.getElementById('ds-sec').value) || 3;
+  const sr   = parseFloat(document.getElementById('ds-sr').value)  || 48000;
+  const samp = Math.round(sec * sr);
+  const stereo = samp * 2;
+  document.getElementById('ds-out').innerHTML =
+    outCard('Samples (mono)', samp.toLocaleString('en-GB')) +
+    outCard('Samples (stereo)', stereo.toLocaleString('en-GB'), '', 'mono × 2') +
+    outCard('Duration check', n(samp / sr, 4), ' s', 'round-trip');
+}
+live(['ds-sec','ds-sr'], renderDurSamples); renderDurSamples();
+
+// ═══════════════════════════════════════════════
+//  17. ROOM FUNDAMENTAL FREQUENCY
+// ═══════════════════════════════════════════════
+function renderRoom() {
+  const unit  = document.getElementById('rm-unit').value;
+  const factor = unit === 'ft' ? 0.3048 : 1;
+  const L = (parseFloat(document.getElementById('rm-l').value) || 5) * factor;
+  const W = (parseFloat(document.getElementById('rm-w').value) || 4) * factor;
+  const H = (parseFloat(document.getElementById('rm-h').value) || 2.6) * factor;
+  const spd = 343;
+  const tb = document.querySelector('#rm-table tbody');
+  tb.innerHTML = '';
+  [['Length', L], ['Width', W], ['Height', H]].forEach(([dim, d]) => {
+    const modes = [1,2,3].map(n => spd / (2 * d * n));
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="col-name">${dim} (${n(d/factor,2)} ${unit})</td>
+      ${modes.map((f,i) => `<td class="${i===0?'col-main':'col-sub'}">${n(f,1)} Hz</td>`).join('')}`;
+    tb.appendChild(tr);
+  });
+}
+live(['rm-l','rm-w','rm-h','rm-unit'], renderRoom); renderRoom();
+
+// ═══════════════════════════════════════════════
+//  18. BITRATE → FILE SIZE
+// ═══════════════════════════════════════════════
+const BR_REFS = [
+  {label:'64 kbps MP3',   kbps:64},
+  {label:'128 kbps MP3',  kbps:128},
+  {label:'192 kbps',      kbps:192},
+  {label:'320 kbps MP3',  kbps:320},
+  {label:'WAV 16-bit CD', kbps:1411.2},
+  {label:'WAV 24-bit 48k',kbps:2304},
+];
+
+function fmtSize(b) {
+  if (b >= 1e9) return n(b/1e9, 2) + ' GB';
+  if (b >= 1e6) return n(b/1e6, 2) + ' MB';
+  return n(b/1e3, 1) + ' KB';
+}
+
+function renderBitrate() {
+  const custom = parseFloat(document.getElementById('br-custom').value);
+  const kbps   = custom > 0 ? custom : parseFloat(document.getElementById('br-rate').value) || 320;
+  const min    = parseFloat(document.getElementById('br-min').value) || 0;
+  const sec    = parseFloat(document.getElementById('br-sec').value) || 0;
+  const total  = min * 60 + sec;
+  const bytes  = (kbps * 1000 * total) / 8;
+  document.getElementById('br-out').innerHTML =
+    outCard('File size', fmtSize(bytes), '', `${Math.round(bytes).toLocaleString('en-GB')} bytes`) +
+    outCard('Bitrate', n(kbps, kbps%1?1:0), ' kbps') +
+    outCard('Duration', `${min}m ${sec}s`);
+  const tb = document.querySelector('#br-table tbody');
+  tb.innerHTML = '';
+  BR_REFS.forEach(r => {
+    const b = (r.kbps * 1000 * total) / 8;
+    const active = Math.abs(r.kbps - kbps) < 0.2;
+    const tr = document.createElement('tr');
+    if (active) tr.className = 'group-row';
+    tr.innerHTML = `<td class="col-name">${r.label}</td><td class="${active?'col-hl':'col-main'}">${fmtSize(b)}</td><td class="col-sub">${r.kbps} kbps</td>`;
+    tb.appendChild(tr);
+  });
+}
+live(['br-rate','br-custom','br-min','br-sec'], renderBitrate); renderBitrate();
+</script>
+
+  <script>
+  (function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+  var ctx=c.getContext('2d');
+  var g=ctx.createLinearGradient(0,0,sz,sz);
+  g.addColorStop(0,'#1f1040');g.addColorStop(1,'#080514');
+  ctx.fillStyle=g;
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><rect x="4" y="20" width="4" height="8" rx="2" fill="white" opacity="0.5"/><rect x="12" y="14" width="4" height="20" rx="2" fill="white" opacity="0.7"/><rect x="20" y="8" width="4" height="32" rx="2" fill="white"/><rect x="28" y="4" width="4" height="40" rx="2" fill="white"/><rect x="36" y="12" width="4" height="24" rx="2" fill="white" opacity="0.7"/><rect x="44" y="18" width="4" height="12" rx="2" fill="white" opacity="0.4"/></svg>';
+  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
+  }catch(e){}})();
+  </script>
+
+<div style="text-align:center;padding:10px 16px 28px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+<div style="text-align:center;padding:4px 0 12px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:rgba(0,0,0,0.3);font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;font-family:-apple-system,sans-serif;">Report a bug</button></div>
 
   <!-- ── Bug report ──────────────────────────────────────────────── -->
   <style>

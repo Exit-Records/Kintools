@@ -517,13 +517,1112 @@
 </head>
 <body>
 
-<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
-  KIN-008 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
+<div class="demo-bar" id="demo-bar">
+  <span>Demo mode — sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
 
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+<!-- ══════════════════════════════════════════════
+     HOME VIEW
+════════════════════════════════════════════════ -->
+<div id="view-home" class="view">
+  <header class="kin-header">
+    <div class="brand">
+      <span class="brand-name">Flashcards</span>
+      <span class="brand-sub">KIN-008 · <span style="text-transform:none">d</span>Bridge</span>
+    </div>
+    <div class="header-actions">
+      <span class="kin-badge">KIN-008</span>
+    </div>
+  </header>
 
-  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-</footer>
+  <div class="view-content">
+    <div class="home-top">
+      <h2>Your Decks</h2>
+      <button class="btn-primary" id="btn-new-deck">+ New Deck</button>
+    </div>
+    <div class="deck-grid" id="deck-grid"></div>
+    <div class="empty-state" id="home-empty" style="display:none">
+      <div class="icon">🗂</div>
+      <p>No decks yet.<br>Create your first deck to get started.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     DECK VIEW
+════════════════════════════════════════════════ -->
+<div id="view-deck" class="view">
+  <header class="kin-header">
+    <button class="btn-back" id="btn-deck-back">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 2L5 8l5.5 6"/></svg>
+      Decks
+    </button>
+    <span class="kin-badge">KIN-008</span>
+  </header>
+
+  <div class="view-content">
+    <div class="deck-header">
+      <div class="deck-title-row">
+        <span class="deck-title" id="deck-title" contenteditable="true" spellcheck="false"></span>
+      </div>
+      <div class="deck-meta" id="deck-meta"></div>
+
+      <div class="study-options">
+        <label class="toggle-opt">
+          <input type="checkbox" id="opt-shuffle"> Shuffle
+        </label>
+        <label class="toggle-opt">
+          <input type="checkbox" id="opt-reverse"> Reverse
+        </label>
+        <label class="toggle-opt">
+          <input type="checkbox" id="opt-confidence" checked> Easy / Hard / No
+        </label>
+      </div>
+
+      <div class="filter-row" id="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="unknown">Unknown</button>
+        <button class="filter-btn" data-filter="learning">Learning</button>
+        <button class="filter-btn" data-filter="known">Known</button>
+      </div>
+
+      <div class="study-controls">
+        <button class="btn-study" id="btn-study-now">Study Now</button>
+      </div>
+    </div>
+
+    <div id="deck-card-list" class="card-list"></div>
+
+    <button class="btn-add-card" id="btn-show-add-form">
+      <span>＋</span> Add Card
+    </button>
+
+    <div class="add-card-form" id="add-card-form" style="display:none">
+      <h4 id="add-form-title">Add Card</h4>
+      <div class="form-row">
+        <textarea id="input-front" placeholder="Question / front side"></textarea>
+        <textarea id="input-back" placeholder="Answer / back side"></textarea>
+      </div>
+      <div class="cloze-tip">
+        <span class="cloze-tip-label">🧩 Cloze</span>
+        Wrap the answer in <code>{{&nbsp;}}</code> to make a fill-in-the-blank card — leave Back empty.<br>
+        <em>Example:</em> <code>The capital of France is {{Paris}}</code>
+      </div>
+      <div class="form-actions">
+        <button class="btn-ghost" id="btn-cancel-add">Cancel</button>
+        <button class="btn-save" id="btn-save-card">Save</button>
+      </div>
+    </div>
+
+    <div class="deck-actions-row">
+      <button class="btn-deck-action" id="btn-export-deck">Export</button>
+      <button class="btn-deck-action" id="btn-import-deck">Import</button>
+      <button class="btn-deck-action danger" id="btn-delete-deck">Delete Deck</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STUDY VIEW
+════════════════════════════════════════════════ -->
+<div id="view-study" class="view">
+  <div class="study-header">
+    <button class="btn-back" id="btn-study-back">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 2L5 8l5.5 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      Back
+    </button>
+    <span class="study-deck-name" id="study-deck-name"></span>
+    <span class="study-progress-text" id="study-progress-text"></span>
+  </div>
+  <div class="study-progress-bar">
+    <div class="study-progress-fill" id="study-progress-fill"></div>
+  </div>
+
+  <div class="study-body" id="study-body">
+    <div class="flashcard-scene" id="flashcard-scene">
+      <div class="flashcard" id="flashcard">
+        <div class="card-face front" id="card-front">
+          <span class="card-face-label">Front</span>
+          <div class="card-face-text" id="card-front-text"></div>
+          <div class="card-face-hint">Tap or press <kbd>Space</kbd> to flip</div>
+        </div>
+        <div class="card-face back" id="card-back">
+          <span class="card-face-label">Back</span>
+          <div class="card-face-text" id="card-back-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="answer-buttons" id="answer-buttons">
+      <button class="ans-btn dontknow" id="btn-dontknow">✕ Don't Know</button>
+      <button class="ans-btn hard hidden" id="btn-hard">~ Hard</button>
+      <button class="ans-btn know" id="btn-know">✓ Know</button>
+    </div>
+
+    <div class="flip-hint" id="flip-hint">← Don't Know &nbsp;·&nbsp; Space to flip &nbsp;·&nbsp; → Know</div>
+  </div>
+
+  <div class="study-complete" id="study-complete">
+    <div class="big-icon">🎉</div>
+    <h2>Session Complete!</h2>
+    <div class="study-stats">
+      <div class="stat-item"><span class="stat-num stat-green" id="stat-know">0</span><span class="stat-lbl">Know</span></div>
+      <div class="stat-item"><span class="stat-num stat-amber" id="stat-hard">0</span><span class="stat-lbl">Hard</span></div>
+      <div class="stat-item"><span class="stat-num stat-red" id="stat-dontknow">0</span><span class="stat-lbl">Don't Know</span></div>
+    </div>
+    <p id="complete-msg"></p>
+    <button class="btn-primary" id="btn-study-again">Study Again</button>
+    <button class="btn-ghost" id="btn-back-from-complete">Back to Deck</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modal-import">
+  <div class="modal">
+    <h3>Import Deck</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">
+      Paste cards below. One card per line: <code>Front | Back</code><br>
+      Cloze: <code>The capital of France is {{Paris}}</code><br>
+      Lines starting with <code>#</code> are ignored.
+    </p>
+    <textarea id="import-text" rows="10" placeholder="# Deck: Spanish Basics&#10;Hello | Hola&#10;Dog | Perro&#10;The capital of France is {{Paris}}"></textarea>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="btn-import-cancel">Cancel</button>
+      <button class="btn-save" id="btn-import-confirm">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-new-deck">
+  <div class="modal">
+    <h3>New Deck</h3>
+    <div class="form-row" style="margin-bottom:0">
+      <input type="text" id="input-new-deck-name" placeholder="Deck name" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="btn-new-deck-cancel">Cancel</button>
+      <button class="btn-save" id="btn-new-deck-confirm">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-confirm">
+  <div class="modal">
+    <h3 id="confirm-title">Are you sure?</h3>
+    <p id="confirm-body" style="color:var(--muted);font-size:14px;margin-bottom:4px"></p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="btn-confirm-cancel">Cancel</button>
+      <button class="btn-danger" id="btn-confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+//  DEMO MODE
+// ═══════════════════════════════════════════════════════════════
+const isDemo = new URLSearchParams(location.search).get('demo') === 'true';
+
+function demoData() {
+  let t = 1700000000000; let i = 0;
+  function uid() { return (t + i++).toString(36); }
+
+  const d1 = uid();
+  const d2 = uid();
+  const d3 = uid();
+
+  return { seeded: true, decks: {
+    [d1]: { id: d1, name: 'Spanish Basics', created: t - 30 * 86400000, cards: [
+      { id: uid(), front: 'Hello',     back: 'Hola',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Goodbye',   back: 'Adiós',      type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Thank you', back: 'Gracias',    type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Please',    back: 'Por favor',  type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Yes',       back: 'Sí',         type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'No',        back: 'No',         type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Dog',       back: 'Perro',      type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Cat',       back: 'Gato',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'House',     back: 'Casa',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Water',     back: 'Agua',       type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Food',      back: 'Comida',     type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Friend',    back: 'Amigo',      type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Family',    back: 'Familia',    type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Street',    back: 'Calle',      type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Book',      back: 'Libro',      type: 'standard', state: 'new',      ease: 1 },
+    ]},
+    [d2]: { id: d2, name: 'World Capitals', created: t - 15 * 86400000, cards: [
+      { id: uid(), front: 'France',    back: 'Paris',    type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Germany',   back: 'Berlin',   type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Italy',     back: 'Rome',     type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Japan',     back: 'Tokyo',    type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Spain',     back: 'Madrid',   type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'China',     back: 'Beijing',  type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Australia', back: 'Canberra', type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Brazil',    back: 'Brasília', type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Egypt',     back: 'Cairo',    type: 'standard', state: 'new',      ease: 1 },
+      { id: uid(), front: 'Canada',    back: 'Ottawa',   type: 'standard', state: 'new',      ease: 1 },
+    ]},
+    [d3]: { id: d3, name: 'Keyboard Shortcuts', created: t - 7 * 86400000, cards: [
+      { id: uid(), front: 'Copy',       back: 'Ctrl+C / Cmd+C',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Paste',      back: 'Ctrl+V / Cmd+V',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Cut',        back: 'Ctrl+X / Cmd+X',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Undo',       back: 'Ctrl+Z / Cmd+Z',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Save',       back: 'Ctrl+S / Cmd+S',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Select All', back: 'Ctrl+A / Cmd+A',       type: 'standard', state: 'known',    ease: 1 },
+      { id: uid(), front: 'Find',       back: 'Ctrl+F / Cmd+F',       type: 'standard', state: 'learning', ease: 1 },
+      { id: uid(), front: 'Redo',       back: 'Ctrl+Y / Cmd+Shift+Z', type: 'standard', state: 'learning', ease: 1 },
+    ]},
+  }};
+}
+
+window.startFresh = function() {
+  localStorage.removeItem('kin008_flashcards');
+  if (history.replaceState) history.replaceState({}, '', location.pathname);
+  location.reload();
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA LAYER
+// ═══════════════════════════════════════════════════════════════
+const STORE_KEY = 'kin008_flashcards';
+
+// ── Starter decks (seeded once on first load) ───────────────
+const STARTER_DECKS = [
+  { name: 'World Capitals', cards: [
+    ['France','Paris'],['Germany','Berlin'],['Italy','Rome'],['Spain','Madrid'],
+    ['Japan','Tokyo'],['China','Beijing'],['Thailand','Bangkok'],['Australia','Canberra'],
+    ['Canada','Ottawa'],['Brazil','Brasilia'],['Egypt','Cairo'],
+    ['Argentina','Buenos Aires'],['South Korea','Seoul'],
+    ['Indonesia','Jakarta'],['Turkey','Ankara'],
+  ]},
+  { name: 'Countries and Currencies', cards: [
+    ['United States','Dollar'],['Japan','Yen'],['United Kingdom','Pound'],
+    ['Thailand','Baht'],['China','Yuan'],['India','Rupee'],
+    ['South Korea','Won'],['European Union','Euro'],['Mexico','Peso'],['Brazil','Real'],
+  ]},
+  { name: 'Spanish Basics', cards: [
+    ['Hello','Hola'],['Goodbye','Adios'],['Thank you','Gracias'],['Please','Por favor'],
+    ['Yes','Sí'],['No','No'],['Dog','Perro'],['Cat','Gato'],['House','Casa'],
+    ['Water','Agua'],['Food','Comida'],['Friend','Amigo'],['Family','Familia'],
+    ['Street','Calle'],['Book','Libro'],
+  ]},
+  { name: 'French Basics', cards: [
+    ['Hello','Bonjour'],['Goodbye','Au revoir'],['Thank you','Merci'],
+    ["Please","S'il vous plaît"],['Yes','Oui'],['No','Non'],
+    ['Dog','Chien'],['Cat','Chat'],['House','Maison'],
+    ['Water','Eau'],['Food','Nourriture'],['Friend','Ami'],
+  ]},
+  { name: 'Music Theory', cards: [
+    ['Tempo','Speed of a piece of music'],['BPM','Beats per minute'],
+    ['Scale','Ordered sequence of musical notes'],['Chord','Three or more notes played together'],
+    ['Major scale','A scale with a bright sound'],['Minor scale','A scale with a darker sound'],
+    ['Octave','Interval of eight notes'],['Harmony','Combination of notes played together'],
+    ['Melody','Main musical line'],['Rhythm','Pattern of beats'],
+  ]},
+  { name: 'General Knowledge', cards: [
+    ['Water freezes at','0°C'],['The largest planet in the solar system','Jupiter'],
+    ['The fastest land animal','Cheetah'],['The chemical symbol for gold','Au'],
+    ['The author of 1984','George Orwell'],['The tallest mountain on Earth','Mount Everest'],
+    ['The largest ocean','Pacific Ocean'],['The first man on the Moon','Neil Armstrong'],
+  ]},
+  { name: 'Solar System', cards: [
+    ['Closest planet to the Sun','Mercury'],['Largest planet','Jupiter'],
+    ['Planet known as the Red Planet','Mars'],['Planet with prominent rings','Saturn'],
+    ['Our galaxy','Milky Way'],['The star at the center of our system','Sun'],
+  ]},
+  { name: 'Human Body', cards: [
+    ['Organ that pumps blood','Heart'],['Largest organ in the body','Skin'],
+    ['Organ responsible for breathing','Lungs'],['Bone protecting the brain','Skull'],
+    ['Organ that filters blood','Kidneys'],['Part of the body used for hearing','Ears'],
+  ]},
+  { name: 'Programming Basics', cards: [
+    ['HTML','Structure of web pages'],['CSS','Styling for web pages'],
+    ['JavaScript','Programming language for web interaction'],
+    ['Variable','A container for storing data'],
+    ['Function','A reusable block of code'],['Array','A list of values'],
+  ]},
+  { name: 'Keyboard Shortcuts', cards: [
+    ['Copy','Ctrl+C or Cmd+C'],['Paste','Ctrl+V or Cmd+V'],['Cut','Ctrl+X or Cmd+X'],
+    ['Undo','Ctrl+Z or Cmd+Z'],['Redo','Ctrl+Y or Cmd+Shift+Z'],
+    ['Save','Ctrl+S or Cmd+S'],['Select All','Ctrl+A or Cmd+A'],['Find','Ctrl+F or Cmd+F'],
+  ]},
+  { name: 'Geography Basics', cards: [
+    ['Largest continent','Asia'],['Largest desert','Sahara'],
+    ['Longest river','Nile'],['Highest mountain range','Himalayas'],
+    ['Largest country by area','Russia'],
+  ]},
+  { name: 'Famous Scientists', cards: [
+    ['Theory of relativity','Albert Einstein'],['Law of gravity','Isaac Newton'],
+    ['Evolution by natural selection','Charles Darwin'],
+    ['Radioactivity research','Marie Curie'],
+    ['Electric light bulb development','Thomas Edison'],
+  ]},
+  { name: 'Cloze Examples 🧩', cards: [
+    ['The capital of France is {{Paris}}',''],
+    ['Water boils at {{100}}°C at sea level',''],
+    ['The chemical symbol for gold is {{Au}}',''],
+    ['{{Neil Armstrong}} was the first person to walk on the Moon',''],
+    ['The largest planet in our solar system is {{Jupiter}}',''],
+    ['{{DNA}} carries the genetic information of living organisms',''],
+    ['The speed of light is approximately {{299,792}} kilometres per second',''],
+    ['{{Shakespeare}} wrote Romeo and Juliet',''],
+    ['The {{heart}} pumps blood around the body',''],
+    ['{{Photosynthesis}} converts sunlight into energy in plants',''],
+  ]},
+];
+
+function seedStarterDecks(data) {
+  let t = Date.now();
+  STARTER_DECKS.forEach(deck => {
+    const id = (t++).toString(36);
+    data.decks[id] = {
+      id, name: deck.name, created: t,
+      cards: deck.cards.map(([front, back]) => ({
+        id: (t++).toString(36),
+        front, back,
+        type: /\{\{.+?\}\}/.test(front) ? 'cloze' : 'standard',
+        state: 'new', ease: 1,
+      })),
+    };
+  });
+  return data;
+}
+
+function loadData() {
+  if (isDemo) return demoData();
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const data = raw ? JSON.parse(raw) : { decks: {} };
+    if (!data.seeded) {
+      seedStarterDecks(data);
+      data.seeded = true;
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    }
+    return data;
+  } catch { return { decks: {} }; }
+}
+function saveData() {
+  if (isDemo) return;
+  localStorage.setItem(STORE_KEY, JSON.stringify(db));
+}
+
+let db = loadData();
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function createDeck(name) {
+  const id = uid();
+  db.decks[id] = { id, name, cards: [], created: Date.now() };
+  saveData();
+  return id;
+}
+
+function deleteDeck(id) {
+  delete db.decks[id];
+  saveData();
+}
+
+function getDeck(id) { return db.decks[id]; }
+
+function addCard(deckId, front, back) {
+  const deck = getDeck(deckId);
+  if (!deck) return;
+  const type = /\{\{.+?\}\}/.test(front) ? 'cloze' : 'standard';
+  deck.cards.push({ id: uid(), front, back: back || '', type, state: 'new', ease: 1 });
+  saveData();
+}
+
+function updateCard(deckId, cardId, front, back) {
+  const deck = getDeck(deckId);
+  if (!deck) return;
+  const card = deck.cards.find(c => c.id === cardId);
+  if (!card) return;
+  card.front = front;
+  card.back = back || '';
+  card.type = /\{\{.+?\}\}/.test(front) ? 'cloze' : 'standard';
+  saveData();
+}
+
+function deleteCard(deckId, cardId) {
+  const deck = getDeck(deckId);
+  if (!deck) return;
+  deck.cards = deck.cards.filter(c => c.id !== cardId);
+  saveData();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ROUTER
+// ═══════════════════════════════════════════════════════════════
+const views = {
+  home:  document.getElementById('view-home'),
+  deck:  document.getElementById('view-deck'),
+  study: document.getElementById('view-study'),
+};
+
+function showView(name) {
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  views[name].classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════════════════════════
+function renderHome() {
+  showView('home');
+  const grid = document.getElementById('deck-grid');
+  const empty = document.getElementById('home-empty');
+  const decks = Object.values(db.decks);
+  grid.innerHTML = '';
+
+  if (!decks.length) {
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  decks.sort((a, b) => (b.created || 0) - (a.created || 0));
+  decks.forEach(deck => {
+    const total = deck.cards.length;
+    const known = deck.cards.filter(c => c.state === 'known').length;
+    const pct = total ? Math.round(known / total * 100) : 0;
+
+    const el = document.createElement('div');
+    el.className = 'deck-card';
+    el.innerHTML = `
+      <div class="deck-card-info">
+        <div class="deck-card-name">${esc(deck.name)}</div>
+        <div class="deck-card-meta">${total} card${total !== 1 ? 's' : ''} · ${pct}% known</div>
+        <div class="deck-card-progress">
+          <div class="deck-card-progress-fill" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <button class="deck-delete-btn" data-id="${deck.id}" title="Delete deck">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 2h5M2 4h11M4 4l.75 8.5h5.5L11 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <span class="deck-card-arrow">›</span>`;
+    el.querySelector('.deck-card-info').addEventListener('click', () => renderDeck(deck.id));
+    el.querySelector('.deck-card-arrow').addEventListener('click', () => renderDeck(deck.id));
+    el.querySelector('.deck-delete-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      showConfirm('Delete Deck', `Delete "${deck.name}" and all its cards? This cannot be undone.`, () => {
+        deleteDeck(deck.id);
+        toast('Deck deleted');
+        renderHome();
+      });
+    });
+    grid.appendChild(el);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DECK VIEW
+// ═══════════════════════════════════════════════════════════════
+let currentDeckId = null;
+let currentFilter = 'all';
+let editingCardId  = null;
+
+function renderDeck(deckId) {
+  currentDeckId = deckId;
+  const deck = getDeck(deckId);
+  if (!deck) return renderHome();
+
+  showView('deck');
+  document.getElementById('deck-title').textContent = deck.name;
+  renderDeckCards();
+  hideAddForm();
+}
+
+function renderDeckMeta() {
+  const deck = getDeck(currentDeckId);
+  if (!deck) return;
+  const total = deck.cards.length;
+  const known = deck.cards.filter(c => c.state === 'known').length;
+  const learning = deck.cards.filter(c => c.state === 'learning').length;
+  const newCards = deck.cards.filter(c => c.state === 'new').length;
+  document.getElementById('deck-meta').textContent =
+    `${total} cards · ${newCards} new · ${learning} learning · ${known} known`;
+}
+
+function renderDeckCards() {
+  const deck = getDeck(currentDeckId);
+  if (!deck) return;
+  renderDeckMeta();
+
+  const filtered = deck.cards.filter(c => {
+    if (currentFilter === 'unknown') return c.state === 'new' || c.state === 'learning';
+    if (currentFilter === 'learning') return c.state === 'learning';
+    if (currentFilter === 'known')    return c.state === 'known';
+    return true;
+  });
+
+  const list = document.getElementById('deck-card-list');
+  list.innerHTML = '';
+
+  filtered.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'card-item';
+    el.innerHTML = `
+      <div class="card-item-body">
+        <div class="card-item-front">${esc(renderClozePreview(card.front))}</div>
+        <div class="card-item-back">${esc(card.back || '—')}</div>
+      </div>
+      <span class="card-item-state state-${card.state}">${card.state}</span>
+      <div class="card-item-actions">
+        <button class="btn-sm" data-edit="${card.id}" title="Edit">✎</button>
+        <button class="btn-sm danger" data-del="${card.id}" title="Delete">✕</button>
+      </div>`;
+    list.appendChild(el);
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:14px">No cards match this filter.</div>`;
+  }
+
+  list.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.addEventListener('click', () => startEditCard(btn.dataset.edit));
+  });
+  list.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', () => confirmDeleteCard(btn.dataset.del));
+  });
+}
+
+function renderClozePreview(text) {
+  return text.replace(/\{\{(.+?)\}\}/g, '[$1]');
+}
+
+function startEditCard(cardId) {
+  const deck = getDeck(currentDeckId);
+  const card = deck.cards.find(c => c.id === cardId);
+  if (!card) return;
+  editingCardId = cardId;
+  document.getElementById('input-front').value = card.front;
+  document.getElementById('input-back').value = card.back;
+  document.getElementById('add-form-title').textContent = 'Edit Card';
+  document.getElementById('add-card-form').style.display = '';
+  document.getElementById('btn-show-add-form').style.display = 'none';
+  document.getElementById('input-front').focus();
+}
+
+function confirmDeleteCard(cardId) {
+  const deck = getDeck(currentDeckId);
+  const card = deck.cards.find(c => c.id === cardId);
+  showConfirm('Delete Card', `Delete "${renderClozePreview(card.front)}"? This cannot be undone.`, () => {
+    deleteCard(currentDeckId, cardId);
+    renderDeckCards();
+    toast('Card deleted');
+  });
+}
+
+function hideAddForm() {
+  document.getElementById('add-card-form').style.display = 'none';
+  document.getElementById('btn-show-add-form').style.display = '';
+  document.getElementById('input-front').value = '';
+  document.getElementById('input-back').value = '';
+  document.getElementById('add-form-title').textContent = 'Add Card';
+  editingCardId = null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  STUDY ENGINE
+// ═══════════════════════════════════════════════════════════════
+let study = {
+  queue: [], original: [], flipped: false,
+  knowCount: 0, hardCount: 0, dontKnowCount: 0,
+  totalSeen: 0, deckId: null, confidenceMode: true,
+};
+
+function buildQueue(deckId) {
+  const deck = getDeck(deckId);
+  if (!deck) return [];
+  const filter = currentFilter;
+  const shuffle = document.getElementById('opt-shuffle').checked;
+  const reverse = document.getElementById('opt-reverse').checked;
+
+  let cards = deck.cards.filter(c => {
+    if (filter === 'unknown') return c.state === 'new' || c.state === 'learning';
+    if (filter === 'learning') return c.state === 'learning';
+    if (filter === 'known')    return c.state === 'known';
+    return true;
+  }).map(c => ({ ...c })); // shallow copy
+
+  if (reverse) {
+    const reversed = cards.map(c => ({ ...c, id: c.id + '_r', front: c.back || c.front, back: c.front, _reversed: true }));
+    cards = [...cards, ...reversed];
+  }
+
+  if (shuffle) {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+  }
+
+  return cards;
+}
+
+function startStudy(deckId) {
+  const queue = buildQueue(deckId);
+  if (!queue.length) { toast('No cards to study with current filter.'); return; }
+
+  study = {
+    queue: [...queue], original: [...queue],
+    flipped: false,
+    knowCount: 0, hardCount: 0, dontKnowCount: 0,
+    totalSeen: 0,
+    deckId,
+    confidenceMode: document.getElementById('opt-confidence').checked,
+  };
+
+  showView('study');
+  document.getElementById('study-body').style.display = '';
+  document.getElementById('study-complete').style.display = 'none';
+  document.getElementById('study-deck-name').textContent = getDeck(deckId).name;
+  showCard();
+}
+
+function showCard() {
+  if (!study.queue.length) {
+    showComplete();
+    return;
+  }
+
+  study.flipped = false;
+  const card = study.queue[0];
+  const total = study.original.length;
+  const remaining = study.queue.length;
+  const seen = total - remaining;
+
+  document.getElementById('study-progress-text').textContent = `${seen + 1} / ${total}`;
+  const pct = total > 0 ? (seen / total * 100) : 0;
+  document.getElementById('study-progress-fill').style.width = pct + '%';
+
+  // Hide answer buttons immediately
+  const ansDiv = document.getElementById('answer-buttons');
+  ansDiv.style.opacity = '0';
+  ansDiv.style.pointerEvents = 'none';
+  document.getElementById('btn-hard').classList.toggle('hidden', !study.confidenceMode);
+
+  const fc = document.getElementById('flashcard');
+  const frontEl = document.getElementById('card-front-text');
+  const backEl = document.getElementById('card-back-text');
+
+  function setBackContent() {
+    if (card.type === 'cloze') {
+      backEl.innerHTML = renderClozeReveal(card.front);
+    } else {
+      backEl.textContent = card.back || '—';
+    }
+  }
+
+  // Always safe to update front immediately — it's hidden while back is showing
+  if (card.type === 'cloze') {
+    frontEl.innerHTML = renderClozeBlank(card.front);
+  } else {
+    frontEl.textContent = card.front;
+  }
+
+  if (fc.classList.contains('flipped')) {
+    // Flip back first; update back content only after animation ends
+    // so the next card's answer never flashes during the rotation
+    fc.classList.remove('flipped');
+    const onEnd = () => {
+      fc.removeEventListener('transitionend', onEnd);
+      setBackContent();
+    };
+    fc.addEventListener('transitionend', onEnd);
+  } else {
+    setBackContent();
+  }
+}
+
+function flipCard() {
+  if (study.flipped) return;
+  study.flipped = true;
+  document.getElementById('flashcard').classList.add('flipped');
+  const ansDiv = document.getElementById('answer-buttons');
+  ansDiv.style.opacity = '1';
+  ansDiv.style.pointerEvents = '';
+}
+
+function handleAnswer(result) {
+  if (!study.flipped) { flipCard(); return; }
+  const card = study.queue.shift();
+  study.totalSeen++;
+
+  // Update persistent card state
+  const deck = getDeck(study.deckId);
+  const realCard = deck && deck.cards.find(c => c.id === card.id.replace('_r',''));
+
+  if (result === 'know') {
+    study.knowCount++;
+    if (realCard) realCard.state = 'known';
+    // Card exits queue (already shifted)
+  } else if (result === 'hard') {
+    study.hardCount++;
+    if (realCard) realCard.state = 'learning';
+    // Reinsert ~5 positions ahead
+    const pos = Math.min(5, study.queue.length);
+    study.queue.splice(pos, 0, card);
+  } else { // dontknow
+    study.dontKnowCount++;
+    if (realCard) realCard.state = 'learning';
+    // Reinsert within next ~3
+    const pos = Math.min(3, study.queue.length);
+    study.queue.splice(pos, 0, card);
+  }
+
+  saveData();
+  showCard();
+}
+
+function showComplete() {
+  document.getElementById('study-body').style.display = 'none';
+  const comp = document.getElementById('study-complete');
+  comp.style.display = 'flex';
+
+  document.getElementById('stat-know').textContent = study.knowCount;
+  document.getElementById('stat-hard').textContent = study.hardCount;
+  document.getElementById('stat-dontknow').textContent = study.dontKnowCount;
+
+  const pct = study.totalSeen > 0 ? Math.round(study.knowCount / study.totalSeen * 100) : 0;
+  const msgs = {
+    100: 'Perfect session! All cards known.',
+    80: 'Great work — almost there!',
+    50: 'Good progress. Keep going!',
+    0:  'Keep practicing — you\'ll get there.',
+  };
+  const msg = pct === 100 ? msgs[100] : pct >= 80 ? msgs[80] : pct >= 50 ? msgs[50] : msgs[0];
+  document.getElementById('complete-msg').textContent = msg;
+  document.getElementById('study-progress-fill').style.width = '100%';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CLOZE RENDERING
+// ═══════════════════════════════════════════════════════════════
+function renderClozeBlank(text) {
+  return esc(text).replace(/\{\{(.+?)\}\}/g, (_, ans) =>
+    `<span class="cloze-blank">${'&nbsp;'.repeat(Math.max(4, ans.length))}</span>`
+  );
+}
+
+function renderClozeReveal(text) {
+  return esc(text).replace(/\{\{(.+?)\}\}/g, (_, ans) =>
+    `<span class="cloze-answer">${esc(ans)}</span>`
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  IMPORT / EXPORT
+// ═══════════════════════════════════════════════════════════════
+function exportDeck(deckId) {
+  const deck = getDeck(deckId);
+  if (!deck) return;
+  const lines = [`# Deck: ${deck.name}`, ''];
+  deck.cards.forEach(c => {
+    if (c.type === 'cloze') {
+      lines.push(c.front);
+    } else {
+      lines.push(`${c.front} | ${c.back}`);
+    }
+  });
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = deck.name.replace(/\s+/g, '-').toLowerCase() + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function parseImport(text, deckId) {
+  const deck = getDeck(deckId);
+  if (!deck) return 0;
+  const lines = text.split('\n');
+  let count = 0;
+  lines.forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    if (/\{\{.+?\}\}/.test(line)) {
+      addCard(deckId, line, '');
+      count++;
+    } else if (line.includes('|')) {
+      const parts = line.split('|');
+      const front = parts[0].trim();
+      const back = parts.slice(1).join('|').trim();
+      if (front) { addCard(deckId, front, back); count++; }
+    }
+  });
+  return count;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MODALS & CONFIRM
+// ═══════════════════════════════════════════════════════════════
+let confirmCallback = null;
+
+function showConfirm(title, body, onOk) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-body').textContent = body;
+  confirmCallback = onOk;
+  document.getElementById('modal-confirm').classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  EVENT WIRING — HOME
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-new-deck').addEventListener('click', () => {
+  document.getElementById('input-new-deck-name').value = '';
+  document.getElementById('modal-new-deck').classList.add('open');
+  setTimeout(() => document.getElementById('input-new-deck-name').focus(), 50);
+});
+
+document.getElementById('btn-new-deck-cancel').addEventListener('click', () => closeModal('modal-new-deck'));
+document.getElementById('btn-new-deck-confirm').addEventListener('click', () => {
+  const name = document.getElementById('input-new-deck-name').value.trim();
+  if (!name) return;
+  const id = createDeck(name);
+  closeModal('modal-new-deck');
+  renderDeck(id);
+});
+document.getElementById('input-new-deck-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-new-deck-confirm').click();
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  EVENT WIRING — DECK
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-deck-back').addEventListener('click', renderHome);
+
+document.getElementById('deck-title').addEventListener('blur', () => {
+  const deck = getDeck(currentDeckId);
+  if (!deck) return;
+  const name = document.getElementById('deck-title').textContent.trim();
+  if (name && name !== deck.name) { deck.name = name; saveData(); toast('Deck renamed'); }
+  else document.getElementById('deck-title').textContent = deck.name;
+});
+document.getElementById('deck-title').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('deck-title').blur(); }
+});
+
+document.getElementById('btn-show-add-form').addEventListener('click', () => {
+  document.getElementById('add-card-form').style.display = '';
+  document.getElementById('btn-show-add-form').style.display = 'none';
+  document.getElementById('add-form-title').textContent = 'Add Card';
+  document.getElementById('input-front').focus();
+});
+
+document.getElementById('btn-cancel-add').addEventListener('click', hideAddForm);
+
+document.getElementById('btn-save-card').addEventListener('click', () => {
+  const front = document.getElementById('input-front').value.trim();
+  const back  = document.getElementById('input-back').value.trim();
+  if (!front) return;
+  if (editingCardId) {
+    updateCard(currentDeckId, editingCardId, front, back);
+    toast('Card updated');
+  } else {
+    addCard(currentDeckId, front, back);
+    toast('Card added');
+  }
+  hideAddForm();
+  renderDeckCards();
+});
+
+// Study filters
+document.getElementById('filter-row').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  renderDeckCards();
+});
+
+document.getElementById('btn-study-now').addEventListener('click', () => startStudy(currentDeckId));
+
+document.getElementById('btn-export-deck').addEventListener('click', () => exportDeck(currentDeckId));
+
+document.getElementById('btn-import-deck').addEventListener('click', () => {
+  document.getElementById('import-text').value = '';
+  document.getElementById('modal-import').classList.add('open');
+});
+document.getElementById('btn-import-cancel').addEventListener('click', () => closeModal('modal-import'));
+document.getElementById('btn-import-confirm').addEventListener('click', () => {
+  const text = document.getElementById('import-text').value;
+  const count = parseImport(text, currentDeckId);
+  closeModal('modal-import');
+  renderDeckCards();
+  toast(`${count} card${count !== 1 ? 's' : ''} imported`);
+});
+
+document.getElementById('btn-delete-deck').addEventListener('click', () => {
+  const deck = getDeck(currentDeckId);
+  showConfirm('Delete Deck', `Delete "${deck.name}" and all its cards? This cannot be undone.`, () => {
+    deleteDeck(currentDeckId);
+    toast('Deck deleted');
+    renderHome();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  EVENT WIRING — STUDY
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('btn-study-back').addEventListener('click', () => renderDeck(study.deckId));
+document.getElementById('btn-back-from-complete').addEventListener('click', () => renderDeck(study.deckId));
+document.getElementById('btn-study-again').addEventListener('click', () => startStudy(study.deckId));
+
+// On touch devices, 'click' fires after 'touchend' — use flag to avoid double-flip
+let lastTouchHandled = 0;
+document.getElementById('flashcard-scene').addEventListener('click', () => {
+  if (Date.now() - lastTouchHandled < 600) return;
+  flipCard();
+});
+document.getElementById('btn-know').addEventListener('click', () => handleAnswer('know'));
+document.getElementById('btn-hard').addEventListener('click', () => handleAnswer('hard'));
+document.getElementById('btn-dontknow').addEventListener('click', () => handleAnswer('dontknow'));
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (views.study.classList.contains('active') && document.getElementById('study-body').style.display !== 'none') {
+    if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+    if (e.code === 'ArrowRight') { e.preventDefault(); handleAnswer('know'); }
+    if (e.code === 'ArrowLeft')  { e.preventDefault(); handleAnswer('dontknow'); }
+    if (e.code === 'ArrowDown')  { e.preventDefault(); handleAnswer('hard'); }
+  }
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+  }
+});
+
+// Modal confirm/cancel
+document.getElementById('btn-confirm-cancel').addEventListener('click', () => closeModal('modal-confirm'));
+document.getElementById('btn-confirm-ok').addEventListener('click', () => {
+  closeModal('modal-confirm');
+  if (confirmCallback) { confirmCallback(); confirmCallback = null; }
+});
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(bd => {
+  bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  SWIPE GESTURES (study view)
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  let startX = 0, startY = 0, startTime = 0;
+  const scene = document.getElementById('flashcard-scene');
+
+  scene.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    startTime = Date.now();
+  }, { passive: true });
+
+  scene.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    const dt = Date.now() - startTime;
+    const absDx = Math.abs(dx), absDy = Math.abs(dy);
+
+    // Mark that touch was handled so the subsequent 'click' event is ignored
+    lastTouchHandled = Date.now();
+
+    // Tap → flip
+    if (absDx < 15 && absDy < 15 && dt < 400) {
+      flipCard();
+      return;
+    }
+
+    // Horizontal swipe — must be clearly dominant axis
+    if (absDx > 50 && absDx > absDy * 2 && dt < 600) {
+      if (!study.flipped) { flipCard(); return; }
+      if (dx > 0) handleAnswer('know');
+      else handleAnswer('dontknow');
+      return;
+    }
+
+    // Swipe down → hard
+    if (absDy > 50 && absDy > absDx * 2 && dy > 0 && dt < 600) {
+      if (study.flipped && study.confidenceMode) handleAnswer('hard');
+    }
+  }, { passive: true });
+})();
+
+// ═══════════════════════════════════════════════════════════════
+//  THEME TOGGLE
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  const btn = document.createElement('button');
+  btn.id = 'theme-btn'; btn.setAttribute('aria-label', 'Toggle theme');
+  const saved = localStorage.getItem('kin008-theme');
+  if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
+  else { btn.textContent = '☀️'; }
+  document.body.appendChild(btn);
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light');
+    btn.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('kin008-theme', isLight ? 'light' : 'dark');
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+if (isDemo) document.getElementById('demo-bar').classList.add('visible');
+renderHome();
+</script>
+
+  <script>
+  (function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
+  var ctx=c.getContext('2d');
+  var g=ctx.createLinearGradient(0,0,sz,sz);
+  g.addColorStop(0,'#2D4A6B');g.addColorStop(1,'#1a3248');
+  ctx.fillStyle=g;
+  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
+  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><rect x="10" y="14" width="22" height="16" rx="2" stroke="white" stroke-width="2"/><rect x="16" y="18" width="22" height="16" rx="2" stroke="white" stroke-width="2" opacity="0.5"/></svg>';
+  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
+  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
+  }catch(e){}})();
+  </script>
+
+<div style="text-align:center;padding:10px 16px 28px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+<div style="text-align:center;padding:4px 0 12px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:rgba(0,0,0,0.3);font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;font-family:-apple-system,sans-serif;">Report a bug</button></div>
 
   <!-- ── Bug report ──────────────────────────────────────────────── -->
   <style>

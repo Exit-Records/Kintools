@@ -479,13 +479,423 @@ body.dark .foot-meta {
 </style>
 </head>
 <body>
-<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
-  KIN-021 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
+<div class="wrap">
 
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+  <header>
+    <div class="kin-label">
+      <h1>Text Counter</h1>
+      <span class="kin-id">KIN-021</span>
+    </div>
+    <div class="header-actions">
+      <button class="clear-btn" onclick="clearText()">Clear</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">&#127769;</button>
+    </div>
+  </header>
 
-  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-</footer>
+  <div class="editor-wrap">
+    <textarea id="editor" placeholder="Paste or type your text here..." spellcheck="false"></textarea>
+  </div>
+
+  <div class="sel-banner" id="selBanner">
+    <span style="opacity:0.8">Selection:</span>
+    <span class="sel-stat" id="selWords">0 words</span>
+    <span class="sel-stat" id="selChars">0 chars</span>
+    <span class="sel-stat" id="selSentences">0 sentences</span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="sWords">0</div><div class="stat-label">Words</div></div>
+    <div class="stat-card"><div class="stat-val" id="sChars">0</div><div class="stat-label">Characters</div></div>
+    <div class="stat-card"><div class="stat-val" id="sCharsNs">0</div><div class="stat-label">Chars (no spaces)</div></div>
+    <div class="stat-card"><div class="stat-val" id="sSentences">0</div><div class="stat-label">Sentences</div></div>
+    <div class="stat-card"><div class="stat-val" id="sParagraphs">0</div><div class="stat-label">Paragraphs</div></div>
+    <div class="stat-card"><div class="stat-val" id="sReadTime">0m</div><div class="stat-label">Reading time</div></div>
+    <div class="stat-card"><div class="stat-val" id="sSpeakTime">0m</div><div class="stat-label">Speaking time</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Readability</div>
+    <div class="readability">
+      <div class="read-card">
+        <div class="read-score" id="fkGrade">—</div>
+        <div class="read-label">Flesch-Kincaid Grade</div>
+        <div class="read-desc" id="fkGradeDesc">Paste text to analyse</div>
+      </div>
+      <div class="read-card">
+        <div class="read-score" id="fkEase">—</div>
+        <div class="read-label">Reading Ease</div>
+        <div class="read-desc" id="fkEaseDesc">Paste text to analyse</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Platform Limits</div>
+    <div class="platforms" id="platforms"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Top Keywords</div>
+    <div class="keywords-list" id="keywords">
+      <span class="empty-state">Start typing to see keyword density</span>
+    </div>
+  </div>
+
+  <button class="copy-stats-btn" id="copyBtn" onclick="copyStats()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    Copy Stats
+  </button>
+
+  <div class="foot-meta">KIN-021 · Text Counter · by Darren</div>
+
+</div>
+
+<script>
+/* ---- Theme ---- */
+let dark = false;
+(function() {
+  const saved = localStorage.getItem('kin021-theme');
+  if (saved === 'dark') { dark = true; applyTheme(); }
+})();
+
+function applyTheme() {
+  document.documentElement.className = dark ? 'dark' : 'light';
+  document.body.classList.toggle('dark', dark);
+  document.getElementById('themeBtn').innerHTML = dark ? '&#9728;' : '&#127769;';
+  document.getElementById('theme-color-meta').content = dark ? '#1a1614' : '#f5f0eb';
+}
+
+function toggleTheme() {
+  dark = !dark;
+  localStorage.setItem('kin021-theme', dark ? 'dark' : 'light');
+  applyTheme();
+}
+
+/* ---- Clear ---- */
+function clearText() {
+  document.getElementById('editor').value = '';
+  analyse('');
+}
+
+/* ---- Stopwords ---- */
+const STOP = new Set([
+  'the','be','to','of','and','a','in','that','have','i','it','for','not','on','with',
+  'he','as','you','do','at','this','but','his','by','from','they','we','her','she',
+  'or','an','will','my','one','all','would','there','their','what','so','up','out',
+  'if','about','who','get','which','go','me','when','make','can','like','time','no',
+  'just','him','know','take','people','into','year','your','good','some','could',
+  'them','see','other','than','then','now','look','only','come','its','over','think',
+  'also','back','after','use','two','how','our','work','first','well','way','even',
+  'new','want','because','any','these','give','day','most','us','is','are','was',
+  'were','been','has','had','did','does','am','being','more','very','much','own',
+  'same','too','each','may','still','should','here','such','both','said',
+  "it's","i'm","don't","i've","didn't","that's","he's","she's","we're",
+  "they're","can't","won't","isn't","aren't","wasn't","weren't","couldn't",
+  "wouldn't","shouldn't","haven't","hasn't","hadn't","let's","there's",
+  "what's","who's","where's","how's","it'll","he'll","she'll","we'll",
+  "they'll","i'll","you'll","i'd","you'd","he'd","she'd","we'd","they'd",
+  "you're","you've","ain't","gonna","gotta","wanna"
+]);
+
+/* ---- Platforms ---- */
+const PLATFORMS = [
+  { name: 'X / Twitter', limit: 280, unit: 'chars' },
+  { name: 'Instagram', limit: 2200, unit: 'chars' },
+  { name: 'LinkedIn', limit: 3000, unit: 'chars' },
+  { name: 'SMS', limit: 160, unit: 'chars' },
+];
+
+function renderPlatforms(charCount) {
+  const el = document.getElementById('platforms');
+  el.innerHTML = PLATFORMS.map(p => {
+    const pct = Math.min((charCount / p.limit) * 100, 100);
+    const over = charCount > p.limit;
+    const cls = over ? 'over' : 'under';
+    return `<div class="plat-card">
+      <div class="plat-header">
+        <span class="plat-name">${p.name}</span>
+        <span class="plat-count ${cls}">${charCount} / ${p.limit}</span>
+      </div>
+      <div class="plat-bar"><div class="plat-fill ${cls}" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ---- Syllable count (approx) ---- */
+function syllables(word) {
+  word = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (word.length <= 3) return 1;
+  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+  word = word.replace(/^y/, '');
+  const m = word.match(/[aeiouy]{1,2}/g);
+  return m ? m.length : 1;
+}
+
+/* ---- Flesch-Kincaid ---- */
+function fleschKincaid(words, sentences, totalSyllables) {
+  if (words === 0 || sentences === 0) return { grade: null, ease: null };
+  const grade = 0.39 * (words / sentences) + 11.8 * (totalSyllables / words) - 15.59;
+  const ease = 206.835 - 1.015 * (words / sentences) - 84.6 * (totalSyllables / words);
+  return { grade: Math.max(0, grade), ease: Math.max(0, Math.min(100, ease)) };
+}
+
+function gradeDesc(g) {
+  if (g === null) return 'Paste text to analyse';
+  if (g <= 5) return '5th grade or below — very easy';
+  if (g <= 8) return 'Middle school — conversational';
+  if (g <= 12) return 'High school — standard';
+  if (g <= 16) return 'College level';
+  return 'Graduate level — complex';
+}
+
+function easeDesc(e) {
+  if (e === null) return 'Paste text to analyse';
+  if (e >= 80) return 'Very easy to read';
+  if (e >= 60) return 'Standard / plain English';
+  if (e >= 40) return 'Moderately difficult';
+  if (e >= 20) return 'Difficult — academic';
+  return 'Very difficult — specialist';
+}
+
+/* ---- Time formatting ---- */
+function fmtTime(mins) {
+  if (mins < 1) return '<1m';
+  if (mins < 60) return Math.round(mins) + 'm';
+  const h = Math.floor(mins / 60);
+  const m = Math.round(mins % 60);
+  return m > 0 ? h + 'h ' + m + 'm' : h + 'h';
+}
+
+/* ---- Count helpers ---- */
+function countWords(t) {
+  const m = t.match(/[\w'\u2019]+/g);
+  return m ? m.length : 0;
+}
+function countSentences(t) {
+  const m = t.match(/[.!?]+[\s\n]+|[.!?]+$/g);
+  return m ? m.length : 0;
+}
+function countParagraphs(t) {
+  if (t.trim() === '') return 0;
+  return t.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || (t.trim() ? 1 : 0);
+}
+
+/* ---- Keywords ---- */
+function topKeywords(text, wordCount) {
+  const words = text.toLowerCase().match(/[a-z'\u2019]{2,}/g);
+  if (!words) return [];
+  const freq = {};
+  words.forEach(w => {
+    const clean = w.replace(/[\u2019']/g, "'");
+    if (!STOP.has(clean) && clean.length > 2) {
+      freq[clean] = (freq[clean] || 0) + 1;
+    }
+  });
+  return Object.entries(freq)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([word, count]) => ({
+      word,
+      count,
+      pct: wordCount > 0 ? ((count / wordCount) * 100).toFixed(1) : '0.0'
+    }));
+}
+
+function renderKeywords(kws) {
+  const el = document.getElementById('keywords');
+  if (kws.length === 0) {
+    el.innerHTML = '<span class="empty-state">Start typing to see keyword density</span>';
+    return;
+  }
+  el.innerHTML = kws.map(k =>
+    `<span class="kw-chip">${k.word} <span class="kw-count">${k.count}</span><span class="kw-pct">${k.pct}%</span></span>`
+  ).join('');
+}
+
+/* ---- Main analyse ---- */
+let lastStats = {};
+
+function analyse(text) {
+  const words = countWords(text);
+  const chars = text.length;
+  const charsNs = text.replace(/\s/g, '').length;
+  const sentences = countSentences(text);
+  const paragraphs = countParagraphs(text);
+  const readTime = words / 238;
+  const speakTime = words / 130;
+
+  document.getElementById('sWords').textContent = words.toLocaleString();
+  document.getElementById('sChars').textContent = chars.toLocaleString();
+  document.getElementById('sCharsNs').textContent = charsNs.toLocaleString();
+  document.getElementById('sSentences').textContent = sentences.toLocaleString();
+  document.getElementById('sParagraphs').textContent = paragraphs.toLocaleString();
+  document.getElementById('sReadTime').textContent = fmtTime(readTime);
+  document.getElementById('sSpeakTime').textContent = fmtTime(speakTime);
+
+  const wordArr = text.match(/[\w'\u2019]+/g) || [];
+  let totalSyl = 0;
+  wordArr.forEach(w => totalSyl += syllables(w));
+  const fk = fleschKincaid(words, sentences, totalSyl);
+
+  document.getElementById('fkGrade').textContent = fk.grade !== null ? fk.grade.toFixed(1) : '—';
+  document.getElementById('fkGradeDesc').textContent = gradeDesc(fk.grade);
+  document.getElementById('fkEase').textContent = fk.ease !== null ? fk.ease.toFixed(1) : '—';
+  document.getElementById('fkEaseDesc').textContent = easeDesc(fk.ease);
+
+  renderPlatforms(chars);
+  const kws = topKeywords(text, words);
+  renderKeywords(kws);
+
+  lastStats = {
+    words, chars, charsNs, sentences, paragraphs,
+    readTime: fmtTime(readTime),
+    speakTime: fmtTime(speakTime),
+    fkGrade: fk.grade !== null ? fk.grade.toFixed(1) : 'N/A',
+    fkEase: fk.ease !== null ? fk.ease.toFixed(1) : 'N/A'
+  };
+}
+
+/* ---- Selection stats ---- */
+const editor = document.getElementById('editor');
+
+function checkSelection() {
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  const banner = document.getElementById('selBanner');
+
+  if (start === end || !editor.value) {
+    banner.classList.remove('active');
+    return;
+  }
+
+  const sel = editor.value.substring(start, end);
+  const sw = countWords(sel);
+  const sc = sel.length;
+  const ss = countSentences(sel);
+
+  document.getElementById('selWords').textContent = sw + ' word' + (sw !== 1 ? 's' : '');
+  document.getElementById('selChars').textContent = sc + ' char' + (sc !== 1 ? 's' : '');
+  document.getElementById('selSentences').textContent = ss + ' sentence' + (ss !== 1 ? 's' : '');
+  banner.classList.add('active');
+}
+
+editor.addEventListener('input', function() { analyse(this.value); });
+editor.addEventListener('select', checkSelection);
+editor.addEventListener('click', checkSelection);
+editor.addEventListener('keyup', checkSelection);
+document.addEventListener('selectionchange', function() {
+  if (document.activeElement === editor) checkSelection();
+});
+
+/* ---- Copy stats ---- */
+function copyStats() {
+  const s = lastStats;
+  const d = new Date();
+  const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  const txt = [
+    'Text Stats (' + dateStr + ')',
+    '---',
+    'Words: ' + (s.words || 0).toLocaleString(),
+    'Characters: ' + (s.chars || 0).toLocaleString(),
+    'Characters (no spaces): ' + (s.charsNs || 0).toLocaleString(),
+    'Sentences: ' + (s.sentences || 0).toLocaleString(),
+    'Paragraphs: ' + (s.paragraphs || 0).toLocaleString(),
+    'Reading time: ' + (s.readTime || '0m'),
+    'Speaking time: ' + (s.speakTime || '0m'),
+    'Flesch-Kincaid Grade: ' + (s.fkGrade || 'N/A'),
+    'Reading Ease: ' + (s.fkEase || 'N/A'),
+  ].join('\n');
+
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Stats';
+    }, 2000);
+  });
+}
+
+/* ---- Init ---- */
+analyse('');
+</script>
+
+<!-- Apple touch icon canvas -->
+<script>
+(function () {
+  try {
+    var sz = 180, c = document.createElement('canvas');
+    c.width = sz; c.height = sz;
+    var ctx = c.getContext('2d');
+    var g = ctx.createLinearGradient(0, 0, sz, sz);
+    g.addColorStop(0, '#c45d3e');
+    g.addColorStop(1, '#8a3525');
+    ctx.fillStyle = g;
+    var r = 36;
+    ctx.beginPath();
+    ctx.moveTo(r,0); ctx.lineTo(sz-r,0); ctx.arcTo(sz,0,sz,r,r);
+    ctx.lineTo(sz,sz-r); ctx.arcTo(sz,sz,sz-r,sz,r);
+    ctx.lineTo(r,sz); ctx.arcTo(0,sz,0,sz-r,r);
+    ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r); ctx.closePath(); ctx.fill();
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>';
+    var img = new Image();
+    var blob = new Blob([svg], { type: 'image/svg+xml' });
+    var url = URL.createObjectURL(blob);
+    img.onload = function () {
+      ctx.drawImage(img, 42, 42, 96, 96);
+      URL.revokeObjectURL(url);
+      var el = document.getElementById('apple-touch-icon');
+      if (el) el.href = c.toDataURL('image/png');
+    };
+    img.src = url;
+  } catch (e) {}
+})();
+</script>
+
+<!-- Inline service worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  const sw = `
+    const CACHE = 'kin-textcounter-v1';
+    const URLS = ['/'];
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)));
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const blob = new Blob([sw], { type: 'application/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(blob));
+}
+</script>
+
+<!-- Inline manifest -->
+<script>
+(function() {
+  const m = {
+    name: 'Text Counter',
+    short_name: 'KIN-021',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#f5f0eb',
+    theme_color: '#f5f0eb',
+    icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml' }]
+  };
+  const blob = new Blob([JSON.stringify(m)], { type: 'application/json' });
+  document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+})();
+</script>
+
+<div style="text-align:center;padding:10px 16px 28px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+<div style="text-align:center;padding:4px 0 12px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:rgba(0,0,0,0.3);font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;font-family:-apple-system,sans-serif;">Report a bug</button></div>
 
   <!-- ── Bug report ──────────────────────────────────────────────── -->
   <style>

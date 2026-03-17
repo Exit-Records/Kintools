@@ -200,13 +200,1096 @@
 
 <!-- HEADER -->
 <header class="kin-hdr">
-  <footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9a8b7e">
-  KIN-018 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Alice and Darren
+  <div class="kin-logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path d="M6 20q5-5 12-8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <path d="M6 16q5-3 12-4" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+      <ellipse cx="12" cy="8" rx="4" ry="5" fill="white" opacity=".9"/>
+    </svg>
+  </div>
+  <span class="kin-ttl">Kin Nest</span>
+  <span class="night-pill hidden" id="night-pill">🌙 Night</span>
+  <span class="kin-num">KIN-018</span>
+</header>
 
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('today')">Today</button>
+  <button class="tab" onclick="showTab('timeline')">Timeline</button>
+  <button class="tab" onclick="showTab('growth')">Growth</button>
+  <button class="tab" onclick="showTab('settings')">Settings</button>
+</div>
 
-  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-</footer>
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══ TODAY ══════════════════════════════════════════════ -->
+  <div class="tab-pane active" id="pane-today">
+
+    <!-- Setup prompt -->
+    <div class="setup-card" id="setup-card">
+      <p class="setup-ttl">👶 Set up your baby</p>
+      <div class="setup-fields">
+        <input class="setup-inp" id="setup-name" placeholder="Baby's name" maxlength="30">
+        <input class="setup-inp" id="setup-dob" type="date" title="Date of birth">
+        <button class="setup-btn" onclick="saveSetup()">Save</button>
+      </div>
+    </div>
+
+    <!-- Export reminder banner -->
+    <div class="remind-banner hidden" id="remind-banner">
+      <div class="remind-body">
+        <p class="remind-ttl">💾 Time to back up your data</p>
+        <p class="remind-sub">Export your logs to keep them safe</p>
+      </div>
+      <div class="remind-act">
+        <button class="r-exp-btn" onclick="exportJSON();dismissReminder()">Export</button>
+        <button class="r-dis-btn" onclick="dismissReminder()" title="Dismiss">✕</button>
+      </div>
+    </div>
+
+    <!-- Sleep active bar -->
+    <div class="sleep-bar hidden" id="sleep-bar">
+      <div class="sleep-pulse"></div>
+      <div class="sleep-bar-info">
+        <p class="sleep-bar-lbl">Sleeping</p>
+        <p class="sleep-bar-dur" id="sleep-bar-dur">0m</p>
+      </div>
+      <button class="sleep-stop-btn" onclick="stopSleep()">Wake</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dash-grid" id="dash-grid">
+      <div class="dash-card"><p class="dash-lbl">Last Feed</p><p class="dash-val" id="d-feed">—</p><p class="dash-sub" id="d-feed-sub"></p></div>
+      <div class="dash-card"><p class="dash-lbl">Awake</p><p class="dash-val" id="d-awake">—</p><p class="dash-sub" id="d-awake-sub"></p></div>
+      <div class="dash-card"><p class="dash-lbl">Next Nap ~</p><p class="dash-val" id="d-nap">—</p><p class="dash-sub" id="d-nap-sub"></p></div>
+      <div class="dash-card"><p class="dash-lbl">Fussiness</p><p class="dash-val" id="d-risk">—</p><p class="dash-sub" id="d-risk-sub"></p></div>
+    </div>
+
+    <!-- Quick log buttons -->
+    <div class="action-grid">
+      <button class="act-btn feed-btn" id="btn-feed" onclick="quickFeed()" oncontextmenu="return false">
+        <span class="act-icon">🍼</span>
+        <span class="act-lbl">Feed</span>
+        <span class="act-sub" id="feed-sub">—</span>
+        <span class="act-hint">hold for options</span>
+      </button>
+      <button class="act-btn sleep-act" id="btn-sleep" onclick="toggleSleep()" oncontextmenu="return false">
+        <span class="act-icon">😴</span>
+        <span class="act-lbl" id="sleep-lbl">Sleep</span>
+        <span class="act-sub" id="sleep-sub">tap to start</span>
+      </button>
+      <button class="act-btn diaper-btn" id="btn-diaper" onclick="quickDiaper()" oncontextmenu="return false">
+        <span class="act-icon">🧷</span>
+        <span class="act-lbl">Diaper</span>
+        <span class="act-sub" id="diaper-sub">—</span>
+        <span class="act-hint">hold for type</span>
+      </button>
+    </div>
+
+    <!-- Today stats -->
+    <div class="stats-row">
+      <div class="stat-chip"><p class="stat-chip-val" id="s-feeds">0</p><p class="stat-chip-lbl">Feeds</p></div>
+      <div class="stat-chip"><p class="stat-chip-val" id="s-naps">0</p><p class="stat-chip-lbl">Naps</p></div>
+      <div class="stat-chip"><p class="stat-chip-val" id="s-sleep">0h</p><p class="stat-chip-lbl">Sleep</p></div>
+      <div class="stat-chip"><p class="stat-chip-val" id="s-diapers">0</p><p class="stat-chip-lbl">Diapers</p></div>
+    </div>
+
+    <!-- Daily reassurance -->
+    <div class="card" id="reassure-card">
+      <p class="sec-ttl">Daily check</p>
+      <div id="reassure-rows"></div>
+      <div class="re-overall" id="reassure-overall">Log some data to see your daily check</div>
+    </div>
+
+    <!-- Intelligence -->
+    <div class="card">
+      <p class="sec-ttl">Routine intelligence</p>
+      <div class="intel-row"><span class="intel-lbl">Wake window</span><span class="intel-val" id="i-ww">—</span></div>
+      <div class="intel-row"><span class="intel-lbl">Nap predictor</span><span class="intel-val" id="i-nap">—</span></div>
+      <div class="intel-row"><span class="intel-lbl">Sleep debt today</span><span class="intel-val" id="i-debt">—</span></div>
+      <div class="intel-row"><span class="intel-lbl">Avg feed interval</span><span class="intel-val" id="i-feed-int">—</span></div>
+      <div class="intel-row"><span class="intel-lbl">Routine stability</span><span class="intel-val" id="i-stability">—</span></div>
+    </div>
+
+  </div><!-- /today -->
+
+  <!-- ══ TIMELINE ══════════════════════════════════════════ -->
+  <div class="tab-pane" id="pane-timeline">
+    <div class="tl-nav">
+      <button class="tl-nav-btn" onclick="tlPrev()">‹ Prev</button>
+      <span class="tl-date-lbl" id="tl-date-lbl"></span>
+      <button class="tl-nav-btn" onclick="tlNext()">Next ›</button>
+    </div>
+    <div class="card" style="padding:14px">
+      <div id="tl-events"></div>
+    </div>
+  </div>
+
+  <!-- ══ GROWTH ══════════════════════════════════════════ -->
+  <div class="tab-pane" id="pane-growth">
+    <div class="card">
+      <p class="sec-ttl">Log measurement</p>
+      <div class="growth-form">
+        <input class="g-inp" id="g-weight" placeholder="Weight (kg)" type="number" min="0" max="20" step="0.01">
+        <input class="g-inp" id="g-height" placeholder="Height (cm)" type="number" min="0" max="120" step="0.1">
+        <input class="g-inp" id="g-head" placeholder="Head (cm)" type="number" min="0" max="60" step="0.1">
+        <button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="logGrowth()">Log</button>
+      </div>
+    </div>
+    <div class="card" style="padding:14px">
+      <p class="sec-ttl">Growth history</p>
+      <div id="growth-list"><p class="tl-empty">No measurements logged yet.</p></div>
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS ══════════════════════════════════════════ -->
+  <div class="tab-pane" id="pane-settings">
+
+    <div class="sett-sec">
+      <p class="sett-ttl">Baby</p>
+      <div class="card">
+        <div class="sett-row" style="border-top:none">
+          <div><p class="sett-lbl">Name</p></div>
+          <input class="setup-inp" id="sett-name" placeholder="Baby's name" style="max-width:140px" maxlength="30">
+        </div>
+        <div class="sett-row">
+          <div><p class="sett-lbl">Date of birth</p></div>
+          <input class="setup-inp" id="sett-dob" type="date" style="max-width:160px">
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn btn-primary btn-sm" onclick="saveSettBaby()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sett-sec">
+      <p class="sett-ttl">Night mode</p>
+      <div class="card">
+        <div class="sett-row" style="border-top:none">
+          <div>
+            <p class="sett-lbl">Auto night mode</p>
+            <p class="sett-sub">Dark interface 20:00 – 06:00</p>
+          </div>
+          <label class="toggle"><input type="checkbox" id="tog-night" onchange="toggleNight()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="sett-sec">
+      <p class="sett-ttl">Export reminders</p>
+      <div class="card">
+        <div class="sett-row" style="border-top:none">
+          <div>
+            <p class="sett-lbl">Remind me to export</p>
+            <p class="sett-sub" id="remind-sett-sub">Get reminded to back up your data</p>
+          </div>
+          <label class="toggle"><input type="checkbox" id="tog-remind" onchange="toggleRemind()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+        <div id="remind-freq-wrap" class="freq-pills hidden">
+          <button class="f-pill active" data-freq="daily" onclick="setRemindFreq(this)">Daily</button>
+          <button class="f-pill" data-freq="weekly" onclick="setRemindFreq(this)">Weekly</button>
+          <button class="f-pill" data-freq="monthly" onclick="setRemindFreq(this)">Monthly</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sett-sec">
+      <p class="sett-ttl">Data</p>
+      <div class="card">
+        <div class="sett-btns">
+          <button class="btn btn-secondary btn-sm" onclick="exportJSON()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v6m0 0L4 5m2 2 2-2M1 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Export JSON
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="exportHTML()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v6m0 0L4 5m2 2 2-2M1 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Export Report
+          </button>
+          <label class="btn btn-secondary btn-sm" style="cursor:pointer">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 9V3m0 0L4 5m2-2 2 2M1 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Import
+            <input type="file" accept=".json" style="display:none" onchange="importJSON(this)">
+          </label>
+        </div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+          <button class="btn btn-danger btn-sm" onclick="nukeAll()">Delete all data</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kin-ftr">
+      Kin Nest · KIN-018 · by Alice and Darren<br>
+      Part of the <a href="https://kintools.netlify.app" target="_blank">Kin</a> collection · No accounts · No tracking · Offline‑ready
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FEED MODAL -->
+<div class="overlay" id="ov-feed">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <p class="sheet-ttl">Log Feed</p>
+    <div class="type-grid" id="feed-type-grid">
+      <button class="type-btn sel" data-ft="left" onclick="selFeedType(this)"><span class="type-icon">🤱</span><span class="type-lbl">Left</span></button>
+      <button class="type-btn" data-ft="right" onclick="selFeedType(this)"><span class="type-icon">🤱</span><span class="type-lbl">Right</span></button>
+      <button class="type-btn" data-ft="bottle" onclick="selFeedType(this)"><span class="type-icon">🍼</span><span class="type-lbl">Bottle</span></button>
+      <button class="type-btn" data-ft="pumped" onclick="selFeedType(this)"><span class="type-icon">🥛</span><span class="type-lbl">Pumped</span></button>
+      <button class="type-btn" data-ft="formula" onclick="selFeedType(this)"><span class="type-icon">🧴</span><span class="type-lbl">Formula</span></button>
+      <button class="type-btn" data-ft="solids" onclick="selFeedType(this)"><span class="type-icon">🥣</span><span class="type-lbl">Solids</span></button>
+    </div>
+    <div class="fgrp">
+      <label class="flbl">Amount (optional)</label>
+      <input class="finput" id="feed-amount" placeholder="e.g. 120ml or 5 min">
+    </div>
+    <div class="fgrp">
+      <label class="flbl">Notes (optional)</label>
+      <textarea class="finput ftxt" id="feed-notes" placeholder="Any notes…"></textarea>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeOv('ov-feed')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveFeedModal()">Log feed</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIAPER MODAL -->
+<div class="overlay" id="ov-diaper">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <p class="sheet-ttl">Log Diaper</p>
+    <div class="type-grid" style="grid-template-columns:repeat(3,1fr)">
+      <button class="type-btn sel" data-dt="wet" onclick="selDiaperType(this)"><span class="type-icon">💧</span><span class="type-lbl">Wet</span></button>
+      <button class="type-btn" data-dt="dirty" onclick="selDiaperType(this)"><span class="type-icon">💩</span><span class="type-lbl">Dirty</span></button>
+      <button class="type-btn" data-dt="both" onclick="selDiaperType(this)"><span class="type-icon">🔄</span><span class="type-lbl">Both</span></button>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeOv('ov-diaper')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveDiaperModal()">Log diaper</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="dialog" id="dlg-confirm">
+  <div class="dlg-card">
+    <p class="dlg-ttl" id="dlg-ttl"></p>
+    <p class="dlg-body" id="dlg-body"></p>
+    <div class="dlg-row">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeOv('dlg-confirm')">Cancel</button>
+      <button class="btn btn-danger" style="flex:1" id="dlg-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════
+const SK = 'kin-nest';
+
+function defaultState() {
+  return {
+    baby: { name: '', dob: '' },
+    settings: { nightAuto: true, remind: false, remindFreq: 'weekly', remindLast: 0 },
+    feeds: [], sleep: [], diapers: [], growth: [], medicine: []
+  };
+}
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SK));
+    if (d && d.feeds) {
+      const def = defaultState();
+      return {
+        baby: { ...def.baby, ...d.baby },
+        settings: { ...def.settings, ...d.settings },
+        feeds: d.feeds || [], sleep: d.sleep || [],
+        diapers: d.diapers || [], growth: d.growth || [], medicine: d.medicine || []
+      };
+    }
+  } catch {}
+  return defaultState();
+}
+
+function save() { localStorage.setItem(SK, JSON.stringify(state)); }
+let state = load();
+
+// ═══════════════════════════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════════════════════════
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,5); }
+
+function fmtTime(ms) {
+  const d = new Date(ms);
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+function fmtDurMin(min) {
+  if (min < 1) return '0m';
+  const h = Math.floor(min / 60), m = Math.round(min % 60);
+  return h > 0 ? (m > 0 ? `${h}h ${m}m` : `${h}h`) : `${m}m`;
+}
+
+function fmtAgo(ms) {
+  const min = (Date.now() - ms) / 60000;
+  if (min < 1) return 'just now';
+  if (min < 60) return `${Math.floor(min)}m ago`;
+  const h = Math.floor(min / 60), m = Math.round(min % 60);
+  return h > 0 ? (m > 0 ? `${h}h ${m}m ago` : `${h}h ago`) : `${Math.floor(min)}m ago`;
+}
+
+function ymd(date) {
+  const d = date instanceof Date ? date : new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function todayYmd() { return ymd(new Date()); }
+
+function fromYmd(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+
+function sameDay(ms, dateStr) { return ymd(new Date(ms)) === dateStr; }
+
+function getAgeWeeks() {
+  if (!state.baby.dob) return null;
+  const dob = fromYmd(state.baby.dob);
+  return Math.floor((Date.now() - dob.getTime()) / (7 * 864e5));
+}
+
+function fmtDate(dateStr) {
+  const d = fromYmd(dateStr);
+  const today = todayYmd(), yest = ymd(new Date(Date.now() - 864e5));
+  if (dateStr === today) return 'Today';
+  if (dateStr === yest) return 'Yesterday';
+  return d.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// Sleep helpers
+// ═══════════════════════════════════════════════════════════
+function activeSleep() { return state.sleep.find(s => !s.end); }
+
+function getAwakeMinutes() {
+  const active = activeSleep();
+  if (active) return 0; // currently sleeping
+  const today = todayYmd();
+  const todaySleeps = state.sleep.filter(s => s.end && sameDay(s.end, today));
+  const lastWake = todaySleeps.length ? Math.max(...todaySleeps.map(s => s.end)) : null;
+  const lastFeed = state.feeds.length ? Math.max(...state.feeds.map(f => f.time)) : null;
+  const ref = Math.max(lastWake || 0, lastFeed || 0);
+  if (!ref) return null;
+  return (Date.now() - ref) / 60000;
+}
+
+function getLastNapDurationMin() {
+  const today = todayYmd();
+  const todaySleeps = state.sleep.filter(s => s.end && sameDay(s.start, today)).sort((a,b) => b.end - a.end);
+  if (!todaySleeps.length) return null;
+  const last = todaySleeps[0];
+  return (last.end - last.start) / 60000;
+}
+
+function getSleepTodayMin() {
+  const today = todayYmd();
+  const active = activeSleep();
+  let total = state.sleep
+    .filter(s => s.end && sameDay(s.start, today))
+    .reduce((sum, s) => sum + (s.end - s.start) / 60000, 0);
+  if (active && sameDay(active.start, today)) total += (Date.now() - active.start) / 60000;
+  return total;
+}
+
+function getNapsToday() {
+  const today = todayYmd();
+  return state.sleep.filter(s => s.end && sameDay(s.start, today)).length;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Feed helpers
+// ═══════════════════════════════════════════════════════════
+function getMinSinceLastFeed() {
+  if (!state.feeds.length) return null;
+  const last = Math.max(...state.feeds.map(f => f.time));
+  return (Date.now() - last) / 60000;
+}
+
+function getAvgFeedIntervalMin() {
+  const sorted = [...state.feeds].sort((a,b) => a.time - b.time);
+  if (sorted.length < 2) return null;
+  const recent = sorted.slice(-8);
+  let gaps = [];
+  for (let i = 1; i < recent.length; i++) gaps.push((recent[i].time - recent[i-1].time) / 60000);
+  return gaps.reduce((a,b) => a+b, 0) / gaps.length;
+}
+
+function getFeedsTodayCount() { return state.feeds.filter(f => sameDay(f.time, todayYmd())).length; }
+function getDiapersTodayCount() { return state.diapers.filter(d => sameDay(d.time, todayYmd())).length; }
+
+// ═══════════════════════════════════════════════════════════
+// Intelligence
+// ═══════════════════════════════════════════════════════════
+const WAKE_WINDOWS = [
+  { maxWeeks: 4,   min: 45,  max: 60  },
+  { maxWeeks: 8,   min: 60,  max: 90  },
+  { maxWeeks: 16,  min: 90,  max: 120 },
+  { maxWeeks: 24,  min: 120, max: 150 },
+  { maxWeeks: 36,  min: 150, max: 180 },
+  { maxWeeks: 999, min: 180, max: 240 }
+];
+
+function getWakeWindow(ageWeeks) {
+  if (ageWeeks === null) return { min: 90, max: 120 };
+  return WAKE_WINDOWS.find(w => ageWeeks < w.maxWeeks) || WAKE_WINDOWS[WAKE_WINDOWS.length-1];
+}
+
+function getDailyTargets(ageWeeks) {
+  if (ageWeeks === null || ageWeeks < 4)  return { feedsMin: 8, feedsMax: 12, sleepMin: 960, diapers: 6 };
+  if (ageWeeks < 8)   return { feedsMin: 8, feedsMax: 12, sleepMin: 900, diapers: 6 };
+  if (ageWeeks < 16)  return { feedsMin: 7, feedsMax: 10, sleepMin: 840, diapers: 5 };
+  if (ageWeeks < 24)  return { feedsMin: 5, feedsMax: 8,  sleepMin: 840, diapers: 5 };
+  return { feedsMin: 4, feedsMax: 6, sleepMin: 780, diapers: 4 };
+}
+
+function getSleepDebtMin() {
+  const aw = getAgeWeeks();
+  const t = getDailyTargets(aw);
+  const slept = getSleepTodayMin();
+  return t.sleepMin - slept; // positive = debt, negative = surplus
+}
+
+function getNapPredictionTime() {
+  const active = activeSleep();
+  if (active) return null;
+  const aw = getAgeWeeks();
+  const ww = getWakeWindow(aw);
+  const avgWW = (ww.min + ww.max) / 2;
+  const today = todayYmd();
+  const lastWakeTime = (() => {
+    const todaySleeps = state.sleep.filter(s => s.end && sameDay(s.end, today)).sort((a,b) => b.end - a.end);
+    if (todaySleeps.length) return todaySleeps[0].end;
+    const lastFeed = state.feeds.filter(f => sameDay(f.time, today)).sort((a,b) => b.time - a.time)[0];
+    if (lastFeed) return lastFeed.time;
+    return null;
+  })();
+  if (!lastWakeTime) return null;
+  return new Date(lastWakeTime + avgWW * 60000);
+}
+
+function getMeltdownScore() {
+  let score = 0;
+  const aw = getAgeWeeks();
+  const ww = getWakeWindow(aw);
+  const awakeMin = getAwakeMinutes();
+  if (awakeMin !== null) {
+    if (awakeMin > ww.max) score += 40;
+    else if (awakeMin > ww.min) score += 10;
+  }
+  const lastNap = getLastNapDurationMin();
+  if (lastNap !== null && lastNap < 35) score += 20;
+  const debt = getSleepDebtMin();
+  if (debt > 60) score += 20;
+  const sinceF = getMinSinceLastFeed();
+  const avgI = getAvgFeedIntervalMin();
+  if (sinceF !== null && avgI !== null && sinceF > avgI * 1.2) score += 10;
+  return Math.min(100, score);
+}
+
+function getRoutineStability() {
+  const today = todayYmd();
+  const recent = [];
+  for (let i = 0; i < 5; i++) {
+    const d = ymd(new Date(Date.now() - i * 864e5));
+    const dayFeeds = state.feeds.filter(f => sameDay(f.time, d)).map(f => new Date(f.time).getHours() * 60 + new Date(f.time).getMinutes());
+    if (dayFeeds.length > 2) recent.push(dayFeeds[0]);
+  }
+  if (recent.length < 3) return null;
+  const avg = recent.reduce((a,b)=>a+b,0)/recent.length;
+  const variance = Math.sqrt(recent.reduce((s,v)=>s+(v-avg)**2,0)/recent.length);
+  if (variance < 20) return { level: 'High', variance: Math.round(variance) };
+  if (variance < 45) return { level: 'Medium', variance: Math.round(variance) };
+  return { level: 'Low', variance: Math.round(variance) };
+}
+
+// ═══════════════════════════════════════════════════════════
+// Night mode
+// ═══════════════════════════════════════════════════════════
+function checkNightMode() {
+  const h = new Date().getHours();
+  const isNight = state.settings.nightAuto && (h >= 20 || h < 6);
+  document.body.classList.toggle('dark', isNight);
+  document.getElementById('night-pill').classList.toggle('hidden', !isNight);
+}
+
+// ═══════════════════════════════════════════════════════════
+// Render
+// ═══════════════════════════════════════════════════════════
+let dashTimer = null;
+
+function render() {
+  renderSetup();
+  renderDash();
+  renderTodayStats();
+  renderReassurance();
+  renderIntelligence();
+  renderTimeline();
+  renderGrowth();
+  renderSettings();
+  checkReminder();
+}
+
+function renderSetup() {
+  const hasName = !!state.baby.name;
+  document.getElementById('setup-card').classList.toggle('hidden', hasName);
+  if (!hasName) {
+    document.getElementById('setup-name').value = state.baby.name;
+    document.getElementById('setup-dob').value = state.baby.dob;
+  }
+}
+
+function renderDash() {
+  const sinceF = getMinSinceLastFeed();
+  document.getElementById('d-feed').textContent = sinceF !== null ? fmtDurMin(sinceF) : '—';
+  const lastFeed = state.feeds.length ? Math.max(...state.feeds.map(f => f.time)) : null;
+  document.getElementById('d-feed-sub').textContent = lastFeed ? `at ${fmtTime(lastFeed)}` : 'no feeds yet';
+
+  const active = activeSleep();
+  const awakeMin = getAwakeMinutes();
+  if (active) {
+    document.getElementById('d-awake').textContent = '😴';
+    document.getElementById('d-awake-sub').textContent = 'sleeping now';
+  } else {
+    document.getElementById('d-awake').textContent = awakeMin !== null ? fmtDurMin(awakeMin) : '—';
+    document.getElementById('d-awake-sub').textContent = 'since last wake';
+  }
+
+  const napPred = getNapPredictionTime();
+  if (napPred && !active) {
+    const diff = (napPred - Date.now()) / 60000;
+    document.getElementById('d-nap').textContent = fmtTime(napPred.getTime());
+    document.getElementById('d-nap-sub').textContent = diff > 0 ? `in ${fmtDurMin(diff)}` : 'overdue';
+  } else {
+    document.getElementById('d-nap').textContent = active ? '—' : '—';
+    document.getElementById('d-nap-sub').textContent = active ? 'sleeping' : 'not enough data';
+  }
+
+  const score = getMeltdownScore();
+  const rEl = document.getElementById('d-risk');
+  rEl.textContent = score < 30 ? 'Low' : score < 60 ? 'Medium' : 'High';
+  rEl.className = 'dash-val ' + (score < 30 ? 'risk-low' : score < 60 ? 'risk-med' : 'risk-high');
+  document.getElementById('d-risk-sub').textContent = `score ${score}/100`;
+
+  // Sleep bar
+  const bar = document.getElementById('sleep-bar');
+  if (active) {
+    bar.classList.remove('hidden');
+    const dur = fmtDurMin((Date.now() - active.start) / 60000);
+    document.getElementById('sleep-bar-dur').textContent = `${dur} · started ${fmtTime(active.start)}`;
+  } else {
+    bar.classList.add('hidden');
+  }
+
+  // Sleep button state
+  const btn = document.getElementById('btn-sleep');
+  btn.classList.toggle('on', !!active);
+  document.getElementById('sleep-lbl').textContent = active ? 'Sleeping' : 'Sleep';
+  document.getElementById('sleep-sub').textContent = active ? 'tap to wake' : 'tap to start';
+
+  // Feed / diaper sub
+  const lastSide = lastBreastSide();
+  const nextSide = lastSide ? (lastSide === 'left' ? 'R' : 'L') : null;
+  const feedSub = sinceF !== null
+    ? `${fmtDurMin(sinceF)} ago${nextSide ? ` · try ${nextSide}` : ''}`
+    : 'no logs yet';
+  document.getElementById('feed-sub').textContent = feedSub;
+  const dcount = getDiapersTodayCount();
+  document.getElementById('diaper-sub').textContent = dcount > 0 ? `${dcount} today` : 'none yet';
+}
+
+function renderTodayStats() {
+  document.getElementById('s-feeds').textContent = getFeedsTodayCount();
+  document.getElementById('s-naps').textContent = getNapsToday();
+  const sleepMin = getSleepTodayMin();
+  document.getElementById('s-sleep').textContent = sleepMin > 0 ? fmtDurMin(sleepMin) : '0m';
+  document.getElementById('s-diapers').textContent = getDiapersTodayCount();
+}
+
+function renderReassurance() {
+  const aw = getAgeWeeks();
+  const t = getDailyTargets(aw);
+  const feeds = getFeedsTodayCount();
+  const sleepMin = getSleepTodayMin();
+  const diapers = getDiapersTodayCount();
+  const rows = document.getElementById('reassure-rows');
+  const overall = document.getElementById('reassure-overall');
+
+  if (!feeds && !sleepMin && !diapers) {
+    rows.innerHTML = '';
+    overall.textContent = 'Log some data to see your daily check';
+    overall.className = 're-overall';
+    return;
+  }
+
+  const feedOk = feeds >= t.feedsMin && feeds <= t.feedsMax;
+  const feedWarn = feeds > 0 && feeds < t.feedsMin;
+  const sleepPct = sleepMin / t.sleepMin;
+  const sleepOk = sleepPct >= 0.85;
+  const diaperOk = diapers >= t.diapers;
+
+  rows.innerHTML = `
+    <div class="re-row"><span class="re-lbl">Feeds today</span><span class="re-val ${feedOk?'ok':feedWarn?'warn':'low'}">${feeds} <small style="font-weight:400;color:var(--muted)">(target ${t.feedsMin}–${t.feedsMax})</small></span></div>
+    <div class="re-row"><span class="re-lbl">Sleep today</span><span class="re-val ${sleepOk?'ok':'warn'}">${fmtDurMin(sleepMin)} <small style="font-weight:400;color:var(--muted)">(target ${fmtDurMin(t.sleepMin)})</small></span></div>
+    <div class="re-row"><span class="re-lbl">Diapers today</span><span class="re-val ${diaperOk?'ok':'warn'}">${diapers} <small style="font-weight:400;color:var(--muted)">(target ${t.diapers}+)</small></span></div>
+  `;
+
+  const allOk = feedOk && sleepOk && diaperOk;
+  const someLow = !feedOk || !sleepOk;
+  overall.textContent = allOk ? '✓ Typical day — things look good' : someLow ? '~ Slight variations — keep logging' : '✓ On track';
+  overall.className = 're-overall';
+}
+
+function renderIntelligence() {
+  const aw = getAgeWeeks();
+  const ww = getWakeWindow(aw);
+  document.getElementById('i-ww').textContent = `${ww.min}–${ww.max} min` + (aw !== null ? ` (${Math.floor(aw/4)}mo)` : '');
+
+  const napT = getNapPredictionTime();
+  document.getElementById('i-nap').textContent = napT ? `~${fmtTime(napT.getTime())}` : '—';
+
+  const debt = getSleepDebtMin();
+  const debtEl = document.getElementById('i-debt');
+  if (debt > 5) { debtEl.textContent = fmtDurMin(debt) + ' deficit'; debtEl.className = 'intel-val warn'; }
+  else if (debt < -5) { debtEl.textContent = fmtDurMin(-debt) + ' surplus'; debtEl.className = 'intel-val ok'; }
+  else { debtEl.textContent = 'On track'; debtEl.className = 'intel-val ok'; }
+
+  const avgI = getAvgFeedIntervalMin();
+  document.getElementById('i-feed-int').textContent = avgI !== null ? `~${fmtDurMin(avgI)}` : '—';
+
+  const stab = getRoutineStability();
+  document.getElementById('i-stability').textContent = stab ? `${stab.level} (±${stab.variance}m)` : 'Not enough data';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Timeline
+// ═══════════════════════════════════════════════════════════
+let tlDateStr = todayYmd();
+
+function renderTimeline() {
+  document.getElementById('tl-date-lbl').textContent = fmtDate(tlDateStr);
+
+  // Build events for day
+  const events = [];
+  state.feeds.filter(f => sameDay(f.time, tlDateStr)).forEach(f =>
+    events.push({ time: f.time, type: 'feed', subtype: f.type, detail: [f.amount, f.notes].filter(Boolean).join(' · '), id: f.id }));
+  state.sleep.forEach(s => {
+    if (sameDay(s.start, tlDateStr)) events.push({ time: s.start, type: 'sleep', detail: s.end ? `Slept ${fmtDurMin((s.end - s.start)/60000)}` : 'sleeping…', id: s.id });
+    if (s.end && sameDay(s.end, tlDateStr)) events.push({ time: s.end, type: 'wake', detail: `After ${fmtDurMin((s.end - s.start)/60000)}`, id: s.id + '_w' });
+  });
+  state.diapers.filter(d => sameDay(d.time, tlDateStr)).forEach(d =>
+    events.push({ time: d.time, type: 'diaper', subtype: d.type, detail: d.type, id: d.id }));
+  state.growth.filter(g => sameDay(g.date, tlDateStr)).forEach(g =>
+    events.push({ time: g.date, type: 'growth', detail: [g.weight && `${g.weight}kg`, g.height && `${g.height}cm`, g.head && `head ${g.head}cm`].filter(Boolean).join(', '), id: g.id }));
+
+  events.sort((a,b) => a.time - b.time);
+
+  const TYPE_LABELS = { feed: 'Feed', sleep: 'Sleep', wake: 'Woke', diaper: 'Diaper', growth: 'Measurement', medicine: 'Medicine' };
+  const FEED_LABELS = { left: 'Left breast', right: 'Right breast', bottle: 'Bottle', pumped: 'Pumped milk', formula: 'Formula', solids: 'Solids' };
+  const DIAPER_LABELS = { wet: 'Wet', dirty: 'Dirty', both: 'Wet & dirty' };
+
+  const container = document.getElementById('tl-events');
+  if (!events.length) {
+    container.innerHTML = '<p class="tl-empty">No events logged for this day.</p>';
+    return;
+  }
+
+  container.innerHTML = events.map(e => {
+    const label = e.type === 'feed' ? (FEED_LABELS[e.subtype] || 'Feed') :
+                  e.type === 'diaper' ? (DIAPER_LABELS[e.subtype] || 'Diaper') :
+                  TYPE_LABELS[e.type] || e.type;
+    const canDel = !e.id.endsWith('_w');
+    return `<div class="tl-event">
+      <span class="tl-time">${fmtTime(e.time)}</span>
+      <span class="tl-dot ${e.type}"></span>
+      <div class="tl-body">
+        <p class="tl-type">${label}</p>
+        ${e.detail ? `<p class="tl-detail">${e.detail}</p>` : ''}
+      </div>
+      ${canDel ? `<button class="tl-del" onclick="deleteEntry('${e.type}','${e.id}')">✕</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function tlPrev() { const d = fromYmd(tlDateStr); d.setDate(d.getDate()-1); tlDateStr = ymd(d); renderTimeline(); }
+function tlNext() {
+  const d = fromYmd(tlDateStr); d.setDate(d.getDate()+1);
+  if (ymd(d) <= todayYmd()) { tlDateStr = ymd(d); renderTimeline(); }
+}
+
+// ═══════════════════════════════════════════════════════════
+// Growth
+// ═══════════════════════════════════════════════════════════
+function renderGrowth() {
+  const list = document.getElementById('growth-list');
+  if (!state.growth.length) { list.innerHTML = '<p class="tl-empty">No measurements logged yet.</p>'; return; }
+  const sorted = [...state.growth].sort((a,b) => b.date - a.date);
+  list.innerHTML = sorted.map(g => `
+    <div class="growth-entry">
+      <div>
+        <p class="growth-date">${fmtDate(ymd(new Date(g.date)))}</p>
+        <p class="growth-vals">${[g.weight&&`${g.weight} kg`, g.height&&`${g.height} cm`, g.head&&`Head ${g.head} cm`].filter(Boolean).join(' · ') || '—'}</p>
+      </div>
+      <button class="tl-del" onclick="deleteEntry('growth','${g.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Settings render
+// ═══════════════════════════════════════════════════════════
+function renderSettings() {
+  document.getElementById('sett-name').value = state.baby.name;
+  document.getElementById('sett-dob').value = state.baby.dob;
+  document.getElementById('tog-night').checked = !!state.settings.nightAuto;
+  document.getElementById('tog-remind').checked = !!state.settings.remind;
+  document.getElementById('remind-freq-wrap').classList.toggle('hidden', !state.settings.remind);
+  document.querySelectorAll('.f-pill').forEach(p => p.classList.toggle('active', p.dataset.freq === (state.settings.remindFreq || 'weekly')));
+  const last = state.settings.remindLast;
+  document.getElementById('remind-sett-sub').textContent = last
+    ? `Last exported ${Math.floor((Date.now()-last)/864e5)} day(s) ago`
+    : 'Get reminded to back up your data';
+}
+
+// ═══════════════════════════════════════════════════════════
+// Reminder
+// ═══════════════════════════════════════════════════════════
+function checkReminder() {
+  if (!state.settings.remind) { document.getElementById('remind-banner').classList.add('hidden'); return; }
+  const freqDays = state.settings.remindFreq === 'daily' ? 1 : state.settings.remindFreq === 'monthly' ? 30 : 7;
+  const due = (Date.now() - (state.settings.remindLast||0)) >= freqDays * 864e5;
+  document.getElementById('remind-banner').classList.toggle('hidden', !due);
+}
+
+function dismissReminder() {
+  state.settings.remindLast = Date.now(); save();
+  document.getElementById('remind-banner').classList.add('hidden');
+  renderSettings();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Logging
+// ═══════════════════════════════════════════════════════════
+let _feedType = 'left';
+
+function lastBreastSide() {
+  const breastFeeds = state.feeds.filter(f => f.type === 'left' || f.type === 'right').sort((a,b) => b.time - a.time);
+  if (!breastFeeds.length) return null;
+  return breastFeeds[0].type;
+}
+
+function suggestedSide() {
+  const last = lastBreastSide();
+  if (!last) return 'left';
+  return last === 'left' ? 'right' : 'left';
+}
+
+let _diaperType = 'wet';
+let _pressTimer = null;
+
+function setupLongPress(btnId, shortFn, longFn) {
+  const btn = document.getElementById(btnId);
+  const start = () => { _pressTimer = setTimeout(() => { _pressTimer = null; longFn(); }, 550); };
+  const end = () => { if (_pressTimer) { clearTimeout(_pressTimer); _pressTimer = null; shortFn(); } };
+  btn.addEventListener('touchstart', e => { e.preventDefault(); start(); }, { passive: false });
+  btn.addEventListener('touchend', end);
+  btn.addEventListener('mousedown', start);
+  btn.addEventListener('mouseup', end);
+  btn.addEventListener('mouseleave', () => { clearTimeout(_pressTimer); _pressTimer = null; });
+}
+
+function quickFeed() {
+  _feedType = suggestedSide();
+  logFeed(_feedType, '', '');
+}
+
+function openFeedModal() {
+  selFeedTypeByVal(suggestedSide());
+  document.getElementById('feed-amount').value = '';
+  document.getElementById('feed-notes').value = '';
+  openOv('ov-feed');
+}
+
+function selFeedType(btn) {
+  document.querySelectorAll('#feed-type-grid .type-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  _feedType = btn.dataset.ft;
+}
+
+function selFeedTypeByVal(val) {
+  document.querySelectorAll('#feed-type-grid .type-btn').forEach(b => { b.classList.toggle('sel', b.dataset.ft === val); });
+  _feedType = val;
+}
+
+function saveFeedModal() {
+  logFeed(_feedType, document.getElementById('feed-amount').value.trim(), document.getElementById('feed-notes').value.trim());
+  closeOv('ov-feed');
+}
+
+function logFeed(type, amount, notes) {
+  state.feeds.push({ id: uid(), time: Date.now(), type, amount, notes }); save(); render();
+}
+
+function toggleSleep() {
+  const active = activeSleep();
+  if (active) { stopSleep(); } else { startSleep(); }
+}
+
+function startSleep() {
+  state.sleep.push({ id: uid(), start: Date.now(), end: null }); save(); render();
+}
+
+function stopSleep() {
+  const active = activeSleep();
+  if (active) { active.end = Date.now(); save(); render(); }
+}
+
+function quickDiaper() { logDiaper('wet'); }
+
+function openDiaperModal() {
+  selDiaperTypeByVal('wet');
+  openOv('ov-diaper');
+}
+
+function selDiaperType(btn) {
+  document.querySelectorAll('#ov-diaper .type-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  _diaperType = btn.dataset.dt;
+}
+
+function selDiaperTypeByVal(val) {
+  document.querySelectorAll('#ov-diaper .type-btn').forEach(b => b.classList.toggle('sel', b.dataset.dt === val));
+  _diaperType = val;
+}
+
+function saveDiaperModal() { logDiaper(_diaperType); closeOv('ov-diaper'); }
+
+function logDiaper(type) {
+  state.diapers.push({ id: uid(), time: Date.now(), type }); save(); render();
+}
+
+function logGrowth() {
+  const w = document.getElementById('g-weight').value.trim();
+  const h = document.getElementById('g-height').value.trim();
+  const hd = document.getElementById('g-head').value.trim();
+  if (!w && !h && !hd) return;
+  state.growth.push({ id: uid(), date: Date.now(), weight: w, height: h, head: hd });
+  save();
+  document.getElementById('g-weight').value = '';
+  document.getElementById('g-height').value = '';
+  document.getElementById('g-head').value = '';
+  render();
+}
+
+function deleteEntry(type, id) {
+  const realId = id.endsWith('_w') ? id.slice(0,-2) : id;
+  if (type === 'feed') state.feeds = state.feeds.filter(f => f.id !== realId);
+  else if (type === 'sleep' || type === 'wake') state.sleep = state.sleep.filter(s => s.id !== realId);
+  else if (type === 'diaper') state.diapers = state.diapers.filter(d => d.id !== realId);
+  else if (type === 'growth') state.growth = state.growth.filter(g => g.id !== realId);
+  save(); render();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Setup / Settings saves
+// ═══════════════════════════════════════════════════════════
+function saveSetup() {
+  const name = document.getElementById('setup-name').value.trim();
+  const dob = document.getElementById('setup-dob').value;
+  if (!name) return;
+  state.baby.name = name; state.baby.dob = dob; save(); render();
+}
+
+function saveSettBaby() {
+  const name = document.getElementById('sett-name').value.trim();
+  const dob = document.getElementById('sett-dob').value;
+  if (!name) return;
+  state.baby.name = name; state.baby.dob = dob; save(); render();
+}
+
+function toggleNight() { state.settings.nightAuto = document.getElementById('tog-night').checked; save(); checkNightMode(); }
+function toggleRemind() { state.settings.remind = document.getElementById('tog-remind').checked; save(); render(); }
+function setRemindFreq(btn) {
+  state.settings.remindFreq = btn.dataset.freq; save();
+  document.querySelectorAll('.f-pill').forEach(p => p.classList.toggle('active', p === btn));
+}
+
+// ═══════════════════════════════════════════════════════════
+// Tabs
+// ═══════════════════════════════════════════════════════════
+function showTab(name) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('pane-' + name).classList.add('active');
+  document.querySelectorAll('.tab')[['today','timeline','growth','settings'].indexOf(name)].classList.add('active');
+  if (name === 'timeline') renderTimeline();
+  if (name === 'growth') renderGrowth();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Overlays
+// ═══════════════════════════════════════════════════════════
+function openOv(id) { document.getElementById(id).classList.add('open'); }
+function closeOv(id) { document.getElementById(id).classList.remove('open'); }
+
+function confirm2(ttl, body, onOk) {
+  document.getElementById('dlg-ttl').textContent = ttl;
+  document.getElementById('dlg-body').textContent = body;
+  document.getElementById('dlg-ok').onclick = () => { closeOv('dlg-confirm'); onOk(); };
+  openOv('dlg-confirm');
+}
+
+// ═══════════════════════════════════════════════════════════
+// Export / Import
+// ═══════════════════════════════════════════════════════════
+function todayFilename(ext) {
+  const d = new Date();
+  const s = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return `kin-nest-data-${s}.${ext}`;
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = todayFilename('json');
+  a.click();
+  state.settings.remindLast = Date.now(); save(); renderSettings();
+  document.getElementById('remind-banner').classList.add('hidden');
+}
+
+function exportHTML() {
+  const feeds7 = [];
+  const sleep7 = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = ymd(new Date(Date.now() - i * 864e5));
+    feeds7.push({ d, count: state.feeds.filter(f => sameDay(f.time, d)).length });
+    const sm = state.sleep.filter(s => s.end && sameDay(s.start, d)).reduce((t,s) => t + (s.end-s.start)/3600000, 0);
+    sleep7.push({ d, hours: Math.round(sm * 10) / 10 });
+  }
+
+  const barW = 28, barGap = 12, chartW = 7 * (barW + barGap) + barGap, chartH = 100;
+  const maxFeeds = Math.max(1, ...feeds7.map(f => f.count));
+  const feedBars = feeds7.map((f, i) => {
+    const bh = Math.max(4, (f.count / maxFeeds) * (chartH - 20));
+    const x = barGap + i * (barW + barGap);
+    const y = chartH - bh;
+    const dayLabel = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(f.d + 'T12:00').getDay()];
+    return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" fill="#ec4899" rx="3"/>
+      <text x="${x + barW/2}" y="${chartH + 14}" text-anchor="middle" font-size="9" fill="#6b7280">${dayLabel}</text>
+      <text x="${x + barW/2}" y="${y - 3}" text-anchor="middle" font-size="9" fill="#374151">${f.count || ''}</text>`;
+  }).join('');
+
+  const maxSleep = Math.max(1, ...sleep7.map(s => s.hours));
+  const pts = sleep7.map((s, i) => {
+    const x = barGap + i * (barW + barGap) + barW/2;
+    const y = chartH - 20 - (s.hours / maxSleep) * (chartH - 30);
+    return `${x},${y}`;
+  }).join(' ');
+  const sleepLine = `<polyline points="${pts}" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const sleepDots = sleep7.map((s, i) => {
+    const x = barGap + i * (barW + barGap) + barW/2;
+    const y = chartH - 20 - (s.hours / maxSleep) * (chartH - 30);
+    const dayLabel = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(s.d + 'T12:00').getDay()];
+    return `<circle cx="${x}" cy="${y}" r="3.5" fill="#2563eb"/>
+      <text x="${x}" y="${chartH - 5}" text-anchor="middle" font-size="9" fill="#6b7280">${dayLabel}</text>
+      <text x="${x}" y="${y - 8}" text-anchor="middle" font-size="9" fill="#374151">${s.hours > 0 ? s.hours + 'h' : ''}</text>`;
+  }).join('');
+
+  const now = new Date().toLocaleString();
+  const babyName = state.baby.name || 'Baby';
+  const totalFeeds = state.feeds.length;
+  const totalSleepSessions = state.sleep.filter(s => s.end).length;
+  const totalDiapers = state.diapers.length;
+
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kin Nest Report · ${babyName}</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0fdf4;color:#111827;margin:0;padding:24px;max-width:750px;margin:0 auto}
+  h1{color:#059669;margin-bottom:4px;font-size:24px}
+  h2{color:#374151;font-size:15px;margin:24px 0 8px;border-bottom:2px solid #e5e7eb;padding-bottom:6px}
+  .meta{color:#6b7280;font-size:13px;margin-bottom:20px}
+  .stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  .stat{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07);min-width:110px;flex:1}
+  .stat-val{font-size:26px;font-weight:800;color:#059669}.stat-lbl{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px}
+  svg{overflow:visible;display:block}
+  .chart-wrap{background:#fff;border-radius:12px;padding:16px 16px 8px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:20px;overflow:visible}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:#f0fdf4;padding:7px 10px;text-align:left;color:#374151;font-weight:700}
+  td{padding:7px 10px;border-top:1px solid #e5e7eb;color:#374151}
+  .print-btn{background:#059669;color:#fff;border:none;border-radius:10px;padding:10px 28px;font-size:14px;font-weight:600;cursor:pointer;margin:4px 0 12px;display:block}
+  .mobile-hint{display:none;background:#f0fdf4;border:1px solid #a7f3d0;border-radius:10px;padding:12px 16px;font-size:13px;color:#065f46;line-height:1.6;margin-bottom:20px}
+  .mobile-hint strong{display:block;margin-bottom:4px}
+  .footer{font-size:11px;color:#9ca3af;margin-top:32px;border-top:1px solid #e5e7eb;padding-top:12px}
+  .footer a{color:#059669}
+  @page{size:A4;margin:15mm 12mm}
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    body{background:#fff!important;padding:0;max-width:100%}
+    .print-btn{display:none!important}
+    .stat{box-shadow:none!important;border:1px solid #e5e7eb!important;break-inside:avoid}
+    .stat-row{break-inside:avoid}
+    .chart-wrap{box-shadow:none!important;border:1px solid #e5e7eb!important;break-inside:avoid;page-break-inside:avoid}
+    table{break-inside:auto}
+    tr{break-inside:avoid;page-break-inside:avoid}
+    h2{break-after:avoid;page-break-after:avoid}
+    svg text{fill:#374151!important}
+  }
+</style>
+</head><body>
+<h1>Kin Nest · Baby Report</h1>
+<p class="meta">Baby: <strong>${babyName}</strong> · Exported: ${now} · <em>Generated by Kin Nest (KIN-018)</em></p>
+<button class="print-btn" id="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+<div class="mobile-hint" id="mobile-hint">
+  <strong>📱 To save as PDF on iPhone / iPad</strong>
+  Tap the <strong>Share</strong> button (□↑) in your browser toolbar → tap <strong>Print</strong> → then <strong>pinch outward</strong> on the page preview. It will open as a PDF you can save to Files or share.
+</div>
+<h2>Totals</h2>
+<div class="stat-row">
+  <div class="stat"><div class="stat-val">${totalFeeds}</div><div class="stat-lbl">Total Feeds</div></div>
+  <div class="stat"><div class="stat-val">${totalSleepSessions}</div><div class="stat-lbl">Sleep Sessions</div></div>
+  <div class="stat"><div class="stat-val">${totalDiapers}</div><div class="stat-lbl">Diapers</div></div>
+  <div class="stat"><div class="stat-val">${state.growth.length}</div><div class="stat-lbl">Measurements</div></div>
+</div>
+<h2>Feeds — last 7 days</h2>
+<div class="chart-wrap"><svg width="${chartW}" height="${chartH + 20}" viewBox="0 0 ${chartW} ${chartH + 20}">${feedBars}</svg></div>
+<h2>Sleep hours — last 7 days</h2>
+<div class="chart-wrap"><svg width="${chartW}" height="${chartH + 20}" viewBox="0 0 ${chartW} ${chartH + 20}">${sleepLine}${sleepDots}</svg></div>
+<h2>Recent feeds (last 20)</h2>
+<table><tr><th>Time</th><th>Type</th><th>Amount</th><th>Notes</th></tr>
+${[...state.feeds].sort((a,b)=>b.time-a.time).slice(0,20).map(f=>`<tr><td>${new Date(f.time).toLocaleString()}</td><td>${f.type}</td><td>${f.amount||'—'}</td><td>${f.notes||'—'}</td></tr>`).join('')}
+</table>
+<h2>Sleep sessions (last 14)</h2>
+<table><tr><th>Start</th><th>End</th><th>Duration</th></tr>
+${[...state.sleep].filter(s=>s.end).sort((a,b)=>b.start-a.start).slice(0,14).map(s=>`<tr><td>${new Date(s.start).toLocaleString()}</td><td>${new Date(s.end).toLocaleString()}</td><td>${fmtDurMin((s.end-s.start)/60000)}</td></tr>`).join('')}
+</table>
+<script>
+  const __data=${JSON.stringify(state)};
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isMobile = isIOS || /Android/.test(navigator.userAgent);
+  if (isMobile) {
+    document.getElementById('print-btn').style.display = 'none';
+    document.getElementById('mobile-hint').style.display = 'block';
+  } else {
+    window.addEventListener('load', function() { setTimeout(function() { window.print(); }, 600); });
+  }
+</scr` + `ipt>
+<p class="footer">
+  This report was generated by <a href="https://kinnestapp.netlify.app">Kin Nest</a>. Raw JSON data is embedded above — use "Import" in Kin Nest to restore it.
+</p>
+
+<div style="text-align:center;padding:10px 16px 28px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+<div style="text-align:center;padding:4px 0 12px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:rgba(0,0,0,0.3);font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;font-family:-apple-system,sans-serif;">Report a bug</button></div>
 
   <!-- ── Bug report ──────────────────────────────────────────────── -->
   <style>
