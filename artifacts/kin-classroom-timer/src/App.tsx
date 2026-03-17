@@ -50,6 +50,8 @@ export default function App() {
   const [running, setRunning] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [chimeFired, setChimeFired] = useState(false);
+  const [bugOpen, setBugOpen] = useState(false);
+  const [bugSuccess, setBugSuccess] = useState(false);
   const [isLight, setIsLight] = useState(() => {
     const saved = localStorage.getItem("kin006-theme");
     return saved === "light";
@@ -219,6 +221,7 @@ export default function App() {
   };
 
   return (
+    <>
     <div
       style={{
         minHeight: "100dvh",
@@ -522,24 +525,17 @@ export default function App() {
       </button>
 
       {/* Footer */}
-      <footer
-        style={{
-          position: "fixed",
-          bottom: 20,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontSize: 11,
-          color: isLight ? "#666" : "#444",
-          letterSpacing: "0.1em",
-          userSelect: "none",
-        }}
-      >
-        <span>Kin</span>
-        <span style={{ margin: "0 6px", color: isLight ? "#888" : "#333" }}>·</span>
-        <span>KIN-006</span>
-        <span style={{ margin: "0 6px", color: isLight ? "#888" : "#333" }}>·</span>
-        <span>dBridge</span>
+      <footer style={{ textAlign: "center", padding: "20px", fontSize: 12, color: isLight ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.35)" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 20, background: "rgba(46,160,67,0.1)", border: "1px solid rgba(46,160,67,0.25)", fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", color: "#2ea043" }}>
+            <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fillOpacity="0.15" stroke="#2ea043" strokeWidth="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            Local Only · Verified
+          </span>
+        </div>
+        <div>
+          <button onClick={() => { setBugOpen(true); setBugSuccess(false); }} style={{ background: "none", border: "none", padding: 0, color: "inherit", font: "inherit", opacity: 0.4, fontSize: 11, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "underline", textUnderlineOffset: 3 }}>Report a bug</button>
+        </div>
+        <div style={{ marginTop: 8, opacity: 0.5, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>Kin · KIN-006 · dBridge</div>
       </footer>
 
       <style>{`
@@ -552,5 +548,45 @@ export default function App() {
         button:active:not(:disabled) { transform: scale(0.97); }
       `}</style>
     </div>
+
+    {/* Bug report backdrop */}
+    {bugOpen && (
+      <div onClick={() => setBugOpen(false)} style={{ display: "block", position: "fixed", inset: 0, zIndex: 901, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(2px)" }} />
+    )}
+
+    {/* Bug report sheet */}
+    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 902, background: "#17171f", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.08)", borderBottom: "none", padding: "0 20px 40px", boxShadow: "0 -8px 40px rgba(0,0,0,0.6)", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif", transform: bugOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 0.3s cubic-bezier(0.32,0.72,0,1)" }}>
+      {!bugSuccess ? (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0 8px" }}>
+            <h2 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: 0 }}>Report a bug</h2>
+            <button onClick={() => setBugOpen(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 22, cursor: "pointer", padding: "0 4px", lineHeight: 1, flex: "none", minHeight: 0 }}>×</button>
+          </div>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            const fd = new FormData(e.currentTarget);
+            await fetch("https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec", { method: "POST", body: fd });
+            setBugSuccess(true);
+          }} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <input type="hidden" name="tool" value="KIN-006 Classroom Timer" />
+            <textarea name="description" required placeholder="What went wrong? What did you expect?" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none", resize: "none", height: 90 }} />
+            <input type="email" name="email" placeholder="Email for follow-up (optional)" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none" }} />
+            <button type="submit" style={{ width: "100%", padding: 13, borderRadius: 12, background: "#5b5ef4", border: "none", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.02em" }}>Send report</button>
+          </form>
+        </>
+      ) : (
+        <>
+          <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+          <div style={{ textAlign: "center", padding: "28px 0 8px" }}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ display: "block", margin: "0 auto 16px" }}><circle cx="12" cy="12" r="11" stroke="#2ea043" strokeWidth="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: "0 0 8px" }}>Thanks for the report</h3>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, lineHeight: 1.5, margin: "0 0 28px" }}>We'll take a look. Your feedback<br/>helps make Kin better for everyone.</p>
+            <button onClick={() => setBugOpen(false)} style={{ padding: "11px 32px", borderRadius: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>Done</button>
+          </div>
+        </>
+      )}
+    </div>
+    </>
   );
 }
