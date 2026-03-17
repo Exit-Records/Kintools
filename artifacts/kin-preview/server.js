@@ -37,9 +37,15 @@ function serve(req, res) {
   }
 
   if (url === "/") {
-    const listing = buildIndex();
-    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-    res.end(listing);
+    try {
+      const landingPath = path.join(SITES_DIR, "kin-landing", "index.html");
+      const data = fs.readFileSync(landingPath);
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+      res.end(data);
+    } catch {
+      res.writeHead(500);
+      res.end("Landing page not found");
+    }
     return;
   }
 
