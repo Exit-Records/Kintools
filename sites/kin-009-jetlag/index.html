@@ -315,7 +315,7 @@
     <div class="brand-sub">KIN-009 · <span style="text-transform:none">d</span>Bridge</div>
   </div>
   <div style="display:flex;gap:10px;align-items:center">
-    <button class="btn-mode" id="btn-mode" title="Toggle light/dark mode">☀️ Light</button>
+    <button class="btn-mode" id="btn-mode" title="Toggle light/dark mode">🌙 Dark</button>
     <span class="kin-badge">KIN-009</span>
   </div>
 </header>
@@ -785,7 +785,7 @@ function render(p, originName, destName, arrivalHour) {
 (function() {
   const btn = document.getElementById('btn-mode');
   const saved = localStorage.getItem('kin-mode');
-  if (saved === 'light') { document.documentElement.classList.add('light'); btn.textContent = '🌙 Dark'; }
+  if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙 Dark'; }
 
   btn.addEventListener('click', () => {
     const isLight = document.documentElement.classList.toggle('light');
