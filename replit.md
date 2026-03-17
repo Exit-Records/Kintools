@@ -54,30 +54,101 @@ Latest: KIN-025 · Stretch — `sites/kin-025-stretch/` — `https://kinstretch.
 - **Apple-touch-icon**: Canvas drawn at 180×180, same gradient as landing page cover card, tool initials in serif. Set on `#apple-touch-icon` href.
 - **Service worker**: Blob SW pattern. Cache key `kin0NN-v1`. Never use `data:` URI SW.
 
-### Footer (every tool)
+### Footer (every tool — canonical format)
+
+The footer is always a single wrapper with three rows: badge · bug link · credit. Never use `position:fixed` on a footer element — it must flow naturally at the bottom of content.
+
+**Single HTML tools** — place this block just before `</body>` (after all app HTML, bug sheet, and scripts):
+
+```html
+<div class="footer" style="text-align:center;padding:20px;font-size:12px;color:rgba(0,0,0,0.45)">
+  <div style="display:flex;justify-content:center;margin-bottom:8px">
+    <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span>
+  </div>
+  <div><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
+  <div style="margin-top:8px;opacity:0.5;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">Kin · KIN-NNN · Creator</div>
+</div>
 ```
-<footer class="kin-footer">
-  <div class="foot-brand">Kin</div>
-  <div class="foot-meta">KIN-NNN · Tool Name<br>by Darren · No tracking · Works offline</div>
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+
+**React tools** — in `App.tsx`:
+
+1. Add bug state alongside other `useState` declarations:
+```tsx
+const [bugOpen, setBugOpen] = useState(false);
+const [bugSuccess, setBugSuccess] = useState(false);
+```
+
+2. Replace any existing footer with this JSX (inside the root div, at the bottom, **never** `position: fixed`):
+```tsx
+<footer style={{ textAlign: "center", padding: "20px", fontSize: 12, color: "rgba(0,0,0,0.45)" }}>
+  <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 20, background: "rgba(46,160,67,0.1)", border: "1px solid rgba(46,160,67,0.25)", fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", color: "#2ea043" }}>
+      <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fillOpacity="0.15" stroke="#2ea043" strokeWidth="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      Local Only · Verified
+    </span>
+  </div>
+  <div>
+    <button onClick={() => { setBugOpen(true); setBugSuccess(false); }} style={{ background: "none", border: "none", padding: 0, color: "inherit", font: "inherit", opacity: 0.4, fontSize: 11, cursor: "pointer", letterSpacing: "0.04em", textDecoration: "underline", textUnderlineOffset: 3 }}>Report a bug</button>
+  </div>
+  <div style={{ marginTop: 8, opacity: 0.5, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>Kin · KIN-NNN · Creator</div>
 </footer>
 ```
 
-The **Local Only · Verified** badge is mandatory on every tool, inside the footer. For tools that have no `<footer>` element, place the badge in a centred `<div>` immediately before `</body>`.
+3. Wrap `return (` in a Fragment and add the bug backdrop + sheet after the closing root `</div>`:
+```tsx
+return (
+  <>
+  <div ...> {/* root div */}
+    ...
+    {/* footer JSX above */}
+  </div>
 
-### Report a bug link (every tool)
-
-Every tool must also include a **"Report a bug"** text link in the footer, immediately after the Local Only badge:
-
-```html
-<div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
+  {bugOpen && (
+    <div onClick={() => setBugOpen(false)} style={{ display: "block", position: "fixed", inset: 0, zIndex: 901, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(2px)" }} />
+  )}
+  <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 902, background: "#17171f", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.08)", borderBottom: "none", padding: "0 20px 40px", boxShadow: "0 -8px 40px rgba(0,0,0,0.6)", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif", transform: bugOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 0.3s cubic-bezier(0.32,0.72,0,1)" }}>
+    {!bugSuccess ? (
+      <>
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0 8px" }}>
+          <h2 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: 0 }}>Report a bug</h2>
+          <button onClick={() => setBugOpen(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 22, cursor: "pointer", padding: "0 4px", lineHeight: 1, flex: "none", minHeight: 0 }}>×</button>
+        </div>
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          await fetch("https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec", { method: "POST", body: fd });
+          setBugSuccess(true);
+        }} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input type="hidden" name="tool" value="KIN-NNN Tool Name" />
+          <textarea name="description" required placeholder="What went wrong? What did you expect?" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none", resize: "none", height: 90 }} />
+          <input type="email" name="email" placeholder="Email for follow-up (optional)" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none" }} />
+          <button type="submit" style={{ width: "100%", padding: 13, borderRadius: 12, background: "#5b5ef4", border: "none", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.02em" }}>Send report</button>
+        </form>
+      </>
+    ) : (
+      <>
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
+        <div style={{ textAlign: "center", padding: "28px 0 8px" }}>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ display: "block", margin: "0 auto 16px" }}><circle cx="12" cy="12" r="11" stroke="#2ea043" strokeWidth="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: "0 0 8px" }}>Thanks for the report</h3>
+          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, lineHeight: 1.5, margin: "0 0 28px" }}>We'll take a look. Your feedback<br/>helps make Kin better for everyone.</p>
+          <button onClick={() => setBugOpen(false)} style={{ padding: "11px 32px", borderRadius: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>Done</button>
+        </div>
+      </>
+    )}
+  </div>
+  </>
+);
 ```
 
-Clicking it opens a slide-up bottom sheet with a form (type, description, anonymous toggle, optional name/email). Submissions go to Google Sheets via Apps Script:
+**Google Sheets endpoint (both app types):**
+`https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec`
 
-**Endpoint:** `https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec`
-
-The full CSS + HTML + JS block is in `Kin Build Rules.md` under "Bug report feature". The only per-tool variables are `kin` (e.g. `KIN-026`) and `name` (e.g. `Tool Name`) in the sheet header and the `subject`/`app` fields of the fetch payload.
+**Rules:**
+- The bug button uses `color:inherit; font:inherit; opacity:0.4` — never hard-coded colours
+- Footer is never `position:fixed`
+- The full bug sheet block (for plain HTML tools) is in `Kin Build Rules.md` under "Bug report feature"
 
 ### Creator rule
 Always `Darren` unless the user explicitly specifies otherwise.
