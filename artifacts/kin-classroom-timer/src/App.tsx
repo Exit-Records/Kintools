@@ -54,7 +54,7 @@ export default function App() {
   const [bugSuccess, setBugSuccess] = useState(false);
   const [isLight, setIsLight] = useState(() => {
     const saved = localStorage.getItem("kin006-theme");
-    return saved === "light";
+    return saved !== "dark";
   });
 
   useEffect(() => {
