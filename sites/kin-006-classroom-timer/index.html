@@ -81,10 +81,10 @@
     .kin-br-head h2 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
     .kin-br-head p  { color: rgba(255,255,255,0.35); font-size: 11px; margin: 3px 0 0; letter-spacing: 0.04em; }
     .kin-br-close {
-      width: 30px; height: 30px; border-radius: 50%;
+      width: 30px !important; height: 30px !important; border-radius: 50%;
       background: rgba(255,255,255,0.07); border: none;
       color: rgba(255,255,255,0.5); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex: none !important; min-height: 0 !important;
     }
     .kin-br-label { display: block; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 7px; }
     .kin-br-field { margin-bottom: 14px; }
@@ -110,9 +110,9 @@
     .kin-br-anon-text div:first-child { color: #fff; font-size: 13px; }
     .kin-br-anon-text div:last-child  { color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px; }
     .kin-br-toggle {
-      width: 44px; height: 26px; border-radius: 99px;
+      width: 44px !important; height: 26px !important; border-radius: 99px;
       background: #5b5ef4; border: none; cursor: pointer;
-      position: relative; transition: background 0.2s; flex-shrink: 0;
+      position: relative; transition: background 0.2s; flex: none !important; min-height: 0 !important;
     }
     .kin-br-toggle::after {
       content: ''; position: absolute; top: 3px; left: calc(100% - 23px);

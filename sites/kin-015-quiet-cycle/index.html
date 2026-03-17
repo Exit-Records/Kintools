@@ -58,7 +58,7 @@
 
     /* ── Header ── */
     .kin-hdr { display: flex; align-items: center; gap: 10px; padding: 4px 0 6px; user-select: none; cursor: default; }
-    .kin-logo { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .kin-logo { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent-dk)); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex: none !important; min-height: 0 !important; }
     .kin-ttl { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
     .kin-num { margin-left: auto; font-size: 10px; font-weight: 500; color: var(--subtle); letter-spacing: .5px; text-transform: uppercase; background: var(--accent-lt); padding: 2px 7px; border-radius: 20px; }
 
@@ -99,7 +99,7 @@
     /* ── Calendar ── */
     .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .cal-mo { font-size: 15px; font-weight: 600; }
-    .cal-arr { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 16px; transition: background .15s; }
+    .cal-arr { width: 30px !important; height: 30px !important; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 16px; transition: background .15s; }
     .cal-arr:hover { background: var(--accent-lt); color: var(--accent); }
     .cal-wds { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 3px; }
     .cal-wd { font-size: 11px; font-weight: 600; color: var(--subtle); padding: 3px 0; text-transform: uppercase; letter-spacing: .2px; }
@@ -1053,10 +1053,10 @@ init();
     .kin-br-head h2 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
     .kin-br-head p  { color: rgba(255,255,255,0.35); font-size: 11px; margin: 3px 0 0; letter-spacing: 0.04em; }
     .kin-br-close {
-      width: 30px; height: 30px; border-radius: 50%;
+      width: 30px !important; height: 30px !important; border-radius: 50%;
       background: rgba(255,255,255,0.07); border: none;
       color: rgba(255,255,255,0.5); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex: none !important; min-height: 0 !important;
     }
     .kin-br-label { display: block; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 7px; }
     .kin-br-field { margin-bottom: 14px; }
@@ -1082,9 +1082,9 @@ init();
     .kin-br-anon-text div:first-child { color: #fff; font-size: 13px; }
     .kin-br-anon-text div:last-child  { color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px; }
     .kin-br-toggle {
-      width: 44px; height: 26px; border-radius: 99px;
+      width: 44px !important; height: 26px !important; border-radius: 99px;
       background: #5b5ef4; border: none; cursor: pointer;
-      position: relative; transition: background 0.2s; flex-shrink: 0;
+      position: relative; transition: background 0.2s; flex: none !important; min-height: 0 !important;
     }
     .kin-br-toggle::after {
       content: ''; position: absolute; top: 3px; left: calc(100% - 23px);
