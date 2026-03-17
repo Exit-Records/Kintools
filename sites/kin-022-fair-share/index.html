@@ -535,6 +535,8 @@ flex-shrink: 0;
   </script>
 </head>
 <body>
+<div id="kin-demo-bar" style="display:none;background:#e8f3ed;padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(46,160,67,0.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><span style="font-size:13px;font-weight:600;color:#2a6b4a">Demo mode — sample data</span><button onclick="kinStartFresh()" style="font-size:13px;font-weight:700;color:#fff;background:#2a6b4a;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:0!important;height:32px;flex:none!important">Start fresh</button></div>
+  <script>if(new URLSearchParams(location.search).get('demo')==='true'){var _kdb=document.getElementById('kin-demo-bar');if(_kdb)_kdb.style.display='flex';}</script>
 
 <div class="header">
   <div>
@@ -781,6 +783,24 @@ let state = { groups: [] };
 let activeGroupId = null;
 let editingGroupId = null;
 let editingExpenseId = null;
+
+  // ── Demo ──────────────────────────────────────────────────────────────────
+  const _isDemo022 = new URLSearchParams(location.search).get('demo') === 'true';
+  function _demoFS() {
+    const today = new Date();
+    function off(n) { const d = new Date(today); d.setDate(d.getDate()-n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    return { groups: [{ id:'g1', name:'Weekend trip', currency:'\u00a3',
+      participants: [{id:'p1',name:'Sarah'},{id:'p2',name:'James'},{id:'p3',name:'Priya'}],
+      expenses: [
+        {id:'e1',description:'Hotel (2 nights)',amount:210,   paidBy:'p1',participants:['p1','p2','p3'],splitType:'equal',splits:{},date:off(3)},
+        {id:'e2',description:'Dinner Friday',   amount:89.40, paidBy:'p2',participants:['p1','p2','p3'],splitType:'equal',splits:{},date:off(3)},
+        {id:'e3',description:'Activities',      amount:45,    paidBy:'p3',participants:['p1','p2','p3'],splitType:'equal',splits:{},date:off(2)},
+        {id:'e4',description:'Groceries & snacks',amount:34.50,paidBy:'p1',participants:['p1','p2','p3'],splitType:'equal',splits:{},date:off(2)},
+      ]
+    }]};
+  }
+  function kinStartFresh() { window.location.href = window.location.pathname; }
+  
 let currentSplitMethod = 'equal';
 let currentPcMode = 'of';
 let tipPresetValue = 15;
@@ -1552,8 +1572,8 @@ function applyTheme(theme) {
 // ── Init ──
 async function init() {
   initTheme();
-  await openDB();
-  await loadState();
+  if (!_isDemo022) await openDB();
+  if (_isDemo022) { state = _demoFS(); saveState = async () => {}; } else { await loadState(); }
   if (state.groups.length && !activeGroupId) {
     activeGroupId = state.groups[0].id;
   }

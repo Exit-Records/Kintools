@@ -502,6 +502,8 @@
   </style>
 </head>
 <body>
+<div id="kin-demo-bar" style="display:none;background:#e8f3ed;padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(46,160,67,0.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><span style="font-size:13px;font-weight:600;color:#2a6b4a">Demo mode — sample data</span><button onclick="kinStartFresh()" style="font-size:13px;font-weight:700;color:#fff;background:#2a6b4a;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:0!important;height:32px;flex:none!important">Start fresh</button></div>
+  <script>if(new URLSearchParams(location.search).get('demo')==='true'){var _kdb=document.getElementById('kin-demo-bar');if(_kdb)_kdb.style.display='flex';}</script>
 
 <!-- ══════════════════════════════════════════════
      HOME VIEW
@@ -825,11 +827,44 @@ function loadData() {
     return data;
   } catch { return { decks: {} }; }
 }
-function saveData() {
+function saveData() { if (_isDemo) return;
   localStorage.setItem(STORE_KEY, JSON.stringify(db));
 }
 
-let db = loadData();
+
+  // ── Demo ─────────────────────────────────────────────────────────────────
+  const _isDemo = new URLSearchParams(location.search).get('demo') === 'true';
+  function _demoDB() {
+    const t = Date.now();
+    return { seeded: true, decks: {
+      'd1': { id:'d1', name:'Spanish Basics', created:t, cards:[
+        {id:'c1',front:'Hello',back:'Hola',type:'standard',state:'known',ease:2},
+        {id:'c2',front:'Goodbye',back:'Adi\u00f3s',type:'standard',state:'known',ease:2},
+        {id:'c3',front:'Thank you',back:'Gracias',type:'standard',state:'known',ease:2},
+        {id:'c4',front:'Please',back:'Por favor',type:'standard',state:'known',ease:2},
+        {id:'c5',front:'Yes',back:'S\u00ed',type:'standard',state:'known',ease:2},
+        {id:'c6',front:'No',back:'No',type:'standard',state:'known',ease:2},
+        {id:'c7',front:'Dog',back:'Perro',type:'standard',state:'learning',ease:1},
+        {id:'c8',front:'Cat',back:'Gato',type:'standard',state:'learning',ease:1},
+        {id:'c9',front:'House',back:'Casa',type:'standard',state:'learning',ease:1},
+        {id:'c10',front:'Water',back:'Agua',type:'standard',state:'learning',ease:1},
+        {id:'c11',front:'Food',back:'Comida',type:'standard',state:'new',ease:1},
+        {id:'c12',front:'Friend',back:'Amigo',type:'standard',state:'new',ease:1},
+        {id:'c13',front:'Family',back:'Familia',type:'standard',state:'new',ease:1},
+        {id:'c14',front:'Street',back:'Calle',type:'standard',state:'new',ease:1},
+        {id:'c15',front:'Book',back:'Libro',type:'standard',state:'new',ease:1},
+      ]},
+      'd2': { id:'d2', name:'World Capitals', created:t-1, cards:[
+        {id:'c16',front:'France',back:'Paris',type:'standard',state:'known',ease:2},
+        {id:'c17',front:'Germany',back:'Berlin',type:'standard',state:'known',ease:2},
+        {id:'c18',front:'Japan',back:'Tokyo',type:'standard',state:'known',ease:2},
+        {id:'c19',front:'Brazil',back:'Bras\u00edlia',type:'standard',state:'learning',ease:1},
+        {id:'c20',front:'Australia',back:'Canberra',type:'standard',state:'new',ease:1},
+      ]}
+    }};
+  }
+  function kinStartFresh() { window.location.href = window.location.pathname; }
+  let db = _isDemo ? _demoDB() : loadData();
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);

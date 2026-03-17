@@ -868,6 +868,8 @@ if("serviceWorker" in navigator){
 </script>
 </head>
 <body>
+<div id="kin-demo-bar" style="display:none;background:#e8f3ed;padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(46,160,67,0.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><span style="font-size:13px;font-weight:600;color:#2a6b4a">Demo mode — sample data</span><button onclick="kinStartFresh()" style="font-size:13px;font-weight:700;color:#fff;background:#2a6b4a;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:0!important;height:32px;flex:none!important">Start fresh</button></div>
+  <script>if(new URLSearchParams(location.search).get('demo')==='true'){var _kdb=document.getElementById('kin-demo-bar');if(_kdb)_kdb.style.display='flex';}</script>
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
 
 <div class="app">
@@ -1006,6 +1008,22 @@ if("serviceWorker" in navigator){
   };
 
   const STORAGE_KEY = 'thoughtloop_entries';
+
+  // ── Demo ──────────────────────────────────────────────────────────────────
+  const _isDemo024 = new URLSearchParams(location.search).get('demo') === 'true';
+  function _demoTL() {
+    const today = new Date();
+    function offDate(n) { const d = new Date(today); d.setDate(d.getDate()-n); return d.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}); }
+    function offISO(n)  { const d = new Date(today); d.setDate(d.getDate()-n); return d.toISOString(); }
+    return [
+      { id:1001, thought:"What if I say the wrong thing in tomorrow's meeting?", verdict:'release', mode:'evening', answers:{happening:false,canact:false,speculation:true}, reframe:"Preparation beats prediction. Review your notes, then let it go.", scheduleDate:'', date:offDate(1), timestamp:offISO(1) },
+      { id:1002, thought:"I need to reply to that email from last week", verdict:'act', mode:'morning', answers:{happening:false,canact:true,speculation:false}, reframe:'', scheduleDate:'', date:offDate(2), timestamp:offISO(2) },
+      { id:1003, thought:"My colleague thinks I'm not pulling my weight", verdict:'notmine', mode:'now', answers:{notmine:true}, reframe:"You can't read minds. Act from your own values, not assumed judgement.", scheduleDate:'', date:offDate(3), timestamp:offISO(3) },
+      { id:1004, thought:"The project deadline feels impossible", verdict:'act', mode:'now', answers:{happening:true,canact:true,speculation:false}, reframe:'', scheduleDate:'', date:offDate(5), timestamp:offISO(5) },
+    ];
+  }
+  function kinStartFresh() { window.location.href = window.location.pathname; }
+  
   const SETTINGS_KEY = 'thoughtloop_settings';
 
   // Questions per mode
@@ -1304,7 +1322,7 @@ const entry = {
 
 const entries = getEntries();
 entries.unshift(entry);
-try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+if (!_isDemo024) { if (!_isDemo024) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {} } }
 
 startOver();
 
@@ -1317,6 +1335,7 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function getEntries() {
+if (_isDemo024) return _demoTL();
 try {
 return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 } catch(e) { return []; }

@@ -197,6 +197,8 @@
   </style>
 </head>
 <body>
+<div id="kin-demo-bar" style="display:none;background:#e8f3ed;padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(46,160,67,0.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><span style="font-size:13px;font-weight:600;color:#2a6b4a">Demo mode — sample data</span><button onclick="kinStartFresh()" style="font-size:13px;font-weight:700;color:#fff;background:#2a6b4a;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:0!important;height:32px;flex:none!important">Start fresh</button></div>
+  <script>if(new URLSearchParams(location.search).get('demo')==='true'){var _kdb=document.getElementById('kin-demo-bar');if(_kdb)_kdb.style.display='flex';}</script>
 
 <!-- HEADER -->
 <header class="kin-hdr">
@@ -513,8 +515,38 @@ function load() {
   return defaultState();
 }
 
-function save() { localStorage.setItem(SK, JSON.stringify(state)); }
-let state = load();
+const _isDemo018 = new URLSearchParams(location.search).get('demo') === 'true';
+  function _demoNest() {
+    const today = new Date();
+    function ts(h, m) { const d = new Date(today); d.setHours(h, m, 0, 0); return d.getTime(); }
+    function dob() { const d = new Date(today); d.setMonth(d.getMonth()-3); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    return {
+      baby: { name: 'Leo', dob: dob() },
+      settings: { nightAuto: true, remind: false, remindFreq: 'weekly', remindLast: 0 },
+      feeds: [
+        { id:'f1', time:ts(6,0),  type:'breast', amount:'15 min', notes:'' },
+        { id:'f2', time:ts(8,30), type:'breast', amount:'12 min', notes:'' },
+        { id:'f3', time:ts(11,0), type:'bottle', amount:'100ml',  notes:'' },
+        { id:'f4', time:ts(13,30),type:'breast', amount:'18 min', notes:'' },
+        { id:'f5', time:ts(16,0), type:'bottle', amount:'90ml',   notes:'' },
+      ],
+      sleep: [
+        { id:'s1', start:ts(7,0),   end:ts(8,15),  quality:'' },
+        { id:'s2', start:ts(10,15), end:ts(11,0),  quality:'' },
+        { id:'s3', start:ts(12,30), end:ts(14,0),  quality:'' },
+      ],
+      diapers: [
+        { id:'d1', time:ts(7,30), type:'wet' },
+        { id:'d2', time:ts(10,0), type:'dirty' },
+        { id:'d3', time:ts(12,0), type:'wet' },
+        { id:'d4', time:ts(15,30),type:'wet' },
+      ],
+      growth: [], medicine: []
+    };
+  }
+  function kinStartFresh() { window.location.href = window.location.pathname; }
+  function save() { if (!_isDemo018) localStorage.setItem(SK, JSON.stringify(state)); }
+let state = _isDemo018 ? _demoNest() : load();
 
 // ═══════════════════════════════════════════════════════════
 // Utilities

@@ -365,6 +365,8 @@ footer {
 </style>
 </head>
 <body>
+<div id="kin-demo-bar" style="display:none;background:#e8f3ed;padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(46,160,67,0.25);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><span style="font-size:13px;font-weight:600;color:#2a6b4a">Demo mode — sample data</span><button onclick="kinStartFresh()" style="font-size:13px;font-weight:700;color:#fff;background:#2a6b4a;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;min-height:0!important;height:32px;flex:none!important">Start fresh</button></div>
+  <script>if(new URLSearchParams(location.search).get('demo')==='true'){var _kdb=document.getElementById('kin-demo-bar');if(_kdb)_kdb.style.display='flex';}</script>
 
 <button id="toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">🌙</button>
 
@@ -429,6 +431,26 @@ footer {
 <script>
 var KEY   = 'kin-mood-slider';
 var THEME = 'kin-mood-dot-theme';
+
+  var _isDemo013 = new URLSearchParams(location.search).get('demo') === 'true';
+  function _demoMood013() {
+    var t = new Date(), dd = {};
+    function off(n) { var d = new Date(t); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+    dd[off(6)] = {val:-2, note:'Rough start to the week'};
+    dd[off(5)] = {val:1,  note:''};
+    dd[off(4)] = {val:3,  note:'Good day, got a lot done'};
+    dd[off(3)] = {val:-1, note:''};
+    dd[off(2)] = {val:4,  note:'Weekend vibes'};
+    dd[off(1)] = {val:2,  note:'Relaxed day'};
+    dd[off(0)] = {val:1,  note:''};
+    return dd;
+  }
+  if (_isDemo013) {
+    loadData = function() { return _demoMood013(); };
+    saveData  = function() {};
+  }
+  function kinStartFresh() { window.location.href = window.location.pathname; }
+  
 
 var DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
