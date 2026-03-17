@@ -1,0 +1,35 @@
+7:31:01 PM: Waiting for other deploys from your team to complete. Check the queue: https://app.netlify.com/teams/exit-records/builds
+7:33:04 PM: build-image version: 207bd4d38e2cd3af6515aa37c5942e41499b616a (noble-new-builds)
+7:33:04 PM: buildbot version: 420ff06ebdfb3fd8215b1a0a158ab916a07fe5a9
+7:33:04 PM: Fetching cached dependencies
+7:33:04 PM: Starting to download cache of 69.3MB (Last modified: 2026-03-15 08:59:15 +0000 UTC)
+7:33:05 PM: Downloaded cache in 392ms
+7:33:07 PM: Extracted cache in 1.94s
+7:33:07 PM: Fetched cache in 2.381s
+7:33:07 PM: Starting to prepare the repo for build
+7:33:07 PM: Preparing Git Reference refs/heads/main
+7:33:09 PM: Installing dependencies
+7:33:09 PM: mise ~/.config/mise/config.toml tools: python@3.14.3
+7:33:09 PM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+7:33:09 PM: mise ~/.config/mise/config.toml tools: go@1.26.0
+7:33:10 PM: Downloading and installing node v22.22.1...
+7:33:10 PM: Downloading https://nodejs.org/dist/v22.22.1/node-v22.22.1-linux-x64.tar.xz...
+7:33:10 PM: Computing checksum with sha256sum
+7:33:10 PM: Checksums matched!
+7:33:13 PM: Now using node v22.22.1 (npm v10.9.4)
+7:33:13 PM: Enabling Node.js Corepack
+7:33:13 PM: pnpm workspaces detected
+7:33:14 PM: Installing npm packages using pnpm version 10.30.2
+7:33:14 PM: Scope: all 12 workspace projects
+7:33:14 PM: Lockfile is up to date, resolution step is skipped
+7:33:14 PM: Already up to date
+7:33:15 PM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+7:33:15 PM: . preinstall: Done
+7:33:15 PM: Done in 1.5s using pnpm v10.30.2
+7:33:15 PM: npm packages installed using pnpm
+7:33:16 PM: Failed during stage 'building site': Deploy directory 'sites/kin-011-audio-calc' does not exist
+7:33:16 PM: Successfully installed dependencies
+7:33:16 PM: Detected 0 framework(s)
+7:33:16 PM: No build steps found, continuing to publishing
+7:33:16 PM: Failing build: Failed to build site
+7:33:17 PM: Finished processing build request in 12.44s
