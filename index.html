@@ -49,6 +49,7 @@
     --hb-24: #4a5e72;
     --hb-25: #c45d3e;
     --hb-26: #1d3a5c;
+    --hb-27: #c0293a;
   }
 
   body {
@@ -449,6 +450,7 @@
   .release:nth-child(24) { animation-delay: 1.35s; }
   .release:nth-child(25) { animation-delay: 1.40s; }
   .release:nth-child(26) { animation-delay: 1.45s; }
+  .release:nth-child(27) { animation-delay: 1.50s; }
 
   /* ---- RESPONSIVE ---- */
   .demo-pill {
@@ -502,7 +504,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">26 tools</span>
+  <span class="catalog-count">27 tools</span>
 </div>
 
 <div class="catalog">
@@ -1088,6 +1090,32 @@
         <div class="release-desc">Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what's draining you, and see your money clearly — no account, no bank connection.</div>
         <div class="release-replaces">Replaces <span>budgeting apps that require an account, spreadsheet sprawl</span></div>
         <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kinground.netlify.app/?demo=true','_blank')">See it in action →</span>
+      </div>
+    </a>
+
+    <!-- KIN-027: Kin Gym -->
+    <a href="#" class="release">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-27), #7a1520);"></div>
+        <span class="cover-category">Health</span>
+        <span class="cover-number">KIN-027</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="17" width="8" height="14" rx="3"/>
+            <rect x="37" y="17" width="8" height="14" rx="3"/>
+            <line x1="11" y1="24" x2="37" y2="24"/>
+            <line x1="15" y1="19" x2="15" y2="29"/>
+            <line x1="33" y1="19" x2="33" y2="29"/>
+          </svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Kin Gym</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">Track sets, reps, and weight across any exercise type. Built-in rest timer and interval trainer start automatically when you log a set. Your log builds as you train — everything stored locally, nothing sent anywhere.</div>
+        <div class="release-replaces">Replaces <span>gym apps behind paywalls, notes apps repurposed for tracking sets</span></div>
+        <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('#','_blank')">See it in action →</span>
       </div>
     </a>
 
