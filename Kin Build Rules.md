@@ -472,3 +472,22 @@ const C = 'kin022-v2';
 | Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
 | Dark mode partially applies / some props stay light | `!important` missing from `body.dark` property values | Section 6 |
 | External `sw.js` or `manifest.json` fails in Blob context | Static file references disallowed — use inline Blob URL | Sections 4.7, 5.5, 7 |
+
+  ## 16. Info (ℹ) Button
+
+  Every Kin tool must include an ℹ button that opens a panel explaining how the tool works.
+
+  **Placement:** Right side of the header bar, beside the theme toggle button.
+
+  **Panel behaviour:**
+  - Toggles open/closed on button press
+  - Also dismisses when the user taps/clicks outside the panel
+  - Overlays the main content (not a modal — no backdrop required, but a semi-transparent one is fine)
+
+  **Content rules:**
+  - The panel must contain copy specific to this tool — what it does and how to use it, written in plain language
+  - Content is supplied by the user in the build brief
+  - **If ℹ panel copy is not provided, do not invent filler text — remind the user to generate it before building begins**
+
+  **Pitfall:** An info panel with generic or empty copy is worse than none. Always block on missing content.
+  

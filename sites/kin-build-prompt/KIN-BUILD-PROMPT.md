@@ -473,3 +473,4 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 8. No `console.log` statements in the final output
 9. No external JS libraries — use vanilla JS and Web APIs only
 10. Test mentally: does it work offline? Does it require an account? Does it collect any data? If any answer is not favourable, revise before outputting
+11. If the brief does not include ℹ (info) panel copy — the text explaining how the tool works — stop and ask the user to provide or generate it before continuing. Do not invent placeholder copy.
