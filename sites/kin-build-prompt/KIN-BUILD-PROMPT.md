@@ -53,9 +53,9 @@ Load from Google Fonts (this is the only permitted external resource):
 - **UI text:** `DM Sans` — weights 400, 500, 600, 700
 - **Display / headings:** `Instrument Serif` — weight 400, italic available
 
-### Colour system — dark first
+### Colour system — light first
 
-The tool is dark by default. Light mode is toggled by adding `.light` to `<html>`.
+The tool is **light by default**. Dark mode is toggled. `<html>` starts with `class="light"`, and dark mode is applied by removing it (or adding `class=""`).
 
 ```css
 :root {
@@ -94,7 +94,7 @@ Every colour in the UI must use these CSS variables — no hardcoded hex values 
 Fixed in the top-right corner. Switches between dark and light by toggling `.light` on `<html>`.
 
 ```html
-<button id="theme-btn" aria-label="Toggle theme">☀️</button>
+<button id="theme-btn" aria-label="Toggle theme">🌙</button>
 ```
 
 ```css
@@ -120,11 +120,12 @@ Fixed in the top-right corner. Switches between dark and light by toggling `.lig
 
 ```js
 const themeBtn = document.getElementById('theme-btn');
-let isDark = true;
+let isDark = false; // light is the default
 themeBtn.addEventListener('click', () => {
   isDark = !isDark;
   document.documentElement.classList.toggle('light', !isDark);
   themeBtn.textContent = isDark ? '☀️' : '🌙';
+  updateThemeMeta(isDark);
 });
 ```
 
@@ -337,90 +338,69 @@ Apply to the main wrapper:
 
 Every Kin tool must be installable to a phone's home screen and work offline after the first visit. Because each tool is a single HTML file, both the manifest and the service worker are inlined — no separate files needed.
 
-### Meta tags (add to `<head>`)
+## PWA — install to home screen + offline
 
-```html
-<!-- PWA / install -->
-<meta name="theme-color" content="#111110" id="theme-color-meta">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="[Tool Name]">
+  Every Kin tool must be installable to a phone's home screen and work offline after the first visit. Both the manifest and service worker are inlined as Blob URLs — no external files.
 
-<!-- Inline manifest via data URI -->
-<link rel="manifest" id="manifest-link">
-```
+  ### Meta tags (add to `<head>`)
 
-### Inline manifest + service worker (add to `<script>`)
+  ```html
+  <!-- PWA / install -->
+  <meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="[Tool Name]">
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
+  ```
 
-Paste this block into your `<script>` tag. Fill in `TOOL_NAME` and `CACHE_NAME`.
+  **Do not add `<link rel="manifest">` in the HTML** — the script below injects it at runtime.
 
-```js
-// ---- PWA SETUP ----
-const TOOL_NAME  = '[Tool Name]';       // e.g. "Unit Price Calculator"
-const CACHE_NAME = 'kin-tool-v1';      // e.g. "kin-unit-price-v1" — unique per tool
-const THEME_DARK  = '#111110';
-const THEME_LIGHT = '#FAFAF7';
+  ### Inline manifest + service worker (add before `</body>`)
 
-// Inline manifest
-const manifest = {
-  name: `${TOOL_NAME} — Kin`,
-  short_name: TOOL_NAME,
-  description: `Free, offline, no accounts.`,
-  start_url: './',
-  display: 'standalone',
-  background_color: THEME_DARK,
-  theme_color: THEME_DARK,
-  icons: [
-    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='120' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '192x192', type: 'image/svg+xml' },
-    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23111110'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-size='320' fill='%23f0efe8'%3EK%3C/text%3E%3C/svg%3E", sizes: '512x512', type: 'image/svg+xml' }
-  ]
-};
-document.getElementById('manifest-link').setAttribute('href',
-  'data:application/json,' + encodeURIComponent(JSON.stringify(manifest)));
+  Replace `KIN-NNN`, `[Tool Name]`, `[INITIALS]`, `ACCENT_HEX`, and `kinNNN-v1` with tool-specific values.
 
-// Update theme-color meta when dark/light toggles
-function updateThemeMeta(dark) {
-  document.getElementById('theme-color-meta').setAttribute('content', dark ? THEME_DARK : THEME_LIGHT);
-  manifest.background_color = dark ? THEME_DARK : THEME_LIGHT;
-  manifest.theme_color       = dark ? THEME_DARK : THEME_LIGHT;
-}
+  ```html
+  <script>
+  /* PWA: inline manifest + service worker */
+  (function(){
+    var m={
+      name:"KIN-NNN — [Tool Name] — Kin",
+      short_name:"[Tool Name]",
+      start_url:".",
+      display:"standalone",
+      background_color:"#f5f4f0",
+      theme_color:"#f5f4f0",
+      icons:[{
+        src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ACCENT_HEX'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>[INITIALS]</text></svg>",
+        sizes:"any",type:"image/svg+xml"
+      }]
+    };
+    var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+    var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(b);
+    document.head.appendChild(l);
+  })();
+  if("serviceWorker"in navigator){
+    var _sw="const C='kinNNN-v1';"+
+      "self.addEventListener('install',function(){self.skipWaiting();});"+
+      "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
+      "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
+  }
+  </script>
+  ```
 
-// Inline service worker via Blob URL (enables offline after first visit)
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = '${CACHE_NAME}';
-    self.addEventListener('install', e => {
-      self.skipWaiting();
-      e.waitUntil(caches.open(CACHE).then(c => c.addAll([self.location.href])));
-    });
-    self.addEventListener('activate', e => {
-      e.waitUntil(caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-      ));
-    });
-    self.addEventListener('fetch', e => {
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return res;
-      })));
-    });`;
-  const swBlob = new Blob([swCode], { type: 'text/javascript' });
-  navigator.serviceWorker.register(URL.createObjectURL(swBlob));
-}
-// ---- END PWA SETUP ----
-```
+  **Update theme-color dynamically when the theme toggles:**
 
-**Wire the theme toggle to `updateThemeMeta`** — call it inside your existing toggle handler:
+  ```js
+  function updateThemeMeta(dark) {
+    document.getElementById('theme-color-meta')
+      .setAttribute('content', dark ? '#111110' : '#f5f4f0');
+  }
+  // Call inside your theme toggle handler after toggling isDark
+  ```
 
-```js
-themeBtn.addEventListener('click', () => {
-  isDark = !isDark;
-  document.documentElement.classList.toggle('light', !isDark);
-  themeBtn.textContent = isDark ? '☀️' : '🌙';
-  updateThemeMeta(isDark); // add this line
-});
-```
+---
+
 
 ---
 
@@ -428,11 +408,11 @@ themeBtn.addEventListener('click', () => {
 
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[Tool Name] — Kin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KIN-NNN — [Tool Name] — Kin</title>
   <meta name="description" content="[One sentence description]. Free, offline, no accounts.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -443,7 +423,7 @@ themeBtn.addEventListener('click', () => {
 </head>
 <body>
 
-  <button id="theme-btn" aria-label="Toggle theme">☀️</button>
+  <button id="theme-btn" aria-label="Toggle theme">🌙</button>
 
   <div class="wrap">
 

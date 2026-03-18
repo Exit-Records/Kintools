@@ -1,7 +1,7 @@
 # Kin Build Rules
 
 > Single source of truth for building, updating, and deploying tools in the Kin Ecosystem.
-> Current as of KIN-023. Next tool: KIN-024.
+> Current as of KIN-028. Next tool: KIN-029.
 
 ---
 
@@ -9,11 +9,13 @@
 
 - **Repo:** `Exit-Records/Kintools` (GitHub, private)
 - **Deployment:** Netlify — each tool is its own Netlify site, a single `index.html` file
-- **Tools completed:** KIN-001 through KIN-023
+- **Tools completed:** KIN-001 through KIN-028
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
 - **Creator:** Always `Darren` unless explicitly specified otherwise
+  - KIN-015 = Alice and Darren
   - KIN-017 = Alice
   - KIN-018 = Alice and Darren
+  - KIN-028 = Darren and Daisy
 
 ---
 
@@ -166,9 +168,15 @@ Default to the light background. Give it an `id` so JS can update it when dark m
 <meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
 ```
 
-### 5.5 Remove base64 manifest
+### 5.5 Remove non-Blob manifests
 
-Delete any `<link rel="manifest" href="data:application/json;base64,...">`. Replace with the Blob pattern (Section 7).
+Delete any of these non-compliant patterns and replace with the Blob URL approach (Section 7):
+
+- `<link rel="manifest" href="data:application/json;base64,...">` — base64 data URI
+- `<link rel="manifest" href="./manifest.json">` — external static file
+- Any `data:application/json,...` href on a manifest link
+
+The Blob URL pattern (Section 7) is the **only** permitted approach. External `manifest.json` and `sw.js` files must not be created or referenced.
 
 ### 5.6 Add apple-touch-icon placeholder
 
@@ -203,6 +211,18 @@ All new tools must open in light mode. Dark is never the default.
 
 **localStorage key** must be tool-specific, e.g. `kin022-theme`, `kin023-theme`, to avoid cross-tool interference.
 
+**Dark mode `!important` rule:** All CSS property values inside `body.dark { }` (and `[data-theme="dark"]` if used) must carry `!important`. Without it, light-mode specificity can win and the dark theme will partially fail:
+
+```css
+/* Correct */
+body.dark { background: #111 !important; color: #f0f0f0 !important; }
+
+/* Wrong — !important missing */
+body.dark { background: #111; color: #f0f0f0; }
+```
+
+CSS variable declarations (e.g. `body.dark { --bg: #111; }`) do not need `!important` — only property assignments do.
+
 ---
 
 ## 7. PWA Script Block
@@ -220,7 +240,7 @@ Template:
 (function(){
   /* Blob manifest */
   var m = {
-    name: "KIN-NNN Tool Name",
+    name: "KIN-NNN — Tool Name — Kin",
     short_name: "Tool Name",
     start_url: ".",
     display: "standalone",
@@ -357,12 +377,20 @@ Add to both `index.html` (root) and `sites/kin-landing/index.html`.
 
 ### Colour and animation delay sequence
 
-| Tool | Variable | nth-child delay |
-|---|---|---|
-| KIN-021 | `--hb-21` | `1.20s` |
-| KIN-022 | `--hb-22` | `1.25s` |
-| KIN-023 | `--hb-23` | `1.30s` |
-| KIN-024 | `--hb-24` | `1.35s` |
+| Tool | Variable | Colour | nth-child delay |
+|---|---|---|---|
+| KIN-021 | `--hb-21` | *(varies)* | `1.20s` |
+| KIN-022 | `--hb-22` | *(varies)* | `1.25s` |
+| KIN-023 | `--hb-23` | *(varies)* | `1.30s` |
+| KIN-024 | `--hb-24` | `#4a5e72` | `1.35s` |
+| KIN-025 | `--hb-25` | `#c45d3e` | `1.40s` |
+| KIN-026 | `--hb-26` | `#1d3a5c` | `1.45s` |
+| KIN-027 | `--hb-27` | `#c0293a` | `1.50s` |
+| KIN-028 | `--hb-028` | *(use existing accent)* | `1.55s` |
+| KIN-025 | `--hb-25` | `#c45d3e` | `1.40s` |
+| KIN-026 | `--hb-26` | `#1d3a5c` | `1.45s` |
+| KIN-027 | `--hb-27` | `#c0293a` | `1.50s` |
+| KIN-028 | `--hb-028` | *(use existing accent)* | `1.55s` |
 
 Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each new `--hb-NN` variable.
 
@@ -442,3 +470,5 @@ const C = 'kin022-v2';
 | `@import` silently ignored | Not first rule in `<style>` | Section 4.5 |
 | Universal selector broken as `- {` | Copy-paste dropped the `*` | Section 4.4 |
 | Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
+| Dark mode partially applies / some props stay light | `!important` missing from `body.dark` property values | Section 6 |
+| External `sw.js` or `manifest.json` fails in Blob context | Static file references disallowed — use inline Blob URL | Sections 4.7, 5.5, 7 |
