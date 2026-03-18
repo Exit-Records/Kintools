@@ -187,8 +187,26 @@ Always update both after a new tool is shipped.
 ## Repository & deployment
 
 - GitHub repo: `Exit-Records/Kintools` (main branch)
-- Netlify publish dir per tool: `sites/kin-NNN-tool-name`
 - No build command — static HTML files served directly
+
+### Netlify setup for each new tool — ALWAYS REMIND USER
+
+When a new tool is ready to deploy, the user must create a new Netlify site and set **two things** in the Netlify UI:
+
+| Setting | Value |
+|---|---|
+| **Publish directory** | `sites/kin-NNN-tool-name` |
+| **Environment variable** | `SITE_DIR` = `sites/kin-NNN-tool-name` |
+
+Both values are identical. The publish directory tells Netlify what folder to serve. The `SITE_DIR` env var is used by the `netlify.toml` ignore command to skip builds when that folder hasn't changed (saves credits).
+
+Steps to remind the user:
+1. Netlify → Add new site → Import from Git → `Exit-Records/Kintools`
+2. Build command: leave blank
+3. Publish directory: `sites/kin-NNN-tool-name`
+4. Site configuration → Environment variables → Add `SITE_DIR` = `sites/kin-NNN-tool-name`
+
+The root-level `netlify.toml` handles ignore logic automatically once `SITE_DIR` is set.
 
 ### GitHub push rule — CRITICAL
 **Always use the Git Tree API for pushes. Never use the Contents API (PUT per file).**
