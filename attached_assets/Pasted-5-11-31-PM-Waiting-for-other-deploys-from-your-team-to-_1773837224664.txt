@@ -1,0 +1,33 @@
+5:11:31 PM: Waiting for other deploys from your team to complete. Check the queue: https://app.netlify.com/teams/exit-records/builds
+5:12:52 PM: build-image version: c2b8ae031d22ab4c62dd61deb4eac30945db824f (noble-new-builds)
+5:12:52 PM: buildbot version: b4d6453da2508df64568638faa74f021b3aab1fd
+5:12:52 PM: Fetching cached dependencies
+5:12:52 PM: Starting to download cache of 80.8MB (Last modified: 2026-03-18 07:28:43 +0000 UTC)
+5:12:53 PM: Downloaded cache in 351ms
+5:12:54 PM: Extracted cache in 1.685s
+5:12:54 PM: Fetched cache in 2.087s
+5:12:54 PM: Starting to prepare the repo for build
+5:12:55 PM: Preparing Git Reference refs/heads/main
+5:12:56 PM: Custom ignore command detected. Proceeding with the specified command: 'git diff --quiet HEAD^ HEAD -- $SITE_DIR netlify.toml'
+5:12:56 PM: Installing dependencies
+5:12:56 PM: mise ~/.config/mise/config.toml tools: python@3.14.3
+5:12:56 PM: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+5:12:56 PM: mise ~/.config/mise/config.toml tools: go@1.26.1
+5:12:57 PM: v22.22.1 is already installed.
+5:12:57 PM: Now using node v22.22.1 (npm v10.9.4)
+5:12:57 PM: Enabling Node.js Corepack
+5:12:57 PM: pnpm workspaces detected
+5:12:58 PM: Installing npm packages using pnpm version 10.30.3
+5:12:58 PM: Scope: all 12 workspace projects
+5:12:58 PM: Lockfile is up to date, resolution step is skipped
+5:12:58 PM: Already up to date
+5:12:59 PM: . preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+5:12:59 PM: . preinstall: Done
+5:12:59 PM: Done in 1.3s using pnpm v10.30.3
+5:12:59 PM: npm packages installed using pnpm
+5:12:59 PM: Successfully installed dependencies
+5:13:00 PM: Detected 0 framework(s)
+5:13:00 PM: No build steps found, continuing to publishing
+5:13:00 PM: Failing build: Failed to build site
+5:13:00 PM: Finished processing build request in 8.022s
+5:13:00 PM: Failed during stage 'building site': Deploy directory 'sites/kin-026-survival-pack' does not exist

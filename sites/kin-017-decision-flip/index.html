@@ -6,8 +6,7 @@
   <title>Decision Flip — KIN-017</title>
   <meta name="description" content="Break decision paralysis in seconds. Paste your options, flip, get an answer. No account, no tracking.">
   <meta name="theme-color" content="#7c3aed">
-  <link rel="manifest" href="./manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="KIN-017">
@@ -882,5 +881,22 @@ function removeChosen(chosen) {
     });
   })();
   </script>
+
+<script>
+/* PWA: inline manifest + service worker */
+(function(){
+  var m={name:"KIN-017 · Decision Flip",short_name:"DF",start_url:".",display:"standalone",background_color:"#7c3aed",theme_color:"#7c3aed",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>DF</text></svg>",sizes:"any",type:"image/svg+xml"}]};
+  var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+  var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+})();
+if("serviceWorker"in navigator){
+  var _sw="const C='kin017-v1';"+
+    "self.addEventListener('install',function(){self.skipWaiting();});"+
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
+}
+</script>
 </body>
 </html>
