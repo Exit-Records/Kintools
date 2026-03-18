@@ -977,7 +977,7 @@ async function saveGroup() {
       currency,
       participants: names.map(n => ({ id: uuid(), name: n })),
       expenses: [],
-      created: new Date().toISOString()
+      created: (function(){var d=new Date(),z=function(n){return String(n).padStart(2,'0');};return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes())+':'+z(d.getSeconds());})()
     };
     state.groups.push(group);
     activeGroupId = group.id;

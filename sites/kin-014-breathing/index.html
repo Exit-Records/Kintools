@@ -657,10 +657,10 @@ function updateStreakDisplay() {
 }
 
 function completeSession() {
-  var today = new Date().toISOString().slice(0, 10);
+  var _td=new Date(),today=_td.getFullYear()+'-'+String(_td.getMonth()+1).padStart(2,'0')+'-'+String(_td.getDate()).padStart(2,'0');
   var s     = loadStreak();
   var prev  = new Date(); prev.setDate(prev.getDate() - 1);
-  var yday  = prev.toISOString().slice(0, 10);
+  var yday  = prev.getFullYear()+'-'+String(prev.getMonth()+1).padStart(2,'0')+'-'+String(prev.getDate()).padStart(2,'0');
 
   if (s.last !== today) {
     s.count = (s.last === yday) ? s.count + 1 : 1;
