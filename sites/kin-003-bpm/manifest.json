@@ -1,6 +1,6 @@
 {
-  "name": "KIN-003 · BPM Counter",
-  "short_name": "KIN-003",
+  "name": "KIN-003 — BPM Counter — Kin",
+  "short_name": "BPM Counter",
   "description": "Tap the beat, get the BPM. Simple and accurate. Works offline.",
   "start_url": "./",
   "display": "standalone",
