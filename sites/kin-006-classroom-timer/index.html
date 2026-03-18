@@ -422,150 +422,127 @@ body.dark footer a { color: #888 !important; }
 
 body.dark .bug-btn { color: #888 !important; }
 
-.sheet-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.4);
+.bug-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
   z-index: 200;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s;
 }
-.sheet-overlay.show { opacity: 1; pointer-events: auto; }
 
-.sheet {
-  position: fixed; bottom: 0; left: 0; right: 0;
+.bug-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: var(--card-bg);
-  border-radius: 20px 20px 0 0;
-  padding: 24px 20px 32px;
+  border-radius: 16px 16px 0 0;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
   z-index: 201;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
-  max-height: 85vh;
+  max-height: 80dvh;
   overflow-y: auto;
 }
-.sheet.show { transform: translateY(0); }
 
-body.dark .sheet { background: #1c1c1c !important; }
-
-.sheet h2 {
-  font-size: 17px;
+.bug-sheet h3 {
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
 }
 
-body.dark .sheet h2 { color: #e0e0e0 !important; }
+body.dark .bug-sheet h3 { color: #e0e0e0 !important; }
 
-.sheet-type-btns {
+.bug-sheet label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  margin-top: 12px;
+  color: var(--text);
+}
+
+body.dark .bug-sheet label { color: #e0e0e0 !important; }
+
+.bug-sheet select,
+.bug-sheet textarea,
+.bug-sheet input[type="text"],
+.bug-sheet input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-appearance: none;
+  min-height: 44px;
+  font-family: inherit;
+}
+
+.bug-sheet textarea { min-height: 80px; resize: vertical; }
+
+body.dark .bug-sheet select,
+body.dark .bug-sheet textarea,
+body.dark .bug-sheet input[type="text"],
+body.dark .bug-sheet input[type="email"] { background: #111111 !important; color: #e0e0e0 !important; border-color: rgba(255,255,255,0.08) !important; }
+
+.bug-anon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+body.dark .bug-anon-row { color: #e0e0e0 !important; }
+
+.bug-toggle {
+  width: 48px;
+  height: 28px;
+  min-height: 28px;
+  border-radius: 14px;
+  background: var(--btn-bg);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bug-toggle.on { background: #3D6B5A; }
+body.dark .bug-toggle.on { background: #3ddc84 !important; }
+body.dark .bug-toggle { background: #2a2a2a !important; }
+
+.bug-toggle::after {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s;
+}
+
+.bug-toggle.on::after { transform: translateX(20px); }
+
+.bug-sheet-actions {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  margin-top: 20px;
 }
 
-.sheet-type-btn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  color: var(--text);
-  font-size: 13px;
-  cursor: pointer;
-  min-height: 44px;
-  -webkit-appearance: none;
-}
-.sheet-type-btn.active { background: var(--text); color: var(--bg); }
+.bug-sheet-actions button { flex: 1; min-height: 44px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; -webkit-appearance: none; border: none; }
 
-body.dark .sheet-type-btn { background: #2a2a2a !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
-body.dark .sheet-type-btn.active { background: #e0e0e0 !important; color: #111111 !important; }
+.bug-cancel { background: var(--btn-bg); color: var(--text); }
+body.dark .bug-cancel { background: #2a2a2a !important; color: #e0e0e0 !important; }
 
-.sheet textarea {
-  width: 100%;
-  min-height: 80px;
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 16px;
-  font-family: inherit;
-  resize: vertical;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-appearance: none;
-}
+.bug-send { background: #3D6B5A; color: #fff; }
+body.dark .bug-send { background: #3ddc84 !important; color: #0a1f13 !important; }
 
-body.dark .sheet textarea { background: #111111 !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
-
-.sheet-anon {
-  display: flex; align-items: center; gap: 10px;
-  margin: 14px 0;
-  font-size: 13px; color: var(--muted);
-}
-
-body.dark .sheet-anon { color: #777 !important; }
-
-.sheet-name-row {
-  display: none;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.sheet-name-row.show { display: flex; }
-
-.sheet-name-row input {
-  flex: 1;
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 16px;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 44px;
-  -webkit-appearance: none;
-}
-
-body.dark .sheet-name-row input { background: #111111 !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
-
-.sheet-submit {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: #3D6B5A;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  min-height: 44px;
-  -webkit-appearance: none;
-}
-
-body.dark .sheet-submit { background: #3ddc84 !important; color: #0a1f13 !important; }
-
-.sheet-thanks {
-  text-align: center;
-  padding: 20px 0;
-  display: none;
-}
-
-.sheet-thanks h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
-.sheet-thanks p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-body.dark .sheet-thanks h3 { color: #e0e0e0 !important; }
-body.dark .sheet-thanks p { color: #777 !important; }
-
-.sheet-done-btn {
-  margin-top: 14px;
-  padding: 10px 24px;
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  background: var(--card-bg);
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  min-height: 44px;
-  -webkit-appearance: none;
-}
-
-body.dark .sheet-done-btn { background: #2a2a2a !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
+.bug-sheet-backdrop.hidden,
+.bug-sheet.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -630,35 +607,30 @@ body.dark .sheet-done-btn { background: #2a2a2a !important; border-color: rgba(2
   <button class="bug-btn" id="bugBtn">Report a bug</button>
 </footer>
 
-<div class="sheet-overlay" id="sheetOverlay"></div>
-<div class="sheet" id="bugSheet">
-  <div id="bugForm">
-    <h2>Report an issue</h2>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">KIN-006 — Classroom Timer</div>
-    <div class="sheet-type-btns" id="bugTypes">
-      <button class="sheet-type-btn active" data-type="Bug">🐛 Bug</button>
-      <button class="sheet-type-btn" data-type="Suggestion">💡 Suggestion</button>
-      <button class="sheet-type-btn" data-type="Other">💬 Other</button>
-    </div>
-    <textarea id="bugDesc" placeholder="What happened?" rows="3"></textarea>
-    <div class="sheet-anon">
-      <label class="toggle-switch">
-        <input type="checkbox" id="anonToggle" checked>
-        <span class="toggle-track"></span>
-        <span class="toggle-knob"></span>
-      </label>
-      <span>Send anonymously</span>
-    </div>
-    <div class="sheet-name-row" id="nameRow">
-      <input type="text" id="bugName" placeholder="Name">
-      <input type="email" id="bugEmail" placeholder="Email">
-    </div>
-    <button class="sheet-submit" id="bugSubmit">Send report</button>
+<div id="bugBackdrop" class="bug-sheet-backdrop hidden" onclick="closeBugSheet()"></div>
+<div id="bugSheet" class="bug-sheet hidden">
+  <h3>Report a bug</h3>
+  <label>Type</label>
+  <select id="bugType">
+    <option value="Bug">Bug</option>
+    <option value="Suggestion">Suggestion</option>
+    <option value="Other">Other</option>
+  </select>
+  <label>Description</label>
+  <textarea id="bugDesc" placeholder="What happened?"></textarea>
+  <div class="bug-anon-row">
+    <span>Anonymous</span>
+    <button class="bug-toggle on" id="bugAnon" onclick="toggleBugAnon()"></button>
   </div>
-  <div class="sheet-thanks" id="bugThanks">
-    <h3>Thanks for the report</h3>
-    <p>We'll take a look. Your feedback<br>helps make Kin better for everyone.</p>
-    <button class="sheet-done-btn" id="bugDone">Done</button>
+  <div id="bugIdentity" style="display:none">
+    <label>Name</label>
+    <input type="text" id="bugName" placeholder="Optional">
+    <label>Email</label>
+    <input type="email" id="bugEmail" placeholder="Optional">
+  </div>
+  <div class="bug-sheet-actions">
+    <button class="bug-cancel" onclick="closeBugSheet()">Cancel</button>
+    <button class="bug-send" onclick="submitBug()">Send</button>
   </div>
 </div>
 
@@ -886,75 +858,49 @@ body.dark .sheet-done-btn { background: #2a2a2a !important; border-color: rgba(2
 
   render();
 
-  var bugBtn = document.getElementById('bugBtn');
-  var sheetOverlay = document.getElementById('sheetOverlay');
-  var bugSheet = document.getElementById('bugSheet');
-  var bugForm = document.getElementById('bugForm');
-  var bugThanks = document.getElementById('bugThanks');
-  var bugTypes = document.getElementById('bugTypes');
-  var bugDesc = document.getElementById('bugDesc');
-  var anonToggle = document.getElementById('anonToggle');
-  var nameRow = document.getElementById('nameRow');
-  var bugSubmit = document.getElementById('bugSubmit');
-  var bugDone = document.getElementById('bugDone');
-  var bugType = 'Bug';
-
-  function openSheet() {
-    sheetOverlay.classList.add('show');
-    bugSheet.classList.add('show');
-    bugForm.style.display = '';
-    bugThanks.style.display = 'none';
-  }
-
-  function closeSheet() {
-    sheetOverlay.classList.remove('show');
-    bugSheet.classList.remove('show');
-  }
-
-  bugBtn.addEventListener('click', openSheet);
-  sheetOverlay.addEventListener('click', closeSheet);
-
-  bugTypes.addEventListener('click', function(e) {
-    var btn = e.target.closest('.sheet-type-btn');
-    if (!btn) return;
-    bugTypes.querySelectorAll('.sheet-type-btn').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    bugType = btn.dataset.type;
-  });
-
-  anonToggle.addEventListener('change', function() {
-    nameRow.classList.toggle('show', !anonToggle.checked);
-  });
-
-  bugSubmit.addEventListener('click', function() {
-    var desc = bugDesc.value.trim();
-    if (!desc) return;
-    var payload = {
-      form_type: 'bug_report',
-      subject: 'KIN-006 — Classroom Timer',
-      app: 'KIN-006',
-      type: bugType,
-      description: desc,
-      name: anonToggle.checked ? '' : (document.getElementById('bugName').value || ''),
-      email: anonToggle.checked ? '' : (document.getElementById('bugEmail').value || '')
-    };
-
-    try {
-      fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).catch(function() {});
-    } catch(e) {}
-
-    bugForm.style.display = 'none';
-    bugThanks.style.display = '';
-    bugDesc.value = '';
-  });
-
-  bugDone.addEventListener('click', closeSheet);
+  document.getElementById('bugBtn').addEventListener('click', openBugSheet);
 })();
+
+function openBugSheet() {
+  document.getElementById('bugBackdrop').classList.remove('hidden');
+  document.getElementById('bugSheet').classList.remove('hidden');
+}
+
+function closeBugSheet() {
+  document.getElementById('bugBackdrop').classList.add('hidden');
+  document.getElementById('bugSheet').classList.add('hidden');
+  document.getElementById('bugDesc').value = '';
+}
+
+function toggleBugAnon() {
+  var btn = document.getElementById('bugAnon');
+  var identity = document.getElementById('bugIdentity');
+  btn.classList.toggle('on');
+  identity.style.display = btn.classList.contains('on') ? 'none' : 'block';
+}
+
+function submitBug() {
+  var desc = document.getElementById('bugDesc').value.trim();
+  if (!desc) return;
+  var anon = document.getElementById('bugAnon').classList.contains('on');
+  var payload = {
+    form_type: 'bug_report',
+    subject: 'KIN-006 — Classroom Timer',
+    app: 'KIN-006',
+    type: document.getElementById('bugType').value,
+    description: desc,
+    name: anon ? '' : (document.getElementById('bugName').value || ''),
+    email: anon ? '' : (document.getElementById('bugEmail').value || '')
+  };
+  try {
+    fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function() {});
+  } catch(e) {}
+  closeBugSheet();
+}
 </script>
 <script>
 (function(){
