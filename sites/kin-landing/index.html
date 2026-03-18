@@ -51,6 +51,7 @@
     --hb-26: #1d3a5c;
     --hb-27: #c0293a;
     --hb-028: #2c3e50;
+    --hb-029: #241a10;
   }
 
   body {
@@ -477,6 +478,7 @@
   .release:nth-child(26) { animation-delay: 1.45s; }
   .release:nth-child(27) { animation-delay: 1.50s; }
   .release:nth-child(28) { animation-delay: 1.55s; }
+  .release:nth-child(29) { animation-delay: 1.60s; }
 
   /* ---- RESPONSIVE ---- */
   .demo-pill {
@@ -1233,7 +1235,32 @@
       </div>
     </a>
 
-  </div>
+      <!-- KIN-029: Nudge -->
+      <a href="https://kinnudge.netlify.app/" target="_blank" rel="noopener" class="release">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-029), #1a0d08);"></div>
+          <span class="cover-category">Wellbeing</span>
+          <span class="cover-number">KIN-029</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 8 L20 28"/>
+              <path d="M20 8 C20 6 22 5 24 6 C26 5 28 6 28 8 L28 20"/>
+              <path d="M28 14 C28 12 30 11 32 12 L32 26"/>
+              <path d="M32 18 C32 16 34 15 36 16 L36 30 C36 37 30 42 24 42 L20 42 C16 42 12 38 12 34 L12 22"/>
+              <path d="M12 22 C12 19 15 18 17 20 L20 23"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Nudge</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">A small push when you're stuck. Filter activities by energy level, time, and type. Thumbs up what helps — the shuffle learns. No streaks, no scores, no guilt.</div>
+          <div class="release-replaces">Replaces <span>decision paralysis — fills a gap no free tool covered</span></div>
+        </div>
+      </a>
+
+    </div>
   
 
 <div class="contribute">
@@ -1375,8 +1402,9 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
     'KIN-025': { name: 'Stretch', cat: 'Wellbeing', desc: 'Pick a routine — morning, desk break, post-run, bedtime, or chair-based. Set your hold time. Audio cues move you through it, and every stretch has an easier version if you need it.', features: ['Five routines (morning, desk, post-run, bedtime, chair)', 'Adjustable hold time per stretch', 'Audio cues to advance automatically', 'Easier version available for every stretch', 'Works offline'], storage: 'Nothing stored' },
     'KIN-026': { name: 'Kin Ground', cat: 'Finance', desc: 'Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what\'s draining you, and see your money clearly. No account, no bank connection.', features: ['Monthly fixed cost tracker by category', 'Subscription log with renewal dates', 'Savings buffer calculator', 'True monthly baseline figure', 'Demo mode to explore before entering real data'], storage: 'localStorage — stays on your device' },
     'KIN-027': { name: 'Kin Gym', cat: 'Fitness', desc: 'Track sets, reps, and weight across any exercise. Built-in rest timer and interval trainer start automatically when you log a set. Your log builds as you train. Everything stored locally.', features: ['Exercise log with sets, reps, and weight', 'Automatic rest timer when a set is logged', 'Interval trainer for circuit and HIIT work', 'Routine builder for saving workouts', 'Demo mode with sample data', 'Works fully offline'], storage: 'localStorage — stays on your device' },
-    'KIN-028': { name: 'Scan', cat: 'Utility', desc: 'Scan documents and photos to PDF using your camera or image library. Adjust brightness, contrast, and black-and-white per page. Crop with drag handles, rotate, reorder pages by dragging. Export a clean multi-page PDF — no account, no upload, nothing stored anywhere.', features: ['Camera capture with front/back switch', 'Import images from library (multi-select)', 'Brightness and contrast sliders per page', 'Black-and-white filter', 'Crop with corner drag handles', 'Rotate page', 'Drag to reorder pages', 'Export to A4, US Letter, or fit-to-image PDF'], storage: 'Nothing stored — all processing is in-memory' }
-  };
+    'KIN-028': { name: 'Scan', cat: 'Utility', desc: 'Scan documents and photos to PDF using your camera or image library. Adjust brightness, contrast, and black-and-white per page. Crop with drag handles, rotate, reorder pages by dragging. Export a clean multi-page PDF — no account, no upload, nothing stored anywhere.', features: ['Camera capture with front/back switch', 'Import images from library (multi-select)', 'Brightness and contrast sliders per page', 'Black-and-white filter', 'Crop with corner drag handles', 'Rotate page', 'Drag to reorder pages', 'Export to A4, US Letter, or fit-to-image PDF'], storage: 'Nothing stored — all processing is in-memory' },
+    'KIN-029': { name: 'Nudge', cat: 'Wellbeing', desc: 'A small push when you\'re stuck. Filter activities by energy level, time, and type. Thumbs up what helps — the shuffle learns. No streaks, no scores, no guilt. Everything stays on your device.', features: ['Energy filter: couch-locked, restless, or stuck', 'Time filter: 1–2 min, 5–10 min, 20+ min', 'Type filter: body, brain, sensory, social, creative', 'Emergency mode picks one and starts a timer', 'Vote-weighted shuffle learns your preferences', 'Three-use daily cooldown prevents overuse', 'Edit full menu in plain text', 'Demo mode with sample data'], storage: 'localStorage — stays on your device' }
+    };
 
   function openInfo(kinNum) {
     var d = KIN[kinNum];
