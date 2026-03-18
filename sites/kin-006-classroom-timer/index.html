@@ -1,37 +1,949 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Classroom Timer — Kin</title>
-    <meta name="description" content="Big, full-screen countdown timer for classrooms. Privacy-first, runs entirely in your browser." />
-    <meta name="theme-color" content="#111111" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="Timer" />
-    <link rel="manifest" href="/manifest.json" />
-    <script type="module" crossorigin src="/assets/index-CxuAxBhR.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CtQ5n0t-.css">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            var unregisterAll = registrations.map(function(r) { return r.unregister(); });
-            return Promise.all(unregisterAll);
-          }).then(function() {
-            return caches.keys().then(function(keys) {
-              return Promise.all(keys.map(function(k) { return caches.delete(k); }));
-            });
-          }).then(function() {
-            navigator.serviceWorker.register('/sw.js').catch(function () {});
-          }).catch(function() {
-            navigator.serviceWorker.register('/sw.js').catch(function () {});
-          });
-        });
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KIN-006 — Classroom Timer — Kin</title>
+<meta name="description" content="Big, full-screen countdown timer for classrooms. Colour shifts from green to amber to red as time runs out.">
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Timer">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f4f0;
+  --text: #1a1a1a;
+  --muted: #888;
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.07);
+  --btn-bg: #e8e8e8;
+  --btn-hover: #d0d0d0;
+  --phase-green: #3D6B5A;
+  --phase-amber: #c4880d;
+  --phase-red: #c0392b;
+  --toggle-bg: rgba(0,0,0,0.06);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  transition: background 0.4s, color 0.4s;
+}
+
+body.dark {
+  --bg: #111111 !important;
+  --text: #e0e0e0 !important;
+  --muted: #777 !important;
+  --card-bg: #1c1c1c !important;
+  --card-border: rgba(255,255,255,0.08) !important;
+  --btn-bg: #2a2a2a !important;
+  --btn-hover: #333 !important;
+  --toggle-bg: rgba(255,255,255,0.08) !important;
+}
+
+body.dark { background: #111111 !important; color: #e0e0e0 !important; }
+
+.top-bar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 0;
+}
+
+.top-bar h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+body.dark .top-bar h1 { color: #e0e0e0 !important; }
+
+.kin-id {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+body.dark .kin-id { color: #777 !important; }
+
+.theme-toggle {
+  background: var(--toggle-bg);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.dark .theme-toggle { background: rgba(255,255,255,0.08) !important; }
+
+.timer-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 20px;
+  gap: 24px;
+}
+
+.display-ring {
+  width: clamp(220px, 60vw, 320px);
+  height: clamp(220px, 60vw, 320px);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 1.2s ease, box-shadow 0.6s ease;
+  position: relative;
+}
+
+.display-ring.green { background: #e8f5ee; box-shadow: 0 0 60px rgba(61,107,90,0.15); }
+.display-ring.amber { background: #fff8e4; box-shadow: 0 0 60px rgba(196,136,13,0.15); }
+.display-ring.red { background: #fde8e4; box-shadow: 0 0 60px rgba(192,57,43,0.15); }
+.display-ring.idle { background: var(--card-bg); box-shadow: none; }
+
+body.dark .display-ring.green { background: #0a1f13 !important; box-shadow: 0 0 60px rgba(61,220,132,0.1) !important; }
+body.dark .display-ring.amber { background: #1f1500 !important; box-shadow: 0 0 60px rgba(240,165,0,0.1) !important; }
+body.dark .display-ring.red { background: #1f0a07 !important; box-shadow: 0 0 60px rgba(232,64,42,0.1) !important; }
+body.dark .display-ring.idle { background: #1c1c1c !important; box-shadow: none !important; }
+
+.time-display {
+  font-size: clamp(56px, 16vw, 96px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transition: color 1.2s ease;
+}
+
+.display-ring.green .time-display { color: #3D6B5A; }
+.display-ring.amber .time-display { color: #c4880d; }
+.display-ring.red .time-display { color: #c0392b; }
+.display-ring.idle .time-display { color: var(--text); }
+
+body.dark .display-ring.green .time-display { color: #3ddc84 !important; }
+body.dark .display-ring.amber .time-display { color: #f0a500 !important; }
+body.dark .display-ring.red .time-display { color: #e8402a !important; }
+body.dark .display-ring.idle .time-display { color: #e0e0e0 !important; }
+
+.phase-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 8px;
+  transition: color 1.2s ease;
+}
+
+.display-ring.green .phase-label { color: #3D6B5A; }
+.display-ring.amber .phase-label { color: #c4880d; }
+.display-ring.red .phase-label { color: #c0392b; }
+.display-ring.idle .phase-label { color: var(--muted); }
+
+body.dark .display-ring.green .phase-label { color: #3ddc84 !important; }
+body.dark .display-ring.amber .phase-label { color: #f0a500 !important; }
+body.dark .display-ring.red .phase-label { color: #e8402a !important; }
+body.dark .display-ring.idle .phase-label { color: #777 !important; }
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--btn-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  max-width: 280px;
+}
+
+body.dark .progress-bar { background: #2a2a2a !important; }
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s linear, background 1.2s ease;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.preset-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  color: var(--text);
+}
+
+.preset-btn:hover { background: var(--btn-bg); }
+.preset-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+body.dark .preset-btn { background: #1c1c1c !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
+body.dark .preset-btn:hover { background: #2a2a2a !important; }
+body.dark .preset-btn.active { background: #e0e0e0 !important; color: #111111 !important; border-color: #e0e0e0 !important; }
+
+.custom-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-input {
+  width: 64px;
+  text-align: center;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--card-bg);
+  color: var(--text);
+  min-height: 44px;
+  -webkit-appearance: none;
+}
+
+body.dark .custom-input { background: #1c1c1c !important; border-color: rgba(255,255,255,0.08) !important; color: #e0e0e0 !important; }
+
+.custom-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+body.dark .custom-label { color: #777 !important; }
+
+.controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.ctrl-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.02em;
+}
+
+.ctrl-btn:active { transform: scale(0.97); }
+
+.ctrl-btn.start { background: #3D6B5A; color: #fff; }
+.ctrl-btn.start:hover { background: #2d5244; }
+.ctrl-btn.pause { background: #c4880d; color: #fff; }
+.ctrl-btn.pause:hover { background: #a87200; }
+.ctrl-btn.reset { background: var(--btn-bg); color: var(--text); }
+.ctrl-btn.reset:hover { background: var(--btn-hover); }
+
+body.dark .ctrl-btn.start { background: #3ddc84 !important; color: #0a1f13 !important; }
+body.dark .ctrl-btn.start:hover { background: #2fc870 !important; }
+body.dark .ctrl-btn.pause { background: #f0a500 !important; color: #1f1500 !important; }
+body.dark .ctrl-btn.pause:hover { background: #d99400 !important; }
+body.dark .ctrl-btn.reset { background: #2a2a2a !important; color: #e0e0e0 !important; }
+body.dark .ctrl-btn.reset:hover { background: #333 !important; }
+
+.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+body.dark .option-row { color: #777 !important; }
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  cursor: pointer;
+  min-height: 26px;
+}
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: var(--btn-bg);
+  border-radius: 13px;
+  transition: background 0.2s;
+}
+
+body.dark .toggle-track { background: #2a2a2a !important; }
+
+.toggle-switch input:checked + .toggle-track { background: #3D6B5A; }
+body.dark .toggle-switch input:checked + .toggle-track { background: #3ddc84 !important; }
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  pointer-events: none;
+}
+
+.toggle-switch input:checked ~ .toggle-knob { transform: translateX(18px); }
+
+.done-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(192,57,43,0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  gap: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.done-overlay.show { opacity: 1; pointer-events: auto; }
+
+.done-text {
+  font-size: clamp(32px, 10vw, 64px);
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+.done-dismiss {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+  padding: 14px 32px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  -webkit-appearance: none;
+}
+
+@keyframes pulseDone {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.done-overlay.show .done-text { animation: pulseDone 1.2s ease-in-out infinite; }
+
+footer {
+  text-align: center;
+  padding: 16px 16px 48px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  width: 100%;
+}
+
+body.dark footer { color: #888 !important; }
+
+footer a { color: inherit; text-decoration: none; }
+body.dark footer a { color: #888 !important; }
+
+.badge-row { display: flex; justify-content: center; margin-top: 8px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(46,160,67,0.1);
+  border: 1px solid rgba(46,160,67,0.25);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #2ea043;
+}
+
+.bug-btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-size: 11px;
+  opacity: 0.4;
+  cursor: pointer;
+  padding: 8px 12px;
+  min-height: 44px;
+  -webkit-appearance: none;
+}
+
+body.dark .bug-btn { color: #888 !important; }
+
+.bug-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+}
+
+.bug-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  z-index: 201;
+  max-height: 80dvh;
+  overflow-y: auto;
+}
+
+.bug-sheet h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+body.dark .bug-sheet h3 { color: #e0e0e0 !important; }
+
+.bug-sheet label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  margin-top: 12px;
+  color: var(--text);
+}
+
+body.dark .bug-sheet label { color: #e0e0e0 !important; }
+
+.bug-sheet select,
+.bug-sheet textarea,
+.bug-sheet input[type="text"],
+.bug-sheet input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-appearance: none;
+  min-height: 44px;
+  font-family: inherit;
+}
+
+.bug-sheet textarea { min-height: 80px; resize: vertical; }
+
+body.dark .bug-sheet select,
+body.dark .bug-sheet textarea,
+body.dark .bug-sheet input[type="text"],
+body.dark .bug-sheet input[type="email"] { background: #111111 !important; color: #e0e0e0 !important; border-color: rgba(255,255,255,0.08) !important; }
+
+.bug-anon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+body.dark .bug-anon-row { color: #e0e0e0 !important; }
+
+.bug-toggle {
+  width: 48px;
+  height: 28px;
+  min-height: 28px;
+  border-radius: 14px;
+  background: var(--btn-bg);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bug-toggle.on { background: #3D6B5A; }
+body.dark .bug-toggle.on { background: #3ddc84 !important; }
+body.dark .bug-toggle { background: #2a2a2a !important; }
+
+.bug-toggle::after {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s;
+}
+
+.bug-toggle.on::after { transform: translateX(20px); }
+
+.bug-sheet-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.bug-sheet-actions button { flex: 1; min-height: 44px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; -webkit-appearance: none; border: none; }
+
+.bug-cancel { background: var(--btn-bg); color: var(--text); }
+body.dark .bug-cancel { background: #2a2a2a !important; color: #e0e0e0 !important; }
+
+.bug-send { background: #3D6B5A; color: #fff; }
+body.dark .bug-send { background: #3ddc84 !important; color: #0a1f13 !important; }
+
+.bug-sheet-backdrop.hidden,
+.bug-sheet.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1>Classroom Timer</h1>
+    <div class="kin-id">KIN-006</div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">🌙</button>
+</div>
+
+<div class="timer-container">
+  <div class="display-ring idle" id="ring">
+    <div class="time-display" id="display">5:00</div>
+    <div class="phase-label" id="phaseLabel">Ready</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress" style="width:100%;background:#3D6B5A"></div>
+  </div>
+
+  <div class="presets" id="presets">
+    <button class="preset-btn active" data-sec="300">5 min</button>
+    <button class="preset-btn" data-sec="600">10 min</button>
+    <button class="preset-btn" data-sec="900">15 min</button>
+    <button class="preset-btn" data-sec="1200">20 min</button>
+    <button class="preset-btn" data-sec="1800">30 min</button>
+    <button class="preset-btn" data-sec="0" id="customBtn">Custom</button>
+  </div>
+
+  <div class="custom-row" id="customRow" style="display:none">
+    <input type="number" class="custom-input" id="customMin" min="0" max="59" value="5" placeholder="min" inputmode="numeric">
+    <span class="custom-label">min</span>
+    <input type="number" class="custom-input" id="customSec" min="0" max="59" value="0" placeholder="sec" inputmode="numeric">
+    <span class="custom-label">sec</span>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn start" id="startBtn">Start</button>
+    <button class="ctrl-btn reset" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="option-row">
+    <span>Chime at end</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="chimeToggle" checked>
+      <span class="toggle-track"></span>
+      <span class="toggle-knob"></span>
+    </label>
+  </div>
+</div>
+
+<div class="done-overlay" id="doneOverlay">
+  <div class="done-text">Time's up</div>
+  <button class="done-dismiss" id="doneDismiss">Dismiss</button>
+</div>
+
+<footer>
+  KIN-006 &nbsp;&middot;&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener">Kin Tools</a> &nbsp;&middot;&nbsp; by Darren
+  <div class="badge-row"><span class="badge"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only &middot; Verified</span></div>
+  <button class="bug-btn" id="bugBtn">Report a bug</button>
+</footer>
+
+<div id="bugBackdrop" class="bug-sheet-backdrop hidden" onclick="closeBugSheet()"></div>
+<div id="bugSheet" class="bug-sheet hidden">
+  <h3>Report a bug</h3>
+  <label>Type</label>
+  <select id="bugType">
+    <option value="Bug">Bug</option>
+    <option value="Suggestion">Suggestion</option>
+    <option value="Other">Other</option>
+  </select>
+  <label>Description</label>
+  <textarea id="bugDesc" placeholder="What happened?"></textarea>
+  <div class="bug-anon-row">
+    <span>Anonymous</span>
+    <button class="bug-toggle on" id="bugAnon" onclick="toggleBugAnon()"></button>
+  </div>
+  <div id="bugIdentity" style="display:none">
+    <label>Name</label>
+    <input type="text" id="bugName" placeholder="Optional">
+    <label>Email</label>
+    <input type="email" id="bugEmail" placeholder="Optional">
+  </div>
+  <div class="bug-sheet-actions">
+    <button class="bug-cancel" onclick="closeBugSheet()">Cancel</button>
+    <button class="bug-send" onclick="submitBug()">Send</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var dark = localStorage.getItem('kin006-theme') === 'dark';
+  var toggle = document.getElementById('themeToggle');
+  var meta = document.getElementById('theme-color-meta');
+
+  function applyTheme() {
+    if (dark) {
+      document.body.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      toggle.textContent = '\u2600\uFE0F';
+      meta.content = '#111111';
+    } else {
+      document.body.classList.remove('dark');
+      document.documentElement.classList.add('light');
+      toggle.textContent = '\uD83C\uDF19';
+      meta.content = '#f5f4f0';
+    }
+  }
+  applyTheme();
+
+  toggle.addEventListener('click', function() {
+    dark = !dark;
+    localStorage.setItem('kin006-theme', dark ? 'dark' : 'light');
+    applyTheme();
+  });
+
+  var totalSeconds = 300;
+  var remaining = 300;
+  var running = false;
+  var paused = false;
+  var interval = null;
+  var activePreset = 300;
+
+  var display = document.getElementById('display');
+  var ring = document.getElementById('ring');
+  var phaseLabel = document.getElementById('phaseLabel');
+  var progress = document.getElementById('progress');
+  var startBtn = document.getElementById('startBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  var presets = document.getElementById('presets');
+  var customRow = document.getElementById('customRow');
+  var customMin = document.getElementById('customMin');
+  var customSec = document.getElementById('customSec');
+  var chimeToggle = document.getElementById('chimeToggle');
+  var doneOverlay = document.getElementById('doneOverlay');
+  var doneDismiss = document.getElementById('doneDismiss');
+
+  function fmt(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + String(sec).padStart(2, '0');
+  }
+
+  function getPhase() {
+    if (!running && !paused) return 'idle';
+    var pct = remaining / totalSeconds;
+    if (pct > 0.33) return 'green';
+    if (pct > 0.1) return 'amber';
+    return 'red';
+  }
+
+  function getPhaseColor() {
+    var p = getPhase();
+    if (p === 'green') return '#3D6B5A';
+    if (p === 'amber') return '#c4880d';
+    if (p === 'red') return '#c0392b';
+    return '#3D6B5A';
+  }
+
+  function getPhaseText() {
+    if (!running && !paused) return 'Ready';
+    if (paused) return 'Paused';
+    return 'Running';
+  }
+
+  function render() {
+    display.textContent = fmt(remaining);
+    var phase = getPhase();
+    ring.className = 'display-ring ' + phase;
+    phaseLabel.textContent = getPhaseText();
+    var pct = totalSeconds > 0 ? (remaining / totalSeconds) * 100 : 0;
+    progress.style.width = pct + '%';
+    progress.style.background = getPhaseColor();
+
+    if (running) {
+      startBtn.textContent = 'Pause';
+      startBtn.className = 'ctrl-btn pause';
+    } else if (paused) {
+      startBtn.textContent = 'Resume';
+      startBtn.className = 'ctrl-btn start';
+    } else {
+      startBtn.textContent = 'Start';
+      startBtn.className = 'ctrl-btn start';
+    }
+  }
+
+  function playChime() {
+    if (!chimeToggle.checked) return;
+    try {
+      var ac = new (window.AudioContext || window.webkitAudioContext)();
+      var notes = [523.25, 659.25, 783.99];
+      notes.forEach(function(freq, i) {
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, ac.currentTime + i * 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + i * 0.25 + 0.8);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(ac.currentTime + i * 0.25);
+        osc.stop(ac.currentTime + i * 0.25 + 0.8);
+      });
+    } catch(e) {}
+  }
+
+  function tick() {
+    if (remaining <= 0) {
+      clearInterval(interval);
+      interval = null;
+      running = false;
+      paused = false;
+      remaining = 0;
+      render();
+      playChime();
+      doneOverlay.classList.add('show');
+      return;
+    }
+    remaining--;
+    render();
+  }
+
+  function setDuration(sec) {
+    if (running) return;
+    totalSeconds = sec;
+    remaining = sec;
+    paused = false;
+    render();
+  }
+
+  presets.addEventListener('click', function(e) {
+    var btn = e.target.closest('.preset-btn');
+    if (!btn) return;
+    if (running) return;
+
+    var allBtns = presets.querySelectorAll('.preset-btn');
+    allBtns.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+
+    var sec = parseInt(btn.dataset.sec);
+    if (sec === 0) {
+      customRow.style.display = 'flex';
+      var cm = parseInt(customMin.value) || 0;
+      var cs = parseInt(customSec.value) || 0;
+      var total = cm * 60 + cs;
+      if (total > 0) setDuration(total);
+      activePreset = 0;
+    } else {
+      customRow.style.display = 'none';
+      setDuration(sec);
+      activePreset = sec;
+    }
+  });
+
+  function updateCustom() {
+    if (activePreset !== 0) return;
+    if (running) return;
+    var cm = parseInt(customMin.value) || 0;
+    var cs = parseInt(customSec.value) || 0;
+    var total = cm * 60 + cs;
+    if (total > 0) setDuration(total);
+  }
+  customMin.addEventListener('input', updateCustom);
+  customSec.addEventListener('input', updateCustom);
+
+  startBtn.addEventListener('click', function() {
+    if (running) {
+      clearInterval(interval);
+      interval = null;
+      running = false;
+      paused = true;
+      render();
+    } else {
+      if (remaining <= 0) {
+        remaining = totalSeconds;
       }
-    </script>
-  </body>
+      running = true;
+      paused = false;
+      interval = setInterval(tick, 1000);
+      render();
+    }
+  });
+
+  resetBtn.addEventListener('click', function() {
+    clearInterval(interval);
+    interval = null;
+    running = false;
+    paused = false;
+    remaining = totalSeconds;
+    render();
+  });
+
+  doneDismiss.addEventListener('click', function() {
+    doneOverlay.classList.remove('show');
+    remaining = totalSeconds;
+    render();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      startBtn.click();
+    }
+    if (e.code === 'KeyR' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      resetBtn.click();
+    }
+    if (e.code === 'Escape') {
+      doneOverlay.classList.remove('show');
+    }
+  });
+
+  render();
+
+  document.getElementById('bugBtn').addEventListener('click', openBugSheet);
+})();
+
+function openBugSheet() {
+  document.getElementById('bugBackdrop').classList.remove('hidden');
+  document.getElementById('bugSheet').classList.remove('hidden');
+}
+
+function closeBugSheet() {
+  document.getElementById('bugBackdrop').classList.add('hidden');
+  document.getElementById('bugSheet').classList.add('hidden');
+  document.getElementById('bugDesc').value = '';
+}
+
+function toggleBugAnon() {
+  var btn = document.getElementById('bugAnon');
+  var identity = document.getElementById('bugIdentity');
+  btn.classList.toggle('on');
+  identity.style.display = btn.classList.contains('on') ? 'none' : 'block';
+}
+
+function submitBug() {
+  var desc = document.getElementById('bugDesc').value.trim();
+  if (!desc) return;
+  var anon = document.getElementById('bugAnon').classList.contains('on');
+  var payload = {
+    form_type: 'bug_report',
+    subject: 'KIN-006 — Classroom Timer',
+    app: 'KIN-006',
+    type: document.getElementById('bugType').value,
+    description: desc,
+    name: anon ? '' : (document.getElementById('bugName').value || ''),
+    email: anon ? '' : (document.getElementById('bugEmail').value || '')
+  };
+  try {
+    fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function() {});
+  } catch(e) {}
+  closeBugSheet();
+}
+</script>
+<script>
+(function(){
+  var m = {name:"KIN-006 \u00b7 Classroom Timer",short_name:"Timer",start_url:".",display:"standalone",background_color:"#f5f4f0",theme_color:"#3D6B5A",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233D6B5A'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='46' font-weight='bold' fill='white' font-family='system-ui'>CT</text></svg>",sizes:"any",type:"image/svg+xml"}]};
+  var blob = new Blob([JSON.stringify(m)],{type:"application/json"});
+  var link = document.createElement("link");
+  link.rel = "manifest";
+  link.href = URL.createObjectURL(blob);
+  document.head.appendChild(link);
+})();
+
+(function(){
+  var c = document.createElement("canvas"); c.width = 180; c.height = 180;
+  var ctx = c.getContext("2d");
+  var r = 36;
+  ctx.beginPath();
+  ctx.moveTo(r,0); ctx.lineTo(180-r,0); ctx.quadraticCurveTo(180,0,180,r);
+  ctx.lineTo(180,180-r); ctx.quadraticCurveTo(180,180,180-r,180);
+  ctx.lineTo(r,180); ctx.quadraticCurveTo(0,180,0,180-r);
+  ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();
+  var g = ctx.createLinearGradient(0,0,180,180);
+  g.addColorStop(0,"#3D6B5A");
+  g.addColorStop(1,"#2d5244");
+  ctx.fillStyle = g; ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+  ctx.font = "bold 46px sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("CT",90,94);
+  var el = document.getElementById("apple-touch-icon");
+  if (el) el.href = c.toDataURL("image/png");
+})();
+
+if ("serviceWorker" in navigator) {
+  var _sw =
+    "const C='kin006-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
+</body>
 </html>
