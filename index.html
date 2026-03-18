@@ -466,6 +466,69 @@
     }
     .demo-pill:hover { opacity: 0.7; }
 
+  .kin-info-btn {
+    align-self: flex-end;
+    margin-top: 10px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    background: none;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Instrument Serif', serif;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+  }
+  .kin-info-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  #kin-info-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(26,26,24,0.65);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  #kin-info-overlay.open { opacity: 1; pointer-events: all; }
+  #kin-info-sheet {
+    position: relative;
+    background: #17171f;
+    border-radius: 20px 20px 0 0;
+    border: 1px solid rgba(255,255,255,0.08); border-bottom: none;
+    padding: 0 24px 48px;
+    width: 100%; max-width: 540px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    max-height: 90vh; overflow-y: auto;
+  }
+  #kin-info-overlay.open #kin-info-sheet { transform: translateY(0); }
+  .kin-is-handle { display: flex; justify-content: center; padding: 14px 0 6px; }
+  .kin-is-handle div { width: 36px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.15); }
+  .kin-is-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: 6px 0 18px; }
+  .kin-is-title { color: #fff; font-size: 18px; font-weight: 700; margin: 0 0 3px; font-family: 'Instrument Serif', serif; letter-spacing: -0.01em; }
+  .kin-is-meta { color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.05em; margin: 0; }
+  .kin-is-close {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.07); border: none;
+    color: rgba(255,255,255,0.5); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kin-is-desc { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.65; margin-bottom: 22px; }
+  .kin-is-label { color: rgba(255,255,255,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px; }
+  .kin-is-features { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 9px; }
+  .kin-is-features li { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.45; padding-left: 14px; position: relative; }
+  .kin-is-features li::before { content: '·'; position: absolute; left: 0; color: rgba(255,255,255,0.25); }
+  .kin-is-storage {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px;
+    background: rgba(46,160,67,0.1); border: 1px solid rgba(46,160,67,0.25);
+    color: #2ea043; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  }
+
     @media (max-width: 600px) {
     header { padding-top: 32px; }
     .catalog { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -1208,6 +1271,102 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
   document.getElementById('sug-thanks').style.display = 'block';
   setTimeout(closeSuggest, 2800);
 });
+</script>
+
+<div id="kin-info-overlay" onclick="if(event.target===this)closeInfo()">
+  <div id="kin-info-sheet">
+    <div class="kin-is-handle"><div></div></div>
+    <div class="kin-is-head">
+      <div>
+        <p class="kin-is-title" id="kin-is-title"></p>
+        <p class="kin-is-meta" id="kin-is-meta"></p>
+      </div>
+      <button class="kin-is-close" onclick="closeInfo()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <p class="kin-is-desc" id="kin-is-desc"></p>
+    <div class="kin-is-label">Features</div>
+    <ul class="kin-is-features" id="kin-is-features"></ul>
+    <div class="kin-is-label">Data storage</div>
+    <span class="kin-is-storage" id="kin-is-storage"></span>
+  </div>
+</div>
+
+<script>
+(function() {
+  var KIN = {
+    'KIN-001': { name: 'Ukulele Tuner', cat: 'Music', desc: 'Chromatic tuner for ukulele. Listens through the device microphone and shows pitch in real time. Supports gCEA standard, aDF#B, DGBE, and fA#DG tunings. Works offline.', features: ['Real-time pitch detection via Web Audio API', 'Four tuning presets (gCEA, aDF#B, DGBE, fA#DG)', 'Visual tuning meter — flat, in tune, sharp', 'PWA with full offline support'], storage: 'Nothing stored · No accounts · No tracking' },
+    'KIN-002': { name: 'Metronome', cat: 'Music', desc: 'Simple metronome with subdivisions and tap tempo. Beat divisions, BPM input and tap-to-set. Runs entirely in the browser.', features: ['BPM control with slider and keyboard input', 'Beat subdivisions (quarter, eighth, triplet, sixteenth)', 'Tap tempo for finding the BPM of any track', 'Audio generated locally via Web Audio API'], storage: 'Nothing stored' },
+    'KIN-003': { name: 'BPM Counter', cat: 'Music', desc: 'Tap a button to the beat, get the BPM. Rolling average tap counter useful for DJs, musicians, and runners.', features: ['Tap-to-measure with rolling average', 'Instant BPM readout with confidence indicator', 'Reset with a single tap', 'Clean single-purpose interface'], storage: 'Nothing stored' },
+    'KIN-004': { name: 'Colour Picker', cat: 'Design', desc: 'Pick colours visually or paste hex/rgb values. Copy to clipboard. Generate simple palettes from any starting colour. Colour blindness simulation modes.', features: ['Visual colour picker canvas', 'Hex / RGB / HSL input and conversion', 'Palette generation from any base colour', 'Colour blindness simulation (8 modes)', 'Copy any value to clipboard in one tap'], storage: 'Nothing stored' },
+    'KIN-005': { name: 'QR Builder', cat: 'Utility', desc: 'Paste a URL, email, Wi-Fi credentials, phone number, contact, or plain text and get a QR code instantly. Download as PNG or SVG.', features: ['Multiple input types: URL, email, Wi-Fi, phone, vCard, text', 'Instant QR generation in the browser', 'Download as PNG or SVG', 'Nothing sent anywhere'], storage: 'Nothing stored' },
+    'KIN-006': { name: 'Classroom Timer', cat: 'Education', desc: 'Full-screen countdown timer for classrooms. Phases shift green to amber to red as time runs down. Preset durations or set your own. Chime at the end.', features: ['Colour-phased countdown (green → amber → red)', 'Preset durations or custom time input', 'Audible chime at zero', 'Full-screen display, works on projectors'], storage: 'Nothing stored' },
+    'KIN-007': { name: 'Ambient Mixer', cat: 'Wellbeing', desc: 'White noise, pink noise, rain, wind, waves, and fire layered and mixed in the browser. Sleep timer, presets, and shareable mix codes. All audio generated locally.', features: ['Six sound layers with individual volume controls', 'Sleep timer (auto-fade to silence)', 'Preset mixes for focus, sleep, rain walks', 'Shareable mix codes via URL', 'All audio synthesised via Web Audio API — no files downloaded'], storage: 'Nothing stored' },
+    'KIN-008': { name: 'Flashcards', cat: 'Education', desc: 'Create decks, flip cards, track what you know. Data saved in the browser. Nothing leaves the device.', features: ['Create and manage multiple decks', 'Flip animation for question/answer reveal', 'Mark cards as known or still learning', 'Progress tracking across sessions'], storage: 'localStorage — stays on your device' },
+    'KIN-009': { name: 'Jet Lag Planner', cat: 'Travel', desc: 'Enter a flight, get a circadian reset plan. Light timing, sleep schedule, fatigue windows, and a daily adjustment guide. Works offline.', features: ['Flight input with timezone auto-detection', 'Circadian reset schedule day by day', 'Light exposure timing recommendations', 'Fatigue window warnings', 'Daily adjustment guide'], storage: 'Nothing stored' },
+    'KIN-010': { name: 'Audio Calculators', cat: 'Music / Developer', desc: '18 calculators for music producers and sound engineers. BPM to delay time, note to frequency, sample rate, latency, room modes, file size, and more.', features: ['BPM to delay time (all note divisions)', 'Note to frequency and back', 'Sample rate and bit-depth converter', 'Latency and buffer size calculator', 'Room mode calculator', 'Audio file size estimator', '18 calculators in total'], storage: 'Nothing stored' },
+    'KIN-011': { name: 'Unit Price Calculator', cat: 'Utility', desc: 'Find the real cost per unit of any product. Compare pack sizes instantly. Pack size parser, best-value badge, reverse mode.', features: ['Multi-item comparison (add as many as you like)', 'Pack size parsing from natural text', 'Best-value badge highlighted automatically', 'Reverse mode: target price from unit cost'], storage: 'Nothing stored' },
+    'KIN-012': { name: 'Name Picker', cat: 'Utility', desc: 'Paste a list of names, pick one at random. Shuffle animation, history log, remove-after-pick option. Great for classrooms, standups, and giveaways.', features: ['Random selection with shuffle animation', 'Pick history log', 'Remove-after-pick toggle', 'Paste a list directly — one name per line'], storage: 'Nothing stored' },
+    'KIN-013': { name: 'Mood Slider', cat: 'Wellbeing', desc: 'Slide a scale from -5 to +5 to log how you\'re really feeling. Optional note, 7-day history, colour-coded by mood. Private, offline, no account needed.', features: ['Bipolar mood scale (−5 to +5)', 'Optional text note with each entry', '7-day colour-coded history view', 'Fully offline'], storage: 'localStorage — stays on your device' },
+    'KIN-014': { name: 'Breathing Exercise', cat: 'Wellbeing', desc: 'Guided breathing patterns: Box Breathing, 4-7-8, ADHD Reset, Sleep Wind-Down. Expanding circle or ring guide, voice prompts, ambient gradient, daily streak. Stillness Score uses the device accelerometer to track how much the phone moves during a session. Less movement equals a higher score, giving genuine feedback on physical calm. Displayed as a subtle bar that fills during the session and logged alongside the streak.', features: ['Four breathing patterns', 'Visual guide (circle or ring)', 'Voice prompts', 'Ambient gradient background', 'Daily streak tracker', 'Stillness Score via accelerometer — less movement, higher score', 'Per-session stillness logged to history'], storage: 'localStorage (streak, theme, stillness history)' },
+    'KIN-015': { name: 'Quiet Cycle', cat: 'Wellbeing / Private', desc: 'Period tracker and cycle predictor. Calendar view with period, predicted, and fertile day highlights. Fertility window toggle, PIN lock, panic delete, and export.', features: ['Calendar view with colour-coded day types', 'Cycle length prediction', 'Fertility window toggle', 'PIN lock (hash-stored, not plain text)', 'Panic delete: 5 taps on the header wipes all data', 'Export to file', 'Timezone-safe date handling'], storage: 'localStorage — PIN hashed, never plain text' },
+    'KIN-016': { name: 'Recipe Scaler', cat: 'Utility', desc: 'Scale any recipe to any number of servings. Paste ingredients, choose original and target servings, get adjusted quantities. Fraction-aware, per-ingredient lock, auto unit conversion.', features: ['Fraction-aware parsing (unicode and ASCII fractions)', 'Per-ingredient lock to keep quantities fixed', 'Auto unit conversion (tsp to tbsp, g to kg, etc.)', 'Combine duplicate ingredients toggle', 'Quick 2× / 3× / ½× buttons', 'Copy scaled recipe to clipboard'], storage: 'localStorage (preferences only)' },
+    'KIN-017': { name: 'Decision Flip', cat: 'Utility', desc: 'Minimal decision-paralysis breaker. Paste a list of options, hit Decide, get a randomly selected result. Shuffle animation, multi-pick mode, remove-after-flip toggle.', features: ['Random selection with slot-machine animation', 'Multi-pick mode (select N unique results)', 'Remove-after-flip toggle', 'Keyboard shortcut: Ctrl/Cmd+Enter'], storage: 'Nothing stored' },
+    'KIN-018': { name: 'Kin Nest', cat: 'Parenting / Wellbeing', desc: 'Baby routine tracker for exhausted parents. One-tap logging for feeds, sleep, and nappies. Dashboard with last feed, awake time, nap prediction, and fussiness risk.', features: ['Feed logging (breast, bottle, pumped, formula, solids)', 'Sleep timer with wake window calculator', 'Nappy tracking (wet, dirty, both)', 'Age-adjusted nap predictor', 'Meltdown risk score', 'Growth log', 'Auto night mode (20:00–06:00)', 'JSON export and import'], storage: 'localStorage — stays on your device' },
+    'KIN-019': { name: 'Markdown Download', cat: 'Utility', desc: 'Write or paste text and download it as a .md file. Name the file, see live word and character counts, copy to clipboard. Works offline.', features: ['Markdown text editor', 'Custom filename input', 'Live word and character count', 'Download as .md via Blob URL', 'Copy to clipboard', 'Tab key inserts two spaces'], storage: 'Nothing stored' },
+    'KIN-020': { name: 'Password Generator', cat: 'Utility', desc: 'Fast, private password generator. Password mode with length slider, character toggles, pronounceable mode. Passphrase mode with ~900-word wordlist. Entropy and time-to-crack display.', features: ['Password mode (length 8–128, character sets, pronounceable)', 'Passphrase mode (~900-word wordlist, 3–8 words, custom separator)', 'Entropy and estimated time-to-crack display', 'Batch generation up to 20 at once', 'Space to regenerate, Cmd+Enter to copy', 'crypto.getRandomValues() — cryptographically random'], storage: 'Nothing stored (session history only, clears on close)' },
+    'KIN-021': { name: 'Text Counter', cat: 'Utility', desc: 'Paste any text and get a full statistical breakdown. Word, character, sentence, and paragraph counts. Reading and speaking time. Flesch-Kincaid readability. Platform character limits.', features: ['Words, characters (with/without spaces), sentences, paragraphs', 'Reading time (238 wpm) and speaking time (130 wpm)', 'Flesch-Kincaid Grade Level and Reading Ease score', 'Platform limit bars: X/280, Instagram/2200, LinkedIn/3000, SMS/160', 'Top 10 keyword density (stopword-filtered)', 'Selection stats — count just a highlighted passage'], storage: 'Nothing stored' },
+    'KIN-022': { name: 'Fair Share', cat: 'Utility', desc: 'Privacy-first shared expense splitter. Create groups with named participants. Log expenses with split methods. Greedy debt-simplification for minimum settlement payments.', features: ['Multiple groups with named participants and currency', 'Four split methods: equal, unequal, percentage, shares', 'Greedy debt-simplification (minimum transactions)', 'Export as .fairshare.json, import and merge', 'Tip calculator with preset chips', 'Three-mode percentage calculator'], storage: 'IndexedDB (localStorage fallback) — stays on your device' },
+    'KIN-023': { name: 'JSON', cat: 'Developer', desc: 'Paste JSON, get it formatted, validated and colour-highlighted. Browse the structure as a tree, compare two payloads, or query values by path. Nothing leaves your browser.', features: ['Format and validate JSON instantly', 'Colour-highlighted syntax view', 'Collapsible tree browser', 'Two-payload diff / compare mode', 'Path query (dot notation)', 'Copy formatted output to clipboard'], storage: 'Nothing stored' },
+    'KIN-024': { name: 'Thought Loop', cat: 'Wellbeing', desc: 'Write down a thought that won\'t leave you alone. Answer three questions. Get a verdict: Act, Schedule, Let it go, or Not Yours. History shows what you keep coming back to.', features: ['Guided three-question framework', 'Verdict: Act · Schedule · Let it go · Not Yours', 'Entry history with date and verdict', 'Highlights recurring thoughts over time'], storage: 'localStorage — stays on your device' },
+    'KIN-025': { name: 'Stretch', cat: 'Wellbeing', desc: 'Pick a routine — morning, desk break, post-run, bedtime, or chair-based. Set your hold time. Audio cues move you through it, and every stretch has an easier version if you need it.', features: ['Five routines (morning, desk, post-run, bedtime, chair)', 'Adjustable hold time per stretch', 'Audio cues to advance automatically', 'Easier version available for every stretch', 'Works offline'], storage: 'Nothing stored' },
+    'KIN-026': { name: 'Kin Ground', cat: 'Finance', desc: 'Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what\'s draining you, and see your money clearly. No account, no bank connection.', features: ['Monthly fixed cost tracker by category', 'Subscription log with renewal dates', 'Savings buffer calculator', 'True monthly baseline figure', 'Demo mode to explore before entering real data'], storage: 'localStorage — stays on your device' },
+    'KIN-027': { name: 'Kin Gym', cat: 'Fitness', desc: 'Track sets, reps, and weight across any exercise. Built-in rest timer and interval trainer start automatically when you log a set. Your log builds as you train. Everything stored locally.', features: ['Exercise log with sets, reps, and weight', 'Automatic rest timer when a set is logged', 'Interval trainer for circuit and HIIT work', 'Routine builder for saving workouts', 'Demo mode with sample data', 'Works fully offline'], storage: 'localStorage — stays on your device' }
+  };
+
+  function openInfo(kinNum) {
+    var d = KIN[kinNum];
+    if (!d) return;
+    document.getElementById('kin-is-title').textContent = d.name;
+    document.getElementById('kin-is-meta').textContent = kinNum + ' · ' + d.cat;
+    document.getElementById('kin-is-desc').textContent = d.desc;
+    var ul = document.getElementById('kin-is-features');
+    ul.innerHTML = '';
+    d.features.forEach(function(f) {
+      var li = document.createElement('li');
+      li.textContent = f;
+      ul.appendChild(li);
+    });
+    document.getElementById('kin-is-storage').textContent = d.storage;
+    document.getElementById('kin-info-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  window.closeInfo = function() {
+    document.getElementById('kin-info-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('.release').forEach(function(card) {
+    var numEl = card.querySelector('.cover-number');
+    if (!numEl) return;
+    var kinNum = numEl.textContent.trim();
+    if (!KIN[kinNum]) return;
+    var infoEl = card.querySelector('.release-info');
+    if (!infoEl) return;
+    var btn = document.createElement('button');
+    btn.className = 'kin-info-btn';
+    btn.setAttribute('aria-label', 'About ' + KIN[kinNum].name);
+    btn.textContent = 'i';
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openInfo(kinNum);
+    });
+    infoEl.appendChild(btn);
+  });
+})();
 </script>
 
 </body>
