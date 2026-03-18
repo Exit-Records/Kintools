@@ -22,7 +22,7 @@ These are not aspirational guidelines. They are entry requirements.
 
 **Current tools: KIN-001 through KIN-028 (28 tools). Next: KIN-029.**
 
-Latest: KIN-028 · Scan — `sites/kin-028-scan/` — Netlify URL TBC
+Latest: KIN-028 · Scan — `sites/kin-028-scan/` — `https://kinscanner.netlify.app`
 
 ---
 
