@@ -1,6 +1,6 @@
 {
-  "name": "KIN-002 · Metronome",
-  "short_name": "KIN-002",
+  "name": "KIN-002 — Metronome — Kin",
+  "short_name": "Metronome",
   "description": "Simple metronome with tap tempo and subdivisions. Works offline, no account.",
   "start_url": "./",
   "display": "standalone",

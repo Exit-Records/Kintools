@@ -1,6 +1,6 @@
 {
-  "name": "KIN-001 · Ukulele Tuner",
-  "short_name": "KIN-001",
+  "name": "KIN-001 — Ukulele Tuner — Kin",
+  "short_name": "Ukulele Tuner",
   "description": "Free chromatic ukulele tuner. GCEA standard and alternate tunings. Works offline.",
   "start_url": "./",
   "display": "standalone",

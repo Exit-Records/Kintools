@@ -1,6 +1,6 @@
 {
-  "name": "KIN-005 · QR Code",
-  "short_name": "KIN-005",
+  "name": "KIN-005 — QR Builder — Kin",
+  "short_name": "QR Builder",
   "description": "Privacy-first QR code generator. Everything stays in your browser.",
   "start_url": "./",
   "display": "standalone",
