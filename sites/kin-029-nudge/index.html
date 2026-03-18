@@ -1217,65 +1217,6 @@ body.dark .toast {
 
 .toast.show {
   transform: translateX(-50%) translateY(0);
-}
-
-  /* Info sheet */
-  .info-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--bg);
-    z-index: 950;
-    border-radius: var(--radius) var(--radius) 0 0;
-    max-height: 85vh;
-    overflow-y: auto;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 20px 16px 32px;
-    padding-bottom: calc(32px + env(safe-area-inset-bottom));
-    box-shadow: 0 -4px 24px var(--shadow);
-  }
-
-  body.dark .info-sheet {
-    background: #1a1a1d !important;
-  }
-
-  .info-sheet.active {
-    transform: translateY(0);
-  }
-
-  .info-sheet h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    letter-spacing: -0.2px;
-  }
-
-  body.dark .info-sheet h2 {
-    color: #e8e8e4 !important;
-  }
-
-  .info-sheet p {
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--text2);
-    margin-bottom: 12px;
-  }
-
-  body.dark .info-sheet p {
-    color: #a0a09a !important;
-  }
-
-  .info-sheet p:last-child {
-    margin-bottom: 0;
-    font-style: italic;
-    color: var(--text3);
-  }
-
-  body.dark .info-sheet p:last-child {
-    color: #6a6a66 !important;
-  }
   </style>
 <script>
 // PWA setup with Blob URL service worker
@@ -1883,24 +1824,7 @@ body.dark .toast {
     }
   }
 
-  // ========== INFO PANEL ==========
-    function openInfo() {
-      infoOpen = true;
-      render();
-      setTimeout(function() {
-        document.querySelector('.info-sheet').classList.add('active');
-        document.querySelector('.info-overlay').classList.add('active');
-      }, 10);
-    }
-
-    function closeInfo() {
-      document.querySelector('.info-sheet').classList.remove('active');
-      document.querySelector('.info-overlay').classList.remove('active');
-      setTimeout(function() { infoOpen = false; }, 300);
-    }
-
-    // ========== BUG REPORT ==========
-  var infoOpen = false;
+  // ========== BUG REPORT ==========
   var bugOpen = false;
   var bugType = 'Bug';
   var bugAnon = true;
@@ -1979,7 +1903,6 @@ body.dark .toast {
     html += '<h1>Nudge</h1>';
     html += '<div class="header-actions">';
     html += '<button class="icon-btn" onclick="openManage()" title="Edit menu">\u270E</button>';
-    html += '<button class="icon-btn" onclick="openInfo()" title="How it works">\u2139</button>';
     html += '<button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">' + (isDark ? '\u2600' : '\u263E') + '</button>';
     html += '</div></div>';
 
@@ -2107,19 +2030,6 @@ body.dark .toast {
     }
     html += '<button class="bug-submit" onclick="submitBug()">Send feedback</button>';
     html += '</div>';
-
-      // Info sheet
-      html += '<div class="modal-overlay info-overlay' + (infoOpen ? ' active' : '') + '" onclick="closeInfo()"></div>';
-      html += '<div class="info-sheet' + (infoOpen ? ' active' : '') + '">';
-      html += '<div class="modal-handle"></div>';
-      html += '<h2>How it works</h2>';
-      html += '<p>Pick your energy level: couch-locked, restless, or wired-but-stuck. Nudge filters a menu of small activities to match where you actually are, not where you wish you were.</p>';
-      html += '<p>Activities are sorted by time (1–2 min, 5–10 min, 20+) and type (body, brain, sensory, social, creative). Thumbs up or down on anything you try. Over time, the shuffle weights toward what actually helps you.</p>';
-      html += '<p>Use it three times in a day and it cools down, so you don\u2019t wear out the things that work. Late at night, outdoor activities quietly disappear.</p>';
-      html += '<p>If you can\u2019t choose at all, hit the emergency button. It picks one thing and starts a timer. Skip if it\u2019s wrong. No pressure.</p>';
-      html += '<p>Edit the whole menu in plain text. Paste your own list, share it with someone, start from scratch. Everything stays on your device.</p>';
-      html += '<p>No streaks. No scores. No guilt. Just options.</p>';
-      html += '</div>';
   
     app.innerHTML = html;
   }
@@ -2207,8 +2117,6 @@ body.dark .toast {
     render();
   };
 
-  window.openInfo = openInfo;
-  window.closeInfo = closeInfo;
   window.openBug = openBug;
   window.closeBug = closeBug;
   window.submitBug = submitBug;

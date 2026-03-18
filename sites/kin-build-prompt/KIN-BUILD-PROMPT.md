@@ -473,4 +473,4 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 8. No `console.log` statements in the final output
 9. No external JS libraries — use vanilla JS and Web APIs only
 10. Test mentally: does it work offline? Does it require an account? Does it collect any data? If any answer is not favourable, revise before outputting
-11. If the brief does not include ℹ (info) panel copy — the text explaining how the tool works — stop and ask the user to provide or generate it before continuing. Do not invent placeholder copy.
+11. If the brief does not include "how it works" copy for the landing page card — the text explaining what the tool does and how to use it — stop and ask the user to provide or generate it before building the landing card. This copy belongs on the landing page only, never inside the tool itself. Do not invent placeholder copy.
