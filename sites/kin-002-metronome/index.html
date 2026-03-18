@@ -53,7 +53,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100dvh;
-  padding: 24px 16px;
+  padding: calc(env(safe-area-inset-top) + 24px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 16px);
 }
 
 .app {
