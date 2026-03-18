@@ -199,7 +199,7 @@
     .ref-list .ref-row:last-child { border-bottom: none; }
     .ref-list .ref-row.active-row { color: var(--accent2); background: var(--surface2); }
   </style>
-  <script>if(localStorage.getItem('kin011-theme')!=='dark')document.documentElement.classList.add('light');</script>
+  <script>if(localStorage.getItem('kin010-theme')!=='dark')document.documentElement.classList.add('light');</script>
 </head>
 <body>
 
@@ -699,7 +699,7 @@
 //  THEME
 // ═══════════════════════════════════════════════
 const themeBtn = document.getElementById('theme-btn');
-let dark = localStorage.getItem('kin011-theme') === 'dark';
+let dark = localStorage.getItem('kin010-theme') === 'dark';
 
 function applyTheme() {
   document.documentElement.classList.toggle('light', !dark);
@@ -708,7 +708,7 @@ function applyTheme() {
 }
 themeBtn.addEventListener('click', () => {
   dark = !dark;
-  localStorage.setItem('kin011-theme', dark ? 'dark' : 'light');
+  localStorage.setItem('kin010-theme', dark ? 'dark' : 'light');
   applyTheme();
 });
 applyTheme();
