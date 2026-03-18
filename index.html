@@ -1422,5 +1422,33 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
 })();
 </script>
 
+
+<script>
+/* PWA: inline manifest + service worker */
+(function(){
+  var m={
+    name:"Kin — Everyday tools. No strings.",
+    short_name:"KIN",
+    start_url:".",
+    display:"standalone",
+    background_color:"#1a1a18",
+    theme_color:"#1a1a18",
+    icons:[
+      {src:"data:image/svg+xml,%3Csvg%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22108%22%20fill%3D%22%231a1a18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22162%22%20fill%3D%22none%22%20stroke%3D%22%23F0EDE6%22%20stroke-width%3D%222%22%20opacity%3D%220.08%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23F0EDE6%22%20stroke-width%3D%223%22%20opacity%3D%220.16%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22146%22%20r%3D%2215%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.70%22%2F%3E%20%3Ccircle%20cx%3D%22354%22%20cy%3D%22190%22%20r%3D%2212%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.55%22%2F%3E%20%3Ccircle%20cx%3D%22352%22%20cy%3D%22308%22%20r%3D%2214%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.58%22%2F%3E%20%3Ccircle%20cx%3D%22178%22%20cy%3D%22326%22%20r%3D%2212%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.52%22%2F%3E%20%3Ccircle%20cx%3D%22154%22%20cy%3D%22196%22%20r%3D%2213%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.65%22%2F%3E%20%20%3Ccircle%20cx%3D%22262%22%20cy%3D%2294%22%20%20r%3D%229%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.22%22%2F%3E%20%3Ccircle%20cx%3D%22398%22%20cy%3D%22148%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22412%22%20cy%3D%22332%22%20r%3D%229%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.20%22%2F%3E%20%3Ccircle%20cx%3D%22254%22%20cy%3D%22416%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22112%22%20cy%3D%22330%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2236%22%20%20fill%3D%22%23F0EDE6%22%2F%3E%20%3C%2Fsvg%3E",sizes:"512x512",type:"image/svg+xml"},
+      {src:"data:image/svg+xml,%3Csvg%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22108%22%20fill%3D%22%23F0EDE6%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22162%22%20fill%3D%22none%22%20stroke%3D%22%232C2C2A%22%20stroke-width%3D%222%22%20opacity%3D%220.09%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%232C2C2A%22%20stroke-width%3D%223%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22146%22%20r%3D%2215%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.65%22%2F%3E%20%3Ccircle%20cx%3D%22354%22%20cy%3D%22190%22%20r%3D%2212%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.52%22%2F%3E%20%3Ccircle%20cx%3D%22352%22%20cy%3D%22308%22%20r%3D%2214%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.55%22%2F%3E%20%3Ccircle%20cx%3D%22178%22%20cy%3D%22326%22%20r%3D%2212%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.50%22%2F%3E%20%3Ccircle%20cx%3D%22154%22%20cy%3D%22196%22%20r%3D%2213%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.60%22%2F%3E%20%20%3Ccircle%20cx%3D%22262%22%20cy%3D%2294%22%20%20r%3D%229%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.22%22%2F%3E%20%3Ccircle%20cx%3D%22398%22%20cy%3D%22148%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22412%22%20cy%3D%22332%22%20r%3D%229%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.20%22%2F%3E%20%3Ccircle%20cx%3D%22254%22%20cy%3D%22416%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22112%22%20cy%3D%22330%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2236%22%20%20fill%3D%22%232C2C2A%22%2F%3E%20%3C%2Fsvg%3E",sizes:"512x512",type:"image/svg+xml"}
+    ]
+  };
+  var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+  var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+})();
+if("serviceWorker"in navigator){
+  var _sw="const C='kin-landing-v1';"+
+    "self.addEventListener('install',function(){self.skipWaiting();});"+
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
+}
+</script>
 </body>
 </html>
