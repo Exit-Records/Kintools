@@ -1,7 +1,7 @@
 # Kin Build Rules
 
 > Single source of truth for building, updating, and deploying tools in the Kin Ecosystem.
-> Current as of KIN-023. Next tool: KIN-024.
+> Current as of KIN-029. Next tool: KIN-030.
 
 ---
 
@@ -9,11 +9,16 @@
 
 - **Repo:** `Exit-Records/Kintools` (GitHub, private)
 - **Deployment:** Netlify — each tool is its own Netlify site, a single `index.html` file
-- **Tools completed:** KIN-001 through KIN-023
+- **Tools completed:** KIN-001 through KIN-029
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
-- **Creator:** Always `Darren` unless explicitly specified otherwise
+- **Creator:** Always `Darren` unless listed below
+  - KIN-001 = Maya
+  - KIN-008 = dBridge
+  - KIN-015 = Alice and Darren
   - KIN-017 = Alice
   - KIN-018 = Alice and Darren
+  - KIN-027 = William and Darren
+  - KIN-028 = Darren and Daisy
 
 ---
 
@@ -287,10 +292,21 @@ src = src.replace('</body>', () => footer + '\n</body>');
 Template:
 
 ```html
-<footer style="text-align:center;padding:16px 16px 32px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9c9c96">
-  KIN-NNN &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
+<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:var(--muted,#888)">
+  KIN-NNN · v1.0 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Creator
+  <!-- badge row goes here — see below -->
+  <div style="margin-top:10px">
+    <button id="kin-bug-btn" onclick="openBug()" style="background:none;border:none;font-size:11px;color:var(--muted,#888);cursor:pointer;letter-spacing:0.04em;font-family:-apple-system,sans-serif;padding:4px 0;min-height:32px;-webkit-appearance:none">Report a bug</button>
+  </div>
 </footer>
 ```
+
+**Three-row structure (top to bottom):**
+1. Credit line: `KIN-NNN · v1.0 · Kin Tools (link) · by Creator`
+2. Local Only · Verified badge (+ ⓘ for localStorage tools)
+3. "Report a bug" button
+
+**Never use `display:flex` on `<footer>` itself** — keep `text-align:center` only.
 
 The credit line must include the version number in the format `vN.N` (e.g. `v1.0`). Every tool ships at `v1.0`. When making a significant update (new feature, layout change, behaviour fix), bump to `v1.1`, `v1.2`, etc. and update the SW cache key in the same commit (see §14).
 
@@ -410,14 +426,21 @@ Add to both `index.html` (root) and `sites/kin-landing/index.html`.
 
 ### Colour and animation delay sequence
 
-| Tool | Variable | nth-child delay |
-|---|---|---|
-| KIN-021 | `--hb-21` | `1.20s` |
-| KIN-022 | `--hb-22` | `1.25s` |
-| KIN-023 | `--hb-23` | `1.30s` |
-| KIN-024 | `--hb-24` | `1.35s` |
+| Tool | Variable | Colour | nth-child delay |
+|---|---|---|---|
+| KIN-021 | `--hb-21` | — | `1.20s` |
+| KIN-022 | `--hb-22` | — | `1.25s` |
+| KIN-023 | `--hb-23` | — | `1.30s` |
+| KIN-024 | `--hb-24` | — | `1.35s` |
+| KIN-025 | `--hb-25` | `#c45d3e` | `1.40s` |
+| KIN-026 | `--hb-26` | `#1d3a5c` | `1.45s` |
+| KIN-027 | `--hb-27` | `#c0293a` | `1.50s` |
+| KIN-028 | `--hb-028` | `#2c3e50` | `1.55s` |
+| KIN-029 | `--hb-029` | `#241a10` | `1.60s` |
 
 Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each new `--hb-NN` variable.
+
+Note: KIN-028 and KIN-029 use zero-padded variable names (`--hb-028`, `--hb-029`) — match whichever format exists in the landing page.
 
 ### Card HTML structure
 
@@ -622,6 +645,8 @@ All three must stay in sync — SW cache key, footer version, and landing card v
 | `@import` silently ignored | Not first rule in `<style>` | Section 4.5 |
 | Universal selector broken as `- {` | Copy-paste dropped the `*` | Section 4.4 |
 | Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
+| App entirely unresponsive — buttons, tabs, all JS silent | JS syntax error aborts the entire script block on load | Run §10 syntax check before every push; look for stray parentheses / operators after complete function calls |
+| Footer visible in exported HTML file but missing from the live page | `<footer>` placed inside an HTML export template literal | Place the footer after the template literal's closing backtick, before the real `</body>` |
 
 ---
 
