@@ -310,6 +310,57 @@ Every Kin tool must display the **Local Only · Verified** badge. Place it insid
 
 The badge uses fully inline styles so it works in any CSS environment without requiring class definitions.
 
+### Local Data Warning — ⓘ info button (localStorage tools only)
+
+Tools that persist **user data** in `localStorage` (notes, logs, streaks, session state — not just a dark-mode preference) must add a small `ⓘ` button immediately to the right of the badge. Tapping it opens a popover with a fixed one-sentence explanation. Stateless tools use the badge only — no `ⓘ` needed.
+
+**Updated badge block (localStorage tools):**
+```html
+<div style="display:flex;justify-content:center;align-items:center;gap:2px;margin-top:8px;position:relative">
+  <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span>
+  <button id="kin-storage-info-btn" onclick="kinToggleStorageInfo(event)" aria-label="Storage information" style="background:none;border:none;padding:0 0 0 2px;cursor:pointer;font-size:11px;line-height:1;color:rgba(0,0,0,0.25);min-height:24px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;-webkit-appearance:none;letter-spacing:0">ⓘ</button>
+  <div id="kin-storage-popover" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:rgba(255,255,255,0.85);font-size:11px;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;padding:10px 14px;border-radius:10px;width:240px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:100;letter-spacing:0.01em">
+    Data is stored in this browser only. Clearing browser storage will remove it permanently.
+    <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#1a1a1a;clip-path:polygon(0 0,100% 0,50% 100%)"></div>
+  </div>
+</div>
+```
+
+**JS toggle function** — add inside an existing `<script>` block or just before `</body>`:
+```js
+function kinToggleStorageInfo(e) {
+  e.stopPropagation();
+  var p = document.getElementById('kin-storage-popover');
+  var isVisible = p.style.display === 'block';
+  p.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    document.addEventListener('click', function closePopover() {
+      p.style.display = 'none';
+      document.removeEventListener('click', closePopover);
+    });
+  }
+}
+```
+
+**Dark mode CSS** — add the appropriate rule for the tool's dark mode selector:
+```css
+/* body.dark tools */
+body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+
+/* html.dark tools */
+html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+
+/* data-theme tools */
+[data-theme="dark"] #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+```
+
+The popover text is fixed — never change it:
+> *Data is stored in this browser only. Clearing browser storage will remove it permanently.*
+
+**Which tools have the ⓘ button:** KIN-002, KIN-007, KIN-009, KIN-010, KIN-013, KIN-014, KIN-015, KIN-016, KIN-018, KIN-022, KIN-024, KIN-025, KIN-026, KIN-027.
+
+**Which tools use badge only (stateless or theme-only storage):** KIN-001, KIN-003, KIN-004, KIN-005, KIN-006, KIN-008, KIN-011, KIN-012, KIN-017, KIN-019, KIN-020, KIN-021, KIN-023, KIN-028, KIN-029.
+
 ---
 
 ## 9. Mobile Optimisation Checklist

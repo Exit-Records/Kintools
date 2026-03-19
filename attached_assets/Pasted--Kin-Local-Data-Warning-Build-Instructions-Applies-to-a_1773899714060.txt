@@ -1,0 +1,123 @@
+# Kin — Local Data Warning: Build Instructions
+
+Applies to all tools that store data in `localStorage`. Adds a small info icon positioned tight against the Local Only · Verified badge — visually it reads as “more about this badge” rather than a standalone button. Tapping it opens a one-sentence popover explaining the storage behaviour.
+
+**Icon choice:** A low-opacity `ⓘ` is used rather than a warning triangle (⚠️). The triangle implies an active problem — something wrong right now. This is passive information about how browsers work, not an alert. The `ⓘ` pitched against the badge conveys “tap to learn more” without triggering anxiety. The same `ⓘ` is used on the landing page to describe apps, but context and visual weight differentiate the two — the footer version is smaller, lower opacity, and physically attached to the badge rather than floating freely.
+
+-----
+
+## 1. Which Tools
+
+Apply only to tools that persist user data in `localStorage`. Tools that are stateless (nothing stored, nothing sent) do not need this — the existing badge wording is sufficient.
+
+-----
+
+## 2. What Changes
+
+- A small `ⓘ` appears inline and tight to the right of the Local Only · Verified badge, at reduced opacity
+- Tapping it toggles a one-sentence popover above the badge
+- Tapping anywhere else dismisses it
+- No new UI chrome — the badge row handles everything
+
+-----
+
+## 3. Badge Row — Updated HTML
+
+Replace the existing badge block inside the footer with this version. The only addition is the `ⓘ` button and the popover div that follows it.
+
+```html
+<div style="display:flex;justify-content:center;align-items:center;gap:2px;margin-top:8px;position:relative">
+  <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif">
+    <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Local Only · Verified
+  </span>
+  <button id="kin-storage-info-btn" onclick="kinToggleStorageInfo(event)" aria-label="Storage information" style="background:none;border:none;padding:0 0 0 2px;cursor:pointer;font-size:11px;line-height:1;color:rgba(0,0,0,0.25);min-height:24px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;-webkit-appearance:none;letter-spacing:0">ⓘ</button>
+  <div id="kin-storage-popover" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:rgba(255,255,255,0.85);font-size:11px;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;padding:10px 14px;border-radius:10px;width:240px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:100;letter-spacing:0.01em">
+    Data is stored in this browser only. Clearing browser storage will remove it permanently.
+    <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#1a1a1a;clip-path:polygon(0 0,100% 0,50% 100%)"></div>
+  </div>
+</div>
+```
+
+-----
+
+## 4. JS — Toggle Function
+
+Add this function inside an existing `<script>` block, or in a new one before `</body>`:
+
+```js
+function kinToggleStorageInfo(e) {
+  e.stopPropagation();
+  var p = document.getElementById('kin-storage-popover');
+  var isVisible = p.style.display === 'block';
+  p.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    document.addEventListener('click', function closePopover() {
+      p.style.display = 'none';
+      document.removeEventListener('click', closePopover);
+    });
+  }
+}
+```
+
+-----
+
+## 5. Dark Mode
+
+The popover uses a dark background (`#1a1a1a`) by default so it reads well in both light and dark contexts without needing a dark mode variant. The `ⓘ` button colour will inherit from the tool’s dark mode styles automatically since it uses `color:rgba(0,0,0,0.3)` in light — add an explicit dark override if the tool uses `body.dark`:
+
+```css
+body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+```
+
+For tools using `[data-theme="dark"]` or `html.dark`:
+
+```css
+[data-theme="dark"] #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+```
+
+-----
+
+## 6. React Tools
+
+Add state alongside other declarations:
+
+```tsx
+const [storageInfoOpen, setStorageInfoOpen] = useState(false);
+```
+
+Replace the badge JSX with:
+
+```tsx
+<div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2, marginTop: 8, position: "relative" }}>
+  <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 20, background: "rgba(46,160,67,0.1)", border: "1px solid rgba(46,160,67,0.25)", fontSize: 10, fontWeight: 600, letterSpacing: "0.08em", color: "#2ea043" }}>
+    <svg width="9" height="11" viewBox="0 0 9 11" fill="none"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fillOpacity="0.15" stroke="#2ea043" strokeWidth="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    Local Only · Verified
+  </span>
+  <button
+    onClick={(e) => { e.stopPropagation(); setStorageInfoOpen(v => !v); }}
+    aria-label="Storage information"
+    style={{ background: "none", border: "none", padding: "0 0 0 2px", cursor: "pointer", fontSize: 11, lineHeight: 1, color: "rgba(0,0,0,0.25)", minHeight: 24, minWidth: 18, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+  >ⓘ</button>
+  {storageInfoOpen && (
+    <>
+      <div onClick={() => setStorageInfoOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} />
+      <div style={{ position: "absolute", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", color: "rgba(255,255,255,0.85)", fontSize: 11, lineHeight: 1.5, padding: "10px 14px", borderRadius: 10, width: 240, textAlign: "center", boxShadow: "0 4px 20px rgba(0,0,0,0.2)", zIndex: 100, letterSpacing: "0.01em", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif" }}>
+        Data is stored in this browser only. Clearing browser storage will remove it permanently.
+        <div style={{ position: "absolute", bottom: -5, left: "50%", transform: "translateX(-50%)", width: 10, height: 10, background: "#1a1a1a", clipPath: "polygon(0 0,100% 0,50% 100%)" }} />
+      </div>
+    </>
+  )}
+</div>
+```
+
+-----
+
+## 7. Build Rules Update
+
+After shipping, update `Kin Build Rules.md` Section 8 (Footer) to note:
+
+- Tools that store `localStorage` data must include the `ⓘ` info button alongside the Local Only · Verified badge
+- Stateless tools use the badge only — no info button needed
+- The popover text is fixed: *“Data is stored in this browser only. Clearing browser storage will remove it permanently.”*
