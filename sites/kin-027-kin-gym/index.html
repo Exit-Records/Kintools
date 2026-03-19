@@ -39,7 +39,6 @@ body.dark .empty-state{color:#444444 !important}
 body.dark .interval-phase{color:#666666 !important}
 body.dark .interval-rounds{color:#666666 !important}
 body.dark .exercise-header{border-color:#2a2a2a !important}
-body.dark .delete-btn{color:#555555 !important}
 body.dark .stats-bar{background:#181818 !important;border-color:#2a2a2a !important}
 body.dark .stats-val{color:#e0e0e0 !important}
 body.dark .stats-label{color:#666666 !important}
@@ -169,6 +168,40 @@ min-height:40px;padding:8px 14px;border-radius:var(--radius);
 border:1px solid var(--border);background:var(--card);color:var(--fg);
 font-size:12px;font-weight:600;cursor:pointer;
 }
+.rt-library{margin-bottom:12px}
+.rt-toggle{
+display:flex;align-items:center;justify-content:space-between;
+min-height:44px;padding:10px 14px;border-radius:var(--radius);
+border:1px solid var(--border);background:var(--card);
+font-size:13px;font-weight:700;color:var(--fg);cursor:pointer;
+-webkit-appearance:none;width:100%;text-align:left;
+}
+.rt-toggle .rt-count{font-weight:400;color:var(--fg3);font-size:12px}
+.rt-toggle .rt-arrow{font-size:12px;color:var(--fg3);transition:transform 0.2s}
+.rt-toggle.open .rt-arrow{transform:rotate(90deg)}
+.rt-list{display:none;margin-top:6px}
+.rt-list.open{display:block}
+.rt-item{
+display:flex;align-items:center;justify-content:space-between;
+padding:12px 14px;margin-bottom:4px;border-radius:var(--radius);
+border:1px solid var(--border);background:var(--card);min-height:52px;
+}
+.rt-info{flex:1;min-width:0;cursor:pointer}
+.rt-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt-meta{font-size:11px;color:var(--fg3);margin-top:2px}
+.rt-actions{display:flex;gap:2px;flex-shrink:0}
+.rt-actions .icon-btn{
+width:40px;height:40px;border:none;background:none;font-size:16px;
+cursor:pointer;border-radius:8px;display:flex;align-items:center;
+justify-content:center;color:var(--fg3);-webkit-appearance:none;
+}
+body.dark .rt-toggle{background:#181818 !important;border-color:#2a2a2a !important;color:#e0e0e0 !important}
+body.dark .rt-toggle .rt-count{color:#666666 !important}
+body.dark .rt-toggle .rt-arrow{color:#666666 !important}
+body.dark .rt-item{background:#181818 !important;border-color:#2a2a2a !important}
+body.dark .rt-name{color:#e0e0e0 !important}
+body.dark .rt-meta{color:#666666 !important}
+body.dark .rt-actions .icon-btn{color:#666666 !important}
 .card{
 background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
 padding:14px;margin-bottom:10px;box-shadow:var(--card-shadow);
@@ -181,10 +214,13 @@ padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--border);
 font-size:15px;font-weight:700;background:none;border:none;color:var(--fg);
 width:100%;min-height:44px;padding:4px 0;font-family:inherit;
 }
-.delete-btn{
-background:none;border:none;font-size:18px;cursor:pointer;color:var(--fg2);
-min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+.remove-ex-btn{
+width:100%;min-height:36px;margin-top:8px;padding:8px;border:none;border-radius:8px;
+background:none;color:var(--fg3);font-size:12px;font-weight:600;cursor:pointer;
+-webkit-appearance:none;
 }
+.remove-ex-btn:active{color:var(--accent)}
+body.dark .remove-ex-btn{color:#555555 !important}
 .rest-config{
 display:flex;align-items:center;gap:8px;padding:6px 10px;margin-bottom:8px;
 background:var(--bg2);border-radius:8px;border:1px solid var(--border);font-size:12px;
@@ -378,7 +414,7 @@ body.dark .demo-bar button{background:#4a9e6e !important}
       <h2>Workout</h2>
       <button class="add-btn" onclick="addExercise()" aria-label="Add exercise">+</button>
     </div>
-    <div class="routines" id="routines"></div>
+    <div id="routines-panel"></div>
     <div id="exercises"></div>
     <div id="workout-empty" class="empty-state">Tap + to add your first exercise</div>
     <div class="workout-actions" id="workout-btns" style="display:none">
@@ -425,20 +461,7 @@ body.dark .demo-bar button{background:#4a9e6e !important}
   <button class="bug-submit" onclick="submitBug()">Send feedback</button>
 </div>
 
-  <div class="bug-overlay" id="bug-overlay" onclick="closeBug()"></div>
-  <div class="bug-sheet" id="bug-sheet">
-    <div class="sheet-handle"></div>
-    <h2>Report a Bug</h2>
-    <div class="bug-type-row">
-      <button class="bug-type-btn active" id="btype-Bug" onclick="setBugType('Bug')">Bug</button>
-      <button class="bug-type-btn" id="btype-Suggestion" onclick="setBugType('Suggestion')">Suggestion</button>
-      <button class="bug-type-btn" id="btype-Other" onclick="setBugType('Other')">Other</button>
-    </div>
-    <textarea class="bug-textarea" id="bug-desc" placeholder="What happened?"></textarea>
-    <button class="bug-submit" onclick="submitBug()">Send feedback</button>
-  </div>
-
-  <nav>
+<nav>
   <button class="nav-btn active" onclick="switchView('rest',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Rest
   </button>
@@ -823,7 +846,11 @@ function addExercise(name,rs,type){
   sets:[makeSet(),makeSet(),makeSet()]});
   saveEx();renderEx();
 }
-function rmEx(id){exercises=exercises.filter(e=>e.id!==id);saveEx();renderEx()}
+function rmEx(id){
+  const e=exercises.find(x=>x.id===id);
+  if(!confirm('Remove '+(e?e.name:'this exercise')+'?'))return;
+  exercises=exercises.filter(e=>e.id!==id);saveEx();renderEx();
+}
 function addSet(id){const e=exercises.find(x=>x.id===id);if(e){e.sets.push(makeSet());saveEx();renderEx()}}
 function setType(eid,type){
   const e=exercises.find(x=>x.id===eid);if(!e)return;
@@ -918,7 +945,6 @@ function renderEx(){
     return `<div class="card">
       <div class="exercise-header">
         <input class="exercise-name" value="${esc(ex.name)}" onchange="upName(${ex.id},this.value)" placeholder="Exercise name">
-        <button class="delete-btn" onclick="rmEx(${ex.id})">&times;</button>
       </div>
       <div class="type-selector">
         ${Object.keys(EX_TYPES).map(k=>`<button class="type-btn${t===k?' active':''}" onclick="setType(${ex.id},'${k}')">${EX_TYPES[k].label}</button>`).join('')}
@@ -928,14 +954,40 @@ function renderEx(){
       <div class="sets-header ${ti.grid}">${ti.cols.map(c=>'<span>'+c+'</span>').join('')}</div>
       ${ex.sets.map((s,i)=>renderSetRow(ex,s,i)).join('')}
       <button class="add-set-btn" onclick="addSet(${ex.id})">+ Add Set</button>
+      <button class="remove-ex-btn" onclick="rmEx(${ex.id})">Remove exercise</button>
     </div>`}).join('');
 }
 
 // ===== ROUTINES =====
+let rtOpen=false;
 function renderRt(){
-  const c=document.getElementById('routines');if(!routines.length){c.innerHTML='';return}
-  c.innerHTML=routines.map((r,i)=>`<button class="routine-btn" onclick="loadRt(${i})">${esc(r.name)}</button>`).join('')
-    +`<button class="routine-btn" onclick="clearRt()" style="color:var(--accent);border-color:var(--accent)">&times;</button>`;
+  const c=document.getElementById('routines-panel');
+  if(!routines.length){c.innerHTML='';return}
+  const count=routines.length;
+  c.innerHTML=`
+    <div class="rt-library">
+      <button class="rt-toggle${rtOpen?' open':''}" onclick="rtOpen=!rtOpen;renderRt()">
+        <span>Saved Routines <span class="rt-count">(${count})</span></span>
+        <span class="rt-arrow">▶</span>
+      </button>
+      <div class="rt-list${rtOpen?' open':''}">
+        ${routines.map((r,i)=>{
+          const exCount=r.exercises?r.exercises.length:0;
+          const types=[...new Set((r.exercises||[]).map(e=>e.type||'strength'))];
+          return `<div class="rt-item">
+            <div class="rt-info" onclick="loadRt(${i})">
+              <div class="rt-name">${esc(r.name)}</div>
+              <div class="rt-meta">${exCount} exercise${exCount!==1?'s':''} · ${types.join(', ')}</div>
+            </div>
+            <div class="rt-actions">
+              <button class="icon-btn" onclick="shareRt(${i})" title="Share">↗</button>
+              <button class="icon-btn" onclick="renameRt(${i})" title="Rename">✎</button>
+              <button class="icon-btn" onclick="deleteRt(${i})" title="Delete">✕</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
 }
 function saveRoutine(){
   const suggest=exercises.slice(0,3).map(e=>e.name).join(', ')+(exercises.length>3?' +':'');
@@ -944,7 +996,7 @@ function saveRoutine(){
     name:e.name,type:e.type||'strength',restSec:e.restSec,
     sets:e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',tag:s.tag||''}))
   }))});
-  saveRt();renderRt();showToast('Routine saved');
+  rtOpen=true;saveRt();renderRt();showToast('Routine saved');
 }
 function loadRt(i){
   const r=routines[i];if(!r)return;
@@ -956,6 +1008,30 @@ function loadRt(i){
     exercises.push({id:exId,name:e.name,type:e.type||'strength',restSec:e.restSec||90,sets});
   });
   saveEx();renderEx();showToast('Loaded: '+r.name);
+}
+function renameRt(i){
+  const r=routines[i];if(!r)return;
+  const n=prompt('Rename routine:',r.name);if(!n)return;
+  r.name=n;saveRt();renderRt();showToast('Renamed');
+}
+function deleteRt(i){
+  const r=routines[i];if(!r)return;
+  if(!confirm('Delete "'+r.name+'"?'))return;
+  routines.splice(i,1);saveRt();renderRt();showToast('Deleted');
+}
+function shareRt(i){
+  const r=routines[i];if(!r)return;
+  const data={kin:'gym',v:1,exercises:r.exercises};
+  const json=JSON.stringify(data);
+  const encoded=btoa(unescape(encodeURIComponent(json)));
+  const url=location.origin+location.pathname+'?w='+encoded;
+  if(navigator.share){
+    navigator.share({title:r.name,text:'Workout: '+r.name,url:url}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(url).then(()=>showToast('Link copied')).catch(()=>{
+      prompt('Copy this link:',url);
+    });
+  }
 }
 function clearRt(){if(!confirm('Delete all routines?'))return;routines=[];saveRt();renderRt()}
 
@@ -1053,57 +1129,28 @@ function fmtDate(d){
 }
 loadSharedWorkout();
 renderEx();renderRt();renderLog();
-// ===== PWA: Blob manifest + Service Worker =====
+// ===== PWA: canvas icon + Blob manifest + Service Worker =====
 (function(){
   try{
-    var canvas=document.createElement('canvas');canvas.width=180;canvas.height=180;
-    var ctx=canvas.getContext('2d');
+    var cv=document.createElement('canvas');cv.width=180;cv.height=180;
+    var ctx=cv.getContext('2d');
     ctx.fillStyle='#d1373f';ctx.fillRect(0,0,180,180);
     ctx.fillStyle='#fff';ctx.font='bold 90px sans-serif';
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('G',90,90);
-    var ati=document.getElementById('apple-touch-icon');
-    if(ati)ati.href=canvas.toDataURL('image/png');
+    var ati=document.getElementById('apple-touch-icon');if(ati)ati.href=cv.toDataURL('image/png');
   }catch(e){}
   var svgIcon="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d1373f'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>G</text></svg>";
-  const manifest={
-    name:'KIN-027 — Kin Gym — Kin',short_name:'Kin Gym',
-    start_url:'./',display:'standalone',
-    background_color:'#ffffff',theme_color:'#ffffff',
-    icons:[{src:svgIcon,sizes:'any',type:'image/svg+xml'}]
-  };
-  const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
-  const mLink=document.createElement('link');
-  mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);
-  document.head.appendChild(mLink);
-
+  var manifest={name:'KIN-027 — Kin Gym — Kin',short_name:'Kin Gym',start_url:'./',display:'standalone',background_color:'#ffffff',theme_color:'#d1373f',icons:[{src:svgIcon,sizes:'any',type:'image/svg+xml'}]};
+  var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var mLink=document.createElement('link');mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);document.head.appendChild(mLink);
   if('serviceWorker' in navigator){
-    const swCode=`
-      var CN='kin-gym-v1';
-      self.addEventListener('install',function(e){e.waitUntil(caches.open(CN).then(function(c){return c.addAll(['./'])}))});
-      self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))});
-    `;
-    const swBlob=new Blob([swCode],{type:'application/javascript'});
-    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(function(){});
+    var sw="const C='kingym-v2';"+
+      "self.addEventListener('install',function(){self.skipWaiting();});"+
+      "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
+      "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(cache){return cache.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){cache.put(e.request,res.clone());return res;});});}));});";
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
   }
 })();
-
-  // ===== BUG REPORT =====
-  var _bugType='Bug';
-  function openBug(){document.getElementById('bug-sheet').classList.add('active');document.getElementById('bug-overlay').classList.add('active')}
-  function closeBug(){document.getElementById('bug-sheet').classList.remove('active');document.getElementById('bug-overlay').classList.remove('active')}
-  function setBugType(t){
-    _bugType=t;
-    ['Bug','Suggestion','Other'].forEach(function(x){document.getElementById('btype-'+x).classList.toggle('active',x===t)});
-  }
-  function submitBug(){
-    var desc=document.getElementById('bug-desc');
-    if(!desc||!desc.value.trim()){showToast('Please add a description');return}
-    fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
-      method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({form_type:'bug_report',subject:'KIN-027 — Kin Gym',app:'KIN-027',type:_bugType,description:desc.value.trim()})
-    }).then(function(){showToast('Feedback sent. Thanks!');closeBug();desc.value=''})
-    .catch(function(){showToast('Could not send. Try again.')});
-  }
 
 // ===== BUG REPORT =====
 var _bugType='Bug';
