@@ -415,6 +415,8 @@ All bug/feedback submissions go to a Google Apps Script endpoint that writes to 
 https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec
 ```
 
+**Form fields:** Type (select) + Description (textarea) + Name (optional text, shown when not anonymous). **No email field** — collecting email goes against the Kin ethos. Never add one.
+
 **POST body (JSON):**
 ```json
 {
@@ -422,7 +424,8 @@ https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49
   "subject":   "KIN-NNN — Tool Name",
   "app":       "KIN-NNN",
   "type":      "Bug | Suggestion | Other",
-  "description": "user-entered text"
+  "description": "user-entered text",
+  "name":      "optional name or empty string"
 }
 ```
 
