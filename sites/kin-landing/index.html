@@ -569,6 +569,11 @@
     .principles { margin-bottom: 40px; }
   }
 
+  .filter-bar {
+    display: flex; overflow-x: auto; gap: 8px;
+    padding: 16px 20px 20px; -ms-overflow-style: none; scrollbar-width: none;
+    justify-content: center; flex-wrap: wrap;
+  }
   .filter-bar::-webkit-scrollbar { display: none; }
   .filter-pill {
     flex: none; padding: 6px 14px; border-radius: 20px;
@@ -609,6 +614,10 @@
 <div class="catalog-header">
   <h2>Catalog</h2>
   <span class="catalog-count">29 tools</span>
+</div>
+
+<div id="filter-bar" class="filter-bar">
+  <button class="filter-pill active" data-filter="all" onclick="filterCatalog('all')">All</button>
 </div>
 
 <div class="catalog">
