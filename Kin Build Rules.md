@@ -288,9 +288,11 @@ Template:
 
 ```html
 <footer style="text-align:center;padding:16px 16px 32px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9c9c96">
-  KIN-NNN &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
+  KIN-NNN &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
 </footer>
 ```
+
+The credit line must include the version number in the format `vN.N` (e.g. `v1.0`). Every tool ships at `v1.0`. When making a significant update (new feature, layout change, behaviour fix), bump to `v1.1`, `v1.2`, etc. and update the SW cache key in the same commit (see §14).
 
 ### Local Only · Verified badge (mandatory on every tool)
 
@@ -369,17 +371,97 @@ Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each 
 ### Card HTML structure
 
 ```html
-<div class="card" style="--c:var(--hb-NN)" onclick="location.href='https://NETLIFY_URL.netlify.app'">
+<div class="card" data-category="CATEGORY" style="--c:var(--hb-NN);animation-delay:Xs" onclick="location.href='https://NETLIFY_URL.netlify.app'">
   <div class="icon">EMOJI</div>
   <div class="name">KIN-NNN</div>
   <div class="tool-name">Tool Name</div>
+  <div class="version">v1.0</div>
   <div class="desc">Short conversational description. One or two sentences. No feature-dump lists.</div>
 </div>
 ```
 
+**`data-category` values** (assign exactly one):
+
+| Category | Tools |
+|---|---|
+| `music` | KIN-001, KIN-002, KIN-003, KIN-010 |
+| `design` | KIN-004 |
+| `utility` | KIN-005, KIN-011, KIN-012, KIN-016, KIN-019, KIN-020, KIN-021, KIN-022, KIN-026, KIN-028 |
+| `education` | KIN-006, KIN-008 |
+| `wellbeing` | KIN-007, KIN-013, KIN-014, KIN-017, KIN-018, KIN-024, KIN-025, KIN-029 |
+| `travel` | KIN-009 |
+| `health` | KIN-015, KIN-027 |
+| `developer` | KIN-023 |
+
+**`version` div**: always `v1.0` for a new tool. Bump in step with the footer when making a significant update.
+
 **Description style:** Match the tone of existing cards — short, plain sentences. Avoid comma-separated feature lists.
 
 Also update the tool count string in both landing pages from `"NN tools"` to `"NN+1 tools"`.
+
+### Filter bar
+
+The landing page must include a filter bar that lets users show cards by category. The bar goes between the subtitle and the card grid. Add it to **both** `index.html` and `sites/kin-landing/index.html`.
+
+**HTML** (insert after `<div class="subtitle">…</div>`):
+```html
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="music">Music</button>
+  <button class="filter-btn" data-filter="design">Design</button>
+  <button class="filter-btn" data-filter="utility">Utility</button>
+  <button class="filter-btn" data-filter="education">Education</button>
+  <button class="filter-btn" data-filter="wellbeing">Wellbeing</button>
+  <button class="filter-btn" data-filter="travel">Travel</button>
+  <button class="filter-btn" data-filter="health">Health</button>
+  <button class="filter-btn" data-filter="developer">Developer</button>
+</div>
+```
+
+**CSS:**
+```css
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 16px 24px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.filter-btn {
+  background: none;
+  border: 1px solid var(--card-border, #e8e4dc);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: var(--text-muted, #888);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--accent, #3b5bdb);
+  border-color: var(--accent, #3b5bdb);
+  color: #fff;
+}
+```
+
+**JS** (add before `</script>` in the landing page script block):
+```js
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.card').forEach(c => {
+      c.style.display = (f === 'all' || c.dataset.category === f) ? '' : 'none';
+    });
+  });
+});
+```
 
 ---
 
@@ -450,7 +532,7 @@ fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1
 
 ## 14. Service Worker Cache Versioning
 
-After significant updates to an existing tool, bump the cache version string to force cache invalidation:
+After significant updates to an existing tool, bump **both** the cache version string and the footer/landing card version number in the same commit:
 
 ```js
 // Before
@@ -458,6 +540,18 @@ const C = 'kin022-v1';
 // After update
 const C = 'kin022-v2';
 ```
+
+Footer credit line (change `v1.0` → `v1.1`):
+```
+KIN-022 &nbsp;·&nbsp; v1.1 &nbsp;·&nbsp; …
+```
+
+Landing card version div:
+```html
+<div class="version">v1.1</div>
+```
+
+All three must stay in sync — SW cache key, footer version, and landing card version.
 
 ---
 
