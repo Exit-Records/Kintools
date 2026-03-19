@@ -253,7 +253,7 @@ background:var(--bg2);border:1px solid transparent;
 .grid-strength{grid-template-columns:32px 1fr 1fr 50px 40px}
 .grid-bodyweight{grid-template-columns:32px 1fr 50px 40px}
 .grid-duration{grid-template-columns:32px 1fr 40px}
-.grid-cardio{grid-template-columns:32px 1fr 1fr 40px}
+.grid-cardio{grid-template-columns:32px 1fr 1fr 60px 40px}
 .set-row.done{background:var(--green-soft);border-color:rgba(45,138,78,0.2)}
 .set-num{font-size:12px;font-weight:700;color:var(--fg3);text-align:center}
 .set-input{
@@ -446,7 +446,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
       <span id="session-sets">0 sets done</span>
     </div>
     <div class="workout-header">
-      <h2>Workout</h2>
+      <h2 id="workout-title">Workout</h2>
       <button class="add-btn" onclick="addExercise()" aria-label="Add exercise">+</button>
     </div>
     <div id="routines-panel"></div>
@@ -867,7 +867,7 @@ const EX_TYPES={
   strength:{label:'Strength',cols:['#','Reps','kg','Tag',''],grid:'grid-strength'},
   bodyweight:{label:'Body',cols:['#','Reps','Tag',''],grid:'grid-bodyweight'},
   duration:{label:'Duration',cols:['#','Seconds',''],grid:'grid-duration'},
-  cardio:{label:'Cardio',cols:['#','Dist (km)','Time (min)',''],grid:'grid-cardio'}
+  cardio:{label:'Cardio',cols:['#','Dist (km)','Time (min)','Level',''],grid:'grid-cardio'}
 };
 
 // ===== DEMO MODE =====
@@ -935,7 +935,7 @@ window.startFresh=function(){
   endSes();renderEx();renderRt();renderLog();
 };
 
-function makeSet(){return {v1:'',v2:'',done:false,tag:''}}
+function makeSet(){return {v1:'',v2:'',v3:'',done:false,tag:''}}
 
 function addExercise(name,rs,type){
   exId++;exercises.push({id:exId,name:name||'New Exercise',type:type||'strength',restSec:rs||90,
@@ -964,7 +964,7 @@ function toggleSet(eid,si){
   const s=e.sets[si];s.done=!s.done;
   if(s.done){
     startSes();bumpSes();
-    logSet(e.name,e.type,si+1,s.v1,s.v2,s.tag);vibrate(50);
+    logSet(e.name,e.type,si+1,s.v1,s.v2,s.tag,s.v3||'');vibrate(50);
     restTotal=e.restSec||90;restLeft=restTotal;updateRestDisplay();highlightPreset();
     if(restRunning){clearInterval(restInt);restRunning=false}
     toggleRest();
@@ -992,7 +992,7 @@ function fmtPrev(type,entries){
     if(type==='strength')return (a||'-')+'\u00d7'+(b||'-')+'kg';
     if(type==='bodyweight')return (a||'-')+' reps';
     if(type==='duration')return (a||'-')+'s';
-    if(type==='cardio')return (a||'-')+'km / '+(b||'-')+'min';
+    if(type==='cardio'){const c=p.v3||'';return (a||'-')+'km / '+(b||'-')+'min'+(c?' / L'+c:'');}
     return a||'-';
   }).join(', ');
 }
@@ -1020,7 +1020,8 @@ function renderSetRow(ex,s,i){
   } else if(t==='cardio'){
     fields=`
       <input class="set-input" type="number" inputmode="decimal" value="${s.v1}" placeholder="km" step="0.01" onchange="upSet(${ex.id},${i},'v1',this.value)">
-      <input class="set-input" type="number" inputmode="decimal" value="${s.v2}" placeholder="min" step="0.1" onchange="upSet(${ex.id},${i},'v2',this.value)">`;
+      <input class="set-input" type="number" inputmode="decimal" value="${s.v2}" placeholder="min" step="0.1" onchange="upSet(${ex.id},${i},'v2',this.value)">
+      <input class="set-input" type="number" inputmode="numeric" value="${s.v3||''}" placeholder="lvl" onchange="upSet(${ex.id},${i},'v3',this.value)">`;
   }
 
   return `<div class="set-row ${grid}${done}">
@@ -1092,7 +1093,7 @@ async function saveRoutine(){
   if(!n)return;
   routines.push({name:n,exercises:exercises.map(e=>({
     name:e.name,type:e.type||'strength',restSec:e.restSec,
-    sets:e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',tag:s.tag||''}))
+    sets:e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',v3:s.v3||'',tag:s.tag||''}))
   }))});
   rtOpen=true;saveRt();renderRt();showToast('Routine saved');
 }
@@ -1104,11 +1105,13 @@ async function loadRt(i){
   }
   exercises=[];exId=parseInt(localStorage.getItem('kin-gym-eid')||'0');
   r.exercises.forEach(e=>{exId++;
-    const sets=e.sets?e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',done:false,tag:s.tag||''})):
+    const sets=e.sets?e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',v3:s.v3||'',done:false,tag:s.tag||''})):
       Array.from({length:e.sc||3},()=>makeSet());
     exercises.push({id:exId,name:e.name,type:e.type||'strength',restSec:e.restSec||90,sets});
   });
-  saveEx();renderEx();showToast('Loaded: '+r.name);
+  saveEx();renderEx();
+  const t=document.getElementById('workout-title');if(t)t.textContent=r.name;
+  showToast('Loaded: '+r.name);
 }
 async function renameRt(i){
   const r=routines[i];if(!r)return;
@@ -1183,18 +1186,20 @@ async function clearWorkout(){
   const ok=await modalConfirm('Clear Workout','Remove all exercises?','Clear',true);
   if(!ok)return;
   exercises=[];saveEx();endSes();renderEx();
+  const t=document.getElementById('workout-title');if(t)t.textContent='Workout';
 }
 function finishWorkout(){
   const d=endSes(),m=Math.round(d/60);
   exercises.forEach(e=>e.sets.forEach(s=>{s.done=false;s.tag=''}));saveEx();renderEx();
+  const t=document.getElementById('workout-title');if(t)t.textContent='Workout';
   showToast('Workout done'+(m>0?' · '+m+' min':'')+'!');
 }
 
 // ===== LOG =====
 let logData=isDemo?demoLog():JSON.parse(localStorage.getItem('kin-gym-log')||'[]');
-function logSet(name,type,sn,v1,v2,tag){
+function logSet(name,type,sn,v1,v2,tag,v3){
   const t=new Date(),ds=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
-  logData.push({date:ds,exercise:name,type:type||'strength',set:sn,v1:v1||'-',v2:v2||'-',tag:tag||''});
+  logData.push({date:ds,exercise:name,type:type||'strength',set:sn,v1:v1||'-',v2:v2||'-',v3:v3||'',tag:tag||''});
   if(!isDemo)localStorage.setItem('kin-gym-log',JSON.stringify(logData));renderLog();
 }
 async function clearLog(){
@@ -1207,7 +1212,7 @@ function fmtLogDetail(l){
   if(t==='strength')return l.v1+' reps &times; '+l.v2+' kg';
   if(t==='bodyweight')return l.v1+' reps';
   if(t==='duration')return l.v1+' sec';
-  if(t==='cardio')return l.v1+' km / '+l.v2+' min';
+  if(t==='cardio')return l.v1+' km / '+l.v2+' min'+(l.v3?' / L'+l.v3:'');
   return l.v1;
 }
 
