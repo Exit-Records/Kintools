@@ -1187,7 +1187,7 @@ async function clearWorkout(){
 function finishWorkout(){
   const d=endSes(),m=Math.round(d/60);
   exercises.forEach(e=>e.sets.forEach(s=>{s.done=false;s.tag=''}));saveEx();renderEx();
-  showToast('Workout done'+(m>0?' · '+m+' min':'')+'!')+'!');
+  showToast('Workout done'+(m>0?' · '+m+' min':'')+'!');
 }
 
 // ===== LOG =====
