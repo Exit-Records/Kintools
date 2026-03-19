@@ -195,7 +195,8 @@
     .kin-ftr a{color:var(--accent);text-decoration:none}
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-</style>
+
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}</style>
 </head>
 <body>
 
@@ -1527,7 +1528,8 @@ if("serviceWorker"in navigator){
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
 }
 </script>
-</body></html>`;
+
+<div id="kin-toast"></div></body></html>`;
 
   const win = window.open('', '_blank');
   if (win) {
@@ -1553,13 +1555,13 @@ function importJSON(input) {
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (!data.feeds && !data.sleep) { alert('Unrecognised file format.'); return; }
+      if (!data.feeds && !data.sleep) { showToast('Unrecognised file format'); return; }
       const count = (data.feeds||[]).length + (data.sleep||[]).length;
       confirm2('Import data?', `This will replace all existing data with ${count} imported entries. This cannot be undone.`, () => {
         const merged = { ...defaultState(), ...data };
         state = merged; save(); render();
       });
-    } catch { alert('Invalid JSON file.'); }
+    } catch { showToast('Invalid JSON file'); }
   };
   reader.readAsText(file);
   input.value = '';
@@ -1614,6 +1616,8 @@ init();
   img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};
   img.src=url;
 }catch(e){}})();
+
+function showToast(m){var t=document.getElementById('kin-toast');t.textContent=m;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0'},2200);}
 </script>
 </body>
 </html>
