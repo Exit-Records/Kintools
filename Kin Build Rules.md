@@ -477,3 +477,110 @@ const C = 'kin022-v2';
 | `@import` silently ignored | Not first rule in `<style>` | Section 4.5 |
 | Universal selector broken as `- {` | Copy-paste dropped the `*` | Section 4.4 |
 | Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
+
+---
+
+## 16. Native Dialogs — Forbidden. Use kinConfirm + showToast
+
+**Never** use `confirm()`, `alert()`, or `prompt()`. They are blocked in many browser contexts, styled inconsistently, and break the Kin aesthetic. Replace them with the two patterns below.
+
+---
+
+### 16.1 kinConfirm — destructive action confirmation
+
+Use for any action that permanently deletes or resets data.
+
+**CSS** (inside `<style>`):
+```css
+.kc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:none;align-items:center;justify-content:center;padding:24px}
+.kc-box{background:var(--card-bg,#fff);border-radius:14px;padding:22px 20px;width:100%;max-width:300px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.kc-msg{font-size:15px;line-height:1.5;margin-bottom:18px;color:var(--text,#111)}
+.kc-btns{display:flex;gap:10px}
+.kc-btns button{flex:1;height:44px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;-webkit-appearance:none}
+.kc-btn-cancel{background:var(--bg-secondary,#f0f0f0);color:var(--text,#111)}
+.kc-btn-ok{background:#c0392b;color:#fff}
+```
+
+**HTML** (just before `</body>`):
+```html
+<div id="kc-overlay" class="kc-overlay">
+  <div class="kc-box">
+    <div id="kc-msg" class="kc-msg"></div>
+    <div class="kc-btns">
+      <button class="kc-btn-cancel" id="kc-cancel">Cancel</button>
+      <button class="kc-btn-ok" id="kc-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+```
+
+**JS** (inside `<script>`, before `</script>`):
+```js
+function kinConfirm(msg) {
+  return new Promise(function(resolve) {
+    var o = document.getElementById('kc-overlay');
+    document.getElementById('kc-msg').textContent = msg;
+    o.style.display = 'flex';
+    function done(v) { o.style.display = 'none'; resolve(v); }
+    document.getElementById('kc-ok').onclick = function() { done(true); };
+    document.getElementById('kc-cancel').onclick = function() { done(false); };
+  });
+}
+```
+
+**Usage — async function (preferred):**
+```js
+async function deleteItem() {
+  if (!await kinConfirm('Delete this item? This cannot be undone.')) return;
+  // proceed with delete
+}
+```
+
+**Usage — non-async (Promise chain):**
+```js
+function clearHistory() {
+  kinConfirm('Clear all history?').then(function(ok) {
+    if (!ok) return;
+    localStorage.removeItem('myKey');
+    render();
+  });
+}
+```
+
+The overlay uses `var(--card-bg)`, `var(--text)`, and `var(--bg-secondary)` so it adapts to dark mode automatically — no extra dark-mode CSS needed.
+
+---
+
+### 16.2 showToast — non-blocking notification
+
+Use for success confirmations, validation errors, and informational messages that don't require user action.
+
+**CSS** (inside `<style>`):
+```css
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}
+```
+
+**HTML** (just before `</body>`):
+```html
+<div id="kin-toast"></div>
+```
+
+**JS** (inside `<script>`, before `</script>`):
+```js
+function showToast(m) {
+  var t = document.getElementById('kin-toast');
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
+}
+```
+
+**Usage:**
+```js
+showToast('Saved');
+showToast('Please add a description');
+showToast('Feedback sent. Thanks!');
+```
+
+**Note:** Some older tools use a local `toast()` function with a CSS class toggle — that pattern is still valid in those tools but `showToast()` is the standard for all new tools.
