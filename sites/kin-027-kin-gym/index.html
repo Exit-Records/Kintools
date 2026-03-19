@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" id="theme-color-meta" content="#ffffff">
-<title>KIN-027 — Kin Gym — Kin</title>
+<meta name="theme-color" content="#ffffff" id="theme-color-meta">
 <link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<title>KIN-027 — Kin Gym — Kin</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -254,6 +254,33 @@ background:var(--card);border:1px solid var(--border);border-radius:var(--radius
 .stats-item{text-align:center}
 .stats-val{font-size:20px;font-weight:700;color:var(--fg)}
 .stats-label{font-size:10px;color:var(--fg2);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+.kin-footer{padding:16px 16px 16px;text-align:center;font-size:12px}
+.kin-footer a{color:var(--fg3);text-decoration:none}
+body.dark .kin-footer a{color:#444444 !important}
+.kin-footer .credit{color:var(--fg3);margin-bottom:8px}
+body.dark .kin-footer .credit{color:#555555 !important}
+.kin-footer .verified{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:500;margin-bottom:8px}
+body.dark .kin-footer .verified{color:#4a9e6e !important}
+.footer-bug{background:none;border:none;cursor:pointer;font:inherit;opacity:0.4;min-height:44px;padding:8px;-webkit-appearance:none;color:inherit}
+.bug-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:900;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.bug-overlay.active{opacity:1;pointer-events:all}
+body.dark .bug-overlay.active{background:rgba(0,0,0,0.6) !important}
+.bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--card);z-index:910;border-radius:12px 12px 0 0;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);padding:20px 16px calc(32px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,0.1)}
+body.dark .bug-sheet{background:#1a1a1a !important}
+.bug-sheet.active{transform:translateY(0)}
+.bug-sheet .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+body.dark .bug-sheet .sheet-handle{background:#2a2a2a !important}
+.bug-sheet h2{font-size:18px;font-weight:700;margin-bottom:16px}
+body.dark .bug-sheet h2{color:#e0e0e0 !important}
+.bug-type-row{display:flex;gap:8px;margin-bottom:12px}
+.bug-type-btn{flex:1;min-height:40px;border:1px solid var(--border);background:var(--card);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--fg2)}
+body.dark .bug-type-btn{background:#222222 !important;color:#888888 !important;border-color:#2a2a2a !important}
+.bug-type-btn.active{border-color:var(--accent);color:var(--accent)}
+body.dark .bug-type-btn.active{border-color:#d1373f !important;color:#d1373f !important}
+.bug-textarea{width:100%;min-height:100px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:inherit;font-size:16px;resize:vertical;background:var(--card);color:var(--fg);-webkit-appearance:none;margin-bottom:12px}
+body.dark .bug-textarea{border-color:#2a2a2a !important;background:#222222 !important;color:#e0e0e0 !important}
+.bug-submit{width:100%;min-height:48px;background:var(--accent);color:#fff;border:none;border-radius:24px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;-webkit-appearance:none}
+body.dark .bug-submit{background:#d1373f !important;color:#fff !important}
 .demo-bar{display:none;background:var(--green-soft);padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
 .demo-bar.visible{display:flex}
 .demo-bar span{font-size:13px;font-weight:600;color:var(--green)}
@@ -261,78 +288,9 @@ background:var(--card);border:1px solid var(--border);border-radius:var(--radius
 body.dark .demo-bar{background:#142214 !important;border-color:#2a2a2a !important}
 body.dark .demo-bar span{color:#4a9e6e !important}
 body.dark .demo-bar button{background:#4a9e6e !important}
+</style>
 
-  /* Footer */
-  .kin-footer{padding:16px 16px 16px;text-align:center;font-size:12px}
-  .kin-footer a{color:var(--fg3);text-decoration:none}
-  body.dark .kin-footer a{color:#444444 !important}
-  .kin-footer .credit{color:var(--fg3);margin-bottom:8px}
-  body.dark .kin-footer .credit{color:#555555 !important}
-  .kin-footer .verified{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-weight:500;margin-bottom:8px}
-  body.dark .kin-footer .verified{color:#4a9e6e !important}
-  .kin-footer .bug-link{color:inherit;font:inherit;opacity:0.4;background:none;border:none;cursor:pointer;min-height:44px;padding:8px;-webkit-appearance:none}
-
-  /* Bug sheet */
-  .bug-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:900;opacity:0;pointer-events:none;transition:opacity 0.2s}
-  .bug-overlay.active{opacity:1;pointer-events:all}
-  body.dark .bug-overlay.active{background:rgba(0,0,0,0.6) !important}
-  .bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--card);z-index:910;border-radius:12px 12px 0 0;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);padding:20px 16px 32px;padding-bottom:calc(32px + env(safe-area-inset-bottom));box-shadow:0 -4px 24px rgba(0,0,0,0.1)}
-  body.dark .bug-sheet{background:#1a1a1a !important}
-  .bug-sheet.active{transform:translateY(0)}
-  .bug-sheet .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-  body.dark .bug-sheet .sheet-handle{background:#2a2a2a !important}
-  .bug-sheet h2{font-size:18px;font-weight:700;margin-bottom:16px}
-  body.dark .bug-sheet h2{color:#e0e0e0 !important}
-  .bug-type-row{display:flex;gap:8px;margin-bottom:12px}
-  .bug-type-btn{flex:1;min-height:40px;border:1px solid var(--border);background:var(--card);border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--fg2)}
-  body.dark .bug-type-btn{background:#222222 !important;color:#888888 !important;border-color:#2a2a2a !important}
-  .bug-type-btn.active{border-color:var(--accent);color:var(--accent)}
-  body.dark .bug-type-btn.active{border-color:#d1373f !important;color:#d1373f !important}
-  .bug-textarea{width:100%;min-height:100px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:inherit;font-size:16px;resize:vertical;background:var(--card);color:var(--fg);-webkit-appearance:none;margin-bottom:12px}
-  body.dark .bug-textarea{border-color:#2a2a2a !important;background:#222222 !important;color:#e0e0e0 !important}
-  .bug-submit{width:100%;min-height:48px;background:var(--accent);color:#fff;border:none;border-radius:24px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;-webkit-appearance:none}
-  body.dark .bug-submit{background:#d1373f !important;color:#fff !important}
-  #kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap}
-  body.dark #kin-toast{background:#e0e0e0 !important;color:#111111 !important}
-  </style>
-
-<script>
-  /* PWA: inline manifest + service worker */
-  (function(){
-    // Apple touch icon via canvas
-    try{
-      var c=document.createElement('canvas');c.width=180;c.height=180;
-      var ctx=c.getContext('2d');
-      ctx.fillStyle='#d1373f';ctx.fillRect(0,0,180,180);
-      ctx.fillStyle='#fff';ctx.font='bold 90px sans-serif';
-      ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('G',90,90);
-      var icon=document.getElementById('apple-touch-icon');
-      if(icon)icon.href=c.toDataURL('image/png');
-    }catch(e){}
-    // Manifest
-    var m={
-      name:'KIN-027 — Kin Gym — Kin',
-      short_name:'Kin Gym',
-      start_url:'.',
-      display:'standalone',
-      background_color:'#ffffff',
-      theme_color:'#d1373f',
-      icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d1373f'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>G</text></svg>",sizes:'any',type:'image/svg+xml'}]
-    };
-    var b=new Blob([JSON.stringify(m)],{type:'application/json'});
-    var l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);
-    document.head.appendChild(l);
-    // Service worker
-    if('serviceWorker' in navigator){
-      var sw="const C='kingym-v1';"
-        +"self.addEventListener('install',function(){self.skipWaiting();});"
-        +"self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"
-        +"self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
-      navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
-    }
-  })();
-  </script>
-  </head>
+</head>
 <body>
 
 <div class="demo-bar" id="demo-bar">
@@ -446,15 +404,27 @@ body.dark .demo-bar button{background:#4a9e6e !important}
     <div id="log-entries"></div>
     <div id="log-empty" class="empty-state">Complete sets in your workout to build your log</div>
   </div>
-    <!-- Footer -->
-    <footer class="kin-footer">
-      <div class="credit"><a href="https://kintools.netlify.app/">KIN-027 &middot; Kin Gym &middot; Kin Tools &middot; by Darren</a></div>
-      <div class="verified">&#x1F6E1; Local Only &middot; Verified</div><br>
-      <button class="bug-link" onclick="openBug()">Report a bug</button>
-    </footer>
-  </main>
 
-  <!-- Bug overlay + sheet -->
+  <footer class="kin-footer">
+    <div class="credit"><a href="https://kintools.netlify.app/">KIN-027 &middot; Kin Gym &middot; Kin Tools &middot; by Darren</a></div>
+    <div class="verified">🛡 Local Only &middot; Verified</div>
+    <button class="footer-bug" onclick="openBug()">Report a bug</button>
+  </footer>
+</main>
+
+<div class="bug-overlay" id="bug-overlay" onclick="closeBug()"></div>
+<div class="bug-sheet" id="bug-sheet">
+  <div class="sheet-handle"></div>
+  <h2>Report a Bug</h2>
+  <div class="bug-type-row">
+    <button class="bug-type-btn active" id="btype-Bug" onclick="setBugType('Bug')">Bug</button>
+    <button class="bug-type-btn" id="btype-Suggestion" onclick="setBugType('Suggestion')">Suggestion</button>
+    <button class="bug-type-btn" id="btype-Other" onclick="setBugType('Other')">Other</button>
+  </div>
+  <textarea class="bug-textarea" id="bug-desc" placeholder="What happened?"></textarea>
+  <button class="bug-submit" onclick="submitBug()">Send feedback</button>
+</div>
+
   <div class="bug-overlay" id="bug-overlay" onclick="closeBug()"></div>
   <div class="bug-sheet" id="bug-sheet">
     <div class="sheet-handle"></div>
@@ -468,7 +438,7 @@ body.dark .demo-bar button{background:#4a9e6e !important}
     <button class="bug-submit" onclick="submitBug()">Send feedback</button>
   </div>
 
-<nav>
+  <nav>
   <button class="nav-btn active" onclick="switchView('rest',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Rest
   </button>
@@ -613,8 +583,8 @@ function vibrate(p){if(navigator.vibrate)navigator.vibrate(p)}
 const body=document.body,themeBtn=document.querySelector('.theme-toggle'),
 themeMeta=document.querySelector('meta[name="theme-color"]');
 function setTheme(d){
-  if(d){body.classList.add('dark');themeBtn.textContent='🌙';themeMeta.content='#0e0e0e'}
-  else{body.classList.remove('dark');themeBtn.textContent='☀️';themeMeta.content='#ffffff'}
+  if(d){body.classList.add('dark');document.documentElement.classList.remove('light');document.documentElement.classList.add('dark');themeBtn.textContent='☀️';themeMeta.content='#0e0e0e'}
+  else{body.classList.remove('dark');document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');themeBtn.textContent='🌙';themeMeta.content='#ffffff'}
   localStorage.setItem('kin-gym-theme',d?'dark':'light');
 }
 function toggleTheme(){setTheme(!body.classList.contains('dark'))}
@@ -968,16 +938,23 @@ function renderRt(){
     +`<button class="routine-btn" onclick="clearRt()" style="color:var(--accent);border-color:var(--accent)">&times;</button>`;
 }
 function saveRoutine(){
-  const n=prompt('Routine name:');if(!n)return;
-  routines.push({name:n,exercises:exercises.map(e=>({name:e.name,type:e.type||'strength',restSec:e.restSec,sc:e.sets.length}))});
+  const suggest=exercises.slice(0,3).map(e=>e.name).join(', ')+(exercises.length>3?' +':'');
+  const n=prompt('Routine name:',suggest);if(!n)return;
+  routines.push({name:n,exercises:exercises.map(e=>({
+    name:e.name,type:e.type||'strength',restSec:e.restSec,
+    sets:e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',tag:s.tag||''}))
+  }))});
   saveRt();renderRt();showToast('Routine saved');
 }
 function loadRt(i){
   const r=routines[i];if(!r)return;
   if(exercises.length&&!confirm('Replace current workout with "'+r.name+'"?'))return;
   exercises=[];exId=parseInt(localStorage.getItem('kin-gym-eid')||'0');
-  r.exercises.forEach(e=>{exId++;const sets=[];for(let j=0;j<(e.sc||3);j++)sets.push(makeSet());
-  exercises.push({id:exId,name:e.name,type:e.type||'strength',restSec:e.restSec||90,sets})});
+  r.exercises.forEach(e=>{exId++;
+    const sets=e.sets?e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',done:false,tag:s.tag||''})):
+      Array.from({length:e.sc||3},()=>makeSet());
+    exercises.push({id:exId,name:e.name,type:e.type||'strength',restSec:e.restSec||90,sets});
+  });
   saveEx();renderEx();showToast('Loaded: '+r.name);
 }
 function clearRt(){if(!confirm('Delete all routines?'))return;routines=[];saveRt();renderRt()}
@@ -1076,24 +1053,47 @@ function fmtDate(d){
 }
 loadSharedWorkout();
 renderEx();renderRt();renderLog();
+// ===== PWA: Blob manifest + Service Worker =====
+(function(){
+  try{
+    var canvas=document.createElement('canvas');canvas.width=180;canvas.height=180;
+    var ctx=canvas.getContext('2d');
+    ctx.fillStyle='#d1373f';ctx.fillRect(0,0,180,180);
+    ctx.fillStyle='#fff';ctx.font='bold 90px sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('G',90,90);
+    var ati=document.getElementById('apple-touch-icon');
+    if(ati)ati.href=canvas.toDataURL('image/png');
+  }catch(e){}
+  var svgIcon="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d1373f'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>G</text></svg>";
+  const manifest={
+    name:'KIN-027 — Kin Gym — Kin',short_name:'Kin Gym',
+    start_url:'./',display:'standalone',
+    background_color:'#ffffff',theme_color:'#ffffff',
+    icons:[{src:svgIcon,sizes:'any',type:'image/svg+xml'}]
+  };
+  const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  const mLink=document.createElement('link');
+  mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);
+  document.head.appendChild(mLink);
 
-
+  if('serviceWorker' in navigator){
+    const swCode=`
+      var CN='kin-gym-v1';
+      self.addEventListener('install',function(e){e.waitUntil(caches.open(CN).then(function(c){return c.addAll(['./'])}))});
+      self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))});
+    `;
+    const swBlob=new Blob([swCode],{type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(function(){});
+  }
+})();
 
   // ===== BUG REPORT =====
   var _bugType='Bug';
-  function openBug(){
-    document.getElementById('bug-sheet').classList.add('active');
-    document.getElementById('bug-overlay').classList.add('active');
-  }
-  function closeBug(){
-    document.getElementById('bug-sheet').classList.remove('active');
-    document.getElementById('bug-overlay').classList.remove('active');
-  }
+  function openBug(){document.getElementById('bug-sheet').classList.add('active');document.getElementById('bug-overlay').classList.add('active')}
+  function closeBug(){document.getElementById('bug-sheet').classList.remove('active');document.getElementById('bug-overlay').classList.remove('active')}
   function setBugType(t){
     _bugType=t;
-    ['Bug','Suggestion','Other'].forEach(function(x){
-      document.getElementById('btype-'+x).classList.toggle('active',x===t);
-    });
+    ['Bug','Suggestion','Other'].forEach(function(x){document.getElementById('btype-'+x).classList.toggle('active',x===t)});
   }
   function submitBug(){
     var desc=document.getElementById('bug-desc');
@@ -1102,8 +1102,23 @@ renderEx();renderRt();renderLog();
       method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({form_type:'bug_report',subject:'KIN-027 — Kin Gym',app:'KIN-027',type:_bugType,description:desc.value.trim()})
     }).then(function(){showToast('Feedback sent. Thanks!');closeBug();desc.value=''})
-    .catch(function(){showToast('Could not send. Try again later.')});
+    .catch(function(){showToast('Could not send. Try again.')});
   }
+
+// ===== BUG REPORT =====
+var _bugType='Bug';
+function openBug(){document.getElementById('bug-sheet').classList.add('active');document.getElementById('bug-overlay').classList.add('active')}
+function closeBug(){document.getElementById('bug-sheet').classList.remove('active');document.getElementById('bug-overlay').classList.remove('active')}
+function setBugType(t){_bugType=t;['Bug','Suggestion','Other'].forEach(function(x){document.getElementById('btype-'+x).classList.toggle('active',x===t)})}
+function submitBug(){
+  var desc=document.getElementById('bug-desc');
+  if(!desc||!desc.value.trim()){showToast('Please add a description');return}
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
+    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({form_type:'bug_report',subject:'KIN-027 — Kin Gym',app:'KIN-027',type:_bugType,description:desc.value.trim()})
+  }).then(function(){showToast('Feedback sent. Thanks!');closeBug();desc.value=''})
+  .catch(function(){showToast('Could not send. Try again.')});
+}
 </script>
 
 </body>
