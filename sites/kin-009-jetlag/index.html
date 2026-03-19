@@ -306,6 +306,8 @@
     #results { display: none; }
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}
 </style>
 </head>
 <body>
@@ -813,7 +815,7 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   const wakeHour       = timeToHour(document.getElementById('inp-wake').value      || '07:00');
 
   if (originIdx === destIdx) {
-    alert('Origin and destination are the same timezone — no adjustment needed!');
+    showToast('Same timezone — no adjustment needed');
     return;
   }
 
@@ -824,7 +826,7 @@ document.getElementById('btn-generate').addEventListener('click', () => {
   });
 
   if (!plan) {
-    alert('No timezone difference detected.');
+    showToast('No timezone difference detected');
     return;
   }
 
@@ -1085,5 +1087,7 @@ if("serviceWorker"in navigator){
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
 }
 </script>
+
+<div id="kin-toast"></div>
 </body>
 </html>
