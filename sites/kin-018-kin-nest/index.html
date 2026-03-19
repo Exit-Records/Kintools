@@ -1537,23 +1537,9 @@ if("serviceWorker"in navigator){
     "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
 }
-</script>
+<\/script>
 
 <div id="kin-toast"></div>
-<script>
-function kinToggleStorageInfo(e) {
-  e.stopPropagation();
-  var p = document.getElementById('kin-storage-popover');
-  var isVisible = p.style.display === 'block';
-  p.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible) {
-    document.addEventListener('click', function closePopover() {
-      p.style.display = 'none';
-      document.removeEventListener('click', closePopover);
-    });
-  }
-}
-</script>
 </body></html>`;
 
   const win = window.open('', '_blank');
@@ -1643,6 +1629,21 @@ init();
 }catch(e){}})();
 
 function showToast(m){var t=document.getElementById('kin-toast');t.textContent=m;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0'},2200);}
+</script>
+
+<script>
+function kinToggleStorageInfo(e) {
+  e.stopPropagation();
+  var p = document.getElementById('kin-storage-popover');
+  var isVisible = p.style.display === 'block';
+  p.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    document.addEventListener('click', function closePopover() {
+      p.style.display = 'none';
+      document.removeEventListener('click', closePopover);
+    });
+  }
+}
 </script>
 </body>
 </html>
