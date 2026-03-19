@@ -317,6 +317,37 @@ body.dark .bug-type-btn.active{border-color:#d1373f !important;color:#d1373f !im
 body.dark .bug-textarea{border-color:#2a2a2a !important;background:#222222 !important;color:#e0e0e0 !important}
 .bug-submit{width:100%;min-height:48px;background:var(--accent);color:#fff;border:none;border-radius:24px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;-webkit-appearance:none}
 body.dark .bug-submit{background:#d1373f !important;color:#fff !important}
+
+.modal-overlay{
+display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;
+align-items:center;justify-content:center;padding:24px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+background:var(--card);border-radius:16px;padding:24px;width:100%;max-width:340px;
+box-shadow:0 8px 30px rgba(0,0,0,0.15);border:1px solid var(--border);
+}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.modal-body{font-size:14px;color:var(--fg2);margin-bottom:16px;line-height:1.5}
+.modal-input{
+width:100%;min-height:48px;padding:12px;font-size:16px;border:1px solid var(--border);
+border-radius:10px;background:var(--bg2);color:var(--fg);margin-bottom:16px;
+-webkit-appearance:none;outline:none;
+}
+.modal-input:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:8px}
+.modal-actions button{
+flex:1;min-height:48px;padding:12px;font-size:15px;font-weight:600;
+border-radius:10px;cursor:pointer;-webkit-appearance:none;border:none;
+}
+.modal-cancel{background:var(--bg2);color:var(--fg)}
+.modal-confirm{background:var(--accent);color:#fff}
+.modal-danger{background:#b44a3f;color:#fff}
+body.dark .modal{background:#1e1e1e !important;border-color:#333333 !important}
+body.dark .modal-title{color:#e0e0e0 !important}
+body.dark .modal-body{color:#999999 !important}
+body.dark .modal-input{background:#262626 !important;color:#e0e0e0 !important;border-color:#333333 !important}
+body.dark .modal-cancel{background:#262626 !important;color:#cccccc !important}
 .demo-bar{display:none;background:var(--green-soft);padding:10px 16px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
 .demo-bar.visible{display:flex}
 .demo-bar span{font-size:13px;font-weight:600;color:var(--green)}
@@ -459,6 +490,15 @@ body.dark .demo-bar button{background:#4a9e6e !important}
   </div>
   <textarea class="bug-textarea" id="bug-desc" placeholder="What happened?"></textarea>
   <button class="bug-submit" onclick="submitBug()">Send feedback</button>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <input type="text" class="modal-input" id="modal-input" style="display:none">
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
 </div>
 
 <nav>
@@ -625,6 +665,51 @@ function showToast(msg){
   let t=document.getElementById('kin-toast');
   if(!t){t=document.createElement('div');t.id='kin-toast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none';document.body.appendChild(t)}
   t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>{t.style.opacity='0'},1800);
+}
+
+// ===== MODAL SYSTEM =====
+const modalEl=document.getElementById('modal-overlay');
+const modalTitle=document.getElementById('modal-title');
+const modalBody=document.getElementById('modal-body');
+const modalInput=document.getElementById('modal-input');
+const modalActions=document.getElementById('modal-actions');
+let modalResolve=null;
+
+function modalClose(val){
+  modalEl.classList.remove('open');
+  modalInput.onkeydown=null;
+  if(modalResolve)modalResolve(val);
+  modalResolve=null;
+}
+modalEl.addEventListener('click',function(e){if(e.target===modalEl)modalClose(null);});
+
+function modalConfirm(title,msg,confirmLabel,danger){
+  return new Promise(resolve=>{
+    modalResolve=resolve;
+    modalTitle.textContent=title;
+    modalBody.textContent=msg;
+    modalInput.style.display='none';
+    modalActions.innerHTML=`
+      <button class="modal-cancel" onclick="modalClose(false)">Cancel</button>
+      <button class="${danger?'modal-danger':'modal-confirm'}" onclick="modalClose(true)">${confirmLabel||'OK'}</button>`;
+    modalEl.classList.add('open');
+  });
+}
+
+function modalPrompt(title,msg,defaultVal,confirmLabel){
+  return new Promise(resolve=>{
+    modalResolve=resolve;
+    modalTitle.textContent=title;
+    modalBody.textContent=msg||'';
+    modalInput.style.display='block';
+    modalInput.value=defaultVal||'';
+    modalInput.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();modalClose(modalInput.value)}};
+    modalActions.innerHTML=`
+      <button class="modal-cancel" onclick="modalClose(null)">Cancel</button>
+      <button class="modal-confirm" onclick="modalClose(document.getElementById('modal-input').value)">${confirmLabel||'Save'}</button>`;
+    modalEl.classList.add('open');
+    setTimeout(()=>{modalInput.focus();modalInput.select()},100);
+  });
 }
 
 // ===== NAV =====
@@ -846,9 +931,10 @@ function addExercise(name,rs,type){
   sets:[makeSet(),makeSet(),makeSet()]});
   saveEx();renderEx();
 }
-function rmEx(id){
+async function rmEx(id){
   const e=exercises.find(x=>x.id===id);
-  if(!confirm('Remove '+(e?e.name:'this exercise')+'?'))return;
+  const ok=await modalConfirm('Remove Exercise','Remove '+(e?e.name:'this exercise')+'?','Remove',true);
+  if(!ok)return;
   exercises=exercises.filter(e=>e.id!==id);saveEx();renderEx();
 }
 function addSet(id){const e=exercises.find(x=>x.id===id);if(e){e.sets.push(makeSet());saveEx();renderEx()}}
@@ -989,18 +1075,22 @@ function renderRt(){
       </div>
     </div>`;
 }
-function saveRoutine(){
+async function saveRoutine(){
   const suggest=exercises.slice(0,3).map(e=>e.name).join(', ')+(exercises.length>3?' +':'');
-  const n=prompt('Routine name:',suggest);if(!n)return;
+  const n=await modalPrompt('Save Routine','Name this routine:',suggest,'Save');
+  if(!n)return;
   routines.push({name:n,exercises:exercises.map(e=>({
     name:e.name,type:e.type||'strength',restSec:e.restSec,
     sets:e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',tag:s.tag||''}))
   }))});
   rtOpen=true;saveRt();renderRt();showToast('Routine saved');
 }
-function loadRt(i){
+async function loadRt(i){
   const r=routines[i];if(!r)return;
-  if(exercises.length&&!confirm('Replace current workout with "'+r.name+'"?'))return;
+  if(exercises.length){
+    const ok=await modalConfirm('Load Routine','Replace current workout with "'+r.name+'"?','Load');
+    if(!ok)return;
+  }
   exercises=[];exId=parseInt(localStorage.getItem('kin-gym-eid')||'0');
   r.exercises.forEach(e=>{exId++;
     const sets=e.sets?e.sets.map(s=>({v1:s.v1||'',v2:s.v2||'',done:false,tag:s.tag||''})):
@@ -1009,14 +1099,16 @@ function loadRt(i){
   });
   saveEx();renderEx();showToast('Loaded: '+r.name);
 }
-function renameRt(i){
+async function renameRt(i){
   const r=routines[i];if(!r)return;
-  const n=prompt('Rename routine:',r.name);if(!n)return;
+  const n=await modalPrompt('Rename Routine','',r.name,'Rename');
+  if(!n)return;
   r.name=n;saveRt();renderRt();showToast('Renamed');
 }
-function deleteRt(i){
+async function deleteRt(i){
   const r=routines[i];if(!r)return;
-  if(!confirm('Delete "'+r.name+'"?'))return;
+  const ok=await modalConfirm('Delete Routine','Delete "'+r.name+'"?','Delete',true);
+  if(!ok)return;
   routines.splice(i,1);saveRt();renderRt();showToast('Deleted');
 }
 function shareRt(i){
@@ -1029,11 +1121,14 @@ function shareRt(i){
     navigator.share({title:r.name,text:'Workout: '+r.name,url:url}).catch(()=>{});
   }else{
     navigator.clipboard.writeText(url).then(()=>showToast('Link copied')).catch(()=>{
-      prompt('Copy this link:',url);
+      modalPrompt('Share Link','Copy this link:',url,'Done');
     });
   }
 }
-function clearRt(){if(!confirm('Delete all routines?'))return;routines=[];saveRt();renderRt()}
+async function clearRt(){
+  const ok=await modalConfirm('Delete All','Delete all saved routines?','Delete All',true);
+  if(!ok)return;routines=[];saveRt();renderRt();
+}
 
 function shareWorkout(){
   if(!exercises.length){showToast('No workout to share');return}
@@ -1048,7 +1143,7 @@ function shareWorkout(){
     navigator.share({title:'KIN GYM Workout',text:'Here\'s a workout for you',url:url}).catch(()=>{});
   }else{
     navigator.clipboard.writeText(url).then(()=>showToast('Link copied')).catch(()=>{
-      prompt('Copy this link:',url);
+      modalPrompt('Share Link','Copy this link:',url,'Done');
     });
   }
 }
@@ -1073,14 +1168,15 @@ function loadSharedWorkout(){
     return true;
   }catch(e){return false}
 }
-function clearWorkout(){
-  if(!confirm('Clear all exercises?'))return;
+async function clearWorkout(){
+  const ok=await modalConfirm('Clear Workout','Remove all exercises?','Clear',true);
+  if(!ok)return;
   exercises=[];saveEx();endSes();renderEx();
 }
 function finishWorkout(){
   const d=endSes(),m=Math.round(d/60);
   exercises.forEach(e=>e.sets.forEach(s=>{s.done=false;s.tag=''}));saveEx();renderEx();
-  alert('Workout finished'+(m>0?' ('+m+' min)':'')+'!');
+  showToast('Workout done'+(m>0?' · '+m+' min':'')+'!')+'!');
 }
 
 // ===== LOG =====
@@ -1090,7 +1186,10 @@ function logSet(name,type,sn,v1,v2,tag){
   logData.push({date:ds,exercise:name,type:type||'strength',set:sn,v1:v1||'-',v2:v2||'-',tag:tag||''});
   if(!isDemo)localStorage.setItem('kin-gym-log',JSON.stringify(logData));renderLog();
 }
-function clearLog(){if(!confirm('Clear entire log?'))return;logData=[];localStorage.setItem('kin-gym-log','[]');renderLog()}
+async function clearLog(){
+  const ok=await modalConfirm('Clear Log','Delete your entire workout log?','Clear',true);
+  if(!ok)return;logData=[];localStorage.setItem('kin-gym-log','[]');renderLog();
+}
 
 function fmtLogDetail(l){
   const t=l.type||'strength';
@@ -1144,7 +1243,7 @@ renderEx();renderRt();renderLog();
   var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
   var mLink=document.createElement('link');mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);document.head.appendChild(mLink);
   if('serviceWorker' in navigator){
-    var sw="const C='kingym-v2';"+
+    var sw="const C='kingym-v3';"+
       "self.addEventListener('install',function(){self.skipWaiting();});"+
       "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
       "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(cache){return cache.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){cache.put(e.request,res.clone());return res;});});}));});";
