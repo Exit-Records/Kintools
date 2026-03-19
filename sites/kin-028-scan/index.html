@@ -729,6 +729,41 @@ body.dark .slider-reset { color: #888888 !important; }
 .bug-sheet-actions button { flex: 1; }
 
 .hidden { display: none !important; }
+
+.chooser-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 16px calc(28px + env(safe-area-inset-bottom));
+  z-index: 201;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+}
+.chooser-sheet h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.chooser-options {
+  display: flex;
+  gap: 10px;
+}
+.chooser-options .btn-secondary {
+  flex: 1;
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 10px;
+  min-height: 72px;
+}
+.chooser-options .btn-secondary .ch-icon { font-size: 24px; }
+body.dark .chooser-sheet { background: #1a1a1a !important; }
 </style>
 </head>
 <body>
@@ -756,6 +791,16 @@ body.dark .slider-reset { color: #888888 !important; }
   <div><button onclick="openBugSheet()" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
   <div style="margin-top:8px;opacity:0.5;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">Kin · KIN-028 · Darren and Daisy</div>
 </footer>
+
+<!-- Add Page Chooser Sheet -->
+<div id="chooserBackdrop" class="bug-sheet-backdrop hidden" onclick="closeChooser()"></div>
+<div id="chooserSheet" class="chooser-sheet hidden">
+  <h3>Add a page</h3>
+  <div class="chooser-options">
+    <button class="btn-secondary" onclick="closeChooser();openCamera()"><span class="ch-icon">📷</span>Camera</button>
+    <button class="btn-secondary" onclick="closeChooser();importImage()"><span class="ch-icon">🖼</span>Import image</button>
+  </div>
+</div>
 
 <!-- Bug Report Sheet -->
 <div id="bugBackdrop" class="bug-sheet-backdrop hidden" onclick="closeBugSheet()"></div>
@@ -802,6 +847,18 @@ let editorImgCache = null;
 let editorImgCacheSrc = null;
 
 const isDemo = new URLSearchParams(location.search).get('demo') === 'true';
+
+function showToast(msg) {
+  let t = document.getElementById('kin-toast-028');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'kin-toast-028';
+    t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;max-width:90vw';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => { t.style.opacity = '0'; }, 2200);
+}
 
 function init() {
   loadTheme();
@@ -984,8 +1041,12 @@ function movePage(index, direction) {
 // ADD / SELECT / DELETE
 // =====================
 function showAddOptions() {
-  const choice = confirm('Use camera? (Cancel to import image instead)');
-  if (choice) openCamera(); else importImage();
+  document.getElementById('chooserBackdrop').classList.remove('hidden');
+  document.getElementById('chooserSheet').classList.remove('hidden');
+}
+function closeChooser() {
+  document.getElementById('chooserBackdrop').classList.add('hidden');
+  document.getElementById('chooserSheet').classList.add('hidden');
 }
 
 function addPage(dataURL) {
@@ -1023,7 +1084,7 @@ async function openCamera() {
     });
     showCameraUI();
   } catch (e) {
-    alert('Camera access denied or not available. Try importing an image instead.');
+    showToast('Camera denied. Try importing an image instead.');
   }
 }
 
@@ -1462,7 +1523,7 @@ function toggleAnon() {
 
 async function submitBug() {
   const desc = document.getElementById('bugDesc').value.trim();
-  if (!desc) { alert('Please add a description.'); return; }
+  if (!desc) { showToast('Please add a description'); return; }
   const isAnon = document.getElementById('bugAnon').classList.contains('on');
   try {
     await fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
@@ -1477,8 +1538,8 @@ async function submitBug() {
     });
     closeBugSheet();
     document.getElementById('bugDesc').value = '';
-    alert('Sent. Thanks.');
-  } catch (e) { alert('Failed to send. Try again.'); }
+    showToast('Feedback sent. Thanks!');
+  } catch (e) { showToast('Could not send. Try again.'); }
 }
 
 // =====================
