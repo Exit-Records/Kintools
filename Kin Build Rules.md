@@ -1,7 +1,7 @@
 # Kin Build Rules
 
 > Single source of truth for building, updating, and deploying tools in the Kin Ecosystem.
-> Current as of KIN-023. Next tool: KIN-024.
+> Current as of KIN-029. Next tool: KIN-030.
 
 ---
 
@@ -9,11 +9,16 @@
 
 - **Repo:** `Exit-Records/Kintools` (GitHub, private)
 - **Deployment:** Netlify — each tool is its own Netlify site, a single `index.html` file
-- **Tools completed:** KIN-001 through KIN-023
+- **Tools completed:** KIN-001 through KIN-029
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
-- **Creator:** Always `Darren` unless explicitly specified otherwise
+- **Creator:** Always `Darren` unless listed below
+  - KIN-001 = Maya
+  - KIN-008 = dBridge
+  - KIN-015 = Alice and Darren
   - KIN-017 = Alice
   - KIN-018 = Alice and Darren
+  - KIN-027 = William and Darren
+  - KIN-028 = Darren and Daisy
 
 ---
 
@@ -287,10 +292,23 @@ src = src.replace('</body>', () => footer + '\n</body>');
 Template:
 
 ```html
-<footer style="text-align:center;padding:16px 16px 32px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:#9c9c96">
-  KIN-NNN &nbsp;·&nbsp; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &nbsp;·&nbsp; by Darren
+<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:var(--muted,#888)">
+  KIN-NNN · v1.0 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Creator
+  <!-- badge row goes here — see below -->
+  <div style="margin-top:10px">
+    <button id="kin-bug-btn" onclick="openBug()" style="background:none;border:none;font-size:11px;color:var(--muted,#888);cursor:pointer;letter-spacing:0.04em;font-family:-apple-system,sans-serif;padding:4px 0;min-height:32px;-webkit-appearance:none">Report a bug</button>
+  </div>
 </footer>
 ```
+
+**Three-row structure (top to bottom):**
+1. Credit line: `KIN-NNN · v1.0 · Kin Tools (link) · by Creator`
+2. Local Only · Verified badge (+ ⓘ for localStorage tools)
+3. "Report a bug" button
+
+**Never use `display:flex` on `<footer>` itself** — keep `text-align:center` only.
+
+The credit line must include the version number in the format `vN.N` (e.g. `v1.0`). Every tool ships at `v1.0`. When making a significant update (new feature, layout change, behaviour fix), bump to `v1.1`, `v1.2`, etc. and update the SW cache key in the same commit (see §14).
 
 ### Local Only · Verified badge (mandatory on every tool)
 
@@ -307,6 +325,57 @@ Every Kin tool must display the **Local Only · Verified** badge. Place it insid
 ```
 
 The badge uses fully inline styles so it works in any CSS environment without requiring class definitions.
+
+### Local Data Warning — ⓘ info button (localStorage tools only)
+
+Tools that persist **user data** in `localStorage` (notes, logs, streaks, session state — not just a dark-mode preference) must add a small `ⓘ` button immediately to the right of the badge. Tapping it opens a popover with a fixed one-sentence explanation. Stateless tools use the badge only — no `ⓘ` needed.
+
+**Updated badge block (localStorage tools):**
+```html
+<div style="display:flex;justify-content:center;align-items:center;gap:2px;margin-top:8px;position:relative">
+  <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span>
+  <button id="kin-storage-info-btn" onclick="kinToggleStorageInfo(event)" aria-label="Storage information" style="background:none;border:none;padding:0 0 0 2px;cursor:pointer;font-size:11px;line-height:1;color:rgba(0,0,0,0.25);min-height:24px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;-webkit-appearance:none;letter-spacing:0">ⓘ</button>
+  <div id="kin-storage-popover" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:rgba(255,255,255,0.85);font-size:11px;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;padding:10px 14px;border-radius:10px;width:240px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:100;letter-spacing:0.01em">
+    Data is stored in this browser only. Clearing browser storage will remove it permanently.
+    <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#1a1a1a;clip-path:polygon(0 0,100% 0,50% 100%)"></div>
+  </div>
+</div>
+```
+
+**JS toggle function** — add inside an existing `<script>` block or just before `</body>`:
+```js
+function kinToggleStorageInfo(e) {
+  e.stopPropagation();
+  var p = document.getElementById('kin-storage-popover');
+  var isVisible = p.style.display === 'block';
+  p.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    document.addEventListener('click', function closePopover() {
+      p.style.display = 'none';
+      document.removeEventListener('click', closePopover);
+    });
+  }
+}
+```
+
+**Dark mode CSS** — add the appropriate rule for the tool's dark mode selector:
+```css
+/* body.dark tools */
+body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+
+/* html.dark tools */
+html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+
+/* data-theme tools */
+[data-theme="dark"] #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+```
+
+The popover text is fixed — never change it:
+> *Data is stored in this browser only. Clearing browser storage will remove it permanently.*
+
+**Which tools have the ⓘ button:** KIN-002, KIN-007, KIN-009, KIN-010, KIN-013, KIN-014, KIN-015, KIN-016, KIN-018, KIN-022, KIN-024, KIN-025, KIN-026, KIN-027.
+
+**Which tools use badge only (stateless or theme-only storage):** KIN-001, KIN-003, KIN-004, KIN-005, KIN-006, KIN-008, KIN-011, KIN-012, KIN-017, KIN-019, KIN-020, KIN-021, KIN-023, KIN-028, KIN-029.
 
 ---
 
@@ -357,29 +426,116 @@ Add to both `index.html` (root) and `sites/kin-landing/index.html`.
 
 ### Colour and animation delay sequence
 
-| Tool | Variable | nth-child delay |
-|---|---|---|
-| KIN-021 | `--hb-21` | `1.20s` |
-| KIN-022 | `--hb-22` | `1.25s` |
-| KIN-023 | `--hb-23` | `1.30s` |
-| KIN-024 | `--hb-24` | `1.35s` |
+| Tool | Variable | Colour | nth-child delay |
+|---|---|---|---|
+| KIN-021 | `--hb-21` | — | `1.20s` |
+| KIN-022 | `--hb-22` | — | `1.25s` |
+| KIN-023 | `--hb-23` | — | `1.30s` |
+| KIN-024 | `--hb-24` | — | `1.35s` |
+| KIN-025 | `--hb-25` | `#c45d3e` | `1.40s` |
+| KIN-026 | `--hb-26` | `#1d3a5c` | `1.45s` |
+| KIN-027 | `--hb-27` | `#c0293a` | `1.50s` |
+| KIN-028 | `--hb-028` | `#2c3e50` | `1.55s` |
+| KIN-029 | `--hb-029` | `#241a10` | `1.60s` |
 
 Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each new `--hb-NN` variable.
+
+Note: KIN-028 and KIN-029 use zero-padded variable names (`--hb-028`, `--hb-029`) — match whichever format exists in the landing page.
 
 ### Card HTML structure
 
 ```html
-<div class="card" style="--c:var(--hb-NN)" onclick="location.href='https://NETLIFY_URL.netlify.app'">
+<div class="card" data-category="CATEGORY" style="--c:var(--hb-NN);animation-delay:Xs" onclick="location.href='https://NETLIFY_URL.netlify.app'">
   <div class="icon">EMOJI</div>
   <div class="name">KIN-NNN</div>
   <div class="tool-name">Tool Name</div>
+  <div class="version">v1.0</div>
   <div class="desc">Short conversational description. One or two sentences. No feature-dump lists.</div>
 </div>
 ```
 
+**`data-category` values** (assign exactly one):
+
+| Category | Tools |
+|---|---|
+| `music` | KIN-001, KIN-002, KIN-003, KIN-010 |
+| `design` | KIN-004 |
+| `utility` | KIN-005, KIN-011, KIN-012, KIN-016, KIN-019, KIN-020, KIN-021, KIN-022, KIN-026, KIN-028 |
+| `education` | KIN-006, KIN-008 |
+| `wellbeing` | KIN-007, KIN-013, KIN-014, KIN-017, KIN-018, KIN-024, KIN-025, KIN-029 |
+| `travel` | KIN-009 |
+| `health` | KIN-015, KIN-027 |
+| `developer` | KIN-023 |
+
+**`version` div**: always `v1.0` for a new tool. Bump in step with the footer when making a significant update.
+
 **Description style:** Match the tone of existing cards — short, plain sentences. Avoid comma-separated feature lists.
 
 Also update the tool count string in both landing pages from `"NN tools"` to `"NN+1 tools"`.
+
+### Filter bar
+
+The landing page must include a filter bar that lets users show cards by category. The bar goes between the subtitle and the card grid. Add it to **both** `index.html` and `sites/kin-landing/index.html`.
+
+**HTML** (insert after `<div class="subtitle">…</div>`):
+```html
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="music">Music</button>
+  <button class="filter-btn" data-filter="design">Design</button>
+  <button class="filter-btn" data-filter="utility">Utility</button>
+  <button class="filter-btn" data-filter="education">Education</button>
+  <button class="filter-btn" data-filter="wellbeing">Wellbeing</button>
+  <button class="filter-btn" data-filter="travel">Travel</button>
+  <button class="filter-btn" data-filter="health">Health</button>
+  <button class="filter-btn" data-filter="developer">Developer</button>
+</div>
+```
+
+**CSS:**
+```css
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 16px 24px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.filter-btn {
+  background: none;
+  border: 1px solid var(--card-border, #e8e4dc);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: var(--text-muted, #888);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--accent, #3b5bdb);
+  border-color: var(--accent, #3b5bdb);
+  color: #fff;
+}
+```
+
+**JS** (add before `</script>` in the landing page script block):
+```js
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.card').forEach(c => {
+      c.style.display = (f === 'all' || c.dataset.category === f) ? '' : 'none';
+    });
+  });
+});
+```
 
 ---
 
@@ -450,7 +606,7 @@ fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1
 
 ## 14. Service Worker Cache Versioning
 
-After significant updates to an existing tool, bump the cache version string to force cache invalidation:
+After significant updates to an existing tool, bump **both** the cache version string and the footer/landing card version number in the same commit:
 
 ```js
 // Before
@@ -458,6 +614,18 @@ const C = 'kin022-v1';
 // After update
 const C = 'kin022-v2';
 ```
+
+Footer credit line (change `v1.0` → `v1.1`):
+```
+KIN-022 &nbsp;·&nbsp; v1.1 &nbsp;·&nbsp; …
+```
+
+Landing card version div:
+```html
+<div class="version">v1.1</div>
+```
+
+All three must stay in sync — SW cache key, footer version, and landing card version.
 
 ---
 
@@ -477,6 +645,8 @@ const C = 'kin022-v2';
 | `@import` silently ignored | Not first rule in `<style>` | Section 4.5 |
 | Universal selector broken as `- {` | Copy-paste dropped the `*` | Section 4.4 |
 | Cross-tool dark mode bleed | localStorage key not tool-specific | Section 6 |
+| App entirely unresponsive — buttons, tabs, all JS silent | JS syntax error aborts the entire script block on load | Run §10 syntax check before every push; look for stray parentheses / operators after complete function calls |
+| Footer visible in exported HTML file but missing from the live page | `<footer>` placed inside an HTML export template literal | Place the footer after the template literal's closing backtick, before the real `</body>` |
 
 ---
 
