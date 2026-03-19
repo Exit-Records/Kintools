@@ -464,25 +464,12 @@ body.dark .bug-sheet label { color: #e0e0e0 !important; }
 .bug-sheet select,
 .bug-sheet textarea,
 .bug-sheet input[type="text"],
-.bug-sheet input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-appearance: none;
-  min-height: 44px;
-  font-family: inherit;
-}
 
 .bug-sheet textarea { min-height: 80px; resize: vertical; }
 
 body.dark .bug-sheet select,
 body.dark .bug-sheet textarea,
 body.dark .bug-sheet input[type="text"],
-body.dark .bug-sheet input[type="email"] { background: #111111 !important; color: #e0e0e0 !important; border-color: rgba(255,255,255,0.08) !important; }
 
 .bug-anon-row {
   display: flex;
@@ -625,8 +612,6 @@ body.dark .bug-send { background: #3ddc84 !important; color: #0a1f13 !important;
   <div id="bugIdentity" style="display:none">
     <label>Name</label>
     <input type="text" id="bugName" placeholder="Optional">
-    <label>Email</label>
-    <input type="email" id="bugEmail" placeholder="Optional">
   </div>
   <div class="bug-sheet-actions">
     <button class="bug-cancel" onclick="closeBugSheet()">Cancel</button>
@@ -889,8 +874,7 @@ function submitBug() {
     app: 'KIN-006',
     type: document.getElementById('bugType').value,
     description: desc,
-    name: anon ? '' : (document.getElementById('bugName').value || ''),
-    email: anon ? '' : (document.getElementById('bugEmail').value || '')
+    name: anon ? '' : (document.getElementById('bugName').value || '')
   };
   try {
     fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {

@@ -72,7 +72,7 @@ body.dark .page-count { background: rgba(0,0,0,0.7) !important; }
 body.dark .demo-bar { background: #1a3a1a !important; color: #4a9d54 !important; }
 body.dark .kin-footer { color: rgba(255,255,255,0.35) !important; }
 body.dark .bug-sheet { background: #1a1a1a !important; color: #e8e8e8 !important; }
-body.dark .bug-sheet select, body.dark .bug-sheet textarea, body.dark .bug-sheet input[type="text"], body.dark .bug-sheet input[type="email"] { background: #111111 !important; color: #e8e8e8 !important; border-color: #2a2a2a !important; }
+body.dark .bug-sheet select, body.dark .bug-sheet textarea, body.dark .bug-sheet input[type="text"] color: #e8e8e8 !important; border-color: #2a2a2a !important; }
 body.dark .crop-handle { background: #e8e8e8 !important; border-color: #111111 !important; }
 body.dark .page-size-row select { background: #111111 !important; color: #e8e8e8 !important; border-color: #2a2a2a !important; }
 body.dark .page-move-btn { background: rgba(255,255,255,0.15) !important; color: #e8e8e8 !important; }
@@ -669,17 +669,6 @@ body.dark .slider-reset { color: #888888 !important; }
 .bug-sheet select,
 .bug-sheet textarea,
 .bug-sheet input[type="text"],
-.bug-sheet input[type="email"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-appearance: none;
-  min-height: 44px;
-}
 
 .bug-sheet textarea { min-height: 80px; resize: vertical; font-family: inherit; }
 
@@ -821,8 +810,6 @@ body.dark .chooser-sheet { background: #1a1a1a !important; }
   <div id="bugIdentity" class="hidden">
     <label>Name</label>
     <input type="text" id="bugName" placeholder="Optional">
-    <label>Email</label>
-    <input type="email" id="bugEmail" placeholder="Optional">
   </div>
   <div class="bug-sheet-actions">
     <button class="btn-secondary" onclick="closeBugSheet()">Cancel</button>
@@ -1533,7 +1520,6 @@ async function submitBug() {
         form_type: 'bug_report', subject: `${APP_ID} — ${APP_NAME}`, app: APP_ID,
         type: document.getElementById('bugType').value, description: desc,
         name: isAnon ? '' : document.getElementById('bugName').value.trim(),
-        email: isAnon ? '' : document.getElementById('bugEmail').value.trim()
       })
     });
     closeBugSheet();
