@@ -359,7 +359,8 @@ footer {
 }
 
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-</style>
+
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}</style>
 </head>
 <body>
 
@@ -658,7 +659,7 @@ function exportNotes() {
     .filter(function (e) { return e[1].val !== null && e[1].val !== undefined; });
 
   if (!entries.length) {
-    alert('No mood entries to export yet.');
+    showToast('No mood entries to export yet');
     return;
   }
 
@@ -931,5 +932,6 @@ if("serviceWorker"in navigator){
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
 }
 </script>
-</body>
+
+<div id="kin-toast"></div></body>
 </html>
