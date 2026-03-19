@@ -406,10 +406,42 @@ KIN-NNN Tool Name: brief one-line summary
 
 ---
 
-## 13. Web3Forms
+## 13. Bug Report — Google Sheets
 
-- Access key: `bee35860-0b11-4196-89d4-2ec55bc8b269`
-- Destination email: `dbridge@mac.com`
+All bug/feedback submissions go to a Google Apps Script endpoint that writes to a shared Sheet.
+
+**Endpoint URL:**
+```
+https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec
+```
+
+**POST body (JSON):**
+```json
+{
+  "form_type": "bug_report",
+  "subject":   "KIN-NNN — Tool Name",
+  "app":       "KIN-NNN",
+  "type":      "Bug | Suggestion | Other",
+  "description": "user-entered text"
+}
+```
+
+**Submission pattern** (always `mode:'no-cors'`):
+```js
+fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    form_type: 'bug_report',
+    subject: 'KIN-NNN \u2014 Tool Name',
+    app: 'KIN-NNN',
+    type: _bugType,
+    description: desc.value.trim()
+  })
+}).then(function(){ showToast('Feedback sent. Thanks!'); closeBug(); desc.value = '' })
+  .catch(function(){ showToast('Could not send. Try again.') });
+```
 
 ---
 
