@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<title>KIN-030 — Quote — Kin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f5f4f0;
+  --surface:#fff;
+  --text:#111;
+  --text-secondary:#666;
+  --border:#ddd;
+  --border-light:#eee;
+  --accent:#c00;
+  --accent-soft:rgba(204,0,0,0.08);
+  --success:#1a7;
+  --success-soft:rgba(17,170,119,0.08);
+  --toast-bg:#111;
+  --toast-text:#fff;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --radius:8px;
+  --footer-muted:#888;
+}
+
+body{
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:16px;
+  padding-bottom:env(safe-area-inset-bottom,0);
+  min-height:100vh;
+  min-height:100dvh;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+
+body.dark{
+  --bg:#1a1a1a;
+  --surface:#252525;
+  --text:#e8e8e8;
+  --text-secondary:#999;
+  --border:#3a3a3a;
+  --border-light:#333;
+  --accent:#e44;
+  --accent-soft:rgba(238,68,68,0.12);
+  --success:#2c9;
+  --success-soft:rgba(34,204,153,0.12);
+  --toast-bg:#fff;
+  --toast-text:#111;
+  --shadow:0 1px 3px rgba(0,0,0,0.2);
+  --footer-muted:#888;
+}
+
+body.dark{background:#1a1a1a !important;color:#e8e8e8 !important}
+body.dark input,body.dark textarea,body.dark select{background:#252525 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark input::placeholder,body.dark textarea::placeholder{color:#777 !important}
+body.dark .section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .item{border-color:#333 !important}
+body.dark label{color:#999 !important}
+body.dark .section-title{color:#e8e8e8 !important}
+body.dark .total-bar{background:#252525 !important;border-color:#3a3a3a !important;color:#e8e8e8 !important}
+body.dark .total-amount{color:#e8e8e8 !important}
+body.dark .btn-secondary{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .btn-primary{background:#e44 !important;color:#fff !important}
+body.dark .btn-export{background:#2c9 !important;color:#111 !important}
+body.dark .btn-add{background:rgba(238,68,68,0.12) !important;color:#e44 !important;border-color:transparent !important}
+body.dark .btn-remove{color:#999 !important}
+body.dark .dot{background:#e44 !important}
+body.dark .theme-toggle{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .demo-bar{background:#1a3a2a !important;color:#6f6 !important;border-color:#2a4a3a !important}
+body.dark .footer-wrap{color:#888 !important}
+body.dark .footer-wrap a{color:#888 !important}
+body.dark .badge-local{color:#2c9 !important;background:rgba(34,204,153,0.12) !important}
+body.dark .quote-id{color:#999 !important;background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .bug-sheet{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .bug-sheet select,body.dark .bug-sheet textarea,body.dark .bug-sheet input{background:#1a1a1a !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .bug-overlay{background:rgba(0,0,0,0.6) !important}
+body.dark .toggle-row{color:#999 !important}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.header h1{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.theme-toggle{
+  width:40px;height:40px;min-height:40px;
+  border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;
+  transition:background 0.2s,color 0.2s;
+  flex-shrink:0;
+}
+
+.demo-bar{
+  background:#e8f5e9;color:#2e7d32;
+  border:1px solid #c8e6c9;border-radius:var(--radius);
+  padding:10px 14px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;font-weight:500;
+}
+.demo-bar button{
+  width:auto;min-height:32px;
+  background:transparent;border:1px solid currentColor;
+  color:inherit;border-radius:6px;padding:4px 12px;
+  font-size:12px;font-weight:500;cursor:pointer;
+}
+
+.quote-id{
+  font-size:12px;color:var(--text-secondary);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:6px 10px;margin-bottom:16px;
+  font-family:monospace;letter-spacing:0.5px;
+}
+.quote-id-row{
+  display:flex;align-items:flex-end;gap:0;
+  margin-bottom:6px;
+}
+.qid-field{flex:1;margin-bottom:0}
+.qid-field input{border-radius:6px 0 0 6px;border-right:none;text-align:center;font-family:monospace;letter-spacing:0.5px}
+.qid-num input{border-radius:0 6px 6px 0;border-left:1px solid var(--border)}
+.qid-sep{
+  display:flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 2px;
+  font-size:16px;color:var(--text-secondary);
+  margin-bottom:0;
+}
+.btn-new{
+  width:100%;min-height:44px;
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border);border-radius:var(--radius);
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:inherit;margin-bottom:16px;
+  transition:background 0.15s;
+}
+body.dark .btn-new{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .quote-id-row input{background:#252525 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .qid-sep{color:#999 !important}
+body.dark .qid-num input{border-left-color:#3a3a3a !important}
+
+.section{
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--radius);
+  padding:14px;margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.section-title{
+  font-size:13px;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.5px;
+  margin-bottom:10px;color:var(--text);
+  display:flex;align-items:center;gap:6px;
+}
+
+label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px}
+input,textarea,select{
+  width:100%;min-height:44px;
+  font-size:16px;font-family:inherit;
+  border:1px solid var(--border);
+  border-radius:6px;padding:10px;
+  background:var(--surface);color:var(--text);
+  -webkit-appearance:none;appearance:none;
+  transition:border-color 0.15s;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:#aaa}
+textarea{min-height:80px;resize:vertical}
+
+.field{margin-bottom:10px}
+.row{display:flex;gap:8px}
+.row .field{flex:1}
+
+.dot{
+  display:inline-block;width:6px;height:6px;
+  background:var(--accent);border-radius:50%;
+  vertical-align:middle;margin-left:4px;
+}
+
+.item{
+  border-bottom:1px solid var(--border-light);
+  padding-bottom:12px;margin-bottom:12px;
+  position:relative;
+}
+.item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.item-label{font-size:12px;color:var(--text-secondary);font-weight:500}
+
+.btn-remove{
+  width:auto;min-height:32px;
+  background:transparent;border:none;
+  color:var(--text-secondary);font-size:12px;
+  cursor:pointer;padding:4px 8px;
+  font-family:inherit;
+}
+.btn-remove:hover{color:var(--accent)}
+
+.btn-add{
+  width:100%;min-height:44px;
+  background:var(--accent-soft);color:var(--accent);
+  border:1px dashed transparent;border-radius:6px;
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:inherit;
+  transition:background 0.15s;
+}
+
+.btn-primary{
+  width:100%;min-height:48px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:var(--radius);
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:inherit;letter-spacing:0.2px;
+  transition:opacity 0.15s;
+}
+.btn-primary:active{opacity:0.85}
+
+.btn-secondary{
+  width:100%;min-height:44px;
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border);border-radius:var(--radius);
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:inherit;
+  transition:background 0.15s;
+}
+
+.btn-export{
+  width:100%;min-height:48px;
+  background:var(--success);color:#fff;
+  border:none;border-radius:var(--radius);
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:inherit;letter-spacing:0.2px;
+  transition:opacity 0.15s;
+}
+.btn-export:active{opacity:0.85}
+
+.btn-group{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+
+.total-bar{
+  background:var(--surface);border:1px solid var(--border-light);
+  border-radius:var(--radius);padding:16px;
+  margin-top:12px;box-shadow:var(--shadow);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.total-label{font-size:13px;color:var(--text-secondary);font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.total-amount{font-size:22px;font-weight:600;color:var(--text);letter-spacing:-0.5px}
+
+.subtotal-row{
+  display:flex;justify-content:space-between;
+  font-size:13px;color:var(--text-secondary);
+  margin-bottom:6px;
+}
+
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--toast-bg);color:var(--toast-text);
+  padding:10px 20px;border-radius:20px;
+  font-size:13px;font-weight:500;
+  opacity:0;transition:opacity 0.25s;
+  pointer-events:none;z-index:100;
+  white-space:nowrap;
+}
+
+/* Footer */
+.footer-wrap{
+  text-align:center;padding:16px 16px 48px;
+  color:var(--footer-muted);font-size:11px;
+}
+.footer-wrap a{color:var(--footer-muted);text-decoration:none}
+.footer-wrap a:hover{text-decoration:underline}
+.badge-local{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;color:var(--success);
+  background:var(--success-soft);
+  border-radius:20px;padding:3px 10px;margin-top:6px;
+}
+.badge-local svg{width:12px;height:12px}
+.footer-bug{
+  display:inline-block;margin-top:8px;
+  background:transparent;border:none;
+  color:inherit;font:inherit;font-size:11px;
+  opacity:0.4;cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Bug report sheet */
+.bug-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.35);
+  z-index:200;opacity:0;pointer-events:none;
+  transition:opacity 0.25s;
+}
+.bug-overlay.open{opacity:1;pointer-events:auto}
+.bug-sheet{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);color:var(--text);
+  border-radius:16px 16px 0 0;
+  padding:20px 16px env(safe-area-inset-bottom,16px);
+  z-index:201;
+  transform:translateY(100%);transition:transform 0.3s ease;
+  max-height:85vh;overflow-y:auto;
+}
+.bug-overlay.open .bug-sheet{transform:translateY(0)}
+.bug-sheet h3{font-size:16px;margin-bottom:14px;font-weight:600}
+.bug-sheet .field{margin-bottom:10px}
+.bug-sheet label{font-size:12px;color:var(--text-secondary);margin-bottom:4px;display:block}
+.bug-sheet select,
+.bug-sheet textarea,
+.bug-sheet input{
+  width:100%;min-height:44px;font-size:16px;
+  border:1px solid var(--border);border-radius:6px;
+  padding:10px;background:var(--surface);color:var(--text);
+  font-family:inherit;-webkit-appearance:none;
+}
+.bug-sheet textarea{min-height:100px;resize:vertical}
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;color:var(--text-secondary);
+  margin-bottom:10px;padding:6px 0;
+}
+.toggle-switch{
+  width:44px;height:26px;
+  background:var(--border);border-radius:13px;
+  position:relative;cursor:pointer;
+  transition:background 0.2s;flex-shrink:0;
+  border:none;padding:0;
+}
+.toggle-switch.on{background:var(--success)}
+.toggle-knob{
+  width:22px;height:22px;
+  background:#fff;border-radius:50%;
+  position:absolute;top:2px;left:2px;
+  transition:transform 0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle-switch.on .toggle-knob{transform:translateX(18px)}
+.bug-actions{display:flex;gap:8px;margin-top:14px}
+.bug-actions button{
+  flex:1;min-height:44px;border-radius:var(--radius);
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:inherit;border:none;
+}
+.bug-cancel{background:var(--border-light);color:var(--text)}
+.bug-submit{background:var(--accent);color:#fff}
+
+.btn-pdf{
+  width:100%;min-height:44px;
+  background:var(--surface);color:var(--text);
+  border:1px solid var(--border);border-radius:var(--radius);
+  font-size:14px;font-weight:500;cursor:pointer;
+  font-family:inherit;
+  transition:background 0.15s;
+}
+body.dark .btn-pdf{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+
+/* ==================== PRINT / PDF ==================== */
+@media print{
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+  body,body.dark{
+    background:#fff !important;color:#111 !important;
+    padding:0 !important;margin:0 !important;font-size:11pt !important;
+  }
+  .header,.theme-toggle,.demo-bar,.btn-group,.toast,.footer-wrap,
+  .bug-overlay,.btn-add,.btn-remove,.dot,.btn-new,
+  .section-title .dot,.quote-id-row,
+  #addItemBtn{display:none !important}
+
+  .section{
+    box-shadow:none !important;border:none !important;
+    background:transparent !important;padding:0 !important;
+    margin-bottom:16pt !important;
+  }
+
+  input,textarea,select{
+    border:none !important;background:transparent !important;
+    padding:0 !important;min-height:auto !important;
+    font-size:11pt !important;color:#111 !important;
+    margin-bottom:2pt !important;
+  }
+  input:empty::placeholder,textarea:empty::placeholder{color:transparent !important}
+  input[value=""]::placeholder,textarea:empty::placeholder{color:transparent !important}
+
+  label{font-size:8pt !important;color:#666 !important;margin-bottom:1pt !important}
+  .section-title{font-size:10pt !important;color:#111 !important;border-bottom:1px solid #ddd !important;padding-bottom:4pt !important;margin-bottom:8pt !important}
+
+  .quote-id{
+    font-size:9pt !important;background:transparent !important;
+    border:none !important;padding:0 !important;margin-bottom:12pt !important;
+    color:#666 !important;
+  }
+
+  .item{border-bottom:1px solid #eee !important;padding-bottom:6pt !important;margin-bottom:6pt !important}
+  .item-header{margin-bottom:2pt !important}
+  .item-label{font-size:8pt !important;color:#999 !important}
+  .row{gap:12pt !important}
+
+  .total-bar{
+    box-shadow:none !important;
+    border:none !important;border-top:2px solid #111 !important;
+    background:transparent !important;
+    padding:8pt 0 !important;margin-top:8pt !important;
+  }
+  .total-label{font-size:10pt !important;color:#111 !important}
+  .total-amount{font-size:16pt !important;color:#111 !important}
+  .subtotal-row{font-size:9pt !important;color:#666 !important}
+
+  /* Print header */
+  .print-header{display:block !important;margin-bottom:20pt}
+  .print-header h2{font-size:22pt;font-weight:600;margin:0 0 4pt;letter-spacing:-0.5px}
+  .print-header .print-id{font-size:9pt;color:#666;font-family:monospace}
+}
+.print-header{display:none}
+</style>
+
+<script>
+(function(){
+  var STORE_KEY='kin030-theme';
+  var saved=localStorage.getItem(STORE_KEY);
+  if(saved==='dark'){
+    document.documentElement.className='dark';
+    document.body&&document.body.classList.add('dark');
+  }
+})();
+</script>
+
+<script>
+// PWA: Service Worker + Manifest via Blob URLs
+(function(){
+  // Manifest
+  var manifest={
+    name:'KIN-030 - Quote',
+    short_name:'Quote',
+    start_url:'.',
+    display:'standalone',
+    background_color:'#f5f4f0',
+    theme_color:'#f5f4f0',
+    icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>Q</text></svg>',sizes:'any',type:'image/svg+xml'}]
+  };
+  var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var mUrl=URL.createObjectURL(mBlob);
+  var link=document.createElement('link');
+  link.rel='manifest';link.href=mUrl;
+  document.head.appendChild(link);
+
+  // Service Worker
+  if('serviceWorker' in navigator){
+    var swCode="var CACHE='kin030-v1';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==CACHE}).map(function(n){return caches.delete(n)}))}))});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var c=res.clone();caches.open(CACHE).then(function(cache){cache.put(e.request,c)})}return res})}))});";
+    var swBlob=new Blob([swCode],{type:'application/javascript'});
+    var swUrl=URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(function(){});
+  }
+
+  // Apple touch icon
+  try{
+    var c=document.createElement('canvas');c.width=180;c.height=180;
+    var ctx=c.getContext('2d');
+    ctx.fillStyle='#f5f4f0';ctx.fillRect(0,0,180,180);
+    ctx.fillStyle='#111';ctx.font='bold 100px sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('Q',90,95);
+    var icon=document.getElementById('apple-touch-icon');
+    if(icon) icon.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>KIN-030 Quote</h1>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme"></button>
+</div>
+
+<div id="demoBar" class="demo-bar" style="display:none">
+  <span>Demo mode &mdash; sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
+
+<div class="print-header" id="printHeader">
+  <h2>Quote</h2>
+  <div class="print-id" id="printId"></div>
+</div>
+
+<div class="quote-id-row" id="quoteIdRow">
+  <div class="field qid-field">
+    <label>Prefix <span class="dot"></span></label>
+    <input id="quotePrefix" placeholder="e.g. Q, INV, DBR">
+  </div>
+  <div class="qid-sep">&ndash;</div>
+  <div class="field qid-field qid-num">
+    <label>Number</label>
+    <input id="quoteNumber" type="number" placeholder="001" inputmode="numeric">
+  </div>
+</div>
+<div class="quote-id" id="quoteIdDisplay"></div>
+<button class="btn-new" type="button" onclick="newQuote()">+ New quote</button>
+
+<!-- FROM -->
+<div class="section">
+  <div class="section-title">From <span class="dot"></span></div>
+  <div class="field">
+    <label>Name / business</label>
+    <input id="fromName" placeholder="Your name or business">
+  </div>
+  <div class="field">
+    <label>Email</label>
+    <input id="fromEmail" type="email" placeholder="you@example.com">
+  </div>
+</div>
+
+<!-- TO -->
+<div class="section">
+  <div class="section-title">To</div>
+  <div class="field">
+    <label>Client name</label>
+    <input id="toName" placeholder="Client or company name">
+  </div>
+  <div class="field">
+    <label>Client email</label>
+    <input id="toEmail" type="email" placeholder="client@example.com">
+  </div>
+</div>
+
+<!-- CURRENCY + VAT -->
+<div class="section">
+  <div class="section-title">Settings <span class="dot"></span></div>
+  <div class="row">
+    <div class="field">
+      <label>Currency code</label>
+      <input id="currency" placeholder="e.g. GBP, USD, EUR">
+    </div>
+    <div class="field">
+      <label>Tax / VAT %</label>
+      <input id="taxRate" type="number" placeholder="0" inputmode="decimal">
+    </div>
+  </div>
+</div>
+
+<!-- ITEMS -->
+<div class="section">
+  <div class="section-title">Line items</div>
+  <div id="itemsList"></div>
+  <button class="btn-add" type="button" id="addItemBtn">+ Add item</button>
+</div>
+
+<!-- VALIDITY -->
+<div class="section">
+  <div class="field">
+    <label>Quote valid until</label>
+    <input id="validUntil" type="date">
+  </div>
+</div>
+
+<!-- PAYMENT -->
+<div class="section">
+  <div class="section-title">Payment details <span class="dot"></span></div>
+  <div class="field">
+    <label>Method</label>
+    <input id="payMethod" placeholder="e.g. Bank transfer, PayPal, Wise">
+  </div>
+  <div class="field">
+    <label>Account details</label>
+    <textarea id="payDetails" placeholder="Account number, IBAN, sort code, PayPal address, or any details the client needs to pay you"></textarea>
+  </div>
+  <div class="field">
+    <label>Reference</label>
+    <input id="payRef" placeholder="Payment reference or instructions">
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="section">
+  <div class="section-title">Notes</div>
+  <div class="field">
+    <textarea id="notes" placeholder="Additional terms, notes, or conditions"></textarea>
+  </div>
+</div>
+
+<!-- TOTALS -->
+<div id="subtotals"></div>
+<div class="total-bar">
+  <span class="total-label">Total</span>
+  <span class="total-amount" id="totalDisplay">0.00</span>
+</div>
+
+<!-- ACTIONS -->
+<div class="btn-group">
+  <button class="btn-secondary" type="button" onclick="saveDefaults()">Save as defaults</button>
+  <button class="btn-pdf" type="button" onclick="savePDF()">Save as PDF</button>
+  <button class="btn-export" type="button" onclick="exportToInvoice()">Copy for Invoice &rarr;</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer style="text-align:center;padding:16px 16px 48px;font-size:11px;color:var(--footer-muted,#888)">
+  KIN-030 &middot; v1.0 &middot; <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &middot; by Darren
+  <div style="margin-top:6px">
+    <span class="badge-local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;vertical-align:middle"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Local Only &middot; Verified</span><button onclick="kinToggleStorageInfo()" title="What is stored?" style="background:none;border:1px solid var(--border,#ddd);border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;color:var(--footer-muted,#888);padding:0;margin-left:4px;vertical-align:middle;font-family:inherit">ⓘ</button>
+  </div>
+  <div id="kinStorageInfo" style="display:none;margin-top:8px;font-size:11px;color:var(--footer-muted,#888);line-height:1.6;max-width:300px;margin-left:auto;margin-right:auto">
+    Saves your defaults and quote sequence to localStorage. Nothing is sent anywhere. Clear site data in your browser to reset.
+  </div>
+  <div style="margin-top:10px">
+    <button onclick="openBugReport()" style="background:none;border:none;color:var(--footer-muted,#888);font-size:11px;opacity:0.5;cursor:pointer;padding:4px 8px;font-family:inherit">Report a bug</button>
+  </div>
+</footer>
+
+<!-- BUG REPORT -->
+<div class="bug-overlay" id="bugOverlay" onclick="closeBugReport(event)">
+  <div class="bug-sheet" onclick="event.stopPropagation()">
+    <h3>Report a bug</h3>
+    <div class="field">
+      <label>Type</label>
+      <select id="bugType"><option>Bug</option><option>Suggestion</option><option>Other</option></select>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="bugDesc" placeholder="What happened?"></textarea>
+    </div>
+    <div class="toggle-row">
+      <span>Submit anonymously</span>
+      <button class="toggle-switch on" id="bugAnonToggle" type="button" onclick="toggleAnon()">
+        <div class="toggle-knob"></div>
+      </button>
+    </div>
+    <div id="bugIdentity" style="display:none">
+      <div class="field">
+        <label>Name</label>
+        <input id="bugName" placeholder="Your name">
+      </div>
+    </div>
+    <div class="bug-actions">
+      <button class="bug-cancel" type="button" onclick="closeBugReport()">Cancel</button>
+      <button class="bug-submit" type="button" onclick="submitBug()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== STATE ====================
+var doc, isDemo=false;
+
+var SEQ_KEY='kin030-sequence';
+
+function getNextNumber(){
+  var n=parseInt(localStorage.getItem(SEQ_KEY)||'0',10);
+  return n+1;
+}
+
+function bumpSequence(num){
+  var current=parseInt(localStorage.getItem(SEQ_KEY)||'0',10);
+  if(num>current) localStorage.setItem(SEQ_KEY,String(num));
+}
+
+function buildQuoteId(){
+  var p=(doc.meta.prefix||'').trim();
+  var n=doc.meta.number||1;
+  var numStr=String(n).padStart(3,'0');
+  return p?(p+'-'+numStr):numStr;
+}
+
+function updateIdDisplay(){
+  document.getElementById('quoteIdDisplay').textContent=buildQuoteId();
+}
+
+function freshDoc(){
+  return {
+    meta:{id:'',type:'quote',prefix:'',number:getNextNumber(),currency:''},
+    from:{name:'',email:''},
+    to:{name:'',email:''},
+    items:[{description:'',quantity:null,rate:null}],
+    totals:{subtotal:0,taxRate:0,taxAmount:0,total:0},
+    terms:{validUntil:''},
+    payment:{method:'',details:'',ref:''},
+    notes:''
+  };
+}
+
+function demoData(){
+  return {
+    meta:{id:'DBR-004',type:'quote',prefix:'DBR',number:4,currency:'GBP'},
+    from:{name:'Darren White',email:'darren@exitrecords.co.uk'},
+    to:{name:'Fabric London',email:'bookings@fabriclondon.com'},
+    items:[
+      {description:'DJ set - Main room (2hrs)',quantity:1,rate:1500},
+      {description:'Travel and accommodation',quantity:1,rate:350},
+      {description:'Additional hour (standby)',quantity:1,rate:500}
+    ],
+    totals:{subtotal:0,taxRate:20,taxAmount:0,total:0},
+    terms:{validUntil:'2026-04-20'},
+    payment:{method:'Bank transfer (Wise)',details:'IBAN: GB29 NWBK 6016 1331 9268 19\nBIC: TRWIGB2L\nPayPal: darren@exitrecords.co.uk',ref:'Include quote ID as payment reference'},
+    notes:'Quote valid for 30 days. 50% deposit required to confirm booking.'
+  };
+}
+
+// ==================== INIT ====================
+function init(){
+  initTheme();
+
+  var params=new URLSearchParams(window.location.search);
+  isDemo=params.get('demo')==='true';
+
+  if(isDemo){
+    doc=demoData();
+    document.getElementById('demoBar').style.display='flex';
+  } else {
+    doc=freshDoc();
+    applyDefaults();
+  }
+
+  syncToDOM();
+  renderItems();
+  recalc();
+
+  // Bind top-level inputs
+  bindInput('quotePrefix',function(v){doc.meta.prefix=v.toUpperCase().trim();updateIdDisplay()});
+  bindInput('quoteNumber',function(v){doc.meta.number=parseInt(v,10)||1;updateIdDisplay()});
+  bindInput('fromName',function(v){doc.from.name=v});
+  bindInput('fromEmail',function(v){doc.from.email=v});
+  bindInput('toName',function(v){doc.to.name=v});
+  bindInput('toEmail',function(v){doc.to.email=v});
+  bindInput('currency',function(v){doc.meta.currency=v.toUpperCase().trim();recalc()});
+  bindInput('taxRate',function(v){doc.totals.taxRate=parseFloat(v)||0;recalc()});
+  bindInput('validUntil',function(v){doc.terms.validUntil=v});
+  bindInput('payMethod',function(v){doc.payment.method=v});
+  bindInput('payDetails',function(v){doc.payment.details=v});
+  bindInput('payRef',function(v){doc.payment.ref=v});
+  bindInput('notes',function(v){doc.notes=v});
+
+  document.getElementById('addItemBtn').onclick=addItem;
+}
+
+function bindInput(id,fn){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('input',function(){fn(this.value)});
+  el.addEventListener('change',function(){fn(this.value)});
+}
+
+function applyDefaults(){
+  var raw=localStorage.getItem('kin030-defaults');
+  if(!raw) return;
+  try{
+    var d=JSON.parse(raw);
+    if(d.prefix) doc.meta.prefix=d.prefix;
+    if(d.currency) doc.meta.currency=d.currency;
+    if(d.taxRate!==undefined) doc.totals.taxRate=d.taxRate;
+    if(d.from){
+      if(d.from.name) doc.from.name=d.from.name;
+      if(d.from.email) doc.from.email=d.from.email;
+    }
+    if(d.payment){
+      Object.keys(d.payment).forEach(function(k){
+        if(d.payment[k]) doc.payment[k]=d.payment[k];
+      });
+    }
+  }catch(e){}
+}
+
+function syncToDOM(){
+  setVal('quotePrefix',doc.meta.prefix);
+  setVal('quoteNumber',doc.meta.number||'');
+  setVal('fromName',doc.from.name);
+  setVal('fromEmail',doc.from.email);
+  setVal('toName',doc.to.name);
+  setVal('toEmail',doc.to.email);
+  setVal('currency',doc.meta.currency);
+  setVal('taxRate',doc.totals.taxRate||'');
+  setVal('validUntil',doc.terms.validUntil);
+  setVal('payMethod',doc.payment.method);
+  setVal('payDetails',doc.payment.details);
+  setVal('payRef',doc.payment.ref);
+  setVal('notes',doc.notes);
+  updateIdDisplay();
+}
+
+function setVal(id,v){
+  var el=document.getElementById(id);
+  if(el) el.value=(v!==null&&v!==undefined)?v:'';
+}
+
+// ==================== ITEMS (no full re-render) ====================
+function renderItems(){
+  var list=document.getElementById('itemsList');
+  list.innerHTML='';
+  doc.items.forEach(function(it,i){
+    list.appendChild(createItemNode(it,i));
+  });
+}
+
+function createItemNode(it,idx){
+  var wrap=document.createElement('div');
+  wrap.className='item';
+  wrap.dataset.idx=idx;
+
+  var header=document.createElement('div');
+  header.className='item-header';
+  var lbl=document.createElement('span');
+  lbl.className='item-label';
+  lbl.textContent='Item '+(idx+1);
+  header.appendChild(lbl);
+
+  if(doc.items.length>1){
+    var rem=document.createElement('button');
+    rem.className='btn-remove';
+    rem.type='button';
+    rem.textContent='Remove';
+    rem.onclick=function(){removeItem(idx)};
+    header.appendChild(rem);
+  }
+
+  var desc=makeInput('text','Description',it.description,function(v){doc.items[idx].description=v});
+  var row=document.createElement('div');
+  row.className='row';
+
+  var qf=document.createElement('div');
+  qf.className='field';
+  var ql=document.createElement('label');
+  ql.textContent='Qty';
+  var qi=makeInput('number','0',it.quantity,function(v){doc.items[idx].quantity=parseFloat(v)||0;recalc()});
+  qi.setAttribute('inputmode','decimal');
+  qf.appendChild(ql);qf.appendChild(qi);
+
+  var rf=document.createElement('div');
+  rf.className='field';
+  var rl=document.createElement('label');
+  rl.textContent='Rate';
+  var ri=makeInput('number','0.00',it.rate,function(v){doc.items[idx].rate=parseFloat(v)||0;recalc()});
+  ri.setAttribute('inputmode','decimal');
+  rf.appendChild(rl);rf.appendChild(ri);
+
+  row.appendChild(qf);
+  row.appendChild(rf);
+
+  wrap.appendChild(header);
+  wrap.appendChild(desc);
+  wrap.appendChild(row);
+  return wrap;
+}
+
+function makeInput(type,placeholder,value,onchange){
+  var el=document.createElement('input');
+  el.type=type;
+  el.placeholder=placeholder;
+  if(value!==null&&value!==undefined&&value!==''){
+    el.value=value;
+  }
+  el.addEventListener('input',function(){onchange(this.value)});
+  return el;
+}
+
+function addItem(){
+  var newItem={description:'',quantity:null,rate:null};
+  doc.items.push(newItem);
+  var list=document.getElementById('itemsList');
+  var node=createItemNode(newItem,doc.items.length-1);
+  list.appendChild(node);
+
+  // Update remove buttons: if we now have >1 items and previously had 1, re-render first item to add remove btn
+  if(doc.items.length===2){
+    renderItems();
+  }
+
+  recalc();
+  setTimeout(function(){node.scrollIntoView({behavior:'smooth',block:'center'})},50);
+}
+
+function removeItem(idx){
+  if(doc.items.length<=1) return;
+  doc.items.splice(idx,1);
+  renderItems();
+  recalc();
+}
+
+// ==================== CALCULATION ====================
+function recalc(){
+  var sub=0;
+  doc.items.forEach(function(it){
+    sub+=(it.quantity||0)*(it.rate||0);
+  });
+  doc.totals.subtotal=sub;
+  doc.totals.taxAmount=sub*(doc.totals.taxRate/100);
+  doc.totals.total=sub+doc.totals.taxAmount;
+
+  // Subtotals display
+  var el=document.getElementById('subtotals');
+  var html='';
+  if(doc.totals.taxRate>0){
+    html+='<div class="subtotal-row"><span>Subtotal</span><span>'+formatCurrency(sub)+'</span></div>';
+    html+='<div class="subtotal-row"><span>Tax ('+doc.totals.taxRate+'%)</span><span>'+formatCurrency(doc.totals.taxAmount)+'</span></div>';
+  }
+  el.innerHTML=html;
+
+  document.getElementById('totalDisplay').textContent=formatCurrency(doc.totals.total);
+}
+
+function formatCurrency(v){
+  var c=doc.meta.currency;
+  if(!c) return v.toFixed(2);
+  try{
+    return new Intl.NumberFormat(undefined,{style:'currency',currency:c}).format(v);
+  }catch(e){
+    return c+' '+v.toFixed(2);
+  }
+}
+
+// ==================== DEFAULTS ====================
+function saveDefaults(){
+  if(isDemo) return toast('Defaults not saved in demo mode');
+  var data={
+    prefix:doc.meta.prefix,
+    currency:doc.meta.currency,
+    taxRate:doc.totals.taxRate,
+    from:{name:doc.from.name,email:doc.from.email},
+    payment:Object.assign({},doc.payment)
+  };
+  localStorage.setItem('kin030-defaults',JSON.stringify(data));
+  toast('Defaults saved');
+}
+
+// ==================== EXPORT ====================
+function exportToInvoice(){
+  var output=JSON.parse(JSON.stringify(doc));
+  output.meta.id=buildQuoteId();
+  output.meta.exported=new Date().toLocaleDateString();
+  bumpSequence(doc.meta.number);
+
+  var json=JSON.stringify(output,null,2);
+
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(json).then(function(){
+      toast('Quote copied - paste into KIN-031 Invoice');
+    }).catch(function(){
+      fallbackCopy(json);
+    });
+  } else {
+    fallbackCopy(json);
+  }
+}
+
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('Quote copied - paste into KIN-031 Invoice')}
+  catch(e){toast('Copy failed - try again')}
+  document.body.removeChild(ta);
+}
+
+// ==================== PDF ====================
+function savePDF(){
+  document.getElementById('printId').textContent=buildQuoteId();
+  bumpSequence(doc.meta.number);
+  window.print();
+}
+
+// ==================== NEW QUOTE ====================
+function newQuote(){
+  if(isDemo){
+    startFresh();
+    return;
+  }
+  // Bump sequence for current quote before creating new one
+  bumpSequence(doc.meta.number);
+  doc=freshDoc();
+  applyDefaults();
+  syncToDOM();
+  renderItems();
+  recalc();
+  window.scrollTo(0,0);
+  toast('New quote created');
+}
+
+// ==================== DEMO ====================
+function startFresh(){
+  isDemo=false;
+  document.getElementById('demoBar').style.display='none';
+  history.replaceState(null,'',window.location.pathname);
+  doc=freshDoc();
+  applyDefaults();
+  syncToDOM();
+  renderItems();
+  recalc();
+}
+
+// ==================== THEME ====================
+function initTheme(){
+  var STORE='kin030-theme';
+  var btn=document.getElementById('themeBtn');
+  var saved=localStorage.getItem(STORE);
+  var dark=saved==='dark';
+
+  function apply(){
+    if(dark){
+      document.documentElement.className='dark';
+      document.body.classList.add('dark');
+      btn.textContent='\u2600';
+      document.getElementById('theme-color-meta').content='#1a1a1a';
+    } else {
+      document.documentElement.className='light';
+      document.body.classList.remove('dark');
+      btn.textContent='\uD83C\uDF19';
+      document.getElementById('theme-color-meta').content='#f5f4f0';
+    }
+    localStorage.setItem(STORE,dark?'dark':'light');
+  }
+
+  apply();
+  btn.onclick=function(){dark=!dark;apply()};
+}
+
+// ==================== TOAST ====================
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.style.opacity='1';
+  setTimeout(function(){el.style.opacity='0'},2200);
+}
+
+// ==================== BUG REPORT ====================
+var bugAnon=true;
+
+function openBugReport(){
+  document.getElementById('bugOverlay').classList.add('open');
+}
+function closeBugReport(e){
+  if(e&&e.target!==document.getElementById('bugOverlay')) return;
+  document.getElementById('bugOverlay').classList.remove('open');
+}
+function toggleAnon(){
+  bugAnon=!bugAnon;
+  var toggle=document.getElementById('bugAnonToggle');
+  if(bugAnon){toggle.classList.add('on')}else{toggle.classList.remove('on')}
+  document.getElementById('bugIdentity').style.display=bugAnon?'none':'block';
+}
+function submitBug(){
+  var desc=document.getElementById('bugDesc').value.trim();
+  if(!desc){toast('Please describe the issue');return}
+
+  var payload={
+    form_type:'bug_report',
+    subject:'KIN-030 \u2014 Quote',
+    app:'KIN-030',
+    type:document.getElementById('bugType').value,
+    description:desc,
+    name:bugAnon?'Anonymous':(document.getElementById('bugName').value||'Anonymous')
+  };
+
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).then(function(){
+    toast('Bug report sent');
+    document.getElementById('bugDesc').value='';
+    closeBugReport();
+  }).catch(function(){
+    toast('Failed to send - try again');
+  });
+}
+
+// ==================== STORAGE INFO ====================
+  function kinToggleStorageInfo(){
+    var el=document.getElementById('kinStorageInfo');
+    el.style.display=el.style.display==='block'?'none':'block';
+  }
+
+  // ==================== BOOT ====================
+document.addEventListener('DOMContentLoaded',init);
+</script>
+
+</body>
+</html>
