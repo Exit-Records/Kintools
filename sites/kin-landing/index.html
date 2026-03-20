@@ -265,6 +265,21 @@
     color: rgba(255,255,255,0.5);
   }
 
+  .release-cover .cover-qir {
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
   .release-cover .kin-mark {
     position: absolute;
     bottom: 14px;
@@ -1312,12 +1327,12 @@
             </svg>
           </div>
           <span class="kin-mark">Kin</span>
+          <span class="cover-qir"><span class="qir-dots"><span style="background:#ff5555"></span><span style="background:#6699ff"></span><span style="background:#44cc99"></span></span> QIR</span>
         </div>
         <div class="release-info">
           <div class="release-name">Quote</div>
           <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
           <div class="release-creator">by Darren</div>
-          <div><span class="qir-badge"><span class="qir-dots"><span style="background:#c00"></span><span style="background:#1a56db"></span><span style="background:#117a55"></span></span> QIR</span></div>
           <div class="release-desc">Generate quotes with flexible line items. Set your prefix and auto-increment numbering, save defaults for repeat use. Clipboard export carries the full document to Invoice. Nothing leaves your device.</div>
           <div class="release-replaces">Replaces <span>invoice apps that require accounts and monthly fees</span></div>
           <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kintools.netlify.app/sites/kin-030/?demo=true','_blank')">See it in action →</span>
