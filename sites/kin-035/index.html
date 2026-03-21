@@ -1018,12 +1018,11 @@ function setupLongPress(el) {
     setTimeout(function() { counter.classList.remove('visible'); }, 2000);
   };
   var start = function(e) {
-    e.preventDefault();
     timer = setTimeout(show, 600);
   };
   var cancel = function() { if (timer) { clearTimeout(timer); timer = null; } };
 
-  el.addEventListener('touchstart', start, { passive: false });
+  el.addEventListener('touchstart', start, { passive: true });
   el.addEventListener('touchend', cancel);
   el.addEventListener('touchcancel', cancel);
   el.addEventListener('mousedown', start);
