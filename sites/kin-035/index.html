@@ -1064,12 +1064,13 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
 });
 
-// === TOAST ===
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('visible');
-  setTimeout(function() { t.classList.remove('visible'); }, 2200);
+// === TOAST (standard §16.2) ===
+function showToast(m) {
+  var t = document.getElementById('kin-toast');
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
 }
 
 // === CONFIRM ===
