@@ -55,6 +55,8 @@
     body.dark .tier-btn { background: #252220 !important; color: #9b9590 !important; border-color: #3a3633 !important; }
     body.dark .tier-btn.active { background: #c45d3e !important; color: #fff !important; border-color: #c45d3e !important; }
     body.dark .theme-toggle { color: #9b9590 !important; }
+    .theme-toggle.active { background: rgba(255,200,0,0.2) !important; }
+    body.dark .theme-toggle.active { background: rgba(255,200,0,0.15) !important; }
     body.dark .preview-item { border-color: #3a3633 !important; }
     body.dark .modification { background: #2e2a27 !important; color: #9b9590 !important; }
     body.dark .header-bar { border-color: #3a3633 !important; }
@@ -233,6 +235,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         <div class="header-title">Stretch</div>
         <div class="header-right">
           <button class="history-btn" onclick="showHistory()" aria-label="History">&#9776;</button>
+          <button class="theme-toggle" id="wakeBtn" onclick="toggleWake()" aria-label="Keep screen on" title="Keep screen on">💡</button>
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" id="themeBtn">&#9789;</button>
         </div>
       </div>
@@ -1307,6 +1310,40 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 <div id="kc-overlay" class="kc-overlay"><div class="kc-box"><div id="kc-msg" class="kc-msg"></div><div class="kc-btns"><button class="kc-btn-cancel" id="kc-cancel">Cancel</button><button class="kc-btn-ok" id="kc-ok">Confirm</button></div></div></div>
 <div id="kin-toast"></div>
 <script>
+// === Toast (standard §16.2) ===
+function showToast(m) {
+  var t = document.getElementById('kin-toast');
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
+}
+// === Wake Lock (standard §17) ===
+var wakeLock = null;
+var wakeBtn = document.getElementById('wakeBtn');
+async function toggleWake() {
+  if (wakeLock) {
+    wakeLock.release();
+    wakeLock = null;
+    wakeBtn.classList.remove('active');
+    wakeBtn.textContent = '💡';
+    showToast('Screen can now sleep');
+    return;
+  }
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeBtn.classList.add('active');
+    wakeBtn.textContent = '🔆';
+    showToast('Screen will stay awake');
+    wakeLock.addEventListener('release', function() {
+      wakeLock = null;
+      wakeBtn.classList.remove('active');
+      wakeBtn.textContent = '💡';
+    });
+  } catch(e) {
+    showToast('Wake lock not supported');
+  }
+}
 function kinToggleStorageInfo(e) {
   e.stopPropagation();
   var p = document.getElementById('kin-storage-popover');
