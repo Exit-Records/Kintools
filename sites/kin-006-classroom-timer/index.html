@@ -99,29 +99,7 @@ body.dark .theme-toggle { background: rgba(255,255,255,0.08) !important; }
 .theme-toggle.active { background: rgba(255, 200, 0, 0.2) !important; }
 body.dark .theme-toggle.active { background: rgba(255, 200, 0, 0.15) !important; }
 
-.wake-toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(12px);
-  background: rgba(30,30,30,0.92);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 24px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-  z-index: 9999;
-}
-.wake-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-body.dark .wake-toast { background: rgba(240,240,240,0.92); color: #111; }
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}
 
 .timer-container {
   flex: 1;
@@ -617,7 +595,7 @@ body.dark .bug-send { background: #3ddc84 !important; color: #0a1f13 !important;
   <button class="done-dismiss" id="doneDismiss">Dismiss</button>
 </div>
 
-<div class="wake-toast" id="wakeToast"></div>
+<div id="kin-toast"></div>
 
 <footer>
   KIN-006 · v1.0 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
@@ -949,38 +927,39 @@ function submitBug() {
   if (el) el.href = c.toDataURL("image/png");
 })();
 
-// === Wake Lock ===
+// === Toast (standard §16.2) ===
+function showToast(m) {
+  var t = document.getElementById('kin-toast');
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
+}
+
+// === Wake Lock (standard §17) ===
 var wakeLock = null;
 var wakeBtn = document.getElementById('wakeBtn');
-var wakeToast = document.getElementById('wakeToast');
-var wakeToastTimer = null;
-function showWakeToast(msg) {
-  wakeToast.textContent = msg;
-  wakeToast.classList.add('show');
-  clearTimeout(wakeToastTimer);
-  wakeToastTimer = setTimeout(function() { wakeToast.classList.remove('show'); }, 2500);
-}
 async function toggleWake() {
   if (wakeLock) {
     wakeLock.release();
     wakeLock = null;
     wakeBtn.classList.remove('active');
     wakeBtn.textContent = '💡';
-    showWakeToast('Screen can now sleep');
+    showToast('Screen can now sleep');
     return;
   }
   try {
     wakeLock = await navigator.wakeLock.request('screen');
     wakeBtn.classList.add('active');
     wakeBtn.textContent = '🔆';
-    showWakeToast('Screen will stay awake');
+    showToast('Screen will stay awake');
     wakeLock.addEventListener('release', function() {
       wakeLock = null;
       wakeBtn.classList.remove('active');
       wakeBtn.textContent = '💡';
     });
   } catch(e) {
-    showWakeToast('Wake lock not supported');
+    showToast('Wake lock not supported');
   }
 }
 

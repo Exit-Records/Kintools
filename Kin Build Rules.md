@@ -754,3 +754,72 @@ showToast('Feedback sent. Thanks!');
 ```
 
 **Note:** Some older tools use a local `toast()` function with a CSS class toggle — that pattern is still valid in those tools but `showToast()` is the standard for all new tools.
+
+---
+
+## 17. Screen Wake Lock — Reusable Pattern
+
+Use this pattern when a tool should be able to keep the screen on during active use (timers, workout trackers, dashboards, etc.). Requires `showToast()` from §16.2.
+
+### Button
+
+Add to the top-bar, to the left of the dark mode toggle. Wrap both in a flex group:
+
+```html
+<div style="display:flex;gap:8px;align-items:center">
+  <button class="theme-toggle" id="wakeBtn" onclick="toggleWake()" aria-label="Keep screen on" title="Keep screen on">💡</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">🌙</button>
+</div>
+```
+
+Reuses `.theme-toggle` styling — no extra button CSS needed.
+
+### Active-state highlight
+
+Add alongside the existing `.theme-toggle` dark-mode rule:
+
+```css
+.theme-toggle.active { background: rgba(255, 200, 0, 0.2) !important; }
+body.dark .theme-toggle.active { background: rgba(255, 200, 0, 0.15) !important; }
+```
+
+Adapt the selector to match the tool's dark mode pattern (`body.dark`, `html.dark`, `[data-theme="dark"]`).
+
+### JS function
+
+```js
+// === Wake Lock (standard §17) ===
+var wakeLock = null;
+var wakeBtn = document.getElementById('wakeBtn');
+async function toggleWake() {
+  if (wakeLock) {
+    wakeLock.release();
+    wakeLock = null;
+    wakeBtn.classList.remove('active');
+    wakeBtn.textContent = '💡';
+    showToast('Screen can now sleep');
+    return;
+  }
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeBtn.classList.add('active');
+    wakeBtn.textContent = '🔆';
+    showToast('Screen will stay awake');
+    wakeLock.addEventListener('release', function() {
+      wakeLock = null;
+      wakeBtn.classList.remove('active');
+      wakeBtn.textContent = '💡';
+    });
+  } catch(e) {
+    showToast('Wake lock not supported');
+  }
+}
+```
+
+**Behaviour:**
+- 💡 = screen lock inactive (default)
+- 🔆 = screen staying awake (amber highlight)
+- Browser auto-release (tab hidden, power save) resets the button automatically via the `release` event
+- `showToast()` must be present — add the standard §16.2 block if the tool doesn't already have it
+
+**Tools using this pattern:** KIN-006, KIN-027
