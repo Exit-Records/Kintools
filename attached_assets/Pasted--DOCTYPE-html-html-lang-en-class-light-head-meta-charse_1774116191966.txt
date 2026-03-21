@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KIN-034 — Random Acts — Kin</title>
+<meta name="theme-color" id="theme-color-meta" content="#f5f0eb">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+:root {
+–bg: #f5f0eb;
+–bg-card: #ffffff;
+–text: #1a1a1a;
+–text-muted: #7a7268;
+–accent: #c45d3e;
+–accent-soft: rgba(196, 93, 62, 0.1);
+–border: #e0d8d0;
+–shadow: rgba(0,0,0,0.06);
+–tag-kindness: #3e8a6e;
+–tag-kindness-bg: rgba(62, 138, 110, 0.1);
+–tag-defiance: #9b5de5;
+–tag-defiance-bg: rgba(155, 93, 229, 0.1);
+–muted: #888;
+}
+
+body {
+font-family: ‘IBM Plex Sans’, sans-serif;
+font-weight: 300;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+align-items: center;
+transition: background 0.4s, color 0.4s;
+-webkit-font-smoothing: antialiased;
+padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body.dark {
+–bg: #1a1816 !important;
+–bg-card: #262220 !important;
+–text: #e8e0d8 !important;
+–text-muted: #8a8078 !important;
+–accent: #d4714f !important;
+–accent-soft: rgba(212, 113, 79, 0.12) !important;
+–border: #3a3530 !important;
+–shadow: rgba(0,0,0,0.2) !important;
+–tag-kindness: #5aad8a !important;
+–tag-kindness-bg: rgba(90, 173, 138, 0.15) !important;
+–tag-defiance: #b07ee8 !important;
+–tag-defiance-bg: rgba(176, 126, 232, 0.15) !important;
+–muted: #888 !important;
+}
+
+body.dark {
+background: #1a1816 !important;
+color: #e8e0d8 !important;
+}
+
+/* Header */
+.header {
+width: 100%;
+max-width: 480px;
+padding: 48px 24px 0;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+}
+
+.title-block h1 {
+font-family: ‘DM Serif Display’, serif;
+font-size: 28px;
+font-weight: 400;
+letter-spacing: -0.5px;
+color: var(–text);
+}
+
+body.dark .title-block h1 { color: #e8e0d8 !important; }
+
+.title-block p {
+font-size: 14px;
+color: var(–text-muted);
+margin-top: 4px;
+}
+
+body.dark .title-block p { color: #8a8078 !important; }
+
+.theme-toggle {
+background: none;
+border: none;
+font-size: 20px;
+cursor: pointer;
+padding: 8px;
+min-height: 44px;
+min-width: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 8px;
+transition: background 0.2s;
+color: var(–text-muted);
+}
+
+body.dark .theme-toggle { color: #8a8078 !important; }
+.theme-toggle:hover { background: var(–accent-soft); }
+body.dark .theme-toggle:hover { background: rgba(212, 113, 79, 0.12) !important; }
+
+/* Card container */
+.card-container {
+width: 100%;
+max-width: 480px;
+padding: 32px 24px;
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+/* Card base */
+.act-card {
+width: 100%;
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 40px 28px 32px;
+box-shadow: 0 2px 20px var(–shadow);
+text-align: center;
+opacity: 0;
+transform: translateY(12px);
+animation: cardIn 0.5s ease forwards;
+position: relative;
+overflow: hidden;
+}
+
+body.dark .act-card {
+background: #262220 !important;
+border-color: #3a3530 !important;
+box-shadow: 0 2px 20px rgba(0,0,0,0.2) !important;
+}
+
+@keyframes cardIn {
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tags */
+.act-tag {
+display: inline-block;
+font-size: 11px;
+font-weight: 500;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+padding: 5px 14px;
+border-radius: 20px;
+margin-bottom: 24px;
+}
+
+.act-tag.kindness { color: var(–tag-kindness); background: var(–tag-kindness-bg); }
+body.dark .act-tag.kindness { color: #5aad8a !important; background: rgba(90, 173, 138, 0.15) !important; }
+.act-tag.defiance { color: var(–tag-defiance); background: var(–tag-defiance-bg); }
+body.dark .act-tag.defiance { color: #b07ee8 !important; background: rgba(176, 126, 232, 0.15) !important; }
+
+.act-text {
+font-family: ‘DM Serif Display’, serif;
+font-size: 22px;
+line-height: 1.4;
+color: var(–text);
+font-weight: 400;
+}
+
+body.dark .act-text { color: #e8e0d8 !important; }
+
+.ornament {
+width: 40px;
+height: 1px;
+background: var(–border);
+margin: 20px auto;
+}
+
+body.dark .ornament { background: #3a3530 !important; }
+
+.act-why {
+font-size: 14px;
+line-height: 1.6;
+color: var(–text-muted);
+max-width: 340px;
+margin: 0 auto;
+}
+
+body.dark .act-why { color: #8a8078 !important; }
+
+/* Unrevealed card */
+.act-card.unrevealed {
+cursor: pointer;
+min-height: 260px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+
+.act-card.unrevealed:hover {
+border-color: var(–accent);
+box-shadow: 0 4px 30px var(–shadow);
+}
+
+body.dark .act-card.unrevealed:hover { border-color: #d4714f !important; }
+
+.reveal-symbol {
+font-size: 48px;
+margin-bottom: 20px;
+opacity: 0.6;
+transition: opacity 0.3s, transform 0.3s;
+}
+
+.act-card.unrevealed:hover .reveal-symbol {
+opacity: 1;
+transform: scale(1.05);
+}
+
+.reveal-prompt {
+font-size: 14px;
+color: var(–text-muted);
+letter-spacing: 0.3px;
+}
+
+body.dark .reveal-prompt { color: #8a8078 !important; }
+
+/* Reveal animations */
+@keyframes revealFade {
+0% { opacity: 0; transform: translateY(8px); }
+100% { opacity: 1; transform: translateY(0); }
+}
+
+.act-card.revealed .act-tag { animation: revealFade 0.4s ease forwards; animation-delay: 0.1s; opacity: 0; }
+.act-card.revealed .act-text { animation: revealFade 0.4s ease forwards; animation-delay: 0.25s; opacity: 0; }
+
+/* Why this? button */
+.why-toggle {
+display: inline-block;
+margin-top: 24px;
+background: none;
+border: none;
+font-family: inherit;
+font-size: 13px;
+color: var(–text-muted);
+cursor: pointer;
+padding: 10px 20px;
+min-height: 44px;
+letter-spacing: 0.3px;
+transition: color 0.2s;
+}
+
+.why-toggle.animated {
+opacity: 0;
+animation: revealFade 0.4s ease forwards;
+animation-delay: 0.5s;
+}
+
+body.dark .why-toggle { color: #8a8078 !important; }
+.why-toggle:hover { color: var(–accent); }
+body.dark .why-toggle:hover { color: #d4714f !important; }
+
+/* Why section */
+.why-section {
+overflow: hidden;
+max-height: 0;
+opacity: 0;
+transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.why-section.visible {
+max-height: 200px;
+opacity: 1;
+}
+
+/* Evening reflection */
+.reflection-area {
+width: 100%;
+margin-top: 28px;
+text-align: center;
+}
+
+.reflection-area.animated {
+opacity: 0;
+animation: revealFade 0.5s ease forwards;
+animation-delay: 0.3s;
+}
+
+.reflection-prompt {
+font-size: 15px;
+color: var(–text);
+margin-bottom: 16px;
+font-weight: 400;
+}
+
+body.dark .reflection-prompt { color: #e8e0d8 !important; }
+
+.reflection-buttons {
+display: flex;
+gap: 12px;
+justify-content: center;
+}
+
+.reflection-btn {
+background: none;
+border: 1px solid var(–border);
+color: var(–text-muted);
+padding: 10px 24px;
+border-radius: 10px;
+font-family: inherit;
+font-size: 14px;
+cursor: pointer;
+min-height: 44px;
+transition: all 0.2s;
+}
+
+body.dark .reflection-btn { border-color: #3a3530 !important; color: #8a8078 !important; }
+.reflection-btn:hover { border-color: var(–accent); color: var(–accent); }
+body.dark .reflection-btn:hover { border-color: #d4714f !important; color: #d4714f !important; }
+
+.reflection-response {
+font-size: 14px;
+color: var(–text-muted);
+line-height: 1.6;
+opacity: 0;
+animation: revealFade 0.4s ease forwards;
+}
+
+body.dark .reflection-response { color: #8a8078 !important; }
+
+/* Tomorrow note */
+.tomorrow-note {
+margin-top: 24px;
+font-size: 12px;
+color: var(–text-muted);
+letter-spacing: 0.3px;
+}
+
+.tomorrow-note.animated {
+opacity: 0;
+animation: revealFade 0.4s ease 0.7s forwards;
+}
+
+body.dark .tomorrow-note { color: #8a8078 !important; }
+
+/* Hidden day counter */
+.day-counter {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background: var(–text);
+color: var(–bg);
+padding: 20px 32px;
+border-radius: 12px;
+font-family: ‘DM Serif Display’, serif;
+font-size: 20px;
+text-align: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
+z-index: 150;
+}
+
+body.dark .day-counter { background: #e8e0d8 !important; color: #1a1816 !important; }
+.day-counter.visible { opacity: 1; }
+
+.day-counter .count {
+font-size: 48px;
+display: block;
+margin-bottom: 4px;
+}
+
+.day-counter .label {
+font-family: ‘IBM Plex Sans’, sans-serif;
+font-size: 13px;
+font-weight: 300;
+opacity: 0.7;
+}
+
+/* Footer */
+.kin-footer {
+width: 100%;
+max-width: 480px;
+text-align: center;
+padding: 16px 16px 48px;
+font-size: 12px;
+color: var(–muted);
+line-height: 1.8;
+}
+
+body.dark .kin-footer { color: #888 !important; }
+
+.kin-footer a { color: var(–muted); text-decoration: none; }
+.kin-footer a:hover { text-decoration: underline; }
+body.dark .kin-footer a { color: #888 !important; }
+
+.footer-badge {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+font-size: 11px;
+opacity: 0.7;
+}
+
+.footer-badge .verified { color: #2d6a4f; font-size: 13px; }
+body.dark .footer-badge .verified { color: #5aad8a !important; }
+
+.bug-report-btn {
+background: none;
+border: none;
+color: var(–muted);
+font-family: inherit;
+font-size: 12px;
+cursor: pointer;
+padding: 8px 16px;
+min-height: 44px;
+text-decoration: underline;
+text-underline-offset: 2px;
+}
+
+body.dark .bug-report-btn { color: #888 !important; }
+
+/* Bug report sheet */
+.bug-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.4);
+z-index: 200;
+align-items: flex-end;
+justify-content: center;
+}
+.bug-overlay.visible { display: flex; }
+
+.bug-sheet {
+background: var(–bg-card);
+border-radius: 16px 16px 0 0;
+width: 100%;
+max-width: 480px;
+padding: 24px 24px 48px;
+transform: translateY(100%);
+transition: transform 0.3s ease;
+}
+
+body.dark .bug-sheet { background: #262220 !important; }
+.bug-overlay.visible .bug-sheet { transform: translateY(0); }
+
+.bug-sheet h3 {
+font-family: ‘DM Serif Display’, serif;
+font-size: 18px;
+margin-bottom: 16px;
+color: var(–text);
+font-weight: 400;
+}
+
+body.dark .bug-sheet h3 { color: #e8e0d8 !important; }
+
+.bug-sheet label {
+font-size: 13px;
+color: var(–text-muted);
+display: block;
+margin-bottom: 6px;
+margin-top: 12px;
+}
+
+body.dark .bug-sheet label { color: #8a8078 !important; }
+
+.bug-sheet select,
+.bug-sheet textarea,
+.bug-sheet input[type=“text”] {
+width: 100%;
+padding: 10px 12px;
+border: 1px solid var(–border);
+border-radius: 8px;
+font-family: inherit;
+font-size: 16px;
+background: var(–bg);
+color: var(–text);
+-webkit-appearance: none;
+min-height: 44px;
+}
+
+body.dark .bug-sheet select,
+body.dark .bug-sheet textarea,
+body.dark .bug-sheet input[type=“text”] {
+border-color: #3a3530 !important;
+background: #1a1816 !important;
+color: #e8e0d8 !important;
+}
+
+.bug-sheet textarea { min-height: 80px; resize: vertical; }
+
+.bug-actions {
+display: flex;
+gap: 12px;
+margin-top: 16px;
+}
+
+.bug-actions button {
+flex: 1;
+min-height: 44px;
+border-radius: 8px;
+font-family: inherit;
+font-size: 14px;
+cursor: pointer;
+border: 1px solid var(–border);
+background: none;
+color: var(–text-muted);
+}
+
+body.dark .bug-actions button { border-color: #3a3530 !important; color: #8a8078 !important; }
+
+.bug-actions .submit-bug { background: var(–accent); color: #fff; border: none; }
+body.dark .bug-actions .submit-bug { background: #d4714f !important; color: #fff !important; }
+
+/* Toast */
+.toast {
+position: fixed;
+bottom: 80px;
+left: 50%;
+transform: translateX(-50%) translateY(20px);
+background: var(–text);
+color: var(–bg);
+padding: 12px 24px;
+border-radius: 10px;
+font-size: 14px;
+opacity: 0;
+transition: all 0.3s ease;
+z-index: 300;
+pointer-events: none;
+white-space: nowrap;
+}
+
+body.dark .toast { background: #e8e0d8 !important; color: #1a1816 !important; }
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Confirm overlay */
+.confirm-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.4);
+z-index: 250;
+align-items: center;
+justify-content: center;
+padding: 24px;
+}
+.confirm-overlay.visible { display: flex; }
+
+.confirm-box {
+background: var(–bg-card);
+border-radius: 12px;
+padding: 24px;
+max-width: 320px;
+width: 100%;
+text-align: center;
+}
+
+body.dark .confirm-box { background: #262220 !important; }
+
+.confirm-box p { font-size: 15px; color: var(–text); margin-bottom: 20px; line-height: 1.5; }
+body.dark .confirm-box p { color: #e8e0d8 !important; }
+
+.confirm-btns { display: flex; gap: 12px; }
+
+.confirm-btns button {
+flex: 1;
+min-height: 44px;
+border-radius: 8px;
+font-family: inherit;
+font-size: 14px;
+cursor: pointer;
+border: 1px solid var(–border);
+background: none;
+color: var(–text-muted);
+}
+
+body.dark .confirm-btns button { border-color: #3a3530 !important; color: #8a8078 !important; }
+
+.confirm-btns .confirm-yes { background: #c0392b; color: #fff; border: none; }
+body.dark .confirm-btns .confirm-yes { background: #c0392b !important; color: #fff !important; }
+</style>
+
+<script>
+// PWA
+(function() {
+  var CACHE_KEY = 'kin034-random-acts-v1.0';
+  var swCode = [
+    'var CACHE_KEY = "' + CACHE_KEY + '";',
+    'self.addEventListener("install", function(e) { self.skipWaiting(); });',
+    'self.addEventListener("activate", function(e) {',
+    '  e.waitUntil(caches.keys().then(function(keys) { return Promise.all(',
+    '    keys.filter(function(k) { return k !== CACHE_KEY; }).map(function(k) { return caches.delete(k); })',
+    '  ); }).then(function() { return self.clients.claim(); }));',
+    '});',
+    'self.addEventListener("fetch", function(e) {',
+    '  e.respondWith(caches.match(e.request).then(function(r) { return r || fetch(e.request).then(function(resp) {',
+    '    if (resp.ok) { var clone = resp.clone(); caches.open(CACHE_KEY).then(function(c) { c.put(e.request, clone); }); }',
+    '    return resp;',
+    '  }).catch(function() { return caches.match("/"); }); }));',
+    '});'
+  ].join('\n');
+  var swBlob = new Blob([swCode], { type: 'application/javascript' });
+  var swURL = URL.createObjectURL(swBlob);
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(swURL).catch(function() {});
+  }
+
+  var manifest = {
+    name: 'Random Acts',
+    short_name: 'Random Acts',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#f5f0eb',
+    theme_color: '#f5f0eb',
+    icons: [{ src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="80">\u2726</text></svg>', sizes: '512x512', type: 'image/svg+xml' }]
+  };
+  var mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  var mURL = URL.createObjectURL(mBlob);
+  var link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = mURL;
+  document.head.appendChild(link);
+
+  var canvas = document.createElement('canvas');
+  canvas.width = 180; canvas.height = 180;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#f5f0eb';
+  ctx.fillRect(0, 0, 180, 180);
+  ctx.fillStyle = '#c45d3e';
+  ctx.font = '120px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('\u2726', 90, 95);
+  var iconEl = document.getElementById('apple-touch-icon');
+  if (iconEl) iconEl.href = canvas.toDataURL('image/png');
+})();
+</script>
+
+</head>
+<body>
+
+<div class="header">
+  <div class="title-block">
+    <h1>Random Acts</h1>
+    <p>Kindness or defiance. One a day.</p>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+</div>
+
+<div class="card-container" id="cardContainer"></div>
+
+<div class="day-counter" id="dayCounter">
+  <span class="count" id="dayCount"></span>
+  <span class="label">days</span>
+</div>
+
+<footer class="kin-footer">
+  <div>KIN-034 · v1.0 · <a href="https://kin.tools" target="_blank" rel="noopener">Kin Tools</a> · by Darren</div>
+  <div class="footer-badge">Local Only · <span class="verified">&#10003;</span> Verified <span style="cursor:help" title="Your data is stored locally on this device and never leaves your browser.">&#9432;</span></div>
+  <div><button class="bug-report-btn" onclick="openBugReport()">Report a bug</button></div>
+</footer>
+
+<div class="bug-overlay" id="bugOverlay" onclick="if(event.target===this)closeBugReport()">
+  <div class="bug-sheet">
+    <h3>Report a bug</h3>
+    <label for="bugType">Type</label>
+    <select id="bugType">
+      <option value="Bug">Bug</option>
+      <option value="Suggestion">Suggestion</option>
+      <option value="Other">Other</option>
+    </select>
+    <label for="bugDesc">Description</label>
+    <textarea id="bugDesc" placeholder="What happened?"></textarea>
+    <label for="bugName">Name (optional)</label>
+    <input type="text" id="bugName" placeholder="Your name">
+    <div class="bug-actions">
+      <button onclick="closeBugReport()">Cancel</button>
+      <button class="submit-bug" onclick="submitBug()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <p id="confirmMsg"></p>
+    <div class="confirm-btns">
+      <button id="confirmNo">Cancel</button>
+      <button class="confirm-yes" id="confirmYes">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// === ACTS DATABASE ===
+// Categories: connection, boundary, presence, letting-go, disruption
+var ACTS = [
+  { type: 'kindness', cat: 'connection', text: 'Leave an anonymous note of encouragement somewhere public.', why: 'Small unexpected words can shift someone\'s entire day. You\'ll never know who needed it.' },
+  { type: 'defiance', cat: 'boundary', text: 'Say no to something you\'d normally agree to out of guilt.', why: 'Boundaries are not selfish. They\'re the architecture of a life you actually want.' },
+  { type: 'kindness', cat: 'connection', text: 'Pay for the person behind you. Coffee, toll, whatever comes.', why: 'Generosity without recognition rewires your relationship with money and control.' },
+  { type: 'defiance', cat: 'disruption', text: 'Leave your phone in another room for three hours.', why: 'The anxiety you feel is the point. Sitting with it is the practice.' },
+  { type: 'kindness', cat: 'connection', text: 'Ask someone how they\'re really doing, and wait for the real answer.', why: 'Most people aren\'t asked twice. The pause after "fine" is where the truth lives.' },
+  { type: 'defiance', cat: 'disruption', text: 'Wear something you love but have been too self-conscious to wear.', why: 'Style is a daily act of defiance against the expectation to disappear.' },
+  { type: 'kindness', cat: 'connection', text: 'Cook for someone who didn\'t ask for it.', why: 'Food made without obligation carries a different kind of warmth.' },
+  { type: 'defiance', cat: 'boundary', text: 'Disagree out loud in a meeting or conversation where you\'d normally stay quiet.', why: 'Silence isn\'t always peace. Sometimes it\'s just rehearsed compliance.' },
+  { type: 'kindness', cat: 'connection', text: 'Send a message to someone you haven\'t spoken to in over a year. No reason needed.', why: 'Connection doesn\'t expire. People remember who reached out.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Delete one app that steals more time than it gives.', why: 'You don\'t owe your attention to every platform that demands it.' },
+  { type: 'kindness', cat: 'connection', text: 'Compliment a stranger. Something specific and real.', why: 'Genuine noticing is rare. It costs nothing and echoes further than you think.' },
+  { type: 'defiance', cat: 'presence', text: 'Skip the news entirely today. All of it.', why: 'Informed and overwhelmed are not the same thing. Clarity sometimes needs silence.' },
+  { type: 'kindness', cat: 'connection', text: 'Write a review for a small business you love.', why: 'Algorithms decide visibility. Your words can tip the balance for someone\'s livelihood.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Do something badly on purpose. Draw, dance, sing. Let it be terrible.', why: 'Perfectionism is a cage. Bad art made freely is better than good art never started.' },
+  { type: 'kindness', cat: 'presence', text: 'Let someone go ahead of you without them noticing you chose to.', why: 'Invisible generosity builds something inside you that visible generosity can\'t.' },
+  { type: 'defiance', cat: 'disruption', text: 'Take a different route to somewhere familiar.', why: 'Routine is efficient but numbing. New paths wake up your peripheral awareness.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Forgive someone silently. Don\'t tell them. Just let it go.', why: 'Forgiveness isn\'t about them. It\'s about returning space to yourself.' },
+  { type: 'defiance', cat: 'presence', text: 'Sit in complete silence for ten minutes. No guided anything. Just silence.', why: 'Unstructured stillness is uncomfortable because it\'s where you actually meet yourself.' },
+  { type: 'kindness', cat: 'connection', text: 'Thank someone for something specific they did weeks or months ago.', why: 'Delayed gratitude is powerful. It tells people their effort wasn\'t forgotten.' },
+  { type: 'defiance', cat: 'boundary', text: 'Walk out of a conversation, film, or book that isn\'t serving you.', why: 'Finishing things you hate is not discipline. It\'s obedience to inertia.' },
+  { type: 'kindness', cat: 'connection', text: 'Tip more than you normally would.', why: 'Service work is undervalued by design. You can push back with your wallet.' },
+  { type: 'defiance', cat: 'boundary', text: 'Tell someone an uncomfortable truth, but say it with care.', why: 'Honesty without cruelty is one of the hardest and most generous things you can offer.' },
+  { type: 'kindness', cat: 'presence', text: 'Pick up litter that isn\'t yours.', why: 'It\'s not about fairness. It\'s about what kind of world you want to move through.' },
+  { type: 'defiance', cat: 'presence', text: 'Go somewhere alone that you\'d normally only go with others.', why: 'Solo experiences sharpen your sense of self. Comfort with your own company is freedom.' },
+  { type: 'kindness', cat: 'presence', text: 'Listen to someone without offering advice. Just listen.', why: 'The urge to fix is about your discomfort, not theirs. Presence is enough.' },
+  { type: 'defiance', cat: 'boundary', text: 'Unfollow five accounts that make you feel worse about your life.', why: 'Curation is self-defence. Your feed is your environment. Edit it like your health depends on it.' },
+  { type: 'kindness', cat: 'connection', text: 'Make eye contact and smile at someone who looks like they\'re having a hard day.', why: 'Acknowledgement is a basic human need. You can meet it without a word.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Admit you were wrong about something, publicly or to someone specific.', why: 'The ability to change your mind is strength. Doubling down is just fear in a suit.' },
+  { type: 'kindness', cat: 'connection', text: 'Share something you made with someone, even if it\'s not finished.', why: 'Vulnerability in creative work builds trust and shows others it\'s safe to try.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Do nothing productive for one hour. Resist the guilt.', why: 'Rest is not earned. Productivity culture wants you to believe otherwise.' },
+  { type: 'kindness', cat: 'connection', text: 'Bring food or drink to someone who\'s working.', why: 'Being seen in the middle of effort is deeply sustaining.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Ask for help with something you\'ve been struggling with alone.', why: 'Self-sufficiency is a myth sold as virtue. Asking is not weakness, it\'s trust.' },
+  { type: 'kindness', cat: 'presence', text: 'Hold a door, carry a bag, offer your seat. Something physical and immediate.', why: 'The body remembers acts of service longer than the mind remembers words.' },
+  { type: 'defiance', cat: 'disruption', text: 'Spend money on an experience instead of a thing.', why: 'Objects accumulate. Experiences integrate. Choose what compounds in memory.' },
+  { type: 'kindness', cat: 'connection', text: 'Tell a child something genuine about what makes them interesting.', why: 'Kids are constantly evaluated. Rarely are they told they\'re genuinely interesting as people.' },
+  { type: 'defiance', cat: 'disruption', text: 'Question one rule or expectation you follow without knowing why.', why: 'Most inherited rules were designed for someone else\'s comfort, not yours.' },
+  { type: 'kindness', cat: 'presence', text: 'Water a plant. Yours or someone else\'s.', why: 'Tending to something alive, without urgency, recalibrates your nervous system.' },
+  { type: 'defiance', cat: 'boundary', text: 'Say what you actually want when someone asks "where shall we eat?"', why: 'False accommodation is a slow leak. Practice having preferences out loud.' },
+  { type: 'kindness', cat: 'connection', text: 'Introduce two people you think should know each other.', why: 'Connection-making is a quiet superpower. It costs you nothing and creates new possibility.' },
+  { type: 'defiance', cat: 'disruption', text: 'Turn off all notifications for 24 hours.', why: 'Every ping is someone else\'s priority. Silence restores yours.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Leave a book you loved somewhere for a stranger to find.', why: 'A book left behind carries intention. Someone will pick it up at exactly the right time.' },
+  { type: 'defiance', cat: 'presence', text: 'Refuse to compare yourself to anyone today. Catch it every time.', why: 'Comparison is a reflex, not a truth. Noticing it is the first step to disarming it.' },
+  { type: 'kindness', cat: 'connection', text: 'Write down three things you appreciate about someone and tell them one.', why: 'Gratitude that stays in your head helps you. Gratitude spoken aloud helps both.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Start something with no plan to finish it.', why: 'The obsession with completion kills curiosity. Some things are meant to be begun, not finished.' },
+  { type: 'kindness', cat: 'connection', text: 'Offer directions or help to someone who looks lost, before they ask.', why: 'Initiative in kindness is rare. Most people wait. Don\'t wait.' },
+  { type: 'defiance', cat: 'presence', text: 'Eat a meal in total silence. No screen, no book, no music.', why: 'It\'s harder than it sounds. That difficulty is information about how disconnected you\'ve become from basic experience.' },
+  { type: 'kindness', cat: 'connection', text: 'Remember someone\'s name and use it next time you see them.', why: 'A name remembered is a person seen. It\'s the smallest act with the deepest impact.' },
+  { type: 'defiance', cat: 'boundary', text: 'Go to bed an hour earlier than usual. No justification needed.', why: 'Late nights are often avoidance disguised as productivity. Rest is defiance against the grind.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Donate something you still like, not just what you\'re done with.', why: 'Giving away what\'s easy to lose isn\'t generosity. The stretch is where the act lives.' },
+  { type: 'defiance', cat: 'presence', text: 'Create something with no intention of sharing it.', why: 'Art made for yourself alone is the purest form. It answers to nothing but your own curiosity.' },
+  { type: 'kindness', cat: 'presence', text: 'Sit with someone in silence. Don\'t fill the space.', why: 'Not every moment needs words. Sometimes the most generous thing is to just be there.' },
+  { type: 'defiance', cat: 'disruption', text: 'Buy something from an independent shop instead of a chain.', why: 'Convenience is subsidised by conformity. Small purchases are quiet votes for the world you want.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Let someone else take the credit for something you helped with.', why: 'Recognition is addictive. Letting it go once teaches you how little you actually need it.' },
+  { type: 'defiance', cat: 'boundary', text: 'Leave a group chat that drains you.', why: 'Digital obligations are still obligations. You can exit quietly and nothing collapses.' },
+  { type: 'kindness', cat: 'presence', text: 'Watch a sunset or sunrise. The whole thing, start to finish.', why: 'Slowness is a skill. Training it on something beautiful is the gentlest way to practise.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Throw away something you\'ve been keeping out of obligation.', why: 'Guilt dressed as sentimentality still takes up space. You are not your archive.' },
+  { type: 'kindness', cat: 'connection', text: 'Ask someone about their day and remember one detail for next time.', why: 'Continuity in small conversations signals that someone matters beyond the moment.' },
+  { type: 'defiance', cat: 'disruption', text: 'Spend a full day without buying anything.', why: 'The urge to purchase is constant and mostly unconscious. A day without it reveals the pattern.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Apologise for something small you never got round to apologising for.', why: 'Old debts don\'t disappear. They just get quieter. Clearing one lightens both people.' },
+  { type: 'defiance', cat: 'presence', text: 'Lie on the floor for ten minutes. No reason. Just lie there.', why: 'It sounds absurd, which is exactly why it works. Absurdity is an exit from overthinking.' },
+  { type: 'kindness', cat: 'presence', text: 'Give someone your full attention for an entire conversation. No glances at your phone.', why: 'Undivided attention is now so rare it feels almost radical.' },
+  { type: 'defiance', cat: 'boundary', text: 'Cancel something you committed to but don\'t actually want to do.', why: 'People respect honesty more than reluctant attendance. Cancel with grace, not guilt.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Let go of needing the last word in an argument.', why: 'Closure is an internal act. You don\'t need their agreement to be at peace.' },
+  { type: 'defiance', cat: 'disruption', text: 'Read a physical book for an hour. No screens in the room.', why: 'Deep reading rewires your attention span. It\'s not nostalgia, it\'s rehabilitation.' },
+  { type: 'kindness', cat: 'connection', text: 'Tell someone what you admire about them that they probably don\'t hear enough.', why: 'People know what they\'re good at professionally. They rarely hear what makes them good to be around.' },
+  { type: 'defiance', cat: 'letting-go', text: 'Delete old photos from your phone that you\'ll never look at again.', why: 'Hoarding memories digitally is still hoarding. Keep the ones that mean something. Release the rest.' },
+  { type: 'kindness', cat: 'presence', text: 'Take a slow walk with no destination and no podcast.', why: 'Walking without purpose is how your mind processes what it hasn\'t had time to.' },
+  { type: 'defiance', cat: 'disruption', text: 'Do the thing you\'ve been putting off for more than a week. Right now.', why: 'Procrastination compounds. The relief on the other side is always bigger than the effort.' },
+  { type: 'kindness', cat: 'letting-go', text: 'Write down a resentment you\'re carrying and then delete it.', why: 'The act of articulating something and choosing to release it is different from pretending it doesn\'t exist.' },
+  { type: 'defiance', cat: 'boundary', text: 'Say "I don\'t know" in a conversation where you\'d normally bluff.', why: 'Admitting ignorance is honesty in a world that rewards performance. It invites real exchange.' },
+  { type: 'kindness', cat: 'presence', text: 'Notice one beautiful thing today and stay with it for a moment.', why: 'Beauty is always there. The practice is in stopping long enough to register it.' },
+  { type: 'defiance', cat: 'presence', text: 'Sit in a cafe alone with nothing to do. No phone, no book. Just be there.', why: 'The discomfort of public stillness reveals how much of your identity depends on looking busy.' },
+  { type: 'kindness', cat: 'connection', text: 'Learn one phrase in a language spoken by someone in your community.', why: 'Even a clumsy attempt in someone\'s mother tongue says more than fluency in your own ever could.' },
+];
+
+// === REFLECTION RESPONSES ===
+var RESPONSES_YES = [
+  'That took something. Well done.',
+  'Small acts, real weight.',
+  'You showed up. That\'s the whole thing.',
+  'One more day of choosing to be deliberate.',
+  'It matters more than you think.',
+  'The world shifted a fraction. You did that.',
+  'Not everyone would have. You did.',
+];
+
+var RESPONSES_NO = [
+  'Tomorrow\'s a fresh draw.',
+  'No guilt here. Awareness is its own act.',
+  'Some days, just opening this is enough.',
+  'The act stays with you even undone.',
+  'Noticing you didn\'t is still noticing.',
+  'Rest counts too.',
+];
+
+// === STATE ===
+var STORAGE_KEY = 'kin034-deck';
+var THEME_KEY = 'kin034-theme';
+var DAYS_KEY = 'kin034-days';
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function smartShuffle() {
+  var indices = [];
+  for (var i = 0; i < ACTS.length; i++) indices.push(i);
+  var attempts = 0;
+  while (attempts < 50) {
+    var shuffled = shuffle(indices);
+    var valid = true;
+    for (var k = 2; k < shuffled.length; k++) {
+      if (ACTS[shuffled[k - 2]].cat === ACTS[shuffled[k - 1]].cat && ACTS[shuffled[k - 1]].cat === ACTS[shuffled[k]].cat) {
+        valid = false; break;
+      }
+    }
+    if (valid) return shuffled;
+    attempts++;
+  }
+  return shuffle(indices);
+}
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function getState() {
+  var state = loadState();
+  if (!state) {
+    state = { deck: smartShuffle(), currentIndex: 0, lastDate: null, revealed: false, reflected: null, reflectedMsg: null, whyShown: false };
+    saveState(state);
+  }
+  if (!('reflected' in state)) { state.reflected = null; state.reflectedMsg = null; saveState(state); }
+  if (!('whyShown' in state)) { state.whyShown = false; saveState(state); }
+  return state;
+}
+
+function trackDay() {
+  var today = new Date().toLocaleDateString();
+  try {
+    var raw = localStorage.getItem(DAYS_KEY);
+    var data = raw ? JSON.parse(raw) : { firstDay: today, count: 0, lastCounted: null };
+    if (data.lastCounted !== today) {
+      data.count++;
+      data.lastCounted = today;
+      localStorage.setItem(DAYS_KEY, JSON.stringify(data));
+    }
+    return data.count;
+  } catch(e) { return 1; }
+}
+
+function getDayCount() {
+  try {
+    var raw = localStorage.getItem(DAYS_KEY);
+    if (raw) return JSON.parse(raw).count || 0;
+  } catch(e) {}
+  return 0;
+}
+
+function advanceToToday() {
+  var state = getState();
+  var today = new Date().toLocaleDateString();
+
+  if (state.lastDate !== today) {
+    if (state.lastDate !== null) {
+      state.currentIndex++;
+      if (state.currentIndex >= state.deck.length) {
+        state.deck = smartShuffle();
+        state.currentIndex = 0;
+      }
+    }
+    state.lastDate = today;
+    state.revealed = false;
+    state.reflected = null;
+    state.reflectedMsg = null;
+    state.whyShown = false;
+    saveState(state);
+  }
+
+  return state;
+}
+
+function isEvening() {
+  return new Date().getHours() >= 18;
+}
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// === RENDER ===
+function renderCard() {
+  var state = advanceToToday();
+  var act = ACTS[state.deck[state.currentIndex]];
+  var container = document.getElementById('cardContainer');
+
+  if (!state.revealed) {
+    container.innerHTML =
+      '<div class="act-card unrevealed" onclick="revealAct()" role="button" tabindex="0" aria-label="Tap to reveal today\'s act">' +
+        '<div class="reveal-symbol" id="revealSymbol">\u2726</div>' +
+        '<div class="reveal-prompt">Tap to reveal today\'s act</div>' +
+      '</div>';
+    var card = container.querySelector('.act-card');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); revealAct(); }
+    });
+    setupLongPress(document.getElementById('revealSymbol'));
+  } else {
+    renderRevealed(act, state, false);
+  }
+}
+
+function renderRevealed(act, state, animate) {
+  var container = document.getElementById('cardContainer');
+  var isInstant = !animate;
+
+  var tagStyle = isInstant ? ' style="opacity:1"' : '';
+  var textStyle = isInstant ? ' style="opacity:1"' : '';
+  var whyBtnClass = isInstant ? '' : ' animated';
+  var cardClass = isInstant ? '' : ' revealed';
+
+  var html =
+    '<div class="act-card' + cardClass + '">' +
+      '<span class="act-tag ' + act.type + '"' + tagStyle + '>' + act.type + '</span>' +
+      '<div class="act-text"' + textStyle + '>' + act.text + '</div>' +
+      '<button class="why-toggle' + whyBtnClass + '" onclick="toggleWhy()" id="whyBtn">' + (state.whyShown ? 'Close' : 'Why this?') + '</button>' +
+      '<div class="why-section' + (state.whyShown ? ' visible' : '') + '" id="whySection">' +
+        '<div class="ornament"></div>' +
+        '<div class="act-why">' + act.why + '</div>' +
+      '</div>' +
+    '</div>';
+
+  // Reflection
+  if (isEvening() && state.reflected === null) {
+    html +=
+      '<div class="reflection-area' + (animate ? ' animated' : '') + '">' +
+        '<div class="reflection-prompt">Did you do it?</div>' +
+        '<div class="reflection-buttons">' +
+          '<button class="reflection-btn" onclick="reflect(\'yes\')">Yes</button>' +
+          '<button class="reflection-btn" onclick="reflect(\'no\')">Not today</button>' +
+        '</div>' +
+      '</div>';
+  } else if (state.reflected !== null) {
+    html +=
+      '<div class="reflection-area">' +
+        '<div class="reflection-response">' + (state.reflectedMsg || '') + '</div>' +
+      '</div>';
+  }
+
+  var tomorrowClass = animate ? ' animated' : '';
+  html += '<div class="tomorrow-note' + tomorrowClass + '">A new act arrives tomorrow</div>';
+
+  container.innerHTML = html;
+}
+
+function revealAct() {
+  var state = getState();
+  state.revealed = true;
+  state.whyShown = false;
+  saveState(state);
+  trackDay();
+
+  var act = ACTS[state.deck[state.currentIndex]];
+  renderRevealed(act, state, true);
+}
+
+function toggleWhy() {
+  var state = getState();
+  state.whyShown = !state.whyShown;
+  saveState(state);
+
+  var section = document.getElementById('whySection');
+  var btn = document.getElementById('whyBtn');
+  if (state.whyShown) {
+    section.classList.add('visible');
+    btn.textContent = 'Close';
+  } else {
+    section.classList.remove('visible');
+    btn.textContent = 'Why this?';
+  }
+}
+
+function reflect(choice) {
+  var state = getState();
+  var msg = choice === 'yes' ? pickRandom(RESPONSES_YES) : pickRandom(RESPONSES_NO);
+  state.reflected = choice;
+  state.reflectedMsg = msg;
+  saveState(state);
+
+  var act = ACTS[state.deck[state.currentIndex]];
+  renderRevealed(act, state, false);
+}
+
+// === LONG PRESS DAY COUNTER ===
+function setupLongPress(el) {
+  if (!el) return;
+  var timer = null;
+  var show = function() {
+    var count = getDayCount();
+    if (count === 0) return;
+    var counter = document.getElementById('dayCounter');
+    document.getElementById('dayCount').textContent = count;
+    counter.classList.add('visible');
+    setTimeout(function() { counter.classList.remove('visible'); }, 2000);
+  };
+  var start = function(e) {
+    e.preventDefault();
+    timer = setTimeout(show, 600);
+  };
+  var cancel = function() { if (timer) { clearTimeout(timer); timer = null; } };
+
+  el.addEventListener('touchstart', start, { passive: false });
+  el.addEventListener('touchend', cancel);
+  el.addEventListener('touchcancel', cancel);
+  el.addEventListener('mousedown', start);
+  el.addEventListener('mouseup', cancel);
+  el.addEventListener('mouseleave', cancel);
+}
+
+// === THEME ===
+function initTheme() {
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved === 'dark');
+}
+
+function applyTheme(dark) {
+  var body = document.body;
+  var html = document.documentElement;
+  var toggle = document.getElementById('themeToggle');
+  var meta = document.getElementById('theme-color-meta');
+
+  if (dark) {
+    body.classList.add('dark');
+    html.classList.remove('light');
+    html.classList.add('dark');
+    toggle.textContent = '\uD83C\uDF19';
+    if (meta) meta.content = '#1a1816';
+  } else {
+    body.classList.remove('dark');
+    html.classList.remove('dark');
+    html.classList.add('light');
+    toggle.textContent = '\u2600\uFE0F';
+    if (meta) meta.content = '#f5f0eb';
+  }
+}
+
+document.getElementById('themeToggle').addEventListener('click', function() {
+  var isDark = !document.body.classList.contains('dark');
+  applyTheme(isDark);
+  localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+});
+
+// === TOAST ===
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(function() { t.classList.remove('visible'); }, 2200);
+}
+
+// === CONFIRM ===
+function kinConfirm(msg) {
+  return new Promise(function(resolve) {
+    var overlay = document.getElementById('confirmOverlay');
+    document.getElementById('confirmMsg').textContent = msg;
+    overlay.classList.add('visible');
+    document.getElementById('confirmYes').onclick = function() { overlay.classList.remove('visible'); resolve(true); };
+    document.getElementById('confirmNo').onclick = function() { overlay.classList.remove('visible'); resolve(false); };
+  });
+}
+
+// === BUG REPORT ===
+function openBugReport() { document.getElementById('bugOverlay').classList.add('visible'); }
+function closeBugReport() { document.getElementById('bugOverlay').classList.remove('visible'); }
+
+function submitBug() {
+  var type = document.getElementById('bugType').value;
+  var desc = document.getElementById('bugDesc').value.trim();
+  var name = document.getElementById('bugName').value.trim();
+  if (!desc) { showToast('Please add a description'); return; }
+
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ form_type: 'bug_report', subject: 'KIN-034 Random Acts', app: 'KIN-034', type: type, description: desc, name: name || 'Anonymous' })
+  });
+
+  closeBugReport();
+  document.getElementById('bugDesc').value = '';
+  document.getElementById('bugName').value = '';
+  showToast('Thanks for the feedback');
+}
+
+// === EVENING CHECK ===
+var lastEveningCheck = isEvening();
+setInterval(function() {
+  var now = isEvening();
+  if (now !== lastEveningCheck) {
+    lastEveningCheck = now;
+    var state = getState();
+    if (state.revealed && state.reflected === null) {
+      renderCard();
+    }
+  }
+}, 60000);
+
+// === INIT ===
+initTheme();
+renderCard();
+</script>
+
+</body>
+</html>
