@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kin - Everyday tools. No strings.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --border: #E8E6E1;
+    --border-hover: #D0CEC8;
+    --text: #1A1A18;
+    --text-mid: #5C5B56;
+    --text-dim: #9C9A94;
+    --accent: #2D5A3D;
+    --accent-light: #E8F0EB;
+    --warm: #F5F0E8;
+    --radius: 12px;
+
+    /* house bag colours - each app gets one */
+    --hb-1: #2D5A3D;
+    --hb-2: #4A3D6B;
+    --hb-3: #6B3D3D;
+    --hb-4: #3D5A6B;
+    --hb-5: #6B5A2D;
+    --hb-6: #3D6B5A;
+    --hb-7: #5A3D4A;
+    --hb-8: #2D4A6B;
+    --hb-9: #1A4060;
+    --hb-10: #1f1040;
+    --hb-11: #3D2A10;
+    --hb-12: #3D1A4A;
+    --hb-13: #1A3A50;
+    --hb-14: #1F3828;
+    --hb-15: #5a3d8f;
+    --hb-16: #7c4d0f;
+    --hb-17: #4c1d95;
+    --hb-18: #065f46;
+    --hb-19: #1a3f5c;
+    --hb-20: #1a2744;
+    --hb-21: #c45d3e;
+    --hb-22: #2d5a3f;
+    --hb-23: #4b3a7c;
+    --hb-24: #4a5e72;
+    --hb-25: #c45d3e;
+    --hb-26: #1d3a5c;
+    --hb-27: #c0293a;
+    --hb-028: #2c3e50;
+    --hb-029: #241a10;
+    --hb-030: #c00;
+    --hb-031: #1a56db;
+    --hb-032: #117a55;
+    --hb-033: #5a1e2e;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 0;
+  }
+
+  .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .nav-tab:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+  .hero {
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+
+  /* ---- PRINCIPLES ---- */
+  .principles {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 32px 0 56px;
+  }
+
+  .principle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+    letter-spacing: 0.01em;
+  }
+
+  .principle::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  /* ---- CATALOG ---- */
+  .catalog-header {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+  }
+
+  .catalog-header h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .catalog-count {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .catalog {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* ---- HOUSE BAG (app card) ---- */
+  .release {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .release:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  }
+
+  .release-cover {
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* the house bag design: solid colour bg, centred icon/glyph, KIN mark */
+  .release-cover .cover-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+  }
+
+  .release-cover .cover-icon {
+    position: relative;
+    z-index: 1;
+    font-size: 48px;
+    line-height: 1;
+    opacity: 0.95;
+    color: white;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+  }
+
+  .release-cover .cover-category {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    z-index: 2;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .release-cover .cover-number {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 2;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .release-cover .cover-qir {
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .release-cover .kin-mark {
+    position: absolute;
+    bottom: 14px;
+    left: 16px;
+    z-index: 2;
+    font-family: 'Instrument Serif', serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.02em;
+  }
+
+  .release-info {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .release-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--text);
+  }
+
+  .release-creator {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .release-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    flex: 1;
+  }
+
+  .release-replaces {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 500;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .release-replaces span {
+    text-decoration: line-through;
+    opacity: 0.7;
+    margin-left: 2px;
+  }
+
+  /* ---- CTA / CONTRIBUTE ---- */
+  .contribute {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .contribute-box {
+    background: var(--warm);
+    border-radius: var(--radius);
+    padding: 48px;
+    max-width: 640px;
+  }
+
+  .contribute-box h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .contribute-box p {
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .contribute-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .contribute-box a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .contribute-box a:hover { opacity: 0.85; }
+
+  .contribute-suggest {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--text);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .contribute-suggest:hover { opacity: 0.7; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer .foot-left {
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    color: var(--text-dim);
+  }
+
+  footer .foot-right {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero, .principles, .catalog-header, .contribute {
+    animation: fadeUp 0.6s ease-out both;
+  }
+  .principles { animation-delay: 0.1s; }
+  .catalog-header { animation-delay: 0.15s; }
+
+  /* ── Suggest an App ── */
+  .suggest-pill { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; z-index: 900; box-shadow: 0 4px 20px rgba(0,0,0,0.15); letter-spacing: 0.01em; transition: transform 0.15s, box-shadow 0.15s; font-family: inherit; }
+  .suggest-pill:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.22); }
+  .suggest-overlay { position: fixed; inset: 0; background: rgba(26,26,24,0.6); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .suggest-overlay.open { opacity: 1; pointer-events: all; }
+  .suggest-sheet { position: relative; background: var(--bg); border-radius: 20px 20px 0 0; padding: 28px 28px 52px; width: 100%; max-width: 540px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); max-height: 90vh; overflow-y: auto; }
+  .suggest-overlay.open .suggest-sheet { transform: translateY(0); }
+  .suggest-handle { width: 36px; height: 4px; background: var(--text-dim); border-radius: 2px; margin: 0 auto 20px; opacity: 0.4; }
+  .suggest-close { position: absolute; top: 20px; right: 22px; background: none; border: none; font-size: 22px; color: var(--text-dim); cursor: pointer; line-height: 1; padding: 0; }
+  .suggest-title { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--text); margin: 0 0 5px; }
+  .suggest-sub { font-size: 13px; color: var(--text-mid); margin: 0 0 20px; line-height: 1.6; }
+  .sug-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sug-field { margin-bottom: 14px; }
+  .sug-label { display: block; font-size: 11px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .sug-input, .sug-textarea { width: 100%; border: 1.5px solid #e0dfd8; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #fff; box-sizing: border-box; outline: none; transition: border-color 0.15s; }
+  .sug-input:focus, .sug-textarea:focus { border-color: var(--accent); }
+  .sug-textarea { resize: vertical; min-height: 80px; }
+  .sug-submit { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 6px; font-family: inherit; transition: opacity 0.15s; }
+  .sug-submit:hover { opacity: 0.85; }
+  .sug-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+  .sug-thanks { text-align: center; padding: 24px 0 8px; display: none; }
+  .sug-thanks h3 { font-family: 'Instrument Serif', serif; font-size: 24px; color: var(--text); margin: 0 0 8px; }
+  .sug-thanks p { font-size: 14px; color: var(--text-mid); margin: 0; }
+
+  .release {
+    animation: fadeUp 0.5s ease-out both;
+  }
+  .release:nth-child(1) { animation-delay: 0.2s; }
+  .release:nth-child(2) { animation-delay: 0.25s; }
+  .release:nth-child(3) { animation-delay: 0.3s; }
+  .release:nth-child(4) { animation-delay: 0.35s; }
+  .release:nth-child(5) { animation-delay: 0.4s; }
+  .release:nth-child(6) { animation-delay: 0.45s; }
+  .release:nth-child(7)  { animation-delay: 0.5s; }
+  .release:nth-child(8)  { animation-delay: 0.55s; }
+  .release:nth-child(9)  { animation-delay: 0.6s; }
+  .release:nth-child(10) { animation-delay: 0.65s; }
+  .release:nth-child(11) { animation-delay: 0.7s; }
+  .release:nth-child(12) { animation-delay: 0.75s; }
+  .release:nth-child(13) { animation-delay: 0.8s; }
+  .release:nth-child(14) { animation-delay: 0.85s; }
+  .release:nth-child(15) { animation-delay: 0.9s; }
+  .release:nth-child(16) { animation-delay: 0.95s; }
+  .release:nth-child(17) { animation-delay: 1.0s; }
+  .release:nth-child(18) { animation-delay: 1.05s; }
+  .release:nth-child(19) { animation-delay: 1.10s; }
+  .release:nth-child(20) { animation-delay: 1.15s; }
+  .release:nth-child(21) { animation-delay: 1.20s; }
+  .release:nth-child(22) { animation-delay: 1.25s; }
+  .release:nth-child(23) { animation-delay: 1.30s; }
+  .release:nth-child(24) { animation-delay: 1.35s; }
+  .release:nth-child(25) { animation-delay: 1.40s; }
+  .release:nth-child(26) { animation-delay: 1.45s; }
+  .release:nth-child(27) { animation-delay: 1.50s; }
+  .release:nth-child(28) { animation-delay: 1.55s; }
+  .release:nth-child(29) { animation-delay: 1.60s; }
+  .release:nth-child(30) { animation-delay: 1.65s; }
+  .release:nth-child(31) { animation-delay: 1.70s; }
+  .release:nth-child(32) { animation-delay: 1.75s; }
+  .release:nth-child(33) { animation-delay: 1.80s; }
+
+  /* ---- RESPONSIVE ---- */
+  .demo-pill {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      cursor: pointer;
+    }
+    .demo-pill:hover { opacity: 0.7; }
+
+  .qir-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600;
+    color: #888; background: #f0efeb;
+    border-radius: 10px; padding: 2px 8px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .qir-dots { display: inline-flex; gap: 3px; align-items: center; }
+  .qir-dots span { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+  body.dark .qir-badge { color: #888 !important; background: #2a2a2a !important; }
+
+  .kin-info-btn {
+    align-self: flex-end;
+    margin-top: 10px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hover);
+    background: none;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Instrument Serif', serif;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+  }
+  .kin-info-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  #kin-info-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(26,26,24,0.65);
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  #kin-info-overlay.open { opacity: 1; pointer-events: all; }
+  #kin-info-sheet {
+    position: relative;
+    background: #17171f;
+    border-radius: 20px 20px 0 0;
+    border: 1px solid rgba(255,255,255,0.08); border-bottom: none;
+    padding: 0 24px 48px;
+    width: 100%; max-width: 540px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    max-height: 90vh; overflow-y: auto;
+  }
+  #kin-info-overlay.open #kin-info-sheet { transform: translateY(0); }
+  .kin-is-handle { display: flex; justify-content: center; padding: 14px 0 6px; }
+  .kin-is-handle div { width: 36px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.15); }
+  .kin-is-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: 6px 0 18px; }
+  .kin-is-title { color: #fff; font-size: 18px; font-weight: 700; margin: 0 0 3px; font-family: 'Instrument Serif', serif; letter-spacing: -0.01em; }
+  .kin-is-meta { color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.05em; margin: 0; }
+  .kin-is-close {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.07); border: none;
+    color: rgba(255,255,255,0.5); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kin-is-desc { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.65; margin-bottom: 22px; }
+  .kin-is-label { color: rgba(255,255,255,0.3); font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 10px; }
+  .kin-is-features { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 9px; }
+  .kin-is-features li { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.45; padding-left: 14px; position: relative; }
+  .kin-is-features li::before { content: '·'; position: absolute; left: 0; color: rgba(255,255,255,0.25); }
+  .kin-is-storage {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px;
+    background: rgba(46,160,67,0.1); border: 1px solid rgba(46,160,67,0.25);
+    color: #2ea043; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  }
+
+    @media (max-width: 600px) {
+    header { padding-top: 32px; }
+    .catalog { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .release-cover { aspect-ratio: 1/1; }
+    .release-info { padding: 12px; }
+    .release-name { font-size: 14px; }
+    .release-desc { font-size: 12px; }
+    .release-replaces { font-size: 10px; }
+    .contribute-box { padding: 32px 24px; }
+    .principles { margin-bottom: 40px; }
+  }
+
+  .filter-bar {
+    display: flex; overflow-x: auto; gap: 8px;
+    padding: 16px 20px 20px; -ms-overflow-style: none; scrollbar-width: none;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-pill {
+    flex: none; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.12); background: transparent;
+    font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 500; letter-spacing: 0.02em; color: rgba(0,0,0,0.5);
+    cursor: pointer; white-space: nowrap; min-height: 34px;
+    -webkit-appearance: none; transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .filter-pill.active { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+  body.dark .filter-pill { border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.45) !important; }
+  body.dark .filter-pill.active { background: #f0f0f0 !important; border-color: #f0f0f0 !important; color: #111 !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo">Kin</div>
+    <nav>
+      <a href="introduction.html" class="nav-tab">What is Kin?</a>
+    </nav>
+  </div>
+  <div class="hero">
+    <h1>Everyday tools.<br>No <em>strings</em>.</h1>
+    <p>Kin is a curated collection of simple, free web tools that just work. No subscriptions, no accounts, no tracking. Install them to your phone, use them offline, no app store needed.</p>
+  </div>
+  <div class="principles">
+    <div class="principle">Free to use, forever</div>
+    <div class="principle">No account needed</div>
+    <div class="principle">No tracking or ads</div>
+    <div class="principle">Works on any device</div>
+    <div class="principle">Community built</div>
+    <div class="principle">Install to your phone, no app store</div>
+  </div>
+</header>
+
+<div class="catalog-header">
+  <h2>Catalog</h2>
+  <span class="catalog-count">30 tools</span>
+</div>
+
+<div id="filter-bar" class="filter-bar">
+  <button class="filter-pill active" data-filter="all" onclick="filterCatalog('all')">All</button>
+</div>
+
+<div class="catalog">
+
+  <!-- KIN-001: Ukulele Tuner -->
+  <a href="https://mayatuner.netlify.app" class="release" data-category="Music">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-1), #1e3d2a);"></div>
+      <span class="cover-category">Music</span>
+      <span class="cover-number">KIN-001</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><path d="M24 6v36M18 10v6a6 6 0 0012 0v-6M15 28c0 5.523 4.029 10 9 10s9-4.477 9-10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Ukulele Tuner</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Maya</div>
+      <div class="release-desc">Tune your ukulele using your phone's microphone. Standard and alternate tunings. Shows you which way to turn the peg. That's it.</div>
+      <div class="release-replaces">Replaces <span>GuitarTuna, Fender Tune</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-002: Metronome -->
+  <a href="https://kinmetronome.netlify.app/" class="release" data-category="Music">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-2), #2e2548);"></div>
+      <span class="cover-category">Music</span>
+      <span class="cover-number">KIN-002</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><path d="M18 40l6-32 6 32" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 14l10 10" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="12" r="3" stroke="white" stroke-width="2"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Metronome</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Set a tempo, hear the click. Tap to find the BPM. Subdivisions if you need them. Works offline.</div>
+      <div class="release-replaces">Replaces <span>Pro Metronome, Soundbrenner</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-003: BPM Counter -->
+  <a href="https://kinbpm.netlify.app" class="release" data-category="Music">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-3), #4a2525);"></div>
+      <span class="cover-category">Music</span>
+      <span class="cover-number">KIN-003</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="24" cy="24" r="14" stroke="white" stroke-width="2"/><path d="M24 14v10l7 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8l4 4M36 8l-4 4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">BPM Counter</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Tap along to anything playing and get the tempo. Useful for DJs, musicians, dancers, runners — anyone who needs to know how fast something is.</div>
+      <div class="release-replaces">Replaces <span>BPM Tap apps with ads</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-004: Colour Picker -->
+  <a href="https://kincolour.netlify.app" class="release" data-category="Design">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-4), #263d48);"></div>
+      <span class="cover-category">Design</span>
+      <span class="cover-number">KIN-004</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="20" cy="20" r="8" stroke="white" stroke-width="2" opacity="0.7"/><circle cx="28" cy="20" r="8" stroke="white" stroke-width="2" opacity="0.7"/><circle cx="24" cy="27" r="8" stroke="white" stroke-width="2" opacity="0.7"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Colour Picker</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Find a colour, copy the code, build a palette. Paste a hex or RGB value if you have one, or just pick visually. Everything stays in your browser.</div>
+      <div class="release-replaces">Replaces <span>Coolors Pro, Color Hunt</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-005: QR Code Generator -->
+  <a href="https://kinqr.netlify.app/" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-5), #4a3d1a);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-005</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><rect x="10" y="10" width="10" height="10" rx="1" stroke="white" stroke-width="2"/><rect x="28" y="10" width="10" height="10" rx="1" stroke="white" stroke-width="2"/><rect x="10" y="28" width="10" height="10" rx="1" stroke="white" stroke-width="2"/><rect x="30" y="30" width="6" height="6" rx="1" stroke="white" stroke-width="2" opacity="0.5"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">QR Code</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Turn any link, text, wifi password, or contact into a QR code. Download as an image. Everything happens in your browser, nothing sent anywhere.</div>
+      <div class="release-replaces">Replaces <span>QR Tiger, Beaconstac</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-006: Classroom Timer -->
+    <a href="https://kinclasstimer.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Education">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-6), #264a3d);"></div>
+        <span class="cover-category">Education</span>
+        <span class="cover-number">KIN-006</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="24" cy="26" r="14" stroke="white" stroke-width="2"/><path d="M24 16v10l7 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 6h8" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M24 6v4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Classroom Timer</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">Big, full-screen countdown for classrooms. Colour shifts from green to amber to red as time runs out. Pick a preset or set your own. Chime at the end.</div>
+        <div class="release-replaces">Replaces <span>Google Timer, random online timers</span></div>
+      </div>
+    </a>
+
+  <!-- KIN-007: Ambient Mixer -->
+    <a href="https://kinambientmix.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-7), #1a2a3d);"></div>
+        <span class="cover-category">Wellbeing</span>
+        <span class="cover-number">KIN-007</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="24" cy="24" r="3" fill="white" opacity="0.9"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="1.5" opacity="0.6"/><circle cx="24" cy="24" r="14" stroke="white" stroke-width="1.5" opacity="0.35"/><path d="M12 24c0 2 1 5 3 7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/><path d="M36 24c0-2-1-5-3-7" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/><path d="M8 24c0 4 2 8 5 11" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/><path d="M40 24c0-4-2-8-5-11" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/></svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Ambient Mixer</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">Rain, wind, waves, fire, white noise and pink noise — layer and mix them however you like. Sleep timer included. Save presets or share a mix with someone.</div>
+        <div class="release-replaces">Replaces <span>Noisli, A-Soft Murmur</span></div>
+      </div>
+    </a>
+
+    <!-- KIN-008: Flashcards -->
+  <a href="https://kinflashcards.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Learning">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-8), #1a3248);"></div>
+      <span class="cover-category">Learning</span>
+      <span class="cover-number">KIN-008</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><rect x="10" y="14" width="22" height="16" rx="2" stroke="white" stroke-width="2"/><rect x="16" y="18" width="22" height="16" rx="2" stroke="white" stroke-width="2" opacity="0.5"/></svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Flashcards</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Make your own flashcard decks, flip through them, mark what you know. Saved in your browser. Your data stays on your device.</div>
+      <div class="release-replaces">Replaces <span>Quizlet Plus, AnkiApp</span></div>
+      <span class="demo-pill" onclick="event.stopPropagation();event.preventDefault();window.open('https://kinflashcards.netlify.app/?demo=true','_blank')">See it in action</span>
+    </div>
+  </a>
+
+      <!-- KIN-009: Jet Lag Planner -->
+    <a href="https://kinjetlag.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Travel">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-9), #0d2235);"></div>
+        <span class="cover-category">Travel</span>
+        <span class="cover-number">KIN-009</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="13" stroke="white" stroke-width="2"/>
+            <path d="M24 11c-3.5 4-5.5 8.5-5.5 13s2 9 5.5 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M24 11c3.5 4 5.5 8.5 5.5 13s-2 9-5.5 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M11 24h26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+            <path d="M24 17v7l4 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Jet Lag Planner</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">Enter where you're flying from and to, get a plan to reset your body clock. When to seek light, when to sleep, when to expect the worst. Works offline.</div>
+        <div class="release-replaces">Replaces <span>Timeshifter, Jet Lag Rooster</span></div>
+      </div>
+    </a>
+      <!-- KIN-011: Audio Calculators -->
+    <a href="https://kinaudiocalc.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Music">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-10), #080514);"></div>
+        <span class="cover-category">Music</span>
+        <span class="cover-number">KIN-010</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+            <rect x="4"  y="20" width="4" height="8"  rx="2" fill="white" opacity="0.5"/>
+            <rect x="12" y="14" width="4" height="20" rx="2" fill="white" opacity="0.7"/>
+            <rect x="20" y="8"  width="4" height="32" rx="2" fill="white"/>
+            <rect x="28" y="4"  width="4" height="40" rx="2" fill="white"/>
+            <rect x="36" y="12" width="4" height="24" rx="2" fill="white" opacity="0.7"/>
+            <rect x="44" y="18" width="4" height="12" rx="2" fill="white" opacity="0.4"/>
+          </svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Audio Calculators</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">18 calculators for anyone making or mixing music. Delay times, frequencies, sample rates, latency, room modes, file sizes and more — all in one place, no clutter.</div>
+        <div class="release-replaces">Replaces <span>scattered online audio calculators</span></div>
+      </div>
+    </a>
+
+    <a href="https://kinunitcalc.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Shopping">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-11), #080514);"></div>
+          <span class="cover-category">Shopping</span>
+          <span class="cover-number">KIN-011</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+              <rect x="4"  y="20" width="12" height="22" rx="2" fill="white" opacity="0.45"/>
+              <rect x="4"  y="12" width="12" height="6"  rx="2" fill="white" opacity="0.25"/>
+              <rect x="20" y="10" width="12" height="32" rx="2" fill="white" opacity="0.85"/>
+              <rect x="20" y="4"  width="12" height="4"  rx="2" fill="white" opacity="0.4"/>
+              <path d="M38 24 L41 28 L46 18" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Unit Price Calculator</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Work out which size is actually cheaper. Compare any two packs — 6x330ml vs 2L, 500g vs 1kg — and see the real cost per unit. No maths required.</div>
+          <div class="release-replaces">Replaces <span>mental maths in the supermarket aisle</span></div>
+        </div>
+      </a>
+
+
+  <!-- KIN-012: Random Name Picker -->
+  <a href="https://kinnamepick.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-12), #1f0d2e);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-012</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="10" y="12" width="28" height="6" rx="3" fill="white" opacity="0.35"/>
+          <rect x="10" y="21" width="28" height="6" rx="3" fill="white" opacity="1"/>
+          <rect x="10" y="30" width="28" height="6" rx="3" fill="white" opacity="0.35"/>
+          <circle cx="38" cy="24" r="5" fill="white" opacity="0.9"/>
+          <path d="M36 24l1.5 1.5L40 22" stroke="#3D1A4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Random Name Picker</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Paste a list of names, pick one at random. Keeps a history so nobody gets picked twice. Good for classrooms, team standups, raffles — anything that needs to be fair.</div>
+      <div class="release-replaces">Replaces <span>Wheel of Names, random.org</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-013: Mood Slider -->
+  <a href="https://kinmoodslider.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-13), #0d1e2a);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-013</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <line x1="8" y1="24" x2="40" y2="24" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+          <line x1="8" y1="18" x2="8" y2="30" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="40" y1="18" x2="40" y2="30" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+          <circle cx="30" cy="24" r="8" fill="white" opacity="0.95"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Mood Slider</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Slide a scale to log how you're really feeling. Add a note if you want. See your last seven days, colour-coded by mood. Private, offline, no account.</div>
+      <div class="release-replaces">Replaces <span>mood tracking apps that want your data</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-014: Breathing Exercise -->
+  <a href="https://kinbreathing.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-14), #0a1a10);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-014</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="8" fill="white" opacity="0.9"/>
+          <circle cx="24" cy="24" r="15" stroke="white" stroke-width="2" opacity="0.4"/>
+          <circle cx="24" cy="24" r="21" stroke="white" stroke-width="1.5" opacity="0.2"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Breathing Exercise</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Guided breathing exercises — box breathing, 4-7-8, ADHD reset, wind-down for sleep. Visual guide, audio cues, optional voice prompts. Fully offline, no account.</div>
+      <div class="release-replaces">Replaces <span>Calm, Headspace, breathing apps with accounts</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-015: Quiet Cycle -->
+  <a href="https://kinquietcycle.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Health">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-15), #3a2060);"></div>
+      <span class="cover-category">Health</span>
+      <span class="cover-number">KIN-015</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="12" stroke="white" stroke-width="2.5" opacity="0.9"/>
+          <circle cx="24" cy="10" r="3" fill="white" opacity="0.9"/>
+          <circle cx="38" cy="24" r="3" fill="white" opacity="0.5"/>
+          <circle cx="24" cy="38" r="3" fill="white" opacity="0.3"/>
+          <circle cx="10" cy="24" r="3" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Quiet Cycle</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Alice and Darren</div>
+      <div class="release-desc">Track your cycle, predict your next period, log symptoms and notes. PIN lock and panic delete if you need them. Everything stays on your device.</div>
+      <div class="release-replaces">Replaces <span>Clue, Flo, period trackers that sell your health data</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-016: Recipe Scaler -->
+  <a href="https://kinrecipescaler.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-16), #4a2800);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-016</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <path d="M14 8h20l6 30H8L14 8z" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
+          <line x1="16" y1="17" x2="24" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="14" y1="25" x2="24" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="33" x2="24" y2="33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Recipe Scaler</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Paste a list of ingredients, change the number of servings, get the adjusted amounts. Handles fractions and unit conversions. Nothing sent anywhere.</div>
+      <div class="release-replaces">Replaces <span>recipe scaling apps that require sign-up</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-017: Decision Flip -->
+  <a href="https://kindecisionflip.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-17), #2e1065);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-017</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="18" stroke="white" stroke-width="2.5"/>
+          <path d="M20 20c0-2.2 1.8-4 4-4s4 1.8 4 4c0 2.2-2 3.5-4 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="34" r="2.2" fill="white"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Decision Flip</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Alice</div>
+      <div class="release-desc">Stuck between options? Paste them in, hit Decide. One gets picked. Nothing saved, nothing sent.</div>
+      <div class="release-replaces">Replaces <span>overthinking</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-018: Kin Nest -->
+  <a href="https://kinnestapp.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-18), #022c22);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-018</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <path d="M12 40q10-10 24-16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          <path d="M12 32q10-6 24-8" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>
+          <ellipse cx="24" cy="16" rx="8" ry="10" fill="white" opacity=".9"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Kin Nest</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Alice and Darren</div>
+      <div class="release-desc">Baby tracker for exhausted parents. Log feeds, sleep and nappies in under two seconds. Wake windows, nap predictions, and a daily note that says you're doing fine. Nothing leaves your device.</div>
+      <div class="release-replaces">Replaces <span>baby tracking apps that want your data</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-019: Markdown Download -->
+  <a href="https://kinmarkdownl.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-19), #0b1e2d);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-019</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="8" y="4" width="24" height="30" rx="3" stroke="white" stroke-width="2" opacity="0.6"/>
+          <line x1="14" y1="13" x2="26" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="14" y1="19" x2="26" y2="19" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <line x1="14" y1="25" x2="20" y2="25" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          <path d="M32 28 L32 44 M26 38 L32 44 L38 38" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Markdown Download</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Write or paste text and download it as a Markdown file. Word count, character count, copy to clipboard. No editor needed, no account, nothing saved.</div>
+      <div class="release-replaces">Replaces <span>opening a code editor just to save a quick .md file</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-020: Password Generator -->
+  <a href="https://kinpassgen.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-20), #0a1520);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-020</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="12" y="22" width="24" height="18" rx="3" stroke="white" stroke-width="2" opacity="0.75"/>
+          <path d="M16 22v-6a8 8 0 0 1 16 0v6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="31" r="2.5" fill="white" opacity="0.6"/>
+          <line x1="24" y1="33.5" x2="24" y2="37" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Password Generator</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Generate strong passwords or easy-to-remember passphrases in your browser. Adjust length, characters, and complexity. Strength meter included. Nothing stored, nothing sent.</div>
+      <div class="release-replaces">Replaces <span>ad-heavy password generator websites</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-021: Text Counter -->
+  <a href="https://kintextcounter.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-21), #6b2a18);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-021</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 48 48">
+          <rect x="10" y="6" width="22" height="28" rx="3" stroke="white" stroke-width="2" opacity="0.7"/>
+          <path d="M32 6v8h8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+          <rect x="10" y="6" width="30" height="36" rx="3" stroke="white" stroke-width="2" opacity="0.4"/>
+          <line x1="16" y1="20" x2="34" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="16" y1="27" x2="34" y2="27" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          <line x1="16" y1="34" x2="26" y2="34" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Text Counter</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Paste any text and see word count, character count, reading time, and how readable it is. Highlights if you're over platform limits. Select a passage to count just that part. Nothing stored.</div>
+      <div class="release-replaces">Replaces <span>wordcounter.net and similar ad-heavy sites</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-022: Fair Share -->
+  <a href="https://kinfairshare.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-22), #1a3628);"></div>
+      <span class="cover-category">Utility</span>
+      <span class="cover-number">KIN-022</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Fair Share</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Split shared costs without signing up for anything. Log what was spent, split it equally or however you like, and see who owes who. Tip calculator included. Data stays on your device.</div>
+      <div class="release-replaces">Replaces <span>Splitwise, Tricount</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-023: JSON -->
+  <a href="https://kinjson.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Developer">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-23), #2d1f5e);"></div>
+      <span class="cover-category">Developer</span>
+      <span class="cover-number">KIN-023</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <text x="24" y="34" font-family="monospace" font-size="32" font-weight="700" fill="white" text-anchor="middle">{}</text>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">JSON</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Paste JSON, get it formatted, validated and colour-highlighted. Browse the structure as a tree, compare two payloads, or query values by path. Nothing leaves your browser.</div>
+      <div class="release-replaces">Replaces <span>jsonlint.com, jsonformatter.org</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-024: Thought Loop -->
+  <a href="https://kinthoughtloop.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-24), #2d3e52);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-024</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M38 24c0 7.7-6.3 14-14 14S10 31.7 10 24 16.3 10 24 10"/>
+          <polyline points="24 4 30 10 24 16"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Thought Loop</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Write down a thought that won't leave you alone. Answer three questions. Get a verdict: Act on it, Schedule it, Let it go, or recognise it's Not Yours. History shows what you keep coming back to.</div>
+      <div class="release-replaces">Replaces <span>CBT worksheets, anxiety journaling apps</span></div>
+    </div>
+  </a>
+
+  <!-- KIN-025: Stretch -->
+  <a href="https://kinstretch.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+    <div class="release-cover">
+      <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-25), #8b3a28);"></div>
+      <span class="cover-category">Wellbeing</span>
+      <span class="cover-number">KIN-025</span>
+      <div class="cover-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="24" cy="10" r="3"/>
+          <line x1="24" y1="13" x2="24" y2="26"/>
+          <line x1="14" y1="20" x2="34" y2="20"/>
+          <line x1="24" y1="26" x2="16" y2="38"/>
+          <line x1="24" y1="26" x2="32" y2="38"/>
+        </svg>
+      </div>
+      <span class="kin-mark">Kin</span>
+    </div>
+    <div class="release-info">
+      <div class="release-name">Stretch</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="release-creator">by Darren</div>
+      <div class="release-desc">Pick a routine — morning, desk break, post-run, bedtime, or chair-based. Set your hold time. Audio cues move you through it, and every stretch has an easier version.</div>
+      <div class="release-replaces">Replaces <span>YouTube stretch videos, app-gated routine planners</span></div>
+    </div>
+  </a>
+
+    <!-- KIN-026: Kin Ground -->
+    <a href="https://kinground.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-26), #0d1f33);"></div>
+        <span class="cover-category">Utility</span>
+        <span class="cover-number">KIN-026</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="18" width="32" height="22" rx="3"/>
+            <path d="M8 24h32"/>
+            <path d="M14 12h20a4 4 0 0 1 4 6H10a4 4 0 0 1 4-6z"/>
+            <circle cx="32" cy="30" r="3"/>
+          </svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Kin Ground</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren</div>
+        <div class="release-desc">Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what's draining you, and see your money clearly — no account, no bank connection.</div>
+        <div class="release-replaces">Replaces <span>budgeting apps that require an account, spreadsheet sprawl</span></div>
+        <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kinground.netlify.app/?demo=true','_blank')">See it in action →</span>
+      </div>
+    </a>
+
+    <!-- KIN-028: Scan -->
+    <a href="https://kinscanner.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+      <div class="release-cover">
+        <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-028), #0f1923);"></div>
+        <span class="cover-category">Utility</span>
+        <span class="cover-number">KIN-028</span>
+        <div class="cover-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="6" width="22" height="28" rx="2"/>
+            <line x1="6" y1="22" x2="42" y2="22"/>
+            <line x1="14" y1="34" x2="34" y2="34"/>
+            <circle cx="34" cy="34" r="7" fill="none"/>
+            <line x1="39" y1="39" x2="44" y2="44"/>
+          </svg>
+        </div>
+        <span class="kin-mark">Kin</span>
+      </div>
+      <div class="release-info">
+        <div class="release-name">Scan</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="release-creator">by Darren and Daisy</div>
+        <div class="release-desc">Scan documents and photos to PDF using your camera or image library. Adjust brightness, contrast, and black-and-white. Crop, rotate, reorder pages. Export a clean multi-page PDF — no account, no upload, nothing stored.</div>
+        <div class="release-replaces">Replaces <span>CamScanner, Adobe Scan, Microsoft Lens — all behind accounts or paywalls</span></div>
+      </div>
+    </a>
+
+      <!-- KIN-029: Nudge -->
+      <a href="https://kinnudge.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-029), #1a0d08);"></div>
+          <span class="cover-category">Wellbeing</span>
+          <span class="cover-number">KIN-029</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 8 L20 28"/>
+              <path d="M20 8 C20 6 22 5 24 6 C26 5 28 6 28 8 L28 20"/>
+              <path d="M28 14 C28 12 30 11 32 12 L32 26"/>
+              <path d="M32 18 C32 16 34 15 36 16 L36 30 C36 37 30 42 24 42 L20 42 C16 42 12 38 12 34 L12 22"/>
+              <path d="M12 22 C12 19 15 18 17 20 L20 23"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Nudge</div>
+      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">A small push when you're stuck. Filter activities by energy level, time, and type. Thumbs up what helps — the shuffle learns. No streaks, no scores, no guilt.</div>
+          <div class="release-replaces">Replaces <span>decision paralysis — fills a gap no free tool covered</span></div>
+        </div>
+      </a>
+
+      <!-- KIN-030: Quote -->
+      <a href="https://kinquote.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Business">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-030), #800000);"></div>
+          <span class="cover-category">Business</span>
+          <span class="cover-number">KIN-030</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="10" y="6" width="28" height="36" rx="3"/>
+              <line x1="16" y1="16" x2="32" y2="16"/>
+              <line x1="16" y1="22" x2="32" y2="22"/>
+              <line x1="16" y1="28" x2="24" y2="28"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+          <span class="cover-qir"><span class="qir-dots"><span style="background:#ff5555"></span><span style="background:#6699ff"></span><span style="background:#44cc99"></span></span> QIR</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Quote</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Generate quotes with flexible line items. Set your prefix and auto-increment numbering, save defaults for repeat use. Clipboard export carries the full document to Invoice. Nothing leaves your device.</div>
+          <div class="release-replaces">Replaces <span>invoice apps that require accounts and monthly fees</span></div>
+          <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kinquote.netlify.app/?demo=true','_blank')">See it in action →</span>
+        </div>
+      </a>
+
+      <!-- KIN-031: Invoice -->
+      <a href="https://kininvoice.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Business">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-031), #0a2a6e);"></div>
+          <span class="cover-category">Business</span>
+          <span class="cover-number">KIN-031</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="10" y="6" width="28" height="36" rx="3"/>
+              <line x1="16" y1="16" x2="32" y2="16"/>
+              <line x1="16" y1="22" x2="32" y2="22"/>
+              <line x1="16" y1="28" x2="22" y2="28"/>
+              <polyline points="24 31 27 35 34 27"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+          <span class="cover-qir"><span class="qir-dots"><span style="background:#ff5555"></span><span style="background:#6699ff"></span><span style="background:#44cc99"></span></span> QIR</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Invoice</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Turn quotes into invoices and track payment. Import from Quote, mark paid or partial, export to Receipt. Nothing leaves your device.</div>
+          <div class="release-replaces">Replaces <span>Wave, FreshBooks, Xero for simple invoicing</span></div>
+          <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kininvoice.netlify.app/?demo=true','_blank')">See it in action →</span>
+        </div>
+      </a>
+
+      <!-- KIN-032: Receipt -->
+      <a href="https://kinreceipt.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Business">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-032), #063d2a);"></div>
+          <span class="cover-category">Business</span>
+          <span class="cover-number">KIN-032</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 6 L10 40 Q12 43 14 40 Q16 37 18 40 Q20 43 22 40 Q24 37 26 40 Q28 43 30 40 Q32 37 34 40 L38 40 L38 6 Z"/>
+              <line x1="16" y1="16" x2="32" y2="16"/>
+              <line x1="16" y1="22" x2="32" y2="22"/>
+              <line x1="16" y1="28" x2="24" y2="28"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+          <span class="cover-qir"><span class="qir-dots"><span style="background:#ff5555"></span><span style="background:#6699ff"></span><span style="background:#44cc99"></span></span> QIR</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Receipt</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Confirm payment with a clean receipt. Import from Invoice, traces the full chain back to the original quote. Nothing leaves your device.</div>
+          <div class="release-replaces">Replaces <span>PDF receipt generators with ad-walls</span></div>
+          <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://kinreceipt.netlify.app/?demo=true','_blank')">See it in action →</span>
+        </div>
+      </a>
+
+      <!-- KIN-033: Page Surgeon -->
+      <a href="https://kinpagesurgeon.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-033), #2d0f17);"></div>
+          <span class="cover-category">Utility</span>
+          <span class="cover-number">KIN-033</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="16" cy="34" r="5"/>
+              <circle cx="16" cy="14" r="5"/>
+              <line x1="20" y1="31" x2="36" y2="18"/>
+              <line x1="20" y1="17" x2="36" y2="30"/>
+              <line x1="28" y1="24" x2="40" y2="24"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Page Surgeon</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Load a PDF and rearrange pages by dragging. Rotate, remove, or cherry-pick pages to export. Save all pages as a new PDF or export only the ones you need. Nothing leaves your browser.</div>
+          <div class="release-replaces">Replaces <span>online PDF tools that upload your files to a server</span></div>
+        </div>
+      </a>
+
+    </div>
+  
+
+<div class="contribute">
+  <div class="contribute-box">
+    <h3>Build with us</h3>
+    <p>Kin is a growing collective. If you've built a simple, free tool that helps people do something without asking for anything in return, we'd like to see it. No elaborate application. Just show us the thing.</p>
+    <div class="contribute-actions">
+      <a href="submit.html">Get in touch &rarr;</a>
+      <button class="contribute-suggest" onclick="openSuggest()">Suggest an app &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-left">Kin</div>
+  <div class="foot-right">Free tools, built by people, for everyone.<br>No accounts. No tracking. No subscriptions. Ever.</div>
+</footer>
+
+<div class="suggest-overlay" id="suggest-overlay" onclick="closeSuggestIfBg(event)">
+  <div class="suggest-sheet">
+    <button class="suggest-close" onclick="closeSuggest()">×</button>
+    <div class="suggest-handle"></div>
+    <h2 class="suggest-title">Suggest an app</h2>
+    <p class="suggest-sub">Got an idea for a simple, free tool that helps people without asking for anything in return? We'd love to hear it.</p>
+    <form id="suggest-form">
+      <div class="sug-row">
+        <div class="sug-field">
+          <label class="sug-label" for="sug-name">Your name</label>
+          <input class="sug-input" id="sug-name" name="name" type="text" placeholder="Alice" required>
+        </div>
+        <div class="sug-field">
+          <label class="sug-label" for="sug-email">Your email</label>
+          <input class="sug-input" id="sug-email" name="email" type="email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="sug-field">
+        <label class="sug-label" for="sug-idea">What's the idea?</label>
+        <input class="sug-input" id="sug-idea" name="app_idea" type="text" placeholder="e.g. A simple sleep tracker" required>
+      </div>
+      <div class="sug-field">
+        <label class="sug-label" for="sug-problem">What problem does it solve?</label>
+        <textarea class="sug-textarea" id="sug-problem" name="problem" placeholder="Who does it help, and what does it do for them?" required></textarea>
+      </div>
+      <button class="sug-submit" id="sug-submit-btn" type="submit">Send suggestion →</button>
+    </form>
+    <div class="sug-thanks" id="sug-thanks">
+      <h3>Thanks 🌿</h3>
+      <p>We've received your idea and will read it carefully.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openSuggest() {
+  document.getElementById('suggest-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSuggest() {
+  document.getElementById('suggest-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeSuggestIfBg(e) {
+  if (e.target === document.getElementById('suggest-overlay')) closeSuggest();
+}
+document.getElementById('suggest-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('sug-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const f = new FormData(this);
+    await fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        form_type: 'idea',
+        subject: 'Kin — App Suggestion',
+        app: 'Kin Landing',
+        description: f.get('app_idea') || '',
+        name: f.get('name') || '',
+        email: f.get('email') || '',
+        problem: f.get('problem') || ''
+      })
+    });
+  } catch(_) {}
+  document.getElementById('suggest-form').style.display = 'none';
+  document.getElementById('sug-thanks').style.display = 'block';
+  setTimeout(closeSuggest, 2800);
+});
+</script>
+
+<div id="kin-info-overlay" onclick="if(event.target===this)closeInfo()">
+  <div id="kin-info-sheet">
+    <div class="kin-is-handle"><div></div></div>
+    <div class="kin-is-head">
+      <div>
+        <p class="kin-is-title" id="kin-is-title"></p>
+        <p class="kin-is-meta" id="kin-is-meta"></p>
+      </div>
+      <button class="kin-is-close" onclick="closeInfo()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <p class="kin-is-desc" id="kin-is-desc"></p>
+    <div class="kin-is-label">Features</div>
+    <ul class="kin-is-features" id="kin-is-features"></ul>
+    <div class="kin-is-label">Data storage</div>
+    <span class="kin-is-storage" id="kin-is-storage"></span>
+  </div>
+</div>
+
+<script>
+(function() {
+  var KIN = {
+    'KIN-001': { name: 'Ukulele Tuner', cat: 'Music', desc: 'Chromatic tuner for ukulele. Listens through the device microphone and shows pitch in real time. Supports gCEA standard, aDF#B, DGBE, and fA#DG tunings. Works offline.', features: ['Real-time pitch detection via Web Audio API', 'Four tuning presets (gCEA, aDF#B, DGBE, fA#DG)', 'Visual tuning meter — flat, in tune, sharp', 'PWA with full offline support'], storage: 'Nothing stored · No accounts · No tracking' },
+    'KIN-002': { name: 'Metronome', cat: 'Music', desc: 'Simple metronome with subdivisions and tap tempo. Beat divisions, BPM input and tap-to-set. Runs entirely in the browser.', features: ['BPM control with slider and keyboard input', 'Beat subdivisions (quarter, eighth, triplet, sixteenth)', 'Tap tempo for finding the BPM of any track', 'Audio generated locally via Web Audio API'], storage: 'Nothing stored' },
+    'KIN-003': { name: 'BPM Counter', cat: 'Music', desc: 'Tap a button to the beat, get the BPM. Rolling average tap counter useful for DJs, musicians, and runners.', features: ['Tap-to-measure with rolling average', 'Instant BPM readout with confidence indicator', 'Reset with a single tap', 'Clean single-purpose interface'], storage: 'Nothing stored' },
+    'KIN-004': { name: 'Colour Picker', cat: 'Design', desc: 'Pick colours visually or paste hex/rgb values. Copy to clipboard. Generate simple palettes from any starting colour. Colour blindness simulation modes.', features: ['Visual colour picker canvas', 'Hex / RGB / HSL input and conversion', 'Palette generation from any base colour', 'Colour blindness simulation (8 modes)', 'Copy any value to clipboard in one tap'], storage: 'Nothing stored' },
+    'KIN-005': { name: 'QR Builder', cat: 'Utility', desc: 'Paste a URL, email, Wi-Fi credentials, phone number, contact, or plain text and get a QR code instantly. Download as PNG or SVG.', features: ['Multiple input types: URL, email, Wi-Fi, phone, vCard, text', 'Instant QR generation in the browser', 'Download as PNG or SVG', 'Nothing sent anywhere'], storage: 'Nothing stored' },
+    'KIN-006': { name: 'Classroom Timer', cat: 'Education', desc: 'Full-screen countdown timer for classrooms. Phases shift green to amber to red as time runs down. Preset durations or set your own. Chime at the end.', features: ['Colour-phased countdown (green → amber → red)', 'Preset durations or custom time input', 'Audible chime at zero', 'Full-screen display, works on projectors'], storage: 'Nothing stored' },
+    'KIN-007': { name: 'Ambient Mixer', cat: 'Wellbeing', desc: 'White noise, pink noise, rain, wind, waves, and fire layered and mixed in the browser. Sleep timer, presets, and shareable mix codes. All audio generated locally.', features: ['Six sound layers with individual volume controls', 'Sleep timer (auto-fade to silence)', 'Preset mixes for focus, sleep, rain walks', 'Shareable mix codes via URL', 'All audio synthesised via Web Audio API — no files downloaded'], storage: 'Nothing stored' },
+    'KIN-008': { name: 'Flashcards', cat: 'Education', desc: 'Create decks, flip cards, track what you know. Data saved in the browser. Nothing leaves the device.', features: ['Create and manage multiple decks', 'Flip animation for question/answer reveal', 'Mark cards as known or still learning', 'Progress tracking across sessions'], storage: 'localStorage — stays on your device' },
+    'KIN-009': { name: 'Jet Lag Planner', cat: 'Travel', desc: 'Enter a flight, get a circadian reset plan. Light timing, sleep schedule, fatigue windows, and a daily adjustment guide. Works offline.', features: ['Flight input with timezone auto-detection', 'Circadian reset schedule day by day', 'Light exposure timing recommendations', 'Fatigue window warnings', 'Daily adjustment guide'], storage: 'Nothing stored' },
+    'KIN-010': { name: 'Audio Calculators', cat: 'Music / Developer', desc: '18 calculators for music producers and sound engineers. BPM to delay time, note to frequency, sample rate, latency, room modes, file size, and more.', features: ['BPM to delay time (all note divisions)', 'Note to frequency and back', 'Sample rate and bit-depth converter', 'Latency and buffer size calculator', 'Room mode calculator', 'Audio file size estimator', '18 calculators in total'], storage: 'Nothing stored' },
+    'KIN-011': { name: 'Unit Price Calculator', cat: 'Utility', desc: 'Find the real cost per unit of any product. Compare pack sizes instantly. Pack size parser, best-value badge, reverse mode.', features: ['Multi-item comparison (add as many as you like)', 'Pack size parsing from natural text', 'Best-value badge highlighted automatically', 'Reverse mode: target price from unit cost'], storage: 'Nothing stored' },
+    'KIN-012': { name: 'Name Picker', cat: 'Utility', desc: 'Paste a list of names, pick one at random. Shuffle animation, history log, remove-after-pick option. Great for classrooms, standups, and giveaways.', features: ['Random selection with shuffle animation', 'Pick history log', 'Remove-after-pick toggle', 'Paste a list directly — one name per line'], storage: 'Nothing stored' },
+    'KIN-013': { name: 'Mood Slider', cat: 'Wellbeing', desc: 'Slide a scale from -5 to +5 to log how you\'re really feeling. Optional note, 7-day history, colour-coded by mood. Private, offline, no account needed.', features: ['Bipolar mood scale (−5 to +5)', 'Optional text note with each entry', '7-day colour-coded history view', 'Fully offline'], storage: 'localStorage — stays on your device' },
+    'KIN-014': { name: 'Breathing Exercise', cat: 'Wellbeing', desc: 'Guided breathing patterns: Box Breathing, 4-7-8, ADHD Reset, Sleep Wind-Down. Expanding circle or ring guide, voice prompts, ambient gradient, daily streak. Stillness Score uses the device accelerometer to track how much the phone moves during a session. Less movement equals a higher score, giving genuine feedback on physical calm. Displayed as a subtle bar that fills during the session and logged alongside the streak.', features: ['Four breathing patterns', 'Visual guide (circle or ring)', 'Voice prompts', 'Ambient gradient background', 'Daily streak tracker', 'Stillness Score via accelerometer — less movement, higher score', 'Per-session stillness logged to history'], storage: 'localStorage (streak, theme, stillness history)' },
+    'KIN-015': { name: 'Quiet Cycle', cat: 'Wellbeing / Private', desc: 'Period tracker and cycle predictor. Calendar view with period, predicted, and fertile day highlights. Fertility window toggle, PIN lock, panic delete, and export.', features: ['Calendar view with colour-coded day types', 'Cycle length prediction', 'Fertility window toggle', 'PIN lock (hash-stored, not plain text)', 'Panic delete: 5 taps on the header wipes all data', 'Export to file', 'Timezone-safe date handling'], storage: 'localStorage — PIN hashed, never plain text' },
+    'KIN-016': { name: 'Recipe Scaler', cat: 'Utility', desc: 'Scale any recipe to any number of servings. Paste ingredients, choose original and target servings, get adjusted quantities. Fraction-aware, per-ingredient lock, auto unit conversion.', features: ['Fraction-aware parsing (unicode and ASCII fractions)', 'Per-ingredient lock to keep quantities fixed', 'Auto unit conversion (tsp to tbsp, g to kg, etc.)', 'Combine duplicate ingredients toggle', 'Quick 2× / 3× / ½× buttons', 'Copy scaled recipe to clipboard'], storage: 'localStorage (preferences only)' },
+    'KIN-017': { name: 'Decision Flip', cat: 'Utility', desc: 'Minimal decision-paralysis breaker. Paste a list of options, hit Decide, get a randomly selected result. Shuffle animation, multi-pick mode, remove-after-flip toggle.', features: ['Random selection with slot-machine animation', 'Multi-pick mode (select N unique results)', 'Remove-after-flip toggle', 'Keyboard shortcut: Ctrl/Cmd+Enter'], storage: 'Nothing stored' },
+    'KIN-018': { name: 'Kin Nest', cat: 'Parenting / Wellbeing', desc: 'Baby routine tracker for exhausted parents. One-tap logging for feeds, sleep, and nappies. Dashboard with last feed, awake time, nap prediction, and fussiness risk.', features: ['Feed logging (breast, bottle, pumped, formula, solids)', 'Sleep timer with wake window calculator', 'Nappy tracking (wet, dirty, both)', 'Age-adjusted nap predictor', 'Meltdown risk score', 'Growth log', 'Auto night mode (20:00–06:00)', 'JSON export and import'], storage: 'localStorage — stays on your device' },
+    'KIN-019': { name: 'Markdown Download', cat: 'Utility', desc: 'Write or paste text and download it as a .md file. Name the file, see live word and character counts, copy to clipboard. Works offline.', features: ['Markdown text editor', 'Custom filename input', 'Live word and character count', 'Download as .md via Blob URL', 'Copy to clipboard', 'Tab key inserts two spaces'], storage: 'Nothing stored' },
+    'KIN-020': { name: 'Password Generator', cat: 'Utility', desc: 'Fast, private password generator. Password mode with length slider, character toggles, pronounceable mode. Passphrase mode with ~900-word wordlist. Entropy and time-to-crack display.', features: ['Password mode (length 8–128, character sets, pronounceable)', 'Passphrase mode (~900-word wordlist, 3–8 words, custom separator)', 'Entropy and estimated time-to-crack display', 'Batch generation up to 20 at once', 'Space to regenerate, Cmd+Enter to copy', 'crypto.getRandomValues() — cryptographically random'], storage: 'Nothing stored (session history only, clears on close)' },
+    'KIN-021': { name: 'Text Counter', cat: 'Utility', desc: 'Paste any text and get a full statistical breakdown. Word, character, sentence, and paragraph counts. Reading and speaking time. Flesch-Kincaid readability. Platform character limits.', features: ['Words, characters (with/without spaces), sentences, paragraphs', 'Reading time (238 wpm) and speaking time (130 wpm)', 'Flesch-Kincaid Grade Level and Reading Ease score', 'Platform limit bars: X/280, Instagram/2200, LinkedIn/3000, SMS/160', 'Top 10 keyword density (stopword-filtered)', 'Selection stats — count just a highlighted passage'], storage: 'Nothing stored' },
+    'KIN-022': { name: 'Fair Share', cat: 'Utility', desc: 'Privacy-first shared expense splitter. Create groups with named participants. Log expenses with split methods. Greedy debt-simplification for minimum settlement payments.', features: ['Multiple groups with named participants and currency', 'Four split methods: equal, unequal, percentage, shares', 'Greedy debt-simplification (minimum transactions)', 'Export as .fairshare.json, import and merge', 'Tip calculator with preset chips', 'Three-mode percentage calculator'], storage: 'IndexedDB (localStorage fallback) — stays on your device' },
+    'KIN-023': { name: 'JSON', cat: 'Developer', desc: 'Paste JSON, get it formatted, validated and colour-highlighted. Browse the structure as a tree, compare two payloads, or query values by path. Nothing leaves your browser.', features: ['Format and validate JSON instantly', 'Colour-highlighted syntax view', 'Collapsible tree browser', 'Two-payload diff / compare mode', 'Path query (dot notation)', 'Copy formatted output to clipboard'], storage: 'Nothing stored' },
+    'KIN-024': { name: 'Thought Loop', cat: 'Wellbeing', desc: 'Write down a thought that won\'t leave you alone. Answer three questions. Get a verdict: Act, Schedule, Let it go, or Not Yours. History shows what you keep coming back to.', features: ['Guided three-question framework', 'Verdict: Act · Schedule · Let it go · Not Yours', 'Entry history with date and verdict', 'Highlights recurring thoughts over time'], storage: 'localStorage — stays on your device' },
+    'KIN-025': { name: 'Stretch', cat: 'Wellbeing', desc: 'Pick a routine — morning, desk break, post-run, bedtime, or chair-based. Set your hold time. Audio cues move you through it, and every stretch has an easier version if you need it.', features: ['Five routines (morning, desk, post-run, bedtime, chair)', 'Adjustable hold time per stretch', 'Audio cues to advance automatically', 'Easier version available for every stretch', 'Works offline'], storage: 'Nothing stored' },
+    'KIN-026': { name: 'Kin Ground', cat: 'Finance', desc: 'Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what\'s draining you, and see your money clearly. No account, no bank connection.', features: ['Monthly fixed cost tracker by category', 'Subscription log with renewal dates', 'Savings buffer calculator', 'True monthly baseline figure', 'Demo mode to explore before entering real data'], storage: 'localStorage — stays on your device' },
+    'KIN-027': { name: 'Kin Gym', cat: 'Fitness', desc: 'Track sets, reps, and weight across any exercise. Built-in rest timer and interval trainer start automatically when you log a set. Your log builds as you train. Everything stored locally.', features: ['Exercise log with sets, reps, and weight', 'Automatic rest timer when a set is logged', 'Interval trainer for circuit and HIIT work', 'Routine builder for saving workouts', 'Demo mode with sample data', 'Works fully offline'], storage: 'localStorage — stays on your device' },
+    'KIN-028': { name: 'Scan', cat: 'Utility', desc: 'Scan documents and photos to PDF using your camera or image library. Adjust brightness, contrast, and black-and-white per page. Crop with drag handles, rotate, reorder pages by dragging. Export a clean multi-page PDF — no account, no upload, nothing stored anywhere.', features: ['Camera capture with front/back switch', 'Import images from library (multi-select)', 'Brightness and contrast sliders per page', 'Black-and-white filter', 'Crop with corner drag handles', 'Rotate page', 'Drag to reorder pages', 'Export to A4, US Letter, or fit-to-image PDF'], storage: 'Nothing stored — all processing is in-memory' },
+    'KIN-029': { name: 'Nudge', cat: 'Wellbeing', desc: 'A small push when you\'re stuck. Filter activities by energy level, time, and type. Thumbs up what helps — the shuffle learns. No streaks, no scores, no guilt. Everything stays on your device.', features: ['Energy filter: couch-locked, restless, or stuck', 'Time filter: 1–2 min, 5–10 min, 20+ min', 'Type filter: body, brain, sensory, social, creative', 'Emergency mode picks one and starts a timer', 'Vote-weighted shuffle learns your preferences', 'Three-use daily cooldown prevents overuse', 'Edit full menu in plain text', 'Demo mode with sample data'], storage: 'localStorage — stays on your device' },
+    'KIN-030': { name: 'Quote', cat: 'Business', desc: 'Generate quotes with flexible line items and export to Invoice. Set your prefix, auto-increment numbering, save defaults for repeat use. Clipboard export carries the full document to KIN-031.', features: ['Flexible line items with qty and rate', 'Custom prefix + auto-increment numbering', 'Save defaults: from, currency, tax, payment', 'International payment fields (IBAN, Wise, PayPal)', 'Tax / VAT calculation', 'Quote valid until date', 'Save as PDF via print', 'Clipboard export to KIN-031 Invoice', 'Demo mode with sample data'], storage: 'localStorage — defaults and sequence only' },
+    'KIN-031': { name: 'Invoice', cat: 'Business', desc: 'Turn quotes into invoices and track payment. Import from KIN-030 Quote, mark paid or partial, export to KIN-032 Receipt. Nothing leaves your device.', features: ['Import from KIN-030 Quote via clipboard', 'Mark as paid, partially paid, or outstanding', 'Payment tracking with date recorded', 'Export to KIN-032 Receipt', 'Save as PDF via print', 'Demo mode with sample data'], storage: 'localStorage — invoice data stays on your device' },
+    'KIN-032': { name: 'Receipt', cat: 'Business', desc: 'Confirm payment with a clean receipt. Import from KIN-031 Invoice, traces the full chain back to the original quote. Nothing leaves your device.', features: ['Import from KIN-031 Invoice via clipboard', 'Full chain traceability: quote → invoice → receipt', 'Payment confirmation details', 'Save as PDF via print', 'Demo mode with sample data'], storage: 'localStorage — receipt data stays on your device' },
+    'KIN-033': { name: 'Page Surgeon', cat: 'Utility', desc: 'Load a PDF and rearrange pages by dragging. Rotate, remove, or cherry-pick pages to export. Save all pages as a new PDF or export only the ones you need. Nothing leaves your browser.', features: ['Drag to reorder pages', 'Rotate pages', 'Remove individual pages', 'Select and export specific pages only', 'Save all pages as new PDF', 'Small / Medium / Large zoom levels', 'Check all / Uncheck all'], storage: 'Nothing stored — all processing is in-memory' }
+    };
+
+  function openInfo(kinNum) {
+    var d = KIN[kinNum];
+    if (!d) return;
+    document.getElementById('kin-is-title').textContent = d.name;
+    document.getElementById('kin-is-meta').textContent = kinNum + ' · ' + d.cat;
+    document.getElementById('kin-is-desc').textContent = d.desc;
+    var ul = document.getElementById('kin-is-features');
+    ul.innerHTML = '';
+    d.features.forEach(function(f) {
+      var li = document.createElement('li');
+      li.textContent = f;
+      ul.appendChild(li);
+    });
+    document.getElementById('kin-is-storage').textContent = d.storage;
+    document.getElementById('kin-info-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  window.closeInfo = function() {
+    document.getElementById('kin-info-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('.release').forEach(function(card) {
+    var numEl = card.querySelector('.cover-number');
+    if (!numEl) return;
+    var kinNum = numEl.textContent.trim();
+    if (!KIN[kinNum]) return;
+    var infoEl = card.querySelector('.release-info');
+    if (!infoEl) return;
+    var btn = document.createElement('button');
+    btn.className = 'kin-info-btn';
+    btn.setAttribute('aria-label', 'About ' + KIN[kinNum].name);
+    btn.textContent = 'i';
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openInfo(kinNum);
+    });
+    infoEl.appendChild(btn);
+  });
+})();
+</script>
+
+
+<script>
+/* PWA: inline manifest + service worker */
+(function(){
+  var m={
+    name:"Kin — Everyday tools. No strings.",
+    short_name:"KIN",
+    start_url:".",
+    display:"standalone",
+    background_color:"#1a1a18",
+    theme_color:"#1a1a18",
+    icons:[
+      {src:"data:image/svg+xml,%3Csvg%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22108%22%20fill%3D%22%231a1a18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22162%22%20fill%3D%22none%22%20stroke%3D%22%23F0EDE6%22%20stroke-width%3D%222%22%20opacity%3D%220.08%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%23F0EDE6%22%20stroke-width%3D%223%22%20opacity%3D%220.16%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22146%22%20r%3D%2215%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.70%22%2F%3E%20%3Ccircle%20cx%3D%22354%22%20cy%3D%22190%22%20r%3D%2212%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.55%22%2F%3E%20%3Ccircle%20cx%3D%22352%22%20cy%3D%22308%22%20r%3D%2214%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.58%22%2F%3E%20%3Ccircle%20cx%3D%22178%22%20cy%3D%22326%22%20r%3D%2212%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.52%22%2F%3E%20%3Ccircle%20cx%3D%22154%22%20cy%3D%22196%22%20r%3D%2213%22%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.65%22%2F%3E%20%20%3Ccircle%20cx%3D%22262%22%20cy%3D%2294%22%20%20r%3D%229%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.22%22%2F%3E%20%3Ccircle%20cx%3D%22398%22%20cy%3D%22148%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22412%22%20cy%3D%22332%22%20r%3D%229%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.20%22%2F%3E%20%3Ccircle%20cx%3D%22254%22%20cy%3D%22416%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22112%22%20cy%3D%22330%22%20r%3D%228%22%20%20%20fill%3D%22%23F0EDE6%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2236%22%20%20fill%3D%22%23F0EDE6%22%2F%3E%20%3C%2Fsvg%3E",sizes:"512x512",type:"image/svg+xml"},
+      {src:"data:image/svg+xml,%3Csvg%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%20%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22108%22%20fill%3D%22%23F0EDE6%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22162%22%20fill%3D%22none%22%20stroke%3D%22%232C2C2A%22%20stroke-width%3D%222%22%20opacity%3D%220.09%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22110%22%20fill%3D%22none%22%20stroke%3D%22%232C2C2A%22%20stroke-width%3D%223%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22146%22%20r%3D%2215%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.65%22%2F%3E%20%3Ccircle%20cx%3D%22354%22%20cy%3D%22190%22%20r%3D%2212%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.52%22%2F%3E%20%3Ccircle%20cx%3D%22352%22%20cy%3D%22308%22%20r%3D%2214%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.55%22%2F%3E%20%3Ccircle%20cx%3D%22178%22%20cy%3D%22326%22%20r%3D%2212%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.50%22%2F%3E%20%3Ccircle%20cx%3D%22154%22%20cy%3D%22196%22%20r%3D%2213%22%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.60%22%2F%3E%20%20%3Ccircle%20cx%3D%22262%22%20cy%3D%2294%22%20%20r%3D%229%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.22%22%2F%3E%20%3Ccircle%20cx%3D%22398%22%20cy%3D%22148%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22412%22%20cy%3D%22332%22%20r%3D%229%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.20%22%2F%3E%20%3Ccircle%20cx%3D%22254%22%20cy%3D%22416%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%3Ccircle%20cx%3D%22112%22%20cy%3D%22330%22%20r%3D%228%22%20%20%20fill%3D%22%232C2C2A%22%20opacity%3D%220.18%22%2F%3E%20%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%2236%22%20%20fill%3D%22%232C2C2A%22%2F%3E%20%3C%2Fsvg%3E",sizes:"512x512",type:"image/svg+xml"}
+    ]
+  };
+  var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+  var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+})();
+if("serviceWorker"in navigator){
+  var _sw="const C='kin-landing-v2';"+
+    "self.addEventListener('install',function(){self.skipWaiting();});"+
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
+}
+</script>
+<script>
+  (function() {
+    var cards = document.querySelectorAll('.release[data-category]');
+    var seen = {};
+    var order = ['Wellbeing','Utility','Music','Health','Design','Developer','Education','Learning','Shopping','Travel','Business'];
+    cards.forEach(function(c) { seen[c.dataset.category] = true; });
+    var bar = document.getElementById('filter-bar');
+    order.forEach(function(cat) {
+      if (!seen[cat]) return;
+      var btn = document.createElement('button');
+      btn.className = 'filter-pill';
+      btn.dataset.filter = cat;
+      btn.textContent = cat;
+      btn.onclick = function() { filterCatalog(cat); };
+      bar.appendChild(btn);
+    });
+  })();
+  function filterCatalog(cat) {
+    document.querySelectorAll('.filter-pill').forEach(function(p) {
+      p.classList.toggle('active', p.dataset.filter === cat);
+    });
+    document.querySelectorAll('.release').forEach(function(c) {
+      if (cat === 'all') { c.style.display = ''; }
+      else { c.style.display = (c.dataset.category === cat) ? '' : 'none'; }
+    });
+  }
+  </script>
+</body>
+</html>
