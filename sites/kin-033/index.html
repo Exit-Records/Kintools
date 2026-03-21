@@ -702,6 +702,8 @@ color: #e8e8e0 !important;
 
 <div class="toolbar">
   <span class="file-info" id="file-info"></span>
+  <button class="btn" onclick="selectAll()">Check all</button>
+  <button class="btn" onclick="selectNone()">Uncheck all</button>
   <button class="btn btn-danger" onclick="loadNew()">New PDF</button>
 </div>
 
@@ -731,8 +733,8 @@ color: #e8e8e0 !important;
 <div id="page-grid" class="page-grid zoom-md"></div>
 
 <div class="export-row">
-  <button class="btn btn-primary" id="export-btn" onclick="exportPdf('selected')">Export selected</button>
-  <button class="btn" onclick="exportPdf('all')">Export all</button>
+  <button class="btn btn-primary" id="save-btn" onclick="exportPdf('all')">Save as new PDF</button>
+  <button class="btn" id="export-btn" onclick="exportPdf('selected')">Export checked only</button>
   <button class="btn" onclick="exportPdf('split')">Split to separate PDFs</button>
   <button class="btn" onclick="resetOrder()">Reset order</button>
 </div>
@@ -1127,9 +1129,12 @@ function updateSelectionBar() {
   bar.style.display = '';
   document.getElementById('sel-count').textContent = selCount;
   document.getElementById('sel-total').textContent = pages.length;
-  var btn = document.getElementById('export-btn');
-  btn.textContent = 'Export ' + selCount + ' selected';
-  btn.disabled = selCount === 0;
+  var expBtn = document.getElementById('export-btn');
+  expBtn.textContent = 'Export ' + selCount + ' checked only';
+  expBtn.disabled = selCount === 0;
+  var saveBtn = document.getElementById('save-btn');
+  saveBtn.textContent = 'Save as new PDF (' + pages.length + ' pages)';
+  saveBtn.disabled = pages.length === 0;
 }
 
 window.selectAll = function() { saveState('select all'); pages.forEach(function(p) { p.selected = true; }); rebuildGrid(); };
