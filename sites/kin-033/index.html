@@ -134,6 +134,19 @@ body.dark .icon-btn { border-color: #333330 !important; color: #e8e8e0 !importan
 .icon-btn:hover { border-color: var(--accent); }
 body.dark .icon-btn:hover { border-color: #e8e8e0 !important; }
 
+.zoom-label-btn {
+width: auto;
+padding: 0 12px;
+gap: 5px;
+font-size: 14px;
+}
+
+.zoom-lbl {
+font-family: 'DM Sans', sans-serif;
+font-size: 12px;
+font-weight: 500;
+}
+
 .upload-zone {
 border: 2px dashed var(--border);
 border-radius: 12px;
@@ -679,8 +692,8 @@ color: #e8e8e0 !important;
       <p>Split, reorder, rotate, and export PDF pages</p>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="zoom-btn" onclick="cycleZoom()" title="Toggle thumbnail size">
-        <span id="zoom-icon">◫</span>
+      <button class="icon-btn zoom-label-btn" id="zoom-btn" onclick="cycleZoom()" title="Toggle thumbnail size">
+        <span id="zoom-icon">S</span><span id="zoom-label" class="zoom-lbl">Small</span>
       </button>
       <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme">
         <span id="theme-icon">☾</span>
@@ -730,7 +743,7 @@ color: #e8e8e0 !important;
   <button class="btn btn-sm btn-danger" onclick="removeSelected()">Remove</button>
 </div>
 
-<div id="page-grid" class="page-grid zoom-md"></div>
+<div id="page-grid" class="page-grid zoom-sm"></div>
 
 <div class="export-row">
   <button class="btn btn-primary" id="save-btn" onclick="exportPdf('all')">Save as new PDF</button>
@@ -825,14 +838,18 @@ function kinConfirm(msg) {
 }
 
 var ZOOM_LEVELS = ['zoom-sm', 'zoom-md', 'zoom-lg'];
-var ZOOM_ICONS = ['▫', '◫', '▣'];
-var zoomIdx = 1;
+var ZOOM_LABELS = ['Small', 'Medium', 'Large'];
+var ZOOM_LETTERS = ['S', 'M', 'L'];
+var ZOOM_RENDER_SIZE = [160, 240, 400];
+var zoomIdx = 0;
 window.cycleZoom = function() {
   zoomIdx = (zoomIdx + 1) % ZOOM_LEVELS.length;
   var grid = document.getElementById('page-grid');
   ZOOM_LEVELS.forEach(function(z) { grid.classList.remove(z); });
   grid.classList.add(ZOOM_LEVELS[zoomIdx]);
-  document.getElementById('zoom-icon').textContent = ZOOM_ICONS[zoomIdx];
+  document.getElementById('zoom-icon').textContent = ZOOM_LETTERS[zoomIdx];
+  document.getElementById('zoom-label').textContent = ZOOM_LABELS[zoomIdx];
+  rebuildGrid();
 };
 
 var pdfBytes = null;
@@ -982,7 +999,8 @@ async function processQueue() {
   try {
     var page = await pdfDoc.getPage(job.origIndex + 1);
     var baseVp = page.getViewport({ scale: 1 });
-    var scale = 240 / Math.max(baseVp.width, baseVp.height);
+    var renderSize = ZOOM_RENDER_SIZE[zoomIdx] * (window.devicePixelRatio || 1);
+    var scale = renderSize / Math.max(baseVp.width, baseVp.height);
     var viewport = page.getViewport({ scale: scale, rotation: job.rotation });
     job.canvas.width = viewport.width;
     job.canvas.height = viewport.height;
