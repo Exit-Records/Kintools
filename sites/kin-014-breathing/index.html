@@ -56,6 +56,23 @@ body {
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s, border-color 0.2s;
 }
+#wakeBtn {
+  position: fixed;
+  top: 14px; right: 58px;
+  z-index: 999;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+#wakeBtn.active { background: rgba(255,200,0,0.2) !important; }
+html.dark #wakeBtn.active { background: rgba(255,200,0,0.15) !important; }
+#kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}
 
 .wrap {
   width: 100%;
@@ -464,6 +481,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </head>
 <body>
 
+<button id="wakeBtn" onclick="toggleWake()" aria-label="Keep screen on" title="Keep screen on">💡</button>
 <button id="toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">🌙</button>
 
 <div class="wrap">
@@ -1263,6 +1281,43 @@ if("serviceWorker"in navigator){
 }
 </script>
 
+<div id="kin-toast"></div>
+<script>
+// === Toast (standard §16.2) ===
+function showToast(m) {
+  var t = document.getElementById('kin-toast');
+  t.textContent = m;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
+}
+// === Wake Lock (standard §17) ===
+var wakeLock = null;
+var wakeBtn = document.getElementById('wakeBtn');
+async function toggleWake() {
+  if (wakeLock) {
+    wakeLock.release();
+    wakeLock = null;
+    wakeBtn.classList.remove('active');
+    wakeBtn.textContent = '💡';
+    showToast('Screen can now sleep');
+    return;
+  }
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeBtn.classList.add('active');
+    wakeBtn.textContent = '🔆';
+    showToast('Screen will stay awake');
+    wakeLock.addEventListener('release', function() {
+      wakeLock = null;
+      wakeBtn.classList.remove('active');
+      wakeBtn.textContent = '💡';
+    });
+  } catch(e) {
+    showToast('Wake lock not supported');
+  }
+}
+</script>
 <script>
 function kinToggleStorageInfo(e) {
   e.stopPropagation();
