@@ -56,6 +56,7 @@
     --hb-031: #1a56db;
     --hb-032: #117a55;
     --hb-033: #5a1e2e;
+    --hb-034: #1a472a;
   }
 
   body {
@@ -502,6 +503,7 @@
   .release:nth-child(31) { animation-delay: 1.70s; }
   .release:nth-child(32) { animation-delay: 1.75s; }
   .release:nth-child(33) { animation-delay: 1.80s; }
+  .release:nth-child(34) { animation-delay: 1.85s; }
 
   /* ---- RESPONSIVE ---- */
   .demo-pill {
@@ -648,7 +650,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">30 tools</span>
+  <span class="catalog-count">31 tools</span>
 </div>
 
 <div id="filter-bar" class="filter-bar">
@@ -1401,6 +1403,34 @@
         </div>
       </a>
 
+      <!-- KIN-034: Noise Meter -->
+      <a href="https://kinnoisemeter.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Education">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-034), #0a2414);"></div>
+          <span class="cover-category">Education</span>
+          <span class="cover-number">KIN-034</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="24" x2="8" y2="24"/>
+              <line x1="10" y1="18" x2="10" y2="30"/>
+              <line x1="16" y1="12" x2="16" y2="36"/>
+              <line x1="22" y1="8" x2="22" y2="40"/>
+              <line x1="28" y1="14" x2="28" y2="34"/>
+              <line x1="34" y1="19" x2="34" y2="29"/>
+              <line x1="40" y1="22" x2="40" y2="26"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Noise Meter</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Liam</div>
+          <div class="release-desc">See when a room gets too loud. Green, yellow, red colour metering with adjustable sensitivity and screen wake lock. Built for classrooms — put a tablet at the front of the room and let the colour bar do the talking.</div>
+          <div class="release-replaces">Replaces <span>expensive classroom sound meters and subscription noise apps</span></div>
+        </div>
+      </a>
+
       <!-- KIN-033: Page Surgeon -->
       <a href="https://kinpagesurgeon.netlify.app/" target="_blank" rel="noopener" class="release" data-category="Utility">
         <div class="release-cover">
@@ -1574,7 +1604,8 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
     'KIN-030': { name: 'Quote', cat: 'Business', desc: 'Generate quotes with flexible line items and export to Invoice. Set your prefix, auto-increment numbering, save defaults for repeat use. Clipboard export carries the full document to KIN-031.', features: ['Flexible line items with qty and rate', 'Custom prefix + auto-increment numbering', 'Save defaults: from, currency, tax, payment', 'International payment fields (IBAN, Wise, PayPal)', 'Tax / VAT calculation', 'Quote valid until date', 'Save as PDF via print', 'Clipboard export to KIN-031 Invoice', 'Demo mode with sample data'], storage: 'localStorage — defaults and sequence only' },
     'KIN-031': { name: 'Invoice', cat: 'Business', desc: 'Turn quotes into invoices and track payment. Import from KIN-030 Quote, mark paid or partial, export to KIN-032 Receipt. Nothing leaves your device.', features: ['Import from KIN-030 Quote via clipboard', 'Mark as paid, partially paid, or outstanding', 'Payment tracking with date recorded', 'Export to KIN-032 Receipt', 'Save as PDF via print', 'Demo mode with sample data'], storage: 'localStorage — invoice data stays on your device' },
     'KIN-032': { name: 'Receipt', cat: 'Business', desc: 'Confirm payment with a clean receipt. Import from KIN-031 Invoice, traces the full chain back to the original quote. Nothing leaves your device.', features: ['Import from KIN-031 Invoice via clipboard', 'Full chain traceability: quote → invoice → receipt', 'Payment confirmation details', 'Save as PDF via print', 'Demo mode with sample data'], storage: 'localStorage — receipt data stays on your device' },
-    'KIN-033': { name: 'Page Surgeon', cat: 'Utility', desc: 'Load a PDF and rearrange pages by dragging. Rotate, remove, or cherry-pick pages to export. Save all pages as a new PDF or export only the ones you need. Nothing leaves your browser.', features: ['Drag to reorder pages', 'Rotate pages', 'Remove individual pages', 'Select and export specific pages only', 'Save all pages as new PDF', 'Small / Medium / Large zoom levels', 'Check all / Uncheck all'], storage: 'Nothing stored — all processing is in-memory' }
+    'KIN-033': { name: 'Page Surgeon', cat: 'Utility', desc: 'Load a PDF and rearrange pages by dragging. Rotate, remove, or cherry-pick pages to export. Save all pages as a new PDF or export only the ones you need. Nothing leaves your browser.', features: ['Drag to reorder pages', 'Rotate pages', 'Remove individual pages', 'Select and export specific pages only', 'Save all pages as new PDF', 'Small / Medium / Large zoom levels', 'Check all / Uncheck all'], storage: 'Nothing stored — all processing is in-memory' },
+    'KIN-034': { name: 'Noise Meter', cat: 'Education', desc: 'See when a room gets too loud. Green, yellow, red colour metering with adjustable sensitivity and screen wake lock. Built for classrooms — put a tablet at the front and let the colour bar do the talking.', features: ['Green / yellow / red zone metering', 'Large status word as primary visual', 'Adjustable sensitivity slider', 'Screen Wake Lock keeps display on while listening', 'Re-acquires wake lock on tab visibility change', 'PWA — install for offline use'], storage: 'Nothing stored — all processing is in-memory' }
     };
 
   function openInfo(kinNum) {
