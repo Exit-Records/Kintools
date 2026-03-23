@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#f7f7f5" id="meta-theme">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" id="apple-touch-icon">
 <title>KIN-026 — Kin Ground — Kin</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -353,6 +354,27 @@ if('serviceWorker' in navigator){
 }
 
 })();
+
+(function(){try{
+  var sz=180,c=document.createElement('canvas');c.width=c.height=sz;
+  var ctx=c.getContext('2d');
+  var r=sz*0.2;
+  ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.quadraticCurveTo(sz,0,sz,r);
+  ctx.lineTo(sz,sz-r);ctx.quadraticCurveTo(sz,sz,sz-r,sz);
+  ctx.lineTo(r,sz);ctx.quadraticCurveTo(0,sz,0,sz-r);
+  ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+  var g=ctx.createLinearGradient(0,0,sz,sz);g.addColorStop(0,'#201a12');g.addColorStop(1,'#100d08');
+  ctx.fillStyle=g;ctx.fill();
+  ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineCap='round';
+  ctx.lineWidth=sz*0.033;
+  ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.28);ctx.lineTo(sz*0.5,sz*0.54);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(sz*0.38,sz*0.57);ctx.lineTo(sz*0.62,sz*0.57);ctx.stroke();
+  ctx.lineWidth=sz*0.028;
+  ctx.beginPath();ctx.moveTo(sz*0.43,sz*0.66);ctx.lineTo(sz*0.57,sz*0.66);ctx.stroke();
+  ctx.lineWidth=sz*0.022;
+  ctx.beginPath();ctx.moveTo(sz*0.46,sz*0.74);ctx.lineTo(sz*0.54,sz*0.74);ctx.stroke();
+  var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');
+}catch(e){}})();
 </script>
 
 

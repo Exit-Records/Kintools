@@ -362,8 +362,8 @@
         c.width = c.height = sz;
         var ctx = c.getContext('2d');
         var g = ctx.createLinearGradient(0, 0, sz, sz);
-        g.addColorStop(0, '#2D5A3D');
-        g.addColorStop(1, '#1a3628');
+        g.addColorStop(0, '#202028');
+        g.addColorStop(1, '#0e0e14');
         ctx.fillStyle = g;
         var r = sz * 0.18;
         ctx.beginPath();
@@ -377,11 +377,12 @@
         ctx.quadraticCurveTo(0, 0, r, 0);
         ctx.closePath();
         ctx.fill();
-        ctx.fillStyle = '#f0efe8';
-        ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('MD', sz / 2, sz * 0.52);
+        ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineWidth=sz*0.028;ctx.lineJoin='round';ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(sz*0.345,sz*0.21);ctx.lineTo(sz*0.58,sz*0.21);ctx.lineTo(sz*0.69,sz*0.32);ctx.lineTo(sz*0.69,sz*0.68);ctx.lineTo(sz*0.345,sz*0.68);ctx.closePath();ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.58,sz*0.21);ctx.lineTo(sz*0.58,sz*0.32);ctx.lineTo(sz*0.69,sz*0.32);ctx.stroke();
+        ctx.lineWidth=sz*0.039;
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.37);ctx.lineTo(sz*0.5,sz*0.58);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.385,sz*0.515);ctx.lineTo(sz*0.5,sz*0.635);ctx.lineTo(sz*0.615,sz*0.515);ctx.stroke();
         var el = document.getElementById('apple-touch-icon');
         if (el) el.href = c.toDataURL('image/png');
       } catch (e) {}
@@ -395,8 +396,8 @@
           c.width = c.height = sz;
           var ctx = c.getContext('2d');
           var g = ctx.createLinearGradient(0, 0, sz, sz);
-          g.addColorStop(0, '#2D5A3D');
-          g.addColorStop(1, '#1a3628');
+          g.addColorStop(0, '#202028');
+          g.addColorStop(1, '#0e0e14');
           ctx.fillStyle = g;
           var r = sz * 0.18;
           ctx.beginPath();
@@ -410,11 +411,12 @@
           ctx.quadraticCurveTo(0, 0, r, 0);
           ctx.closePath();
           ctx.fill();
-          ctx.fillStyle = '#f0efe8';
-          ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('MD', sz / 2, sz * 0.52);
+          ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineWidth=sz*0.028;ctx.lineJoin='round';ctx.lineCap='round';
+          ctx.beginPath();ctx.moveTo(sz*0.345,sz*0.21);ctx.lineTo(sz*0.58,sz*0.21);ctx.lineTo(sz*0.69,sz*0.32);ctx.lineTo(sz*0.69,sz*0.68);ctx.lineTo(sz*0.345,sz*0.68);ctx.closePath();ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.58,sz*0.21);ctx.lineTo(sz*0.58,sz*0.32);ctx.lineTo(sz*0.69,sz*0.32);ctx.stroke();
+          ctx.lineWidth=sz*0.039;
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.37);ctx.lineTo(sz*0.5,sz*0.58);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.385,sz*0.515);ctx.lineTo(sz*0.5,sz*0.635);ctx.lineTo(sz*0.615,sz*0.515);ctx.stroke();
           return c.toDataURL('image/png');
         }
         var manifest = {

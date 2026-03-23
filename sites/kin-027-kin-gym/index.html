@@ -1249,9 +1249,16 @@ renderEx();renderRt();renderLog();
   try{
     var cv=document.createElement('canvas');cv.width=180;cv.height=180;
     var ctx=cv.getContext('2d');
-    ctx.fillStyle='#d1373f';ctx.fillRect(0,0,180,180);
-    ctx.fillStyle='#fff';ctx.font='bold 90px sans-serif';
-    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('G',90,90);
+    var sz=180;
+    var grd=ctx.createLinearGradient(0,0,sz,sz);grd.addColorStop(0,'#1a1e2c');grd.addColorStop(1,'#0a0c18');
+    ctx.fillStyle=grd;ctx.fillRect(0,0,sz,sz);
+    ctx.fillStyle='rgba(245,240,232,0.92)';
+    ctx.fillRect(sz*0.41,sz*0.486,sz*0.178,sz*0.044);
+    ctx.fillRect(sz*0.289,sz*0.411,sz*0.089,sz*0.178);
+    ctx.fillRect(sz*0.622,sz*0.411,sz*0.089,sz*0.178);
+    ctx.fillStyle='rgba(245,240,232,0.6)';
+    ctx.fillRect(sz*0.41,sz*0.456,sz*0.05,sz*0.089);
+    ctx.fillRect(sz*0.54,sz*0.456,sz*0.05,sz*0.089);
     var ati=document.getElementById('apple-touch-icon');if(ati)ati.href=cv.toDataURL('image/png');
   }catch(e){}
   var svgIcon="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d1373f'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>G</text></svg>";
