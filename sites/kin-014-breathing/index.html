@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en" class="light">
 <head>
 <meta charset="UTF-8">
@@ -15,148 +16,148 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg:       #FAFAF7;
-  --surface:  #FFFFFF;
-  --border:   #E8E4DC;
-  --text:     #1A1A18;
-  --text-mid: #5C5A54;
-  --text-dim: #9C9A94;
+--bg:       #FAFAF7;
+--surface:  #FFFFFF;
+--border:   #E8E4DC;
+--text:     #1A1A18;
+--text-mid: #5C5A54;
+--text-dim: #9C9A94;
 }
 
 html.dark {
-  --bg:       #111110;
-  --surface:  #1C1C1A;
-  --border:   #2A2A27;
-  --text:     #E8E4DC;
-  --text-mid: #9C9A94;
-  --text-dim: #4A4A46;
+--bg:       #111110;
+--surface:  #1C1C1A;
+--border:   #2A2A27;
+--text:     #E8E4DC;
+--text-mid: #9C9A94;
+--text-dim: #4A4A46;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  -webkit-font-smoothing: antialiased;
-  transition: background 0.8s ease, color 0.2s;
+font-family: -apple-system, BlinkMacSystemFont, ‘Segoe UI’, system-ui, sans-serif;
+background: var(--bg);
+color: var(--text);
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+align-items: center;
+-webkit-font-smoothing: antialiased;
+transition: background 0.8s ease, color 0.2s;
 }
 
 #toggle {
-  position: fixed;
-  top: 14px; right: 14px;
-  z-index: 999;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
+position: fixed;
+top: 14px; right: 14px;
+z-index: 999;
+width: 36px; height: 36px;
+border-radius: 50%;
+border: 1.5px solid var(--border);
+background: var(--surface);
+font-size: 16px; cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: background 0.2s, border-color 0.2s;
 }
 #wakeBtn {
-  position: fixed;
-  top: 14px; right: 58px;
-  z-index: 999;
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
+position: fixed;
+top: 14px; right: 58px;
+z-index: 999;
+width: 36px; height: 36px;
+border-radius: 50%;
+border: 1.5px solid var(--border);
+background: var(--surface);
+font-size: 16px; cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: background 0.2s, border-color 0.2s;
+-webkit-appearance: none;
+-webkit-tap-highlight-color: transparent;
 }
 #wakeBtn.active { background: rgba(255,200,0,0.2) !important; }
 html.dark #wakeBtn.active { background: rgba(255,200,0,0.15) !important; }
 #kin-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9998;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;max-width:90vw}
 
 .wrap {
-  width: 100%;
-  max-width: 420px;
-  padding: 52px 20px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+width: 100%;
+max-width: 420px;
+padding: 52px 20px 40px;
+display: flex;
+flex-direction: column;
+gap: 24px;
 }
 
 /* ── Header ────────────────────────────────── */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
 }
 
 .header h1 {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+font-size: 22px;
+font-weight: 600;
+letter-spacing: -0.02em;
 }
 
 .header .sub {
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-top: 2px;
+font-size: 12px;
+color: var(--text-dim);
+margin-top: 2px;
 }
 
 .streak-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 1px;
 }
 
 .streak-num {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--text-dim);
-  line-height: 1;
-  transition: color 0.3s;
+font-size: 22px;
+font-weight: 600;
+letter-spacing: -0.02em;
+color: var(--text-dim);
+line-height: 1;
+transition: color 0.3s;
 }
 
 .streak-num.active { color: #5BAD85; }
 
 .streak-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--text-dim);
 }
 
 /* ── Quick presets (Enhancement 4) ─────────── */
 .quick-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 8px;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--text-dim);
+margin-bottom: 8px;
 }
 
 .quick-row {
-  display: flex;
-  gap: 8px;
+display: flex;
+gap: 8px;
 }
 
 .quick-btn {
-  flex: 1;
-  padding: 9px 8px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-mid);
-  cursor: pointer;
-  text-align: center;
-  font-family: inherit;
-  line-height: 1.3;
-  transition: border-color 0.15s, color 0.15s;
+flex: 1;
+padding: 9px 8px;
+border-radius: 8px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+font-size: 11px;
+font-weight: 600;
+color: var(--text-mid);
+cursor: pointer;
+text-align: center;
+font-family: inherit;
+line-height: 1.3;
+transition: border-color 0.15s, color 0.15s;
 }
 
 .quick-btn:hover { border-color: var(--text-dim); color: var(--text); }
@@ -165,311 +166,348 @@ html.dark #wakeBtn.active { background: rgba(255,200,0,0.15) !important; }
 
 /* ── Breathing area ────────────────────────── */
 .breath-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  padding: 12px 0 8px;
-  position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 24px;
+padding: 12px 0 8px;
+position: relative;
 }
 
 .anim-wrap {
-  width: 220px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+width: 220px;
+height: 220px;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+overflow: visible;
 }
 
 /* Circle mode */
 .breath-circle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: var(--border);
-  transform: scale(0.38);
-  transition: background 0.6s ease;
-  will-change: transform;
+width: 200px;
+height: 200px;
+border-radius: 50%;
+background: var(--border);
+transform: scale(0.38);
+transition: background 0.6s ease;
+will-change: transform;
 }
 
 /* Ring mode */
 .ring-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
+position: absolute;
+inset: 0;
+width: 100%; height: 100%;
 }
 
 .ring-track {
-  fill: none;
-  stroke: var(--border);
-  stroke-width: 9;
+fill: none;
+stroke: var(--border);
+stroke-width: 9;
 }
 
 .ring-progress {
-  fill: none;
-  stroke: var(--border);
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-dasharray: 659.73;
-  stroke-dashoffset: 659.73;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
+fill: none;
+stroke: var(--border);
+stroke-width: 9;
+stroke-linecap: round;
+stroke-dasharray: 659.73;
+stroke-dashoffset: 659.73;
+transform: rotate(-90deg);
+transform-origin: 50% 50%;
 }
 
 .phase-info {
-  text-align: center;
-  min-height: 56px;
+text-align: center;
+min-height: 56px;
 }
 
 .phase-label {
-  font-size: 28px;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  color: var(--text-dim);
-  line-height: 1;
-  transition: color 0.4s;
+font-size: 28px;
+font-weight: 300;
+letter-spacing: -0.02em;
+color: var(--text-dim);
+line-height: 1;
+transition: color 0.4s;
 }
 
 .phase-secs {
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-top: 5px;
-  font-variant-numeric: tabular-nums;
-  min-height: 18px;
+font-size: 13px;
+color: var(--text-dim);
+margin-top: 5px;
+font-variant-numeric: tabular-nums;
+min-height: 18px;
 }
 
 /* ── Session timer ──────────────────────────── */
 .timer-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
 }
 
 .timer-display {
-  font-size: 20px;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  color: var(--text-dim);
-  font-variant-numeric: tabular-nums;
-  min-width: 52px;
-  text-align: center;
+font-size: 20px;
+font-weight: 300;
+letter-spacing: 0.04em;
+color: var(--text-dim);
+font-variant-numeric: tabular-nums;
+min-width: 52px;
+text-align: center;
 }
 
 /* ── Pattern & duration selectors ──────────── */
 .select-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+display: flex;
+gap: 10px;
+align-items: center;
 }
 
 .pattern-select {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239C9A94' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 30px;
-  transition: border-color 0.15s;
+flex: 1;
+padding: 10px 12px;
+border-radius: 8px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+color: var(--text);
+font-size: 13px;
+font-family: inherit;
+outline: none;
+cursor: pointer;
+-webkit-appearance: none;
+appearance: none;
+background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘10’ height=‘6’ fill=‘none’%3E%3Cpath d=‘M1 1l4 4 4-4’ stroke=’%239C9A94’ stroke-width=‘1.5’ stroke-linecap=‘round’ stroke-linejoin=‘round’/%3E%3C/svg%3E”);
+background-repeat: no-repeat;
+background-position: right 12px center;
+padding-right: 30px;
+transition: border-color 0.15s;
 }
 
 .pattern-select:focus { border-color: var(--text-dim); }
 
 .dur-pills {
-  display: flex;
-  gap: 6px;
+display: flex;
+gap: 6px;
 }
 
 .dur-pill {
-  flex: 1;
-  padding: 9px 4px;
-  border-radius: 7px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-  text-align: center;
+flex: 1;
+padding: 9px 4px;
+border-radius: 7px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+font-size: 11px;
+font-weight: 600;
+color: var(--text-dim);
+cursor: pointer;
+font-family: inherit;
+transition: all 0.15s;
+text-align: center;
 }
 
 .dur-pill.active, .dur-pill:hover {
-  border-color: var(--text);
-  color: var(--text);
+border-color: var(--text);
+color: var(--text);
 }
 
 /* ── Custom inputs ──────────────────────────── */
 .custom-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 6px;
-  display: none;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+gap: 6px;
+display: none;
 }
 
 .custom-row.visible { display: grid; }
 
 .custom-field {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+display: flex;
+flex-direction: column;
+gap: 3px;
 }
 
 .custom-field label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-align: center;
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--text-dim);
+text-align: center;
 }
 
 .custom-field input {
-  width: 100%;
-  padding: 8px 6px;
-  border-radius: 6px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 14px;
-  font-family: inherit;
-  text-align: center;
-  outline: none;
-  transition: border-color 0.15s;
+width: 100%;
+padding: 8px 6px;
+border-radius: 6px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+color: var(--text);
+font-size: 14px;
+font-family: inherit;
+text-align: center;
+outline: none;
+transition: border-color 0.15s;
 }
 
 .custom-field input:focus { border-color: var(--text-dim); }
 
 /* ── Controls ───────────────────────────────── */
 .controls {
-  display: flex;
-  gap: 10px;
+display: flex;
+gap: 10px;
 }
 
 .btn-primary {
-  flex: 2;
-  padding: 14px 20px;
-  border-radius: 10px;
-  border: none;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: opacity 0.15s;
-  letter-spacing: -0.01em;
+flex: 2;
+padding: 14px 20px;
+border-radius: 10px;
+border: none;
+background: var(--text);
+color: var(--bg);
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+font-family: inherit;
+transition: opacity 0.15s;
+letter-spacing: -0.01em;
 }
 
 .btn-primary:hover { opacity: 0.85; }
 
 .btn-secondary {
-  flex: 1;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  color: var(--text-mid);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: inherit;
-  transition: border-color 0.15s, color 0.15s;
+flex: 1;
+padding: 14px;
+border-radius: 10px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+color: var(--text-mid);
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+font-family: inherit;
+transition: border-color 0.15s, color 0.15s;
 }
 
 .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
 
 /* ── Toggles ────────────────────────────────── */
 .toggle-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
 }
 
 .tog {
-  flex: 1;
-  min-width: 60px;
-  padding: 8px 6px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-family: inherit;
-  text-align: center;
-  transition: all 0.15s;
+flex: 1;
+min-width: 60px;
+padding: 8px 6px;
+border-radius: 8px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+font-size: 10px;
+font-weight: 600;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+color: var(--text-dim);
+cursor: pointer;
+font-family: inherit;
+text-align: center;
+transition: all 0.15s;
 }
 
 .tog.on {
-  border-color: var(--text);
-  color: var(--text);
-  background: var(--surface);
+border-color: var(--text);
+color: var(--text);
+background: var(--surface);
 }
 
 /* ── Completion ─────────────────────────────── */
 .complete-card {
-  display: none;
-  padding: 20px;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  text-align: center;
-  gap: 6px;
-  flex-direction: column;
+display: none;
+padding: 20px;
+background: var(--surface);
+border: 1.5px solid var(--border);
+border-radius: 12px;
+text-align: center;
+gap: 6px;
+flex-direction: column;
 }
 
 .complete-card.show { display: flex; }
 
 .complete-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #5BAD85;
+font-size: 16px;
+font-weight: 600;
+color: #5BAD85;
 }
 
 .complete-sub {
-  font-size: 13px;
-  color: var(--text-dim);
+font-size: 13px;
+color: var(--text-dim);
 }
 
 /* ── Saved msg ──────────────────────────────── */
 .saved-msg {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s;
-  height: 14px;
-  margin-top: -16px;
+font-size: 11px;
+color: var(--text-dim);
+text-align: center;
+opacity: 0;
+transition: opacity 0.3s;
+height: 14px;
+margin-top: -16px;
 }
 
 .saved-msg.show { opacity: 1; }
 
 /* ── Footer ─────────────────────────────────── */
 footer {
-  font-size: 11px;
-  color: var(--text-dim);
-  text-align: center;
-  padding: 16px 16px 48px;
+font-size: 11px;
+color: var(--text-dim);
+text-align: center;
+padding: 16px 16px 48px;
+}
+
+/* ── Five Finger mode ──────────────────────── */
+.finger-svg {
+width: 220px;
+height: 220px;
+overflow: visible;
+}
+
+.finger-svg .hand-outline {
+fill: none;
+stroke: var(--text-dim);
+stroke-width: 3.5;
+stroke-linejoin: round;
+stroke-linecap: round;
+opacity: 0.5;
+}
+
+.finger-svg .trace-done {
+fill: none;
+stroke-width: 5;
+stroke-linejoin: round;
+stroke-linecap: round;
+}
+
+.finger-svg .trace-dot {
+filter: drop-shadow(0 0 8px currentColor);
+}
+
+.finger-count {
+font-size: 11px;
+font-weight: 600;
+color: var(--text-dim);
+letter-spacing: 0.04em;
+min-height: 16px;
+text-align: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .breath-circle { transition: none !important; }
+.breath-circle { transition: none !important; }
 }
 
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
@@ -478,6 +516,7 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 <style>
 html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+
 </head>
 <body>
 
@@ -498,6 +537,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   </div>
 
   <!-- Quick Presets (Enhancement 4) -->
+
   <div class="quick-presets">
     <div class="quick-label">Quick start</div>
     <div class="quick-row">
@@ -514,9 +554,21 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         <span class="q-sub">Wind-down · 5 min</span>
       </button>
     </div>
+    <div class="quick-label" style="margin-top:12px">Kids</div>
+    <div class="quick-row">
+      <button class="quick-btn" onclick="applyPreset('balloon')">
+        <span class="q-name">Balloon</span>
+        <span class="q-sub">Inflate · 1 min</span>
+      </button>
+      <button class="quick-btn" onclick="applyPreset('finger')">
+        <span class="q-name">Five Fingers</span>
+        <span class="q-sub">Hand trace · 5 cycles</span>
+      </button>
+    </div>
   </div>
 
   <!-- Breathing animation -->
+
   <div class="breath-area">
     <div class="anim-wrap" id="anim-wrap">
       <div class="breath-circle" id="breath-circle"></div>
@@ -525,24 +577,34 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         <circle cx="110" cy="110" r="105" class="ring-progress" id="ring-progress"/>
       </svg>
     </div>
+    <svg class="finger-svg" id="finger-svg" viewBox="0 0 220 220" style="display:none" aria-hidden="true">
+      <path class="hand-outline" id="finger-hand" d="M30,210 C29.2,206.7 27.0,196.7 25,190 C23.0,183.3 20.2,176.7 18,170 C15.8,163.3 13.3,156.7 12,150 C10.7,143.3 10.0,135.8 10,130 C10.0,124.2 11.0,119.2 12,115 C13.0,110.8 14.3,107.8 16,105 C17.7,102.2 19.7,99.7 22,98 C24.3,96.3 27.3,95.0 30,95 C32.7,95.0 36.0,95.8 38,98 C40.0,100.2 41.0,104.3 42,108 C43.0,111.7 43.3,115.5 44,120 C44.7,124.5 45.3,130.0 46,135 C46.7,140.0 47.0,147.5 48,150 C49.0,152.5 51.0,152.5 52,150 C53.0,147.5 53.3,140.8 54,135 C54.7,129.2 55.3,122.5 56,115 C56.7,107.5 57.3,97.5 58,90 C58.7,82.5 59.2,76.3 60,70 C60.8,63.7 61.8,56.2 63,52 C64.2,47.8 65.5,46.5 67,45 C68.5,43.5 70.3,43.0 72,43 C73.7,43.0 75.7,43.0 77,45 C78.3,47.0 79.2,50.0 80,55 C80.8,60.0 81.3,68.3 82,75 C82.7,81.7 83.3,88.8 84,95 C84.7,101.2 85.0,109.2 86,112 C87.0,114.8 89.0,115.3 90,112 C91.0,108.7 91.3,99.0 92,92 C92.7,85.0 93.3,77.3 94,70 C94.7,62.7 95.2,54.7 96,48 C96.8,41.3 97.8,34.3 99,30 C100.2,25.7 101.3,23.7 103,22 C104.7,20.3 107.0,20.0 109,20 C111.0,20.0 113.5,20.0 115,22 C116.5,24.0 117.2,27.3 118,32 C118.8,36.7 119.3,43.3 120,50 C120.7,56.7 121.3,64.5 122,72 C122.7,79.5 123.3,88.3 124,95 C124.7,101.7 125.0,109.2 126,112 C127.0,114.8 129.0,115.3 130,112 C131.0,108.7 131.3,99.0 132,92 C132.7,85.0 133.3,77.0 134,70 C134.7,63.0 135.2,55.8 136,50 C136.8,44.2 137.8,38.7 139,35 C140.2,31.3 141.3,29.5 143,28 C144.7,26.5 147.0,26.0 149,26 C151.0,26.0 153.5,26.0 155,28 C156.5,30.0 157.2,33.5 158,38 C158.8,42.5 159.3,48.8 160,55 C160.7,61.2 161.3,67.8 162,75 C162.7,82.2 163.3,90.8 164,98 C164.7,105.2 165.0,114.7 166,118 C167.0,121.3 169.0,121.0 170,118 C171.0,115.0 171.3,106.0 172,100 C172.7,94.0 173.3,87.7 174,82 C174.7,76.3 175.0,70.3 176,66 C177.0,61.7 178.5,58.0 180,56 C181.5,54.0 183.3,53.7 185,54 C186.7,54.3 188.8,55.3 190,58 C191.2,60.7 191.3,65.0 192,70 C192.7,75.0 193.3,81.3 194,88 C194.7,94.7 195.3,101.3 196,110 C196.7,118.7 197.7,130.0 198,140 C198.3,150.0 198.3,160.8 198,170 C197.7,179.2 197.0,188.3 196,195 C195.0,201.7 192.7,207.5 192,210"/>
+      <path class="trace-done" id="finger-trace-done" d=""/>
+      <circle class="trace-dot" id="finger-dot" r="8" cx="0" cy="0" fill="#5B9BD5" style="display:none"/>
+    </svg>
     <div class="phase-info">
       <div class="phase-label" id="phase-label">Ready</div>
       <div class="phase-secs" id="phase-secs"></div>
     </div>
+    <div class="finger-count" id="finger-count"></div>
   </div>
 
   <!-- Timer -->
+
   <div class="timer-row">
     <div class="timer-display" id="timer-display">—</div>
   </div>
 
   <!-- Pattern + duration -->
+
   <div style="display:flex;flex-direction:column;gap:8px;">
     <select class="pattern-select" id="pattern-select" onchange="onPatternChange()">
       <option value="box">Box Breathing (4-4-4-4)</option>
       <option value="478">4-7-8 Breathing</option>
       <option value="adhd">ADHD Focus Reset</option>
       <option value="sleep">Sleep Wind-Down</option>
+      <option value="balloon">Balloon Breathing</option>
+      <option value="finger">Five Finger Breathing</option>
       <option value="custom">Custom</option>
     </select>
     <div class="dur-pills">
@@ -555,6 +617,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   </div>
 
   <!-- Custom inputs -->
+
   <div class="custom-row" id="custom-row">
     <div class="custom-field">
       <label>Inhale</label>
@@ -575,12 +638,14 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   </div>
 
   <!-- Controls -->
+
   <div class="controls">
     <button class="btn-primary" id="btn-start" onclick="startPause()">Start</button>
     <button class="btn-secondary" onclick="reset()">Reset</button>
   </div>
 
   <!-- Toggles -->
+
   <div class="toggle-row">
     <button class="tog" id="tog-audio"  onclick="toggleOpt('audio')">Audio</button>
     <button class="tog" id="tog-haptic" onclick="toggleOpt('haptic')">Haptic</button>
@@ -589,6 +654,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   </div>
 
   <!-- Completion -->
+
   <div class="complete-card" id="complete-card">
     <div class="complete-title">Session Complete</div>
     <div class="complete-sub" id="complete-sub"></div>
@@ -597,7 +663,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   <div class="saved-msg" id="saved-msg">Streak updated</div>
 
   <footer>
-  KIN-014 · v1.0 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
+  KIN-014 · v1.1 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Darren
   <div style="display:flex;justify-content:center;align-items:center;gap:2px;margin-top:8px;position:relative">
     <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span>
     <button id="kin-storage-info-btn" onclick="kinToggleStorageInfo(event)" aria-label="Storage information" style="background:none;border:none;padding:0 0 0 2px;cursor:pointer;font-size:11px;line-height:1;color:rgba(0,0,0,0.25);min-height:24px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;-webkit-appearance:none;letter-spacing:0">ⓘ</button>
@@ -614,17 +680,21 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 <script>
 /* ── Constants ───────────────────────────────── */
 var PATTERNS = {
-  box:    { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
-  '478':  { inhale: 4, hold1: 7, exhale: 8, hold2: 0 },
-  adhd:   { inhale: 3, hold1: 0, exhale: 3, hold2: 0 },
-  sleep:  { inhale: 4, hold1: 0, exhale: 6, hold2: 2 },
-  custom: { inhale: 4, hold1: 0, exhale: 4, hold2: 0 },
+  box:     { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
+  '478':   { inhale: 4, hold1: 7, exhale: 8, hold2: 0 },
+  adhd:    { inhale: 3, hold1: 0, exhale: 3, hold2: 0 },
+  sleep:   { inhale: 4, hold1: 0, exhale: 6, hold2: 2 },
+  balloon: { inhale: 3, hold1: 1, exhale: 5, hold2: 0 },
+  finger:  { inhale: 3, hold1: 0, exhale: 3, hold2: 0, fingerMode: true, cycles: 5 },
+  custom:  { inhale: 4, hold1: 0, exhale: 4, hold2: 0 },
 };
 
 var QUICK_PRESETS = {
-  anxiety: { pattern: '478',   dur: 1 },
-  focus:   { pattern: 'adhd',  dur: 3 },
-  sleep:   { pattern: 'sleep', dur: 5 },
+  anxiety: { pattern: '478',     dur: 1 },
+  focus:   { pattern: 'adhd',    dur: 3 },
+  sleep:   { pattern: 'sleep',   dur: 5 },
+  balloon: { pattern: 'balloon', dur: 1 },
+  finger:  { pattern: 'finger',  dur: 0 },
 };
 
 var PHASE_NAMES  = { inhale: 'Inhale', hold1: 'Hold', exhale: 'Exhale', hold2: 'Hold' };
@@ -635,6 +705,198 @@ var MIN_SCALE = 0.38;
 var MAX_SCALE = 1.0;
 var DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── Five Finger hand path ──────────────────── */
+/* Traced from a child's spread hand outline, 82 points, catmull-rom smoothed */
+var FINGER_POINTS = [
+  {x: 28, y:210}, {x: 24, y:195}, {x: 20, y:175},
+  {x: 14, y:155}, {x: 10, y:135}, {x:  8, y:118},
+  {x: 10, y:105}, {x: 14, y: 98}, {x: 20, y: 94},  // thumb tip
+  {x: 26, y: 98}, {x: 30, y:105},
+  {x: 34, y:118}, {x: 38, y:130}, {x: 42, y:140},
+  {x: 48, y:148}, {x: 52, y:142},                    // thumb-index web
+  {x: 54, y:128}, {x: 56, y:108}, {x: 58, y: 88},
+  {x: 60, y: 68}, {x: 62, y: 52}, {x: 64, y: 42},
+  {x: 67, y: 38}, {x: 70, y: 36}, {x: 73, y: 38},  // index tip
+  {x: 76, y: 44}, {x: 78, y: 55}, {x: 80, y: 70},
+  {x: 82, y: 88}, {x: 84, y:105},
+  {x: 86, y:112}, {x: 88, y:108},                    // index-middle web
+  {x: 90, y: 92}, {x: 92, y: 72}, {x: 94, y: 52},
+  {x: 96, y: 36}, {x: 98, y: 24},
+  {x:101, y: 18}, {x:104, y: 16}, {x:107, y: 18},  // middle tip
+  {x:110, y: 24}, {x:112, y: 38}, {x:114, y: 55},
+  {x:116, y: 75}, {x:118, y: 95},
+  {x:120, y:108}, {x:122, y:112}, {x:124, y:108},  // middle-ring web
+  {x:126, y: 92}, {x:128, y: 72}, {x:130, y: 55},
+  {x:132, y: 42}, {x:134, y: 32},
+  {x:137, y: 27}, {x:140, y: 25}, {x:143, y: 27},  // ring tip
+  {x:146, y: 34}, {x:148, y: 48}, {x:150, y: 65},
+  {x:152, y: 85}, {x:154, y:102},
+  {x:156, y:115}, {x:158, y:118}, {x:160, y:115},  // ring-pinky web
+  {x:162, y:100}, {x:164, y: 85}, {x:166, y: 72},
+  {x:168, y: 62}, {x:170, y: 54},
+  {x:173, y: 50}, {x:176, y: 48}, {x:179, y: 50},  // pinky tip
+  {x:182, y: 56}, {x:184, y: 68}, {x:186, y: 82},
+  {x:188, y:100}, {x:190, y:120}, {x:192, y:140},
+  {x:194, y:158}, {x:196, y:175}, {x:198, y:195},
+  {x:200, y:210},
+];
+
+/* Build the SVG path string using smooth cubic-ish curves via catmull-rom */
+function buildFingerPath() {
+  var pts = FINGER_POINTS;
+  if (pts.length < 2) return '';
+  var d = 'M' + pts[0].x + ',' + pts[0].y;
+  for (var i = 0; i < pts.length - 1; i++) {
+    var p0 = pts[Math.max(i - 1, 0)];
+    var p1 = pts[i];
+    var p2 = pts[i + 1];
+    var p3 = pts[Math.min(i + 2, pts.length - 1)];
+    /* Catmull-Rom to cubic bezier control points */
+    var tension = 6;
+    var cp1x = p1.x + (p2.x - p0.x) / tension;
+    var cp1y = p1.y + (p2.y - p0.y) / tension;
+    var cp2x = p2.x - (p3.x - p1.x) / tension;
+    var cp2y = p2.y - (p3.y - p1.y) / tension;
+    d += ' C' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) +
+         ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) +
+         ' ' + p2.x + ',' + p2.y;
+  }
+  return d;
+}
+
+/* Get total path length and segment lengths for animation */
+/* Pure math approach - no SVG DOM measurement needed (works in iframes) */
+
+/* Cubic bezier point at t */
+function cBez(p0x, p0y, cp1x, cp1y, cp2x, cp2y, p1x, p1y, t) {
+  var u = 1 - t;
+  return {
+    x: u*u*u*p0x + 3*u*u*t*cp1x + 3*u*t*t*cp2x + t*t*t*p1x,
+    y: u*u*u*p0y + 3*u*u*t*cp1y + 3*u*t*t*cp2y + t*t*t*p1y
+  };
+}
+
+/* Approximate length of one cubic bezier segment */
+function cBezLen(p0x, p0y, cp1x, cp1y, cp2x, cp2y, p1x, p1y) {
+  var steps = 20, len = 0;
+  var prev = { x: p0x, y: p0y };
+  for (var i = 1; i <= steps; i++) {
+    var pt = cBez(p0x, p0y, cp1x, cp1y, cp2x, cp2y, p1x, p1y, i / steps);
+    var dx = pt.x - prev.x, dy = pt.y - prev.y;
+    len += Math.sqrt(dx * dx + dy * dy);
+    prev = pt;
+  }
+  return len;
+}
+
+/* Build segment data from FINGER_POINTS using same catmull-rom as buildFingerPath */
+var fingerSegments = null;
+
+function buildFingerSegments() {
+  if (fingerSegments) return fingerSegments;
+  var pts = FINGER_POINTS;
+  var segs = [];
+  var tension = 6;
+  for (var i = 0; i < pts.length - 1; i++) {
+    var p0 = pts[Math.max(i - 1, 0)];
+    var p1 = pts[i];
+    var p2 = pts[i + 1];
+    var p3 = pts[Math.min(i + 2, pts.length - 1)];
+    var cp1x = p1.x + (p2.x - p0.x) / tension;
+    var cp1y = p1.y + (p2.y - p0.y) / tension;
+    var cp2x = p2.x - (p3.x - p1.x) / tension;
+    var cp2y = p2.y - (p3.y - p1.y) / tension;
+    var len = cBezLen(p1.x, p1.y, cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    segs.push({ p0: p1, p1: p2, cp1x: cp1x, cp1y: cp1y, cp2x: cp2x, cp2y: cp2y, len: len });
+  }
+  var totalLen = 0;
+  for (var j = 0; j < segs.length; j++) totalLen += segs[j].len;
+  fingerSegments = { segs: segs, totalLen: totalLen };
+  return fingerSegments;
+}
+
+/* Get point at global progress (0-1) along the hand path */
+function getFingerPoint(progress01) {
+  var data = buildFingerSegments();
+  var targetLen = progress01 * data.totalLen;
+  var accumulated = 0;
+  for (var i = 0; i < data.segs.length; i++) {
+    var seg = data.segs[i];
+    if (accumulated + seg.len >= targetLen || i === data.segs.length - 1) {
+      var localT = seg.len > 0 ? (targetLen - accumulated) / seg.len : 0;
+      localT = Math.max(0, Math.min(1, localT));
+      return cBez(seg.p0.x, seg.p0.y, seg.cp1x, seg.cp1y, seg.cp2x, seg.cp2y, seg.p1.x, seg.p1.y, localT);
+    }
+    accumulated += seg.len;
+  }
+  var last = FINGER_POINTS[FINGER_POINTS.length - 1];
+  return { x: last.x, y: last.y };
+}
+
+function initFingerSVG() {
+  buildFingerSegments();
+}
+
+var fingerInited = false;
+
+function getFingerData() {
+  if (!fingerInited) {
+    initFingerSVG();
+    fingerInited = true;
+  }
+  return buildFingerSegments();
+}
+
+/* Position the dot along the hand path */
+function positionFingerDot(progress01) {
+  var pt = getFingerPoint(progress01);
+  var dot = document.getElementById('finger-dot');
+  dot.setAttribute('cx', pt.x.toFixed(1));
+  dot.setAttribute('cy', pt.y.toFixed(1));
+  return pt;
+}
+
+/* Update the colored trace behind the dot */
+function updateFingerTrace(progress01) {
+  var done = document.getElementById('finger-trace-done');
+  var steps = Math.max(2, Math.ceil(progress01 * 60));
+  var d = '';
+  for (var i = 0; i <= steps; i++) {
+    var t = (i / steps) * progress01;
+    var pt = getFingerPoint(t);
+    d += (i === 0 ? 'M' : 'L') + pt.x.toFixed(1) + ',' + pt.y.toFixed(1);
+  }
+  done.setAttribute('d', d);
+}
+
+function isFingerMode() {
+  return PATTERNS[st.patternKey] && PATTERNS[st.patternKey].fingerMode;
+}
+
+function showFingerMode(show) {
+  document.getElementById('finger-svg').style.display = show ? 'block' : 'none';
+  document.getElementById('finger-dot').style.display = show ? 'block' : 'none';
+  document.getElementById('finger-count').style.display = show ? 'block' : 'none';
+  document.getElementById('anim-wrap').style.display = show ? 'none' : 'flex';
+  if (show) {
+    getFingerData(); /* init SVG path */
+    document.getElementById('finger-trace-done').setAttribute('d', '');
+  } else {
+    document.getElementById('finger-count').textContent = '';
+    document.getElementById('finger-dot').style.display = 'none';
+    document.getElementById('finger-trace-done').setAttribute('d', '');
+  }
+}
+
+/* Show the hand outline as a preview when pattern is selected (before Start) */
+function showFingerPreview() {
+  document.getElementById('finger-svg').style.display = 'block';
+  document.getElementById('anim-wrap').style.display = 'none';
+  getFingerData(); /* builds the path */
+  document.getElementById('finger-dot').style.display = 'none';
+  document.getElementById('finger-trace-done').setAttribute('d', '');
+}
 
 /* ── State ───────────────────────────────────── */
 var st = {
@@ -652,6 +914,8 @@ var st = {
   raf: null,
   audioCtx: null,
   darkMode: false,
+  fingerCycle: 0,
+  fingerTotalCycles: 5,
 };
 
 /* ── Bootstrap ───────────────────────────────── */
@@ -700,8 +964,12 @@ function completeSession() {
   updateStreakDisplay();
 
   document.getElementById('complete-card').classList.add('show');
-  document.getElementById('complete-sub').textContent =
-    s.count + '-day streak. Well done.';
+  var completeSub = s.count + '-day streak. Well done.';
+  if (isFingerMode()) {
+    completeSub = 'All 5 fingers traced! ' + completeSub;
+    showFingerMode(false);
+  }
+  document.getElementById('complete-sub').textContent = completeSub;
   document.getElementById('btn-start').textContent = 'Start';
   document.getElementById('phase-label').textContent = 'Done';
   document.getElementById('phase-label').style.color = '#5BAD85';
@@ -809,14 +1077,18 @@ function loop(ts) {
   var progress = Math.min(elapsed / phase.dur, 1);
   var reduced  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  updateVisuals(phase.key, progress, reduced);
+  if (isFingerMode()) {
+    updateFingerVisuals(phase.key, progress);
+  } else {
+    updateVisuals(phase.key, progress, reduced);
+  }
 
   /* Seconds countdown in current phase */
   var secsLeft = Math.max(0, Math.ceil(phase.dur - elapsed));
   document.getElementById('phase-secs').textContent = secsLeft + 's';
 
-  /* Session countdown */
-  if (st.sessionDur > 0) {
+  /* Session countdown (skipped in finger mode - uses cycle-based completion) */
+  if (st.sessionDur > 0 && !isFingerMode()) {
     var sessElapsed = (ts - st.sessionStart) / 1000;
     var sessLeft = Math.max(0, st.sessionDur - sessElapsed);
     document.getElementById('timer-display').textContent = fmtTime(sessLeft);
@@ -830,12 +1102,81 @@ function loop(ts) {
   if (elapsed >= phase.dur) {
     var nextIdx  = (st.phaseIdx + 1) % phases.length;
     var nextPhase = phases[nextIdx];
+
+    /* In finger mode, track cycles (one cycle = inhale + exhale = full loop of phases) */
+    if (isFingerMode() && nextIdx === 0) {
+      st.fingerCycle++;
+      updateFingerCount();
+      if (st.fingerCycle >= st.fingerTotalCycles) {
+        completeSession();
+        return;
+      }
+    }
+
     st.phaseIdx  = nextIdx;
     st.phaseStart = ts - (elapsed - phase.dur) * 1000;
     triggerCues(nextPhase.key);
   }
 
   st.raf = requestAnimationFrame(loop);
+}
+
+/* ── Five Finger visuals ────────────────────── */
+function updateFingerVisuals(phaseKey, progress) {
+  var cycle = st.fingerCycle;
+  var totalCycles = st.fingerTotalCycles; /* 5 */
+  /* Each cycle = inhale (first half of finger section) + exhale (second half) */
+  /* Map to global 0-1 progress along entire path */
+  var cycleStart = cycle / totalCycles;
+  var cycleHalf = 0.5 / totalCycles;
+  var globalProgress;
+  if (phaseKey === 'inhale') {
+    globalProgress = cycleStart + progress * cycleHalf;
+  } else { /* exhale */
+    globalProgress = cycleStart + cycleHalf + progress * cycleHalf;
+  }
+  globalProgress = Math.min(globalProgress, 1);
+
+  /* Update dot position */
+  positionFingerDot(globalProgress);
+
+  /* Update trace */
+  updateFingerTrace(globalProgress);
+
+  /* Color the dot and trace */
+  var color = PHASE_COLORS[phaseKey];
+  document.getElementById('finger-dot').setAttribute('fill', color);
+  var traceDone = document.getElementById('finger-trace-done');
+  traceDone.setAttribute('stroke', color);
+
+  /* Phase label */
+  var labelEl = document.getElementById('phase-label');
+  if (phaseKey === 'inhale') {
+    labelEl.textContent = 'Breathe In';
+  } else {
+    labelEl.textContent = 'Breathe Out';
+  }
+  labelEl.style.color = color;
+
+  /* Ambient background */
+  var tints = {
+    inhale: st.darkMode ? '10,21,32'  : '91,155,213',
+    exhale: st.darkMode ? '10,26,16'  : '91,173,133',
+  };
+  var alpha = (0.5 * 0.14).toFixed(3);
+  document.body.style.background =
+    'radial-gradient(ellipse 65% 55% at 50% 42%, rgba(' + (tints[phaseKey] || tints.inhale) + ',' + alpha + ') 0%, var(--bg) 72%)';
+}
+
+function updateFingerCount() {
+  var el = document.getElementById('finger-count');
+  var fingerNames = ['Thumb', 'Index finger', 'Middle finger', 'Ring finger', 'Pinky'];
+  var next = st.fingerCycle;
+  if (next < st.fingerTotalCycles) {
+    el.textContent = fingerNames[next] + ' (' + (next + 1) + ' of ' + st.fingerTotalCycles + ')';
+  } else {
+    el.textContent = 'All done!';
+  }
 }
 
 /* ── Cues ────────────────────────────────────── */
@@ -909,9 +1250,16 @@ function startPause() {
     st.sessionStart = performance.now();
     st.running = true;
     st.paused  = false;
+    st.fingerCycle = 0;
     document.getElementById('complete-card').classList.remove('show');
     document.getElementById('btn-start').textContent = 'Pause';
-    if (st.sessionDur > 0) {
+
+    if (isFingerMode()) {
+      showFingerMode(true);
+      st.fingerTotalCycles = PATTERNS[st.patternKey].cycles || 5;
+      updateFingerCount();
+      document.getElementById('timer-display').textContent = '5 cycles';
+    } else if (st.sessionDur > 0) {
       document.getElementById('timer-display').textContent = fmtTime(st.sessionDur);
     } else {
       document.getElementById('timer-display').textContent = '∞';
@@ -925,22 +1273,31 @@ function reset() {
   st.running = false;
   st.paused  = false;
   st.phaseIdx = 0;
+  st.fingerCycle = 0;
   cancelAnimationFrame(st.raf);
+  if (isFingerMode()) showFingerMode(false);
   document.getElementById('btn-start').textContent = 'Start';
   document.getElementById('phase-label').textContent = 'Ready';
   document.getElementById('phase-label').style.color = 'var(--text-dim)';
   document.getElementById('phase-secs').textContent  = '';
-  document.getElementById('timer-display').textContent = st.sessionDur > 0 ? fmtTime(st.sessionDur) : '—';
+  document.getElementById('timer-display').textContent = st.sessionDur > 0 ? fmtTime(st.sessionDur) : (isFingerMode() ? '5 cycles' : '—');
   document.getElementById('complete-card').classList.remove('show');
+  document.getElementById('finger-count').textContent = '';
   resetBackground();
 }
 
 /* ── Pattern & duration ──────────────────────── */
 function onPatternChange() {
   var sel = document.getElementById('pattern-select').value;
+  var wasFinger = isFingerMode();
   st.patternKey = sel;
   if (st.running) reset();
+  if (wasFinger && !isFingerMode()) showFingerMode(false);
   document.getElementById('custom-row').classList.toggle('visible', sel === 'custom');
+  if (isFingerMode()) {
+    document.getElementById('timer-display').textContent = '5 cycles';
+    showFingerPreview();
+  }
 }
 
 function updateCustom() {
@@ -961,11 +1318,17 @@ function setDur(mins) {
 
 function applyPreset(key) {
   var preset = QUICK_PRESETS[key];
+  var wasFinger = isFingerMode();
   var sel    = document.getElementById('pattern-select');
   sel.value  = preset.pattern;
   st.patternKey = preset.pattern;
   document.getElementById('custom-row').classList.remove('visible');
+  if (wasFinger && !isFingerMode()) showFingerMode(false);
   setDur(preset.dur);
+  if (isFingerMode()) {
+    document.getElementById('timer-display').textContent = '5 cycles';
+    showFingerPreview();
+  }
   if (st.running || st.paused) reset();
 }
 
@@ -974,7 +1337,7 @@ function toggleOpt(opt) {
   st[opt] = !st[opt];
   document.getElementById('tog-' + opt).classList.toggle('on', st[opt]);
 
-  if (opt === 'ring') {
+  if (opt === 'ring' && !isFingerMode()) {
     document.getElementById('breath-circle').style.display = st.ring ? 'none'  : '';
     document.getElementById('ring-svg').style.display      = st.ring ? ''      : 'none';
   }
@@ -1049,6 +1412,7 @@ function fmtTime(secs) {
 </script>
 
   <!-- ── Bug report ──────────────────────────────────────────────── -->
+
   <style>
     #kin-bug-backdrop {
       display: none; position: fixed; inset: 0; z-index: 901;
@@ -1138,9 +1502,11 @@ function fmtTime(secs) {
   </style>
 
   <!-- Backdrop -->
+
   <div id="kin-bug-backdrop"></div>
 
   <!-- Bug report sheet -->
+
   <div id="kin-bug-sheet">
     <div id="kin-br-form-view">
       <div class="kin-br-handle"><div></div></div>
@@ -1273,7 +1639,7 @@ function fmtTime(secs) {
   document.head.appendChild(l);
 })();
 if("serviceWorker"in navigator){
-  var _sw="const C='kin014-v1';"+
+  var _sw="const C='kin014-v2';"+
     "self.addEventListener('install',function(){self.skipWaiting();});"+
     "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});"+
     "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
@@ -1283,7 +1649,7 @@ if("serviceWorker"in navigator){
 
 <div id="kin-toast"></div>
 <script>
-// === Toast (standard §16.2) ===
+// === Toast ===
 function showToast(m) {
   var t = document.getElementById('kin-toast');
   t.textContent = m;
@@ -1291,7 +1657,7 @@ function showToast(m) {
   clearTimeout(t._t);
   t._t = setTimeout(function() { t.style.opacity = '0'; }, 2200);
 }
-// === Wake Lock (standard §17) ===
+// === Wake Lock ===
 var wakeLock = null;
 var wakeBtn = document.getElementById('wakeBtn');
 async function toggleWake() {
@@ -1318,6 +1684,7 @@ async function toggleWake() {
   }
 }
 </script>
+
 <script>
 function kinToggleStorageInfo(e) {
   e.stopPropagation();
@@ -1332,5 +1699,6 @@ function kinToggleStorageInfo(e) {
   }
 }
 </script>
+
 </body>
 </html>
