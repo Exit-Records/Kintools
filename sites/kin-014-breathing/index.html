@@ -652,6 +652,7 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
     <button class="tog" id="tog-voice"  onclick="toggleOpt('voice')">Voice</button>
     <button class="tog" id="tog-ring"   onclick="toggleOpt('ring')">Ring Mode</button>
   </div>
+  <div id="haptic-ios-note" style="display:none;font-size:10px;color:var(--text-dim);text-align:center;margin-top:-10px;opacity:0.75">True haptic unavailable in iOS Web Apps — using a click sound instead</div>
 
   <!-- Completion -->
 
@@ -678,6 +679,8 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </div>
 
 <script>
+var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
 /* ── Constants ───────────────────────────────── */
 var PATTERNS = {
   box:     { inhale: 4, hold1: 4, exhale: 4, hold2: 4 },
@@ -836,6 +839,8 @@ function getFingerPoint(progress01) {
 
 function initFingerSVG() {
   buildFingerSegments();
+  var el = document.getElementById('finger-hand');
+  if (el) el.setAttribute('d', buildFingerPath());
 }
 
 var fingerInited = false;
@@ -878,7 +883,9 @@ function showFingerMode(show) {
   document.getElementById('finger-svg').style.display = show ? 'block' : 'none';
   document.getElementById('finger-dot').style.display = show ? 'block' : 'none';
   document.getElementById('finger-count').style.display = show ? 'block' : 'none';
+  document.getElementById('finger-count').style.order  = show ? '-1' : '';
   document.getElementById('anim-wrap').style.display = show ? 'none' : 'flex';
+  document.getElementById('phase-secs').style.display = show ? 'none' : '';
   if (show) {
     getFingerData(); /* init SVG path */
     document.getElementById('finger-trace-done').setAttribute('d', '');
@@ -893,6 +900,8 @@ function showFingerMode(show) {
 function showFingerPreview() {
   document.getElementById('finger-svg').style.display = 'block';
   document.getElementById('anim-wrap').style.display = 'none';
+  document.getElementById('phase-secs').style.display = 'none';
+  document.getElementById('finger-count').style.order  = '-1';
   getFingerData(); /* builds the path */
   document.getElementById('finger-dot').style.display = 'none';
   document.getElementById('finger-trace-done').setAttribute('d', '');
@@ -934,6 +943,7 @@ var st = {
 
   updateStreakDisplay();
   setDur(5);
+  if (isIOS) document.getElementById('haptic-ios-note').style.display = 'block';
 }());
 
 /* ── Streak (Enhancement 2) ──────────────────── */
@@ -1182,9 +1192,12 @@ function updateFingerCount() {
 /* ── Cues ────────────────────────────────────── */
 function triggerCues(phaseKey) {
   var freqs = { inhale: 523, hold1: 440, exhale: 349, hold2: 330 };
-  if (st.audio)  playTone(freqs[phaseKey] || 440, 0.15, 0.3);
-  if (st.haptic && navigator.vibrate) navigator.vibrate(40);
-  if (st.voice)  speak(PHASE_NAMES[phaseKey]);
+  if (st.audio) playTone(freqs[phaseKey] || 440, 0.15, 0.3);
+  if (st.haptic) {
+    if (navigator.vibrate) navigator.vibrate(40);
+    else playClick();
+  }
+  if (st.voice) speak(PHASE_NAMES[phaseKey]);
 }
 
 /* ── Audio (Web Audio API) ───────────────────── */
@@ -1209,6 +1222,27 @@ function playTone(freq, vol, dur) {
     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + dur + 0.05);
+  } catch (e) {}
+}
+
+/* Short noise-burst click — haptic fallback on iOS */
+function playClick() {
+  try {
+    var ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    var bufLen = Math.floor(ctx.sampleRate * 0.012);
+    var buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < bufLen; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufLen, 3);
+    }
+    var src = ctx.createBufferSource();
+    src.buffer = buf;
+    var g = ctx.createGain();
+    g.gain.value = 0.28;
+    src.connect(g);
+    g.connect(ctx.destination);
+    src.start();
   } catch (e) {}
 }
 
@@ -1345,6 +1379,10 @@ function toggleOpt(opt) {
   if (opt === 'audio' && st.audio) {
     getAudioCtx();
     playTone(440, 0.1, 0.2);
+  }
+  if (opt === 'haptic' && st.haptic) {
+    if (navigator.vibrate) navigator.vibrate(40);
+    else playClick();
   }
 }
 
