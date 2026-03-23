@@ -858,8 +858,11 @@ color: rgba(245,240,235,0.6);
   var c=document.createElement("canvas");c.width=180;c.height=180;
   var ctx=c.getContext("2d");
   var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
-  var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,"#4a5e72");g.addColorStop(1,"#2d3e52");ctx.fillStyle=g;ctx.fill();
-  ctx.fillStyle="rgba(255,255,255,0.9)";ctx.font="bold 46px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("TL",90,94);
+  var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,"#1a2830");g.addColorStop(1,"#0a1418");ctx.fillStyle=g;ctx.fill();
+  var sz=180;
+  ctx.strokeStyle="rgba(245,240,232,0.92)";ctx.lineWidth=sz*0.039;ctx.lineCap="round";ctx.lineJoin="round";
+  ctx.beginPath();ctx.arc(sz*0.5,sz*0.5,sz*0.27,Math.PI*0.55,Math.PI*0.5,true);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(sz*0.27,sz*0.635);ctx.lineTo(sz*0.3,sz*0.71);ctx.lineTo(sz*0.37,sz*0.665);ctx.stroke();
   var el=document.getElementById("apple-touch-icon");if(el)el.href=c.toDataURL("image/png");
 })();
 if("serviceWorker" in navigator){

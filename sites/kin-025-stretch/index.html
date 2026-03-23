@@ -1002,8 +1002,8 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         c.width = c.height = sz;
         var ctx = c.getContext('2d');
         var g = ctx.createLinearGradient(0, 0, sz, sz);
-        g.addColorStop(0, '#c45d3e');
-        g.addColorStop(1, '#8b3a28');
+        g.addColorStop(0, '#182a20');
+        g.addColorStop(1, '#0a1610');
         ctx.fillStyle = g;
         var r = sz * 0.18;
         ctx.beginPath();
@@ -1017,11 +1017,14 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         ctx.quadraticCurveTo(0, 0, r, 0);
         ctx.closePath();
         ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('ST', sz / 2, sz * 0.52);
+        ctx.fillStyle='rgba(245,240,232,0.92)';
+        ctx.beginPath();ctx.arc(sz*0.5,sz*0.24,sz*0.061,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineWidth=sz*0.033;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.3);ctx.lineTo(sz*0.5,sz*0.61);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.42);ctx.lineTo(sz*0.3,sz*0.3);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.42);ctx.lineTo(sz*0.7,sz*0.3);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.61);ctx.lineTo(sz*0.37,sz*0.8);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.61);ctx.lineTo(sz*0.63,sz*0.8);ctx.stroke();
         var el = document.getElementById('apple-touch-icon');
         if (el) el.href = c.toDataURL('image/png');
       } catch(e) {}
@@ -1035,8 +1038,8 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
           c.width = c.height = sz;
           var ctx = c.getContext('2d');
           var g = ctx.createLinearGradient(0, 0, sz, sz);
-          g.addColorStop(0, '#c45d3e');
-          g.addColorStop(1, '#8b3a28');
+          g.addColorStop(0, '#182a20');
+          g.addColorStop(1, '#0a1610');
           ctx.fillStyle = g;
           var r = sz * 0.18;
           ctx.beginPath();
@@ -1050,11 +1053,14 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
           ctx.quadraticCurveTo(0, 0, r, 0);
           ctx.closePath();
           ctx.fill();
-          ctx.fillStyle = '#fff';
-          ctx.font = 'bold ' + Math.round(sz * 0.34) + 'px serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('ST', sz / 2, sz * 0.52);
+          ctx.fillStyle='rgba(245,240,232,0.92)';
+          ctx.beginPath();ctx.arc(sz*0.5,sz*0.24,sz*0.061,0,Math.PI*2);ctx.fill();
+          ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineWidth=sz*0.033;ctx.lineCap='round';
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.3);ctx.lineTo(sz*0.5,sz*0.61);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.42);ctx.lineTo(sz*0.3,sz*0.3);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.42);ctx.lineTo(sz*0.7,sz*0.3);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.61);ctx.lineTo(sz*0.37,sz*0.8);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(sz*0.5,sz*0.61);ctx.lineTo(sz*0.63,sz*0.8);ctx.stroke();
           return c.toDataURL('image/png');
         }
         var manifest = {

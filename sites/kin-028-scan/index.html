@@ -1541,9 +1541,10 @@ async function submitBug() {
 // PWA
 // =====================
 function setupPWA() {
-  const G1 = '#2c3e50', G2 = '#1a252f';
+  const G1 = '#1c1c28', G2 = '#0c0c14';
 
   function makeIcon(size) {
+    const sz = size;
     const c = document.createElement('canvas');
     c.width = size; c.height = size;
     const ctx = c.getContext('2d');
@@ -1564,11 +1565,18 @@ function setupPWA() {
     grad.addColorStop(1, G2);
     ctx.fillStyle = grad;
     ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.font = `600 ${size * 0.32}px Georgia, serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('Sc', size / 2, size / 2 + size * 0.02);
+    ctx.strokeStyle='rgba(245,240,232,0.92)';ctx.lineWidth=sz*0.028;ctx.lineJoin='round';ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(sz*0.33,sz*0.21);ctx.lineTo(sz*0.6,sz*0.21);ctx.lineTo(sz*0.69,sz*0.31);ctx.lineTo(sz*0.69,sz*0.69);ctx.lineTo(sz*0.33,sz*0.69);ctx.closePath();ctx.stroke();
+    ctx.beginPath();ctx.moveTo(sz*0.6,sz*0.21);ctx.lineTo(sz*0.6,sz*0.31);ctx.lineTo(sz*0.69,sz*0.31);ctx.stroke();
+    ctx.fillStyle='rgba(245,240,232,0.92)';ctx.fillRect(sz*0.33,sz*0.435,sz*0.36,sz*0.014);
+    ctx.fillStyle='rgba(245,240,232,0.14)';ctx.fillRect(sz*0.33,sz*0.41,sz*0.36,sz*0.055);
+    ctx.fillStyle='rgba(245,240,232,0.4)';
+    ctx.fillRect(sz*0.385,sz*0.27,sz*0.18,sz*0.04);
+    ctx.fillRect(sz*0.385,sz*0.32,sz*0.13,sz*0.04);
+    ctx.fillStyle='rgba(245,240,232,0.3)';
+    ctx.fillRect(sz*0.385,sz*0.5,sz*0.2,sz*0.04);
+    ctx.fillRect(sz*0.385,sz*0.55,sz*0.15,sz*0.04);
+    ctx.fillRect(sz*0.385,sz*0.6,sz*0.17,sz*0.04);
     return c.toDataURL('image/png');
   }
 
