@@ -1228,13 +1228,12 @@ function drawEditor() {
     canvas.style.height = (img.height * scale) + 'px';
 
     const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
     const b = 100 + page.adjustments.brightness;
     const c = 100 + page.adjustments.contrast;
     let f = `brightness(${b}%) contrast(${c}%)`;
     if (page.adjustments.bw) f += ' grayscale(100%)';
-    ctx.filter = f;
-    ctx.drawImage(img, 0, 0);
-    ctx.filter = 'none';
+    canvas.style.filter = f;
 
     if (currentTool === 'crop' && page.crop) setupCropOverlay(canvas, page.crop, scale);
     else removeCropOverlay();
@@ -1264,13 +1263,12 @@ function drawEditorFast() {
     if (!canvas || activePageIndex < 0 || !editorImgCache) return;
     const page = pages[activePageIndex];
     const ctx = canvas.getContext('2d');
+    ctx.drawImage(editorImgCache, 0, 0);
     const b = 100 + page.adjustments.brightness;
     const c = 100 + page.adjustments.contrast;
     let f = `brightness(${b}%) contrast(${c}%)`;
     if (page.adjustments.bw) f += ' grayscale(100%)';
-    ctx.filter = f;
-    ctx.drawImage(editorImgCache, 0, 0);
-    ctx.filter = 'none';
+    canvas.style.filter = f;
   });
 }
 
@@ -1472,11 +1470,24 @@ function processPageForExport(page) {
       const c = document.createElement('canvas');
       c.width = img.width; c.height = img.height;
       const ctx = c.getContext('2d');
-      const b = 100 + page.adjustments.brightness;
-      const cont = 100 + page.adjustments.contrast;
-      let f = `brightness(${b}%) contrast(${cont}%)`;
-      if (page.adjustments.bw) f += ' grayscale(100%)';
-      ctx.filter = f; ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0);
+      const { brightness, contrast, bw } = page.adjustments;
+      const bF = (100 + brightness) / 100;
+      const cF = (100 + contrast) / 100;
+      if (bF !== 1 || cF !== 1 || bw) {
+        const id = ctx.getImageData(0, 0, c.width, c.height);
+        const d = id.data;
+        for (let i = 0; i < d.length; i += 4) {
+          let r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255;
+          r = Math.min(1, r * bF); g = Math.min(1, g * bF); b = Math.min(1, b * bF);
+          r = Math.max(0, Math.min(1, (r - 0.5) * cF + 0.5));
+          g = Math.max(0, Math.min(1, (g - 0.5) * cF + 0.5));
+          b = Math.max(0, Math.min(1, (b - 0.5) * cF + 0.5));
+          if (bw) { const gr = 0.299 * r + 0.587 * g + 0.114 * b; r = g = b = gr; }
+          d[i] = r * 255 | 0; d[i + 1] = g * 255 | 0; d[i + 2] = b * 255 | 0;
+        }
+        ctx.putImageData(id, 0, 0);
+      }
       resolve(c.toDataURL('image/jpeg', 0.92));
     };
     img.src = page.imageData;
