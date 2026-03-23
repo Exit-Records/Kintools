@@ -836,6 +836,8 @@ function getFingerPoint(progress01) {
 
 function initFingerSVG() {
   buildFingerSegments();
+  var el = document.getElementById('finger-hand');
+  if (el) el.setAttribute('d', buildFingerPath());
 }
 
 var fingerInited = false;
