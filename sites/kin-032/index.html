@@ -471,10 +471,20 @@ label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px
   try{
     var c=document.createElement('canvas');c.width=180;c.height=180;
     var ctx=c.getContext('2d');
-    ctx.fillStyle='#f5f4f0';ctx.fillRect(0,0,180,180);
-    ctx.fillStyle='#111';ctx.font='bold 100px sans-serif';
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText('R',90,95);
+    ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,180,180);
+    ctx.beginPath();ctx.arc(90,90,68,0,Math.PI*2);ctx.strokeStyle='rgba(17,122,85,0.2)';ctx.lineWidth=0.8;ctx.stroke();
+    ctx.beginPath();ctx.arc(90,90,48,0,Math.PI*2);ctx.strokeStyle='rgba(17,122,85,0.35)';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.fillStyle='#117a55';ctx.beginPath();ctx.arc(90,90,10,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.7;ctx.beginPath();ctx.arc(52,60,5,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.55;ctx.beginPath();ctx.arc(132,72,4.5,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.65;ctx.beginPath();ctx.arc(66,128,3.8,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.5;ctx.beginPath();ctx.arc(126,118,4,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.4;ctx.beginPath();ctx.arc(56,90,3,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.3;ctx.beginPath();ctx.arc(30,36,3,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.25;ctx.beginPath();ctx.arc(154,130,2.5,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.2;ctx.beginPath();ctx.arc(140,38,2.2,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=0.22;ctx.beginPath();ctx.arc(36,148,2.8,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
     var icon=document.getElementById('apple-touch-icon');
     if(icon) icon.href=c.toDataURL('image/png');
   }catch(e){}
