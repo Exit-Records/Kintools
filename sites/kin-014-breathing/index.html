@@ -880,7 +880,9 @@ function showFingerMode(show) {
   document.getElementById('finger-svg').style.display = show ? 'block' : 'none';
   document.getElementById('finger-dot').style.display = show ? 'block' : 'none';
   document.getElementById('finger-count').style.display = show ? 'block' : 'none';
+  document.getElementById('finger-count').style.order  = show ? '-1' : '';
   document.getElementById('anim-wrap').style.display = show ? 'none' : 'flex';
+  document.getElementById('phase-secs').style.display = show ? 'none' : '';
   if (show) {
     getFingerData(); /* init SVG path */
     document.getElementById('finger-trace-done').setAttribute('d', '');
@@ -895,6 +897,8 @@ function showFingerMode(show) {
 function showFingerPreview() {
   document.getElementById('finger-svg').style.display = 'block';
   document.getElementById('anim-wrap').style.display = 'none';
+  document.getElementById('phase-secs').style.display = 'none';
+  document.getElementById('finger-count').style.order  = '-1';
   getFingerData(); /* builds the path */
   document.getElementById('finger-dot').style.display = 'none';
   document.getElementById('finger-trace-done').setAttribute('d', '');
