@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <defs>
-      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#1A4060"/>
-        <stop offset="100%" stop-color="#0d2235"/>
-      </linearGradient>
-    </defs>
-    <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-    <g transform="translate(128,128) scale(5.33)"><circle cx="24" cy="24" r="13" stroke="white" stroke-width="2"/><path d="M24 11c-3.5 4-5.5 8.5-5.5 13s2 9 5.5 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M24 11c3.5 4 5.5 8.5 5.5 13s-2 9-5.5 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M11 24h26" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/><path d="M24 17v7l4 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="108" fill="#1a1a18"/>
+<circle cx="256" cy="256" r="180" fill="none" stroke="#F0EDE6" stroke-width="1.5" opacity="0.12"/>
+<circle cx="256" cy="256" r="120" fill="none" stroke="#F0EDE6" stroke-width="2" opacity="0.18"/>
+<circle cx="90" cy="200" r="5" fill="#F0EDE6" opacity="0.13"/>
+<circle cx="420" cy="310" r="5.5" fill="#F0EDE6" opacity="0.12"/>
+<g stroke="#F0EDE6" stroke-width="6" fill="none" transform="translate(256,256)">
+<circle cx="0" cy="0" r="55"/>
+<ellipse cx="0" cy="0" rx="22" ry="55"/>
+<line x1="-55" y1="0" x2="55" y2="0" opacity="0.4"/>
+</g></svg>

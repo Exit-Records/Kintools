@@ -1,14 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#202028"/>
-      <stop offset="100%" stop-color="#0e0e14"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" fill="url(#bg)"/>
-  <rect x="176" y="108" width="188" height="232" rx="12" fill="#f5f0e8" opacity="0.1"/>
-  <rect x="176" y="108" width="188" height="232" rx="12" fill="none" stroke="#f5f0e8" stroke-width="14"/>
-  <path d="M 304,108 L 304,162 L 364,162" fill="none" stroke="#f5f0e8" stroke-width="14" stroke-linejoin="round"/>
-  <line x1="256" y1="196" x2="256" y2="330" stroke="#f5f0e8" stroke-width="20" stroke-linecap="round"/>
-  <path d="M 210,294 L 256,344 L 302,294" fill="none" stroke="#f5f0e8" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="108" fill="#1a1a18"/>
+<circle cx="256" cy="256" r="180" fill="none" stroke="#F0EDE6" stroke-width="1.5" opacity="0.12"/>
+<circle cx="256" cy="256" r="120" fill="none" stroke="#F0EDE6" stroke-width="2" opacity="0.18"/>
+<circle cx="140" cy="100" r="5.5" fill="#F0EDE6" opacity="0.13"/>
+<circle cx="400" cy="370" r="5" fill="#F0EDE6" opacity="0.12"/>
+<g stroke="#F0EDE6" stroke-width="7" stroke-linecap="round" fill="none" transform="translate(256,256)">
+<rect x="-38" y="-55" width="76" height="100" rx="8"/>
+<line x1="0" y1="-20" x2="0" y2="20"/>
+<polyline points="-15,8 0,24 15,8"/>
+</g></svg>
