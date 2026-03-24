@@ -1,16 +1,17 @@
 # Kin Build Rules
 
 > Single source of truth for building, updating, and deploying tools in the Kin Ecosystem.
-> Current as of KIN-029. Next tool: KIN-030.
+> Current as of KIN-035.
 
 ---
 
 ## 1. Project Context
 
 - **Repo:** `Exit-Records/Kintools` (GitHub, private)
-- **Deployment:** Netlify — each tool is its own Netlify site, a single `index.html` file
-- **Tools completed:** KIN-001 through KIN-029
+- **Deployment:** Cloudflare Pages — each tool is its own Cloudflare Pages project, a single `index.html` file served from `toolname.kintools.net`
+- **Tools completed:** KIN-001 through KIN-035
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
+- **Directory structure:** Each tool lives at `sites/kin-NNN-name/` (e.g. `sites/kin-001-ukulele/`, `sites/kin-035-random-acts/`). Each directory must contain `index.html` and `wrangler.jsonc`.
 - **Creator:** Always `Darren` unless listed below
   - KIN-001 = Maya
   - KIN-008 = dBridge
@@ -19,6 +20,7 @@
   - KIN-018 = Alice and Darren
   - KIN-027 = William and Darren
   - KIN-028 = Darren and Daisy
+  - KIN-034 = Liam
 
 ---
 
@@ -26,9 +28,9 @@
 
 1. Apply all transforms to the source file locally
 2. Run syntax checks — do not push a broken file
-3. Push to GitHub via the Git Data API
-4. User deploys to Netlify independently and provides the live URL
-5. **Never guess a Netlify URL** — wait for the user to confirm
+3. Show the user what will change and **wait for explicit confirmation before pushing**
+4. Push to GitHub via the Git Data API — Cloudflare Pages auto-deploys on every push
+5. **Never push without user confirmation** — every push triggers a rebuild of all 35 Cloudflare projects
 
 ---
 
@@ -36,12 +38,11 @@
 
 | File | What changes |
 |---|---|
-| `index.html` (root) | New release card, tool count string, `--hb-NN` colour, nth-child animation delay |
-| `sites/kin-landing/index.html` | Identical changes — always keep both in sync |
+| `sites/kin-landing/index.html` | New release card, tool count string, `--hb-NN` colour, info overlay entry |
+| `sites/kin-NNN-name/index.html` | The tool itself (new file) |
+| `sites/kin-NNN-name/wrangler.jsonc` | Cloudflare Pages config (new file — see §18) |
 | `Kin Catalog.md` | Full tool entry (number, name, URL, summary, tech notes) |
 | `replit.md` | Update current tool count and latest tool reference |
-
-Both landing pages must always be identical. Never update one without the other.
 
 ---
 
@@ -293,7 +294,7 @@ Template:
 
 ```html
 <footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:var(--muted,#888)">
-  KIN-NNN · v1.0 · <a href="https://kintools.netlify.app/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Creator
+  KIN-NNN · v1.0 · <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Creator
   <!-- badge row goes here — see below -->
   <div style="margin-top:10px">
     <button id="kin-bug-btn" onclick="openBug()" style="background:none;border:none;font-size:11px;color:var(--muted,#888);cursor:pointer;letter-spacing:0.04em;font-family:-apple-system,sans-serif;padding:4px 0;min-height:32px;-webkit-appearance:none">Report a bug</button>
@@ -373,9 +374,9 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 The popover text is fixed — never change it:
 > *Data is stored in this browser only. Clearing browser storage will remove it permanently.*
 
-**Which tools have the ⓘ button:** KIN-002, KIN-007, KIN-009, KIN-010, KIN-013, KIN-014, KIN-015, KIN-016, KIN-018, KIN-022, KIN-024, KIN-025, KIN-026, KIN-027.
+**Which tools have the ⓘ button:** KIN-002, KIN-007, KIN-009, KIN-010, KIN-013, KIN-014, KIN-015, KIN-016, KIN-018, KIN-022, KIN-024, KIN-025, KIN-026, KIN-027, KIN-030, KIN-031, KIN-032, KIN-035.
 
-**Which tools use badge only (stateless or theme-only storage):** KIN-001, KIN-003, KIN-004, KIN-005, KIN-006, KIN-008, KIN-011, KIN-012, KIN-017, KIN-019, KIN-020, KIN-021, KIN-023, KIN-028, KIN-029.
+**Which tools use badge only (stateless or theme-only storage):** KIN-001, KIN-003, KIN-004, KIN-005, KIN-006, KIN-008, KIN-011, KIN-012, KIN-017, KIN-019, KIN-020, KIN-021, KIN-023, KIN-028, KIN-029, KIN-033, KIN-034.
 
 ---
 
@@ -437,15 +438,21 @@ Add to both `index.html` (root) and `sites/kin-landing/index.html`.
 | KIN-027 | `--hb-27` | `#c0293a` | `1.50s` |
 | KIN-028 | `--hb-028` | `#2c3e50` | `1.55s` |
 | KIN-029 | `--hb-029` | `#241a10` | `1.60s` |
+| KIN-030 | `--hb-030` | `#cc0000` | `1.65s` |
+| KIN-031 | `--hb-031` | `#1a56db` | `1.70s` |
+| KIN-032 | `--hb-032` | `#117a55` | `1.75s` |
+| KIN-033 | `--hb-033` | `#5a1e2e` | `1.80s` |
+| KIN-034 | `--hb-034` | `#1a472a` | `1.85s` |
+| KIN-035 | `--hb-035` | `#5c2a1a` | `1.90s` |
 
 Pattern: `delay = 1.10s + (N - 19) × 0.05s`. Choose a distinct colour for each new `--hb-NN` variable.
 
-Note: KIN-028 and KIN-029 use zero-padded variable names (`--hb-028`, `--hb-029`) — match whichever format exists in the landing page.
+Note: KIN-028 onward use zero-padded variable names (`--hb-028`, `--hb-030`, etc.) — match whichever format exists in the landing page.
 
 ### Card HTML structure
 
 ```html
-<div class="card" data-category="CATEGORY" style="--c:var(--hb-NN);animation-delay:Xs" onclick="location.href='https://NETLIFY_URL.netlify.app'">
+<div class="card" data-category="CATEGORY" style="--c:var(--hb-NN);animation-delay:Xs" onclick="location.href='https://toolname.kintools.net'">
   <div class="icon">EMOJI</div>
   <div class="name">KIN-NNN</div>
   <div class="tool-name">Tool Name</div>
@@ -460,12 +467,13 @@ Note: KIN-028 and KIN-029 use zero-padded variable names (`--hb-028`, `--hb-029`
 |---|---|
 | `music` | KIN-001, KIN-002, KIN-003, KIN-010 |
 | `design` | KIN-004 |
-| `utility` | KIN-005, KIN-011, KIN-012, KIN-016, KIN-019, KIN-020, KIN-021, KIN-022, KIN-026, KIN-028 |
-| `education` | KIN-006, KIN-008 |
-| `wellbeing` | KIN-007, KIN-013, KIN-014, KIN-017, KIN-018, KIN-024, KIN-025, KIN-029 |
+| `utility` | KIN-005, KIN-011, KIN-012, KIN-016, KIN-019, KIN-020, KIN-021, KIN-022, KIN-026, KIN-028, KIN-033 |
+| `education` | KIN-006, KIN-008, KIN-034 |
+| `wellbeing` | KIN-007, KIN-013, KIN-014, KIN-017, KIN-018, KIN-024, KIN-025, KIN-029, KIN-035 |
 | `travel` | KIN-009 |
 | `health` | KIN-015, KIN-027 |
 | `developer` | KIN-023 |
+| `business` | KIN-030, KIN-031, KIN-032 |
 
 **`version` div**: always `v1.0` for a new tool. Bump in step with the footer when making a significant update.
 
@@ -823,3 +831,77 @@ async function toggleWake() {
 - `showToast()` must be present — add the standard §16.2 block if the tool doesn't already have it
 
 **Tools using this pattern:** KIN-006, KIN-027
+
+---
+
+## 18. Cloudflare Pages Deployment
+
+Each tool is a separate Cloudflare Pages project. Every tool directory must contain a `wrangler.jsonc` file.
+
+### wrangler.jsonc template
+
+```jsonc
+{
+  "name": "kin-NNN-toolname",
+  "pages_build_output_dir": "."
+}
+```
+
+- `name` must be lowercase, hyphenated, and match the directory name exactly (e.g. `kin-035-random-acts`)
+- `pages_build_output_dir` is always `"."` — the tool is in the root of its own directory
+
+### Cloudflare Pages project settings (set once per tool)
+
+| Setting | Value |
+|---|---|
+| Root directory | `sites/kin-NNN-name` (exact folder name, no trailing slash) |
+| Build command | *(leave blank)* |
+| Deploy command | `npx wrangler deploy` |
+| Non-prod deploy command | `npx wrangler versions upload` |
+
+**Do NOT use `--config` flag** — Cloudflare already sets the root directory, so the flag would double the path.
+
+### Custom domain
+
+Each tool gets a subdomain: `toolname.kintools.net` (e.g. `randomacts.kintools.net`). Add it in the Pages project's Settings → Custom Domains. Cloudflare handles DNS automatically — no manual DNS records needed.
+
+### Subdomain reference
+
+| Tool | Subdomain |
+|---|---|
+| KIN-001 | ukulele.kintools.net |
+| KIN-002 | metronome.kintools.net |
+| KIN-003 | bpm.kintools.net |
+| KIN-004 | colour.kintools.net |
+| KIN-005 | qr.kintools.net |
+| KIN-006 | timer.kintools.net |
+| KIN-007 | ambient.kintools.net |
+| KIN-008 | flashcards.kintools.net |
+| KIN-009 | jetlag.kintools.net |
+| KIN-010 | audiocalc.kintools.net |
+| KIN-011 | unitprice.kintools.net |
+| KIN-012 | namepicker.kintools.net |
+| KIN-013 | mood.kintools.net |
+| KIN-014 | breathing.kintools.net |
+| KIN-015 | quietcycle.kintools.net |
+| KIN-016 | recipescale.kintools.net |
+| KIN-017 | decision.kintools.net |
+| KIN-018 | *(removed from landing — verify subdomain in Cloudflare)* |
+| KIN-019 | markdown.kintools.net |
+| KIN-020 | passgen.kintools.net |
+| KIN-021 | textcounter.kintools.net |
+| KIN-022 | fairshare.kintools.net |
+| KIN-023 | json.kintools.net |
+| KIN-024 | thoughtloop.kintools.net |
+| KIN-025 | stretch.kintools.net |
+| KIN-026 | ground.kintools.net |
+| KIN-027 | gym.kintools.net |
+| KIN-028 | scan.kintools.net |
+| KIN-029 | nudge.kintools.net |
+| KIN-030 | quote.kintools.net |
+| KIN-031 | invoice.kintools.net |
+| KIN-032 | receipt.kintools.net |
+| KIN-033 | pagesurgeon.kintools.net |
+| KIN-034 | noise.kintools.net |
+| KIN-035 | randomacts.kintools.net |
+| Landing | kintools.net |
