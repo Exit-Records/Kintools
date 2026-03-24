@@ -1,0 +1,51 @@
+2026-03-24T01:59:36.460Z	Initializing build environment...
+2026-03-24T01:59:36.460Z	Initializing build environment...
+2026-03-24T01:59:37.909Z	Success: Finished initializing build environment
+2026-03-24T01:59:39.195Z	Cloning repository...
+2026-03-24T01:59:42.906Z	Restoring from dependencies cache
+2026-03-24T01:59:42.908Z	Restoring from build output cache
+2026-03-24T01:59:44.341Z	Detected the following tools from environment: pnpm@10.26.1, nodejs@22.16.0
+2026-03-24T01:59:46.071Z	Installing project dependencies: pnpm install --frozen-lockfile
+2026-03-24T01:59:46.812Z	Scope: all 12 workspace projects
+2026-03-24T01:59:46.976Z	Lockfile is up to date, resolution step is skipped
+2026-03-24T01:59:47.035Z	Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-03-24T01:59:47.108Z	Packages: +499
+2026-03-24T01:59:47.110Z	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-03-24T01:59:48.035Z	Progress: resolved 499, reused 0, downloaded 13, added 0
+2026-03-24T01:59:49.032Z	Progress: resolved 499, reused 0, downloaded 150, added 63
+2026-03-24T01:59:50.037Z	Progress: resolved 499, reused 0, downloaded 188, added 95
+2026-03-24T01:59:51.038Z	Progress: resolved 499, reused 0, downloaded 195, added 95
+2026-03-24T01:59:52.038Z	Progress: resolved 499, reused 0, downloaded 200, added 96
+2026-03-24T01:59:53.038Z	Progress: resolved 499, reused 0, downloaded 222, added 103
+2026-03-24T01:59:54.043Z	Progress: resolved 499, reused 0, downloaded 317, added 137
+2026-03-24T01:59:55.046Z	Progress: resolved 499, reused 0, downloaded 402, added 171
+2026-03-24T01:59:56.047Z	Progress: resolved 499, reused 0, downloaded 461, added 191
+2026-03-24T01:59:57.047Z	Progress: resolved 499, reused 0, downloaded 499, added 405
+2026-03-24T01:59:57.181Z	Progress: resolved 499, reused 0, downloaded 499, added 499, done
+2026-03-24T01:59:57.484Z	.../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+2026-03-24T01:59:57.576Z	.../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+2026-03-24T01:59:58.019Z	
+2026-03-24T01:59:58.019Z	dependencies:
+2026-03-24T01:59:58.019Z	+ @replit/connectors-sdk 0.2.0
+2026-03-24T01:59:58.019Z	+ jszip 3.10.1
+2026-03-24T01:59:58.019Z	
+2026-03-24T01:59:58.019Z	devDependencies:
+2026-03-24T01:59:58.020Z	+ prettier 3.8.1
+2026-03-24T01:59:58.020Z	+ typescript 5.9.3
+2026-03-24T01:59:58.020Z	
+2026-03-24T01:59:58.133Z	. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+2026-03-24T01:59:58.147Z	. preinstall: Done
+2026-03-24T01:59:58.326Z	Done in 12s using pnpm v10.26.1
+2026-03-24T01:59:58.617Z	Executing user deploy command: npx wrangler deploy
+2026-03-24T02:00:00.068Z	npm warn exec The following package was not found and will be installed: wrangler@4.76.0
+2026-03-24T02:00:10.583Z	
+2026-03-24T02:00:10.584Z	 ⛅️ wrangler 4.76.0
+2026-03-24T02:00:10.584Z	───────────────────
+2026-03-24T02:00:11.096Z	
+2026-03-24T02:00:11.096Z	Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+2026-03-24T02:00:11.097Z	
+2026-03-24T02:00:11.175Z	✘ [ERROR] The Wrangler application detection logic has been run in the root of a workspace instead of targeting a specific project. Change your working directory to one of the applications in the workspace and try again.
+2026-03-24T02:00:11.175Z	
+2026-03-24T02:00:11.175Z	
+2026-03-24T02:00:11.209Z	🪵  Logs were written to "/opt/buildhome/.config/.wrangler/logs/wrangler-2026-03-24_02-00-09_787.log"
+2026-03-24T02:00:11.292Z	Failed: error occurred while running deploy command
