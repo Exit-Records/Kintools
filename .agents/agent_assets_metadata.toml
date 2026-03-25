@@ -12,3 +12,9 @@ id = "p7Oum3Kr0zUOC_5_xtfIr"
 uri = "file://Kin Build Rules.md"
 type = "text"
 title = "Kin Build Rules — updated to KIN-023"
+
+[[outputs]]
+id = "-z9vzElItEYG-8rRoc1AZ"
+uri = "file://README.md"
+type = "text"
+title = "README.md — Kin Tools"
