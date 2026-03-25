@@ -36,3 +36,9 @@ id = "k0kY5OyS6nHcEnovFLWfV"
 uri = "file://kin-icons-1080x1350.png"
 type = "image"
 title = "Kin — Home Screen Icons (1080×1350)"
+
+[[outputs]]
+id = "mL1a1miedvoeTGuXWG867"
+uri = "file://icon-grid.png"
+type = "image"
+title = "Kin Tools — Icon Grid (1080×1350)"
