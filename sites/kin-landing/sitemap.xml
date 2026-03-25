@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Landing page -->
+  <url>
+    <loc>https://kintools.net/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- KIN-001: Ukulele Chord Finder -->
+  <url>
+    <loc>https://ukulele.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-002: Metronome -->
+  <url>
+    <loc>https://metronome.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-003: BPM Tap -->
+  <url>
+    <loc>https://bpm.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-004: Colour Picker -->
+  <url>
+    <loc>https://colour.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-005: QR Builder -->
+  <url>
+    <loc>https://qr.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-006: Classroom Timer -->
+  <url>
+    <loc>https://timer.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-007: Ambient Mixer -->
+  <url>
+    <loc>https://ambient.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-008: Flashcards -->
+  <url>
+    <loc>https://flashcards.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-009: Jet Lag Planner -->
+  <url>
+    <loc>https://jetlag.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-010: Audio Calculator -->
+  <url>
+    <loc>https://audiocalc.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-011: Unit Price -->
+  <url>
+    <loc>https://unitprice.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-012: Name Picker -->
+  <url>
+    <loc>https://namepicker.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-013: Mood Log -->
+  <url>
+    <loc>https://mood.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-014: Breathing -->
+  <url>
+    <loc>https://breathing.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-015: Quiet Cycle -->
+  <url>
+    <loc>https://quietcycle.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-016: Recipe Scale -->
+  <url>
+    <loc>https://recipescale.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-017: Decision Maker -->
+  <url>
+    <loc>https://decision.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-019: Markdown Download -->
+  <url>
+    <loc>https://markdown.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-020: Password Generator -->
+  <url>
+    <loc>https://passgen.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-021: Text Counter -->
+  <url>
+    <loc>https://textcounter.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-022: Fair Share -->
+  <url>
+    <loc>https://fairshare.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-023: JSON -->
+  <url>
+    <loc>https://json.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-024: Thought Loop -->
+  <url>
+    <loc>https://thoughtloop.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-025: Stretch -->
+  <url>
+    <loc>https://stretch.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-026: Kin Ground -->
+  <url>
+    <loc>https://ground.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-027: Kin Gym -->
+  <url>
+    <loc>https://gym.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-028: Scan -->
+  <url>
+    <loc>https://scan.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-029: Nudge -->
+  <url>
+    <loc>https://nudge.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-030: Quote -->
+  <url>
+    <loc>https://quote.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-031: Invoice -->
+  <url>
+    <loc>https://invoice.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-032: Receipt -->
+  <url>
+    <loc>https://receipt.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-033: Page Surgeon -->
+  <url>
+    <loc>https://pagesurgeon.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-034: Noise Meter -->
+  <url>
+    <loc>https://noise.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- KIN-035: Random Acts -->
+  <url>
+    <loc>https://randomacts.kintools.net/</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
