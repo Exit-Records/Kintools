@@ -18,3 +18,9 @@ id = "-z9vzElItEYG-8rRoc1AZ"
 uri = "file://README.md"
 type = "text"
 title = "README.md — Kin Tools"
+
+[[outputs]]
+id = "YdymRyGorCkrmk-3KnnFa"
+uri = "file://Kin Catalog.md"
+type = "text"
+title = "Kin Catalog.md"
