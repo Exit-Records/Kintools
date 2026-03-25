@@ -22,7 +22,7 @@ These are not aspirational guidelines. They are entry requirements.
 
 **Current tools: KIN-001 through KIN-028 (28 tools). Next: KIN-029.**
 
-Latest: KIN-028 · Scan — `sites/kin-028-scan/` — `https://kinscanner.netlify.app`
+Latest: KIN-028 · Scan — `sites/kin-028-scan/` — `https://scan.kintools.net`
 
 ---
 
@@ -158,15 +158,15 @@ Always `Darren` unless the user explicitly specifies otherwise.
 ## Landing pages
 
 Two files kept in sync — always edit both:
-- `index.html` (root — Netlify deploy)
-- `sites/kin-landing/index.html` (local preview)
+- `index.html` (root — kept in sync with sites/kin-landing/)
+- `sites/kin-landing/index.html` (Cloudflare Pages deploy)
 
 ### Adding a new tool card
 1. Add `--hb-NNN: #colour;` to `:root` CSS vars
 2. Add `.release:nth-child(NNN) { animation-delay: Xs; }` (increment by 0.05s)
 3. Update count: `<span class="catalog-count">N tools</span>`
 4. Add card before closing `</div>` of `.catalog`
-5. Card `href="#"` until Netlify URL is confirmed — then update both files
+5. Card `href="#"` until Cloudflare URL is confirmed — then update both files
 
 ### Category labels (consistent set)
 `Wellbeing` · `Utility` · `Music` · `Health` · `Design` · `Developer` · `Education` · `Learning` · `Shopping` · `Travel`
@@ -189,29 +189,20 @@ Always update both after a new tool is shipped.
 - GitHub repo: `Exit-Records/Kintools` (main branch)
 - No build command — static HTML files served directly
 
-### Netlify setup for each new tool — ALWAYS REMIND USER
+### Cloudflare Pages setup for each new tool — ALWAYS REMIND USER
 
-When a new tool is ready to deploy, the user must create a new Netlify site and set **two things** in the Netlify UI:
-
-| Setting | Value |
-|---|---|
-| **Publish directory** | `sites/kin-NNN-tool-name` |
-| **Environment variable** | `SITE_DIR` = `sites/kin-NNN-tool-name` |
-
-Both values are identical. The publish directory tells Netlify what folder to serve. The `SITE_DIR` env var is used by the `netlify.toml` ignore command to skip builds when that folder hasn't changed (saves credits).
+When a new tool is ready to deploy, the user must create a new Cloudflare Pages project:
 
 Steps to remind the user:
-1. Netlify → Add new site → Import from Git → `Exit-Records/Kintools`
+1. Cloudflare → Workers & Pages → Create → Pages → Connect to Git → `Exit-Records/Kintools`
 2. Build command: leave blank
-3. Publish directory: `sites/kin-NNN-tool-name`
-4. Site configuration → Environment variables → Add `SITE_DIR` = `sites/kin-NNN-tool-name`
-
-The root-level `netlify.toml` handles ignore logic automatically once `SITE_DIR` is set.
+3. Build output directory: `sites/kin-NNN-tool-name`
+4. Set custom domain: `toolname.kintools.net`
 
 ### GitHub push rule — CRITICAL
 **Always use the Git Tree API for pushes. Never use the Contents API (PUT per file).**
-Every Contents API PUT = one commit = one Netlify deploy per connected site (~27 sites).
-Multiple individual pushes in a session burn through Netlify credits fast.
+Every Contents API PUT = one commit = one Cloudflare Pages deploy per connected site (~35 sites).
+Multiple individual pushes in a session burn through Cloudflare build minutes fast.
 
 Correct approach — single batched commit for all files changed in a session:
 1. Create blobs for each changed file (`POST /repos/.../git/blobs`)
@@ -228,7 +219,7 @@ This produces **1 commit → 1 deploy per site**, no matter how many files chang
 
 - Iterative development; ask before major architectural changes
 - All changes pushed to GitHub before handing back
-- Landing page Netlify URLs confirmed by user before updating card hrefs
+- Landing page Cloudflare URLs confirmed by user before updating card hrefs
 - Description style: short conversational sentences, plain English, no jargon
 - Never default new tools to dark mode
 
