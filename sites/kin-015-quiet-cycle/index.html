@@ -262,22 +262,6 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
-<link rel="canonical" href="https://quietcycle.kintools.net/">
-  <meta name="description" content="Period tracker and cycle predictor. Calendar view with period, predicted, and fertile day highlights. Fertility window toggle, PIN lock, panic delete, and…">
-  <meta name="author" content="Kin Tools">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://quietcycle.kintools.net/">
-  <meta property="og:title" content="KIN-015 — Quiet Cycle — Kin">
-  <meta property="og:description" content="Period tracker and cycle predictor. Calendar view with period, predicted, and fertile day highlights. Fertility window toggle, PIN lock, panic delete, and…">
-  <meta property="og:image" content="https://kintools.net/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Kin Tools">
-  <meta property="og:locale" content="en_GB">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KIN-015 — Quiet Cycle — Kin">
-  <meta name="twitter:description" content="Period tracker and cycle predictor. Calendar view with period, predicted, and fertile day highlights. Fertility window toggle, PIN lock, panic delete, and…">
-  <meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -381,8 +365,8 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
       <button class="cal-arr" id="cal-next">›</button>
     </div>
     <div class="cal-wds">
-      <div class="cal-wd">Su</div><div class="cal-wd">Mo</div><div class="cal-wd">Tu</div>
-      <div class="cal-wd">We</div><div class="cal-wd">Th</div><div class="cal-wd">Fr</div><div class="cal-wd">Sa</div>
+      <div class="cal-wd">Mo</div><div class="cal-wd">Tu</div><div class="cal-wd">We</div>
+      <div class="cal-wd">Th</div><div class="cal-wd">Fr</div><div class="cal-wd">Sa</div><div class="cal-wd">Su</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
     <div class="cal-legend">
@@ -726,7 +710,7 @@ function renderActive() {
 function renderCal() {
   document.getElementById('cal-mo').textContent=`${MO[calM]} ${calY}`;
   const pd=periodDays(), pred=predictedDays(), fert=fertileDays(), tod=today();
-  const first=new Date(calY,calM,1).getDay();
+  const first=(new Date(calY,calM,1).getDay()+6)%7;
   const dim=new Date(calY,calM+1,0).getDate();
   const grid=document.getElementById('cal-grid');
   grid.innerHTML='';
