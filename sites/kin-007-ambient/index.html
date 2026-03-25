@@ -231,6 +231,9 @@
     /* ── Drift toggle ─────────────────────────────── */
     .drift-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .drift-info { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .wake-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .wake-info { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    #wake-panel { display: none; }
     .toggle-pill {
       width: 44px; height: 24px; border-radius: 12px;
       background: var(--border); border: none;
@@ -391,6 +394,19 @@
             <div class="drift-info">Nodes drift gently over time</div>
           </div>
           <button class="toggle-pill" id="drift-toggle"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="wake-panel">
+      <div class="panel-header">Screen Lock</div>
+      <div class="panel-body">
+        <div class="wake-row">
+          <div>
+            <div style="font-size:13px;font-weight:500;">Keep screen on</div>
+            <div class="wake-info">Prevent sleep while playing</div>
+          </div>
+          <button class="toggle-pill" id="wake-toggle"></button>
         </div>
       </div>
     </div>
@@ -570,6 +586,7 @@ const state = {
   playing: false,
   masterVolume: 75,
   drift: false,
+  wakeLock: false,
   timerMinutes: 0,
   timerEnd: null,
   timerInterval: null,
@@ -948,11 +965,31 @@ function updateReverb(name) {
   reverbConvolver.buffer = makeIR(ctx, cfg.duration, cfg.decay);
 }
 
+// ── Wake Lock ────────────────────────────────────────────────────
+let wakeSentinel = null;
+
+async function acquireWakeLock() {
+  if (!state.wakeLock || !('wakeLock' in navigator)) return;
+  try {
+    wakeSentinel = await navigator.wakeLock.request('screen');
+    wakeSentinel.addEventListener('release', () => { wakeSentinel = null; });
+  } catch (_) {}
+}
+
+async function releaseWakeLock() {
+  if (wakeSentinel) { try { await wakeSentinel.release(); } catch (_) {} wakeSentinel = null; }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && state.playing) acquireWakeLock();
+});
+
 function play() {
   if (!ctx) initAudio();
   if (ctx.state === 'suspended') ctx.resume();
   state.playing = true;
   updateGains();
+  acquireWakeLock();
   document.getElementById('btn-play').textContent = '⏸  Pause';
   document.getElementById('btn-play').classList.add('playing');
 }
@@ -960,6 +997,7 @@ function play() {
 function pause() {
   state.playing = false;
   if (ctx) ctx.suspend();
+  releaseWakeLock();
   document.getElementById('btn-play').textContent = '▶ \u00a0Play';
   document.getElementById('btn-play').classList.remove('playing');
 }
@@ -1407,6 +1445,22 @@ document.getElementById('drift-toggle').addEventListener('click', () => {
   saveMix();
   showToast(state.drift ? 'Drift on' : 'Drift off');
 });
+
+// Wake Lock toggle
+if ('wakeLock' in navigator) {
+  document.getElementById('wake-panel').style.display = '';
+  document.getElementById('wake-toggle').addEventListener('click', () => {
+    state.wakeLock = !state.wakeLock;
+    document.getElementById('wake-toggle').classList.toggle('on', state.wakeLock);
+    if (state.wakeLock && state.playing) {
+      acquireWakeLock();
+      showToast('Screen will stay on');
+    } else {
+      releaseWakeLock();
+      showToast('Screen lock restored');
+    }
+  });
+}
 
 // Copy mix code
 document.getElementById('btn-copy-code').addEventListener('click', () => {
