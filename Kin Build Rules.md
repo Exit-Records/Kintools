@@ -11,6 +11,9 @@
 - **Deployment:** Cloudflare Pages — each tool is its own Cloudflare Pages project, a single `index.html` file served from `toolname.kintools.net`
 - **Tools completed:** KIN-001 through KIN-035
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
+
+  Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only. A tool may contain multiple functions if they serve a single, clearly defined user intent.
+
 - **Directory structure:** Each tool lives at `sites/kin-NNN-name/` (e.g. `sites/kin-001-ukulele/`, `sites/kin-035-random-acts/`). Each directory must contain `index.html` and `wrangler.jsonc`.
 - **Creator:** Always `Darren` unless listed below
   - KIN-001 = Maya
