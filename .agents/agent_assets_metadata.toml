@@ -24,3 +24,9 @@ id = "YdymRyGorCkrmk-3KnnFa"
 uri = "file://Kin Catalog.md"
 type = "text"
 title = "Kin Catalog.md"
+
+[[outputs]]
+id = "H2VQfod46nZdcfcbMEEao"
+uri = "file://Kin Tools Overview.md"
+type = "text"
+title = "Kin Tools Overview"
