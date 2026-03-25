@@ -11,6 +11,9 @@
 - **Deployment:** Cloudflare Pages — each tool is its own Cloudflare Pages project, a single `index.html` file served from `toolname.kintools.net`
 - **Tools completed:** KIN-001 through KIN-035
 - **Architecture:** Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only — nothing stored server-side, nothing transmitted.
+
+  Every tool is a single self-contained HTML file. No external runtime dependencies. All processing is client-side only. A tool may contain multiple functions if they serve a single, clearly defined user intent.
+
 - **Directory structure:** Each tool lives at `sites/kin-NNN-name/` (e.g. `sites/kin-001-ukulele/`, `sites/kin-035-random-acts/`). Each directory must contain `index.html` and `wrangler.jsonc`.
 - **Creator:** Always `Darren` unless listed below
   - KIN-001 = Maya
@@ -39,7 +42,7 @@
 | File | What changes |
 |---|---|
 | `sites/kin-landing/index.html` | New release card, tool count string, `--hb-NN` colour, info overlay entry |
-| `sites/kin-NNN-name/index.html` | The tool itself (new file) |
+| `sites/kin-NNN-name/index.html` | The tool itself — must include OG/canonical block (see §19) |
 | `sites/kin-NNN-name/wrangler.jsonc` | Cloudflare Pages config (new file — see §18) |
 | `Kin Catalog.md` | Full tool entry (number, name, URL, summary, tech notes) |
 | `replit.md` | Update current tool count and latest tool reference |
@@ -905,3 +908,48 @@ Each tool gets a subdomain: `toolname.kintools.net` (e.g. `randomacts.kintools.n
 | KIN-034 | noise.kintools.net |
 | KIN-035 | randomacts.kintools.net |
 | Landing | kintools.net |
+
+---
+
+## 19. Meta Tags — OG, Twitter Card, and Canonical
+
+Every Kin tool must include the following block in `<head>`, inserted immediately before `</head>`. Customise the three per-tool values; everything else is fixed.
+
+### Per-tool values
+
+| Field | Value |
+|---|---|
+| `SUBDOMAIN` | From the §18 subdomain table (e.g. `ukulele`) |
+| `TOOL_TITLE` | `KIN-NNN — Tool Name — Kin` (e.g. `KIN-001 — Ukulele Tuner — Kin`) |
+| `TOOL_DESC` | Short description from the landing page info overlay — max 155 chars, truncate at a word boundary |
+
+### Template
+
+```html
+<link rel="canonical" href="https://SUBDOMAIN.kintools.net/">
+<meta name="description" content="TOOL_DESC">
+<meta name="author" content="Kin Tools">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://SUBDOMAIN.kintools.net/">
+<meta property="og:title" content="TOOL_TITLE">
+<meta property="og:description" content="TOOL_DESC">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TOOL_TITLE">
+<meta name="twitter:description" content="TOOL_DESC">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+```
+
+### Notes
+
+- **og:image** is always `https://kintools.net/og-image.png` — shared across all tools, hosted on the landing page project.
+- **canonical** points to the tool's own subdomain, not `kintools.net`. This tells Google each tool is an independent page.
+- **Insertion point:** immediately before `</head>`. Use the function form of `.replace()`:
+  ```js
+  src = src.replace('</head>', () => ogBlock + '\n</head>');
+  ```
+- **Existing tools:** KIN-001 through KIN-035 already have OG tags (added in batch commit `977b0f5`), except KIN-003, KIN-005 (had their own already), and KIN-018 (subdomain unconfirmed).
