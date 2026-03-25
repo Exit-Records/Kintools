@@ -20,9 +20,9 @@ These are not aspirational guidelines. They are entry requirements.
 
 **External resources policy:** Fonts, audio libraries, and open frameworks are permitted if they do not track users. Google Fonts — fine. An analytics script — not fine. The test: does this resource work without knowing anything about the person using it?
 
-**Current tools: KIN-001 through KIN-028 (28 tools). Next: KIN-029.**
+**Current tools: KIN-001 through KIN-035 (35 tools).**
 
-Latest: KIN-028 · Scan — `sites/kin-028-scan/` — `https://scan.kintools.net`
+Latest: KIN-035 · Random Acts — `sites/kin-035/` — `https://randomacts.kintools.net`
 
 ---
 
