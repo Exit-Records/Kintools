@@ -35,24 +35,24 @@
   }
 
 html.light {
---bg:          #FAFAF7;
---surface:     #FFFFFF;
---surface2:    #F3F2EE;
---border:      #E4E2DC;
---border-hover:#CCCAC2;
---text:        #1A1A18;
---text-mid:    #5C5B56;
---text-dim:    #9C9A94;
---accent:      #2D5A3D;
---accent-dim:  #E8F0EB;
+–bg:          #FAFAF7;
+–surface:     #FFFFFF;
+–surface2:    #F3F2EE;
+–border:      #E4E2DC;
+–border-hover:#CCCAC2;
+–text:        #1A1A18;
+–text-mid:    #5C5B56;
+–text-dim:    #9C9A94;
+–accent:      #2D5A3D;
+–accent-dim:  #E8F0EB;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+- { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
 font-family: ‘DM Sans’, sans-serif;
-background: var(--bg);
-color: var(--text);
+background: var(–bg);
+color: var(–text);
 min-height: 100dvh;
 -webkit-font-smoothing: antialiased;
 }
@@ -63,14 +63,14 @@ top: 14px; right: 14px;
 z-index: 999;
 width: 36px; height: 36px;
 border-radius: 50%;
-border: 1px solid var(--border);
-background: var(--surface);
+border: 1px solid var(–border);
+background: var(–surface);
 cursor: pointer;
 display: flex; align-items: center; justify-content: center;
 font-size: 16px;
 transition: border-color 0.2s, background 0.2s;
 }
-#theme-btn:hover { border-color: var(--border-hover); }
+#theme-btn:hover { border-color: var(–border-hover); }
 
 .wrap {
 max-width: 620px;
@@ -89,25 +89,25 @@ to   { opacity: 1; transform: translateY(0); }
 .kin-label {
 font-size: 10px; font-weight: 700;
 letter-spacing: 0.12em; text-transform: uppercase;
-color: var(--text-dim); margin-bottom: 8px;
+color: var(–text-dim); margin-bottom: 8px;
 }
 
 .kin-title {
 font-family: ‘Instrument Serif’, serif;
 font-size: clamp(26px, 6vw, 36px);
 font-weight: 400; line-height: 1.1;
-color: var(--text); margin-bottom: 8px;
+color: var(–text); margin-bottom: 8px;
 }
 
-.kin-sub { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+.kin-sub { font-size: 14px; color: var(–text-mid); line-height: 1.6; }
 
 /* –– MODE TABS –– */
 .mode-tabs {
 display: flex;
 gap: 0;
 margin-bottom: 24px;
-background: var(--surface2);
-border-radius: var(--radius-sm);
+background: var(–surface2);
+border-radius: var(–radius-sm);
 padding: 3px;
 }
 
@@ -119,7 +119,7 @@ background: none;
 font-family: ‘DM Sans’, sans-serif;
 font-size: 13px;
 font-weight: 600;
-color: var(--text-dim);
+color: var(–text-dim);
 cursor: pointer;
 border-radius: 6px;
 min-height: 44px;
@@ -128,27 +128,27 @@ letter-spacing: 0.01em;
 }
 
 .mode-tab.active {
-background: var(--surface);
-color: var(--text);
+background: var(–surface);
+color: var(–text);
 box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .field-label {
 font-size: 11px; font-weight: 700;
 letter-spacing: 0.1em; text-transform: uppercase;
-color: var(--text-dim); margin-bottom: 8px;
+color: var(–text-dim); margin-bottom: 8px;
 display: flex; justify-content: space-between; align-items: baseline;
 }
 
-.field-label span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+.field-label span { font-size: 11px; font-weight: 400; color: var(–text-dim); }
 
 #name-input {
 width: 100%;
 min-height: 160px;
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius);
-color: var(--text);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+color: var(–text);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 14px;
 line-height: 1.7;
@@ -157,8 +157,8 @@ resize: vertical;
 transition: border-color 0.15s;
 -webkit-appearance: none;
 }
-#name-input::placeholder { color: var(--text-dim); }
-#name-input:focus { outline: none; border-color: var(--accent); }
+#name-input::placeholder { color: var(–text-dim); }
+#name-input:focus { outline: none; border-color: var(–accent); }
 
 .options-row {
 display: flex;
@@ -172,21 +172,21 @@ display: flex;
 align-items: center;
 gap: 8px;
 padding: 9px 14px;
-background: var(--surface);
-border: 1px solid var(--border);
+background: var(–surface);
+border: 1px solid var(–border);
 border-radius: 100px;
 cursor: pointer;
 font-size: 13px;
-color: var(--text-mid);
+color: var(–text-mid);
 font-weight: 500;
 transition: border-color 0.15s, color 0.15s, background 0.15s;
 user-select: none;
 }
 
 .toggle-pill.on {
-background: var(--accent-dim);
-border-color: var(--accent);
-color: var(--accent);
+background: var(–accent-dim);
+border-color: var(–accent);
+color: var(–accent);
 }
 
 .toggle-pill input { display: none; }
@@ -212,7 +212,7 @@ margin-bottom: 20px;
 
 .count-label {
 font-size: 13px;
-color: var(--text-mid);
+color: var(–text-mid);
 font-weight: 500;
 white-space: nowrap;
 }
@@ -221,9 +221,9 @@ white-space: nowrap;
 display: flex;
 align-items: center;
 gap: 0;
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
 overflow: hidden;
 }
 
@@ -231,21 +231,21 @@ overflow: hidden;
 width: 36px; height: 36px;
 border: none;
 background: transparent;
-color: var(--text-mid);
+color: var(–text-mid);
 font-size: 18px;
 cursor: pointer;
 transition: background 0.15s, color 0.15s;
 display: flex; align-items: center; justify-content: center;
 }
-.count-btn:hover { background: var(--surface2); color: var(--text); }
+.count-btn:hover { background: var(–surface2); color: var(–text); }
 
 #winner-count {
 width: 44px;
 background: transparent;
 border: none;
-border-left: 1px solid var(--border);
-border-right: 1px solid var(--border);
-color: var(--text);
+border-left: 1px solid var(–border);
+border-right: 1px solid var(–border);
+color: var(–text);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 15px;
 font-weight: 600;
@@ -260,10 +260,10 @@ height: 36px;
 #pick-btn {
 width: 100%;
 padding: 15px;
-background: var(--text);
-color: var(--bg);
+background: var(–text);
+color: var(–bg);
 border: none;
-border-radius: var(--radius);
+border-radius: var(–radius);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 16px;
 font-weight: 700;
@@ -277,9 +277,9 @@ margin-bottom: 28px;
 #pick-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 #result-card {
-background: var(--accent-dim);
-border: 1px solid var(--accent);
-border-radius: var(--radius);
+background: var(–accent-dim);
+border: 1px solid var(–accent);
+border-radius: var(–radius);
 padding: 28px 24px;
 margin-bottom: 24px;
 display: none;
@@ -293,7 +293,7 @@ font-size: 10px;
 font-weight: 700;
 letter-spacing: 0.12em;
 text-transform: uppercase;
-color: var(--accent);
+color: var(–accent);
 margin-bottom: 16px;
 opacity: 0.75;
 }
@@ -301,7 +301,7 @@ opacity: 0.75;
 #result-names {
 font-family: ‘Instrument Serif’, serif;
 font-size: clamp(22px, 5vw, 32px);
-color: var(--accent);
+color: var(–accent);
 line-height: 1.4;
 }
 
@@ -309,7 +309,7 @@ line-height: 1.4;
 font-family: ‘DM Sans’, sans-serif;
 font-size: 18px;
 font-weight: 600;
-color: var(--text-mid);
+color: var(–text-mid);
 opacity: 0.7;
 }
 
@@ -341,12 +341,12 @@ margin-bottom: 12px;
 .section-label {
 font-size: 10px; font-weight: 700;
 letter-spacing: 0.12em; text-transform: uppercase;
-color: var(--text-dim);
+color: var(–text-dim);
 }
 
 #clear-history {
 font-size: 11px;
-color: var(--text-dim);
+color: var(–text-dim);
 background: none;
 border: none;
 cursor: pointer;
@@ -354,7 +354,7 @@ padding: 0;
 font-family: ‘DM Sans’, sans-serif;
 transition: color 0.15s;
 }
-#clear-history:hover { color: var(--text-mid); }
+#clear-history:hover { color: var(–text-mid); }
 
 #history-list {
 display: flex;
@@ -363,25 +363,25 @@ gap: 6px;
 max-height: 260px;
 overflow-y: auto;
 scrollbar-width: thin;
-scrollbar-color: var(--border) transparent;
+scrollbar-color: var(–border) transparent;
 }
 #history-list::-webkit-scrollbar { width: 4px; }
 #history-list::-webkit-scrollbar-track { background: transparent; }
-#history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+#history-list::-webkit-scrollbar-thumb { background: var(–border); border-radius: 2px; }
 
 .history-item {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
 padding: 10px 14px;
 font-size: 13px;
-color: var(--text-mid);
+color: var(–text-mid);
 line-height: 1.5;
 animation: fadeIn 0.25s ease-out;
 }
 
 .history-item strong {
-color: var(--text);
+color: var(–text);
 font-weight: 600;
 }
 
@@ -389,9 +389,9 @@ font-weight: 600;
 width: 100%;
 padding: 11px;
 background: transparent;
-border: 1px solid var(--border);
-border-radius: var(--radius);
-color: var(--text-dim);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+color: var(–text-dim);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 13px;
 font-weight: 500;
@@ -399,7 +399,7 @@ cursor: pointer;
 transition: border-color 0.15s, color 0.15s;
 margin-bottom: 28px;
 }
-#reset-btn:hover { border-color: var(--border-hover); color: var(--text-mid); }
+#reset-btn:hover { border-color: var(–border-hover); color: var(–text-mid); }
 
 /* –– SAVED CLASSES –– */
 .class-manager {
@@ -414,10 +414,10 @@ margin-bottom: 10px;
 
 .class-row select {
 flex: 1;
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
-color: var(--text);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 13px;
 padding: 0 12px;
@@ -427,10 +427,10 @@ cursor: pointer;
 }
 
 .class-row button {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
-color: var(--text-mid);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text-mid);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 12px;
 font-weight: 500;
@@ -441,7 +441,7 @@ white-space: nowrap;
 transition: border-color 0.15s, color 0.15s;
 }
 
-.class-row button:hover { border-color: var(--border-hover); color: var(--text); }
+.class-row button:hover { border-color: var(–border-hover); color: var(–text); }
 
 .class-row .delete-class {
 color: #c8785a;
@@ -458,10 +458,10 @@ margin-bottom: 16px;
 
 .save-class-row input {
 flex: 1;
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
-color: var(--text);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 14px;
 padding: 0 12px;
@@ -469,14 +469,14 @@ min-height: 44px;
 -webkit-appearance: none;
 }
 
-.save-class-row input::placeholder { color: var(--text-dim); }
-.save-class-row input:focus { outline: none; border-color: var(--accent); }
+.save-class-row input::placeholder { color: var(–text-dim); }
+.save-class-row input:focus { outline: none; border-color: var(–accent); }
 
 .save-class-row button {
-background: var(--accent-dim);
-border: 1px solid var(--accent);
-border-radius: var(--radius-sm);
-color: var(--accent);
+background: var(–accent-dim);
+border: 1px solid var(–accent);
+border-radius: var(–radius-sm);
+color: var(–accent);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 13px;
 font-weight: 600;
@@ -515,18 +515,18 @@ display: inline-flex;
 align-items: center;
 gap: 4px;
 padding: 6px 12px;
-background: var(--surface);
-border: 1px solid var(--border);
+background: var(–surface);
+border: 1px solid var(–border);
 border-radius: 100px;
 font-size: 13px;
-color: var(--text);
+color: var(–text);
 cursor: pointer;
 transition: all 0.15s;
 user-select: none;
 min-height: 36px;
 }
 
-.name-chip:hover { border-color: var(--border-hover); }
+.name-chip:hover { border-color: var(–border-hover); }
 
 .name-chip.absent {
 text-decoration: line-through;
@@ -536,7 +536,7 @@ border-style: dashed;
 
 .absent-count {
 font-size: 11px;
-color: var(--text-dim);
+color: var(–text-dim);
 }
 
 /* –– TEAMS RESULT –– */
@@ -554,9 +554,9 @@ margin-bottom: 16px;
 }
 
 .team-card {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius);
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
 padding: 16px;
 animation: fadeIn 0.35s ease-out both;
 }
@@ -577,7 +577,7 @@ text-transform: uppercase;
 
 .team-count {
 font-size: 11px;
-color: var(--text-dim);
+color: var(–text-dim);
 }
 
 .team-member {
@@ -585,9 +585,9 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 padding: 6px 0;
-border-bottom: 1px solid var(--border);
+border-bottom: 1px solid var(–border);
 font-size: 14px;
-color: var(--text);
+color: var(–text);
 }
 
 .team-member:last-child { border-bottom: none; }
@@ -595,7 +595,7 @@ color: var(--text);
 .team-move-btn {
 background: none;
 border: none;
-color: var(--text-dim);
+color: var(–text-dim);
 cursor: pointer;
 font-size: 14px;
 padding: 4px 8px;
@@ -608,7 +608,7 @@ border-radius: 6px;
 transition: background 0.15s, color 0.15s;
 }
 
-.team-move-btn:hover { background: var(--surface2); color: var(--text); }
+.team-move-btn:hover { background: var(–surface2); color: var(–text); }
 
 .teams-actions {
 display: flex;
@@ -619,9 +619,9 @@ gap: 10px;
 flex: 1;
 padding: 11px;
 background: transparent;
-border: 1px solid var(--border);
-border-radius: var(--radius-sm);
-color: var(--text-mid);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text-mid);
 font-family: ‘DM Sans’, sans-serif;
 font-size: 13px;
 font-weight: 500;
@@ -630,7 +630,7 @@ min-height: 44px;
 transition: border-color 0.15s, color 0.15s;
 }
 
-.teams-actions button:hover { border-color: var(--border-hover); color: var(--text); }
+.teams-actions button:hover { border-color: var(–border-hover); color: var(–text); }
 
 /* Team colours */
 .team-c0 .team-label { color: #7eb88a; }
@@ -649,19 +649,23 @@ transition: border-color 0.15s, color 0.15s;
 .kin-footer {
 margin-top: 40px;
 padding-top: 24px;
-border-top: 1px solid var(--border);
-text-align: center;
+border-top: 1px solid var(–border);
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 12px;
 }
 
 .foot-brand {
 font-family: ‘Instrument Serif’, serif;
 font-size: 16px;
-color: var(--text-dim);
+color: var(–text-dim);
 }
 
 .foot-meta {
 font-size: 11px;
-color: var(--text-dim);
+color: var(–text-dim);
 text-align: right;
 line-height: 1.7;
 }
@@ -675,20 +679,6 @@ line-height: 1.7;
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
 
-<link rel="canonical" href="https://namepicker.kintools.net/">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://namepicker.kintools.net/">
-  <meta property="og:title" content="KIN-012 — Name Picker — Kin">
-  <meta property="og:description" content="Pick one or more names at random from a list. Save class lists, mark absent pupils, split into teams. Free, offline, no accounts.">
-  <meta property="og:image" content="https://kintools.net/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Kin Tools">
-  <meta property="og:locale" content="en_GB">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KIN-012 — Name Picker — Kin">
-  <meta name="twitter:description" content="Pick one or more names at random from a list. Save class lists, mark absent pupils, split into teams. Free, offline, no accounts.">
-  <meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -762,6 +752,7 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
       </label>
     </div>
 
+```
 <div class="count-row">
   <span class="count-label">Pick</span>
   <div class="count-controls">
@@ -771,6 +762,8 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
   </div>
   <span class="count-label">name<span id="count-plural"></span></span>
 </div>
+```
+
   </div>
 
   <!-- Teams mode options -->
