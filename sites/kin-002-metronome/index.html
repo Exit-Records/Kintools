@@ -3,16 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>KIN-002 — Metronome — Kin</title>
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#c65d2e">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" id="theme-color-meta" content="#f6f4ef">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="KIN-002">
-  <link rel="apple-touch-icon" id="apple-touch-icon">
+<meta name="apple-mobile-web-app-title" content="KIN-002">
+<link rel="apple-touch-icon" id="apple-touch-icon">
 <style>
 :root {
   --bg: #f6f4ef;
@@ -216,12 +213,27 @@ button:active {
   margin-bottom: 4px;
 }
 
+.select-wrap {
+  position: relative;
+}
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--text-dim);
+  margin-top: 3px;
+  pointer-events: none;
+}
+
 select {
   width: 100%;
   min-height: 44px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 0 12px;
+  padding: 0 28px 0 12px;
   font-family: inherit;
   font-size: 14px;
   color: var(--text);
@@ -314,6 +326,50 @@ footer .kin-mark {
 <style>
 html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+<link rel="canonical" href="https://metronome.kintools.net/">
+<meta name="description" content="Simple metronome with subdivisions and tap tempo. Beat divisions, BPM input and tap-to-set. Runs entirely in the browser.">
+<meta name="author" content="Kin Tools">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://metronome.kintools.net/">
+<meta property="og:title" content="KIN-002 — Metronome — Kin">
+<meta property="og:description" content="Simple metronome with subdivisions and tap tempo. Beat divisions, BPM input and tap-to-set. Runs entirely in the browser.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-002 — Metronome — Kin">
+<meta name="twitter:description" content="Simple metronome with subdivisions and tap tempo. Beat divisions, BPM input and tap-to-set. Runs entirely in the browser.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+<script>
+(function(){
+  var m = {
+    name: "KIN-002 Metronome",
+    short_name: "Metronome",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#f6f4ef",
+    theme_color: "#f6f4ef"
+  };
+  var b = new Blob([JSON.stringify(m)], {type: "application/json"});
+  var lk = document.createElement("link");
+  lk.rel = "manifest";
+  lk.href = URL.createObjectURL(b);
+  document.head.appendChild(lk);
+})();
+
+if ("serviceWorker" in navigator) {
+  var _sw =
+    "const C='kin002-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
 </head>
 <body>
 
@@ -345,13 +401,15 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   <div class="settings">
     <div class="setting">
       <label>Time Signature</label>
-      <select id="signature">
-        <option value="4">4/4</option>
-        <option value="3">3/4</option>
-        <option value="5">5/4</option>
-        <option value="6">6/8</option>
-        <option value="7">7/8</option>
-      </select>
+      <div class="select-wrap">
+        <select id="signature">
+          <option value="4">4/4</option>
+          <option value="3">3/4</option>
+          <option value="5">5/4</option>
+          <option value="6">6/8</option>
+          <option value="7">7/8</option>
+        </select>
+      </div>
     </div>
     <div class="setting">
       <label>Subdivision</label>
@@ -632,20 +690,24 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
     }
   });
 
-  // Service Worker registration
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
+  // Note: background tab throttling may cause scheduler gaps on some browsers.
+  // This is a known browser limitation — not fixable without a native app or AudioWorklet.
 })();
 
 // Theme toggle
 (function() {
   const btn = document.getElementById('theme-btn');
+  const meta = document.getElementById('theme-color-meta');
   const saved = localStorage.getItem('kin002-theme');
-  if (saved === 'dark') { document.documentElement.classList.add('dark'); btn.textContent = '☀️'; }
+  if (saved === 'dark') {
+    document.documentElement.classList.add('dark');
+    btn.textContent = '☀️';
+    if (meta) meta.content = '#0d1117';
+  }
   btn.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     btn.textContent = isDark ? '☀️' : '🌙';
+    if (meta) meta.content = isDark ? '#0d1117' : '#f6f4ef';
     localStorage.setItem('kin002-theme', isDark ? 'dark' : 'light');
   });
 })();
@@ -859,20 +921,17 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-002 — Metronome',
+          form_type: 'bug_report',
+          subject: 'KIN-002 \u2014 Metronome',
           app: 'KIN-002',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
