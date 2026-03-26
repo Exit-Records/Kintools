@@ -29,7 +29,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-004 | Colour Picker | — | Darren | colour-picker.kintools.net | 🔨 | React bundle, not single-file HTML |
 | KIN-005 | QR Builder | v1.0 | Darren | qr-builder.kintools.net | 🔨 | React bundle, not single-file HTML |
 | KIN-006 | Classroom Timer | v1.0 | Darren | classroom-timer.kintools.net | ✅ | 3 issues fixed |
-| KIN-007 | Ambient Mixer | v1.0 | Darren | ambient.kintools.net | 🔄 | |
+| KIN-007 | Ambient Mixer | v1.0 | Darren | ambient.kintools.net | ✅ | 5 issues fixed; ScriptProcessorNode noted for future major update |
 | KIN-008 | Flashcards | v1.0 | dBridge | flashcards.kintools.net | 🔄 | |
 | KIN-009 | Jet Lag Planner | v1.0 | Darren | jetlag.kintools.net | 🔄 | |
 | KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | 🔄 | |
@@ -63,9 +63,9 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 ## Stress-test progress
 
-- **Tested:** 4 / 35 (KIN-001, 002, 003, 006)
+- **Tested:** 5 / 35 (KIN-001, 002, 003, 006, 007)
 - **Needs rebuild:** 2 (KIN-004, 005)
-- **Pending:** 29
+- **Pending:** 28
 
 ---
 
