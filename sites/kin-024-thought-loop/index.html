@@ -229,9 +229,10 @@ text-transform: uppercase;
 }
 
 .theme-toggle {
-position: fixed;
-top: calc(16px + env(safe-area-inset-top));
-right: calc(16px + env(safe-area-inset-right));
+position: absolute;
+right: 8px;
+top: 50%;
+transform: translateY(-50%);
 background: none;
 border: none;
 font-size: 1.2rem;
@@ -242,7 +243,6 @@ min-width: 44px;
 display: flex;
 align-items: center;
 justify-content: center;
-z-index: 100;
 -webkit-appearance: none;
 }
 
@@ -642,17 +642,14 @@ letter-spacing: 0.04em;
 
 /* Nav */
 .bottom-nav {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
+position: sticky;
+top: 0;
+z-index: 99;
 background: #f5f0eb;
-border-top: 1px solid #e5ddd5;
+border-bottom: 1px solid #e5ddd5;
 display: flex;
 justify-content: center;
 gap: 0;
-padding: 0 0 env(safe-area-inset-bottom);
-z-index: 99;
 }
 
 body.dark .bottom-nav {
@@ -885,7 +882,25 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 <meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
-<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('write')" id="nav-write">
+    <span class="nav-icon">&#9998;</span>
+    Write
+  </button>
+  <button class="nav-btn" onclick="showScreen('patterns')" id="nav-patterns">
+    <span class="nav-icon">&#9673;</span>
+    Patterns
+  </button>
+  <button class="nav-btn" onclick="showScreen('history')" id="nav-history">
+    <span class="nav-icon">&#8801;</span>
+    History
+  </button>
+  <button class="nav-btn" onclick="showScreen('settings')" id="nav-settings">
+    <span class="nav-icon">&#9881;</span>
+    Settings
+  </button>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+</div>
 
 <div class="app">
   <!-- WRITE SCREEN -->
@@ -978,27 +993,6 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 <button class="export-btn" onclick="clearAllData()" style="color:#c44b2b;border-color:#c44b2b40;">Clear all data</button>
 
   </div>
-</div>
-
-<!-- Bottom nav -->
-
-<div class="bottom-nav">
-  <button class="nav-btn active" onclick="showScreen('write')" id="nav-write">
-    <span class="nav-icon">&#9998;</span>
-    Write
-  </button>
-  <button class="nav-btn" onclick="showScreen('patterns')" id="nav-patterns">
-    <span class="nav-icon">&#9673;</span>
-    Patterns
-  </button>
-  <button class="nav-btn" onclick="showScreen('history')" id="nav-history">
-    <span class="nav-icon">&#8801;</span>
-    History
-  </button>
-  <button class="nav-btn" onclick="showScreen('settings')" id="nav-settings">
-    <span class="nav-icon">&#9881;</span>
-    Settings
-  </button>
 </div>
 
 <!-- Friction overlay -->
