@@ -461,9 +461,48 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 
 ---
 
+## Deployment files — all three required
+
+Every tool needs exactly three files in its `sites/kin-NNN-tool-name/` directory:
+
+### 1. `index.html`
+The complete single-file tool (see Full file structure above).
+
+### 2. `wrangler.jsonc`
+Required by Cloudflare Pages. Without it the site shows "Hello World". Copy exactly, changing only the `name` field:
+
+```jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kin-NNN-tool-name",
+  "compatibility_date": "2025-09-27",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
+```
+
+### 3. `icon.svg`
+512×512 SVG used as the Cloudflare Pages icon. Dark background matching the tool's accent colour, simple white or light icon, rounded rect (`rx="108"`). Example structure:
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#[tool-bg-colour]"/>
+  <!-- simple icon path in white or light colour -->
+</svg>
+```
+
+---
+
 ## Rules for the AI building this
 
-1. Output a single complete `.html` file — nothing else
+1. Output all three files: `index.html`, `wrangler.jsonc`, and `icon.svg` — the tool will not deploy correctly without all three
 2. All CSS and JS must be inlined — no `<link>` tags except the Google Fonts `<link>`
 3. Use only the CSS variables defined above — no hardcoded colours
 4. The dark/light toggle must work exactly as specified
