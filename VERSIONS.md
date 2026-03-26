@@ -34,7 +34,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-009 | Jet Lag Planner | v1.0 | Darren | jetlag.kintools.net | ✅ | 2 fixes: bug report + header storage ⓘ added |
 | KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | ✅ | 5 fixes: localStorage key bug, bug report, theme-color, OG, semitone text |
 | KIN-011 | Unit Price Calc | v1.0 | Darren | unit-price.kintools.net | ✅ | 5 fixes: theme persistence, bug report, theme-color, OG, footer+Google Fonts; pack regex already correct |
-| KIN-012 | Name Picker | v1.1 | Darren | name-picker.kintools.net | 🔄 | |
+| KIN-012 | Name Picker | v1.1 | Darren | name-picker.kintools.net | ✅ | 7 fixes: XSS in renderTeams+renderHistory (esc() added), theme persistence (kin012-theme), ⓘ storage popover, theme-color default #FAFAF7, duplicate apple-mobile metas removed, manifest→Blob URL, Google Fonts removed |
 | KIN-013 | Mood Slider | v1.0 | Darren | mood-slider.kintools.net | ✅ | 5 fixes: viewport, theme-meta id, theme key→kin013-theme (migrated), showToast defined, bug report, OG |
 | KIN-014 | Breathing | v1.1 | Darren | breathing.kintools.net | ✅ | 6 fixes: viewport, theme-meta id, theme key→kin014-theme + streak→kin014-streak (migrated), bug report, OG |
 | KIN-015 | Quiet Cycle | v1.0 | Alice & Darren | quiet-cycle.kintools.net | ✅ | 4 fixes: viewport, XSS in renderEntries (note escaped), bug report, OG |
@@ -63,10 +63,10 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 ## Stress-test progress
 
-- **Tested:** 31 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030, 031, 032, 033, 034, 035)
+- **Tested:** 32 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 012, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030, 031, 032, 033, 034, 035)
 - **Needs rebuild:** 2 (KIN-004, 005)
 - **Deferred:** 1 (KIN-027 — complex, user request)
-- **Pending:** 1 (KIN-012)
+- **Pending:** 0 — stress-test phase complete ✅
 
 ---
 
