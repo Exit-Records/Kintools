@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="108" fill="#0a1525"/>
+<rect width="512" height="512" rx="108" fill="url(#g)" opacity="0.35"/>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a3a6a"/><stop offset="1" stop-color="#0a1525"/></linearGradient></defs>
+<!-- Shield outline -->
+<path d="M256 96 L176 132 L176 244 C176 300 220 348 256 368 C292 348 336 300 336 244 L336 132 Z" fill="none" stroke="#e8e4dc" stroke-width="18" stroke-linejoin="round" opacity="0.9"/>
+<!-- Document lines inside shield -->
+<line x1="220" y1="200" x2="292" y2="200" stroke="#e8e4dc" stroke-width="12" stroke-linecap="round" opacity="0.85"/>
+<line x1="220" y1="228" x2="292" y2="228" stroke="#e8e4dc" stroke-width="12" stroke-linecap="round" opacity="0.85"/>
+<line x1="220" y1="256" x2="268" y2="256" stroke="#e8e4dc" stroke-width="12" stroke-linecap="round" opacity="0.85"/>
+<!-- Pound sign accent -->
+<text x="256" y="320" font-family="system-ui,sans-serif" font-size="40" font-weight="700" text-anchor="middle" fill="#e8e4dc" opacity="0.6">£</text>
+</svg>

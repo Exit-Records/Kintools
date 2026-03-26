@@ -59,6 +59,7 @@
     --hb-034: #1a472a;
     --hb-035: #5c2a1a;
     --hb-036: #1a0a18;
+    --hb-037: #0a1525;
   }
 
   body {
@@ -1480,6 +1481,31 @@
         </div>
       </a>
 
+      <!-- KIN-037: Unclaimed -->
+      <a href="https://benefits.kintools.net/" target="_blank" rel="noopener" class="release" data-category="Wellbeing">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-037), #050e1a);"></div>
+          <span class="cover-category">Wellbeing</span>
+          <span class="cover-number">KIN-037</span>
+          <div class="cover-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 4 L10 10 L10 26 C10 34 17 41 24 44 C31 41 38 34 38 26 L38 10 Z"/>
+              <line x1="18" y1="22" x2="30" y2="22"/>
+              <line x1="18" y1="28" x2="30" y2="28"/>
+              <line x1="18" y1="34" x2="26" y2="34"/>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Unclaimed</div>
+          <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">UK funding, grants, and support most people don't know about. Benefits, arts funding, enterprise grants, helplines. 60+ entries with per-item status tracking. Nothing leaves your device.</div>
+          <div class="release-replaces">Replaces <span>benefits calculators that need your details, and grant databases behind paywalls or sign-up walls</span></div>
+        </div>
+      </a>
+
     </div>
   
 
@@ -1629,7 +1655,8 @@ document.getElementById('suggest-form').addEventListener('submit', async functio
     'KIN-033': { name: 'Page Surgeon', cat: 'Utility', desc: 'Load a PDF and rearrange pages by dragging. Rotate, remove, or cherry-pick pages to export. Save all pages as a new PDF or export only the ones you need. Nothing leaves your browser.', features: ['Drag to reorder pages', 'Rotate pages', 'Remove individual pages', 'Select and export specific pages only', 'Save all pages as new PDF', 'Small / Medium / Large zoom levels', 'Check all / Uncheck all'], storage: 'Nothing stored — all processing is in-memory' },
     'KIN-034': { name: 'Noise Meter', cat: 'Education', desc: 'See when a room gets too loud. Green, yellow, red colour metering with adjustable sensitivity and screen wake lock. Built for classrooms — put a tablet at the front and let the colour bar do the talking.', features: ['Green / yellow / red zone metering', 'Large status word as primary visual', 'Adjustable sensitivity slider', 'Screen Wake Lock keeps display on while listening', 'Re-acquires wake lock on tab visibility change', 'PWA — install for offline use'], storage: 'Nothing stored — all processing is in-memory' },
     'KIN-035': { name: 'Random Acts', cat: 'Wellbeing', desc: 'One act of kindness or defiance per day. Tap to reveal, note what happened, reflect on how it felt. 52-act shuffled deck resets when complete. Everything stays on your device.', features: ['One act per day from a 52-act deck', 'Kindness or defiance — the choice is yours', 'Shuffled deck resets when complete', 'Note what happened after each act', 'Reflection prompt captures how it felt', 'Long-press \u2726 to see your streak', 'Dark mode'], storage: 'localStorage — act log and reflections stored on your device' },
-    'KIN-036': { name: 'Blood Pressure', cat: 'Health', desc: 'Log blood pressure readings with clinical AHA categories. Track trends with a built-in chart, generate printable reports for your doctor, and export your data as JSON. Nothing leaves your device.', features: ['AHA 2017 category classification (Normal to Crisis)', 'Log systolic, diastolic, pulse, arm, position, notes', 'Trend chart in report view', 'Printable PDF report with date range filter', 'Export and import data as JSON', 'Delete all data', 'Demo mode with 30 days of sample readings', 'Dark mode', 'PWA — installable'], storage: 'localStorage — readings stored on your device' }
+    'KIN-036': { name: 'Blood Pressure', cat: 'Health', desc: 'Log blood pressure readings with clinical AHA categories. Track trends with a built-in chart, generate printable reports for your doctor, and export your data as JSON. Nothing leaves your device.', features: ['AHA 2017 category classification (Normal to Crisis)', 'Log systolic, diastolic, pulse, arm, position, notes', 'Trend chart in report view', 'Printable PDF report with date range filter', 'Export and import data as JSON', 'Delete all data', 'Demo mode with 30 days of sample readings', 'Dark mode', 'PWA — installable'], storage: 'localStorage — readings stored on your device' },
+    'KIN-037': { name: 'Unclaimed', cat: 'Wellbeing', desc: 'UK funding, grants, and support most people don\'t know about. Benefits, arts funding, enterprise grants, helplines. 60+ entries with per-item status tracking. Nothing leaves your device.', features: ['60+ UK benefit, grant, and support entries', 'Per-item status tracking: Looking into / Applied / Receiving', 'Search by keyword', 'Category filter pills (income, housing, health, children, carers, pension, energy, and more)', 'Summary stats: how many you are looking into, applied for, receiving', 'AI prompt helper — copy a tailored prompt to get help applying', 'Dark mode', 'PWA — installable'], storage: 'kin037-theme · kin037-status' }
     };
 
   function openInfo(kinNum) {

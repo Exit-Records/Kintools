@@ -1,6 +1,6 @@
 # Kin Tools — Version Manifest
 
-Canonical reference for all 36 tools in the Kin ecosystem.  
+Canonical reference for all 37 tools in the Kin ecosystem.  
 All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 **Last updated:** 2026-03-26  
@@ -59,6 +59,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-034 | Noise Meter | v1.0 | Liam | noise-meter.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
 | KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |
 | KIN-036 | Blood Pressure | v1.0 | Darren | bloodpressure.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
+| KIN-037 | Unclaimed | v1.0 | Darren | benefits.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 
 ---
 
