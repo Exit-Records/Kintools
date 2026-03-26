@@ -1,0 +1,50 @@
+PASS:
+- Tap timing uses performance.now() (sub-ms, monotonic)
+- BPM calculation mathematically correct (rolling average)
+- Idle timeout resets after 3s
+- Confidence bar scales sensibly
+- pointerdown for fastest touch response
+- Reset clears state cleanly
+- No localStorage for user data (correct for stateless tool)
+- Footer follows current three-row pattern
+- Badge correctly has no ⓘ (stateless)
+- Apple touch icon uses canvas pattern correctly
+- Keyboard shortcuts for tap and reset
+
+ISSUES:
+- [MEDIUM] Keyboard repeat: holding Space fires repeated keydown events, 
+  registering rapid false taps and producing wildly high BPM
+  Reproduce: Hold spacebar for 1 second
+  Impact: Display shows 500+ BPM from false input
+  Fix: Add e.repeat guard: if (e.repeat) return;
+
+- [MEDIUM] Manifest uses static manifest.json, not Blob pattern
+  Fix: Replace with inline Blob manifest per Section 7
+
+- [MEDIUM] Service worker registers sw.js (separate file), not inline Blob
+  Fix: Replace with inline Blob SW per Section 4.7
+
+- [LOW] Viewport has maximum-scale=1, blocks pinch-to-zoom
+  Fix: Remove maximum-scale=1
+
+- [LOW] CSS is dark-first (:root = dark, html.light = light override). 
+  Inverted from build rules convention. Theme toggle also inverted to match.
+  Impact: Works but inconsistent with all other tools
+  Fix: Swap :root to light values, add html.dark override, update toggle logic
+
+- [LOW] Duplicate meta tags (mobile-web-app-capable x2, apple-mobile-web-app-capable x2, 
+  status-bar-style x2, apple-mobile-web-app-title x2 with conflicting values)
+  Fix: Deduplicate, keep one of each
+
+- [LOW] theme-color meta missing id="theme-color-meta"
+  Fix: Add id, update in theme toggle
+
+- [LOW] OG tags incomplete (missing og:url, og:image, og:site_name, twitter cards, canonical)
+  Fix: Replace with full Section 19 template
+
+- [LOW] Bug report sends email field and uses old form_type mapping
+  Fix: Remove email, align to current standard
+
+- [LOW] No BPM clamping on display. Extremely fast taps could show 4-5 digit numbers.
+  Impact: Cosmetic only, display might overflow
+  Fix: Optional. Could clamp display to 10-400 range or let it show raw value.

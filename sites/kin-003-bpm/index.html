@@ -2,22 +2,13 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>KIN-003 — BPM Counter — Kin</title>
-  <meta name="description" content="Tap the beat. Get the BPM. A simple, accurate tempo counter for DJs, musicians and runners." />
-  <meta name="theme-color" content="#f5f7fa" />
+  <meta name="theme-color" id="theme-color-meta" content="#f5f7fa" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="BPM" />
-  <meta property="og:title" content="BPM Counter — KIN-003" />
-  <meta property="og:description" content="Tap the beat. Get the BPM." />
-  <meta property="og:type" content="website" />
-  <link rel="manifest" href="manifest.json" />
-<meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="KIN-003">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="KIN-003" />
   <link rel="apple-touch-icon" id="apple-touch-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,22 +20,6 @@
        ───────────────────────────────────────────── */
 
     :root {
-      --bg:            #1a1714;
-      --surface:       #242018;
-      --surface-hi:    #2e2923;
-      --border:        #3a342c;
-      --text-primary:  #f0ece4;
-      --text-secondary:#8c8072;
-      --text-dim:      #5a5248;
-      --accent:        #d4a853;
-      --accent-glow:   rgba(212, 168, 83, 0.18);
-      --accent-dim:    rgba(212, 168, 83, 0.08);
-      --tap-active:    #e8ba6a;
-      --font-sans: 'DM Sans', system-ui, sans-serif;
-      --font-mono: 'DM Mono', 'Courier New', monospace;
-    }
-
-    html.light {
       --bg:            #f5f7fa;
       --surface:       #ffffff;
       --surface-hi:    #f0f2f5;
@@ -56,6 +31,22 @@
       --accent-glow:   rgba(200,148,58,0.15);
       --accent-dim:    rgba(200,148,58,0.08);
       --tap-active:    #d4a853;
+      --font-sans: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    html.dark {
+      --bg:            #1a1714;
+      --surface:       #242018;
+      --surface-hi:    #2e2923;
+      --border:        #3a342c;
+      --text-primary:  #f0ece4;
+      --text-secondary:#8c8072;
+      --text-dim:      #5a5248;
+      --accent:        #d4a853;
+      --accent-glow:   rgba(212, 168, 83, 0.18);
+      --accent-dim:    rgba(212, 168, 83, 0.08);
+      --tap-active:    #e8ba6a;
     }
     #theme-btn {
       position: fixed; top: 14px; right: 14px; z-index: 999;
@@ -319,6 +310,50 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://bpm.kintools.net/">
+<meta name="description" content="Tap a button to the beat, get the BPM. Rolling average tap counter useful for DJs, musicians, and runners.">
+<meta name="author" content="Kin Tools">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bpm.kintools.net/">
+<meta property="og:title" content="KIN-003 — BPM Counter — Kin">
+<meta property="og:description" content="Tap a button to the beat, get the BPM. Rolling average tap counter useful for DJs, musicians, and runners.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-003 — BPM Counter — Kin">
+<meta name="twitter:description" content="Tap a button to the beat, get the BPM. Rolling average tap counter useful for DJs, musicians, and runners.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+<script>
+(function(){
+  var m = {
+    name: "KIN-003 BPM Counter",
+    short_name: "BPM Counter",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#f5f7fa",
+    theme_color: "#f5f7fa"
+  };
+  var b = new Blob([JSON.stringify(m)], {type: "application/json"});
+  var lk = document.createElement("link");
+  lk.rel = "manifest";
+  lk.href = URL.createObjectURL(b);
+  document.head.appendChild(lk);
+})();
+
+if ("serviceWorker" in navigator) {
+  var _sw =
+    "const C='kin003-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
 </head>
 <body>
 
@@ -435,7 +470,7 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
           total += taps[i] - taps[i - 1];
         }
         var avg = total / (taps.length - 1);
-        var bpm = Math.round(60000 / avg);
+        var bpm = Math.min(400, Math.max(10, Math.round(60000 / avg)));
         var confidence = taps.length / 4;
         updateDisplay(bpm, confidence);
       }
@@ -451,6 +486,7 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 
     // Keyboard support
     document.addEventListener('keydown', function (e) {
+      if (e.repeat) return;
       if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault();
         tap();
@@ -463,25 +499,21 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 </script>
 
 <script>
-  // Service Worker registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function (err) {
-        console.warn('SW registration failed:', err);
-      });
-    });
-  }
-
   // Theme toggle
   (function() {
     const btn = document.getElementById('theme-btn');
+    const meta = document.getElementById('theme-color-meta');
     const saved = localStorage.getItem('kin003-theme');
-    if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
-    else { btn.textContent = '☀️'; }
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      btn.textContent = '☀️';
+      if (meta) meta.content = '#1a1714';
+    }
     btn.addEventListener('click', () => {
-      const isLight = document.documentElement.classList.toggle('light');
-      btn.textContent = isLight ? '🌙' : '☀️';
-      localStorage.setItem('kin003-theme', isLight ? 'light' : 'dark');
+      const isDark = document.documentElement.classList.toggle('dark');
+      btn.textContent = isDark ? '☀️' : '🌙';
+      if (meta) meta.content = isDark ? '#1a1714' : '#f5f7fa';
+      localStorage.setItem('kin003-theme', isDark ? 'dark' : 'light');
     });
   })();
 </script>
@@ -694,20 +726,17 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-003 — BPM Counter',
+          form_type: 'bug_report',
+          subject: 'KIN-003 \u2014 BPM Counter',
           app: 'KIN-003',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
