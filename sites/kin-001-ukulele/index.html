@@ -2,14 +2,12 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
-  <meta name="description" content="A free, offline ukulele tuner. Supports gCEA, aDF#B, DGBE, and fA#DG tunings. No account required." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>KIN-001 — Ukulele Tuner — Kin</title>
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#2c2318" />
+  <meta name="theme-color" id="theme-color-meta" content="#f5f0e8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="apple-touch-icon" href="./icon.svg" />
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -454,36 +452,13 @@
       width: 100%;
       max-width: 480px;
       margin-top: 32px;
-      padding-top: 16px;
+      padding: 16px 16px 48px;
       border-top: 1px solid var(--cream-dark);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-kin {
-      font-family: 'Lora', Georgia, serif;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--ink-soft);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .footer-meta {
+      text-align: center;
+      font-family: -apple-system, sans-serif;
       font-size: 11px;
+      letter-spacing: 0.04em;
       color: var(--ink-soft);
-      text-align: right;
-      line-height: 1.4;
-    }
-
-    .footer-meta span {
-      display: block;
-    }
-
-    .footer-catalog {
-      font-family: 'Lora', Georgia, serif;
-      font-style: italic;
     }
 
     /* Offline notice */
@@ -515,6 +490,72 @@
 
     .error-msg.visible { display: block; }
   </style>
+<link rel="canonical" href="https://ukulele.kintools.net/">
+<meta name="description" content="Chromatic tuner for ukulele. Listens through the device microphone and shows pitch in real time. Supports gCEA standard, aDF#B, DGBE, and fA#DG tunings. Works offline.">
+<meta name="author" content="Kin Tools">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ukulele.kintools.net/">
+<meta property="og:title" content="KIN-001 — Ukulele Tuner — Kin">
+<meta property="og:description" content="Chromatic tuner for ukulele. Listens through the device microphone and shows pitch in real time. Supports gCEA standard, aDF#B, DGBE, and fA#DG tunings. Works offline.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-001 — Ukulele Tuner — Kin">
+<meta name="twitter:description" content="Chromatic tuner for ukulele. Listens through the device microphone and shows pitch in real time. Supports gCEA standard, aDF#B, DGBE, and fA#DG tunings. Works offline.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+<script>
+(function(){
+  var m = {
+    name: "KIN-001 Ukulele Tuner",
+    short_name: "Ukulele Tuner",
+    start_url: ".",
+    display: "standalone",
+    background_color: "#f5f0e8",
+    theme_color: "#f5f0e8"
+  };
+  var b = new Blob([JSON.stringify(m)], {type: "application/json"});
+  var lk = document.createElement("link");
+  lk.rel = "manifest";
+  lk.href = URL.createObjectURL(b);
+  document.head.appendChild(lk);
+})();
+
+(function(){
+  var c = document.createElement("canvas"); c.width = 180; c.height = 180;
+  var ctx = c.getContext("2d");
+  var r = 36;
+  ctx.beginPath();
+  ctx.moveTo(r,0); ctx.lineTo(180-r,0); ctx.quadraticCurveTo(180,0,180,r);
+  ctx.lineTo(180,180-r); ctx.quadraticCurveTo(180,180,180-r,180);
+  ctx.lineTo(r,180); ctx.quadraticCurveTo(0,180,0,180-r);
+  ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();
+  var g = ctx.createLinearGradient(0,0,180,180);
+  g.addColorStop(0,"#2D5A3D");
+  g.addColorStop(1,"#1e3d2a");
+  ctx.fillStyle = g; ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+  ctx.font = "bold 46px sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("UT",90,94);
+  var el = document.getElementById("apple-touch-icon");
+  if (el) el.href = c.toDataURL("image/png");
+})();
+
+if ("serviceWorker" in navigator) {
+  var _sw =
+    "const C='kin001-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
 </head>
 <body>
 
@@ -570,12 +611,10 @@
   </main>
 
   <footer>
-  KIN-001 · v1.0 · <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Maya
-  
-  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
-
-  <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-</footer>
+    KIN-001 · v1.1 · <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Maya
+    <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only · Verified</span></div>
+    <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:4px 0;min-height:32px;font-size:11px;color:inherit;opacity:0.5;cursor:pointer;letter-spacing:0.04em;font-family:-apple-system,sans-serif;-webkit-appearance:none">Report a bug</button></div>
+  </footer>
 
   <script>
     // ─── Tuning data ───────────────────────────────────────────────────────────
@@ -920,15 +959,6 @@
     window.addEventListener('offline', updateOffline);
     updateOffline();
 
-    // ─── Service Worker registration ───────────────────────────────────────────
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => {
-          console.warn('Service worker registration failed:', err);
-        });
-      });
-    }
-
     // ─── Initial render ────────────────────────────────────────────────────────
     setTuning(TUNINGS[0]);
     renderTuningButtons();
@@ -937,11 +967,17 @@
     // ─── Theme toggle ─────────────────────────────────────────────────────────
     (function() {
       const btn = document.getElementById('theme-btn');
+      const meta = document.getElementById('theme-color-meta');
       const saved = localStorage.getItem('kin001-theme');
-      if (saved === 'dark') { document.documentElement.classList.add('dark'); btn.textContent = '☀️'; }
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        btn.textContent = '☀️';
+        if (meta) meta.content = '#0d1117';
+      }
       btn.addEventListener('click', () => {
         const isDark = document.documentElement.classList.toggle('dark');
         btn.textContent = isDark ? '☀️' : '🌙';
+        if (meta) meta.content = isDark ? '#0d1117' : '#f5f0e8';
         localStorage.setItem('kin001-theme', isDark ? 'dark' : 'light');
       });
     })();
@@ -1141,20 +1177,17 @@
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-001 — Ukulele Tuner',
+          form_type: 'bug_report',
+          subject: 'KIN-001 \u2014 Ukulele Tuner',
           app: 'KIN-001',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
