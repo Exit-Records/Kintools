@@ -8,8 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="KIN-010">
+  <meta name="theme-color" id="theme-color-meta" content="#f5f7fa">
   <link rel="apple-touch-icon" id="apple-touch-icon">
-  <meta name="description" content="18 audio engineering and music production calculators. BPM, frequency, phase, sample rate, acoustics, file size and more." />
+  <meta name="description" content="18 audio engineering and music production calculators. BPM, frequency, phase, sample rate, acoustics, file size and more.">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -200,7 +201,28 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
-  <script>if(localStorage.getItem('kin010-theme')!=='dark')document.documentElement.classList.add('light');</script>
+  <script>
+    (function(){
+      var dark = localStorage.getItem('kin010-theme') === 'dark';
+      if (!dark) document.documentElement.classList.add('light');
+      var m = document.getElementById('theme-color-meta');
+      if (m) m.content = dark ? '#0d1117' : '#f5f7fa';
+    })();
+  </script>
+<link rel="canonical" href="https://audio-calc.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://audio-calc.kintools.net/">
+<meta property="og:title" content="KIN-010 — Audio Calculators — Kin">
+<meta property="og:description" content="18 audio engineering and music production calculators. BPM, frequency, phase, sample rate, acoustics, file size and more. All calculations run locally.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-010 — Audio Calculators — Kin">
+<meta name="twitter:description" content="18 audio engineering and music production calculators. BPM, frequency, phase, sample rate, acoustics, file size and more. All calculations run locally.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -534,7 +556,7 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
         <tbody></tbody>
       </table>
     </div>
-    <div class="info-box"><strong>Why it matters:</strong> a 44.1k file in a 48k session plays ~8.8% faster if not converted — roughly one semitone sharp.</div>
+    <div class="info-box"><strong>Why it matters:</strong> a 44.1k file in a 48k session plays ~8.8% faster if not converted — roughly a semitone and a half sharp.</div>
   </section>
 
   <!-- ══════════════════════════════════════════
@@ -700,12 +722,14 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 //  THEME
 // ═══════════════════════════════════════════════
 const themeBtn = document.getElementById('theme-btn');
+const themeColorMeta = document.getElementById('theme-color-meta');
 let dark = localStorage.getItem('kin010-theme') === 'dark';
 
 function applyTheme() {
   document.documentElement.classList.toggle('light', !dark);
   themeBtn.textContent = dark ? '☀️' : '🌙';
   themeBtn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+  if (themeColorMeta) themeColorMeta.content = dark ? '#0d1117' : '#f5f7fa';
 }
 themeBtn.addEventListener('click', () => {
   dark = !dark;
@@ -720,7 +744,7 @@ applyTheme();
 const sel = document.getElementById('calc-select');
 const sections = document.querySelectorAll('.calc-section');
 
-const saved = localStorage.getItem('kin011-calc');
+const saved = localStorage.getItem('kin010-calc');
 if (saved) {
   const opt = [...sel.options].find(o => o.value === saved);
   if (opt) sel.value = saved;
@@ -730,7 +754,7 @@ function showSection(id) {
   sections.forEach(s => s.classList.remove('active'));
   const s = document.getElementById('s-' + id);
   if (s) s.classList.add('active');
-  localStorage.setItem('kin011-calc', id);
+  localStorage.setItem('kin010-calc', id);
 }
 
 sel.addEventListener('change', () => showSection(sel.value));
@@ -1472,20 +1496,17 @@ live(['br-rate','br-custom','br-min','br-sec'], renderBitrate); renderBitrate();
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-010 — Audio Calculators',
+          form_type: 'bug_report',
+          subject: 'KIN-010 \u2014 Audio Calculators',
           app: 'KIN-010',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

@@ -32,7 +32,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-007 | Ambient Mixer | v1.0 | Darren | ambient.kintools.net | ✅ | 5 issues fixed; ScriptProcessorNode noted for future major update |
 | KIN-008 | Flashcards | v1.0 | dBridge | flashcards.kintools.net | ✅ | 6 issues fixed; custom confirm modal noted (low priority) |
 | KIN-009 | Jet Lag Planner | v1.0 | Darren | jetlag.kintools.net | ✅ | 2 fixes: bug report + header storage ⓘ added |
-| KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | 🔄 | |
+| KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | ✅ | 5 fixes: localStorage key bug, bug report, theme-color, OG, semitone text |
 | KIN-011 | Unit Price Calc | v1.0 | Darren | unit-price.kintools.net | 🔄 | |
 | KIN-012 | Name Picker | v1.1 | Darren | name-picker.kintools.net | 🔄 | |
 | KIN-013 | Mood Slider | v1.0 | Darren | mood-slider.kintools.net | 🔄 | |
@@ -63,9 +63,9 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 ## Stress-test progress
 
-- **Tested:** 7 / 35 (KIN-001, 002, 003, 006, 007, 008, 009)
+- **Tested:** 8 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010)
 - **Needs rebuild:** 2 (KIN-004, 005)
-- **Pending:** 26
+- **Pending:** 25
 
 ---
 
