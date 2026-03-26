@@ -67,14 +67,19 @@ min-height: 100%;
 line-height: 1.5;
 -webkit-font-smoothing: antialiased;
 padding-top: var(--safe-top);
-padding-bottom: calc(72px + var(--safe-bottom));
+padding-bottom: var(--safe-bottom);
+}
+
+/* Sticky top wrapper (header + tab bar) */
+.sticky-top {
+position: sticky;
+top: 0;
+z-index: 100;
+background: var(--bg);
 }
 
 /* Header */
 .header {
-position: sticky;
-top: 0;
-z-index: 100;
 background: var(--bg);
 border-bottom: 1px solid var(--border);
 padding: 14px 20px;
@@ -95,15 +100,9 @@ font-weight: 400;
 
 /* Tab bar */
 .tab-bar {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-z-index: 100;
 background: var(--bg-card);
-border-top: 1px solid var(--border);
+border-bottom: 1px solid var(--border);
 display: flex;
-padding-bottom: var(--safe-bottom);
 }
 .tab-bar button {
 flex: 1;
@@ -550,6 +549,7 @@ flex-shrink: 0;
 </head>
 <body>
 
+<div class="sticky-top">
 <div class="header">
   <div>
     <h1>Fair Share</h1>
@@ -564,6 +564,30 @@ flex-shrink: 0;
       <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </div>
+</div>
+
+<div class="tab-bar">
+  <button class="active" onclick="switchTab('Groups', this)" data-tab="viewGroups">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="3"/><path d="M9 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/><path d="M18 8v6M15 11h6"/></svg>
+    Groups
+  </button>
+  <button onclick="switchTab('Expenses', this)" data-tab="viewExpenses">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
+    Expenses
+  </button>
+  <button onclick="switchTab('Balances', this)" data-tab="viewBalances">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Balances
+  </button>
+  <button onclick="switchTab('Tools', this)" data-tab="viewTools">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+    Tools
+  </button>
+  <button onclick="switchTab('Export', this)" data-tab="viewExport">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export
+  </button>
+</div>
 </div>
 
 <div class="content">
@@ -657,31 +681,6 @@ flex-shrink: 0;
       <button class="btn btn-block" onclick="document.getElementById('importFile').click()">Choose File</button>
     </div>
   </div>
-</div>
-
-<!-- Tab Bar -->
-
-<div class="tab-bar">
-  <button class="active" onclick="switchTab('Groups', this)" data-tab="viewGroups">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="3"/><path d="M9 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/><path d="M18 8v6M15 11h6"/></svg>
-    Groups
-  </button>
-  <button onclick="switchTab('Expenses', this)" data-tab="viewExpenses">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
-    Expenses
-  </button>
-  <button onclick="switchTab('Balances', this)" data-tab="viewBalances">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    Balances
-  </button>
-  <button onclick="switchTab('Tools', this)" data-tab="viewTools">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-    Tools
-  </button>
-  <button onclick="switchTab('Export', this)" data-tab="viewExport">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Export
-  </button>
 </div>
 
 <!-- Group Modal -->
