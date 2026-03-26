@@ -10,7 +10,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" id="apple-touch-icon" href="">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -1217,7 +1216,8 @@ body.dark .toast {
 
 .toast.show {
   transform: translateX(-50%) translateY(0);
-  </style>
+}
+</style>
 <script>
 // PWA setup with Blob URL service worker
 (function() {
@@ -1879,9 +1879,7 @@ body.dark .toast {
 
     if (!bugAnon) {
       var nameEl = document.getElementById('bug-name');
-      var emailEl = document.getElementById('bug-email');
       if (nameEl) payload.name = nameEl.value.trim();
-      if (emailEl) payload.email = emailEl.value.trim();
     }
 
     fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {

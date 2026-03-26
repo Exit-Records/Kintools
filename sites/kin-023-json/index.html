@@ -9,9 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="KIN JSON">
 <link rel="apple-touch-icon" id="apple-touch-icon" href="">
-<meta name="theme-color" id="meta-theme" content="#f2f0EC">
+<meta name="theme-color" id="theme-color-meta" content="#f2f0EC">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -440,7 +439,7 @@ font-family: var(--mono); font-size: 13px; text-align: center; padding: 20px;
 
   <script>
   (function(){
-    const manifest={name:'KIN JSON',short_name:'KIN JSON',start_url:'.',display:'standalone',background_color:'#f2f0EC',theme_color:'#f2f0EC',icons:[{src:'icon.svg',sizes:'any',type:'image/svg+xml'}]};
+    const manifest={name:'KIN JSON',short_name:'KIN JSON',start_url:'.',display:'standalone',background_color:'#f2f0EC',theme_color:'#f2f0EC',icons:[{src:'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 180 180\'%3E%3Crect width=\'180\' height=\'180\' rx=\'36\' fill=\'%234b3a7c\'/%3E%3Ctext x=\'90\' y=\'105\' font-family=\'monospace\' font-size=\'72\' font-weight=\'bold\' fill=\'rgba(255,255,255,0.9)\' text-anchor=\'middle\'%3E%7B%7D%3C/text%3E%3C/svg%3E',sizes:'any',type:'image/svg+xml'}]};
     const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
     const link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(blob);document.head.appendChild(link);
   })();
@@ -453,10 +452,20 @@ font-family: var(--mono); font-size: 13px; text-align: center; padding: 20px;
     const l=document.getElementById('apple-touch-icon');if(l)l.href=c.toDataURL('image/png');
   })();
   if('serviceWorker' in navigator){
-    const sw=`const C='kin-json-v2';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k))))));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;}))));});`;
+    const sw=`const C='kin023-v1';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k))))));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;}))));});`;
     navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})));
   }
   </script>
+<link rel="canonical" href="https://json.kintools.net/">
+<meta property="og:title" content="KIN-023 — JSON — Kin">
+<meta property="og:description" content="Format, validate, and explore JSON. Tree view, TypeScript interface generation, diff, and path queries. Browser-only.">
+<meta property="og:url" content="https://json.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-023 — JSON — Kin">
+<meta name="twitter:description" content="Format, validate, and explore JSON. Tree view, TypeScript interface generation, diff, and path queries. Browser-only.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -473,7 +482,7 @@ font-family: var(--mono); font-size: 13px; text-align: center; padding: 20px;
   function applyTheme(t) {
     theme = t;
     document.documentElement.setAttribute('data-theme', t);
-    document.getElementById('meta-theme').content = t === 'dark' ? '#131316' : '#f2f0EC';
+    document.getElementById('theme-color-meta').content = t === 'dark' ? '#131316' : '#f2f0EC';
     localStorage.setItem(THEME_KEY, t);
   }
   applyTheme(theme);
@@ -928,15 +937,15 @@ render();
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
+          form_type: 'bug_report',
           subject: 'KIN-023 — JSON Formatter',
           app: 'KIN-023',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

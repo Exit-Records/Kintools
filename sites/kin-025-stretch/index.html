@@ -225,6 +225,16 @@
 <style>
 body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+<link rel="canonical" href="https://stretch.kintools.net/">
+<meta property="og:title" content="KIN-025 — Stretch — Kin">
+<meta property="og:description" content="Guided stretching routines for desk workers and athletes. Timer, audio cues, and wake lock. Five routines, 59 stretches. No login, no tracking.">
+<meta property="og:url" content="https://stretch.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-025 — Stretch — Kin">
+<meta name="twitter:description" content="Guided stretching routines for desk workers and athletes. Timer, audio cues, and wake lock. Five routines, 59 stretches. No login, no tracking.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
   <div class="app">
@@ -1296,15 +1306,15 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
+          form_type: 'bug_report',
           subject: 'KIN-025 — Stretch',
           app: 'KIN-025',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

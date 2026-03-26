@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>KIN-022 — Fair Share — Kin</title>
 <meta name="description" content="Privacy-first shared expense splitter. No accounts, no servers, no tracking.">
-<meta name="theme-color" content="#1a1a1a">
+<meta name="theme-color" id="theme-color-meta" content="#1a1a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Fair Share">
@@ -57,7 +57,6 @@
 --shadow-lg: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
 
 html { height: 100%; -webkit-text-size-adjust: 100%; }
 body {
@@ -538,6 +537,16 @@ flex-shrink: 0;
 <style>
 [data-theme="dark"] #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+<link rel="canonical" href="https://fair-share.kintools.net/">
+<meta property="og:title" content="KIN-022 — Fair Share — Kin">
+<meta property="og:description" content="Split shared expenses fairly. Equal, percentage, or custom amounts. Debt simplification and text summaries. No accounts, no servers.">
+<meta property="og:url" content="https://fair-share.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-022 — Fair Share — Kin">
+<meta name="twitter:description" content="Split shared expenses fairly. Equal, percentage, or custom amounts. Debt simplification and text summaries. No accounts, no servers.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -1534,8 +1543,9 @@ function esc(str) {
 }
 
 // ── Theme ──
+(function(){var _o=localStorage.getItem('fs-theme');if(_o&&!localStorage.getItem('kin022-theme')){localStorage.setItem('kin022-theme',_o);localStorage.removeItem('fs-theme');}})();
 function initTheme() {
-  const saved = localStorage.getItem('fs-theme') || 'light';
+  const saved = localStorage.getItem('kin022-theme') || 'light';
   applyTheme(saved);
 }
 function toggleTheme() {
@@ -1548,10 +1558,10 @@ function applyTheme(theme) {
   } else {
     document.documentElement.removeAttribute('data-theme');
   }
-  localStorage.setItem('fs-theme', theme);
+  localStorage.setItem('kin022-theme', theme);
   document.getElementById('iconMoon').style.display = theme === 'dark' ? 'none' : 'block';
   document.getElementById('iconSun').style.display = theme === 'dark' ? 'block' : 'none';
-  document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#141210' : '#1a1a1a';
+  document.getElementById('theme-color-meta').content = theme === 'dark' ? '#141210' : '#1a1a1a';
 }
 
 // ── Init ──
@@ -1806,15 +1816,15 @@ if ('serviceWorker' in navigator) {
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
+          form_type: 'bug_report',
           subject: 'KIN-022 — Fair Share',
           app: 'KIN-022',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

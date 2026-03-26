@@ -44,15 +44,15 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-019 | Markdown Download | v1.0 | Darren | markdown-download.kintools.net | ✅ | 3 fixes: Google Fonts removed, bug report, OG |
 | KIN-020 | Password Generator | v1.0 | Darren | password-generator.kintools.net | ✅ | 2 fixes: bug report, OG; viewport + manifest already clean |
 | KIN-021 | Text Counter | v1.0 | Darren | text-counter.kintools.net | ✅ | 5 fixes: SW key→kin021-v1, manifest icon→data URI, Google Fonts removed, bug report, OG |
-| KIN-022 | Fair Share | v1.0 | Darren | fair-share.kintools.net | 🔄 | |
-| KIN-023 | JSON | v1.0 | Darren | json.kintools.net | 🔄 | |
-| KIN-024 | Thought Loop | v1.0 | Darren | thought-loop.kintools.net | 🔄 | |
-| KIN-025 | Stretch | v1.0 | Darren | stretch.kintools.net | 🔄 | |
-| KIN-026 | Kin Ground | v1.0 | Darren | kin-ground.kintools.net | 🔄 | |
-| KIN-027 | Kin Gym | v1.0 | William & Darren | kin-gym.kintools.net | 🔄 | |
-| KIN-028 | Scan | v1.0 | Darren & Daisy | scan.kintools.net | 🔄 | |
-| KIN-029 | Nudge | — | Darren | nudge.kintools.net | 🔄 | index.html restored from git; Netlify URL fixed |
-| KIN-030 | Quote | v1.0 | Darren | quote.kintools.net | 🔄 | |
+| KIN-022 | Fair Share | v1.0 | Darren | fair-share.kintools.net | ✅ | 5 fixes: theme key fs-theme→kin022-theme (migrated), theme-color-meta id, Google Fonts removed, bug report, OG |
+| KIN-023 | JSON | v1.0 | Darren | json.kintools.net | ✅ | 6 fixes: SW key→kin023-v1, manifest icon→data URI, theme-meta id, Google Fonts removed, bug report, OG |
+| KIN-024 | Thought Loop | v1.0 | Darren | thought-loop.kintools.net | ✅ | 6 fixes: storage keys→kin024-* (migrated), theme extracted to kin024-theme, theme-color-meta id, Google Fonts removed, bug report, OG |
+| KIN-025 | Stretch | v1.0 | Darren | stretch.kintools.net | ✅ | 2 fixes: bug report, OG; already best-structured in batch |
+| KIN-026 | Kin Ground | v1.0 | Darren | kin-ground.kintools.net | ✅ | 7 fixes: storage keys→kin026-* (migrated), theme-color-meta id, SW activate handler, footer URL kin.tools→kintools.net, bug report, OG |
+| KIN-027 | Kin Gym | v1.0 | William & Darren | kin-gym.kintools.net | ⚠️ | Deferred — see scratchpad: custom modal, esc() incomplete, OG missing |
+| KIN-028 | Scan | v1.0 | Darren & Daisy | scan.kintools.net | ✅ | 3 fixes: CSS syntax error (missing { in dark mode), theme-color-meta id, OG |
+| KIN-029 | Nudge | v1.0 | Darren | nudge.kintools.net | ✅ | 3 fixes: CSS unclosed .toast.show, email removed from bug report, Google Fonts removed |
+| KIN-030 | Quote | v1.0 | Darren | quote.kintools.net | ✅ | 1 fix: Google Fonts removed; OG/theme-color-meta/bug report already correct |
 | KIN-031 | Invoice | v1.0 | Darren | invoice.kintools.net | 🔄 | |
 | KIN-032 | Receipt | v1.0 | Darren | receipt.kintools.net | 🔄 | |
 | KIN-033 | Page Surgeon | v1.0 | Darren | page-surgeon.kintools.net | 🔄 | |
@@ -63,9 +63,10 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 ## Stress-test progress
 
-- **Tested:** 18 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021)
+- **Tested:** 26 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030)
 - **Needs rebuild:** 2 (KIN-004, 005)
-- **Pending:** 15 (KIN-012, 022–035)
+- **Deferred:** 1 (KIN-027 — complex, user request)
+- **Pending:** 6 (KIN-012, 031, 032, 033, 034, 035)
 
 ---
 

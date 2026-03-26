@@ -1,0 +1,396 @@
+# KIN Catalogue Audit — KIN-022 through KIN-030
+
+## Date: 2026-03-26
+
+-----
+
+## Summary Matrix
+
+|Tool                |Risk|Dark Mode                         |Theme Key                          |Theme-color ID         |Bug Report             |OG Tags   |ⓘ                |Notable Issues                                                                                                                                        |
+|--------------------|----|----------------------------------|-----------------------------------|-----------------------|-----------------------|----------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+|KIN-022 Fair Share  |Med |[data-theme=“dark”] CSS vars      |fs-theme                           |No id attr             |Old (text/plain, email)|✗         |✓                |IndexedDB+localStorage dual storage; non-standard dark pattern; theme-color static #1a1a1a light                                                      |
+|KIN-023 JSON        |Low |[data-theme=“dark”] CSS vars      |kin-json-theme                     |id=“meta-theme” ✗      |Old (text/plain, email)|✗         |✗ (correct)      |Non-standard SW cache key kin-json-v2; manifest refs icon.svg (missing); @import after :root                                                          |
+|KIN-024 Thought Loop|Med |body.dark !important              |settings.darkMode (in settings obj)|No id attr             |Old (text/plain, email)|✗         |✓                |Theme stored inside settings object not standalone key; non-standard storage keys (thoughtloop_*)                                                     |
+|KIN-025 Stretch     |Low |body.dark !important              |kin025-theme ✓                     |id=“theme-color-meta” ✓|Old (text/plain, email)|✗         |✓                |Best-structured of this batch; wake lock; audio tones; correct theme-color meta id                                                                    |
+|KIN-026 Kin Ground  |Med |body.dark with CSS vars+!important|kin_theme (underscores)            |id=“meta-theme” ✗      |Old (text/plain, email)|✗         |✓                |Non-standard localStorage keys (kin_survival_pack etc); settings footer has wrong URL (kin.tools not kintools.net); SW missing activate cleanup       |
+|KIN-027 Kin Gym     |High|body.dark !important (extensive)  |kin-gym-theme                      |id=“theme-color-meta” ✓|mode:‘no-cors’ ✓       |✗         |✓                |Most complex tool in this batch; custom modal system (not kinConfirm); WAV audio engine; workout sharing via URL params; by William+Darren            |
+|KIN-028 Scan        |Med |body.dark !important              |kin-scan-theme                     |id not present ✗       |mode:‘no-cors’ ✓       |✗         |✗ (stateless)    |External jsPDF CDN dependency; camera API; CSS syntax error in dark mode styles; by Darren+Daisy                                                      |
+|KIN-029 Nudge       |Low |body.dark CSS vars + !important   |kin029-theme ✓                     |id=“theme-color-meta” ✓|mode:‘no-cors’ ✓       |✓ (has OG)|✗ (correct)      |First tool with full OG/canonical tags; external DM Sans+DM Mono fonts; email field in bug report (against ethos); missing closing brace in .toast CSS|
+|KIN-030 Quote       |Med |body.dark !important              |kin030-theme ✓                     |id=“theme-color-meta” ✓|mode:‘no-cors’ ✓       |✓ (has OG)|✓ (custom toggle)|Print/PDF stylesheet; Quote→Invoice clipboard export; auto-increment sequence; external DM Sans font                                                  |
+
+-----
+
+## Per-Tool Details
+
+### KIN-022 Fair Share (Medium risk — stores group expenses via IndexedDB)
+
+**Storage:** IndexedDB primary (FairShareDB), localStorage fallback (fairshare_state)
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin022-v1)
+- Full expense splitting: equal, unequal, percentage, shares
+- Debt simplification algorithm (greedy creditor/debtor matching) correct
+- Balance calculation correct (payer gets +amount, participants get -share)
+- JSON export/import with duplicate detection and merge
+- Text summary export to clipboard
+- 10 expense categories
+- Tip calculator with presets and custom %
+- Percentage calculator (3 modes: X% of Y, X is ?% of Y, % change)
+- XSS prevention via esc() helper using textContent→innerHTML
+- kinConfirm() for destructive actions
+- Local date formatting correct
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] Dark mode uses `[data-theme="dark"]` CSS variable pattern, not body.dark with !important. Memory says three patterns are in use and to preserve whichever the source uses, but this is a fourth pattern not documented.
+- [LOW] Theme key `fs-theme` not tool-specific format (should be `kin022-theme`)
+- [LOW] Theme-color meta has no `id` attribute (should be `id="theme-color-meta"`)
+- [LOW] Bug report: old pattern (Content-Type text/plain, sends email field)
+- [LOW] No OG/canonical tags
+- [LOW] External Google Fonts (DM Sans + DM Mono) not cached by SW
+
+-----
+
+### KIN-023 JSON Formatter (Low risk, stateless)
+
+**Storage:** Theme only in kin-json-theme
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin-json-v2)
+- 4 modes: Format, Tree, TypeScript interface generation, JSON diff
+- Auto-fix for malformed JSON (trailing commas, single quotes, unquoted keys)
+- Error position reporting (line/col) from parse errors
+- JSON path query with dot/bracket notation
+- Syntax highlighting with type-specific colours
+- Collapsible tree view with item counts
+- Stats bar (bytes, keys, depth, objects, arrays)
+- Sort keys deep (recursive)
+- Minify function
+- Tab key inserts spaces in textarea
+- Cursor position preservation across re-renders (saveCursor/restoreCursors)
+- XSS: esc() function present
+- Diff with added/removed/changed categorisation
+
+ISSUES:
+
+- [LOW] SW cache key `kin-json-v2` not standard format (should be `kin023-v1` or similar)
+- [LOW] Theme-color meta id is `meta-theme` not `theme-color-meta`
+- [LOW] @import for Google Fonts placed after :root declaration (must be first in style block per build rules)
+- [LOW] Manifest icons reference `icon.svg` which doesn’t exist
+- [LOW] Bug report: old pattern (Content-Type text/plain, sends email)
+- [LOW] No OG/canonical tags
+- [LOW] No ⓘ popover (correct — stateless)
+
+-----
+
+### KIN-024 Thought Loop (Medium risk — stores thought entries)
+
+**Storage:** thoughtloop_entries, thoughtloop_settings
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin024-v1)
+- Three modes: Now, Morning, Evening with different question sets
+- Triage logic: three yes/no questions → verdict (Act, Schedule, Release, Not Yours)
+- “Not mine” shortcut for absorbed problems
+- Schedule with date picker and due reminder system
+- Reframe prompt for Release verdict
+- Pattern analysis: speculation %, release %, dissolution rate
+- Friction pause (30s countdown before questions appear, configurable)
+- Rotating placeholder text (mode-specific, fading transitions)
+- History with 50-entry limit and escapeHtml()
+- Text export to clipboard
+- kinConfirm() for destructive actions
+- ⓘ storage popover present
+
+ISSUES:
+
+- [LOW] Theme stored inside settings object (settings.darkMode) instead of standalone localStorage key. Theme key not `kin024-theme`.
+- [LOW] Storage keys non-standard (thoughtloop_entries, thoughtloop_settings — should be kin024-*)
+- [LOW] Theme-color meta has no id attribute
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+- [LOW] External Google Fonts (DM Serif Text + DM Sans) not cached by SW
+
+-----
+
+### KIN-025 Stretch (Low risk — stores completion log)
+
+**Storage:** kin025-theme, kin025-log
+
+PASS:
+
+- Single-file HTML, Blob manifest via link element, Blob SW (kin025-v1)
+- 5 routines: Morning (10), Desk break (11), Post-run (15), Bedtime (10), Chair-based (13)
+- 59 total stretches with descriptions and modifications
+- Tier system (Short/Normal/Long) with multipliers on hold times
+- Per-stretch: description, accessibility modification, timer type (seconds or reps/fixed)
+- Timer with auto-advance to next stretch
+- Pause/resume, skip, previous navigation
+- Audio tones for transitions and completion (Web Audio API)
+- Wake lock support with toggle
+- Completion logging (routine, tier, date, time) with 50-entry cap
+- `body.dark` pattern with hardcoded !important values
+- Theme key `kin025-theme` ✓
+- Theme-color meta id=“theme-color-meta” ✓
+- kinConfirm() for destructive actions
+- ⓘ storage popover present
+
+ISSUES:
+
+- [LOW] Bug report: old pattern (Content-Type text/plain, sends email)
+- [LOW] No OG/canonical tags
+- [NOTE] Best-structured tool in this batch. Closest to build rules compliance.
+
+-----
+
+### KIN-026 Kin Ground (Medium risk — stores financial data)
+
+**Storage:** kin_survival_pack, kin_theme, kin_setup_done, kin_survival_mode
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin-survival-v1)
+- 7 tabs: Spend check, Budget, Subscriptions, 72-hour delay, Emergency buffer, Pulse, Settings
+- Spend check with hourly-rate and reference-anchor comparisons
+- Budget with essential/non-essential split and Survival Mode toggle
+- Subscription tracker with billing cycle normalisation (weekly→monthly, yearly→monthly)
+- 72-hour impulse purchase delay with countdown timers
+- Emergency buffer calculator with months-remaining and trend tracking
+- Pulse dashboard aggregating all sections
+- Demo mode with comprehensive sample data
+- JSON import/export for backup
+- escapeHtml via createElement pattern
+- kinConfirm() for destructive actions
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] Settings footer links to `kin.tools` not `kintools.net` (wrong domain)
+- [LOW] Non-standard localStorage keys (kin_survival_pack, kin_theme, etc. — should be kin026-*)
+- [LOW] Theme-color meta id is `meta-theme` not `theme-color-meta`
+- [LOW] SW missing activate event handler for cache cleanup
+- [LOW] Bug report: old pattern (Content-Type text/plain, sends email)
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-027 Kin Gym (High complexity — stores workout data, exercises, routines, log)
+
+**Storage:** kin-gym-theme, kin-gym-ex, kin-gym-eid, kin-gym-rt, kin-gym-log
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kingym-v3)
+- 4 tabs: Rest timer, Interval timer, Workout builder, Log
+- Rest timer with SVG ring progress, presets (30s-3min), custom duration
+- Interval timer with configurable work/rest/rounds
+- Workout builder with 4 exercise types (strength, bodyweight, duration, cardio)
+- Set tracking with warm-up/failure/drop-set tags
+- Auto rest timer trigger on set completion
+- Session timer with set counter
+- Previous workout data display per exercise
+- Routine save/load/rename/delete/share system
+- Workout sharing via base64-encoded URL parameters
+- WAV audio generation engine (22kHz, 16-bit PCM) for iOS-compatible sound
+- Audio pool with 4 pre-created Audio elements for concurrent playback
+- iOS audio unlock on first user gesture
+- Custom modal system (modalConfirm/modalPrompt) instead of kinConfirm
+- Wake lock support
+- Demo mode with sample exercises and log
+- `body.dark` with extensive !important coverage
+- Theme key kin-gym-theme (standard format)
+- Theme-color meta id=“theme-color-meta” ✓
+- Bug report uses mode:‘no-cors’ ✓ (first in this batch to do so)
+- By William and Darren (correct credit)
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] Custom modal system instead of kinConfirm() — works well but diverges from standard
+- [LOW] esc() only escapes `"` and `<` but not `>` and `&` — incomplete for general XSS prevention (exercise names from user input)
+- [LOW] No OG/canonical tags
+- [LOW] Bug report submit has no email/name field at all (no anonymous toggle). Correct per ethos but differs from other tools’ bug report format.
+
+-----
+
+### KIN-028 Scan (Medium risk — stores page images in memory only)
+
+**Storage:** kin-scan-theme only (pages are session-only in memory, not persisted)
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin028-v1)
+- Camera capture with front/rear switching
+- Multi-image import
+- Page management: add, delete, reorder (arrow buttons), select
+- Per-page editing: brightness, contrast, black & white, rotate, crop
+- Crop with draggable corner handles and box shadow overlay
+- Real-time brightness/contrast via CSS filter with requestAnimationFrame throttling
+- Image caching for smooth slider performance
+- PDF export via jsPDF with page size options (A4, US Letter, fit-to-image)
+- Custom filename with date default
+- Pixel-level adjustments for PDF export (manual brightness/contrast/BW in ImageData)
+- Maximum dimension capping at 2000px for memory management
+- Demo mode with generated sample pages
+- `body.dark` with !important
+- Bug report uses mode:‘no-cors’ ✓
+- By Darren and Daisy (correct credit)
+
+ISSUES:
+
+- [MEDIUM] CSS syntax error: `body.dark .bug-sheet select, body.dark .bug-sheet textarea, body.dark .bug-sheet input[type="text"] color: #e8e8e8 !important;` — missing opening brace `{` after the selector
+- [LOW] External CDN dependency (jsPDF 2.5.1 from cdnjs) — not cached by SW, breaks offline
+- [LOW] Theme-color meta has `id="theme-meta"` not `id="theme-color-meta"`
+- [LOW] No ⓘ popover (correct — no persistent storage)
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-029 Nudge (Low risk — stores activity votes and usage)
+
+**Storage:** kin029-data, kin029-theme
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin029-v1)
+- 45 default activities across 5 types (body, brain, sensory, social, creative)
+- 3 energy filters (Couch, Restless, Stuck)
+- 3 time filters (1-2 min, 5-10 min, 20+ min)
+- Type filtering with colour-coded dots
+- Weighted shuffle: thumbs-up increases selection probability
+- Cooldown system: 3 uses per day per activity, then greyed out
+- Time-of-day awareness (filters inappropriate activities at night)
+- Emergency mode with full-screen overlay and countdown timer
+- Wake lock in emergency mode
+- Completion chime via Web Audio API
+- Editable activity menu with text import/export format
+- Share menu as text
+- Stats: total activities, tries, helpful count
+- `body.dark` with CSS variables AND !important on every declaration
+- Theme key kin029-theme ✓
+- Theme-color meta id=“theme-color-meta” ✓
+- Bug report uses mode:‘no-cors’ ✓
+- **First tool with full OG/canonical tags** (canonical, og:*, twitter:*)
+
+ISSUES:
+
+- [MEDIUM] CSS has unclosed `.toast.show {` declaration — missing closing brace
+- [LOW] Bug report includes email field in non-anonymous mode (against KIN ethos — “NO email field”)
+- [LOW] External Google Fonts (DM Sans + DM Mono) not cached by SW
+- [LOW] escHtml uses createElement pattern (correct)
+
+-----
+
+### KIN-030 Quote (Medium risk — stores defaults and sequence number)
+
+**Storage:** kin030-theme, kin030-defaults, kin030-sequence
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin030-v1)
+- Quote builder with From/To, line items, currency, tax rate
+- Auto-incrementing quote number with configurable prefix
+- Saveable defaults (from info, currency, tax, payment details)
+- Reference anchor comparisons (max 3)
+- Quote export to clipboard as JSON (designed to paste into KIN-031 Invoice)
+- Print/PDF via window.print() with comprehensive @media print stylesheet
+- Line item CRUD without full re-render (DOM manipulation)
+- Currency formatting via Intl.NumberFormat with fallback
+- Tax calculation (subtotal + tax% = total)
+- Validity date field
+- Payment details section (method, account, reference)
+- Notes field
+- JSON import/export for data backup
+- `body.dark` with !important on all elements
+- Theme key kin030-theme ✓
+- Theme-color meta id=“theme-color-meta” ✓
+- Bug report uses mode:‘no-cors’ ✓
+- Full OG/canonical tags ✓
+
+ISSUES:
+
+- [LOW] External Google Fonts (DM Sans) not cached by SW
+- [LOW] ⓘ storage info toggle uses custom implementation (kinToggleStorageInfo without event param)
+- [LOW] Bug report does NOT include email field (correct per ethos)
+- [LOW] Footer links to kintools.net ✓ (correct)
+
+-----
+
+## Bug Report Evolution in this Batch
+
+KIN-022 through KIN-026: Old pattern (Content-Type text/plain, sends email field)
+KIN-027 through KIN-030: New pattern (mode:‘no-cors’, no email in KIN-027/030, email present in KIN-029)
+
+KIN-027 is the transition point where bug reports start using mode:‘no-cors’.
+
+-----
+
+## Dark Mode Evolution
+
+- KIN-022, KIN-023: `[data-theme="dark"]` with CSS variables
+- KIN-024: `body.dark` with !important (correct)
+- KIN-025: `body.dark` with !important (correct, best implementation)
+- KIN-026: `body.dark` with CSS variables + !important (hybrid)
+- KIN-027-030: `body.dark` with !important (correct, comprehensive)
+
+-----
+
+## OG Tags Status
+
+- KIN-022 through KIN-028: No OG tags
+- KIN-029: Full OG/canonical ✓ (first in this batch)
+- KIN-030: Full OG/canonical ✓
+
+-----
+
+## Priority Actions
+
+### High Priority (functional bugs)
+
+1. KIN-028: Fix CSS syntax error (missing `{` in dark mode bug-sheet selector)
+1. KIN-029: Fix unclosed `.toast.show` CSS declaration
+1. KIN-029: Remove email field from bug report (against KIN ethos)
+
+### Medium Priority (standards alignment)
+
+1. KIN-022: Rename theme key `fs-theme` → `kin022-theme`
+1. KIN-023: Fix @import position (must be first in style block)
+1. KIN-023: Rename SW cache key `kin-json-v2` → `kin023-v1`
+1. KIN-024: Extract theme to standalone `kin024-theme` key
+1. KIN-024: Rename storage keys `thoughtloop_*` → `kin024-*`
+1. KIN-026: Fix settings footer URL `kin.tools` → `kintools.net`
+1. KIN-026: Rename storage keys `kin_survival_*` → `kin026-*`
+1. KIN-026: Add activate handler to SW for cache cleanup
+1. KIN-022 through KIN-026: Align bug report to mode:‘no-cors’, remove email
+1. ALL: Add theme-color meta `id="theme-color-meta"` where missing
+
+### Low Priority (polish)
+
+1. KIN-022 through KIN-028: Add OG/canonical tags
+1. ALL: Cache external Google Fonts in SW or remove
+1. KIN-023: Fix manifest icon reference (use canvas-generated PNG)
+1. KIN-027: Consider aligning custom modal to kinConfirm pattern
+1. KIN-027: Expand esc() to cover `>` and `&`
+
+-----
+
+## Notable Positives
+
+- **KIN-025 Stretch**: Closest to full build rules compliance in this batch. 59 stretches with medically sound descriptions and modifications. Wake lock, audio, correct theme key, correct meta id.
+- **KIN-027 Kin Gym**: Most technically ambitious. WAV audio generation for iOS reliability, workout sharing via URL params, 4 exercise types, session tracking.
+- **KIN-022 Fair Share**: Solid expense splitting with debt simplification. IndexedDB with localStorage fallback is thoughtful.
+- **KIN-024 Thought Loop**: Elegant triage framework. The speculation/dissolution tracking in patterns is genuinely useful for anxiety management.
+- **KIN-026 Kin Ground**: 72-hour rule is a standout feature. Pulse dashboard ties all sections together well.
+- **KIN-029 Nudge**: Time-of-day awareness and cooldown system show real attention to behavioural design.
+- **KIN-030 Quote**: Print stylesheet is comprehensive. Quote→Invoice clipboard pipeline is a clean workflow.
+
+-----
+
+## Audit Progress
+
+- **Completed:** KIN-001 through KIN-030
+- **Remaining:** KIN-031 through KIN-035 (5 tools)

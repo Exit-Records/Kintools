@@ -4,14 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#f5f0eb">
+<meta name="theme-color" id="theme-color-meta" content="#f5f0eb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Thought Loop">
 <link rel="apple-touch-icon" id="apple-touch-icon" href="">
 <title>KIN-024 — Thought Loop — Kin</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
 :root {
 --bg: #f5f0eb;
@@ -874,6 +873,16 @@ if("serviceWorker" in navigator){
 <style>
 body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+<link rel="canonical" href="https://thought-loop.kintools.net/">
+<meta property="og:title" content="KIN-024 — Thought Loop — Kin">
+<meta property="og:description" content="Triage anxious thoughts with three yes/no questions. Act, schedule, or release — no journaling required. Private and browser-only.">
+<meta property="og:url" content="https://thought-loop.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-024 — Thought Loop — Kin">
+<meta name="twitter:description" content="Triage anxious thoughts with three yes/no questions. Act, schedule, or release — no journaling required. Private and browser-only.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
@@ -1013,8 +1022,9 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
     darkMode: false
   };
 
-  const STORAGE_KEY = 'thoughtloop_entries';
-  const SETTINGS_KEY = 'thoughtloop_settings';
+  const STORAGE_KEY = 'kin024-entries';
+  const SETTINGS_KEY = 'kin024-settings';
+  (function(){var _e=localStorage.getItem('thoughtloop_entries');if(_e&&!localStorage.getItem('kin024-entries')){localStorage.setItem('kin024-entries',_e);localStorage.removeItem('thoughtloop_entries');}var _s=localStorage.getItem('thoughtloop_settings');if(_s&&!localStorage.getItem('kin024-settings')){localStorage.setItem('kin024-settings',_s);localStorage.removeItem('thoughtloop_settings');}})();
 
   // Questions per mode
   const questions = {
@@ -1077,12 +1087,13 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
     if (settings.darkMode) {
       document.body.classList.add('dark');
       document.querySelector('.theme-toggle').textContent = '☀️';
-      document.querySelector('meta[name="theme-color"]').content = '#1a1917';
+      document.getElementById('theme-color-meta').content = '#1a1917';
     } else {
       document.body.classList.remove('dark');
       document.querySelector('.theme-toggle').textContent = '🌙';
-      document.querySelector('meta[name="theme-color"]').content = '#f5f0eb';
+      document.getElementById('theme-color-meta').content = '#f5f0eb';
     }
+    localStorage.setItem('kin024-theme', settings.darkMode ? 'dark' : 'light');
   }
 
   // Mode
@@ -1788,15 +1799,15 @@ startPlaceholderRotation();
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
+          form_type: 'bug_report',
           subject: 'KIN-024 — Thought Loop',
           app: 'KIN-024',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
