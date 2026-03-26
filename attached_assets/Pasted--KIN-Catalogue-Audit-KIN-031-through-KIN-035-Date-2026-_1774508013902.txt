@@ -1,0 +1,243 @@
+# KIN Catalogue Audit — KIN-031 through KIN-035
+
+## Date: 2026-03-26
+
+-----
+
+## Summary Matrix
+
+|Tool                |Risk|Dark Mode           |Theme Key     |Theme-color ID         |Bug Report      |OG Tags|ⓘ            |Creator|Notable                                                                 |
+|--------------------|----|--------------------|--------------|-----------------------|----------------|-------|-------------|-------|------------------------------------------------------------------------|
+|KIN-031 Invoice     |Low |body.dark !important|kin031-theme ✓|id=“theme-color-meta” ✓|mode:‘no-cors’ ✓|✓      |✓ (custom)   |Darren |Quote→Invoice import; payment status tracking; print stylesheet         |
+|KIN-032 Receipt     |Low |body.dark !important|kin032-theme ✓|id=“theme-color-meta” ✓|mode:‘no-cors’ ✓|✓      |✓ (custom)   |Darren |Invoice→Receipt import; read-only display; full chain tracing           |
+|KIN-033 Page Surgeon|Low |body.dark !important|kin033-theme ✓|id=“theme-color-meta” ✓|mode:‘no-cors’ ✓|✓      |✗ (stateless)|Darren |PDF.js + pdf-lib CDN; drag reorder; undo/redo; keyboard shortcuts       |
+|KIN-034 Noise Meter |Low |body.dark !important|kin034-theme ✓|id=“theme-color-meta” ✓|mode:‘no-cors’ ✓|✓      |✗ (stateless)|Liam   |Microphone API; real-time dB metering; wake lock; adjustable sensitivity|
+|KIN-035 Random Acts |Low |body.dark !important|kin035-theme ✓|id=“theme-color-meta” ✓|mode:‘no-cors’ ✓|✓      |✓            |Darren |73 acts; category-aware shuffle; evening reflection; hidden day counter |
+
+-----
+
+## Per-Tool Details
+
+### KIN-031 Invoice
+
+**Storage:** kin031-theme, kin031-defaults, kin031-sequence
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin031-v1) with activate handler ✓
+- Import from KIN-030 Quote via JSON paste
+- Export to KIN-032 Receipt via clipboard JSON
+- Payment status: Unpaid / Partial / Paid with auto-fill on “Paid”
+- Balance due calculation for partial payments
+- Invoice date + due date (auto-set from quote validity)
+- Source quote reference display
+- Auto-increment sequence number with prefix
+- Saveable defaults (from, currency, tax, payment)
+- Print/PDF via window.print() with comprehensive @media print stylesheet
+- Demo mode with realistic data
+- body.dark with !important ✓
+- Theme key kin031-theme ✓, theme-color meta id ✓
+- Bug report: mode:‘no-cors’ ✓, no email field ✓
+- Full OG/canonical tags ✓
+- ⓘ storage info (custom toggle, no popover)
+
+ISSUES:
+
+- [LOW] External Google Fonts (DM Sans) not cached by SW
+- [LOW] ⓘ uses custom kinToggleStorageInfo() without event param (minor inconsistency)
+- [NOTE] Very clean implementation. Part of the Quote→Invoice→Receipt pipeline.
+
+-----
+
+### KIN-032 Receipt
+
+**Storage:** kin032-theme, kin032-defaults, kin032-sequence
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin032-v1) with activate handler ✓
+- Import from KIN-031 Invoice via JSON paste
+- Full chain tracing: Receipt → Invoice → Quote (displays both source IDs)
+- Read-only display (no editable fields after import, except prefix/number)
+- Paid confirmation bar with amount, method, date
+- Payment details section
+- Print/PDF via window.print() with comprehensive print stylesheet
+- Empty state until data imported
+- Demo mode with realistic chain data
+- body.dark with !important ✓
+- Theme key kin032-theme ✓, theme-color meta id ✓
+- Bug report: mode:‘no-cors’ ✓, no email field ✓
+- Full OG/canonical tags ✓
+- ⓘ storage info (custom toggle)
+
+ISSUES:
+
+- [LOW] External Google Fonts (DM Sans) not cached by SW
+- [NOTE] Cleanest tool in the business trio. Completes the Quote→Invoice→Receipt pipeline.
+
+-----
+
+### KIN-033 Page Surgeon
+
+**Storage:** kin033-theme only (pages in memory, not persisted)
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin033-v1) with activate handler ✓
+- PDF loading via PDF.js (CDN), export via pdf-lib (CDN, ESM dynamic import)
+- Drag-and-drop page reorder with visual drop indicators
+- Page selection: click, shift-click range, select all/none/invert
+- Range input parser (e.g. “1-5, 8, 12-15”)
+- Per-page rotation (90° increments) with badge display
+- Remove selected pages with confirmation
+- Export modes: all pages, selected only, split to separate PDFs
+- Undo/redo system (up to 40 states) with keyboard shortcuts
+- Zoom levels (S/M/L) with render quality scaling
+- Canvas thumbnail rendering with async queue
+- Full keyboard navigation (A/D/I/Del/R/arrows/Space/Ctrl+Z)
+- Focus management with tabindex
+- Progress bar during PDF loading
+- Custom kinConfirm (inline, not standard pattern)
+- body.dark with !important ✓
+- Theme key kin033-theme ✓, theme-color meta id ✓
+- Bug report: mode:‘no-cors’ ✓, no email field, has name field
+- Full OG/canonical tags ✓
+
+ISSUES:
+
+- [MEDIUM] Missing `file-info` element referenced in JS: `document.getElementById('file-info')` but no element with that ID exists in HTML. Will throw null reference on PDF load.
+- [LOW] External CDN dependencies (PDF.js 3.11.174 + pdf-lib 1.17.1) not cached by SW, breaks offline
+- [LOW] No ⓘ popover (correct, stateless)
+- [LOW] Bug report has name field but no anonymous toggle (simplified pattern)
+
+-----
+
+### KIN-034 Noise Meter
+
+**Storage:** kin034-theme only
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin034-v1) with activate handler ✓
+- Microphone access via getUserMedia
+- Real-time dB calculation from RMS of float time-domain data
+- Smoothed metering (0.7/0.3 exponential moving average)
+- Three zones: Green (<50dB), Yellow (50-75dB), Red (>75dB)
+- Vertical meter with CSS fill animation
+- Glow effects per zone (box-shadow)
+- Adjustable sensitivity (1-10 scale, affects dB boost)
+- Wake lock auto-acquire on start, release on stop
+- Wake lock re-acquire on visibility change
+- AudioContext resume handling
+- kinConfirm ✓ and showToast ✓
+- body.dark with !important ✓
+- Theme key kin034-theme ✓, theme-color meta id ✓
+- Bug report: mode:‘no-cors’ ✓, no email field, has name field
+- Full OG/canonical tags ✓
+- By Liam (correct credit)
+- No ⓘ popover (correct, stateless)
+
+ISSUES:
+
+- [LOW] External Google Fonts (Space Grotesk) not cached by SW
+- [NOTE] Clean, focused tool. Good use of Web Audio AnalyserNode for real-time processing.
+
+-----
+
+### KIN-035 Random Acts
+
+**Storage:** kin035-deck, kin035-theme, kin035-days
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin035-v1) with activate handler ✓
+- 73 acts (kindness + defiance) across 5 categories (connection, boundary, presence, letting-go, disruption)
+- Category-aware shuffle: no three consecutive same-category (50 attempts, fallback to plain shuffle)
+- One act per day, deck resets when exhausted
+- Sealed card with tap-to-reveal animation
+- “Why this?” delayed reasoning section with show/hide toggle
+- Evening reflection after 6pm: “Did you do it?” with Yes/Not today
+- Randomised reflection responses (7 yes, 6 no)
+- Hidden day counter via long-press on ✦ symbol (600ms threshold)
+- Day tracking via localStorage with first-day and last-counted deduplication
+- Evening check interval (60s) to show reflection when clock crosses 6pm
+- No demo mode, no skip, no redraw (by design)
+- Keyboard support on unrevealed card (Enter/Space)
+- body.dark with !important ✓
+- Theme key kin035-theme ✓, theme-color meta id ✓
+- Bug report: mode:‘no-cors’ ✓, no email field, has name field
+- Full OG/canonical tags ✓
+- ⓘ storage popover ✓
+- kinConfirm ✓ and showToast ✓
+
+ISSUES:
+
+- [MEDIUM] localStorage keys use `kin035-*` prefix. Memory note says they should be `kin034-*` (from when this was numbered differently). The current `kin035-*` is correct for KIN-035. Memory needs updating to remove the stale `kin034-*` reference.
+- [LOW] External Google Fonts (DM Serif Display + IBM Plex Sans) not cached by SW
+- [NOTE] Most conceptually distinctive tool in the catalogue. The writing quality of the 73 acts and “why” explanations is exceptional.
+
+-----
+
+## Cross-Batch Patterns (KIN-031 through KIN-035)
+
+This is the most consistent batch in the entire catalogue:
+
+- **All five tools** use body.dark with !important ✓
+- **All five tools** have correct theme key format (kin0XX-theme) ✓
+- **All five tools** have theme-color meta with id=“theme-color-meta” ✓
+- **All five tools** use mode:‘no-cors’ bug report ✓
+- **All five tools** have full OG/canonical tags ✓
+- **All five tools** have SW with activate handler for cache cleanup ✓
+- **No tool** has an email field in bug report ✓
+
+This batch represents mature build rules compliance.
+
+-----
+
+## Priority Actions
+
+### Medium Priority
+
+1. KIN-033: Add missing `file-info` element to HTML (referenced in JS line `document.getElementById('file-info')`)
+1. KIN-035: Update memory to remove stale `kin034-*` localStorage key reference
+
+### Low Priority
+
+1. ALL: External Google Fonts not cached by SW (DM Sans, Space Grotesk, DM Serif Display, IBM Plex Sans)
+1. KIN-033: External CDN deps (PDF.js, pdf-lib) break offline use
+
+-----
+
+## Full Catalogue Audit: COMPLETE
+
+### Coverage
+
+- KIN-001 through KIN-035: All 35 tools audited
+- Reports generated:
+  - `kin-audit-001-011.md` (KIN-001 through KIN-011)
+  - `kin-audit-013-021.md` (KIN-013 through KIN-021, KIN-012 inline)
+  - `kin-audit-022-030.md` (KIN-022 through KIN-030)
+  - `kin-audit-031-035.md` (KIN-031 through KIN-035) ← this file
+
+### High-Level Summary Across All 35 Tools
+
+**Functional bugs requiring immediate fix:** 9
+
+- KIN-003: keyboard repeat
+- KIN-006: AudioContext leak
+- KIN-010: wrong localStorage key
+- KIN-012: XSS in renderTeams/renderHistory
+- KIN-013: undefined showToast
+- KIN-015: XSS in renderEntries note field
+- KIN-028: CSS syntax error
+- KIN-029: unclosed CSS declaration + email field
+- KIN-033: missing file-info element
+
+**Rebuilds required:** 2
+
+- KIN-004: React/Vite bundled app, needs single-file rebuild
+- KIN-005: React/Vite bundled app, needs single-file rebuild
+
+**Tools at full or near-full compliance:** KIN-025, KIN-029, KIN-030, KIN-031, KIN-032, KIN-033, KIN-034, KIN-035
+
+**Business pipeline (Quote→Invoice→Receipt):** KIN-030 → KIN-031 → KIN-032. Clean JSON clipboard handoff. All three fully compliant.

@@ -53,20 +53,20 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-028 | Scan | v1.0 | Darren & Daisy | scan.kintools.net | ✅ | 3 fixes: CSS syntax error (missing { in dark mode), theme-color-meta id, OG |
 | KIN-029 | Nudge | v1.0 | Darren | nudge.kintools.net | ✅ | 3 fixes: CSS unclosed .toast.show, email removed from bug report, Google Fonts removed |
 | KIN-030 | Quote | v1.0 | Darren | quote.kintools.net | ✅ | 1 fix: Google Fonts removed; OG/theme-color-meta/bug report already correct |
-| KIN-031 | Invoice | v1.0 | Darren | invoice.kintools.net | 🔄 | |
-| KIN-032 | Receipt | v1.0 | Darren | receipt.kintools.net | 🔄 | |
-| KIN-033 | Page Surgeon | v1.0 | Darren | page-surgeon.kintools.net | 🔄 | |
-| KIN-034 | Noise Meter | v1.0 | Liam | noise-meter.kintools.net | 🔄 | |
-| KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | 🔄 | |
+| KIN-031 | Invoice | v1.0 | Darren | invoice.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
+| KIN-032 | Receipt | v1.0 | Darren | receipt.kintools.net | ✅ | 1 fix: Google Fonts removed; cleanest in business trio |
+| KIN-033 | Page Surgeon | v1.0 | Darren | page-surgeon.kintools.net | ✅ | 2 fixes: missing file-info HTML element added, Google Fonts removed |
+| KIN-034 | Noise Meter | v1.0 | Liam | noise-meter.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
+| KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |
 
 ---
 
 ## Stress-test progress
 
-- **Tested:** 26 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030)
+- **Tested:** 31 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030, 031, 032, 033, 034, 035)
 - **Needs rebuild:** 2 (KIN-004, 005)
 - **Deferred:** 1 (KIN-027 — complex, user request)
-- **Pending:** 6 (KIN-012, 031, 032, 033, 034, 035)
+- **Pending:** 1 (KIN-012)
 
 ---
 
