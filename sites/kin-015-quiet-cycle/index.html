@@ -2,7 +2,7 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KIN-015 — Quiet Cycle — Kin</title>
   <meta name="description" content="Private menstrual cycle tracker. Period prediction, symptom notes, fertility estimate. Your data never leaves your device.">
   <meta name="theme-color" content="#7c5cbf">
@@ -262,6 +262,20 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://quiet-cycle.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quiet-cycle.kintools.net/">
+<meta property="og:title" content="KIN-015 — Quiet Cycle — Kin">
+<meta property="og:description" content="Private cycle tracking with PIN protection. Predictions and fertility estimates. All data stays on your device.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-015 — Quiet Cycle — Kin">
+<meta name="twitter:description" content="Private cycle tracking with PIN protection. Predictions and fertility estimates. All data stays on your device.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -755,13 +769,14 @@ function renderTimeline() {
   </div>`).join('');
 }
 
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function renderEntries() {
   const el=document.getElementById('entry-list');
   const sorted2=[...state.cycles].sort((a,b)=>a.start>b.start?-1:a.start<b.start?1:0);
   if(!sorted2.length){el.innerHTML='<p class="entry-empty">No cycles logged yet.</p>';return;}
   el.innerHTML=sorted2.map(c=>{
     const len=c.end?daysBetween(c.start,c.end)+1:null;
-    const meta=[len?`${len} day${len!==1?'s':''}`:(c.end?'':'ongoing'),c.note||''].filter(Boolean).join(' · ');
+    const meta=[len?`${len} day${len!==1?'s':''}`:(c.end?'':'ongoing'),escHtml(c.note||'')].filter(Boolean).join(' · ');
     return `<div class="entry">
       <div class="entry-dot"></div>
       <div class="entry-info">
@@ -1234,15 +1249,15 @@ init();
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-015 — Quiet Cycle',
+          form_type: 'bug_report',
+          subject: 'KIN-015 \u2014 Quiet Cycle',
           app: 'KIN-015',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

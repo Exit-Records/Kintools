@@ -2,7 +2,7 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KIN-016 — Recipe Scaler — Kin</title>
   <meta name="description" content="Scale any recipe to any number of servings. Paste ingredients, set servings, get adjusted quantities instantly. No account, no tracking.">
   <meta name="theme-color" content="#b45309">
@@ -388,6 +388,20 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://recipe-scaler.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://recipe-scaler.kintools.net/">
+<meta property="og:title" content="KIN-016 — Recipe Scaler — Kin">
+<meta property="og:description" content="Scale any recipe up or down instantly. Handles fractions, mixed numbers and unit conversions. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-016 — Recipe Scaler — Kin">
+<meta name="twitter:description" content="Scale any recipe up or down instantly. Handles fractions, mixed numbers and unit conversions. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 <div id="app">
@@ -1206,15 +1220,15 @@ $('btn-clear').addEventListener('click', () => {
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-016 — Recipe Scaler',
+          form_type: 'bug_report',
+          subject: 'KIN-016 \u2014 Recipe Scaler',
           app: 'KIN-016',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

@@ -35,15 +35,15 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | ✅ | 5 fixes: localStorage key bug, bug report, theme-color, OG, semitone text |
 | KIN-011 | Unit Price Calc | v1.0 | Darren | unit-price.kintools.net | ✅ | 5 fixes: theme persistence, bug report, theme-color, OG, footer+Google Fonts; pack regex already correct |
 | KIN-012 | Name Picker | v1.1 | Darren | name-picker.kintools.net | 🔄 | |
-| KIN-013 | Mood Slider | v1.0 | Darren | mood-slider.kintools.net | 🔄 | |
-| KIN-014 | Breathing | v1.1 | Darren | breathing.kintools.net | 🔄 | |
-| KIN-015 | Quiet Cycle | v1.0 | Alice & Darren | quiet-cycle.kintools.net | 🔄 | |
-| KIN-016 | Recipe Scaler | v1.0 | Darren | recipe-scaler.kintools.net | 🔄 | |
-| KIN-017 | Decision Flip | v1.0 | Alice | decision-flip.kintools.net | 🔄 | |
-| KIN-018 | Kin Nest | v1.0 | Alice & Darren | kin-nest.kintools.net | 🔄 | |
-| KIN-019 | Markdown Download | v1.0 | Darren | markdown-download.kintools.net | 🔄 | |
-| KIN-020 | Password Generator | v1.0 | Darren | password-generator.kintools.net | 🔄 | |
-| KIN-021 | Text Counter | v1.0 | Darren | text-counter.kintools.net | 🔄 | |
+| KIN-013 | Mood Slider | v1.0 | Darren | mood-slider.kintools.net | ✅ | 5 fixes: viewport, theme-meta id, theme key→kin013-theme (migrated), showToast defined, bug report, OG |
+| KIN-014 | Breathing | v1.1 | Darren | breathing.kintools.net | ✅ | 6 fixes: viewport, theme-meta id, theme key→kin014-theme + streak→kin014-streak (migrated), bug report, OG |
+| KIN-015 | Quiet Cycle | v1.0 | Alice & Darren | quiet-cycle.kintools.net | ✅ | 4 fixes: viewport, XSS in renderEntries (note escaped), bug report, OG |
+| KIN-016 | Recipe Scaler | v1.0 | Darren | recipe-scaler.kintools.net | ✅ | 3 fixes: viewport, bug report, OG |
+| KIN-017 | Decision Flip | v1.0 | Alice | decision-flip.kintools.net | ✅ | 3 fixes: viewport, bug report, OG |
+| KIN-018 | Kin Nest | v1.0 | Alice & Darren | kin-nest.kintools.net | ✅ | 3 fixes: viewport, bug report, OG; duplicate footer is inside report export template (correct) |
+| KIN-019 | Markdown Download | v1.0 | Darren | markdown-download.kintools.net | ✅ | 3 fixes: Google Fonts removed, bug report, OG |
+| KIN-020 | Password Generator | v1.0 | Darren | password-generator.kintools.net | ✅ | 2 fixes: bug report, OG; viewport + manifest already clean |
+| KIN-021 | Text Counter | v1.0 | Darren | text-counter.kintools.net | ✅ | 5 fixes: SW key→kin021-v1, manifest icon→data URI, Google Fonts removed, bug report, OG |
 | KIN-022 | Fair Share | v1.0 | Darren | fair-share.kintools.net | 🔄 | |
 | KIN-023 | JSON | v1.0 | Darren | json.kintools.net | 🔄 | |
 | KIN-024 | Thought Loop | v1.0 | Darren | thought-loop.kintools.net | 🔄 | |
@@ -63,9 +63,9 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
 ## Stress-test progress
 
-- **Tested:** 9 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011)
+- **Tested:** 18 / 35 (KIN-001, 002, 003, 006, 007, 008, 009, 010, 011, 013, 014, 015, 016, 017, 018, 019, 020, 021)
 - **Needs rebuild:** 2 (KIN-004, 005)
-- **Pending:** 24
+- **Pending:** 15 (KIN-012, 022–035)
 
 ---
 

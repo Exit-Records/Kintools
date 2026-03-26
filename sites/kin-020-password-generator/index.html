@@ -872,6 +872,20 @@ if("serviceWorker" in navigator){
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))).catch(function(){});
 }
 </script>
+<link rel="canonical" href="https://passgen.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://passgen.kintools.net/">
+<meta property="og:title" content="KIN-020 — Password Generator — Kin">
+<meta property="og:description" content="Generate strong passwords and passphrases with entropy scoring. Cryptographically random. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-020 — Password Generator — Kin">
+<meta name="twitter:description" content="Generate strong passwords and passphrases with entropy scoring. Cryptographically random. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 <div class="container">
@@ -1879,15 +1893,15 @@ if("serviceWorker" in navigator){
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-020 — Password Generator',
+          form_type: 'bug_report',
+          subject: 'KIN-020 \u2014 Password Generator',
           app: 'KIN-020',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

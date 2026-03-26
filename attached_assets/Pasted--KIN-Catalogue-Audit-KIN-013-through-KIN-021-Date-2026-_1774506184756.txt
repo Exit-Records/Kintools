@@ -1,0 +1,394 @@
+# KIN Catalogue Audit — KIN-013 through KIN-021
+
+## Date: 2026-03-26
+
+-----
+
+## Summary Matrix
+
+|Tool                 |Risk|Dark Mode           |Theme Key           |Theme-color      |Viewport     |Bug Report |OG Tags|ⓘ          |Critical Issues                          |
+|---------------------|----|--------------------|--------------------|-----------------|-------------|-----------|-------|-----------|-----------------------------------------|
+|KIN-013 Mood Slider  |Med |html.dark           |kin-mood-dot-theme ✗|id=“theme-meta” ✗|max-scale=1 ✗|Old pattern|✗      |✓          |Non-standard keys, showToast undefined   |
+|KIN-014 Breathing    |Med |html.dark           |kin-breath-theme ✗  |id=“theme-meta” ✗|max-scale=1 ✗|Old pattern|✗      |✓          |Non-standard keys, SW v2 but footer v1.1 |
+|KIN-015 Quiet Cycle  |High|None (light only)   |N/A                 |Static #7c5cbf   |max-scale=1 ✗|Old pattern|✗      |✓          |XSS in renderEntries, no dark mode       |
+|KIN-016 Recipe Scaler|Low |None (light only)   |N/A                 |Static #b45309   |max-scale=1 ✗|Old pattern|✗      |✓          |No dark mode                             |
+|KIN-017 Decision Flip|Low |None (light only)   |N/A                 |Static #7c3aed   |max-scale=1 ✗|Old pattern|✗      |✗ (correct)|Math.random not crypto, no dark mode     |
+|KIN-018 Kin Nest     |High|body.dark !important|N/A (auto night)    |Static #059669   |max-scale=1 ✗|Old pattern|✗      |✓          |Duplicate footer, most complex tool      |
+|KIN-019 Markdown DL  |Low |body.dark !important|kin019-theme ✓      |id correct ✓     |Clean ✓      |Old pattern|✗      |✗ (correct)|External fonts not cached                |
+|KIN-020 PassGen      |Low |body.dark !important|kin020-theme ✓      |Present          |Clean ✓      |Old pattern|✗      |✗ (correct)|Manifest icon references missing file    |
+|KIN-021 Text Counter |Low |body.dark !important|kin021-theme ✓      |id correct ✓     |Clean ✓      |Old pattern|✗      |✗ (correct)|External fonts, non-standard SW cache key|
+
+-----
+
+## Per-Tool Details
+
+### KIN-013 Mood Slider (Medium risk)
+
+**Stores:** Daily mood entries (value + note) in `kin-mood-slider`
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin013-v1)
+- Colour interpolation across 5-stop gradient correct
+- Local date formatting correct (YYYY-MM-DD)
+- 7-day grid renders correctly
+- Export as .txt with all entries
+- ⓘ storage popover present
+- Note field with 200 char limit and counter
+
+ISSUES:
+
+- [MEDIUM] Theme key `kin-mood-dot-theme` not tool-specific format (should be `kin013-theme`)
+- [MEDIUM] Theme-color meta uses `id="theme-meta"` not `id="theme-color-meta"`
+- [LOW] Viewport has `maximum-scale=1` (build rules say no)
+- [LOW] `showToast` referenced but never defined in main script
+- [LOW] Bug report: old pattern (email, text/plain, old form_type)
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-014 Breathing Exercise (Medium risk)
+
+**Stores:** Streak data in `kin-breath-streak`, theme in `kin-breath-theme`
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin014-v2)
+- 6 breathing patterns (box, 4-7-8, ADHD, sleep, balloon, five-finger)
+- Custom pattern mode with user-defined timings
+- Five-finger SVG hand tracing with pure-JS Catmull-Rom spline math
+- Cubic bezier evaluation without SVG DOM measurement (iframe compatible)
+- Voice synthesis via Web Speech API
+- iOS haptic fallback (noise-burst click via Web Audio)
+- Wake lock support with toggle button
+- Ring mode (SVG circle progress) as alternative visualisation
+- Ambient background colour gradients tied to breathing phase
+- AudioContext shared correctly via getAudioCtx()
+- Streak logic uses local dates correctly
+- Quick presets (Anxiety, Focus, Sleep, Balloon, Five Fingers)
+- prefers-reduced-motion support
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] Theme key `kin-breath-theme` not tool-specific (should be `kin014-theme`)
+- [MEDIUM] Theme-color meta uses `id="theme-meta"` not `id="theme-color-meta"`
+- [LOW] SW cache key `kin014-v2` but footer shows v1.1 (version mismatch)
+- [LOW] Viewport has `maximum-scale=1`
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-015 Quiet Cycle (High risk — sensitive reproductive health data)
+
+**Stores:** Cycle history, settings, PIN hash in `kin-quiet-cycle`
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin015-v1)
+- Most privacy-sensitive tool in the catalogue
+- PIN lock with client-side hash (djb2 variant with salt, adequate for local-only)
+- Panic delete via 5-tap on header (clears all data instantly)
+- Cycle prediction: average of all intervals, applied to last start date
+- Fertility window: ovulation at next_period - 14 days, window ov-2 to ov+1
+- Correctly disclaimed as estimate only (“Not medical advice”)
+- Calendar view with period days, predicted days, fertile days
+- Cycle variability detection (warns if range > 7 days)
+- Timeline with bar chart of cycle lengths
+- Full CRUD on cycle entries with date/note fields
+- Export reminder system with weekly/monthly frequency
+- Data export as .txt
+- Delete all data with confirm dialog
+- Privacy guarantee panel with verifiable claims
+- By Alice and Darren (correct credit)
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] XSS in renderEntries(): note field rendered via template literal in innerHTML
+  Impact: Self-XSS if user enters HTML in notes
+  Fix: Escape note text before insertion
+- [LOW] No dark mode toggle (light only)
+- [LOW] Viewport has `maximum-scale=1`
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-016 Recipe Scaler (Low risk)
+
+**Stores:** Config (format, precision, toggles) in `kin-016-rs`
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin016-v1)
+- Comprehensive ingredient parser with regex quantity/unit extraction
+- Unicode fraction support (½¼¾⅓⅔⅛⅜⅝⅞) via toAscii() conversion
+- Mixed number parsing (e.g. “1 1/2”)
+- Unit registry: 20+ unit types with variant spelling recognition
+- Auto unit up-conversion (tsp→tbsp→cup, g→kg, ml→l, oz→lb)
+- Three precision modes: cooking (⅛ steps), quarter, exact
+- Fraction and decimal output formatting
+- Lock individual ingredients from scaling
+- Combine duplicate ingredients feature
+- Two-panel layout (input/output) responsive to mobile
+- Quick multiply buttons (×2, ×3, ÷2, ÷3)
+- Copy scaled recipe to clipboard
+- Ratio pill showing current scale factor
+- Pass-through lines for headers/instructions (lines without quantities)
+- ⓘ storage popover present
+
+ISSUES:
+
+- [LOW] No dark mode
+- [LOW] Viewport has `maximum-scale=1`
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-017 Decision Flip (Low risk, stateless)
+
+**Stores:** Nothing
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin017-v1)
+- Multi-pick support (1-N from options)
+- Remove after flip correctly consumes one occurrence per chosen item
+- Spin animation with accelerating intervals (55ms → 180ms over 1.4s)
+- Error handling for empty options
+- Keyboard shortcut: Ctrl/Cmd+Enter from textarea
+- By Alice (correct credit)
+- Clean, focused UI
+
+ISSUES:
+
+- [LOW] Uses Math.random() not crypto.getRandomValues() for shuffle
+  Impact: Acceptable for casual decisions, not for anything requiring fairness
+- [LOW] No dark mode
+- [LOW] Viewport has `maximum-scale=1`
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-018 Kin Nest (High risk — extensive baby tracking data)
+
+**Stores:** All baby data (feeds, sleep, diapers, growth, settings) in `kin-nest`
+
+PASS:
+
+- Single-file HTML, most complex tool in the catalogue
+- Blob manifest, Blob SW (kin018-v1)
+- Feed tracking: 6 types (left/right breast, bottle, pumped, formula, solids)
+- Breast side alternation suggestion
+- Sleep tracking: active timer with live duration, start/stop toggle
+- Diaper tracking: wet, dirty, both
+- Growth measurements: weight (kg), height (cm), head circumference (cm)
+- Routine intelligence engine:
+  - Age-based wake windows (6 brackets from newborn to 9mo+)
+  - Nap prediction from last wake time + average wake window
+  - Sleep debt calculation against age-appropriate daily targets
+  - Meltdown/fussiness score (0-100) based on multiple factors
+  - Routine stability analysis (variance of first-feed times over 5 days)
+  - Feed interval averaging (last 8 feeds)
+- Daily reassurance panel comparing feeds/sleep/diapers against targets
+- Auto night mode (20:00-06:00) with body.dark class
+- Long-press on feed/diaper buttons for modal with type selection
+- Timeline with day-by-day navigation
+- HTML report export with:
+  - Embedded SVG bar charts (feeds) and line charts (sleep)
+  - Print stylesheet with @page sizing
+  - iOS-aware share hint (pinch-to-PDF)
+  - Embedded JSON data for re-import
+- JSON import/export with confirmation dialog
+- Export reminder system (daily/weekly/monthly)
+- Baby setup wizard
+- By Alice and Darren (correct credit)
+- ⓘ storage popover present
+
+ISSUES:
+
+- [MEDIUM] Duplicate footer (one inside settings pane, one at page bottom with standard badge)
+  Fix: Remove settings-pane footer, keep standard one
+- [LOW] body.dark uses !important but only for a subset of elements
+  Some elements may not be covered (e.g. modal backgrounds in night mode)
+- [LOW] Viewport has `maximum-scale=1`
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+- [LOW] HTML export includes bug report CSS/markup (unnecessary bloat in export)
+
+-----
+
+### KIN-019 Markdown Download (Low risk, stateless)
+
+**Stores:** Theme preference only in `kin019-theme`
+
+PASS:
+
+- Single-file HTML, Blob manifest via Blob URL, Blob SW (kin019-v1)
+- body.dark pattern with hardcoded values and !important (correct)
+- Theme persisted to kin019-theme (correct format)
+- Theme-color meta with correct id
+- Tab key inserts 2 spaces (markdown-friendly)
+- Word and character count
+- Download as .md with correct MIME type
+- Copy to clipboard with fallback (execCommand)
+- Toast notification system
+- Viewport clean (no maximum-scale)
+
+ISSUES:
+
+- [LOW] External Google Fonts (DM Sans + Instrument Serif) not cached by SW
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-020 Password Generator (Low risk, session-only storage)
+
+**Stores:** Theme only in `kin020-theme`. History is session-only (not persisted).
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW (kin020-v1)
+- Three generation modes: random password, passphrase, pronounceable
+- crypto.getRandomValues() for all randomness (correct for security tool)
+- 2048-word EFF wordlist subset for passphrases
+- Entropy calculation with crack time estimation at 1B guesses/sec
+- Strength bar visualisation (low/medium/high colour coding)
+- Ambiguous character exclusion (0O1lI|)
+- Custom character inclusion/exclusion rules
+- Passphrase: configurable separator, case mode (title/lower/upper/random)
+- Pronounceable: consonant-vowel syllable generation
+- Optional digit/symbol suffix for passphrase and pronounceable modes
+- Batch generation (2-20 passwords)
+- Session-only history (max 50, cleared on tab close)
+- escHtml() for XSS prevention in history/batch rendering (good practice)
+- body.dark pattern with most thorough hardcoded !important coverage in catalogue
+- Keyboard shortcuts (Space = generate, Enter = copy)
+- Theme persisted to kin020-theme (correct format)
+- Viewport clean
+
+ISSUES:
+
+- [LOW] Manifest icon references `icon.svg` which doesn’t exist
+  Fix: Use data URI or canvas-generated PNG like other tools
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+
+-----
+
+### KIN-021 Text Counter (Low risk, stateless)
+
+**Stores:** Theme only in `kin021-theme`
+
+PASS:
+
+- Single-file HTML, Blob manifest, Blob SW
+- body.dark pattern with comprehensive hardcoded !important overrides
+- Theme persisted to kin021-theme (correct format)
+- Theme-color meta with correct id
+- Flesch-Kincaid readability scoring (Grade Level and Reading Ease)
+- Syllable estimation algorithm
+- Platform character limits (Twitter 280, Instagram 2200, LinkedIn 3000, SMS 160)
+- Keyword density with comprehensive stopword filtering (100+ stopwords)
+- Selection-aware stats (word/char/sentence count for selected text)
+- Copy stats to clipboard with formatted output
+- Reading time at 238 WPM, speaking at 130 WPM (standard rates)
+- Viewport clean
+
+ISSUES:
+
+- [LOW] SW cache key `kin-textcounter-v1` not tool-specific format (should be `kin021-v1`)
+- [LOW] Manifest icon references `icon.svg` which doesn’t exist
+- [LOW] External Google Fonts (IBM Plex Mono + IBM Plex Sans) not cached by SW
+- [LOW] Bug report: old pattern
+- [LOW] No OG/canonical tags
+- [NOTE] Uploaded twice (documents 12 and 13 are identical)
+
+-----
+
+## Recurring Issues (KIN-013 through KIN-021)
+
+### Viewport
+
+- KIN-013 through KIN-018: `maximum-scale=1` in viewport meta
+- KIN-019 through KIN-021: Clean viewport (correct)
+- Fix: Remove `maximum-scale=1` from all tools
+
+### Bug Report
+
+- ALL tools use old pattern: Content-Type text/plain, sends email field, old form_type mapping
+- Fix: Align all to KIN-012’s pattern (mode:‘no-cors’, no email, form_type:‘bug_report’)
+
+### OG/Canonical Tags
+
+- NONE of these tools have OG/canonical tags
+- Fix: Add per Section 19 template
+
+### Theme-color Meta ID
+
+- KIN-013, KIN-014: Use `id="theme-meta"` instead of `id="theme-color-meta"`
+- KIN-015 through KIN-018: No id attribute on theme-color meta
+- KIN-019 through KIN-021: Correct `id="theme-color-meta"`
+
+### Theme localStorage Keys
+
+Non-standard keys (should be `kin0NN-theme`):
+
+- KIN-013: `kin-mood-dot-theme`
+- KIN-014: `kin-breath-theme`
+  Standard keys:
+- KIN-019: `kin019-theme` ✓
+- KIN-020: `kin020-theme` ✓
+- KIN-021: `kin021-theme` ✓
+
+### Dark Mode
+
+Three categories:
+
+1. **No dark mode at all:** KIN-015, KIN-016, KIN-017
+1. **html.dark pattern:** KIN-013, KIN-014
+1. **body.dark with !important:** KIN-018, KIN-019, KIN-020, KIN-021
+
+### External Fonts (not SW-cached)
+
+- KIN-019: DM Sans + Instrument Serif (Google Fonts)
+- KIN-021: IBM Plex Mono + IBM Plex Sans (Google Fonts)
+
+-----
+
+## Priority Actions
+
+### High Priority (functional/security)
+
+1. KIN-015: Escape note field in renderEntries() to prevent XSS
+1. KIN-013: Define showToast() function or remove references
+
+### Medium Priority (standards alignment)
+
+1. KIN-013, KIN-014: Change theme-color meta id to `theme-color-meta`
+1. KIN-013: Change `kin-mood-dot-theme` → `kin013-theme`
+1. KIN-014: Change `kin-breath-theme` → `kin014-theme`
+1. KIN-018: Remove duplicate footer
+1. KIN-021: Change SW cache key `kin-textcounter-v1` → `kin021-v1`
+1. KIN-020, KIN-021: Fix manifest icons (use data URI not file reference)
+1. ALL: Align bug report to standard pattern
+
+### Low Priority (polish)
+
+1. KIN-013 through KIN-018: Remove `maximum-scale=1` from viewport
+1. ALL: Add OG/canonical tags per Section 19
+1. KIN-019, KIN-021: Cache external fonts in SW or remove
+1. KIN-015, KIN-016, KIN-017: Consider adding dark mode
+
+-----
+
+## Audit Progress
+
+- **Completed:** KIN-001 through KIN-021
+- **Next:** KIN-022
+- **Remaining:** KIN-022 through KIN-035 (14 tools)

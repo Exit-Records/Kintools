@@ -12,7 +12,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="KIN-021">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
 :root {
   --radius: 12px;
@@ -477,6 +476,20 @@ body.dark .foot-meta {
   .sel-banner { font-size: 0.75rem; gap: 8px; }
 }
 </style>
+<link rel="canonical" href="https://text-counter.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://text-counter.kintools.net/">
+<meta property="og:title" content="KIN-021 — Text Counter — Kin">
+<meta property="og:description" content="Word count, reading time, readability score and platform character limits. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-021 — Text Counter — Kin">
+<meta name="twitter:description" content="Word count, reading time, readability score and platform character limits. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 <div class="wrap">
@@ -856,7 +869,7 @@ analyse('');
 <script>
 if ('serviceWorker' in navigator) {
   const sw = `
-    const CACHE = 'kin-textcounter-v1';
+    const CACHE = 'kin021-v1';
     const URLS = ['/'];
     self.addEventListener('install', e => {
       e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)));
@@ -885,7 +898,7 @@ if ('serviceWorker' in navigator) {
     display: 'standalone',
     background_color: '#f5f0eb',
     theme_color: '#f5f0eb',
-    icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml' }]
+    icons: [{ src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1614'/><text x='50' y='54' text-anchor='middle' dominant-baseline='central' font-size='40' font-weight='bold' fill='white' font-family='system-ui'>TC</text></svg>", sizes: 'any', type: 'image/svg+xml' }]
   };
   const blob = new Blob([JSON.stringify(m)], { type: 'application/json' });
   document.getElementById('manifest-link').href = URL.createObjectURL(blob);
@@ -1097,15 +1110,15 @@ if ('serviceWorker' in navigator) {
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-021 — Text Counter',
+          form_type: 'bug_report',
+          subject: 'KIN-021 \u2014 Text Counter',
           app: 'KIN-021',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

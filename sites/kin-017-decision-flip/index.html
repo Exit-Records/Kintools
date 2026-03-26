@@ -2,7 +2,7 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KIN-017 — Decision Flip — Kin</title>
   <meta name="description" content="Break decision paralysis in seconds. Paste your options, flip, get an answer. No account, no tracking.">
   <meta name="theme-color" content="#7c3aed">
@@ -336,6 +336,20 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://decision-flip.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://decision-flip.kintools.net/">
+<meta property="og:title" content="KIN-017 — Decision Flip — Kin">
+<meta property="og:description" content="Can't decide? Paste your options, flip, get an answer. Multi-pick support with animated reveal. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-017 — Decision Flip — Kin">
+<meta name="twitter:description" content="Can't decide? Paste your options, flip, get an answer. Multi-pick support with animated reveal. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -863,15 +877,15 @@ function removeChosen(chosen) {
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-017 — Decision Flip',
+          form_type: 'bug_report',
+          subject: 'KIN-017 \u2014 Decision Flip',
           app: 'KIN-017',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';

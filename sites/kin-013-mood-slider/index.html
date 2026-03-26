@@ -2,7 +2,7 @@
 <html lang="en" class="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>KIN-013 — Mood Slider — Kin</title>
     <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="KIN-013">
   <link rel="apple-touch-icon" id="apple-touch-icon">
 <meta name="description" content="Ultra-minimal daily mood tracker. Slide to log, add a note. Everything stays in your browser.">
-<meta name="theme-color" id="theme-meta" content="#FAFAF7">
+<meta name="theme-color" id="theme-color-meta" content="#FAFAF7">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -365,6 +365,20 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 <style>
 html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 </style>
+<link rel="canonical" href="https://mood-slider.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mood-slider.kintools.net/">
+<meta property="og:title" content="KIN-013 — Mood Slider — Kin">
+<meta property="og:description" content="Track your daily mood with a simple slider. Add a note, spot patterns over time. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-013 — Mood Slider — Kin">
+<meta name="twitter:description" content="Track your daily mood with a simple slider. Add a note, spot patterns over time. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -435,7 +449,8 @@ html.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 
 <script>
 var KEY   = 'kin-mood-slider';
-var THEME = 'kin-mood-dot-theme';
+var THEME = 'kin013-theme';
+(function(){var _o=localStorage.getItem('kin-mood-dot-theme');if(_o&&!localStorage.getItem('kin013-theme')){localStorage.setItem('kin013-theme',_o);localStorage.removeItem('kin-mood-dot-theme');}})();
 
 var DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -481,7 +496,7 @@ function moodLabelFor(val) {
   if (saved === 'dark') {
     document.documentElement.classList.add('dark');
     document.getElementById('toggle').textContent = '☀️';
-    document.getElementById('theme-meta').content = '#111110';
+    document.getElementById('theme-color-meta').content = '#111110';
   }
 
   var now = new Date();
@@ -559,7 +574,7 @@ function showSaved() {
 function toggleTheme() {
   var dark = document.documentElement.classList.toggle('dark');
   document.getElementById('toggle').textContent = dark ? '☀️' : '🌙';
-  document.getElementById('theme-meta').content = dark ? '#111110' : '#FAFAF7';
+  document.getElementById('theme-color-meta').content = dark ? '#111110' : '#FAFAF7';
   localStorage.setItem(THEME, dark ? 'dark' : 'light');
 }
 
@@ -669,6 +684,7 @@ function exportNotes() {
     .sort(function (a, b) { return a[0].localeCompare(b[0]); })
     .filter(function (e) { return e[1].val !== null && e[1].val !== undefined; });
 
+  function showToast(m){var t=document.getElementById('kin-toast');if(!t)return;t.textContent=m;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0'},2200);}
   if (!entries.length) {
     showToast('No mood entries to export yet');
     return;
@@ -909,15 +925,15 @@ function exportNotes() {
       else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-013 — Mood Slider',
+          form_type: 'bug_report',
+          subject: 'KIN-013 \u2014 Mood Slider',
           app: 'KIN-013',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
