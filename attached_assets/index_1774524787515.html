@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KIN-037 -- Blood Pressure -- Kin</title>
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Blood Pressure">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#f5f4f0;--surface:#fff;--text:#111;--text-secondary:#666;
+--border:#ddd;--border-light:#eee;
+--accent:#1a56db;--accent-soft:rgba(26,86,219,0.08);
+--success:#1a7;--success-soft:rgba(17,170,119,0.08);
+--warning:#c60;--warning-soft:rgba(204,102,0,0.08);
+--danger:#c00;--danger-soft:rgba(204,0,0,0.08);
+--elevated:#d35;--elevated-soft:rgba(221,51,85,0.08);
+--crisis:#900;--crisis-soft:rgba(153,0,0,0.08);
+--toast-bg:#111;--toast-text:#fff;
+--shadow:0 1px 3px rgba(0,0,0,0.06);--radius:8px;--footer-muted:#888;
+}
+
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;padding-bottom:env(safe-area-inset-bottom,0);min-height:100vh;min-height:100dvh;line-height:1.5;-webkit-text-size-adjust:100%}
+
+body.dark{--bg:#1a1a1a;--surface:#252525;--text:#e8e8e8;--text-secondary:#999;--border:#3a3a3a;--border-light:#333;--accent:#5b8def;--accent-soft:rgba(91,141,239,0.12);--success:#2c9;--success-soft:rgba(34,204,153,0.12);--warning:#e80;--warning-soft:rgba(238,136,0,0.12);--danger:#e44;--danger-soft:rgba(238,68,68,0.12);--elevated:#e57;--elevated-soft:rgba(238,85,119,0.12);--crisis:#f44;--crisis-soft:rgba(255,68,68,0.12);--toast-bg:#fff;--toast-text:#111;--shadow:0 1px 3px rgba(0,0,0,0.2);--footer-muted:#888}
+
+body.dark{background:#1a1a1a !important;color:#e8e8e8 !important}
+body.dark .section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .section-title{color:#e8e8e8 !important}
+body.dark input,body.dark textarea,body.dark select{background:#252525 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark input::placeholder,body.dark textarea::placeholder{color:#777 !important}
+body.dark label{color:#999 !important}
+body.dark .theme-toggle{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .btn-primary{background:#5b8def !important;color:#fff !important}
+body.dark .btn-secondary{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .demo-bar{background:#1a3a2a !important;color:#6f6 !important;border-color:#2a4a3a !important}
+body.dark .log-entry{border-color:#333 !important}
+body.dark .log-date{color:#999 !important}
+body.dark .log-values{color:#e8e8e8 !important}
+body.dark .log-meta{color:#777 !important}
+body.dark .category-badge{border-color:#444 !important}
+body.dark .summary-card{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .summary-label{color:#999 !important}
+body.dark .summary-value{color:#e8e8e8 !important}
+body.dark .empty-state{color:#999 !important;border-color:#3a3a3a !important}
+body.dark .tab-btn{background:#333 !important;color:#999 !important;border-color:#444 !important}
+body.dark .tab-btn.active{background:#5b8def !important;color:#fff !important;border-color:#5b8def !important}
+body.dark .badge-local{color:#2c9 !important;background:rgba(34,204,153,0.12) !important}
+body.dark .bug-sheet{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .bug-sheet select,body.dark .bug-sheet textarea,body.dark .bug-sheet input{background:#1a1a1a !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .bug-overlay{background:rgba(0,0,0,0.6) !important}
+body.dark .toggle-row{color:#999 !important}
+body.dark .print-range{background:#252525 !important;border-color:#3a3a3a !important;color:#e8e8e8 !important}
+body.dark .kinconfirm-box{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .kinconfirm-cancel{background:#333 !important;color:#e8e8e8 !important}
+body.dark .chart-section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .toggle-opt{background:#333 !important;color:#999 !important;border-color:#444 !important}
+body.dark .toggle-opt.active{background:rgba(91,141,239,0.12) !important;color:#5b8def !important;border-color:#5b8def !important}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.header h1{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.theme-toggle{width:40px;height:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:background 0.2s,color 0.2s;flex-shrink:0}
+
+.demo-bar{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500}
+.demo-bar button{width:auto;min-height:32px;background:transparent;border:1px solid currentColor;color:inherit;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer}
+
+.tab-row{display:flex;gap:4px;margin-bottom:16px}
+.tab-btn{flex:1;min-height:44px;background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.tab-content{display:none}.tab-content.active{display:block}
+
+.section{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:var(--text)}
+
+label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px}
+input,textarea,select{width:100%;min-height:44px;font-size:16px;font-family:inherit;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);color:var(--text);-webkit-appearance:none;appearance:none;transition:border-color 0.15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:#aaa}
+textarea{min-height:60px;resize:vertical}
+.field{margin-bottom:10px}
+.row{display:flex;gap:8px}.row .field{flex:1}
+
+.toggle-group{display:flex;gap:4px}
+.toggle-opt{flex:1;min-height:44px;background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.toggle-opt.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+
+.btn-primary{width:100%;min-height:48px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity 0.15s}
+.btn-primary:active{opacity:0.85}
+.btn-secondary{width:100%;min-height:44px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.15s}
+.btn-group{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+
+.category-badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;text-transform:uppercase;border:1px solid transparent}
+.cat-normal{color:var(--success);background:var(--success-soft);border-color:var(--success)}
+.cat-elevated{color:var(--warning);background:var(--warning-soft);border-color:var(--warning)}
+.cat-high1{color:var(--elevated);background:var(--elevated-soft);border-color:var(--elevated)}
+.cat-high2{color:var(--danger);background:var(--danger-soft);border-color:var(--danger)}
+.cat-crisis{color:var(--crisis);background:var(--crisis-soft);border-color:var(--crisis)}
+
+.log-entry{padding:10px 0;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.log-entry:last-child{border-bottom:none}
+.log-left{flex:1;min-width:0}
+.log-date{font-size:12px;color:var(--text-secondary);margin-bottom:2px}
+.log-values{font-size:16px;font-weight:600}
+.log-meta{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.log-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.log-delete{background:none;border:none;color:var(--text-secondary);font-size:12px;cursor:pointer;padding:4px 8px;font-family:inherit;min-height:32px}
+.log-delete:hover{color:var(--danger)}
+
+.summary-row{display:flex;gap:8px;margin-bottom:8px}
+.summary-card{flex:1;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:10px;text-align:center;box-shadow:var(--shadow)}
+.summary-label{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px}
+.summary-value{font-size:18px;font-weight:600}
+
+.chart-section{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow-x:auto}
+.chart-section svg{display:block;width:100%;height:auto}
+
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-secondary);border:1px dashed var(--border);border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.empty-state strong{display:block;font-size:16px;color:var(--text);margin-bottom:6px}
+
+.print-range{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-text);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:100;white-space:nowrap}
+
+.kinconfirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;align-items:center;justify-content:center}
+.kinconfirm-overlay.visible{display:flex}
+.kinconfirm-box{background:var(--surface);border-radius:14px;padding:24px;max-width:320px;width:90%;text-align:center}
+.kinconfirm-box p{font-size:15px;margin-bottom:20px;line-height:1.5}
+.kinconfirm-btns{display:flex;gap:8px}
+.kinconfirm-btns button{flex:1;min-height:44px;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none}
+.kinconfirm-cancel{background:var(--border-light);color:var(--text)}
+.kinconfirm-confirm{background:var(--danger);color:#fff}
+
+.bug-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.bug-overlay.open{opacity:1;pointer-events:auto}
+.bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--surface);color:var(--text);border-radius:16px 16px 0 0;padding:20px 16px env(safe-area-inset-bottom,16px);z-index:201;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
+.bug-overlay.open .bug-sheet{transform:translateY(0)}
+.bug-sheet h3{font-size:16px;margin-bottom:14px;font-weight:600}
+.bug-sheet .field{margin-bottom:10px}
+.bug-sheet label{font-size:12px;color:var(--text-secondary);margin-bottom:4px;display:block}
+.bug-sheet select,.bug-sheet textarea,.bug-sheet input{width:100%;min-height:44px;font-size:16px;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);color:var(--text);font-family:inherit;-webkit-appearance:none}
+.bug-sheet textarea{min-height:100px;resize:vertical}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:10px;padding:6px 0}
+.toggle-switch{width:44px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none;padding:0}
+.toggle-switch.on{background:var(--success)}
+.toggle-knob{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.toggle-switch.on .toggle-knob{transform:translateX(18px)}
+.bug-actions{display:flex;gap:8px;margin-top:14px}
+.bug-actions button{flex:1;min-height:44px;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;border:none}
+.bug-cancel{background:var(--border-light);color:var(--text)}
+.bug-submit{background:var(--accent);color:#fff}
+
+@media print{
+*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+body,body.dark{background:#fff !important;color:#111 !important;padding:0 !important;margin:0 !important;font-size:10pt !important}
+.header,.theme-toggle,.demo-bar,.tab-row,.btn-group,.toast,.bug-overlay,.kinconfirm-overlay,.log-delete,.print-range,.no-print{display:none !important}
+.tab-content{display:block !important}
+#tabAdd{display:none !important}
+#tabHistory{display:none !important}
+#tabReport{display:block !important}
+.section,.summary-card,.chart-section{box-shadow:none !important;border:1px solid #ddd !important;background:#fff !important;page-break-inside:avoid}
+.print-header{display:block !important;margin-bottom:16pt}
+.print-header h2{font-size:18pt;font-weight:600;margin:0 0 4pt}
+.print-header .print-sub{font-size:9pt;color:#666}
+.category-badge{border:1px solid currentColor !important}
+footer{display:none !important}
+.summary-label{color:#666 !important}
+.summary-value{color:#111 !important}
+.log-date{color:#666 !important}
+.log-values{color:#111 !important}
+.log-meta{color:#888 !important}
+}
+.print-header{display:none}
+</style>
+
+<script>
+(function(){
+  var STORE_KEY='kin037-theme';
+  var saved=localStorage.getItem(STORE_KEY);
+  if(saved==='dark'){
+    document.documentElement.className='dark';
+    document.body&&document.body.classList.add('dark');
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var manifest={name:'KIN-037 - Blood Pressure',short_name:'Blood Pressure',start_url:'.',display:'standalone',background_color:'#f5f4f0',theme_color:'#f5f4f0',icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2260%22>BP</text></svg>',sizes:'any',type:'image/svg+xml'}]};
+  var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(mBlob);
+  document.head.appendChild(link);
+
+  if('serviceWorker' in navigator){
+    var swCode="var CACHE='kin037-v1';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==CACHE}).map(function(n){return caches.delete(n)}))}))});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var c=res.clone();caches.open(CACHE).then(function(cache){cache.put(e.request,c)})}return res})}))});";
+    var swBlob=new Blob([swCode],{type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(function(){});
+  }
+
+  try{
+    var c=document.createElement('canvas');c.width=180;c.height=180;
+    var ctx=c.getContext('2d');
+    var r=36;
+    ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+    var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,'#1a0a18');g.addColorStop(1,'#0a0510');ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle='rgba(200,60,80,0.7)';ctx.lineWidth=2.5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(30,110);ctx.lineTo(50,110);ctx.lineTo(60,80);ctx.lineTo(70,130);ctx.lineTo(80,60);ctx.lineTo(90,120);ctx.lineTo(100,90);ctx.lineTo(110,110);ctx.lineTo(150,110);ctx.stroke();
+    ctx.fillStyle='rgba(200,60,80,0.9)';ctx.beginPath();ctx.arc(90,60,4,0,Math.PI*2);ctx.fill();
+    var icon=document.getElementById('apple-touch-icon');
+    if(icon) icon.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
+<link rel="canonical" href="https://bloodpressure.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bloodpressure.kintools.net/">
+<meta property="og:title" content="KIN-037 -- Blood Pressure -- Kin">
+<meta property="og:description" content="Log blood pressure readings with clinical AHA categories. Track trends over time and print reports for your doctor. Nothing leaves your device.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-037 -- Blood Pressure -- Kin">
+<meta name="twitter:description" content="Log blood pressure readings with clinical AHA categories. Track trends over time and print reports for your doctor. Nothing leaves your device.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+</head>
+<body>
+
+<div class="header">
+  <h1>KIN-037 Blood Pressure</h1>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme"></button>
+</div>
+
+<div id="demoBar" class="demo-bar" style="display:none">
+  <span>Demo mode -- sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
+
+<div class="print-header" id="printHeader">
+  <h2>Blood Pressure Report</h2>
+  <div class="print-sub" id="printSub"></div>
+</div>
+
+<div class="tab-row no-print">
+  <button class="tab-btn active" data-tab="tabAdd" onclick="switchTab('tabAdd')">Log</button>
+  <button class="tab-btn" data-tab="tabHistory" onclick="switchTab('tabHistory')">History</button>
+  <button class="tab-btn" data-tab="tabReport" onclick="switchTab('tabReport')">Report</button>
+</div>
+
+<div class="tab-content active" id="tabAdd">
+  <div class="section">
+    <div class="section-title">New reading</div>
+    <div class="row">
+      <div class="field"><label>Systolic (mmHg)</label><input id="inSys" type="number" placeholder="120" inputmode="numeric"></div>
+      <div class="field"><label>Diastolic (mmHg)</label><input id="inDia" type="number" placeholder="80" inputmode="numeric"></div>
+      <div class="field"><label>Pulse (bpm)</label><input id="inPulse" type="number" placeholder="72" inputmode="numeric"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Date</label><input id="inDate" type="date"></div>
+      <div class="field"><label>Time</label><input id="inTime" type="time"></div>
+    </div>
+    <div class="field"><label>Arm</label>
+      <div class="toggle-group" id="armGroup">
+        <button class="toggle-opt active" data-val="L" type="button">Left</button>
+        <button class="toggle-opt" data-val="R" type="button">Right</button>
+      </div>
+    </div>
+    <div class="field"><label>Position</label>
+      <div class="toggle-group" id="posGroup">
+        <button class="toggle-opt active" data-val="sitting" type="button">Sitting</button>
+        <button class="toggle-opt" data-val="standing" type="button">Standing</button>
+        <button class="toggle-opt" data-val="lying" type="button">Lying</button>
+      </div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="inNotes" placeholder="Medication, activity, how you felt"></textarea></div>
+  </div>
+  <button class="btn-primary" type="button" onclick="saveReading()">Save reading</button>
+</div>
+
+<div class="tab-content" id="tabHistory">
+  <div class="empty-state" id="emptyState"><strong>No readings yet</strong>Log your first blood pressure reading to get started.</div>
+  <div id="logList"></div>
+  <div class="btn-group" id="historyActions" style="display:none">
+    <button class="btn-secondary" type="button" onclick="exportJSON()">Export data (JSON)</button>
+    <button class="btn-secondary" type="button" onclick="importJSON()">Import data (JSON)</button>
+    <button class="btn-secondary" type="button" style="color:var(--danger)" onclick="clearAll()">Delete all readings</button>
+  </div>
+</div>
+
+<div class="tab-content" id="tabReport">
+  <div class="print-range no-print">
+    <div class="section-title">Report range</div>
+    <div class="row">
+      <div class="field"><label>From</label><input id="reportFrom" type="date"></div>
+      <div class="field"><label>To</label><input id="reportTo" type="date"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('all')">All</button>
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('last-print')">Since last print</button>
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('30')">Last 30 days</button>
+    </div>
+  </div>
+  <div id="reportContent"></div>
+  <div class="btn-group no-print">
+    <button class="btn-primary" type="button" onclick="printReport()">Print / Save as PDF</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="kinconfirm-overlay" id="kinconfirmOverlay">
+  <div class="kinconfirm-box"><p id="kinconfirmMsg"></p>
+    <div class="kinconfirm-btns">
+      <button class="kinconfirm-cancel" id="kinconfirmCancel">Cancel</button>
+      <button class="kinconfirm-confirm" id="kinconfirmConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:16px 16px 48px;font-size:11px;color:var(--footer-muted,#888)">
+  <div><a href="https://kintools.net/" style="color:var(--footer-muted,#888);text-decoration:none">KIN-037 &middot; v1.0 &middot; Kin Tools</a> &middot; by Darren</div>
+  <div style="margin-top:6px">
+    <span class="badge-local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;vertical-align:middle"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Local Only &middot; Verified</span><button onclick="kinToggleStorageInfo()" title="What is stored?" style="background:none;border:1px solid var(--border,#ddd);border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;color:var(--footer-muted,#888);padding:0;margin-left:4px;vertical-align:middle;font-family:inherit">&#9432;</button>
+  </div>
+  <div id="kinStorageInfo" style="display:none;margin-top:8px;font-size:11px;color:var(--footer-muted,#888);line-height:1.6;max-width:300px;margin-left:auto;margin-right:auto">Saves your readings to localStorage. Nothing is sent anywhere. Clear site data in your browser to reset. This is not a medical device.</div>
+  <div style="margin-top:10px"><button onclick="openBugReport()" style="background:none;border:none;color:var(--footer-muted,#888);font-size:11px;opacity:0.5;cursor:pointer;padding:4px 8px;font-family:inherit">Report a bug</button></div>
+</footer>
+
+<div class="bug-overlay" id="bugOverlay" onclick="closeBugReport(event)">
+  <div class="bug-sheet" onclick="event.stopPropagation()">
+    <h3>Report a bug</h3>
+    <div class="field"><label>Type</label><select id="bugType"><option>Bug</option><option>Suggestion</option><option>Other</option></select></div>
+    <div class="field"><label>Description</label><textarea id="bugDesc" placeholder="What happened?"></textarea></div>
+    <div class="toggle-row"><span>Submit anonymously</span>
+      <button class="toggle-switch on" id="bugAnonToggle" type="button" onclick="toggleAnon()"><div class="toggle-knob"></div></button>
+    </div>
+    <div id="bugIdentity" style="display:none"><div class="field"><label>Name</label><input id="bugName" placeholder="Your name"></div></div>
+    <div class="bug-actions">
+      <button class="bug-cancel" type="button" onclick="closeBugReport()">Cancel</button>
+      <button class="bug-submit" type="button" onclick="submitBug()">Send</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none">
+
+<script>
+// === AHA Categories (2017 guidelines) ===
+function classify(sys,dia){
+  if(sys>=180||dia>=120) return{label:'Crisis',cls:'cat-crisis'};
+  if(sys>=140||dia>=90) return{label:'High Stage 2',cls:'cat-high2'};
+  if(sys>=130||dia>=80) return{label:'High Stage 1',cls:'cat-high1'};
+  if(sys>=120&&dia<80) return{label:'Elevated',cls:'cat-elevated'};
+  return{label:'Normal',cls:'cat-normal'};
+}
+
+// === State ===
+var STORE_KEY='kin037-readings',PRINT_KEY='kin037-lastprint',isDemo=false;
+
+function loadReadings(){try{var r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
+function saveReadings(a){if(!isDemo) localStorage.setItem(STORE_KEY,JSON.stringify(a));}
+
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function nowTime(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function formatDate(s){if(!s)return'';try{var p=s.split('-');var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}catch(e){return s;}}
+
+function demoData(){
+  var readings=[];var base=new Date();
+  for(var i=29;i>=0;i--){
+    var d=new Date(base);d.setDate(d.getDate()-i);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    readings.push({id:Date.now()-i*86400000,date:ds,time:'0'+(7+Math.floor(Math.random()*2))+':'+String(Math.floor(Math.random()*60)).padStart(2,'0'),systolic:118+Math.floor(Math.random()*30),diastolic:72+Math.floor(Math.random()*18),pulse:64+Math.floor(Math.random()*20),arm:Math.random()>0.5?'L':'R',position:'sitting',notes:i===15?'After morning walk':(i===5?'Took medication late':'')});
+  }
+  return readings;
+}
+
+function getData(){return isDemo?demoData():loadReadings();}
+
+// === Init ===
+function init(){
+  initTheme();
+  var params=new URLSearchParams(window.location.search);
+  isDemo=params.get('demo')==='true';
+  if(isDemo) document.getElementById('demoBar').style.display='flex';
+  document.getElementById('inDate').value=todayStr();
+  document.getElementById('inTime').value=nowTime();
+  setupToggleGroups();
+  renderHistory();
+}
+
+function setupToggleGroups(){
+  document.querySelectorAll('.toggle-group').forEach(function(group){
+    group.querySelectorAll('.toggle-opt').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        group.querySelectorAll('.toggle-opt').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
+      });
+    });
+  });
+}
+
+// === Save ===
+function saveReading(){
+  var sys=parseInt(document.getElementById('inSys').value);
+  var dia=parseInt(document.getElementById('inDia').value);
+  var pulse=parseInt(document.getElementById('inPulse').value);
+  if(!sys||!dia){showToast('Enter systolic and diastolic values');return;}
+  if(sys<50||sys>300){showToast('Systolic seems out of range');return;}
+  if(dia<30||dia>200){showToast('Diastolic seems out of range');return;}
+  var arm=document.querySelector('#armGroup .toggle-opt.active');
+  var pos=document.querySelector('#posGroup .toggle-opt.active');
+  var reading={id:Date.now(),date:document.getElementById('inDate').value||todayStr(),time:document.getElementById('inTime').value||nowTime(),systolic:sys,diastolic:dia,pulse:pulse||null,arm:arm?arm.dataset.val:'L',position:pos?pos.dataset.val:'sitting',notes:document.getElementById('inNotes').value.trim()};
+  var readings=getData();readings.push(reading);
+  readings.sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+  saveReadings(readings);
+  document.getElementById('inSys').value='';document.getElementById('inDia').value='';document.getElementById('inPulse').value='';document.getElementById('inNotes').value='';
+  document.getElementById('inDate').value=todayStr();document.getElementById('inTime').value=nowTime();
+  var cat=classify(sys,dia);
+  showToast(sys+'/'+dia+' saved - '+cat.label);
+  renderHistory();
+}
+
+// === History ===
+function renderHistory(){
+  var readings=getData();var list=document.getElementById('logList');
+  var empty=document.getElementById('emptyState');var actions=document.getElementById('historyActions');
+  if(readings.length===0){empty.style.display='block';list.innerHTML='';actions.style.display='none';return;}
+  empty.style.display='none';actions.style.display='flex';
+  var sorted=readings.slice().reverse();var html='';
+  sorted.forEach(function(r){
+    var cat=classify(r.systolic,r.diastolic);var meta=[];
+    if(r.arm) meta.push(r.arm==='L'?'Left arm':'Right arm');
+    if(r.position) meta.push(r.position.charAt(0).toUpperCase()+r.position.slice(1));
+    if(r.pulse) meta.push(r.pulse+' bpm');
+    html+='<div class="log-entry"><div class="log-left">';
+    html+='<div class="log-date">'+escHtml(formatDate(r.date))+(r.time?' '+escHtml(r.time):'')+'</div>';
+    html+='<div class="log-values">'+r.systolic+'/'+r.diastolic+' <span class="category-badge '+cat.cls+'">'+escHtml(cat.label)+'</span></div>';
+    html+='<div class="log-meta">'+escHtml(meta.join(' - '))+(r.notes?' - '+escHtml(r.notes):'')+'</div>';
+    html+='</div><div class="log-right"><button class="log-delete" onclick="deleteReading('+r.id+')">Delete</button></div></div>';
+  });
+  list.innerHTML=html;
+}
+
+function deleteReading(id){
+  kinConfirm('Delete this reading?').then(function(ok){
+    if(!ok)return;var readings=loadReadings();
+    readings=readings.filter(function(r){return r.id!==id;});
+    saveReadings(readings);renderHistory();showToast('Reading deleted');
+  });
+}
+
+// === Report ===
+function setReportRange(mode){
+  var readings=getData();if(readings.length===0)return;
+  var from=document.getElementById('reportFrom');var to=document.getElementById('reportTo');
+  to.value=todayStr();
+  if(mode==='all'){from.value=readings[0].date;}
+  else if(mode==='last-print'){var lp=localStorage.getItem(PRINT_KEY);from.value=lp||readings[0].date;}
+  else if(mode==='30'){var d=new Date();d.setDate(d.getDate()-30);from.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  generateReport();
+}
+
+function generateReport(){
+  var readings=getData();
+  var from=document.getElementById('reportFrom').value;var to=document.getElementById('reportTo').value;
+  var filtered=readings.filter(function(r){if(from&&r.date<from)return false;if(to&&r.date>to)return false;return true;});
+  var container=document.getElementById('reportContent');
+  if(filtered.length===0){container.innerHTML='<div class="empty-state">No readings in this range.</div>';return;}
+  var html='';
+  var sysArr=filtered.map(function(r){return r.systolic;});
+  var diaArr=filtered.map(function(r){return r.diastolic;});
+  var pulseArr=filtered.filter(function(r){return r.pulse;}).map(function(r){return r.pulse;});
+  var avgSys=Math.round(sysArr.reduce(function(a,b){return a+b;},0)/sysArr.length);
+  var avgDia=Math.round(diaArr.reduce(function(a,b){return a+b;},0)/diaArr.length);
+  var avgPulse=pulseArr.length?Math.round(pulseArr.reduce(function(a,b){return a+b;},0)/pulseArr.length):'--';
+  var avgCat=classify(avgSys,avgDia);
+
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Avg Systolic</div><div class="summary-value">'+avgSys+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Avg Diastolic</div><div class="summary-value">'+avgDia+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Avg Pulse</div><div class="summary-value">'+avgPulse+'</div></div>';
+  html+='</div>';
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Average Category</div><div class="summary-value"><span class="category-badge '+avgCat.cls+'">'+escHtml(avgCat.label)+'</span></div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Readings</div><div class="summary-value">'+filtered.length+'</div></div>';
+  html+='</div>';
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Min</div><div class="summary-value">'+Math.min.apply(null,sysArr)+'/'+Math.min.apply(null,diaArr)+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Max</div><div class="summary-value">'+Math.max.apply(null,sysArr)+'/'+Math.max.apply(null,diaArr)+'</div></div>';
+  html+='</div>';
+
+  html+=buildChart(filtered);
+
+  html+='<div class="section"><div class="section-title">Readings</div>';
+  filtered.forEach(function(r){
+    var cat=classify(r.systolic,r.diastolic);var meta=[];
+    if(r.arm) meta.push(r.arm==='L'?'L':'R');
+    if(r.position) meta.push(r.position.charAt(0).toUpperCase()+r.position.slice(1));
+    if(r.pulse) meta.push(r.pulse+' bpm');
+    html+='<div class="log-entry"><div class="log-left">';
+    html+='<div class="log-date">'+escHtml(formatDate(r.date))+(r.time?' '+escHtml(r.time):'')+'</div>';
+    html+='<div class="log-values">'+r.systolic+'/'+r.diastolic+' <span class="category-badge '+cat.cls+'">'+escHtml(cat.label)+'</span></div>';
+    html+='<div class="log-meta">'+escHtml(meta.join(' - '))+(r.notes?' - '+escHtml(r.notes):'')+'</div>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+
+  html+='<div class="section"><div class="section-title">AHA Blood Pressure Categories</div>';
+  html+='<div style="font-size:12px;line-height:1.8;color:var(--text-secondary)">';
+  html+='<span class="category-badge cat-normal">Normal</span> Less than 120/80<br>';
+  html+='<span class="category-badge cat-elevated">Elevated</span> 120-129 / less than 80<br>';
+  html+='<span class="category-badge cat-high1">High Stage 1</span> 130-139 / 80-89<br>';
+  html+='<span class="category-badge cat-high2">High Stage 2</span> 140+ / 90+<br>';
+  html+='<span class="category-badge cat-crisis">Crisis</span> 180+ / 120+<br>';
+  html+='</div><div style="font-size:11px;color:var(--text-secondary);margin-top:8px">Source: American Heart Association 2017 guidelines. This tool is not a medical device.</div></div>';
+  container.innerHTML=html;
+}
+
+function buildChart(data){
+  if(data.length<2) return'';
+  var W=600,H=220,PAD=40,PADR=20,PADT=20,PADB=40;
+  var chartW=W-PAD-PADR,chartH=H-PADT-PADB;
+  var allVals=[];data.forEach(function(r){allVals.push(r.systolic,r.diastolic);});
+  var minV=Math.min.apply(null,allVals)-10,maxV=Math.max.apply(null,allVals)+10;
+  minV=Math.max(40,minV);maxV=Math.min(220,maxV);
+  function yPos(v){return PADT+chartH-((v-minV)/(maxV-minV))*chartH;}
+  function xPos(i){return PAD+(i/(data.length-1))*chartW;}
+  var isDark=document.body.classList.contains('dark');
+  var textCol=isDark?'#999':'#888',gridCol=isDark?'#333':'#eee',sysCol='#c44',diaCol='#1a56db';
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">';
+  var steps=[60,80,100,120,140,160,180];
+  steps.forEach(function(v){if(v>=minV&&v<=maxV){var y=yPos(v);svg+='<line x1="'+PAD+'" y1="'+y+'" x2="'+(W-PADR)+'" y2="'+y+'" stroke="'+gridCol+'" stroke-width="1"/>';svg+='<text x="'+(PAD-6)+'" y="'+(y+4)+'" text-anchor="end" fill="'+textCol+'" font-size="10">'+v+'</text>';}});
+  if(120>=minV&&120<=maxV){svg+='<line x1="'+PAD+'" y1="'+yPos(120)+'" x2="'+(W-PADR)+'" y2="'+yPos(120)+'" stroke="rgba(17,170,119,0.3)" stroke-width="1" stroke-dasharray="4,3"/>';}
+  if(140>=minV&&140<=maxV){svg+='<line x1="'+PAD+'" y1="'+yPos(140)+'" x2="'+(W-PADR)+'" y2="'+yPos(140)+'" stroke="rgba(204,0,0,0.3)" stroke-width="1" stroke-dasharray="4,3"/>';}
+  var sysPath='',diaPath='';
+  data.forEach(function(r,i){var x=xPos(i);sysPath+=(i===0?'M':'L')+x.toFixed(1)+','+yPos(r.systolic).toFixed(1);diaPath+=(i===0?'M':'L')+x.toFixed(1)+','+yPos(r.diastolic).toFixed(1);});
+  svg+='<path d="'+sysPath+'" fill="none" stroke="'+sysCol+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  svg+='<path d="'+diaPath+'" fill="none" stroke="'+diaCol+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  data.forEach(function(r,i){var x=xPos(i);svg+='<circle cx="'+x.toFixed(1)+'" cy="'+yPos(r.systolic).toFixed(1)+'" r="3" fill="'+sysCol+'"/>';svg+='<circle cx="'+x.toFixed(1)+'" cy="'+yPos(r.diastolic).toFixed(1)+'" r="3" fill="'+diaCol+'"/>';});
+  var step=Math.max(1,Math.floor(data.length/6));
+  for(var i=0;i<data.length;i+=step){svg+='<text x="'+xPos(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" fill="'+textCol+'" font-size="9">'+data[i].date.slice(5)+'</text>';}
+  svg+='<circle cx="'+(PAD+10)+'" cy="'+(H-10)+'" r="4" fill="'+sysCol+'"/><text x="'+(PAD+18)+'" y="'+(H-7)+'" fill="'+textCol+'" font-size="10">Systolic</text>';
+  svg+='<circle cx="'+(PAD+80)+'" cy="'+(H-10)+'" r="4" fill="'+diaCol+'"/><text x="'+(PAD+88)+'" y="'+(H-7)+'" fill="'+textCol+'" font-size="10">Diastolic</text>';
+  svg+='</svg>';
+  return'<div class="chart-section">'+svg+'</div>';
+}
+
+// === Print ===
+function printReport(){
+  generateReport();
+  var from=document.getElementById('reportFrom').value;var to=document.getElementById('reportTo').value;
+  document.getElementById('printSub').textContent=(from?formatDate(from):'Start')+' to '+(to?formatDate(to):'Today');
+  if(!isDemo) localStorage.setItem(PRINT_KEY,todayStr());
+  setTimeout(function(){window.print();},100);
+}
+
+// === Export/Import ===
+function exportJSON(){
+  var readings=loadReadings();var json=JSON.stringify(readings,null,2);
+  var blob=new Blob([json],{type:'application/json'});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='blood-pressure-'+todayStr()+'.json';a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},5000);showToast('Data exported');
+}
+function importJSON(){document.getElementById('fileInput').click();}
+document.getElementById('fileInput').addEventListener('change',function(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var imported=JSON.parse(ev.target.result);if(!Array.isArray(imported)){showToast('Invalid data format');return;}
+      var existing=loadReadings();var ids={};existing.forEach(function(r){ids[r.id]=true;});
+      var added=0;imported.forEach(function(r){if(r.systolic&&r.diastolic&&!ids[r.id]){existing.push(r);added++;}});
+      existing.sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+      saveReadings(existing);renderHistory();showToast(added+' reading'+(added!==1?'s':'')+' imported');
+    }catch(err){showToast('Failed to import: invalid JSON');}
+  };
+  reader.readAsText(file);e.target.value='';
+});
+
+function clearAll(){
+  kinConfirm('Delete all readings? This cannot be undone.').then(function(ok){
+    if(!ok)return;localStorage.removeItem(STORE_KEY);localStorage.removeItem(PRINT_KEY);
+    renderHistory();showToast('All readings deleted');
+  });
+}
+
+// === Tabs ===
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  document.querySelector('[data-tab="'+id+'"]').classList.add('active');
+  if(id==='tabReport'){var readings=getData();if(readings.length>0){if(!document.getElementById('reportFrom').value){setReportRange('all');}else{generateReport();}}}
+}
+
+function startFresh(){isDemo=false;document.getElementById('demoBar').style.display='none';history.replaceState(null,'',window.location.pathname);renderHistory();}
+
+// === Theme ===
+function initTheme(){
+  var STORE='kin037-theme';var btn=document.getElementById('themeBtn');
+  var saved=localStorage.getItem(STORE);var dark=saved==='dark';
+  function apply(){
+    if(dark){document.documentElement.className='dark';document.body.classList.add('dark');btn.textContent='\u2600';document.getElementById('theme-color-meta').content='#1a1a1a';}
+    else{document.documentElement.className='light';document.body.classList.remove('dark');btn.textContent='\uD83C\uDF19';document.getElementById('theme-color-meta').content='#f5f4f0';}
+    localStorage.setItem(STORE,dark?'dark':'light');
+  }
+  apply();btn.onclick=function(){dark=!dark;apply();};
+}
+
+function showToast(msg){var el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';setTimeout(function(){el.style.opacity='0';},2200);}
+
+function kinConfirm(msg){
+  return new Promise(function(resolve){
+    var o=document.getElementById('kinconfirmOverlay');
+    document.getElementById('kinconfirmMsg').textContent=msg;o.classList.add('visible');
+    document.getElementById('kinconfirmCancel').onclick=function(){o.classList.remove('visible');resolve(false);};
+    document.getElementById('kinconfirmConfirm').onclick=function(){o.classList.remove('visible');resolve(true);};
+  });
+}
+
+function kinToggleStorageInfo(){var el=document.getElementById('kinStorageInfo');el.style.display=el.style.display==='block'?'none':'block';}
+
+var bugAnon=true;
+function openBugReport(){document.getElementById('bugOverlay').classList.add('open');}
+function closeBugReport(e){if(e&&e.target!==document.getElementById('bugOverlay'))return;document.getElementById('bugOverlay').classList.remove('open');}
+function toggleAnon(){bugAnon=!bugAnon;var t=document.getElementById('bugAnonToggle');if(bugAnon){t.classList.add('on');}else{t.classList.remove('on');}document.getElementById('bugIdentity').style.display=bugAnon?'none':'block';}
+function submitBug(){
+  var desc=document.getElementById('bugDesc').value.trim();if(!desc){showToast('Please describe the issue');return;}
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
+    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({form_type:'bug_report',subject:'KIN-037 \u2014 Blood Pressure',app:'KIN-037',type:document.getElementById('bugType').value,description:desc,name:bugAnon?'Anonymous':(document.getElementById('bugName').value||'Anonymous')})
+  }).then(function(){showToast('Bug report sent');document.getElementById('bugDesc').value='';closeBugReport();}).catch(function(){showToast('Failed to send - try again');});
+}
+
+document.addEventListener('DOMContentLoaded',init);
+document.getElementById('reportFrom').addEventListener('change',generateReport);
+document.getElementById('reportTo').addEventListener('change',generateReport);
+</script>
+</body>
+</html>
