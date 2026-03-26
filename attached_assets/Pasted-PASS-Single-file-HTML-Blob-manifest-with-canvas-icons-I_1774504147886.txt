@@ -1,0 +1,50 @@
+PASS:
+- Single-file HTML
+- Blob manifest with canvas icons
+- Inline Blob SW
+- Apple touch icon canvas pattern
+- Tool-specific localStorage keys (kin007-mix, kin007-theme)
+- Footer three-row format with info button/popover (correct for localStorage tool)
+- Noise algorithms correct (pink Voss-McCartney, brown leaky integrator)
+- Convolution reverb with per-preset IR generation
+- Spatial audio model (distance = gain, x = pan)
+- Drag constrained to unit circle, touch passive:false
+- Sleep timer uses Date.now() (no drift)
+- Mix code encode/decode with clipboard fallback
+- Mix persistence in localStorage
+- AudioContext deferred to user interaction
+- Wake lock with feature detection and visibility re-acquire
+- Canvas DPR handling
+- Welcome screen gating audio init
+
+ISSUES:
+- [MEDIUM] ScriptProcessorNode deprecated. Still works but will 
+  eventually be removed from browsers.
+  Impact: Long-term. No immediate breakage.
+  Fix: Migrate to AudioWorklet when doing a major update
+
+- [MEDIUM] Bug report sends email field, uses Content-Type text/plain 
+  instead of mode:'no-cors', uses old form_type mapping
+  Fix: Align to standard: mode:'no-cors', JSON body, no email field
+
+- [MEDIUM] Dead code: old bug report system (bugSheet/bugBackdrop HTML + 
+  CSS + JS) still in DOM alongside the standard kin-bug-sheet system
+  Fix: Remove the old bugSheet/bugBackdrop block entirely
+
+- [LOW] Missing theme-color meta tag
+  Fix: Add <meta name="theme-color" id="theme-color-meta" content="#f5f7fa">
+
+- [LOW] OG tags incomplete (missing og:type, og:url, og:image, canonical, 
+  twitter cards)
+  Fix: Replace with full Section 19 template
+
+- [LOW] External Google Font (DM Sans) not cached by SW, will fail offline
+  Fix: Either add font URL to SW cache list, or remove external font 
+  and rely on system font stack
+
+- [LOW] Safe area padding only on bottom, not all four sides
+  Fix: Apply full env() padding to body
+
+- [LOW] Incomplete CSS for bug-sheet inner elements (select, textarea, 
+  input styles have empty rule blocks around lines for dark mode)
+  Fix: Clean up empty CSS rules
