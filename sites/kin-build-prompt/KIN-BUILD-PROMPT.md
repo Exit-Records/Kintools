@@ -500,6 +500,55 @@ Required by Cloudflare Pages. Without it the site shows "Hello World". Copy exac
 
 ---
 
+## Section 21 — Version Migration
+
+When a version update changes localStorage key names, data structure, or storage strategy, the new version must migrate existing user data on load. Never silently drop data because of a schema change.
+
+### Rules
+
+1. Every tool that persists data must define its storage keys and expected shape in a comment block near the top of the script section.
+1. On load, before rendering, check for old key names or data shapes. If found, migrate to the new format and remove old keys.
+1. Migration must be non-destructive. If the migration fails (malformed data, unexpected shape), preserve the original data untouched and log a console warning. Do not delete what you cannot convert.
+1. When renaming a localStorage key (e.g. `kin-mood-dot-theme` to `kin013-theme`), copy the value to the new key, then remove the old key. Both operations in the same function.
+1. When changing data shape (e.g. adding a field, restructuring an array), write a migration function that reads the old shape, transforms it, and writes the new shape. Default missing fields rather than rejecting the record.
+1. Bump the SW cache key (`kin0NN-v1` to `kin0NN-v2`), footer version, and landing card version in the same commit as any migration. All three must stay in sync.
+1. Version migrations are cumulative. If v1.0 used key A, v1.1 renamed to key B, and v1.2 restructured the data, then v1.2 must handle both A-to-current and B-to-current. A user jumping from v1.0 to v1.2 must not lose data.
+1. Test the migration path by setting old-format data in localStorage, loading the new version, and confirming the data appears correctly.
+
+### Pattern
+
+```javascript
+// === Migration (v1.0 → v1.1) ===
+(function migrate() {
+  // Key rename
+  var old = localStorage.getItem('old-key-name');
+  if (old !== null) {
+    localStorage.setItem('kin0NN-data', old);
+    localStorage.removeItem('old-key-name');
+  }
+
+  // Shape change
+  try {
+    var raw = localStorage.getItem('kin0NN-data');
+    if (raw) {
+      var data = JSON.parse(raw);
+      if (Array.isArray(data) && data.length > 0 && !('newField' in data[0])) {
+        data.forEach(function(entry) {
+          entry.newField = 'default';
+        });
+        localStorage.setItem('kin0NN-data', JSON.stringify(data));
+      }
+    }
+  } catch(e) {
+    console.warn('KIN-0NN migration failed, preserving original data:', e);
+  }
+})();
+```
+
+Run migration before init. Wrap in try/catch. If anything fails, leave the data alone.
+
+---
+
 ## Rules for the AI building this
 
 1. Output all three files: `index.html`, `wrangler.jsonc`, and `icon.svg` — the tool will not deploy correctly without all three
