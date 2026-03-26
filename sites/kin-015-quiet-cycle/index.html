@@ -232,6 +232,14 @@
     @keyframes panic { 0%,100%{background:var(--bg)} 50%{background:#fee2e2} }
     body.panic { animation: panic .4s; }
 
+    /* ── Onboarding tip ── */
+    .onboard-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity 0.3s}
+    .onboard-overlay.visible{opacity:1}
+    .onboard-box{background:#fff;border-radius:16px;padding:28px 24px;max-width:320px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+    .onboard-box p{font-size:15px;line-height:1.6;color:#333;margin-bottom:16px}
+    .onboard-box .ob-highlight{font-weight:600;color:#7c5cbf}
+    .onboard-box button{min-height:44px;width:100%;border:none;border-radius:10px;background:#7c5cbf;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+
     /* ── Export reminder banner ── */
     .remind-banner {
       display: flex; align-items: center; gap: 12px;
@@ -1296,6 +1304,33 @@ function kinToggleStorageInfo(e) {
     });
   }
 }
+</script>
+
+<!-- Onboarding tip (shown once) -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-box">
+    <p>If you ever need to erase all data instantly, <span class="ob-highlight">tap the app name five times</span>. This works from any screen, including the PIN lock.</p>
+    <p style="font-size:13px;color:#888;margin-bottom:16px">Remember this. It won't be shown again.</p>
+    <button onclick="dismissOnboard()">Got it</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var OB_KEY='kin015-onboarded';
+  if(localStorage.getItem(OB_KEY)) return;
+  // Show after a short delay so the app has rendered
+  setTimeout(function(){
+    var ov=document.getElementById('onboardOverlay');
+    if(ov) ov.classList.add('visible');
+  },800);
+  window.dismissOnboard=function(){
+    var ov=document.getElementById('onboardOverlay');
+    ov.classList.remove('visible');
+    setTimeout(function(){ov.remove();},300);
+    localStorage.setItem(OB_KEY,'1');
+  };
+})();
 </script>
 </body>
 </html>
