@@ -2,14 +2,15 @@
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>KIN-008 — Flashcards — Kin</title>
     <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="KIN-008">
+  <meta name="theme-color" id="theme-color-meta" content="#f5f7fa">
   <link rel="apple-touch-icon" id="apple-touch-icon">
-  <meta name="description" content="Browser-based flashcard tool. Create decks, study cards, import and export. All data stored locally." />
+  <meta name="description" content="Browser-based flashcard tool. Create decks, study cards, import and export. All data stored locally.">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -515,6 +516,20 @@
   
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://flashcards.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://flashcards.kintools.net/">
+<meta property="og:title" content="KIN-008 — Flashcards — Kin">
+<meta property="og:description" content="Browser-based flashcard tool. Create decks, study with spaced repetition, import and export. All data stored locally — nothing leaves your device.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-008 — Flashcards — Kin">
+<meta name="twitter:description" content="Browser-based flashcard tool. Create decks, study with spaced repetition, import and export. All data stored locally — nothing leaves your device.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -532,8 +547,13 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
       <span class="brand-name">Flashcards</span>
       <span class="brand-sub">KIN-008 · v1.0 · <span style="text-transform:none">d</span>Bridge</span>
     </div>
-    <div class="header-actions">
+    <div class="header-actions" style="position:relative;display:flex;align-items:center;gap:6px">
       <span class="kin-badge">KIN-008</span>
+      <button id="storage-info-btn" aria-label="Storage info" style="background:none;border:none;padding:0;width:18px;height:18px;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0.7;border-radius:50%">ⓘ</button>
+      <div id="storage-info-popover" role="tooltip" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:230px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.5;color:var(--muted);z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.15)">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">Stored locally</strong>
+        Your decks, cards and study progress are saved in this browser only. Nothing is sent to any server. Clear your browser data to reset.
+      </div>
     </div>
   </header>
 
@@ -783,7 +803,7 @@ function demoData() {
 }
 
 window.startFresh = function() {
-  localStorage.removeItem('kin008_flashcards');
+  localStorage.removeItem('kin008-flashcards');
   if (history.replaceState) history.replaceState({}, '', location.pathname);
   location.reload();
 };
@@ -791,7 +811,15 @@ window.startFresh = function() {
 // ═══════════════════════════════════════════════════════════════
 //  DATA LAYER
 // ═══════════════════════════════════════════════════════════════
-const STORE_KEY = 'kin008_flashcards';
+const STORE_KEY = 'kin008-flashcards';
+// Migrate old underscore key if present
+(function() {
+  var old = localStorage.getItem('kin008_flashcards');
+  if (old && !localStorage.getItem('kin008-flashcards')) {
+    localStorage.setItem('kin008-flashcards', old);
+    localStorage.removeItem('kin008_flashcards');
+  }
+})();
 
 // ── Starter decks (seeded once on first load) ───────────────
 const STARTER_DECKS = [
@@ -1589,14 +1617,39 @@ document.querySelectorAll('.modal-backdrop').forEach(bd => {
 (function() {
   const btn = document.createElement('button');
   btn.id = 'theme-btn'; btn.setAttribute('aria-label', 'Toggle theme');
+  const meta = document.getElementById('theme-color-meta');
   const saved = localStorage.getItem('kin008-theme');
-  if (saved !== 'dark') { document.documentElement.classList.add('light'); btn.textContent = '🌙'; }
-  else { btn.textContent = '☀️'; }
+  if (saved !== 'dark') {
+    document.documentElement.classList.add('light');
+    btn.textContent = '🌙';
+    if (meta) meta.content = '#f5f7fa';
+  } else {
+    btn.textContent = '☀️';
+    if (meta) meta.content = '#0d1117';
+  }
   document.body.appendChild(btn);
   btn.addEventListener('click', () => {
     const isLight = document.documentElement.classList.toggle('light');
     btn.textContent = isLight ? '🌙' : '☀️';
+    if (meta) meta.content = isLight ? '#f5f7fa' : '#0d1117';
     localStorage.setItem('kin008-theme', isLight ? 'light' : 'dark');
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════
+//  STORAGE INFO POPOVER
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  var infoBtn = document.getElementById('storage-info-btn');
+  var popover = document.getElementById('storage-info-popover');
+  if (!infoBtn || !popover) return;
+  infoBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var open = popover.style.display === 'none';
+    popover.style.display = open ? 'block' : 'none';
+  });
+  document.addEventListener('click', function() {
+    if (popover) popover.style.display = 'none';
   });
 })();
 
@@ -1821,20 +1874,17 @@ renderHome();
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-008 — Flashcards',
+          form_type: 'bug_report',
+          subject: 'KIN-008 \u2014 Flashcards',
           app: 'KIN-008',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
