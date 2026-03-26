@@ -8,10 +8,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="KIN-011">
+  <meta name="theme-color" id="theme-color-meta" content="#f5f7fa">
   <link rel="apple-touch-icon" id="apple-touch-icon">
 <meta name="description" content="Find the true cost of products based on weight, volume, or quantity. Free, offline, no accounts.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap');
 
   :root {
     --bg: #111110;
@@ -429,13 +429,9 @@
   /* ---- FOOTER ---- */
   .kin-footer {
     margin-top: 64px;
-    padding-top: 24px;
+    padding: 24px 16px 48px;
     border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
+    text-align: center;
   }
 
   .foot-brand {
@@ -466,6 +462,20 @@
 
 body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 </style>
+<link rel="canonical" href="https://unit-price.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://unit-price.kintools.net/">
+<meta property="og:title" content="KIN-011 — Unit Price Calc — Kin">
+<meta property="og:description" content="Find the true cost per unit. Compare packs, sizes and formats by weight, volume or quantity. Free, offline, no accounts.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-011 — Unit Price Calc — Kin">
+<meta name="twitter:description" content="Find the true cost per unit. Compare packs, sizes and formats by weight, volume or quantity. Free, offline, no accounts.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
 </head>
 <body>
 
@@ -643,12 +653,18 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 <script>
   // ---- THEME ----
   const themeBtn = document.getElementById('theme-btn');
-  let isDark = false;
-  document.documentElement.classList.add('light');
-  themeBtn.addEventListener('click', () => {
-    isDark = !isDark;
+  const themeColorMeta = document.getElementById('theme-color-meta');
+  let isDark = localStorage.getItem('kin011-theme') === 'dark';
+  function applyTheme011() {
     document.documentElement.classList.toggle('light', !isDark);
     themeBtn.textContent = isDark ? '☀️' : '🌙';
+    if (themeColorMeta) themeColorMeta.content = isDark ? '#111110' : '#f5f7fa';
+  }
+  applyTheme011();
+  themeBtn.addEventListener('click', () => {
+    isDark = !isDark;
+    localStorage.setItem('kin011-theme', isDark ? 'dark' : 'light');
+    applyTheme011();
   });
 
   // ---- UNITS ----
@@ -1125,20 +1141,17 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-011 — Unit Price Calculator',
+          form_type: 'bug_report',
+          subject: 'KIN-011 \u2014 Unit Price Calculator',
           app: 'KIN-011',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
