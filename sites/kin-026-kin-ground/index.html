@@ -75,7 +75,7 @@ transition: background 0.15s, color 0.15s;
 .demo-bar.visible { display: flex; }
 .demo-bar span { font-size: 13px; font-weight: 600; color: var(--accent); }
 .demo-bar button { font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); border: none; border-radius: 8px; padding: 6px 14px; cursor: pointer; min-height: 32px; -webkit-appearance: none; }
-nav { display: flex; gap: 6px; padding: 10px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; background: var(--bg); }
+nav { display: flex; gap: 6px; padding: 10px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; background: var(--bg); max-width: 500px; margin: 0 auto; justify-content: center; }
 nav::-webkit-scrollbar { display: none; }
 nav button { flex-shrink: 0; min-height: 44px; padding: 10px 14px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--tab-bg); color: var(--tab-text); -webkit-appearance: none; transition: background 0.15s, color 0.15s; }
 nav button.active { background: var(--tab-active); color: var(--tab-active-text); }
