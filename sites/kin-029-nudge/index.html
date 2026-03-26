@@ -1698,7 +1698,9 @@ body.dark .toast {
     emergencyRunning = false;
     clearInterval(emergencyInterval);
     renderEmergency();
+    wakeLockEnabled = true;
     updateWakeLockToggle();
+    acquireWakeLock();
     document.getElementById('emergency-overlay').classList.add('active');
   }
 
@@ -2096,7 +2098,9 @@ body.dark .toast {
     emergencyRunning = false;
     clearInterval(emergencyInterval);
     renderEmergency();
+    wakeLockEnabled = true;
     updateWakeLockToggle();
+    acquireWakeLock();
     document.getElementById('emergency-overlay').classList.add('active');
   };
 

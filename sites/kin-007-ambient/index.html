@@ -597,7 +597,7 @@ const state = {
   playing: false,
   masterVolume: 75,
   drift: false,
-  wakeLock: false,
+  wakeLock: true,
   timerMinutes: 0,
   timerEnd: null,
   timerInterval: null,
@@ -1460,6 +1460,7 @@ document.getElementById('drift-toggle').addEventListener('click', () => {
 // Wake Lock toggle
 if ('wakeLock' in navigator) {
   document.getElementById('wake-panel').style.display = '';
+  document.getElementById('wake-toggle').classList.toggle('on', state.wakeLock);
   document.getElementById('wake-toggle').addEventListener('click', () => {
     state.wakeLock = !state.wakeLock;
     document.getElementById('wake-toggle').classList.toggle('on', state.wakeLock);

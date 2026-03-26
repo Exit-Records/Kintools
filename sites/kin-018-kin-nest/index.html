@@ -1058,6 +1058,21 @@ function logFeed(type, amount, notes) {
   state.feeds.push({ id: uid(), time: Date.now(), type, amount, notes }); save(); render();
 }
 
+let nestWakeLock = null;
+async function acquireNestWakeLock() {
+  if (!('wakeLock' in navigator) || nestWakeLock) return;
+  try {
+    nestWakeLock = await navigator.wakeLock.request('screen');
+    nestWakeLock.addEventListener('release', () => { nestWakeLock = null; });
+  } catch (_) {}
+}
+function releaseNestWakeLock() {
+  if (nestWakeLock) { try { nestWakeLock.release(); } catch (_) {} nestWakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && activeSleep()) acquireNestWakeLock();
+});
+
 function toggleSleep() {
   const active = activeSleep();
   if (active) { stopSleep(); } else { startSleep(); }
@@ -1065,11 +1080,13 @@ function toggleSleep() {
 
 function startSleep() {
   state.sleep.push({ id: uid(), start: Date.now(), end: null }); save(); render();
+  acquireNestWakeLock();
 }
 
 function stopSleep() {
   const active = activeSleep();
   if (active) { active.end = Date.now(); save(); render(); }
+  releaseNestWakeLock();
 }
 
 function quickDiaper() { logDiaper('wet'); }

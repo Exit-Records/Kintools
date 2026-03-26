@@ -793,6 +793,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 
     function showHome() {
       stopTimer();
+      releaseWakeLockAuto();
       currentRoutine = null;
       currentStretchIndex = 0;
       showScreen('home');
@@ -861,6 +862,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
       isPaused = false;
       showScreen('active');
       loadStretch();
+      acquireWakeLockAuto();
     }
 
     function getStretchDuration(stretch) {
@@ -954,6 +956,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 
     function completeRoutine() {
       stopTimer();
+      releaseWakeLockAuto();
       playComplete();
 
       var log = JSON.parse(localStorage.getItem('kin025-log') || '[]');
@@ -1358,6 +1361,27 @@ async function toggleWake() {
     showToast('Wake lock not supported');
   }
 }
+async function acquireWakeLockAuto() {
+  if (!('wakeLock' in navigator) || wakeLock) return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeBtn.classList.add('active');
+    wakeBtn.textContent = '🔆';
+    wakeLock.addEventListener('release', function() {
+      wakeLock = null;
+      wakeBtn.classList.remove('active');
+      wakeBtn.textContent = '💡';
+    });
+  } catch(e) {}
+}
+function releaseWakeLockAuto() {
+  if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
+  wakeBtn.classList.remove('active');
+  wakeBtn.textContent = '💡';
+}
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && currentRoutine) acquireWakeLockAuto();
+});
 function kinToggleStorageInfo(e) {
   e.stopPropagation();
   var p = document.getElementById('kin-storage-popover');

@@ -672,6 +672,19 @@ async function toggleWake(){
   wakeLock.addEventListener('release',()=>{wakeLock=null;wakeBtn.classList.remove('active');wakeBtn.textContent='💡'})}
   catch(e){showToast('Wake lock not supported')}
 }
+async function acquireWakeLockAuto(){
+  if(!('wakeLock' in navigator)||wakeLock)return;
+  try{wakeLock=await navigator.wakeLock.request('screen');wakeBtn.classList.add('active');wakeBtn.textContent='🔆';
+  wakeLock.addEventListener('release',()=>{wakeLock=null;wakeBtn.classList.remove('active');wakeBtn.textContent='💡'})}
+  catch(e){}
+}
+function releaseWakeLockAuto(){
+  if(wakeLock){try{wakeLock.release()}catch(e){}wakeLock=null}
+  wakeBtn.classList.remove('active');wakeBtn.textContent='💡'
+}
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&(restRunning||iS.running))acquireWakeLockAuto()
+});
 function showToast(msg){
   let t=document.getElementById('kin-toast');
   if(!t){t=document.createElement('div');t.id='kin-toast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none';document.body.appendChild(t)}
@@ -767,13 +780,13 @@ function setRestCustom(){
   document.querySelectorAll('#v-rest .preset-btn').forEach(b=>b.classList.remove('active'));
 }
 function toggleRest(){
-  if(restRunning){clearInterval(restInt);restRunning=false;restStartBtn.textContent='Resume';return}
+  if(restRunning){clearInterval(restInt);restRunning=false;releaseWakeLockAuto();restStartBtn.textContent='Resume';return}
   if(restLeft<=0)restLeft=restTotal;
-  restRunning=true;restStartBtn.textContent='Pause';restLabelEl.textContent='Resting...';
+  restRunning=true;acquireWakeLockAuto();restStartBtn.textContent='Pause';restLabelEl.textContent='Resting...';
   restInt=setInterval(()=>{
     restLeft--;updateRestDisplay();countdownAudio(restLeft);
     if(restLeft<=0){
-      clearInterval(restInt);restRunning=false;
+      clearInterval(restInt);restRunning=false;releaseWakeLockAuto();
       restStartBtn.textContent='Start';restLabelEl.textContent='Go!';
       playFinish();vibrate([200,100,200,100,200]);
       document.getElementById('v-rest').classList.add('flash');
@@ -813,16 +826,16 @@ function updateID(){
   intTimeEl.classList.toggle('warning',iS.left<=5&&iS.left>0);
 }
 function toggleInterval(){
-  if(iS.running){clearInterval(iInt);iS.running=false;intStartBtn.textContent='Resume';return}
+  if(iS.running){clearInterval(iInt);iS.running=false;releaseWakeLockAuto();intStartBtn.textContent='Resume';return}
   readIC();
   if(iS.phase==='ready'||iS.phase==='done'){iS.phase='work';iS.round=1;iS.left=iS.work}
-  iS.running=true;intStartBtn.textContent='Pause';
+  iS.running=true;acquireWakeLockAuto();intStartBtn.textContent='Pause';
   iInt=setInterval(()=>{
     iS.left--;countdownAudio(iS.left);
     if(iS.left<=0){
       if(iS.phase==='work'){
         if(iS.round>=iS.totalRounds){
-          clearInterval(iInt);iS.running=false;iS.phase='done';intStartBtn.textContent='Start';
+          clearInterval(iInt);iS.running=false;releaseWakeLockAuto();iS.phase='done';intStartBtn.textContent='Start';
           playFinish();vibrate([300,100,300,100,300]);updateID();return;
         }
         iS.phase='rest';iS.left=iS.rest;playTransition(false);vibrate([150,80,150]);
