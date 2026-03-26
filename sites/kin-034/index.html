@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" id="theme-color-meta" content="#f5f5f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Noise Meter">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<title>KIN-034 — Noise Meter — Kin</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f5f5f0;
+  --fg: #1a1a1a;
+  --muted: #888;
+  --card-bg: #ffffff;
+  --card-border: #e0e0dc;
+  --green: #22c55e;
+  --green-glow: rgba(34, 197, 94, 0.3);
+  --yellow: #eab308;
+  --yellow-glow: rgba(234, 179, 8, 0.3);
+  --red: #ef4444;
+  --red-glow: rgba(239, 68, 68, 0.3);
+  --meter-bg: #e8e8e4;
+  --label-bg: rgba(255,255,255,0.7);
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+body.dark {
+  background: #111111 !important;
+  color: #e8e8e8 !important;
+}
+body.dark .meter-track {
+  background: #2a2a2a !important;
+}
+body.dark .zone-label {
+  background: rgba(30,30,30,0.8) !important;
+  color: #ccc !important;
+}
+body.dark .status-text {
+  color: #e8e8e8 !important;
+}
+body.dark .controls button {
+  background: #2a2a2a !important;
+  color: #e8e8e8 !important;
+  border-color: #444 !important;
+}
+body.dark .controls button:hover {
+  background: #333 !important;
+}
+body.dark .controls button.active {
+  background: #22c55e !important;
+  color: #111 !important;
+  border-color: #22c55e !important;
+}
+body.dark .header-bar {
+  color: #e8e8e8 !important;
+}
+body.dark .threshold-info {
+  color: #999 !important;
+}
+body.dark .bug-sheet {
+  background: #1e1e1e !important;
+  color: #e8e8e8 !important;
+}
+body.dark .bug-sheet select,
+body.dark .bug-sheet textarea,
+body.dark .bug-sheet input {
+  background: #2a2a2a !important;
+  color: #e8e8e8 !important;
+  border-color: #444 !important;
+}
+body.dark .bug-sheet .bug-submit {
+  background: #e8e8e8 !important;
+  color: #111 !important;
+}
+body.dark .kinconfirm-overlay .kinconfirm-box {
+  background: #1e1e1e !important;
+  color: #e8e8e8 !important;
+}
+body.dark .kinconfirm-overlay .kinconfirm-cancel {
+  background: #2a2a2a !important;
+  color: #e8e8e8 !important;
+}
+body.dark .toast {
+  background: #333 !important;
+  color: #e8e8e8 !important;
+}
+body.dark .sensitivity-slider input[type="range"] {
+  accent-color: #22c55e !important;
+}
+body.dark .sensitivity-slider label {
+  color: #999 !important;
+}
+body.dark .wake-indicator {
+  color: #999 !important;
+}
+
+/* Header */
+.header-bar {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 8px;
+}
+.header-bar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main meter area */
+.meter-container {
+  width: 100%;
+  max-width: 480px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px 0;
+}
+
+.status-text {
+  font-size: clamp(28px, 8vw, 48px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s;
+}
+
+/* Vertical meter */
+.meter-track {
+  width: 100%;
+  max-width: 480px;
+  height: clamp(220px, 40vh, 400px);
+  background: var(--meter-bg);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.meter-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0%;
+  border-radius: 16px;
+  transition: height 0.08s linear, background 0.2s;
+}
+
+.meter-zones {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+.meter-zone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.meter-zone:last-child { border-bottom: none; }
+
+.zone-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--label-bg);
+  color: var(--muted);
+}
+
+/* Glow on meter track */
+.meter-track.glow-red {
+  box-shadow: 0 0 40px var(--red-glow), 0 0 80px var(--red-glow);
+}
+.meter-track.glow-yellow {
+  box-shadow: 0 0 30px var(--yellow-glow);
+}
+.meter-track.glow-green {
+  box-shadow: 0 0 20px var(--green-glow);
+}
+
+/* Sensitivity slider */
+.sensitivity-slider {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+}
+.sensitivity-slider label {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  min-width: 70px;
+}
+.sensitivity-slider input[type="range"] {
+  flex: 1;
+  min-height: 44px;
+  accent-color: var(--green);
+}
+.sensitivity-slider .sens-value {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Threshold info */
+.threshold-info {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Controls */
+.controls {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+}
+.controls button {
+  flex: 1;
+  min-height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-appearance: none;
+}
+.controls button:hover { background: #eee; }
+.controls button.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+/* Wake lock indicator */
+.wake-indicator {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+.wake-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: background 0.3s;
+}
+.wake-dot.active { background: var(--green); }
+
+/* Bug report sheet */
+.bug-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:2000; }
+.bug-overlay.visible { display:block; }
+.bug-sheet {
+  position:fixed; bottom:0; left:0; right:0;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+  z-index:2001;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.bug-overlay.visible .bug-sheet { transform: translateY(0); }
+.bug-sheet h3 { font-size:16px; font-weight:600; margin-bottom:16px; }
+.bug-sheet label { display:block; font-size:13px; font-weight:500; margin-bottom:4px; margin-top:12px; }
+.bug-sheet select, .bug-sheet textarea, .bug-sheet input {
+  width:100%; font-family:inherit; font-size:16px; padding:10px; border:1px solid var(--card-border);
+  border-radius:8px; background:var(--bg); color:var(--fg);
+  -webkit-appearance:none;
+}
+.bug-sheet textarea { min-height:80px; resize:vertical; }
+.bug-sheet .bug-submit {
+  margin-top:16px; width:100%; min-height:48px; border:none; border-radius:10px;
+  background:var(--fg); color:var(--bg); font-family:inherit; font-size:15px;
+  font-weight:600; cursor:pointer;
+}
+
+/* kinConfirm */
+.kinconfirm-overlay {
+  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.45); z-index:3000; align-items:center; justify-content:center;
+}
+.kinconfirm-overlay.visible { display:flex; }
+.kinconfirm-box {
+  background:#fff; border-radius:14px; padding:24px; max-width:320px; width:90%;
+  text-align:center;
+}
+.kinconfirm-box p { font-size:15px; margin-bottom:20px; line-height:1.5; }
+.kinconfirm-btns { display:flex; gap:10px; }
+.kinconfirm-btns button { flex:1; min-height:44px; border-radius:10px; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; border:none; }
+.kinconfirm-cancel { background:#e8e8e4; color:var(--fg); }
+.kinconfirm-confirm { background:var(--red); color:#fff; }
+
+/* Toast */
+.toast {
+  position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:#333; color:#fff; padding:10px 20px; border-radius:10px;
+  font-size:14px; opacity:0; transition:all 0.3s; z-index:4000; pointer-events:none;
+  white-space:nowrap;
+}
+.toast.visible { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+<script>
+(function(){
+  var m={name:"KIN-034 Noise Meter",short_name:"Noise Meter",start_url:".",display:"standalone",background_color:"#f5f5f0",theme_color:"#f5f5f0"};
+  var b=new Blob([JSON.stringify(m)],{type:"application/json"});
+  var lk=document.createElement("link");lk.rel="manifest";lk.href=URL.createObjectURL(b);
+  document.head.appendChild(lk);
+})();
+
+(function(){
+  var c=document.createElement("canvas");c.width=180;c.height=180;
+  var ctx=c.getContext("2d");
+  var r=36;
+  ctx.beginPath();
+  ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);
+  ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);
+  ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);
+  ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();
+  var g=ctx.createLinearGradient(0,0,180,180);
+  g.addColorStop(0,"#2a1010");
+  g.addColorStop(1,"#140808");
+  ctx.fillStyle=g;ctx.fill();
+  var sz=180;
+  ctx.fillStyle="rgba(245,240,232,0.92)";
+  ctx.globalAlpha=0.55;ctx.fillRect(sz*0.28,sz*0.445,sz*0.067,sz*0.11);
+  ctx.globalAlpha=0.75;ctx.fillRect(sz*0.37,sz*0.35,sz*0.067,sz*0.3);
+  ctx.globalAlpha=1;   ctx.fillRect(sz*0.465,sz*0.28,sz*0.072,sz*0.44);
+  ctx.globalAlpha=0.75;ctx.fillRect(sz*0.563,sz*0.345,sz*0.067,sz*0.31);
+  ctx.globalAlpha=0.55;ctx.fillRect(sz*0.653,sz*0.435,sz*0.067,sz*0.13);
+  ctx.globalAlpha=1;
+  var el=document.getElementById("apple-touch-icon");
+  if(el)el.href=c.toDataURL("image/png");
+})();
+
+if("serviceWorker" in navigator){
+  var _sw=
+    "const C='kin034-v1';" +
+    "self.addEventListener('install',function(){self.skipWaiting();});" +
+    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
+    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
+  ).catch(function(){});
+}
+</script>
+</head>
+<body>
+
+<div class="header-bar">
+  <h1>Noise Meter</h1>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9728;&#65039;</button>
+</div>
+
+<div class="meter-container">
+  <div class="status-text" id="statusText">Ready</div>
+
+  <div class="meter-track" id="meterTrack">
+    <div class="meter-fill" id="meterFill"></div>
+    <div class="meter-zones">
+      <div class="meter-zone"><span class="zone-label">Loud</span></div>
+      <div class="meter-zone"><span class="zone-label">Moderate</span></div>
+      <div class="meter-zone"><span class="zone-label">Quiet</span></div>
+    </div>
+  </div>
+
+  <div class="sensitivity-slider">
+    <label>Sensitivity</label>
+    <input type="range" id="sensitivity" min="1" max="10" value="5" step="1">
+    <span class="sens-value" id="sensValue">5</span>
+  </div>
+
+  <div class="threshold-info">
+    Green &lt; 50 dB &middot; Yellow 50&#8211;75 dB &middot; Red &gt; 75 dB
+  </div>
+</div>
+
+<div class="controls">
+  <button id="startBtn" onclick="toggleListening()">Start</button>
+</div>
+
+<div class="wake-indicator">
+  <span class="wake-dot" id="wakeDot"></span>
+  <span id="wakeText">Screen wake lock inactive</span>
+</div>
+
+<!-- Bug report -->
+<div class="bug-overlay" id="bugOverlay" onclick="if(event.target===this)closeBug()">
+  <div class="bug-sheet">
+    <h3>Report a bug</h3>
+    <label>Type</label>
+    <select id="bugType"><option>Bug</option><option>Suggestion</option><option>Other</option></select>
+    <label>Description</label>
+    <textarea id="bugDesc" placeholder="What happened?"></textarea>
+    <label>Name (optional)</label>
+    <input type="text" id="bugName" placeholder="Your name">
+    <button class="bug-submit" onclick="submitBug()">Send</button>
+  </div>
+</div>
+
+<!-- kinConfirm -->
+<div class="kinconfirm-overlay" id="kinconfirmOverlay">
+  <div class="kinconfirm-box">
+    <p id="kinconfirmMsg"></p>
+    <div class="kinconfirm-btns">
+      <button class="kinconfirm-cancel" id="kinconfirmCancel">Cancel</button>
+      <button class="kinconfirm-confirm" id="kinconfirmConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<footer style="text-align:center;padding:16px 16px 48px;font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:0.04em;color:var(--muted,#888)">
+  KIN-034 &middot; v1.0 &middot; <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &middot; by Liam
+  <div style="display:flex;justify-content:center;margin-top:8px"><span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif"><svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>Local Only &middot; Verified</span></div>
+  <div style="margin-top:10px">
+    <button id="kin-bug-btn" onclick="openBug()" style="background:none;border:none;font-size:11px;color:var(--muted,#888);cursor:pointer;letter-spacing:0.04em;font-family:-apple-system,sans-serif;padding:4px 0;min-height:32px;-webkit-appearance:none">Report a bug</button>
+  </div>
+</footer>
+
+<script>
+// === Theme ===
+(function(){
+  var saved = localStorage.getItem('kin034-theme');
+  if(saved === 'dark'){
+    document.body.classList.add('dark');
+    document.documentElement.classList.remove('light');
+    document.documentElement.classList.add('dark');
+    document.getElementById('themeToggle').textContent = '\uD83C\uDF19';
+    document.getElementById('theme-color-meta').content = '#111111';
+  }
+})();
+document.getElementById('themeToggle').addEventListener('click', function(){
+  var isDark = document.body.classList.toggle('dark');
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle('light', !isDark);
+  this.textContent = isDark ? '\uD83C\uDF19' : '\u2600\uFE0F';
+  document.getElementById('theme-color-meta').content = isDark ? '#111111' : '#f5f5f0';
+  localStorage.setItem('kin034-theme', isDark ? 'dark' : 'light');
+});
+
+// === kinConfirm / showToast ===
+function kinConfirm(msg){
+  return new Promise(function(resolve){
+    var o = document.getElementById('kinconfirmOverlay');
+    document.getElementById('kinconfirmMsg').textContent = msg;
+    o.classList.add('visible');
+    document.getElementById('kinconfirmCancel').onclick = function(){ o.classList.remove('visible'); resolve(false); };
+    document.getElementById('kinconfirmConfirm').onclick = function(){ o.classList.remove('visible'); resolve(true); };
+  });
+}
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(function(){ t.classList.remove('visible'); }, 2200);
+}
+
+// === Bug Report ===
+function openBug(){ document.getElementById('bugOverlay').classList.add('visible'); }
+function closeBug(){ document.getElementById('bugOverlay').classList.remove('visible'); }
+function submitBug(){
+  var desc = document.getElementById('bugDesc').value.trim();
+  if(!desc){ showToast('Please add a description'); return; }
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      form_type:'bug', subject:'KIN-034 Noise Meter',
+      app:'KIN-034', type:document.getElementById('bugType').value,
+      description:desc, name:document.getElementById('bugName').value.trim()
+    })
+  });
+  closeBug();
+  document.getElementById('bugDesc').value='';
+  document.getElementById('bugName').value='';
+  showToast('Thanks! Report sent.');
+}
+
+// === Noise Meter Core ===
+var audioCtx, analyser, mic, animFrame;
+var listening = false;
+var wakeLock = null;
+var smoothDb = 0;
+
+var sensitivity = 5;
+var sensEl = document.getElementById('sensitivity');
+var sensVal = document.getElementById('sensValue');
+sensEl.addEventListener('input', function(){
+  sensitivity = parseInt(this.value);
+  sensVal.textContent = sensitivity;
+});
+
+var GREEN_MAX = 50;
+var YELLOW_MAX = 75;
+
+function getZone(db){
+  if(db < GREEN_MAX) return 'green';
+  if(db < YELLOW_MAX) return 'yellow';
+  return 'red';
+}
+function getZoneColor(zone){
+  if(zone === 'green') return 'var(--green)';
+  if(zone === 'yellow') return 'var(--yellow)';
+  return 'var(--red)';
+}
+function getStatusLabel(zone){
+  if(zone === 'green') return 'Quiet';
+  if(zone === 'yellow') return 'Moderate';
+  return 'Too Loud';
+}
+
+function updateMeter(db){
+  var statusText = document.getElementById('statusText');
+  var meterFill = document.getElementById('meterFill');
+  var meterTrack = document.getElementById('meterTrack');
+
+  var clamped = Math.max(0, Math.min(100, db));
+  var pct = clamped;
+  var zone = getZone(clamped);
+  var col = getZoneColor(zone);
+
+  statusText.textContent = getStatusLabel(zone);
+  statusText.style.color = col;
+  meterFill.style.height = pct + '%';
+  meterFill.style.background = col;
+  meterTrack.className = 'meter-track glow-' + zone;
+}
+
+function processAudio(){
+  if(!listening) return;
+
+  var data = new Float32Array(analyser.fftSize);
+  analyser.getFloatTimeDomainData(data);
+
+  var sum = 0;
+  for(var i = 0; i < data.length; i++){
+    sum += data[i] * data[i];
+  }
+  var rms = Math.sqrt(sum / data.length);
+
+  var boost = 1 + (sensitivity - 5) * 0.15;
+  var db = 20 * Math.log10(Math.max(rms, 0.000001)) + 94;
+  db = db * boost;
+  db = Math.max(0, db);
+
+  smoothDb = smoothDb * 0.7 + db * 0.3;
+  updateMeter(smoothDb);
+  animFrame = requestAnimationFrame(processAudio);
+}
+
+async function toggleListening(){
+  var btn = document.getElementById('startBtn');
+
+  if(listening){
+    listening = false;
+    btn.textContent = 'Start';
+    btn.classList.remove('active');
+    cancelAnimationFrame(animFrame);
+    if(mic){ mic.getTracks().forEach(function(t){ t.stop(); }); mic = null; }
+    if(audioCtx){ audioCtx.close(); audioCtx = null; }
+    smoothDb = 0;
+    document.getElementById('meterFill').style.height = '0%';
+    document.getElementById('statusText').textContent = 'Ready';
+    document.getElementById('statusText').style.color = '';
+    document.getElementById('meterTrack').className = 'meter-track';
+    releaseWake();
+    return;
+  }
+
+  try {
+    mic = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    var source = audioCtx.createMediaStreamSource(mic);
+    source.connect(analyser);
+    listening = true;
+    btn.textContent = 'Stop';
+    btn.classList.add('active');
+    processAudio();
+    acquireWake();
+  } catch(e){
+    showToast('Microphone access needed');
+  }
+}
+
+// === Wake Lock ===
+async function acquireWake(){
+  if(!('wakeLock' in navigator)) return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    document.getElementById('wakeDot').classList.add('active');
+    document.getElementById('wakeText').textContent = 'Screen stays on';
+    wakeLock.addEventListener('release', function(){
+      document.getElementById('wakeDot').classList.remove('active');
+      document.getElementById('wakeText').textContent = 'Screen wake lock inactive';
+    });
+  } catch(e){}
+}
+function releaseWake(){
+  if(wakeLock){
+    wakeLock.release();
+    wakeLock = null;
+  }
+  document.getElementById('wakeDot').classList.remove('active');
+  document.getElementById('wakeText').textContent = 'Screen wake lock inactive';
+}
+
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible' && listening){
+    acquireWake();
+  }
+});
+</script>
+</body>
+</html>
