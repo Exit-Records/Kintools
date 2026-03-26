@@ -199,6 +199,30 @@ Steps to remind the user:
 3. Build output directory: `sites/kin-NNN-tool-name`
 4. Set custom domain: `toolname.kintools.net`
 
+### Start of session — CRITICAL: pull before any work
+Before touching any file, always sync with the remote to avoid divergent commits:
+
+```bash
+git fetch origin
+git status
+```
+
+If the output says "Your branch is behind" or shows divergent commits, merge first:
+
+```bash
+git merge origin/main
+```
+
+If conflicts are expected (local work vs remote updates to same files), use:
+
+```bash
+git merge -X ours origin/main
+```
+
+**Never start editing files while the local branch is behind `origin/main`.** Skipping this step caused a 30+ file conflict in a previous session when the remote gained 10 commits (SEO updates, Cloudflare configs) while local work was already underway.
+
+---
+
 ### GitHub push rule — CRITICAL
 **Always use the Git Tree API for pushes. Never use the Contents API (PUT per file).**
 Every Contents API PUT = one commit = one Cloudflare Pages deploy per connected site (~35 sites).
