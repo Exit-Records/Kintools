@@ -319,7 +319,14 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
   </div>
   <div style="display:flex;gap:10px;align-items:center">
     <button class="btn-mode" id="btn-mode" title="Toggle light/dark mode">🌙 Dark</button>
-    <span class="kin-badge">KIN-009</span>
+    <div style="position:relative;display:inline-flex;align-items:center;gap:4px">
+      <span class="kin-badge">KIN-009</span>
+      <button id="hdr-storage-info-btn" aria-label="Storage info" style="background:none;border:none;padding:0;width:18px;height:18px;cursor:pointer;color:var(--muted,#888);font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;opacity:0.7;border-radius:50%">ⓘ</button>
+      <div id="hdr-storage-popover" role="tooltip" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:230px;background:var(--card,#fff);border:1px solid var(--border,#dde1ec);border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.5;color:var(--muted,#888);z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.15);text-align:left">
+        <strong style="color:var(--text,#1a1f2e);display:block;margin-bottom:4px">Stored locally</strong>
+        Your trip plan is saved in this browser only. Nothing is sent to any server. Clear your browser data to reset.
+      </div>
+    </div>
   </div>
 </header>
 
@@ -1055,20 +1062,17 @@ document.getElementById('btn-generate').addEventListener('click', () => {
       e.preventDefault();
       var data = new FormData(form);
       var typeRaw = data.get('type') || '';
-      var formType = 'bug';
-      if (typeRaw.toLowerCase().indexOf('feature') !== -1) formType = 'idea';
-      else if (typeRaw.toLowerCase().indexOf('other') !== -1) formType = 'app_suggestion';
       fetch(SHEETS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          form_type: formType,
-          subject: 'KIN-009 — Jet Lag Planner',
+          form_type: 'bug_report',
+          subject: 'KIN-009 \u2014 Jet Lag Planner',
           app: 'KIN-009',
           type: typeRaw,
           description: data.get('description') || '',
-          name: anon ? 'Anonymous' : (data.get('name') || 'Not provided'),
-          email: anon ? 'Anonymous' : (data.get('email') || 'Not provided')
+          name: anon ? '' : (data.get('name') || '')
         })
       }).catch(function() {});
       formView.style.display = 'none';
@@ -1109,6 +1113,17 @@ function kinToggleStorageInfo(e) {
     });
   }
 }
+
+(function() {
+  var btn = document.getElementById('hdr-storage-info-btn');
+  var pop = document.getElementById('hdr-storage-popover');
+  if (!btn || !pop) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    pop.style.display = pop.style.display === 'none' ? 'block' : 'none';
+  });
+  document.addEventListener('click', function() { if (pop) pop.style.display = 'none'; });
+})();
 </script>
 </body>
 </html>
