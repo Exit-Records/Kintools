@@ -108,6 +108,21 @@ function serve(req, res) {
     return;
   }
 
+  // KIN-005 and KIN-004 are React builds — their compiled assets are not in sites/.
+  // Redirect to the live Vite artifact for KIN-005; show a placeholder for KIN-004.
+  if (url.startsWith("/kin-005-qr-builder")) {
+    const rest = url.slice("/kin-005-qr-builder".length) || "/";
+    res.writeHead(302, { Location: "/kin-qr-builder" + rest });
+    res.end();
+    return;
+  }
+
+  if (url.startsWith("/kin-004-colour-picker")) {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(`<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KIN-004 — Colour Picker</title><style>body{font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100dvh;margin:0;background:#f5f4f0;color:#444;text-align:center;padding:32px}</style></head><body><div><div style="font-size:48px;margin-bottom:16px">🎨</div><h2 style="font-size:20px;font-weight:700;margin:0 0 8px">KIN-004 — Colour Picker</h2><p style="margin:0;font-size:14px;color:#888">This tool needs a rebuild.<br>Not yet available in preview.</p></div></body></html>`);
+    return;
+  }
+
   try {
     const stat = fs.statSync(filePath);
     if (stat.isDirectory()) {
