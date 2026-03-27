@@ -548,7 +548,12 @@ function renderList(){
     if(b.amount) html+='<div class="benefit-amount">'+escHtml(b.amount)+'</div>';
     html+='<div class="benefit-detail"><strong>Who is it for:</strong> '+escHtml(b.who)+'</div>';
     if(b.missed) html+='<div class="benefit-missed">Often missed: '+escHtml(b.missed)+'</div>';
-    if(b.link) html+='<a class="benefit-link" href="'+escHtml(b.link)+'" target="_blank" rel="noopener">Find out more on gov.uk \u2192</a>';
+    if(b.link){
+      var linkLabel='Find out more';
+      if(b.link.indexOf('gov.uk')>=0) linkLabel='Find out more on gov.uk';
+      else{try{var h=new URL(b.link).hostname.replace('www.','');linkLabel='Find out more at '+h;}catch(e){}}
+      html+='<a class="benefit-link" href="'+escHtml(b.link)+'" target="_blank" rel="noopener">'+linkLabel+' \u2192</a>';
+    }
     if(b.apply) html+=' <a class="benefit-link" href="'+escHtml(b.apply)+'" target="_blank" rel="noopener" style="margin-left:12px">Apply \u2192</a>';
 
     if(b.cat==='support'){
