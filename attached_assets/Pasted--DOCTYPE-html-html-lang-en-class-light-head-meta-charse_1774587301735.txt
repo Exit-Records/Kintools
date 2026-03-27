@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KIN-037 -- Unclaimed -- Kin</title>
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Unclaimed">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+–bg:#f5f4f0;–surface:#fff;–text:#111;–text-secondary:#666;–text-tertiary:#999;
+–border:#ddd;–border-light:#eee;
+–accent:#1a56db;–accent-soft:rgba(26,86,219,0.08);
+–success:#1a7;–success-soft:rgba(17,170,119,0.08);
+–warning:#c60;–warning-soft:rgba(204,102,0,0.08);
+–toast-bg:#111;–toast-text:#fff;
+–shadow:0 1px 3px rgba(0,0,0,0.06);–radius:8px;–footer-muted:#888;
+–cat-children:#7c3aed;–cat-children-soft:rgba(124,58,237,0.08);
+–cat-housing:#0d9488;–cat-housing-soft:rgba(13,148,136,0.08);
+–cat-health:#dc2626;–cat-health-soft:rgba(220,38,38,0.08);
+–cat-income:#b45309;–cat-income-soft:rgba(180,83,9,0.08);
+–cat-carers:#2563eb;–cat-carers-soft:rgba(37,99,235,0.08);
+–cat-pension:#6d28d9;–cat-pension-soft:rgba(109,40,217,0.08);
+–cat-energy:#059669;–cat-energy-soft:rgba(5,150,105,0.08);
+–cat-bereavement:#64748b;–cat-bereavement-soft:rgba(100,116,139,0.08);
+–cat-education:#d97706;–cat-education-soft:rgba(217,119,6,0.08);
+–cat-creative:#e11d48;–cat-creative-soft:rgba(225,29,72,0.08);
+–cat-community:#0891b2;–cat-community-soft:rgba(8,145,178,0.08);
+–cat-enterprise:#7c3aed;–cat-enterprise-soft:rgba(124,58,237,0.08);
+–cat-equality:#d946ef;–cat-equality-soft:rgba(217,70,239,0.08);
+–cat-migration:#0284c7;–cat-migration-soft:rgba(2,132,199,0.08);
+–cat-lgbtqia:#ec4899;–cat-lgbtqia-soft:rgba(236,72,153,0.08);
+–cat-support:#525252;–cat-support-soft:rgba(82,82,82,0.08);
+}
+
+body{font-family:‘DM Sans’,system-ui,-apple-system,sans-serif;background:var(–bg);color:var(–text);padding:16px;padding-bottom:env(safe-area-inset-bottom,0);min-height:100vh;min-height:100dvh;line-height:1.5;-webkit-text-size-adjust:100%}
+
+body.dark{–bg:#1a1a1a;–surface:#252525;–text:#e8e8e8;–text-secondary:#999;–text-tertiary:#666;–border:#3a3a3a;–border-light:#333;–accent:#5b8def;–accent-soft:rgba(91,141,239,0.12);–success:#2c9;–success-soft:rgba(34,204,153,0.12);–warning:#e80;–warning-soft:rgba(238,136,0,0.12);–toast-bg:#fff;–toast-text:#111;–shadow:0 1px 3px rgba(0,0,0,0.2);–footer-muted:#888;–cat-children:#a78bfa;–cat-children-soft:rgba(167,139,250,0.12);–cat-housing:#2dd4bf;–cat-housing-soft:rgba(45,212,191,0.12);–cat-health:#f87171;–cat-health-soft:rgba(248,113,113,0.12);–cat-income:#fbbf24;–cat-income-soft:rgba(251,191,36,0.12);–cat-carers:#60a5fa;–cat-carers-soft:rgba(96,165,250,0.12);–cat-pension:#a78bfa;–cat-pension-soft:rgba(167,139,250,0.12);–cat-energy:#34d399;–cat-energy-soft:rgba(52,211,153,0.12);–cat-bereavement:#94a3b8;–cat-bereavement-soft:rgba(148,163,184,0.12);–cat-education:#fbbf24;–cat-education-soft:rgba(251,191,36,0.12);–cat-creative:#fb7185;–cat-creative-soft:rgba(251,113,133,0.12);–cat-community:#22d3ee;–cat-community-soft:rgba(34,211,238,0.12);–cat-enterprise:#a78bfa;–cat-enterprise-soft:rgba(167,139,250,0.12);–cat-equality:#e879f9;–cat-equality-soft:rgba(232,121,249,0.12);–cat-migration:#38bdf8;–cat-migration-soft:rgba(56,189,248,0.12);–cat-lgbtqia:#f472b6;–cat-lgbtqia-soft:rgba(244,114,182,0.12);–cat-support:#a3a3a3;–cat-support-soft:rgba(163,163,163,0.12)}
+
+body.dark{background:#1a1a1a !important;color:#e8e8e8 !important}
+body.dark .section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark input{background:#252525 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark input::placeholder{color:#777 !important}
+body.dark .theme-toggle{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .cat-pill{border-color:#444 !important}
+body.dark .cat-pill.active{border-color:currentColor !important}
+body.dark .benefit-card{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .benefit-name{color:#e8e8e8 !important}
+body.dark .benefit-desc{color:#bbb !important}
+body.dark .benefit-detail{color:#999 !important}
+body.dark .benefit-missed{color:#e80 !important;background:rgba(238,136,0,0.1) !important}
+body.dark .benefit-amount{color:#2c9 !important;background:rgba(34,204,153,0.1) !important}
+body.dark .benefit-link{color:#5b8def !important}
+body.dark .status-btn{background:#333 !important;color:#999 !important;border-color:#444 !important}
+body.dark .status-btn.s-looking{background:rgba(91,141,239,0.12) !important;color:#5b8def !important;border-color:#5b8def !important}
+body.dark .status-btn.s-applied{background:rgba(238,136,0,0.12) !important;color:#e80 !important;border-color:#e80 !important}
+body.dark .status-btn.s-receiving{background:rgba(34,204,153,0.12) !important;color:#2c9 !important;border-color:#2c9 !important}
+body.dark .badge-local{color:#2c9 !important;background:rgba(34,204,153,0.12) !important}
+body.dark .search-wrap input{background:#333 !important;border-color:#444 !important;color:#e8e8e8 !important}
+body.dark .updated-note{color:#666 !important}
+body.dark .disclaimer{color:#777 !important;border-color:#333 !important}
+body.dark .stat-card{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .stat-label{color:#999 !important}
+body.dark .stat-value{color:#e8e8e8 !important}
+body.dark .bug-sheet{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .bug-sheet select,body.dark .bug-sheet textarea,body.dark .bug-sheet input{background:#1a1a1a !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .bug-overlay{background:rgba(0,0,0,0.6) !important}
+body.dark .toggle-row{color:#999 !important}
+body.dark .empty-msg{color:#777 !important}
+
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.header h1{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.theme-toggle{width:40px;height:40px;min-height:40px;border-radius:50%;border:1px solid var(–border);background:var(–surface);color:var(–text);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0}
+
+.updated-note{font-size:11px;color:var(–text-tertiary);margin-bottom:16px}
+
+/* Search */
+.search-wrap{margin-bottom:12px}
+.search-wrap input{width:100%;min-height:44px;font-size:16px;font-family:inherit;border:1px solid var(–border);border-radius:var(–radius);padding:10px 14px;background:var(–surface);color:var(–text);-webkit-appearance:none}
+.search-wrap input:focus{outline:none;border-color:var(–accent)}
+
+/* Category pills */
+.cat-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.cat-pill{min-height:36px;padding:6px 14px;border-radius:20px;border:1px solid var(–border);background:transparent;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap}
+.cat-pill.active{border-color:currentColor;font-weight:600}
+
+/* Stats */
+.stat-row{display:flex;gap:8px;margin-bottom:16px}
+.stat-card{flex:1;background:var(–surface);border:1px solid var(–border-light);border-radius:var(–radius);padding:10px;text-align:center;box-shadow:var(–shadow)}
+.stat-label{font-size:10px;color:var(–text-secondary);text-transform:uppercase;letter-spacing:0.3px}
+.stat-value{font-size:18px;font-weight:600}
+
+/* Benefit cards */
+.benefit-card{background:var(–surface);border:1px solid var(–border-light);border-radius:var(–radius);padding:14px;margin-bottom:10px;box-shadow:var(–shadow)}
+.benefit-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+.benefit-name{font-size:15px;font-weight:600;flex:1}
+.benefit-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.benefit-desc{font-size:14px;color:var(–text);line-height:1.5;margin-bottom:8px}
+.benefit-detail{font-size:12px;color:var(–text-secondary);line-height:1.6;margin-bottom:4px}
+.benefit-detail strong{color:var(–text);font-weight:500}
+
+.benefit-amount{display:inline-block;font-size:12px;font-weight:600;color:var(–success);background:var(–success-soft);padding:2px 10px;border-radius:4px;margin-bottom:8px}
+.benefit-missed{display:inline-block;font-size:12px;font-weight:500;color:var(–warning);background:var(–warning-soft);padding:4px 10px;border-radius:6px;margin-top:6px;line-height:1.4}
+.benefit-link{display:inline-block;font-size:13px;color:var(–accent);text-decoration:none;font-weight:500;margin-top:8px;min-height:44px;line-height:44px}
+.benefit-link:hover{text-decoration:underline}
+
+/* Status buttons */
+.status-row{display:flex;gap:4px;margin-top:10px}
+.status-btn{flex:1;min-height:36px;border-radius:6px;border:1px solid var(–border);background:var(–surface);color:var(–text-secondary);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.status-btn.s-looking{background:var(–accent-soft);color:var(–accent);border-color:var(–accent)}
+.status-btn.s-applied{background:var(–warning-soft);color:var(–warning);border-color:var(–warning)}
+.status-btn.s-receiving{background:var(–success-soft);color:var(–success);border-color:var(–success)}
+
+/* Prompt button */
+.prompt-btn{width:100%;min-height:44px;margin-top:8px;border-radius:6px;border:1px dashed var(–border);background:transparent;color:var(–text-secondary);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.prompt-btn:hover{border-color:var(–accent);color:var(–accent)}
+body.dark .prompt-btn{border-color:#444 !important;color:#999 !important}
+body.dark .prompt-btn:hover{border-color:#5b8def !important;color:#5b8def !important}
+
+/* Prompt sheet */
+.prompt-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.prompt-overlay.open{opacity:1;pointer-events:auto}
+.prompt-sheet{position:fixed;bottom:0;left:0;right:0;background:var(–surface);color:var(–text);border-radius:16px 16px 0 0;padding:20px 16px env(safe-area-inset-bottom,16px);z-index:201;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
+.prompt-overlay.open .prompt-sheet{transform:translateY(0)}
+.prompt-sheet h3{font-size:16px;margin-bottom:6px;font-weight:600}
+.prompt-info{font-size:13px;color:var(–text-secondary);line-height:1.5;margin-bottom:14px}
+.prompt-text{width:100%;min-height:120px;font-size:14px;font-family:inherit;border:1px solid var(–border);border-radius:6px;padding:12px;background:var(–bg);color:var(–text);resize:vertical;line-height:1.5;-webkit-appearance:none}
+.prompt-actions{display:flex;gap:8px;margin-top:12px}
+.prompt-actions button{flex:1;min-height:44px;border-radius:var(–radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;border:none}
+.prompt-close{background:var(–border-light);color:var(–text)}
+.prompt-copy{background:var(–accent);color:#fff}
+body.dark .prompt-sheet{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .prompt-text{background:#1a1a1a !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .prompt-close{background:#333 !important;color:#e8e8e8 !important}
+body.dark .prompt-info{color:#999 !important}
+
+.empty-msg{text-align:center;padding:40px 20px;color:var(–text-secondary);font-size:14px}
+
+.disclaimer{font-size:11px;color:var(–text-tertiary);border-top:1px solid var(–border-light);padding-top:12px;margin-top:16px;line-height:1.6}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(–toast-bg);color:var(–toast-text);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:100;white-space:nowrap}
+
+/* Bug report */
+.bug-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.bug-overlay.open{opacity:1;pointer-events:auto}
+.bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(–surface);color:var(–text);border-radius:16px 16px 0 0;padding:20px 16px env(safe-area-inset-bottom,16px);z-index:201;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
+.bug-overlay.open .bug-sheet{transform:translateY(0)}
+.bug-sheet h3{font-size:16px;margin-bottom:14px;font-weight:600}
+.bug-sheet .field{margin-bottom:10px}
+.bug-sheet label{font-size:12px;color:var(–text-secondary);margin-bottom:4px;display:block}
+.bug-sheet select,.bug-sheet textarea,.bug-sheet input{width:100%;min-height:44px;font-size:16px;border:1px solid var(–border);border-radius:6px;padding:10px;background:var(–surface);color:var(–text);font-family:inherit;-webkit-appearance:none}
+.bug-sheet textarea{min-height:100px;resize:vertical}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(–text-secondary);margin-bottom:10px;padding:6px 0}
+.toggle-switch{width:44px;height:26px;background:var(–border);border-radius:13px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none;padding:0}
+.toggle-switch.on{background:var(–success)}
+.toggle-knob{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.toggle-switch.on .toggle-knob{transform:translateX(18px)}
+.bug-actions{display:flex;gap:8px;margin-top:14px}
+.bug-actions button{flex:1;min-height:44px;border-radius:var(–radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;border:none}
+.bug-cancel{background:var(–border-light);color:var(–text)}
+.bug-submit{background:var(–accent);color:#fff}
+</style>
+
+<script>
+(function(){
+  var s=localStorage.getItem('kin037-theme');
+  if(s==='dark'){document.documentElement.className='dark';document.body&&document.body.classList.add('dark');}
+})();
+</script>
+
+<script>
+(function(){
+  var manifest={name:'KIN-037 - Unclaimed',short_name:'Unclaimed',start_url:'.',display:'standalone',background_color:'#f5f4f0',theme_color:'#f5f4f0',icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2260%22>UK</text></svg>',sizes:'any',type:'image/svg+xml'}]};
+  var b=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var lk=document.createElement('link');lk.rel='manifest';lk.href=URL.createObjectURL(b);document.head.appendChild(lk);
+  if('serviceWorker' in navigator){
+    var sw="var CACHE='kin037-v1';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==CACHE}).map(function(n){return caches.delete(n)}))}))});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var c=res.clone();caches.open(CACHE).then(function(cache){cache.put(e.request,c)})}return res})}))});";
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
+  }
+  try{
+    var c=document.createElement('canvas');c.width=180;c.height=180;var ctx=c.getContext('2d');
+    var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+    var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,'#1a2040');g.addColorStop(1,'#0a1020');ctx.fillStyle=g;ctx.fill();
+    ctx.fillStyle='rgba(245,240,232,0.9)';ctx.font='bold 52px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('UK',90,85);
+    ctx.font='18px system-ui';ctx.fillStyle='rgba(245,240,232,0.5)';ctx.fillText('benefits',90,120);
+    var icon=document.getElementById('apple-touch-icon');if(icon) icon.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
+
+<link rel="canonical" href="https://benefits.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://benefits.kintools.net/">
+<meta property="og:title" content="KIN-037 -- Unclaimed -- Kin">
+<meta property="og:description" content="UK funding, grants, and support you might not know about. Benefits, creative arts funding, enterprise support, helplines. Plain language, direct links. Nothing leaves your device.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-037 -- Unclaimed -- Kin">
+<meta name="twitter:description" content="UK funding, grants, and support you might not know about. Benefits, creative arts funding, enterprise support, helplines. Plain language, direct links. Nothing leaves your device.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+</head>
+<body>
+
+<div class="header">
+  <h1>KIN-037 Unclaimed</h1>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme"></button>
+</div>
+
+<div class="updated-note">UK funding, grants, and support you might not know about. Last updated March 2026.</div>
+
+<div class="search-wrap"><input id="searchInput" type="text" placeholder="Search (e.g. childcare, housing, music, games, pension)"></div>
+
+<div class="cat-row" id="catRow"></div>
+
+<div class="stat-row" id="statRow"></div>
+
+<div id="benefitsList"></div>
+
+<div class="disclaimer">
+  This tool lists benefits you might be entitled to. It does not calculate eligibility. For a full eligibility check, use the free calculator at <a href="https://www.gov.uk/benefits-calculators" target="_blank" rel="noopener" style="color:var(--accent)">gov.uk/benefits-calculators</a> or contact <a href="https://www.citizensadvice.org.uk" target="_blank" rel="noopener" style="color:var(--accent)">Citizens Advice</a>. Amounts shown are typical and may vary by circumstance. This is not financial or legal advice.
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Prompt sheet -->
+
+<div class="prompt-overlay" id="promptOverlay" onclick="closePrompt(event)">
+  <div class="prompt-sheet" onclick="event.stopPropagation()">
+    <h3>Get help applying</h3>
+    <div class="prompt-info">Copy the text below and paste it into Google, ChatGPT, or any AI assistant. Edit the parts in brackets to match your situation. This will give you step-by-step help with your application.</div>
+    <textarea class="prompt-text" id="promptText" readonly></textarea>
+    <div class="prompt-actions">
+      <button class="prompt-close" type="button" onclick="closePrompt()">Close</button>
+      <button class="prompt-copy" type="button" onclick="copyPrompt()">Copy to clipboard</button>
+    </div>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:16px 16px 48px;font-size:11px;color:var(--footer-muted,#888)">
+  <div><a href="https://kintools.net/" style="color:var(--footer-muted,#888);text-decoration:none">KIN-037 &middot; v1.0 &middot; Kin Tools</a> &middot; by Darren</div>
+  <div style="margin-top:6px">
+    <span class="badge-local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;vertical-align:middle"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Local Only &middot; Verified</span><button onclick="kinToggleStorageInfo()" title="What is stored?" style="background:none;border:1px solid var(--border,#ddd);border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;color:var(--footer-muted,#888);padding:0;margin-left:4px;vertical-align:middle;font-family:inherit">&#9432;</button>
+  </div>
+  <div id="kinStorageInfo" style="display:none;margin-top:8px;font-size:11px;color:var(--footer-muted,#888);line-height:1.6;max-width:300px;margin-left:auto;margin-right:auto">Your checklist status is saved to localStorage. Nothing is sent anywhere. The benefits data is built into the app. Clear site data to reset.</div>
+  <div style="margin-top:10px"><button onclick="openBugReport()" style="background:none;border:none;color:var(--footer-muted,#888);font-size:11px;opacity:0.5;cursor:pointer;padding:4px 8px;font-family:inherit">Report a bug</button></div>
+</footer>
+
+<div class="bug-overlay" id="bugOverlay" onclick="closeBugReport(event)">
+  <div class="bug-sheet" onclick="event.stopPropagation()">
+    <h3>Report a bug</h3>
+    <div class="field"><label>Type</label><select id="bugType"><option>Bug</option><option>Suggestion</option><option>Other</option></select></div>
+    <div class="field"><label>Description</label><textarea id="bugDesc" placeholder="What happened?"></textarea></div>
+    <div class="toggle-row"><span>Submit anonymously</span>
+      <button class="toggle-switch on" id="bugAnonToggle" type="button" onclick="toggleAnon()"><div class="toggle-knob"></div></button>
+    </div>
+    <div id="bugIdentity" style="display:none"><div class="field"><label>Name</label><input id="bugName" placeholder="Your name"></div></div>
+    <div class="bug-actions">
+      <button class="bug-cancel" type="button" onclick="closeBugReport()">Cancel</button>
+      <button class="bug-submit" type="button" onclick="submitBug()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === BENEFITS DATABASE ===
+var BENEFITS = [
+  {id:'uc',cat:'income',name:'Universal Credit',desc:'Monthly payment if you are on a low income or out of work. Replaces six older benefits including Housing Benefit and Working Tax Credits.',who:'Anyone 18+ (or 16-17 in some cases) with low or no income and less than \u00a316,000 in savings.',amount:'From \u00a3425/month (single, 25+) to \u00a3667/month (couple). Extra for children, housing, disability, childcare.',missed:'Many working people assume they do not qualify. You can claim Universal Credit even if you are employed, if your income is low enough. The two-child limit is being removed from April 2026.',link:'https://www.gov.uk/universal-credit',apply:'https://www.gov.uk/universal-credit/how-to-claim'},
+
+  {id:'pc',cat:'pension',name:'Pension Credit',desc:'Tops up your weekly income to a minimum level if you have reached State Pension age. A gateway benefit that unlocks many other entitlements.',who:'Anyone over State Pension age on a low income.',amount:'Tops up income to at least \u00a3183/week (single) or \u00a3279/week (couple).',missed:'Around 1 million eligible pensioners do not claim. Worth on average \u00a32,600/year. Claiming it can also unlock Council Tax Reduction, Cold Weather Payments, free TV licence (75+), and the Warm Home Discount.',link:'https://www.gov.uk/pension-credit',apply:'https://www.gov.uk/pension-credit/how-to-claim'},
+
+  {id:'cb',cat:'children',name:'Child Benefit',desc:'A regular payment for anyone responsible for raising a child. You do not need to be working.',who:'Anyone responsible for a child under 16 (or under 20 in approved education/training).',amount:'\u00a326.05/week for the eldest child, \u00a317.25 for each additional child.',missed:'Some higher earners stopped claiming after the High Income Charge was introduced. Even if you or your partner earn over \u00a360,000, it is worth claiming for National Insurance credits towards your State Pension, especially if you are not working.',link:'https://www.gov.uk/child-benefit',apply:'https://www.gov.uk/child-benefit/how-to-claim'},
+
+  {id:'fsm',cat:'children',name:'Free School Meals',desc:'Free lunch for your child at school every day. From September 2026, all children in families on Universal Credit will qualify.',who:'Children in state schools whose family receives Universal Credit (expanded from Sept 2026). Currently also if income under \u00a37,400.',amount:'Saves around \u00a3500 per child per year. Also triggers Pupil Premium funding for the school.',missed:'Many eligible families do not apply because they think their income is too high, or they did not know they needed to apply separately. You must apply even if you are on Universal Credit. From Sept 2026, the income threshold is removed for UC families.',link:'https://www.gov.uk/apply-free-school-meals',apply:'https://www.gov.uk/apply-free-school-meals'},
+
+  {id:'hs',cat:'children',name:'Healthy Start',desc:'Prepaid card for milk, fruit, vegetables and vitamins if you are pregnant or have children under 4.',who:'Pregnant women or families with children under 4 who receive certain benefits and have a household earned income under \u00a3408/month.',amount:'\u00a34.65/week per child (1-4), \u00a39.30/week per child under 1, \u00a34.65/week if pregnant. From April 2026.',missed:'Take-up is low. Many families on Universal Credit do not realise they qualify. The earned income limit is very low (\u00a3408/month) so part-time workers often miss out, but it is still worth checking.',link:'https://www.healthystart.nhs.uk/',apply:'https://www.healthystart.nhs.uk/how-to-apply/'},
+
+  {id:'fbc',cat:'children',name:'Free Breakfast Clubs',desc:'Free breakfast at school before classes start. Being rolled out to more schools from 2026.',who:'Children at participating primary schools, prioritising schools with highest free school meal rates.',amount:'Saves parents up to \u00a3450/year and gives back up to 95 hours/year.',missed:'This is a school-level programme. Ask your child\'s school if they offer it or have applied. You do not apply individually.',link:'https://educationhub.blog.gov.uk/2025/04/free-breakfast-clubs-everything-you-need-to-know/',apply:''},
+
+  {id:'cc',cat:'children',name:'Childcare Support (Universal Credit)',desc:'Help with childcare costs if you are working and on Universal Credit. Covers up to 85% of costs.',who:'Working parents on Universal Credit using registered childcare.',amount:'Up to \u00a31,015/month for one child, \u00a31,740 for two. From April 2026, extra \u00a3736/month for each additional child above two.',missed:'You pay upfront and claim back, which many low-income families cannot afford. A Budgeting Advance can help cover the first month. Many parents do not know about the upfront payment help.',link:'https://www.gov.uk/universal-credit/other-financial-support',apply:'https://www.gov.uk/universal-credit'},
+
+  {id:'fh',cat:'children',name:'30 Hours Free Childcare',desc:'30 hours of free childcare per week for working parents of 3-4 year olds. Extends to younger children from 2024-25.',who:'Working parents earning at least \u00a38,670/year (National Minimum Wage for 16hrs) and under \u00a3100,000.',amount:'30 hours/week for 38 weeks/year. Saves thousands annually.',missed:'Both parents must be working (or one working and one disabled/carer). Single parents qualify if working. You must re-confirm eligibility every 3 months or you lose it.',link:'https://www.gov.uk/30-hours-free-childcare',apply:'https://www.gov.uk/apply-30-hours-free-childcare'},
+
+  {id:'ctr',cat:'housing',name:'Council Tax Reduction',desc:'A discount on your Council Tax bill. Can cover it completely if you are on a very low income.',who:'Anyone on a low income. Rules vary by council. Pension Credit Guarantee Credit usually means full reduction.',amount:'Varies. Can be up to 100% of your bill. Average new claim saves over \u00a31,000/year.',missed:'Only 24% of eligible pensioners claim this. You must apply to your local council separately. It is not automatic even if you receive other benefits. Every council runs its own scheme.',link:'https://www.gov.uk/council-tax-help',apply:''},
+
+  {id:'hb',cat:'housing',name:'Housing Benefit / UC Housing Element',desc:'Help with rent if you are on a low income. Now mostly through Universal Credit, but Housing Benefit still exists for some pension-age claimants.',who:'Renters on a low income. Private and social tenants.',amount:'Varies by location and circumstances. Can cover full rent for those on lowest incomes.',missed:'If you are over State Pension age and not on Universal Credit, you may still need to claim Housing Benefit separately through your council.',link:'https://www.gov.uk/housing-benefit',apply:'https://www.gov.uk/housing-benefit/how-to-claim'},
+
+  {id:'smi',cat:'housing',name:'Support for Mortgage Interest',desc:'A loan to help pay the interest on your mortgage if you receive certain benefits. Repaid when you sell.',who:'Homeowners receiving Universal Credit, Pension Credit, Income Support, or income-based JSA/ESA.',amount:'Covers eligible mortgage interest payments. This is a loan secured against your property, not a grant.',missed:'Many homeowners in financial difficulty do not know this exists. It does not pay capital repayments, only interest.',link:'https://www.gov.uk/support-for-mortgage-interest',apply:'https://www.gov.uk/support-for-mortgage-interest/how-to-claim'},
+
+  {id:'dhp',cat:'housing',name:'Discretionary Housing Payment',desc:'Extra money from your council if Housing Benefit or UC housing costs do not cover your rent. Short-term help.',who:'Anyone already getting Housing Benefit or UC housing element who still has a shortfall.',amount:'Varies. Applied for through your local council. One-off or short-term payments.',missed:'Many people affected by the benefit cap or bedroom tax do not know they can apply for extra help from the council.',link:'https://www.gov.uk/government/publications/claiming-discretionary-housing-payments',apply:''},
+
+  {id:'pip',cat:'health',name:'Personal Independence Payment (PIP)',desc:'Help with extra living costs if you have a long-term health condition or disability. Not means-tested.',who:'Anyone 16+ to State Pension age with a condition that affects daily living or mobility for 3+ months.',amount:'From \u00a329/week to \u00a3188/week depending on needs. Two components: daily living and mobility.',missed:'You do not need to be out of work. Many working disabled people qualify. The assessment is based on how your condition affects you, not your diagnosis. From Nov 2026, new claimants need 4+ points on at least one daily living activity.',link:'https://www.gov.uk/pip',apply:'https://www.gov.uk/pip/how-to-claim'},
+
+  {id:'aa',cat:'health',name:'Attendance Allowance',desc:'For people over State Pension age who need help with personal care because of illness or disability.',who:'Anyone over State Pension age who needs help with daily living. Not means-tested.',amount:'\u00a376.70/week (lower rate) or \u00a3114.60/week (higher rate).',missed:'Hugely underclaimed. You do not need someone actually attending to you. If you need supervision, prompting, or help with things like washing, dressing, eating, or staying safe, you may qualify.',link:'https://www.gov.uk/attendance-allowance',apply:'https://www.gov.uk/attendance-allowance/how-to-claim'},
+
+  {id:'ca',cat:'carers',name:'Carer\'s Allowance',desc:'Payment if you spend at least 35 hours a week caring for someone who receives certain disability benefits.',who:'Anyone 16+ caring for someone 35+ hours/week who gets PIP daily living, Attendance Allowance, or similar. You must earn under \u00a3151/week after deductions.',amount:'\u00a381.90/week.',missed:'Many carers do not think of themselves as carers because they are looking after a family member. The earnings limit is low, but claiming builds National Insurance credits towards your pension.',link:'https://www.gov.uk/carers-allowance',apply:'https://www.gov.uk/carers-allowance/how-to-claim'},
+
+  {id:'ce',cat:'carers',name:'Carer Element (Universal Credit)',desc:'Extra money within your Universal Credit if you are a carer. Can be claimed alongside or instead of Carer\'s Allowance.',who:'UC claimants providing care for someone who gets a qualifying disability benefit for 35+ hours/week.',amount:'\u00a3198.31/month on top of your UC.',missed:'You can get the UC carer element even if you do not get Carer\'s Allowance (e.g. because you earn over the CA limit). Many people miss this.',link:'https://www.gov.uk/universal-credit/other-financial-support',apply:''},
+
+  {id:'whd',cat:'energy',name:'Warm Home Discount',desc:'A one-off discount on your electricity bill each winter.',who:'People on Pension Credit Guarantee Credit get it automatically. Others on low income may qualify through their energy supplier.',amount:'\u00a3150 off your electricity bill.',missed:'If you receive Pension Credit Guarantee Credit, it should be applied automatically. Others need to apply through their energy supplier. Many suppliers have limited places and close early.',link:'https://www.gov.uk/the-warm-home-discount-scheme',apply:'https://www.gov.uk/the-warm-home-discount-scheme/how-to-apply'},
+
+  {id:'cwp',cat:'energy',name:'Cold Weather Payment',desc:'\u00a325 for each 7-day period of very cold weather (freezing or below) between November and March.',who:'People receiving Pension Credit, Income Support, income-based JSA, income-related ESA, or UC with certain elements.',amount:'\u00a325 per cold spell. Paid automatically.',missed:'This is automatic if you qualify, but many people do not realise it is linked to Pension Credit. Another reason to claim Pension Credit if eligible.',link:'https://www.gov.uk/cold-weather-payment',apply:''},
+
+  {id:'bsp',cat:'bereavement',name:'Bereavement Support Payment',desc:'A tax-free lump sum and monthly payments if your spouse or civil partner has died.',who:'Anyone under State Pension age whose spouse or civil partner died and they paid National Insurance.',amount:'Lump sum of \u00a32,500 or \u00a33,500 plus up to 18 monthly payments of \u00a3100 or \u00a3350.',missed:'You must claim within 21 months of the death. Many people do not know about this or assume it is only for older people. It is not means-tested.',link:'https://www.gov.uk/bereavement-support-payment',apply:'https://www.gov.uk/bereavement-support-payment/how-to-claim'},
+
+  {id:'ba',cat:'income',name:'Budgeting Advance',desc:'An interest-free loan from the government to help with emergency costs, moving, starting a job, or funeral costs.',who:'Anyone on Universal Credit for 6+ months who needs help with a one-off expense. Must have less than \u00a31,000 in savings.',amount:'Up to \u00a3348 (single), \u00a3464 (couple), \u00a3812 (with children). Repaid from future UC payments.',missed:'Many people on UC do not know this exists. It can help cover upfront childcare costs, furniture, clothes for a job interview, or essential household items.',link:'https://www.gov.uk/universal-credit/other-financial-support',apply:''},
+
+  {id:'sf',cat:'income',name:'Sure Start Maternity Grant',desc:'A one-off \u00a3500 payment to help with the costs of a new baby.',who:'First-time parents (or if none of your children are under 16) who receive certain benefits. Must claim within 11 weeks before or 6 months after birth.',amount:'\u00a3500 one-off payment.',missed:'Only for your first child (or if you have no other children under 16). The time window is strict. Many parents miss the deadline.',link:'https://www.gov.uk/sure-start-maternity-grant',apply:'https://www.gov.uk/sure-start-maternity-grant/how-to-claim'},
+
+  {id:'fg',cat:'bereavement',name:'Funeral Expenses Payment',desc:'Help with funeral costs if you are on a low income and responsible for arranging a funeral.',who:'Anyone arranging a funeral who receives UC, Pension Credit, Housing Benefit, or certain other benefits.',amount:'Covers necessary burial or cremation fees plus up to \u00a31,000 for other costs.',missed:'Many families go into debt for funerals without knowing they can get help. Must be claimed within 6 months of the funeral.',link:'https://www.gov.uk/funeral-payments',apply:'https://www.gov.uk/funeral-payments/how-to-claim'},
+
+  {id:'sdp',cat:'health',name:'NHS Low Income Scheme',desc:'Help with health costs including prescriptions, dental, eye tests, glasses, and travel to hospital.',who:'Anyone on a low income. Full help if on UC with no earnings, partial help for others.',amount:'Free prescriptions, dental treatment, eye tests, glasses voucher, travel costs.',missed:'Many people pay for prescriptions when they are entitled to free ones. If you receive UC and have no earnings, or earn below a threshold, you automatically qualify. You can also apply via the HC1 form if not on benefits.',link:'https://www.gov.uk/help-nhs-costs',apply:'https://www.gov.uk/apply-nhs-low-income-scheme'},
+
+  {id:'suc',cat:'education',name:'Student Finance (Grants)',desc:'Maintenance grants, special support grants, and childcare grants for students from low-income families.',who:'Full-time students in higher education from households with income under \u00a325,000 for maximum grant.',amount:'Maintenance grants up to \u00a34,000+/year depending on household income. Childcare Grant up to 85% of costs.',missed:'Many mature students and parents returning to education do not know about the Childcare Grant or Parents Learning Allowance available through Student Finance.',link:'https://www.gov.uk/student-finance',apply:'https://www.gov.uk/student-finance/new-students'},
+
+  {id:'dla',cat:'health',name:'Disability Living Allowance (Children)',desc:'Help with extra costs of looking after a disabled child under 16.',who:'Children under 16 with a physical or mental health condition that means they need more care or supervision than other children their age.',amount:'Care: \u00a329-\u00a3110/week. Mobility: \u00a329-\u00a377/week.',missed:'Many parents do not claim because they feel their child\'s needs are not severe enough. The threshold is about needing more help than a child of the same age without a disability, not about severity.',link:'https://www.gov.uk/disability-living-allowance-children',apply:'https://www.gov.uk/disability-living-allowance-children/how-to-claim'},
+
+  {id:'spi',cat:'pension',name:'State Pension',desc:'Weekly payment from the government when you reach State Pension age, based on your National Insurance record.',who:'Anyone with 10+ qualifying years of National Insurance contributions. Full amount requires 35 years.',amount:'Up to \u00a3230.25/week (new State Pension from April 2025). Higher from April 2026.',missed:'Check your NI record for gaps. You may be able to buy voluntary contributions to fill gaps and increase your pension. Years spent caring for children or as a carer can count if you claimed Child Benefit or Carer\'s Allowance.',link:'https://www.gov.uk/check-state-pension',apply:'https://www.gov.uk/get-state-pension'},
+
+  {id:'tfc',cat:'children',name:'Tax-Free Childcare',desc:'Government tops up your childcare payments. For every \u00a38 you pay in, the government adds \u00a32.',who:'Working parents of children under 12 (17 if disabled) earning under \u00a3100,000.',amount:'Up to \u00a3500 every 3 months per child (\u00a32,000/year). \u00a34,000/year for disabled children.',missed:'Cannot be used alongside Universal Credit childcare support. You need to choose which is better for you. Many parents do not know they need to reconfirm every 3 months.',link:'https://www.gov.uk/tax-free-childcare',apply:'https://www.gov.uk/apply-for-tax-free-childcare'},
+
+  // === CREATIVE & ARTS GRANTS ===
+
+  {id:'nlpg',cat:'creative',name:'National Lottery Project Grants',desc:'Arts Council England\'s main open fund. Supports individual artists, community groups, and cultural organisations with projects in arts, libraries, and museums.',who:'Individual creative practitioners and organisations in England. All art forms, all career stages.',amount:'\u00a31,000 to \u00a3100,000. Most individual grants are under \u00a330,000.',missed:'Many independent artists assume this is only for organisations or established professionals. Individuals can apply. You do not need a track record with ACE. First-time applicants are welcome and there is dedicated guidance for them.',link:'https://www.artscouncil.org.uk/ProjectGrants',apply:'https://www.artscouncil.org.uk/ProjectGrants'},
+
+  {id:'dycp',cat:'creative',name:'Developing Your Creative Practice (DYCP)',desc:'Grants for individual creative practitioners in England to take their work to the next stage through research, training, travel, mentoring, or developing ideas.',who:'Independent creative and cultural practitioners in England at any career stage.',amount:'\u00a32,000 to \u00a312,000.',missed:'Paused until April 2026 but returning. While paused, equivalent R&D funding is available through National Lottery Project Grants. Many creatives do not realise DYCP covers non-production activities like research trips, skill development, and networking.',link:'https://www.artscouncil.org.uk/developing-creativity-and-culture/supporting-individual-creative-and-cultural-practitioners/our-funding-programmes-individuals',apply:''},
+
+  {id:'prsopen',cat:'creative',name:'PRS Foundation Open Fund',desc:'Grants for music creators of all genres and backgrounds at any career stage. Supports creation, performance, and promotion of new music.',who:'UK-based songwriters, composers, artists, bands, producers, and performers writing their own music or commissioning others.',amount:'Up to \u00a35,000. One application per calendar year.',missed:'Many independent and underground music creators do not know about this. It covers all genres including electronic music, and is open to artists without label backing. Previous recipients include Little Simz, Young Fathers, and Afrodeutsche.',link:'https://prsfoundation.com/funding-support/funding-music-creators/all-career-levels/the-open-fund-for-music-creators/',apply:'https://prsfoundation.com/funding-support/funding-music-creators/all-career-levels/the-open-fund-for-music-creators/'},
+
+  {id:'momentum',cat:'creative',name:'PPL Momentum Music Fund',desc:'Grants for UK-based artists and bands to break through to the next level. Covers recording, touring, and marketing.',who:'UK-based artists and bands with existing momentum (some releases, live activity, industry interest) who need funding to take the next step.',amount:'\u00a35,000 to \u00a315,000. Average grant around \u00a310,000.',missed:'Many artists at the critical middle stage (past starting out, not yet self-sustaining) miss this. It is specifically designed for that gap. Previous recipients include Sam Fender, Shygirl, Kae Tempest, and Knucks.',link:'https://prsfoundation.com/funding-support/funding-music-creators/next-steps/ppl-momentum-music-fund/',apply:'https://prsfoundation.com/funding-support/funding-music-creators/next-steps/ppl-momentum-music-fund/'},
+
+  {id:'hmuk',cat:'creative',name:'Help Musicians UK',desc:'Financial and wellbeing support for professional musicians. Includes creative development grants, hardship funding, and mental health services.',who:'Professional musicians in the UK at any career stage. Different funds have different criteria.',amount:'Varies by programme. Creative development, health and welfare, and retirement support available.',missed:'Many musicians do not realise Help Musicians offers mental health support (Music Minds Matter helpline), hardship grants for those in financial difficulty, and hearing health support, alongside creative funding.',link:'https://www.helpmusicians.org.uk/',apply:'https://www.helpmusicians.org.uk/'},
+
+  {id:'ymnext',cat:'creative',name:'Youth Music NextGen Fund',desc:'Grants for young music creators and music-adjacent creatives aged 18-25 to invest in their own projects.',who:'18-25 year olds (up to 30 if d/Deaf or disabled) based in England, Scotland, Wales, or Northern Ireland.',amount:'Up to \u00a32,500.',missed:'Specifically aimed at those whose lack of finance holds them back. You do not need formal music training or industry connections. Music-adjacent creatives (producers, engineers, event organisers, content creators) also qualify.',link:'https://youthmusic.org.uk/nextgen-fund',apply:'https://youthmusic.org.uk/nextgen-fund'},
+
+  {id:'csopen',cat:'creative',name:'Creative Scotland Open Fund',desc:'Funding for artists, writers, musicians, and other creative practitioners based in Scotland.',who:'Individual artists and creative practitioners based in Scotland.',amount:'Rolling fund. Various amounts depending on project.',missed:'If you are based in Scotland, this is your equivalent of Arts Council England funding. Many Scottish creatives apply to London-based funds without realising Creative Scotland has its own open fund for individuals.',link:'https://www.creativescotland.com/funding',apply:'https://www.creativescotland.com/funding'},
+
+  {id:'acw',cat:'creative',name:'Arts Council of Wales',desc:'Funding for artists and arts organisations based in Wales. Supports creation, development, and presentation of work.',who:'Artists and creative practitioners based in Wales.',amount:'Various. Individual grants available through multiple strands.',missed:'Welsh creatives often look to ACE first. Arts Council of Wales has dedicated funding for Welsh-based practitioners and the Anthem programme specifically supports Welsh music.',link:'https://arts.wales/funding',apply:'https://arts.wales/funding'},
+
+  {id:'acni',cat:'creative',name:'Arts Council of Northern Ireland',desc:'Funding for individual artists and arts organisations based in Northern Ireland across all art forms.',who:'Artists and creative practitioners based in Northern Ireland.',amount:'Various. Individual grants from small project support to major awards.',missed:'NI-based creatives sometimes apply to London-based funds when ACNI has dedicated funding. The SIAP (Support for the Individual Artist Programme) offers grants for individual creative development.',link:'https://artscouncil-ni.org/funding',apply:'https://artscouncil-ni.org/funding'},
+
+  {id:'wmm',cat:'creative',name:'Women Make Music',desc:'PRS Foundation fund specifically supporting women, trans, and non-binary music creators to develop and create new music.',who:'Women, trans, and non-binary music creators based in the UK.',amount:'Up to \u00a35,000.',missed:'Exists specifically to address the gender gap in music. Many eligible creators do not apply because they do not realise there is a dedicated fund for them separate from the general PRS Open Fund.',link:'https://prsfoundation.com/funding-support/funding-music-creators/women-make-music/',apply:'https://prsfoundation.com/funding-support/funding-music-creators/women-make-music/'},
+
+  {id:'soa',cat:'creative',name:'Society of Authors Grants',desc:'Multiple grant funds for writers at different stages, covering fiction, non-fiction, poetry, illustration, and translation.',who:'Writers, illustrators, and literary translators. Some funds require Society membership, others do not.',amount:'Varies by fund. Typically \u00a32,000 to \u00a36,000. Some up to \u00a310,000+.',missed:'There are over a dozen separate funds covering specific needs: works in progress, research travel, medical emergencies, authors\' families in need. Many writers only know about the main grants and miss the specialist ones.',link:'https://www.societyofauthors.org/grants',apply:'https://www.societyofauthors.org/grants'},
+
+  {id:'rlf',cat:'creative',name:'Royal Literary Fund',desc:'Financial support for published writers experiencing financial difficulty. Also runs fellowships placing writers in universities.',who:'Published writers (at least one full-length work with a mainstream publisher) facing financial hardship.',amount:'Grants typically \u00a32,000 to \u00a38,000. Emergency grants available.',missed:'Many published writers do not apply because they feel embarrassed about financial difficulty or assume they are not eligible. The RLF exists specifically for this situation. Self-published work does not currently qualify.',link:'https://www.rlf.org.uk/financial-support/',apply:'https://www.rlf.org.uk/financial-support/'},
+
+  {id:'bfi',cat:'creative',name:'BFI Network Funding',desc:'Development and production funding for new and emerging filmmakers. Short films, features, and development projects.',who:'UK-based filmmakers (writers, directors, producers) at an early stage in their careers.',amount:'Short film production up to \u00a350,000. Development funding varies.',missed:'Many aspiring filmmakers do not realise the BFI funds individuals directly, not just production companies. You do not need industry connections to apply. First-time filmmakers are actively encouraged.',link:'https://network.bfi.org.uk/funding',apply:'https://network.bfi.org.uk/funding'},
+
+  {id:'elephant',cat:'creative',name:'Elephant Trust',desc:'Small grants for visual artists and galleries to create new, innovative work. Prioritises projects that develop new ideas.',who:'Individual visual artists and small galleries in the UK.',amount:'Most grants \u00a3500 to \u00a32,000.',missed:'Small amounts but low competition compared to ACE funds. Specifically values innovation and risk-taking. Turnaround is relatively fast. Good for visual artists who find ACE applications intimidating.',link:'https://www.elephanttrust.org.uk/',apply:'https://www.elephanttrust.org.uk/'},
+
+  {id:'jerwood',cat:'creative',name:'Jerwood Arts',desc:'Supports early-career artists across visual arts, dance, theatre, music, and writing through commissions, residencies, and exhibitions.',who:'Early-career artists and makers in the UK across all disciplines.',amount:'Varies by programme. Commissions, residencies, and exhibition opportunities rather than open grant rounds.',missed:'Jerwood programmes are prestigious but many early-career artists assume they are not established enough. The whole point is supporting people at the start. Check their open calls regularly.',link:'https://jerwoodarts.org/',apply:'https://jerwoodarts.org/'},
+
+  {id:'crafts',cat:'creative',name:'Crafts Council Programmes',desc:'Development programmes, bursaries, and opportunities for makers and craft practitioners in England.',who:'Makers and craft practitioners in England at various career stages.',amount:'Varies. Bursaries, development programmes, and exhibition opportunities.',missed:'Craft is often overlooked in arts funding conversations. If your practice involves making physical objects (ceramics, textiles, furniture, jewellery, etc.), the Crafts Council has dedicated support that does not require competing against all art forms.',link:'https://www.craftscouncil.org.uk/',apply:'https://www.craftscouncil.org.uk/'},
+
+  {id:'stageone',cat:'creative',name:'Stage One Bursaries',desc:'Support for new theatre producers to develop skills and produce work. Bursaries, mentoring, and seed funding.',who:'Emerging theatre producers in the UK.',amount:'Bursaries and seed commissions. Amounts vary by programme.',missed:'Most theatre funding goes to companies and venues. Stage One specifically supports individual producers, which is unusual in the sector.',link:'https://stageone.uk.com/',apply:'https://stageone.uk.com/'},
+
+  {id:'powerup',cat:'creative',name:'Power Up',desc:'Long-term initiative supporting Black music creators and industry professionals. Grants, mentoring, and career development.',who:'Black music creators, professionals, and executives in the UK.',amount:'Grants plus mentoring, networking, and career development support.',missed:'A dedicated, long-term programme specifically addressing anti-Black racism and racial disparities in music. Not a one-off fund. Delivered by PRS Foundation with support from Creative Scotland and others.',link:'https://prsfoundation.com/power-up/',apply:'https://prsfoundation.com/power-up/'},
+
+  // === COMMUNITY & ENTERPRISE ===
+
+  {id:'nlcf',cat:'community',name:'National Lottery Community Fund (Awards for All)',desc:'Small grants for community groups, charities, and voluntary organisations running projects that matter to local people.',who:'Not-for-profit groups, charities, schools, statutory bodies, and social enterprises across the UK.',amount:'\u00a3300 to \u00a310,000.',missed:'Many small community groups do not realise they can apply without being a registered charity. Constituted groups (with a simple governing document and bank account) are eligible. Very accessible for first-time applicants.',link:'https://www.tnlcommunityfund.org.uk/funding/under10k',apply:'https://www.tnlcommunityfund.org.uk/funding/under10k'},
+
+  {id:'flc',cat:'community',name:'Fairer Life Chances (National Lottery)',desc:'Larger grants for community projects tackling poverty, disadvantage, or discrimination.',who:'Community organisations, charities, and social enterprises across the UK.',amount:'\u00a320,001 to \u00a3500,000.',missed:'For organisations running substantial projects addressing inequality. If your community group has grown beyond what Awards for All covers, this is the next step.',link:'https://www.tnlcommunityfund.org.uk/',apply:'https://www.tnlcommunityfund.org.uk/'},
+
+  {id:'kings',cat:'enterprise',name:'The King\'s Trust (formerly Prince\'s Trust)',desc:'Funding, mentoring, and training for young people aged 18-30 who want to start or grow a business.',who:'18-30 year olds in the UK who are unemployed, underemployed, or struggling financially.',amount:'Start-up grants, low-interest loans, and enterprise programmes. Plus mentoring and training.',missed:'Not just for tech startups. Supports creative businesses, freelancers, market traders, and sole traders. The mentoring and practical support can be more valuable than the money.',link:'https://www.kingstrust.org.uk/',apply:'https://www.kingstrust.org.uk/'},
+
+  {id:'sul',cat:'enterprise',name:'Start Up Loans',desc:'Government-backed personal loans for new businesses. Fixed interest, repaid over 1-5 years. Includes free mentoring.',who:'Anyone 18+ in the UK starting or growing a business that has been trading for less than 36 months.',amount:'Up to \u00a325,000 per person at 6% fixed interest. Average loan around \u00a37,500.',missed:'Many people do not realise these are personal loans (not business loans) so you do not need a limited company. Sole traders and freelancers qualify. The free mentoring is a significant benefit.',link:'https://www.startuploans.co.uk/',apply:'https://www.startuploans.co.uk/'},
+
+  {id:'turn2us',cat:'community',name:'Turn2us Grants Search',desc:'Free tool that searches thousands of charitable grants you may be eligible for based on your circumstances. Not a grant itself but a way to find them.',who:'Anyone in the UK. Searches based on your age, location, occupation, health, and circumstances.',amount:'Searches over 3,000 charitable funds. Many people find grants worth \u00a3hundreds to \u00a3thousands they had no idea existed.',missed:'This is one of the most valuable tools most people have never heard of. It searches charitable trust funds that are impossible to find through Google. Completely free, anonymous, and takes about 10 minutes.',link:'https://grants-search.turn2us.org.uk/',apply:'https://grants-search.turn2us.org.uk/'},
+
+  {id:'lwa',cat:'community',name:'Local Welfare Assistance',desc:'Emergency help from your local council for people in crisis. Can cover food, fuel, essential items, and emergency housing.',who:'Anyone in financial crisis. Criteria vary by council. Usually need to be referred or demonstrate urgent need.',amount:'Varies by council. Can include food vouchers, fuel payments, furniture, white goods, and emergency accommodation.',missed:'Every council has one but they go by different names and are almost impossible to find online. Ask at your local council, Jobcentre, or Citizens Advice. From April 2026 being replaced by the Crisis and Resilience Fund with \u00a31 billion in funding.',link:'https://www.gov.uk/find-local-council',apply:''},
+
+  {id:'social',cat:'community',name:'Social Tariffs (Broadband & Mobile)',desc:'Discounted broadband and mobile contracts for people on Universal Credit and other benefits. Same service, much lower price.',who:'People receiving Universal Credit, Pension Credit, or certain other means-tested benefits.',amount:'Broadband from \u00a312-15/month instead of \u00a330-50. BT, Virgin Media O2, Sky, Vodafone, and others offer them.',missed:'Massively underclaimed. Most providers do not advertise these. You usually need to call and specifically ask for the social tariff. It is not available through normal sign-up pages. Ofcom estimates over 4 million eligible households are not using one.',link:'https://www.ofcom.org.uk/phones-and-broadband/saving-money/social-tariffs',apply:''},
+
+  // === SOFTWARE & TECH ===
+
+  {id:'iuksmart',cat:'enterprise',name:'Innovate UK Smart Grants',desc:'Funding for innovative projects from UK registered businesses of any size, in any sector. Covers software, hardware, services, and processes that are genuinely new.',who:'UK registered businesses. Sole traders with a registered business can apply. Projects must demonstrate innovation, not just software development.',amount:'Typically \u00a325,000 to \u00a3500,000. SMEs can claim up to 70% of project costs.',missed:'Many small software businesses assume Innovate UK is only for lab-based R&D or large companies. It covers commercial software innovation. The application is competitive but the amounts are significant. Creative industries is now one of six priority sectors.',link:'https://www.ukri.org/councils/innovate-uk/',apply:'https://apply-for-innovation-funding.service.gov.uk/competition/search'},
+
+  {id:'ukgames',cat:'enterprise',name:'UK Games Fund',desc:'Grants and business support for early-stage indie game developers in the UK. Covers prototyping, development, and bringing games to market.',who:'UK-based indie game developers and small studios at early stage. Individual developers and small teams.',amount:'Varies by programme. Grants plus mentoring, business development support, and industry networking.',missed:'Many solo developers and tiny teams do not realise they can apply. You do not need to be a studio. The fund specifically targets early-stage projects with potential, not polished products.',link:'https://ukgamesfund.com/',apply:'https://ukgamesfund.com/'},
+
+  {id:'rdtax',cat:'enterprise',name:'R&D Tax Credits',desc:'Tax relief for companies spending money on research and development. Software development often qualifies as R&D if it involves technical uncertainty or innovation.',who:'UK limited companies paying Corporation Tax that are working on qualifying R&D projects. Must be solving a technical problem where the solution is not readily available.',amount:'SMEs can claim an additional deduction of up to 86% of qualifying R&D costs, or a tax credit of up to 10% if loss-making. Can be worth thousands per year.',missed:'Many small software companies do not claim because they think R&D means lab coats and test tubes. Building novel software, solving technical challenges, and developing new processes all qualify. If you are writing code that does something nobody else has done in the same way, it is worth investigating.',link:'https://www.gov.uk/guidance/corporation-tax-research-and-development-rd-relief',apply:'https://www.gov.uk/guidance/corporation-tax-research-and-development-rd-relief'},
+
+  {id:'vgtr',cat:'enterprise',name:'Video Games Tax Relief (VGTR)',desc:'Tax relief for UK video game development companies. Reduces the cost of production by allowing companies to claim back a percentage of qualifying expenditure.',who:'UK companies developing video games that are certified as British by the BFI. The game must pass a cultural test or qualify through an international co-production treaty.',amount:'Up to 25% of qualifying core expenditure can be claimed as a payable tax credit.',missed:'Many indie developers do not realise their game could qualify as culturally British through the BFI cultural test. The test is more accessible than it sounds. If your game is set in the UK, made by UK developers, or has British cultural content, it is worth applying.', link:'https://www.bfi.org.uk/apply-british-certification-tax-relief/video-games-tax-relief',apply:'https://www.bfi.org.uk/apply-british-certification-tax-relief/video-games-tax-relief'},
+
+  {id:'epic',cat:'enterprise',name:'Epic MegaGrants',desc:'Grants from Epic Games for developers, creators, and artists using or contributing to the Unreal Engine ecosystem. Not UK-specific but open to UK applicants.',who:'Game developers, filmmakers, educators, software tool creators, and open-source contributors worldwide. Individuals and teams of any size.',amount:'Typically $5,000 to $500,000 depending on project scope. Over $100 million awarded across 2,000+ projects to date.',missed:'Many UK indie developers assume this is only for large studios or AAA projects. Solo developers and tiny teams have received grants. Open-source tools, educational projects, and creative non-game uses of Unreal Engine also qualify. You do not need a finished product to apply.',link:'https://www.unrealengine.com/en-US/megagrants',apply:'https://www.unrealengine.com/en-US/megagrants'},
+
+  // === EQUALITY ===
+
+  {id:'phoenix',cat:'equality',name:'The Phoenix Way',desc:'A \u00a350 million partnership between the National Lottery Community Fund and The Ubele Initiative. Boosts funding and support to Black and minoritised community-led charities and grassroots groups.',who:'Black and minoritised community-led charities, grassroots groups, and social enterprises across the UK.',amount:'Various. Part of a 5-year, \u00a350 million programme.',missed:'Many small Black-led community organisations do not know this exists. It specifically addresses the structural underfunding of minoritised community groups, which research has shown receive a disproportionately small share of charitable funding.',link:'https://www.tnlcommunityfund.org.uk/',apply:'https://www.tnlcommunityfund.org.uk/'},
+
+  {id:'bfn',cat:'equality',name:'Black Funding Network',desc:'A giving circle that connects donors directly with small Black-led community organisations. Regular crowdfunding events and grant rounds.',who:'Small Black-led grassroots organisations in the UK that are often overlooked by mainstream funders.',amount:'Varies. Grants come through crowdfunding events and direct giving circles.',missed:'Mainstream funding routes consistently underfund Black-led organisations. BFN exists to close that gap through collective giving. If you run a small Black-led community group, this is worth knowing about.',link:'https://www.blackfundingnetwork.org/',apply:'https://www.blackfundingnetwork.org/'},
+
+  {id:'lloyds',cat:'equality',name:'Lloyds Bank Foundation Racial Equity Fund',desc:'Three-year unrestricted grants for charities and CICs led by and for Black, Asian, and minority ethnic communities, tackling economic inequity.',who:'BAME-led charities and CICs in England and Wales (outside London) with annual income between \u00a325,000 and \u00a3500,000.',amount:'Up to \u00a375,000 over three years. Unrestricted, so organisations choose how to use it.',missed:'Unrestricted funding is rare and valuable. Most grants tie money to specific projects. This fund trusts organisations to know what they need. The outside-London focus is deliberate, addressing regional inequality in funding.',link:'https://www.lloydsbankfoundation.org.uk/',apply:'https://www.lloydsbankfoundation.org.uk/'},
+
+  {id:'rrj',cat:'equality',name:'Resourcing Racial Justice',desc:'A fund created by people of colour to support individuals and groups working towards racial justice in their communities.',who:'Individuals and groups in the UK working on racial justice. Led by and for people of colour.',amount:'\u00a35,000 to \u00a350,000.',missed:'One of the few funds in the UK created and led by people of colour for racial justice work. Not just for established organisations. Grassroots groups and individuals doing community-level work are the target.',link:'https://www.resourcingracialjustice.org/',apply:'https://www.resourcingracialjustice.org/'},
+
+  // === MIGRATION ===
+
+  {id:'refcouncil',cat:'migration',name:'Refugee Council',desc:'Practical support for refugees and asylum seekers including advice on the asylum process, housing, employment, ESOL classes, and children and young people\'s services.',who:'Refugees and people seeking asylum in the UK.',amount:'Not a grant. Free advice, casework, ESOL classes, therapeutic support, and employment programmes.',missed:'Many refugees and asylum seekers do not know they can get free, specialist advice separate from their legal representative. The Refugee Council also runs specific programmes for unaccompanied children and young people.',link:'https://www.refugeecouncil.org.uk/',apply:'https://www.refugeecouncil.org.uk/get-support/'},
+
+  {id:'mighelp',cat:'migration',name:'Migrant Help',desc:'Free advice and support for asylum seekers in the UK. Runs the Asylum Helpline on behalf of the Home Office.',who:'Asylum seekers and refugees. Also supports victims of modern slavery and trafficking.',amount:'Free advice service. Helpline: 0808 8010 503 (freephone). Covers asylum support, accommodation, and signposting to other services.',missed:'This is the official helpline for asylum support but many people do not know it exists or that it is free. Available in multiple languages. Can help with problems with accommodation, missing support payments, and understanding the asylum process.',link:'https://www.migranthelpuk.org/',apply:'https://www.migranthelpuk.org/'},
+
+  {id:'ruth',cat:'migration',name:'Ruth Hayman Trust',desc:'Small educational grants for adults who have come to settle in the UK and whose first language is not English.',who:'Adults settling in the UK whose first language is not English and who cannot afford the full cost of their studies.',amount:'Up to \u00a3500 for education and training costs.',missed:'A small but meaningful grant that can cover course fees, books, travel to classes, or exam fees. Many people settling in the UK do not know about it. Can make the difference between accessing education or not.',link:'https://www.ruthhaymantrust.org.uk/',apply:'https://www.ruthhaymantrust.org.uk/'},
+
+  {id:'sanctuary',cat:'migration',name:'University Sanctuary Scholarships',desc:'Many UK universities offer full or partial scholarships for refugees and asylum seekers. Covers tuition fees and sometimes living costs.',who:'Refugees and asylum seekers applying to UK universities. Some require refugee status, others accept asylum seekers.',amount:'Varies by university. Can cover full tuition fees (\u00a39,250+/year) and sometimes maintenance. Some offer foundation year programmes.',missed:'Over 100 UK universities now offer some form of sanctuary scholarship, but there is no central application. You have to check each university individually. The Student Action for Refugees (STAR) network maintains the most complete list.',link:'https://star-network.org.uk/access-to-university/scholarships/',apply:'https://star-network.org.uk/access-to-university/scholarships/'},
+
+  {id:'nrpf',cat:'migration',name:'No Recourse to Public Funds (NRPF) Support',desc:'If your visa says "no recourse to public funds" you cannot claim most benefits. But there is still support available, especially if you have children or are destitute.',who:'People with a visa condition of No Recourse to Public Funds who are destitute or have children.',amount:'Local authority support under Section 17 (Children Act) or Section 21 (Care Act). Can include accommodation and subsistence. Also: free school meals may still be available, and education funding is not a "public fund."',missed:'Many people with NRPF assume they are entitled to nothing. This is not true. If you have children and are destitute, your local authority has a legal duty to support you. Education funding is also separate from public funds. The NRPF Network can advise.',link:'https://www.nrpfnetwork.org.uk/',apply:'https://www.nrpfnetwork.org.uk/'},
+
+  // === LGBTQIA+ ===
+
+  {id:'switchboard',cat:'lgbtqia',name:'Switchboard LGBT+ Helpline',desc:'Confidential listening, information, and support for LGBTQIA+ people. Phone, email, and instant messaging. Run by LGBTQIA+ volunteers.',who:'Anyone who wants to talk about sexuality, gender identity, sexual health, or emotional wellbeing.',amount:'Free. Phone: 0800 0119 100 (10am-10pm, 7 days). Also email and webchat.',missed:'Running for over 50 years. Many people do not know this exists or assume helplines are only for crisis situations. You can call to talk through anything, not just emergencies.',link:'https://switchboard.lgbt/',apply:''},
+
+  {id:'lgbtfound',cat:'lgbtqia',name:'LGBT Foundation',desc:'National charity based in Manchester providing health, wellbeing, and community services for LGBTQIA+ people. Includes talking therapies, sexual health, and trans-specific services.',who:'Anyone identifying as LGBTQIA+. Services available nationally and locally in Greater Manchester.',amount:'Free services including counselling, sexual health, social groups, and advice.',missed:'Serves over 40,000 people a year but many LGBTQIA+ people outside Manchester do not realise their services extend nationally, including online support and resources.',link:'https://lgbt.foundation/',apply:'https://lgbt.foundation/'},
+
+  {id:'galop',cat:'lgbtqia',name:'Galop',desc:'The UK LGBTQ+ anti-abuse charity. Specialist support for domestic abuse, sexual violence, hate crime, conversion therapy, and forced marriage.',who:'LGBTQ+ people who have experienced abuse or violence of any kind.',amount:'Free. Helpline: 0800 999 5428 (Mon-Thu 10am-8pm, Fri 10am-4pm). Also email and webchat.',missed:'Many LGBTQ+ people experiencing domestic abuse do not contact mainstream services because they fear not being understood. Galop is run by and for LGBTQ+ people. They also have a specific National Conversion Therapy Helpline.',link:'https://galop.org.uk/',apply:'https://galop.org.uk/'},
+
+  {id:'mermaids',cat:'lgbtqia',name:'Mermaids',desc:'Support for transgender, non-binary, and gender-diverse children and young people up to age 20, and their families.',who:'Trans and gender-diverse young people under 20, and their parents, carers, and families.',amount:'Free. Helpline: 0808 801 0400 (Mon-Fri 9am-9pm). Text MERMAIDS to 85258 (24/7). Also webchat.',missed:'Many parents of gender-questioning children do not know where to turn. Mermaids supports families as well as young people directly, including local peer support groups.',link:'https://mermaidsuk.org.uk/',apply:'https://mermaidsuk.org.uk/'},
+
+  {id:'akt',cat:'lgbtqia',name:'akt (Albert Kennedy Trust)',desc:'Supports LGBTQ+ young people aged 16-25 who are facing or experiencing homelessness, or living in a hostile environment.',who:'LGBTQ+ young people aged 16-25 in the UK who are homeless or at risk of homelessness.',amount:'Free support including emergency accommodation, advice, mentoring, and help finding safe housing.',missed:'LGBTQ+ youth homelessness is significantly higher than the general population. Many young people do not know there is a specialist service. akt can help whether you have been kicked out, feel unsafe at home, or are sofa-surfing.',link:'https://www.akt.org.uk/',apply:'https://www.akt.org.uk/'},
+
+  {id:'stonehouse',cat:'lgbtqia',name:'Stonewall Housing',desc:'Specialist housing advice and support for LGBTQ+ people in the UK. Helps with homelessness, housing rights, and finding safe accommodation.',who:'Anyone identifying as LGBTQ+ who needs housing advice or support.',amount:'Free. Phone: 0800 6 404 404. Also webchat and email.',missed:'Housing issues disproportionately affect LGBTQ+ people, particularly trans people and those fleeing domestic abuse. Stonewall Housing understands these specific circumstances in ways that general housing services may not.',link:'https://stonewallhousing.org/',apply:'https://stonewallhousing.org/'},
+
+  {id:'consortium',cat:'lgbtqia',name:'LGBT+ Futures: Equity Fund',desc:'Grants for LGBTQ+ organisations, with priority for work with under-represented communities including disabled, Black and Asian, and trans people.',who:'LGBTQ+ community organisations and groups in the UK.',amount:'\u00a3100 to \u00a325,000. Administered by the LGBT+ Consortium.',missed:'Prioritises intersectional work. If your organisation supports LGBTQ+ people who also face other forms of marginalisation (disability, race, poverty), this fund is specifically designed for that overlap.',link:'https://www.consortium.lgbt/grantgiving/',apply:'https://www.consortium.lgbt/grantgiving/'},
+
+  {id:'pinktherapy',cat:'lgbtqia',name:'Pink Therapy',desc:'Directory of LGBTQIA+-affirming therapists and counsellors across the UK. Helps you find trusted, non-judgemental mental health support.',who:'Anyone who identifies as LGBTQIA+ and is looking for a therapist who understands their experience.',amount:'Directory is free to search. Therapy costs vary by practitioner. Some offer reduced rates.',missed:'Many LGBTQIA+ people avoid therapy because of previous negative experiences with practitioners who did not understand their identity. Pink Therapy therapists are vetted for LGBTQIA+ competence.',link:'https://www.pinktherapy.com/',apply:'https://www.pinktherapy.com/'},
+
+  // === SUPPORT & HELPLINES ===
+
+  {id:'samaritans',cat:'support',name:'Samaritans',desc:'24-hour emotional support for anyone in distress or struggling to cope. You do not have to be suicidal to call.',who:'Anyone. No restrictions on age, circumstance, or reason for calling.',amount:'Free. Phone: 116 123 (24 hours, 7 days). Email: jo@samaritans.org. Also Welsh language line: 0808 164 0123.',missed:'Many people think Samaritans is only for people who are suicidal. It is for anyone having a difficult time. You can call about money worries, relationship problems, loneliness, or anything that feels overwhelming. The email service is valuable for people who find it hard to speak on the phone.',link:'https://www.samaritans.org/',apply:''},
+
+  {id:'cab',cat:'support',name:'Citizens Advice',desc:'Free, confidential advice on benefits, debt, housing, employment, consumer rights, immigration, and more. Available online, by phone, and in person at local offices.',who:'Anyone in England and Wales. Citizens Advice Scotland and Citizens Advice Northern Ireland run separately.',amount:'Free. Phone: 0800 144 8848 (England). Online advice at citizensadvice.org.uk. Local offices for face-to-face help.',missed:'Citizens Advice helps with almost everything and many people do not realise the breadth of what they cover. They can check your benefit entitlements, write letters to creditors, help with employment tribunals, and advise on immigration. The "Help to Claim" service specifically supports Universal Credit applications.',link:'https://www.citizensadvice.org.uk/',apply:'https://www.citizensadvice.org.uk/about-us/contact-us/'},
+
+  {id:'mind',cat:'support',name:'Mind',desc:'Mental health charity providing advice and support. Infoline for mental health information, plus local Mind centres across England and Wales offering counselling and community support.',who:'Anyone experiencing a mental health problem or supporting someone who is.',amount:'Free. Infoline: 0300 123 3393 (Mon-Fri 9am-6pm). Text: 86463. Also email and webchat. Local Mind centres offer in-person support.',missed:'Many people do not know about local Mind centres, which offer services like counselling, peer support groups, employment help, and crisis support in your area. These are often available at low or no cost.',link:'https://www.mind.org.uk/',apply:'https://www.mind.org.uk/information-support/local-minds/'},
+
+  {id:'shelter',cat:'support',name:'Shelter',desc:'Housing and homelessness charity. Free advice on eviction, rent arrears, mortgage problems, disrepair, homelessness, and your housing rights.',who:'Anyone in England or Scotland with a housing problem. Shelter Cymru covers Wales.',amount:'Free. Phone: 0808 800 4444 (England, Mon-Fri 8am-8pm, weekends 9am-5pm). Also webchat and local advice centres.',missed:'You do not have to be homeless to contact Shelter. If you are behind on rent, facing eviction, living in unsafe conditions, or struggling with your mortgage, they can help. Many people wait until crisis point when earlier advice could have prevented it.',link:'https://www.shelter.org.uk/',apply:'https://www.shelter.org.uk/'},
+
+  {id:'stepchange',cat:'support',name:'StepChange Debt Charity',desc:'Free debt advice and practical solutions. Helps you understand your options, set up payment plans, and deal with creditors.',who:'Anyone in the UK struggling with debt. Completely free, no fees ever.',amount:'Free. Phone: 0800 138 1111 (Mon-Fri 8am-8pm, Sat 8am-4pm). Also online debt advice tool.',missed:'Many people in debt pay for advice they could get free, or avoid getting help because they feel ashamed. StepChange is a charity, never charges fees, and will not judge you. They can set up Debt Management Plans, help with IVAs, and negotiate directly with creditors on your behalf.',link:'https://www.stepchange.org/',apply:'https://www.stepchange.org/'},
+
+  {id:'nda',cat:'support',name:'National Domestic Abuse Helpline',desc:'24-hour helpline for anyone experiencing domestic abuse. Run by Refuge. Confidential support, safety planning, and help finding emergency accommodation.',who:'Anyone experiencing domestic abuse, or concerned about someone who is. All genders.',amount:'Free. Phone: 0808 2000 247 (24 hours, 7 days). Also live chat via the Refuge website.',missed:'Domestic abuse is not only physical. Controlling behaviour, financial abuse, coercion, and threats all count. Many people do not recognise what they are experiencing as abuse, or assume the helpline is only for women. It is for everyone.',link:'https://www.nationaldahelpline.org.uk/',apply:'https://www.nationaldahelpline.org.uk/'},
+
+  {id:'legalaid',cat:'support',name:'Legal Aid',desc:'Free legal help if you are on a low income and face a legal problem in housing, debt, family, immigration, welfare benefits, or certain other areas. Covers advice, representation, and court costs.',who:'Anyone on a low income or receiving certain benefits. Means-tested. Covers specific categories of law, not everything.',amount:'Free if you qualify. Covers solicitor costs, court fees, and representation. Check eligibility online in minutes.',missed:'Most people think Legal Aid was abolished. It was heavily cut in 2012 but it still exists for housing disputes, debt, family cases involving domestic abuse or child protection, immigration and asylum, welfare benefits appeals, and more. If you are facing eviction, being chased by creditors, or appealing a benefits decision, you may qualify.',link:'https://www.gov.uk/legal-aid',apply:'https://www.gov.uk/check-legal-aid'},
+
+  {id:'lawcentres',cat:'support',name:'Law Centres',desc:'Free legal advice from qualified solicitors. Funded by legal aid and grants. Specialise in social welfare law: housing, debt, employment, immigration, and welfare benefits.',who:'Anyone who cannot afford a solicitor. No means test for initial advice at most Law Centres.',amount:'Free. Around 40 Law Centres across England, Wales, and Northern Ireland.',missed:'Many people do not know Law Centres exist. They are not high street solicitors. They are community-based legal practices that give free advice and representation to people who would otherwise have none. If you have a legal problem and no money, start here.',link:'https://www.lawcentres.org.uk/',apply:'https://www.lawcentres.org.uk/i-am-looking-for-a-law-centre'},
+
+  {id:'cla',cat:'support',name:'Civil Legal Advice',desc:'The government\'s free legal advice helpline for people who qualify for legal aid. Covers debt, housing, family, and education law.',who:'Anyone in England and Wales who qualifies for legal aid. Means-tested (checked on the call).',amount:'Free. Phone: 0345 345 4345 (Mon-Fri 9am-8pm, Sat 9am-12:30pm). Also online chat.',missed:'This is the official gateway to legal aid but almost nobody knows the number. If you think you might qualify for legal aid but do not know where to start, this is the call to make. They check your eligibility and connect you with a legal aid solicitor.',link:'https://www.gov.uk/civil-legal-advice',apply:''},
+];
+
+var CATEGORIES = [
+  {id:'bereavement',label:'Bereavement',col:'var(--cat-bereavement)'},
+  {id:'carers',label:'Carers',col:'var(--cat-carers)'},
+  {id:'children',label:'Children & Family',col:'var(--cat-children)'},
+  {id:'community',label:'Community',col:'var(--cat-community)'},
+  {id:'creative',label:'Creative & Arts',col:'var(--cat-creative)'},
+  {id:'education',label:'Education',col:'var(--cat-education)'},
+  {id:'energy',label:'Energy & Heating',col:'var(--cat-energy)'},
+  {id:'enterprise',label:'Enterprise',col:'var(--cat-enterprise)'},
+  {id:'equality',label:'Equality',col:'var(--cat-equality)'},
+  {id:'health',label:'Health & Disability',col:'var(--cat-health)'},
+  {id:'housing',label:'Housing',col:'var(--cat-housing)'},
+  {id:'income',label:'Income',col:'var(--cat-income)'},
+  {id:'lgbtqia',label:'LGBTQIA+',col:'var(--cat-lgbtqia)'},
+  {id:'migration',label:'Migration',col:'var(--cat-migration)'},
+  {id:'pension',label:'Pension',col:'var(--cat-pension)'},
+  {id:'support',label:'Support',col:'var(--cat-support)'},
+];
+
+// === STATE ===
+var STORE_KEY='kin037-status';
+var activeCat=null;
+var searchTerm='';
+
+function loadStatus(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+function saveStatus(s){localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+// === INIT ===
+function init(){
+  initTheme();
+  renderCats();
+  renderList();
+  document.getElementById('searchInput').addEventListener('input',function(){searchTerm=this.value.toLowerCase().trim();renderList();});
+}
+
+function renderCats(){
+  var row=document.getElementById('catRow');
+  var html='<button class="cat-pill'+(activeCat===null?' active':'')+'" onclick="setCat(null)" style="color:var(--text-secondary)">All</button>';
+  CATEGORIES.forEach(function(c){
+    html+='<button class="cat-pill'+(activeCat===c.id?' active':'')+'" onclick="setCat(\''+c.id+'\')" style="color:'+c.col+'">'+escHtml(c.label)+'</button>';
+  });
+  row.innerHTML=html;
+}
+
+function setCat(id){activeCat=id;renderCats();renderList();}
+
+function renderList(){
+  var status=loadStatus();
+  var filtered=BENEFITS.filter(function(b){
+    if(activeCat&&b.cat!==activeCat) return false;
+    if(searchTerm){
+      var hay=(b.name+' '+b.desc+' '+b.who+' '+(b.missed||'')).toLowerCase();
+      return hay.indexOf(searchTerm)>=0;
+    }
+    return true;
+  });
+
+  // Stats
+  var looking=0,applied=0,receiving=0;
+  BENEFITS.forEach(function(b){
+    var s=status[b.id];
+    if(s==='looking') looking++;
+    if(s==='applied') applied++;
+    if(s==='receiving') receiving++;
+  });
+
+  var statHtml='';
+  if(looking||applied||receiving){
+    statHtml='<div class="stat-row">';
+    statHtml+='<div class="stat-card"><div class="stat-label">Looking into</div><div class="stat-value" style="color:var(--accent)">'+looking+'</div></div>';
+    statHtml+='<div class="stat-card"><div class="stat-label">Applied</div><div class="stat-value" style="color:var(--warning)">'+applied+'</div></div>';
+    statHtml+='<div class="stat-card"><div class="stat-label">Receiving</div><div class="stat-value" style="color:var(--success)">'+receiving+'</div></div>';
+    statHtml+='</div>';
+  }
+  document.getElementById('statRow').innerHTML=statHtml;
+
+  // Benefits
+  var list=document.getElementById('benefitsList');
+  if(filtered.length===0){
+    list.innerHTML='<div class="empty-msg">No benefits match your search.</div>';
+    return;
+  }
+
+  var html='';
+  filtered.forEach(function(b){
+    var cat=CATEGORIES.find(function(c){return c.id===b.cat;});
+    var catCol=cat?cat.col:'var(--text-secondary)';
+    var st=status[b.id]||'';
+
+    html+='<div class="benefit-card">';
+    html+='<div class="benefit-header"><div class="benefit-name">'+escHtml(b.name)+'</div><div class="benefit-cat-dot" style="background:'+catCol+'"></div></div>';
+    html+='<div class="benefit-desc">'+escHtml(b.desc)+'</div>';
+    if(b.amount) html+='<div class="benefit-amount">'+escHtml(b.amount)+'</div>';
+    html+='<div class="benefit-detail"><strong>Who is it for:</strong> '+escHtml(b.who)+'</div>';
+    if(b.missed) html+='<div class="benefit-missed">Often missed: '+escHtml(b.missed)+'</div>';
+    if(b.link){
+      var linkLabel='Find out more';
+      if(b.link.indexOf('gov.uk')>=0) linkLabel='Find out more on gov.uk';
+      else{try{var h=new URL(b.link).hostname.replace('www.','');linkLabel='Find out more at '+h;}catch(e){}}
+      html+='<a class="benefit-link" href="'+escHtml(b.link)+'" target="_blank" rel="noopener">'+linkLabel+' \u2192</a>';
+    }
+    if(b.apply) html+=' <a class="benefit-link" href="'+escHtml(b.apply)+'" target="_blank" rel="noopener" style="margin-left:12px">Apply \u2192</a>';
+
+    if(b.cat==='support'){
+      // No status tracking for helplines and crisis services
+    } else if(b.cat==='lgbtqia'||b.cat==='migration'){
+      html+='<div class="status-row">';
+      html+='<button class="status-btn'+(st==='looking'?' s-looking':'')+'" onclick="setStatus(\''+b.id+'\',\'looking\')">Aware</button>';
+      html+='<button class="status-btn'+(st==='applied'?' s-applied':'')+'" onclick="setStatus(\''+b.id+'\',\'applied\')">Contacted</button>';
+      html+='<button class="status-btn'+(st==='receiving'?' s-receiving':'')+'" onclick="setStatus(\''+b.id+'\',\'receiving\')">Using</button>';
+      html+='</div>';
+    } else {
+      html+='<div class="status-row">';
+      html+='<button class="status-btn'+(st==='looking'?' s-looking':'')+'" onclick="setStatus(\''+b.id+'\',\'looking\')">Looking into</button>';
+      html+='<button class="status-btn'+(st==='applied'?' s-applied':'')+'" onclick="setStatus(\''+b.id+'\',\'applied\')">Applied</button>';
+      html+='<button class="status-btn'+(st==='receiving'?' s-receiving':'')+'" onclick="setStatus(\''+b.id+'\',\'receiving\')">Receiving</button>';
+      html+='</div>';
+    }
+    var promptLabel=(b.cat==='support'||b.cat==='lgbtqia')?'Learn more - copy a prompt':'Get help applying - copy a prompt';
+    html+='<button class="prompt-btn" onclick="openPrompt(\''+b.id+'\')">'+promptLabel+'</button>';
+    html+='</div>';
+    html+='</div>';
+  });
+  list.innerHTML=html;
+}
+
+function setStatus(id,val){
+  var status=loadStatus();
+  if(status[id]===val){delete status[id];}
+  else{status[id]=val;}
+  saveStatus(status);
+  renderList();
+}
+
+// === PROMPT GENERATOR ===
+function buildPrompt(id){
+  var b=BENEFITS.find(function(x){return x.id===id;});
+  if(!b) return '';
+
+  // Support & helplines - not an application, someone needs help
+  if(b.cat==='support'){
+    return 'I am in the UK and I would like to understand how '+b.name+' can help me. [Briefly describe your situation in your own words, only share what you are comfortable with.]\n\nPlease help me understand:\n1. What kind of support they offer and how it works\n2. How to get in touch and what to expect when I do\n3. Whether there are other services I should also know about for my situation\n4. Any practical steps I can take right now\n\nPlease be gentle and explain everything in plain, simple language.';
+  }
+
+  // LGBTQIA+ - mix of services and grants, sensitive context
+  if(b.cat==='lgbtqia'){
+    return 'I am in the UK and I would like to know more about '+b.name+'. [Share as much or as little about your situation as you feel comfortable with.]\n\nPlease help me understand:\n1. What support or services they provide\n2. How to access them and what the process is like\n3. Whether there are other LGBTQIA+ services or resources I should know about\n4. What to expect when I reach out for the first time\n\nPlease explain everything in plain, simple language.';
+  }
+
+  // Migration - sensitive, legal complexity
+  if(b.cat==='migration'){
+    return 'I am living in the UK and I would like to understand how '+b.name+' could help me. [Briefly describe your situation, e.g. your immigration status, how long you have been in the UK, and what kind of help you need. Only share what you are comfortable with.]\n\nPlease help me understand:\n1. What support is available to me given my circumstances\n2. How to access it and what the process involves\n3. Whether my immigration status affects my eligibility\n4. What other support or organisations I should also know about\n5. Any rights I have that I might not be aware of\n\nPlease explain everything in plain, simple language and be careful to note where rules may have changed recently.';
+  }
+
+  // Equality - community organisations and racial justice funds
+  if(b.cat==='equality'){
+    return 'I am in the UK and I would like to learn more about '+b.name+'. [Briefly describe your organisation or community work, or explain what kind of support you are looking for.]\n\nPlease help me understand:\n1. What they offer and who it is designed for\n2. How to apply or get involved\n3. What makes a strong application if there is a funding element\n4. Whether there are other similar funds or organisations I should also know about\n\nPlease explain everything in plain, simple language.';
+  }
+
+  // Creative & arts - grant applications, portfolio/project based
+  if(b.cat==='creative'){
+    return 'I am a creative practitioner in the UK and I am interested in applying to '+b.name+'. [Briefly describe your creative practice, e.g. what kind of work you make, where you are in your career, and what you would use the funding for.]\n\nPlease help me understand:\n1. Whether my practice and situation are a good fit for this fund\n2. How to apply, step by step\n3. What makes a strong application and what they are looking for\n4. Common mistakes to avoid\n5. Whether there are other funds I should also apply to\n6. Any tips for someone who has never applied for arts funding before\n\nPlease explain everything in plain, simple language.';
+  }
+
+  // Enterprise - business grants, tax relief, startup support
+  if(b.cat==='enterprise'){
+    return 'I am based in the UK and I am interested in '+b.name+'. [Briefly describe your business or project, e.g. what you do, your business structure (sole trader, limited company, etc.), how long you have been trading, and what you need the funding or support for.]\n\nPlease help me understand:\n1. Whether I am likely to be eligible\n2. How to apply, step by step\n3. What documents or evidence I will need\n4. How long the process takes\n5. Any common mistakes to avoid\n6. Whether there are other funds or schemes I should also look into\n\nPlease explain everything in plain, simple language.';
+  }
+
+  // Community - organisations and groups applying for funding
+  if(b.cat==='community'){
+    return 'I am in the UK and I would like to know more about '+b.name+'. [Briefly describe your community group or the support you are looking for, e.g. what your group does, how many people it serves, and what you need help with.]\n\nPlease help me understand:\n1. What is available and who it is for\n2. How to access it or apply\n3. What I will need to provide\n4. Whether there are other sources of support I should also know about\n\nPlease explain everything in plain, simple language.';
+  }
+
+  // Default - benefits, entitlements, standard application
+  return 'I live in the UK and I think I might be eligible for '+b.name+'. Here is my situation: [briefly describe your circumstances, e.g. your age, whether you work, your income level, your household, and any relevant health conditions or caring responsibilities].\n\nPlease help me understand:\n1. Whether I am likely to qualify based on what I have told you\n2. Exactly how to apply, step by step\n3. What documents or information I will need to have ready\n4. How long the process usually takes\n5. Whether claiming '+b.name+' would make me eligible for any other benefits I should also apply for\n6. Any common mistakes people make when applying that I should avoid\n\nPlease explain everything in plain, simple language.';
+}
+
+function openPrompt(id){
+  var b=BENEFITS.find(function(x){return x.id===id;});
+  var text=buildPrompt(id);
+  document.getElementById('promptText').value=text;
+  var info=document.querySelector('.prompt-info');
+  if(b&&(b.cat==='support'||b.cat==='lgbtqia')){
+    info.textContent='Copy the text below and paste it into Google, ChatGPT, or any AI assistant. Edit the parts in brackets to match your situation. This will help you understand what support is available.';
+  } else {
+    info.textContent='Copy the text below and paste it into Google, ChatGPT, or any AI assistant. Edit the parts in brackets to match your situation. This will give you step-by-step help with your application.';
+  }
+  document.getElementById('promptOverlay').classList.add('open');
+}
+
+function closePrompt(e){
+  if(e&&e.target!==document.getElementById('promptOverlay')) return;
+  document.getElementById('promptOverlay').classList.remove('open');
+}
+
+function copyPrompt(){
+  var text=document.getElementById('promptText').value;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      showToast('Prompt copied - paste into Google or any AI assistant');
+    }).catch(function(){fallbackCopyPrompt(text);});
+  } else {fallbackCopyPrompt(text);}
+}
+
+function fallbackCopyPrompt(text){
+  var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast('Prompt copied - paste into Google or any AI assistant');}
+  catch(e){showToast('Copy failed - try selecting and copying manually');}
+  document.body.removeChild(ta);
+}
+
+// === THEME ===
+function initTheme(){
+  var STORE='kin037-theme';var btn=document.getElementById('themeBtn');
+  var saved=localStorage.getItem(STORE);var dark=saved==='dark';
+  function apply(){
+    if(dark){document.documentElement.className='dark';document.body.classList.add('dark');btn.textContent='\u2600';document.getElementById('theme-color-meta').content='#1a1a1a';}
+    else{document.documentElement.className='light';document.body.classList.remove('dark');btn.textContent='\uD83C\uDF19';document.getElementById('theme-color-meta').content='#f5f4f0';}
+    localStorage.setItem(STORE,dark?'dark':'light');
+  }
+  apply();btn.onclick=function(){dark=!dark;apply();};
+}
+
+function showToast(msg){var el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';setTimeout(function(){el.style.opacity='0';},2200);}
+function kinToggleStorageInfo(){var el=document.getElementById('kinStorageInfo');el.style.display=el.style.display==='block'?'none':'block';}
+
+var bugAnon=true;
+function openBugReport(){document.getElementById('bugOverlay').classList.add('open');}
+function closeBugReport(e){if(e&&e.target!==document.getElementById('bugOverlay'))return;document.getElementById('bugOverlay').classList.remove('open');}
+function toggleAnon(){bugAnon=!bugAnon;var t=document.getElementById('bugAnonToggle');if(bugAnon){t.classList.add('on');}else{t.classList.remove('on');}document.getElementById('bugIdentity').style.display=bugAnon?'none':'block';}
+function submitBug(){
+  var desc=document.getElementById('bugDesc').value.trim();if(!desc){showToast('Please describe the issue');return;}
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
+    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({form_type:'bug_report',subject:'KIN-037 \u2014 Unclaimed',app:'KIN-037',type:document.getElementById('bugType').value,description:desc,name:bugAnon?'Anonymous':(document.getElementById('bugName').value||'Anonymous')})
+  }).then(function(){showToast('Bug report sent');document.getElementById('bugDesc').value='';closeBugReport();}).catch(function(){showToast('Failed to send');});
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+
+</body>
+</html>
