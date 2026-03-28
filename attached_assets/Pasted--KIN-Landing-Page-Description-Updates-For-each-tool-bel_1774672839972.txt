@@ -1,0 +1,90 @@
+# KIN Landing Page — Description Updates
+
+For each tool below, find the current description text and replace it with the new text. These are in the landing page tool data. Match on the exact string.
+
+-----
+
+### KIN-007 — Ambient Mixer
+
+FIND: `White noise, pink noise, rain, wind, waves, and fire layered and mixed in the browser. Sleep timer, presets, and shareable mix codes. All audio generated locally.`
+REPLACE: `Layer rain, wind, waves, fire, and noise into your own ambient mix. Sleep timer, presets, and shareable codes. All audio generated on your device.`
+
+### KIN-009 — Jet Lag Planner
+
+FIND: `Enter a flight, get a circadian reset plan. Light timing, sleep schedule, fatigue windows, and a daily adjustment guide. Works offline.`
+REPLACE: `Enter your flight and get a plan to reset your body clock. When to seek light, when to sleep, and how to adjust day by day.`
+
+### KIN-010 — Audio Calculators
+
+FIND: `18 calculators for music producers and sound engineers. BPM to delay time, note to frequency, sample rate, latency, room modes, file size, and more.`
+REPLACE: `18 calculators for producers and engineers. Delay times, frequencies, sample rates, latency, room modes, file sizes. Everything you used to Google mid-session.`
+
+### KIN-011 — Unit Price Calculator
+
+FIND: `Find the real cost per unit of any product. Compare pack sizes instantly. Pack size parser, best-value badge, reverse mode.`
+REPLACE: `Find the real cost per unit of any product. Compare pack sizes instantly. Shows you which one is actually cheaper.`
+
+### KIN-014 — Breathing Exercise
+
+FIND: `Guided breathing patterns: Box Breathing, 4-7-8, ADHD Reset, Sleep Wind-Down. Expanding circle or ring guide, voice prompts, ambient gradient, daily streak. Stillness Score uses the device accelerometer to track how much the phone moves during a session. Less movement equals a higher score, giving genuine feedback on physical calm. Displayed as a subtle bar that fills during the session and logged alongside the streak.`
+REPLACE: `Guided breathing. Box Breathing, 4-7-8, ADHD Reset, Sleep Wind-Down. Follow the animation, track your streak. Stillness Score measures how still you hold the phone during a session, giving you real feedback on physical calm.`
+
+### KIN-016 — Recipe Scaler
+
+FIND: `Scale any recipe to any number of servings. Paste ingredients, choose original and target servings, get adjusted quantities. Fraction-aware, per-ingredient lock, auto unit conversion.`
+REPLACE: `Scale any recipe up or down. Paste your ingredients, set the number of servings, get adjusted quantities. Handles fractions and unit conversions automatically.`
+
+### KIN-017 — Decision Flip
+
+FIND: `Minimal decision-paralysis breaker. Paste a list of options, hit Decide, get a randomly selected result. Shuffle animation, multi-pick mode, remove-after-flip toggle.`
+REPLACE: `Can't decide? Paste your options, hit Decide. Shuffle animation picks one for you. Multi-pick if you need more than one. Remove-after-flip so nobody gets picked twice.`
+
+### KIN-020 — Password Generator
+
+FIND: `Fast, private password generator. Password mode with length slider, character toggles, pronounceable mode. Passphrase mode with ~900-word wordlist. Entropy and time-to-crack display.`
+REPLACE: `Generate strong passwords or memorable passphrases. Adjust length, choose character types, or switch to word-based. Shows how long it would take to crack.`
+
+### KIN-022 — Fair Share
+
+FIND: `Privacy-first shared expense splitter. Create groups with named participants. Log expenses with split methods. Greedy debt-simplification for minimum settlement payments.`
+REPLACE: `Split shared expenses fairly. Create a group, log who paid what, see who owes who. Simplifies debts so you make the fewest payments possible. Nothing leaves your device.`
+
+### KIN-023 — JSON
+
+FIND: `Paste JSON, get it formatted, validated and colour-highlighted. Browse the structure as a tree, compare two payloads, or query values by path. Nothing leaves your browser.`
+REPLACE: `Paste JSON, get it formatted and validated. Browse as a tree, compare two payloads, or query by path. Nothing leaves your browser.`
+
+### KIN-026 — Kin Ground
+
+FIND: `Track your monthly costs, subscriptions, and savings buffer. Know your true baseline, spot what's draining you, and see your money clearly. No account, no bank connection.`
+REPLACE: `See where your money actually goes. Track monthly costs, subscriptions, and your savings buffer. Spot what's draining you. No account, no bank connection.`
+
+### KIN-027 — Kin Gym
+
+FIND: `Track sets, reps, and weight across any exercise. Built-in rest timer and interval trainer start automatically when you log a set. Your log builds as you train. Everything stored locally.`
+REPLACE: `Track sets, reps, and weight. Rest timer starts automatically when you log a set. Your log builds as you train. Everything stays on your device.`
+
+### KIN-030 — Quote
+
+FIND: `Generate quotes with flexible line items and export to Invoice. Set your prefix, auto-increment numbering, save defaults for repeat use. Clipboard export carries the full document to KIN-031.`
+REPLACE: `Create professional quotes for clients. Flexible line items, auto-numbering, saved defaults. Export to Invoice with one tap.`
+
+### KIN-031 — Invoice
+
+FIND: `Turn quotes into invoices and track payment. Import from KIN-030 Quote, mark paid or partial, export to KIN-032 Receipt. Nothing leaves your device.`
+REPLACE: `Turn quotes into invoices and track payment. Mark paid or partial, export a receipt when settled. Part of the Quote > Invoice > Receipt chain. Nothing leaves your device.`
+
+### KIN-032 — Receipt
+
+FIND: `Confirm payment with a clean receipt. Import from KIN-031 Invoice, traces the full chain back to the original quote. Nothing leaves your device.`
+REPLACE: `Confirm payment with a clean receipt. Links back to the original quote and invoice. Nothing leaves your device.`
+
+### KIN-034 — Noise Meter
+
+FIND: `See when a room gets too loud. Green, yellow, red colour metering with adjustable sensitivity and screen wake lock. Built for classrooms — put a tablet at the front and let the colour bar do the talking.`
+REPLACE: `See when a room gets too loud. Green, amber, red. Adjustable sensitivity. Built for classrooms — put a tablet at the front and let the colour do the talking.`
+
+### KIN-037 — Unclaimed
+
+FIND: `UK funding, grants, and support most people don't know about. Benefits, arts funding, enterprise grants, helplines. 60+ entries with per-item status tracking. Nothing leaves your device.`
+REPLACE: `UK benefits, grants, creative funding, and support services that most people don't know exist. Plain language, direct links, AI-powered prompts to help you apply. 100+ entries across 16 categories. Nothing leaves your device.`
