@@ -42,3 +42,9 @@ id = "mL1a1miedvoeTGuXWG867"
 uri = "file://icon-grid.png"
 type = "image"
 title = "Kin Tools — Icon Grid (1080×1350)"
+
+[[outputs]]
+id = "KusBRqhuv7XP7gGzqKUvm"
+uri = "file://kin-tools-directory.md"
+type = "text"
+title = "Kin Tools Directory — All 36 Tools"
