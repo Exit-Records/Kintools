@@ -1,0 +1,102 @@
+# KIN Landing Page - Version Changelog Feature
+
+## Overview
+
+Add a tappable version badge to each tool's landing card that opens a small popover showing the last 2-3 changes. Provides visibility that tools are actively maintained without cluttering the card.
+
+---
+
+## Data Structure
+
+Add a `changes` array to each tool object in the landing page data. Each entry has a version string and a one-line description. Newest first. Maximum 3 entries displayed.
+
+```js
+{
+  id: 'kin037',
+  name: 'Unclaimed',
+  // ... existing fields ...
+  version: '1.2',
+  changes: [
+    { v: '1.2', date: '2026-03-28', note: 'Updated all benefit rates to April 2026' },
+    { v: '1.1', date: '2026-03-27', note: 'Added Scotland and Northern Ireland specific entries' },
+    { v: '1.0', date: '2026-03-26', note: 'First release' }
+  ]
+}
+```
+
+---
+
+## UI Behaviour
+
+### Badge
+- Small version badge on the landing card, e.g. "v1.2"
+- Positioned near the existing version/author line
+- Styled subtly: smaller text, muted colour, not competing with the description
+- Tappable on mobile, hoverable on desktop
+
+### Popover
+- Opens on tap (mobile) or hover (desktop)
+- Shows the last 3 entries from the `changes` array
+- Each entry: version number, date, one-line note
+- Closes on tap outside or scroll
+
+### Popover Layout
+```
+v1.2 · 28 Mar 2026
+Updated all benefit rates to April 2026
+
+v1.1 · 27 Mar 2026
+Added Scotland and Northern Ireland specific entries
+
+v1.0 · 26 Mar 2026
+First release
+```
+
+### Styling
+- Background: surface colour (same as card)
+- Border: 1px solid border colour
+- Border radius: 8px
+- Shadow: subtle drop shadow
+- Max width: 280px
+- Font size: 13px for version/date, 13px for note
+- Version number: bold or semi-bold
+- Date: muted colour
+- Note: standard text colour
+- Respects dark mode
+
+---
+
+## Interaction
+
+- Mobile: tap badge to open, tap outside to close
+- Desktop: hover to open, mouseout to close (with small delay so it doesn't flicker)
+- Popover positioned above or below badge depending on screen space
+- If the tool has no `changes` array or it's empty, just show the version number with no popover
+
+---
+
+## Fallback
+
+If a tool hasn't been updated yet and only has a version number but no changes array, display the version badge without the tap/hover behaviour. No empty popovers.
+
+---
+
+## Example Cards
+
+### Tool with changes
+Badge shows: `v1.2`
+Tap opens popover with 3 entries.
+
+### Tool with no changes yet
+Badge shows: `v1.0`
+No popover. Just a static label.
+
+---
+
+## Notes
+
+- Maximum 3 changelog entries displayed per tool. If more exist in the data, only show the newest 3.
+- Date format: DD Mon YYYY (e.g. 28 Mar 2026)
+- Keep notes to one line, under 60 characters. These are summaries, not release notes.
+- Version numbers must match the version in the tool's footer and service worker cache key.
+- This is a landing page feature only. It does not affect the tools themselves.
