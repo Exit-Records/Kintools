@@ -365,21 +365,19 @@
   .ver-badge.has-log:hover { opacity: 1; }
 
   .ver-popover {
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 0;
-    z-index: 200;
+    position: fixed;
+    z-index: 9999;
     background: var(--surface, #fff);
     border: 1px solid var(--border, #e0dfd8);
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14);
     padding: 12px 14px;
-    min-width: 230px;
-    max-width: 280px;
+    width: min(260px, calc(100vw - 32px));
     pointer-events: none;
     opacity: 0;
     transform: translateY(4px);
     transition: opacity 0.15s, transform 0.15s;
+    word-wrap: break-word;
   }
   .ver-popover.open {
     opacity: 1;
@@ -1829,34 +1827,53 @@ if("serviceWorker"in navigator){
   /* ---- VERSION BADGE POPOVERS ---- */
   (function() {
     var active = null;
+    var pop = null; // single shared popover appended to body
 
-    function fmtDate(d) { return d; }
-
-    function buildPopover(changes) {
+    function buildPopover() {
       var el = document.createElement('div');
       el.className = 'ver-popover';
-      var shown = changes.slice(0, 3);
-      shown.forEach(function(c) {
+      document.body.appendChild(el);
+      return el;
+    }
+
+    function positionPopover(badge) {
+      var r = badge.getBoundingClientRect();
+      var popW = pop.offsetWidth || 260;
+      var popH = pop.offsetHeight || 100;
+      var margin = 8;
+      // Prefer above the badge
+      var top = r.top - popH - margin;
+      if (top < margin) top = r.bottom + margin; // flip below if no room above
+      // Align left with badge, but clamp to viewport
+      var left = r.left;
+      if (left + popW > window.innerWidth - margin) left = window.innerWidth - popW - margin;
+      if (left < margin) left = margin;
+      pop.style.top = top + 'px';
+      pop.style.left = left + 'px';
+    }
+
+    function fillPopover(changes) {
+      pop.innerHTML = '';
+      changes.slice(0, 3).forEach(function(c) {
         var row = document.createElement('div');
         row.className = 'ver-popover-row';
         var head = document.createElement('div');
-        head.innerHTML = '<span class="ver-popover-head">v' + c.v + '</span><span class="ver-popover-date">&middot; ' + fmtDate(c.date) + '</span>';
+        head.innerHTML = '<span class="ver-popover-head">v' + c.v + '</span><span class="ver-popover-date">&middot; ' + c.date + '</span>';
         var note = document.createElement('div');
         note.className = 'ver-popover-note';
         note.textContent = c.note;
         row.appendChild(head);
         row.appendChild(note);
-        el.appendChild(row);
+        pop.appendChild(row);
       });
-      return el;
     }
 
     function closeActive() {
-      if (active) {
-        active.classList.remove('open');
-        active = null;
-      }
+      if (pop) pop.classList.remove('open');
+      active = null;
     }
+
+    pop = buildPopover();
 
     document.querySelectorAll('.ver-badge.has-log').forEach(function(badge) {
       var raw = badge.getAttribute('data-changes');
@@ -1865,44 +1882,40 @@ if("serviceWorker"in navigator){
       try { changes = JSON.parse(raw); } catch(e) { return; }
       if (!changes.length) return;
 
-      var pop = buildPopover(changes);
-      badge.appendChild(pop);
-
       // Desktop: hover
       var hoverTimer;
       badge.addEventListener('mouseenter', function() {
         clearTimeout(hoverTimer);
         closeActive();
+        fillPopover(changes);
         pop.classList.add('open');
-        active = pop;
+        positionPopover(badge);
+        active = badge;
       });
       badge.addEventListener('mouseleave', function() {
-        hoverTimer = setTimeout(function() {
-          pop.classList.remove('open');
-          if (active === pop) active = null;
-        }, 200);
+        hoverTimer = setTimeout(closeActive, 200);
       });
       pop.addEventListener('mouseenter', function() { clearTimeout(hoverTimer); });
       pop.addEventListener('mouseleave', function() {
-        hoverTimer = setTimeout(function() {
-          pop.classList.remove('open');
-          if (active === pop) active = null;
-        }, 200);
+        hoverTimer = setTimeout(closeActive, 200);
       });
 
       // Mobile: tap
       badge.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        var isOpen = pop.classList.contains('open');
+        if (active === badge) { closeActive(); return; }
         closeActive();
-        if (!isOpen) { pop.classList.add('open'); active = pop; }
+        fillPopover(changes);
+        pop.classList.add('open');
+        positionPopover(badge);
+        active = badge;
       });
     });
 
-    // Tap outside closes
-    document.addEventListener('click', function() { closeActive(); });
-    document.addEventListener('scroll', function() { closeActive(); }, true);
+    // Tap outside / scroll closes
+    document.addEventListener('click', closeActive);
+    document.addEventListener('scroll', closeActive, true);
   })();
   </script>
 </body>
