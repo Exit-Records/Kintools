@@ -1107,7 +1107,7 @@ function completeSetup() {
 function goToModeSelect() {
   if (!state) return;
   document.getElementById('modeSelectGreeting').textContent = 'Hi! Who\'s using the app?';
-  document.getElementById('modeChildName').textContent = state.profile.name + '\'s';
+  document.getElementById('modeChildName').textContent = 'Go, ' + state.profile.name + '!';
   showScreen('modeSelectScreen');
 }
 
