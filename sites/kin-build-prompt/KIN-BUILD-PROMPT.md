@@ -408,6 +408,92 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 
 ---
 
+## Demo mode (use when the tool has persistent data)
+
+If the tool stores user data (localStorage), it must support a demo mode so visitors can try it with pre-filled sample data before committing to setup.
+
+Demo mode is activated by the URL parameter `?demo=true`. It is never saved to localStorage — it is purely in-memory for the session.
+
+### How it works
+
+1. On load, check for `?demo=true` in the URL
+2. If found: load hardcoded sample data into the app's state variable (do not call `saveState()`)
+3. Show the demo bar — a green info strip at the top of the app
+4. "Start fresh" clears state, hides the bar, strips `?demo=true` from the URL silently, and drops the user into the setup/onboarding screen
+
+### Demo bar HTML (place immediately after `<div class="app">`)
+
+```html
+<div id="demoBar" class="demo-bar" style="display:none">
+  <span>Demo mode &mdash; sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
+```
+
+### Demo bar CSS
+
+```css
+.demo-bar {
+  background: #e8f5e9; color: #2e7d32;
+  border: 1px solid #c8e6c9; border-radius: 10px;
+  padding: 10px 14px; margin: 12px 0 4px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; font-weight: 500;
+}
+.demo-bar button {
+  background: transparent; border: 1px solid currentColor;
+  color: inherit; border-radius: 6px; padding: 4px 12px;
+  font-size: 12px; font-weight: 500; cursor: pointer; min-height: 30px;
+}
+```
+
+### JavaScript
+
+```js
+function isDemo() {
+  return window.location.search.indexOf('demo=true') !== -1
+      || window.location.hash === '#demo';
+}
+
+function loadDemoData() {
+  // Populate the app's state variable with realistic hardcoded sample data.
+  // Cover at least 7 days of activity so all screens and charts have content.
+  // Do NOT call saveState() — demo data must never touch localStorage.
+  state = { /* ... tool-specific sample data ... */ };
+}
+
+function startFresh() {
+  document.getElementById('demoBar').style.display = 'none';
+  history.replaceState(null, '', window.location.pathname); // strips ?demo=true
+  state = null;
+  showScreen('setupScreen'); // or equivalent first-run screen
+}
+
+function init() {
+  if (isDemo()) {
+    loadDemoData();
+    document.getElementById('demoBar').style.display = 'flex';
+    // show the main app screen, populate any UI from state
+    return;
+  }
+  if (loadState()) {
+    // existing user — go straight to the app
+  } else {
+    showScreen('setupScreen'); // new user — show onboarding
+  }
+}
+```
+
+### Landing page link
+
+The landing page card's "See it in action" button must link to `https://[subdomain].kintools.net/?demo=true` so visitors get the demo experience immediately.
+
+### Rules
+
+- Demo data must be realistic — use plausible names, dates, and values, not "Lorem ipsum" or zeros
+- Demo mode must never write to localStorage
+- `startFresh()` must use `history.replaceState` — never `window.location.href` (no page reload)
+- Do not show a toast for demo mode — the bar itself is the signal
 
 ---
 
