@@ -1841,7 +1841,7 @@ function generateICS() {
     events += 'BEGIN:VEVENT\r\n' +
       'UID:wetsgo-' + uid + '-' + dateStr + '@kintools.net\r\n' +
       'DTSTART;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
-      'DTEND;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
+      'DURATION:PT1M\r\n' +
       rrule +
       'SUMMARY:Bathroom reminder\r\n' +
       'DESCRIPTION:Time to try the toilet!\r\n' +
