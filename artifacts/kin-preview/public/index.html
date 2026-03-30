@@ -533,7 +533,14 @@ textarea { resize: vertical; min-height: 80px; }
 
   <div class="card">
     <h3>Calendar Reminders</h3>
-    <p class="text-sm text-muted mb-md">Download a calendar file (.ics) with your reminder schedule. Add it to your phone's calendar for native notifications.</p>
+    <div style="background:var(--bg-input);border-radius:10px;padding:14px;margin-bottom:14px;font-size:0.85rem;line-height:1.6;">
+      <strong>Before you download:</strong><br>
+      1. Open your phone's Calendar app<br>
+      2. Create a new calendar called "Wets Go!"<br>
+      <span style="color:var(--text-muted);">(iOS: Calendars > Add Calendar. Android: Settings > Add calendar.)</span><br>
+      3. Come back here and tap Download<br>
+      4. When asked which calendar, choose "Wets Go!"
+    </div>
     <div class="form-group">
       <div class="label">Duration</div>
       <select id="icsDuration">
