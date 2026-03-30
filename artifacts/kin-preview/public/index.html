@@ -1792,11 +1792,11 @@ function generateICS() {
   }
   rrule += '\r\n';
 
-  var tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  var y = tomorrow.getFullYear();
-  var mo = String(tomorrow.getMonth() + 1).padStart(2, '0');
-  var da = String(tomorrow.getDate()).padStart(2, '0');
+  // Use today as start date so remaining reminders fire today
+  var startDate = new Date();
+  var y = startDate.getFullYear();
+  var mo = String(startDate.getMonth() + 1).padStart(2, '0');
+  var da = String(startDate.getDate()).padStart(2, '0');
   var dateStr = y + mo + da;
 
   var events = '';
