@@ -1,0 +1,166 @@
+# Wets Go! Calendar Duration Patch
+
+Two changes needed. Find the exact code blocks below and replace them.
+
+-----
+
+## 1. HTML — Calendar Reminders card
+
+**FIND** (around line 535-540):
+
+```html
+  <div class="card">
+    <h3>Calendar Reminders</h3>
+    <p class="text-sm text-muted mb-md">Download a calendar file (.ics) with your reminder schedule. Add it to your phone's calendar for native notifications.</p>
+    <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
+    <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
+  </div>
+```
+
+**REPLACE WITH:**
+
+```html
+  <div class="card">
+    <h3>Calendar Reminders</h3>
+    <p class="text-sm text-muted mb-md">Download a calendar file (.ics) with your reminder schedule. Add it to your phone's calendar for native notifications.</p>
+    <div class="form-group">
+      <div class="label">Duration</div>
+      <select id="icsDuration">
+        <option value="7">1 week</option>
+        <option value="30" selected>1 month</option>
+        <option value="90">3 months</option>
+        <option value="custom">Custom end date</option>
+        <option value="0">Ongoing (no end)</option>
+      </select>
+    </div>
+    <div class="form-group hidden" id="icsCustomDateGroup">
+      <div class="label">End date</div>
+      <input type="date" id="icsCustomDate">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
+    <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
+  </div>
+```
+
+-----
+
+## 2. JavaScript — generateICS function
+
+**FIND** the entire `generateICS` function (starts with `function generateICS() {` and ends with the closing `}`). Replace the whole thing with:
+
+```javascript
+// Show/hide custom date picker
+document.getElementById('icsDuration').addEventListener('change', function() {
+  var group = document.getElementById('icsCustomDateGroup');
+  if (this.value === 'custom') {
+    group.classList.remove('hidden');
+  } else {
+    group.classList.add('hidden');
+  }
+});
+
+function generateICS() {
+  var tz = getIANATimezone();
+  var interval = state.schedule.interval;
+  var wakeParts = state.schedule.wake.split(':');
+  var bedParts = state.schedule.bed.split(':');
+  var wakeH = parseInt(wakeParts[0]);
+  var wakeM = parseInt(wakeParts[1]);
+  var bedH = parseInt(bedParts[0]);
+  var bedM = parseInt(bedParts[1]);
+
+  // Work out duration
+  var durationSelect = document.getElementById('icsDuration');
+  var durationVal = durationSelect.value;
+  var endDate = null;
+
+  if (durationVal === 'custom') {
+    var customDate = document.getElementById('icsCustomDate').value;
+    if (!customDate) {
+      showToast('Please select an end date');
+      return;
+    }
+    endDate = new Date(customDate);
+  } else if (durationVal !== '0') {
+    var days = parseInt(durationVal);
+    endDate = new Date();
+    endDate.setDate(endDate.getDate() + days);
+  }
+  // durationVal === '0' means ongoing, endDate stays null
+
+  // Build RRULE
+  var rrule = 'RRULE:FREQ=DAILY';
+  if (endDate) {
+    var ey = endDate.getFullYear();
+    var emo = String(endDate.getMonth() + 1).padStart(2, '0');
+    var eda = String(endDate.getDate()).padStart(2, '0');
+    rrule += ';UNTIL=' + ey + emo + eda + 'T235959Z';
+  }
+  rrule += '\r\n';
+
+  // Use tomorrow as start date
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var y = tomorrow.getFullYear();
+  var mo = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  var da = String(tomorrow.getDate()).padStart(2, '0');
+  var dateStr = y + mo + da;
+
+  var events = '';
+  var wakeMin = wakeH * 60 + wakeM;
+  var bedMin = bedH * 60 + bedM;
+  var uid = 0;
+
+  for (var min = wakeMin; min < bedMin; min += interval) {
+    var h = Math.floor(min / 60);
+    var m = min % 60;
+    var hStr = String(h).padStart(2, '0');
+    var mStr = String(m).padStart(2, '0');
+    uid++;
+
+    events += 'BEGIN:VEVENT\r\n' +
+      'UID:wetsgo-' + uid + '-' + dateStr + '@kintools.net\r\n' +
+      'DTSTART;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
+      'DTEND;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
+      rrule +
+      'SUMMARY:Bathroom reminder\r\n' +
+      'DESCRIPTION:Time to try the toilet!\r\n' +
+      'BEGIN:VALARM\r\n' +
+      'TRIGGER:PT0M\r\n' +
+      'ACTION:DISPLAY\r\n' +
+      'DESCRIPTION:Bathroom reminder\r\n' +
+      'END:VALARM\r\n' +
+      'END:VEVENT\r\n';
+  }
+
+  var ics = 'BEGIN:VCALENDAR\r\n' +
+    'VERSION:2.0\r\n' +
+    'PRODID:-//KIN//Wets Go//EN\r\n' +
+    'CALSCALE:GREGORIAN\r\n' +
+    'X-WR-CALNAME:Wets Go! Reminders\r\n' +
+    'X-WR-TIMEZONE:' + tz + '\r\n' +
+    events +
+    'END:VCALENDAR';
+
+  var blob = new Blob([ics], { type: 'text/calendar' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'wetsgo-reminders.ics';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  var label = durationVal === '0' ? 'ongoing' : durationVal === 'custom' ? 'until ' + document.getElementById('icsCustomDate').value : durationVal + ' days';
+  showToast('Downloaded (' + label + ', ' + tz + ')');
+}
+```
+
+-----
+
+## Summary
+
+- Adds a dropdown: 1 week, 1 month (default), 3 months, custom end date, ongoing
+- “Custom end date” shows a date picker
+- The RRULE gets an `UNTIL` parameter when a duration is set
+- “Ongoing” keeps the old behaviour (no end date)
+- Toast confirms what was downloaded
