@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F5EDE4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta property="og:title" content="Wets Go! - KIN-036">
+<meta property="og:description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
+<title>Wets Go!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5EDE4;
+  --bg-card: #FEFCF9;
+  --bg-input: #FAF6F1;
+  --text: #3D3229;
+  --text-muted: #8B7D6B;
+  --text-light: #B5A898;
+  --accent: #D4764E;
+  --accent-hover: #C06540;
+  --success: #7BA078;
+  --success-bg: #EDF5ED;
+  --info: #6B9EC4;
+  --info-bg: #EBF2F8;
+  --danger: #C47272;
+  --danger-bg: #F8ECEC;
+  --self-init: #6B9EC4;
+  --border: #E8DFD4;
+  --shadow: 0 2px 8px rgba(61,50,41,0.06);
+  --shadow-lg: 0 4px 20px rgba(61,50,41,0.1);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --font-display: 'Nunito', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --max-w: 440px;
+}
+
+- { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { background: var(–bg); color: var(–text); font-family: var(–font-body); font-size: 16px; line-height: 1.5; min-height: 100dvh; overflow-x: hidden; }
+
+.app { max-width: var(–max-w); margin: 0 auto; padding: 0 16px 100px; position: relative; }
+
+/* Typography */
+h1 { font-family: var(–font-display); font-size: 1.6rem; font-weight: 800; color: var(–text); line-height: 1.2; }
+h2 { font-family: var(–font-display); font-size: 1.25rem; font-weight: 700; color: var(–text); line-height: 1.3; }
+h3 { font-family: var(–font-display); font-size: 1.05rem; font-weight: 700; color: var(–text); }
+.label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(–text-muted); margin-bottom: 6px; }
+
+/* Screens */
+.screen { display: none; padding-top: 20px; }
+.screen.active { display: block; }
+
+/* Header */
+.header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 12px; }
+.header h1 { font-size: 1.3rem; }
+.header-actions { display: flex; gap: 8px; }
+
+/* Cards */
+.card { background: var(–bg-card); border-radius: var(–radius); padding: 20px; margin-bottom: 14px; box-shadow: var(–shadow); border: 1px solid var(–border); }
+.card-sm { padding: 14px 16px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border: none; border-radius: var(–radius-sm); font-family: var(–font-body); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s ease; min-height: 48px; }
+.btn-primary { background: var(–accent); color: #fff; }
+.btn-primary:hover { background: var(–accent-hover); }
+.btn-primary:active { transform: scale(0.97); }
+.btn-secondary { background: var(–bg-input); color: var(–text); border: 1px solid var(–border); }
+.btn-secondary:hover { background: var(–border); }
+.btn-success { background: var(–success); color: #fff; }
+.btn-danger { background: var(–danger); color: #fff; }
+.btn-info { background: var(–info); color: #fff; }
+.btn-full { width: 100%; }
+.btn-sm { padding: 10px 16px; font-size: 0.9rem; min-height: 40px; }
+.btn-icon { width: 44px; height: 44px; padding: 0; border-radius: 50%; background: var(–bg-input); border: 1px solid var(–border); color: var(–text-muted); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-icon:hover { background: var(–border); }
+
+/* Forms */
+input:not([type=“checkbox”]), select, textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(–border); border-radius: var(–radius-sm); font-family: var(–font-body); font-size: 0.95rem; background: var(–bg-input); color: var(–text); outline: none; transition: border-color 0.15s; box-sizing: border-box; }
+input:not([type=“checkbox”]):focus, select:focus, textarea:focus { border-color: var(–accent); }
+input[type=“checkbox”] { width: 20px; height: 20px; accent-color: var(–accent); cursor: pointer; flex-shrink: 0; }
+input[type=“time”] { padding: 0 8px; font-size: 0.9rem; text-align: center; height: 44px; -webkit-appearance: none; appearance: none; }
+textarea { resize: vertical; min-height: 80px; }
+.form-group { margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-row { display: flex; gap: 10px; }
+.form-row > * { flex: 1; min-width: 0; }
+
+/* Tabs */
+.tabs { display: flex; background: var(–bg-card); border-radius: var(–radius-sm); padding: 4px; margin-bottom: 16px; border: 1px solid var(–border); overflow-x: auto; gap: 2px; }
+.tab { flex: 1; padding: 10px 8px; border: none; background: none; border-radius: 8px; font-family: var(–font-body); font-size: 0.82rem; font-weight: 500; color: var(–text-muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.tab.active { background: var(–accent); color: #fff; font-weight: 600; }
+
+/* Log buttons */
+.log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.log-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 10px; border-radius: var(–radius); border: 2px solid var(–border); background: var(–bg-card); cursor: pointer; transition: all 0.15s; }
+.log-btn:active { transform: scale(0.96); }
+.log-btn .log-icon { font-size: 1.8rem; }
+.log-btn .log-label { font-size: 0.85rem; font-weight: 600; color: var(–text); }
+.log-btn.went { border-color: var(–success); background: var(–success-bg); }
+.log-btn.didnt { border-color: var(–border); }
+.log-btn.accident { border-color: var(–danger); background: var(–danger-bg); }
+.log-btn.self-init { border-color: var(–info); background: var(–info-bg); }
+
+/* Entries */
+.entry { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(–border); }
+.entry:last-child { border-bottom: none; }
+.entry-icon { font-size: 1.3rem; width: 36px; text-align: center; }
+.entry-info { flex: 1; }
+.entry-time { font-size: 0.85rem; font-weight: 600; }
+.entry-type { font-size: 0.8rem; color: var(–text-muted); }
+.entry-note { font-size: 0.78rem; color: var(–text-light); font-style: italic; }
+.entry-delete { background: none; border: none; color: var(–text-light); cursor: pointer; padding: 8px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; }
+.entry-delete:hover { background: var(–danger-bg); color: var(–danger); }
+
+/* Pattern grid */
+.pattern-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0; }
+.pattern-day { text-align: center; }
+.pattern-day-label { font-size: 0.7rem; font-weight: 600; color: var(–text-muted); margin-bottom: 4px; }
+.pattern-cell { width: 100%; aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.pattern-cell.empty { background: var(–bg-input); color: var(–text-light); }
+
+/* Hydration */
+.hydration-bar { height: 16px; background: var(–bg-input); border-radius: 8px; overflow: hidden; margin: 8px 0; }
+.hydration-fill { height: 100%; background: var(–info); border-radius: 8px; transition: width 0.3s ease; }
+.hydration-count { display: flex; align-items: center; justify-content: space-between; }
+
+/* Timer display */
+.timer-display { text-align: center; padding: 24px 0; }
+.timer-ring { width: 180px; height: 180px; margin: 0 auto 16px; position: relative; }
+.timer-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.timer-ring .bg { fill: none; stroke: var(–border); stroke-width: 8; }
+.timer-ring .fg { fill: none; stroke: var(–accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.timer-text .time { font-family: var(–font-display); font-size: 2.2rem; font-weight: 800; color: var(–text); }
+.timer-text .hint { font-size: 0.85rem; color: var(–text-muted); }
+
+/* Child mode */
+.child-view { text-align: center; padding: 20px 0; }
+.child-greeting { font-family: var(–font-display); font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+.child-message { font-size: 1.05rem; color: var(–text-muted); margin-bottom: 20px; }
+.child-response-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.child-btn { padding: 20px; border-radius: var(–radius); border: none; font-family: var(–font-display); font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.15s; min-height: 64px; }
+.child-btn:active { transform: scale(0.96); }
+.child-btn.went { background: var(–success); color: #fff; }
+.child-btn.didnt { background: var(–bg-input); color: var(–text); border: 2px solid var(–border); }
+.child-btn.accident { background: var(–danger-bg); color: var(–danger); border: 2px solid var(–danger); }
+.child-btn.self-init { background: var(–info); color: #fff; }
+
+/* Reward bar */
+.reward-section { margin: 20px 0; }
+.reward-bar-outer { height: 20px; background: var(–bg-input); border-radius: 10px; overflow: hidden; margin: 8px 0; }
+.reward-bar-inner { height: 100%; background: linear-gradient(90deg, var(–accent), #E8A87C); border-radius: 10px; transition: width 0.5s ease; }
+.reward-info { display: flex; justify-content: space-between; font-size: 0.85rem; }
+.reward-points { font-weight: 700; color: var(–accent); }
+.reward-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.reward-badge { font-size: 1.5rem; opacity: 0.3; transition: opacity 0.3s; }
+.reward-badge.unlocked { opacity: 1; }
+
+/* Alert overlay */
+.alert-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.alert-overlay.visible { display: flex; }
+.alert-box { background: var(–bg-card); border-radius: 20px; padding: 32px 24px; text-align: center; max-width: 360px; width: 100%; box-shadow: var(–shadow-lg); }
+.alert-box h2 { font-size: 1.4rem; margin-bottom: 12px; }
+.alert-box p { color: var(–text-muted); margin-bottom: 24px; }
+
+/* Toast */
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(–text); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 0.9rem; font-weight: 500; opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 999; }
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Confirm overlay */
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.6); z-index: 1001; align-items: center; justify-content: center; padding: 20px; }
+.confirm-overlay.visible { display: flex; }
+.confirm-box { background: var(–bg-card); border-radius: var(–radius); padding: 24px; max-width: 320px; width: 100%; text-align: center; }
+.confirm-box p { margin-bottom: 20px; }
+.confirm-btns { display: flex; gap: 10px; }
+.confirm-btns .btn { flex: 1; }
+
+/* Bug report */
+.bug-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.6); z-index: 1001; align-items: center; justify-content: center; padding: 20px; }
+.bug-overlay.visible { display: flex; }
+.bug-box { background: var(–bg-card); border-radius: var(–radius); padding: 24px; max-width: 380px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+/* PIN lock */
+.pin-overlay { display: none; position: fixed; inset: 0; background: var(–bg); z-index: 1002; align-items: center; justify-content: center; }
+.pin-overlay.visible { display: flex; }
+.pin-box { text-align: center; padding: 24px; }
+.pin-dots { display: flex; gap: 16px; justify-content: center; margin: 24px 0; }
+.pin-dot { width: 16px; height: 16px; border-radius: 50%; background: var(–border); transition: background 0.15s; }
+.pin-dot.filled { background: var(–accent); }
+.pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 260px; margin: 0 auto; }
+.pin-key { width: 72px; height: 72px; border-radius: 50%; border: 2px solid var(–border); background: var(–bg-card); font-family: var(–font-display); font-size: 1.5rem; font-weight: 700; color: var(–text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.pin-key:active { background: var(–accent); color: #fff; border-color: var(–accent); }
+.pin-key.backspace { font-size: 1.2rem; }
+
+/* Privacy badge */
+.privacy-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(–success-bg); border-radius: 20px; font-size: 0.78rem; font-weight: 500; color: var(–success); cursor: pointer; position: relative; }
+.privacy-tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(–text); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 0.78rem; width: 220px; text-align: center; z-index: 10; }
+.privacy-badge:hover .privacy-tooltip, .privacy-badge:focus .privacy-tooltip { display: block; }
+
+/* Footer */
+.footer { text-align: center; padding: 40px 0 20px; }
+.footer-text { font-size: 0.75rem; color: var(–text-light); }
+.footer-text a { color: var(–text-muted); text-decoration: none; }
+
+/* Week overview grid */
+.week-grid { margin: 12px 0; }
+.week-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(–border); }
+.week-row:last-child { border-bottom: none; }
+.week-day-label { width: 36px; font-size: 0.78rem; font-weight: 600; color: var(–text-muted); }
+.week-bar { flex: 1; height: 24px; background: var(–bg-input); border-radius: 6px; display: flex; overflow: hidden; }
+.week-segment { height: 100%; transition: width 0.3s; }
+.week-count { width: 28px; text-align: right; font-size: 0.78rem; font-weight: 600; color: var(–text-muted); }
+
+/* School plan */
+.school-plan-preview { background: #fff; border: 1px solid var(–border); border-radius: var(–radius); padding: 24px; margin: 16px 0; }
+.school-timetable { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+.school-timetable th { text-align: left; padding: 6px 4px; border-bottom: 2px solid var(–border); font-weight: 600; color: var(–text-muted); font-size: 0.75rem; }
+.school-timetable td { padding: 4px; border-bottom: 1px solid var(–border); vertical-align: middle; }
+.school-timetable input[type=“checkbox”] { width: 18px; height: 18px; margin: 0; }
+.school-timetable input[type=“time”], .school-timetable input[type=“text”] { padding: 0 6px; font-size: 0.85rem; width: 100%; border-radius: 8px; height: 38px; }
+.delete-btn { background: none; border: none; color: var(–text-light); cursor: pointer; padding: 6px; font-size: 0.85rem; font-weight: 600; line-height: 1; border-radius: 6px; }
+.delete-btn:hover { background: var(–danger-bg); color: var(–danger); }
+
+/* Potty mode */
+.potty-day-counter { text-align: center; padding: 16px; background: var(–accent); color: #fff; border-radius: var(–radius); margin-bottom: 16px; }
+.potty-day-counter .day-num { font-family: var(–font-display); font-size: 2.5rem; font-weight: 800; }
+.potty-day-counter .day-label { font-size: 0.9rem; opacity: 0.9; }
+
+/* Note modal */
+.note-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.6); z-index: 1001; align-items: flex-end; justify-content: center; padding: 0; }
+.note-overlay.visible { display: flex; }
+.note-box { background: var(–bg-card); border-radius: 20px 20px 0 0; padding: 24px; width: 100%; max-width: var(–max-w); }
+
+/* ICS download */
+.ics-section { margin: 16px 0; }
+
+/* Utility */
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 16px; }
+.mb-md { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.text-muted { color: var(–text-muted); }
+.text-sm { font-size: 0.85rem; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.gap-sm { gap: 8px; }
+.hidden { display: none !important; }
+
+/* Print */
+@media print {
+body { background: #fff; }
+.app { padding: 0; max-width: 100%; }
+.screen { display: none !important; }
+#schoolPlanPrint { display: block !important; }
+.no-print { display: none !important; }
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.pop { animation: pop 0.4s ease; }
+@keyframes celebrate { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+.celebrate { animation: celebrate 0.5s ease; }
+</style>
+
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- PIN Lock Screen -->
+
+<div class="pin-overlay" id="pinOverlay">
+<div class="pin-box">
+  <h2>Enter PIN</h2>
+  <p class="text-muted text-sm mt-sm" id="pinPromptText">Enter your 4-digit PIN</p>
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="pin-pad" id="pinPad">
+    <button class="pin-key" onclick="pinInput(1)">1</button>
+    <button class="pin-key" onclick="pinInput(2)">2</button>
+    <button class="pin-key" onclick="pinInput(3)">3</button>
+    <button class="pin-key" onclick="pinInput(4)">4</button>
+    <button class="pin-key" onclick="pinInput(5)">5</button>
+    <button class="pin-key" onclick="pinInput(6)">6</button>
+    <button class="pin-key" onclick="pinInput(7)">7</button>
+    <button class="pin-key" onclick="pinInput(8)">8</button>
+    <button class="pin-key" onclick="pinInput(9)">9</button>
+    <div></div>
+    <button class="pin-key" onclick="pinInput(0)">0</button>
+    <button class="pin-key backspace" onclick="pinBackspace()">&#9003;</button>
+  </div>
+</div>
+</div>
+
+<!-- SETUP SCREEN -->
+
+<div class="screen" id="setupScreen">
+<div style="text-align:center;padding:40px 0 24px;">
+  <h1 style="font-size:2rem;">Wets Go!</h1>
+  <p class="text-muted mt-sm">Bathroom reminders and hydration tracking for families</p>
+</div>
+<div class="card">
+  <h3>Child Profile</h3>
+  <div class="form-group mt-md">
+    <div class="label">Name</div>
+    <input type="text" id="setupName" placeholder="Child's name" autocomplete="off">
+  </div>
+  <div class="form-group">
+    <div class="label">Age</div>
+    <input type="number" id="setupAge" placeholder="Age" min="1" max="17" inputmode="numeric">
+  </div>
+  <div class="form-group">
+    <div class="label">Mode</div>
+    <select id="setupMode">
+      <option value="standard">Standard (ages 3+)</option>
+      <option value="potty">Potty Training (toddlers)</option>
+    </select>
+  </div>
+</div>
+<div class="card">
+  <h3>Reminder Schedule</h3>
+  <div class="form-group mt-md">
+    <div class="label">Reminder interval</div>
+    <select id="setupInterval">
+      <option value="30">Every 30 minutes</option>
+      <option value="45">Every 45 minutes</option>
+      <option value="60">Every 60 minutes</option>
+      <option value="90">Every 90 minutes</option>
+      <option value="120" selected>Every 2 hours</option>
+      <option value="150">Every 2.5 hours</option>
+      <option value="180">Every 3 hours</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <div class="label">Wake time</div>
+      <input type="time" id="setupWake" value="07:00">
+    </div>
+    <div class="form-group">
+      <div class="label">Bed time</div>
+      <input type="time" id="setupBed" value="19:30">
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h3>Security PIN</h3>
+  <p class="text-sm text-muted mb-md">Optional 4-digit PIN to protect parent mode</p>
+  <div class="form-group">
+    <input type="password" id="setupPin" placeholder="4-digit PIN (optional)" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+  </div>
+</div>
+<button class="btn btn-primary btn-full mt-md" onclick="completeSetup()">Start</button>
+<div class="footer">
+  <div class="privacy-badge" tabindex="0" style="margin:16px auto 0;">
+    &#x1F6E1; Nothing leaves your device
+    <div class="privacy-tooltip">All data is stored locally on this device using your browser's storage. No accounts, no servers, no tracking.</div>
+  </div>
+</div>
+</div>
+
+<!-- MODE SELECT -->
+
+<div class="screen" id="modeSelectScreen">
+<div style="text-align:center;padding:40px 0 20px;">
+  <h1 style="font-size:1.6rem;">Wets Go!</h1>
+  <p class="text-muted mt-sm" id="modeSelectGreeting"></p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;">
+  <button class="card card-sm" style="text-align:left;cursor:pointer;border:2px solid var(--border);" onclick="enterMode('parent')">
+    <h3>&#128100; Parent / Carer</h3>
+    <p class="text-sm text-muted mt-sm">Log visits, track patterns, manage schedule</p>
+  </button>
+  <button class="card card-sm" style="text-align:left;cursor:pointer;border:2px solid var(--accent);" onclick="enterMode('child')">
+    <h3>&#127775; <span id="modeChildName">Child</span> Mode</h3>
+    <p class="text-sm text-muted mt-sm">Timer, reminders, and rewards</p>
+  </button>
+</div>
+</div>
+
+<!-- PARENT MODE -->
+
+<div class="screen" id="parentScreen">
+<div class="header">
+  <h1>&#128100; Parent Mode</h1>
+  <div class="header-actions">
+    <button class="btn-icon" onclick="showScreen('modeSelectScreen')" title="Switch mode">&#8617;</button>
+  </div>
+</div>
+<div class="tabs" id="parentTabs">
+  <button class="tab active" onclick="showParentTab('today')">Today</button>
+  <button class="tab" onclick="showParentTab('week')">Week</button>
+  <button class="tab" onclick="showParentTab('hydration')">Water</button>
+  <button class="tab" onclick="showParentTab('school')">School</button>
+  <button class="tab" onclick="showParentTab('settings')">Settings</button>
+</div>
+
+<!-- Today Tab -->
+
+<div id="parentToday" class="parent-tab">
+  <div class="timer-display" id="parentTimer">
+    <div class="timer-ring">
+      <svg viewBox="0 0 200 200">
+        <circle class="bg" cx="100" cy="100" r="88"/>
+        <circle class="fg" id="parentTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-text">
+        <div class="time" id="parentTimerText">--:--</div>
+        <div class="hint">until next reminder</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Log a Visit</h3>
+  <div class="log-grid">
+    <button class="log-btn went" onclick="logVisit('went')">
+      <span class="log-icon">&#9989;</span>
+      <span class="log-label">Went</span>
+    </button>
+    <button class="log-btn didnt" onclick="logVisit('didnt')">
+      <span class="log-icon">&#10060;</span>
+      <span class="log-label">Didn't go</span>
+    </button>
+    <button class="log-btn accident" onclick="logVisit('accident')">
+      <span class="log-icon">&#128167;</span>
+      <span class="log-label">Accident</span>
+    </button>
+    <button class="log-btn self-init" onclick="logVisit('self')">
+      <span class="log-icon">&#11088;</span>
+      <span class="log-label">Self-initiated</span>
+    </button>
+  </div>
+
+  <div class="flex-between mt-md">
+    <h3>Today's Log</h3>
+    <button class="btn btn-sm btn-secondary" onclick="promptNote()">+ Note</button>
+  </div>
+  <div id="todayEntries" class="mt-sm"></div>
+</div>
+
+<!-- Week Tab -->
+
+<div id="parentWeek" class="parent-tab hidden">
+  <h3>Weekly Overview</h3>
+  <p class="text-sm text-muted">Mon - Sun pattern view</p>
+  <div id="weekOverview" class="week-grid mt-md"></div>
+  <div class="mt-md" style="display:flex;gap:10px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--success);display:inline-block;"></span> Went</span>
+    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--info);display:inline-block;"></span> Self-initiated</span>
+    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--danger);display:inline-block;"></span> Accident</span>
+    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--border);display:inline-block;"></span> Didn't go</span>
+  </div>
+  <div class="card mt-md">
+    <h3>Weekly Summary</h3>
+    <div id="weekSummary"></div>
+  </div>
+</div>
+
+<!-- Hydration Tab -->
+
+<div id="parentHydration" class="parent-tab hidden">
+  <div class="card">
+    <div class="flex-between">
+      <h3>&#128167; Hydration</h3>
+      <span class="text-sm text-muted" id="hydrationTarget"></span>
+    </div>
+    <div class="hydration-bar mt-sm">
+      <div class="hydration-fill" id="hydrationFill" style="width:0%"></div>
+    </div>
+    <div class="hydration-count">
+      <span id="hydrationCount" style="font-size:1.8rem;font-weight:800;color:var(--info);">0</span>
+      <button class="btn btn-sm btn-info" onclick="logDrink()">+ Drink</button>
+    </div>
+    <p class="text-sm text-muted mt-sm" id="hydrationNote"></p>
+  </div>
+  <div class="card mt-sm">
+    <h3>Daily Water Targets (cups)</h3>
+    <p class="text-sm text-muted mt-sm">Ages 1-3: ~4 cups<br>Ages 4-8: ~5 cups<br>Ages 9-13: ~7-8 cups<br>Ages 14+: ~8 cups</p>
+    <p class="text-sm text-muted mt-sm" style="font-style:italic;">Based on widely referenced paediatric hydration guidance. Adjust for activity, climate, and individual needs.</p>
+  </div>
+</div>
+
+<!-- School Tab -->
+
+<div id="parentSchool" class="parent-tab hidden">
+  <h3>School Toileting Plan</h3>
+  <p class="text-sm text-muted mb-md">A printable plan for your child's school. Edit the timetable and notes to match their day.</p>
+
+  <div class="card">
+    <div class="label">Overview (editable)</div>
+    <textarea id="schoolOverview" rows="3" placeholder="e.g. Child uses timed bathroom reminders to build routine and awareness. This is not a behavioural issue."></textarea>
+  </div>
+
+  <div class="card mt-sm">
+    <div class="flex-between">
+      <div class="label">School Timetable</div>
+      <button class="btn btn-sm btn-secondary" onclick="addSchoolRow()">+ Add</button>
+    </div>
+    <table class="school-timetable" id="schoolTimetable">
+      <thead><tr><th style="width:30px;"></th><th style="width:80px;">Time</th><th>Transition</th><th style="width:30px;"></th></tr></thead>
+      <tbody id="schoolTimetableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card mt-sm">
+    <div class="label">Additional Notes</div>
+    <textarea id="schoolNotes" rows="3" placeholder="Sensory triggers, preferred language, specific routines..."></textarea>
+  </div>
+
+<button class="btn btn-primary btn-full mt-md" onclick="printSchoolPlan()">🖨 Print School Plan</button>
+
+</div>
+
+<!-- Settings Tab -->
+
+<div id="parentSettings" class="parent-tab hidden">
+  <div class="card">
+    <h3>Schedule</h3>
+    <div class="form-group mt-md">
+      <div class="label">Reminder interval</div>
+      <select id="settingsInterval" onchange="updateSettings()">
+        <option value="30">Every 30 minutes</option>
+        <option value="45">Every 45 minutes</option>
+        <option value="60">Every 60 minutes</option>
+        <option value="90">Every 90 minutes</option>
+        <option value="120">Every 2 hours</option>
+        <option value="150">Every 2.5 hours</option>
+        <option value="180">Every 3 hours</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <div class="label">Wake time</div>
+        <input type="time" id="settingsWake" onchange="updateSettings()">
+      </div>
+      <div class="form-group">
+        <div class="label">Bed time</div>
+        <input type="time" id="settingsBed" onchange="updateSettings()">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Calendar Reminders</h3>
+    <p class="text-sm text-muted mb-md">Download a calendar file (.ics) with your reminder schedule. Add it to your phone's calendar for native notifications.</p>
+    <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
+    <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
+  </div>
+
+  <div class="card">
+    <h3>Profile</h3>
+    <div class="form-group mt-md">
+      <div class="label">Child's name</div>
+      <input type="text" id="settingsName" onchange="updateSettings()">
+    </div>
+    <div class="form-group">
+      <div class="label">Age</div>
+      <input type="number" id="settingsAge" min="1" max="17" inputmode="numeric" onchange="updateSettings()">
+    </div>
+    <div class="form-group">
+      <div class="label">Mode</div>
+      <select id="settingsMode" onchange="updateSettings()">
+        <option value="standard">Standard</option>
+        <option value="potty">Potty Training</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Security</h3>
+    <div class="form-group mt-md">
+      <div class="label">PIN (4 digits, blank to remove)</div>
+      <input type="password" id="settingsPin" maxlength="4" inputmode="numeric" pattern="[0-9]*" onchange="updateSettings()">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Data</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
+      <button class="btn btn-sm btn-secondary btn-full" onclick="exportData()">&#128228; Export Data (JSON)</button>
+      <button class="btn btn-sm btn-secondary btn-full" onclick="document.getElementById('importFile').click()">&#128229; Import Data</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+      <button class="btn btn-sm btn-danger btn-full" onclick="clearAllData()">&#128465; Delete All Data</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Weekly Report</h3>
+    <p class="text-sm text-muted mb-md">Printable summary for GP or health visitor</p>
+    <button class="btn btn-secondary btn-full" onclick="printWeeklyReport()">&#128424; Print Weekly Report</button>
+  </div>
+
+  <div class="footer">
+    <button class="btn btn-sm btn-secondary" onclick="openBugReport()" style="margin:0 auto 14px;display:flex;">Report an Issue</button>
+    <div class="privacy-badge" tabindex="0" style="margin:0 auto 12px;">
+      &#x1F6E1; Nothing leaves your device
+      <div class="privacy-tooltip">All data is stored locally on this device using your browser's storage. No accounts, no servers, no tracking.</div>
+    </div>
+    <p class="footer-text">KIN-036 Wets Go! v1.0<br><a href="https://kintools.net" target="_blank" rel="noopener">kintools.net</a></p>
+  </div>
+</div>
+</div>
+
+<!-- CHILD MODE -->
+
+<div class="screen" id="childScreen">
+<div class="header">
+  <button class="btn-icon" onclick="exitChildMode()" title="Parent mode">&#128274;</button>
+  <h2 id="childHeader">Wets Go!</h2>
+  <button class="btn-icon" onclick="logDrinkChild()" title="Log a drink" style="font-size:1.4rem;">&#128167;</button>
+</div>
+
+<div class="child-view" id="childWaiting">
+  <div class="timer-display">
+    <div class="timer-ring">
+      <svg viewBox="0 0 200 200">
+        <circle class="bg" cx="100" cy="100" r="88"/>
+        <circle class="fg" id="childTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-text">
+        <div class="time" id="childTimerText">--:--</div>
+        <div class="hint" id="childTimerHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reward-section">
+    <div class="reward-info">
+      <span class="reward-points" id="childPoints">0 points</span>
+      <span class="text-sm text-muted" id="childNextReward"></span>
+    </div>
+    <div class="reward-bar-outer">
+      <div class="reward-bar-inner" id="childRewardBar" style="width:0%"></div>
+    </div>
+    <div class="reward-badges" id="childBadges"></div>
+  </div>
+
+  <div id="childSelfInit" class="mt-md">
+    <button class="child-btn self-init" onclick="childSelfInitiated()" style="width:100%;" id="childSelfBtn">I went by myself!</button>
+  </div>
+
+  <div id="childAccidentBtn" class="mt-sm">
+    <button class="child-btn accident" onclick="childAccident()" style="width:100%;font-size:1rem;" id="childAccBtn">Oops, accident</button>
+  </div>
+
+  <div id="childHydrationDisplay" class="card card-sm mt-md">
+    <div class="flex-between">
+      <span class="text-sm" style="font-weight:600;">&#128167; Water today</span>
+      <span class="text-sm" id="childHydrationCount">0</span>
+    </div>
+    <div class="hydration-bar mt-sm">
+      <div class="hydration-fill" id="childHydrationFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Child alert (timer fired) -->
+
+<div class="child-view hidden" id="childAlert">
+  <div style="padding:20px 0;">
+    <div style="font-size:3rem;" class="pop">&#9200;</div>
+    <h1 id="childAlertTitle" style="margin-top:16px;"></h1>
+    <p class="text-muted mt-sm" id="childAlertMessage"></p>
+  </div>
+  <div class="child-response-btns" id="childResponseBtns">
+    <button class="child-btn went" onclick="childResponse('went')" id="childRespWent">I tried!</button>
+    <button class="child-btn didnt" onclick="childResponse('didnt')" id="childRespDidnt">Not right now</button>
+    <button class="child-btn accident" onclick="childResponse('accident')" id="childRespAccident">Had an accident</button>
+  </div>
+</div>
+</div>
+
+<!-- POTTY TRAINING CHILD MODE -->
+
+<div class="screen" id="pottyScreen">
+<div class="header">
+  <button class="btn-icon" onclick="exitChildMode()" title="Parent mode">&#128274;</button>
+  <h2>Wets Go!</h2>
+  <button class="btn-icon" onclick="logDrinkChild()" title="Log a drink" style="font-size:1.4rem;">&#128167;</button>
+</div>
+<div class="child-view">
+  <div class="potty-day-counter">
+    <div class="day-num" id="pottyDayNum">1</div>
+    <div class="day-label">Day of training</div>
+  </div>
+  <div class="timer-display">
+    <div class="timer-ring">
+      <svg viewBox="0 0 200 200">
+        <circle class="bg" cx="100" cy="100" r="88"/>
+        <circle class="fg" id="pottyTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-text">
+        <div class="time" id="pottyTimerText">--:--</div>
+        <div class="hint">Time to try!</div>
+      </div>
+    </div>
+  </div>
+  <div class="log-grid" style="margin-top:20px;">
+    <button class="log-btn went" onclick="logPotty('dry')" style="border-color:var(--success);background:var(--success-bg);">
+      <span class="log-icon">&#9989;</span>
+      <span class="log-label">Nappy dry</span>
+    </button>
+    <button class="log-btn" onclick="logPotty('wet')" style="border-color:var(--info);background:var(--info-bg);">
+      <span class="log-icon">&#128167;</span>
+      <span class="log-label">Nappy wet</span>
+    </button>
+    <button class="log-btn self-init" onclick="logPotty('potty')">
+      <span class="log-icon">&#127881;</span>
+      <span class="log-label">Used potty!</span>
+    </button>
+    <button class="log-btn accident" onclick="logPotty('accident')">
+      <span class="log-icon">&#128167;</span>
+      <span class="log-label">Accident</span>
+    </button>
+  </div>
+  <div id="pottyEntries" class="mt-md"></div>
+</div>
+</div>
+
+<!-- SCHOOL PLAN PRINT VIEW -->
+
+<div id="schoolPlanPrint" style="display:none;">
+</div>
+
+<!-- Note overlay -->
+
+<div class="note-overlay" id="noteOverlay">
+<div class="note-box">
+  <h3>Add a Note</h3>
+  <textarea id="noteText" rows="3" placeholder="Any context..." class="mt-md"></textarea>
+  <div style="display:flex;gap:10px;margin-top:14px;">
+    <button class="btn btn-secondary" style="flex:1;" onclick="closeNote()">Cancel</button>
+    <button class="btn btn-primary" style="flex:1;" onclick="saveNote()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Confirm overlay -->
+
+<div class="confirm-overlay" id="confirmOverlay">
+<div class="confirm-box">
+  <p id="confirmMsg"></p>
+  <div class="confirm-btns">
+    <button class="btn btn-secondary" id="confirmNo">Cancel</button>
+    <button class="btn btn-primary" id="confirmYes">Confirm</button>
+  </div>
+</div>
+</div>
+
+<!-- Toast -->
+
+<div class="toast" id="toast"></div>
+
+<!-- Bug Report -->
+
+<div class="bug-overlay" id="bugOverlay">
+<div class="bug-box">
+  <div class="flex-between">
+    <h3>Report an Issue</h3>
+    <button class="btn-icon" onclick="closeBugReport()" style="width:36px;height:36px;font-size:1rem;">&#10005;</button>
+  </div>
+  <div class="form-group mt-md">
+    <div class="label">Type</div>
+    <select id="bugType"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="other">Other</option></select>
+  </div>
+  <div class="form-group">
+    <div class="label">Description</div>
+    <textarea id="bugDesc" rows="3" placeholder="What happened?"></textarea>
+  </div>
+  <div class="form-group">
+    <div class="label">Name (optional)</div>
+    <input type="text" id="bugName" placeholder="Anonymous">
+  </div>
+  <button class="btn btn-primary btn-full" onclick="submitBug()">Send</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// ===== CONSTANTS =====
+var STORAGE_KEY = 'kin036_wetsgo';
+var CIRCUMFERENCE = 2 * Math.PI * 88; // ~553
+
+var REWARD_MILESTONES = [
+  { points: 5, icon: '\u{1F331}', label: 'Seedling' },
+  { points: 15, icon: '\u{1F33F}', label: 'Sprout' },
+  { points: 30, icon: '\u{1F333}', label: 'Tree' },
+  { points: 50, icon: '\u{2B50}', label: 'Star' },
+  { points: 75, icon: '\u{1F31F}', label: 'Glowing Star' },
+  { points: 100, icon: '\u{1F3C6}', label: 'Trophy' }
+];
+
+var WATER_TARGETS = { 1:4, 2:4, 3:4, 4:5, 5:5, 6:5, 7:5, 8:5, 9:7, 10:7, 11:7, 12:8, 13:8, 14:8, 15:8, 16:8, 17:8 };
+
+var DEFAULT_SCHOOL_ROWS = [
+  { active: true, time: '08:50', label: 'Arrival' },
+  { active: true, time: '10:30', label: 'Morning break' },
+  { active: true, time: '12:00', label: 'Lunch' },
+  { active: true, time: '13:00', label: 'Afternoon start' },
+  { active: true, time: '14:30', label: 'Afternoon break' },
+  { active: true, time: '15:15', label: 'Before home time' }
+];
+
+// ===== STATE =====
+var state = null;
+var timerInterval = null;
+var timerEnd = null;
+var currentParentTab = 'today';
+var pinBuffer = '';
+var pinCallback = null;
+
+// ===== DATA =====
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      state = JSON.parse(raw);
+      // Migration: clear pre-filled overview text from v1.0
+      if (state.schoolPlan && state.schoolPlan.overview && state.schoolPlan.overview.indexOf('toileting differences linked to interoception') !== -1) {
+        state.schoolPlan.overview = '';
+        saveState();
+      }
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function saveState() {
+  if (state) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function createState(name, age, mode, interval, wake, bed, pin) {
+  state = {
+    version: 1,
+    profile: { name: name, age: parseInt(age), mode: mode },
+    schedule: { interval: parseInt(interval), wake: wake, bed: bed },
+    pin: pin || '',
+    logs: [],
+    hydration: {},
+    rewards: { points: 0, unlocked: [] },
+    schoolPlan: {
+      overview: '',
+      timetable: JSON.parse(JSON.stringify(DEFAULT_SCHOOL_ROWS)),
+      notes: ''
+    },
+    pottyStartDate: mode === 'potty' ? new Date().toISOString().split('T')[0] : null,
+    createdAt: new Date().toISOString()
+  };
+  saveState();
+}
+
+// ===== SCREENS =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+// ===== SETUP =====
+function completeSetup() {
+  var name = document.getElementById('setupName').value.trim();
+  var age = document.getElementById('setupAge').value;
+  var mode = document.getElementById('setupMode').value;
+  var interval = document.getElementById('setupInterval').value;
+  var wake = document.getElementById('setupWake').value;
+  var bed = document.getElementById('setupBed').value;
+  var pin = document.getElementById('setupPin').value.trim();
+
+  if (!name) { showToast('Please enter a name'); return; }
+  if (!age || age < 1 || age > 17) { showToast('Please enter age (1-17)'); return; }
+  if (pin && (pin.length !== 4 || !/^\d{4}$/.test(pin))) { showToast('PIN must be 4 digits'); return; }
+
+  if (mode === 'potty') { interval = '45'; }
+
+  createState(name, age, mode, interval, wake, bed, pin);
+  goToModeSelect();
+}
+
+// ===== MODE SELECT =====
+function goToModeSelect() {
+  if (!state) return;
+  document.getElementById('modeSelectGreeting').textContent = 'Hi! Who\'s using the app?';
+  document.getElementById('modeChildName').textContent = state.profile.name + '\'s';
+  showScreen('modeSelectScreen');
+}
+
+function enterMode(mode) {
+  if (mode === 'parent') {
+    if (state.pin) {
+      requestPin(function() { enterParentMode(); });
+    } else {
+      enterParentMode();
+    }
+  } else {
+    enterChildMode();
+  }
+}
+
+// ===== PIN =====
+function requestPin(callback) {
+  pinBuffer = '';
+  pinCallback = callback;
+  updatePinDots();
+  document.getElementById('pinPromptText').textContent = 'Enter your 4-digit PIN';
+  document.getElementById('pinOverlay').classList.add('visible');
+}
+
+function pinInput(n) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += n;
+  updatePinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(function() {
+      if (pinBuffer === state.pin) {
+        document.getElementById('pinOverlay').classList.remove('visible');
+        if (pinCallback) pinCallback();
+      } else {
+        pinBuffer = '';
+        updatePinDots();
+        document.getElementById('pinPromptText').textContent = 'Wrong PIN. Try again.';
+      }
+    }, 200);
+  }
+}
+
+function pinBackspace() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+}
+
+function updatePinDots() {
+  var dots = document.querySelectorAll('#pinDots .pin-dot');
+  dots.forEach(function(d, i) {
+    d.classList.toggle('filled', i < pinBuffer.length);
+  });
+}
+
+// ===== PARENT MODE =====
+function enterParentMode() {
+  showScreen('parentScreen');
+  populateSettings();
+  showParentTab('today');
+  startTimer();
+}
+
+function showParentTab(tab) {
+  // Save school plan fields if leaving school tab
+  if (currentParentTab === 'school') {
+    var ovEl = document.getElementById('schoolOverview');
+    var notesEl = document.getElementById('schoolNotes');
+    if (ovEl) state.schoolPlan.overview = ovEl.value;
+    if (notesEl) state.schoolPlan.notes = notesEl.value;
+    saveState();
+  }
+
+  currentParentTab = tab;
+  document.querySelectorAll('.parent-tab').forEach(function(t) { t.classList.add('hidden'); });
+  document.querySelectorAll('#parentTabs .tab').forEach(function(t) { t.classList.remove('active'); });
+
+  var tabMap = { today: 'parentToday', week: 'parentWeek', hydration: 'parentHydration', school: 'parentSchool', settings: 'parentSettings' };
+  document.getElementById(tabMap[tab]).classList.remove('hidden');
+
+  var tabs = document.querySelectorAll('#parentTabs .tab');
+  var tabNames = ['today','week','hydration','school','settings'];
+  tabs[tabNames.indexOf(tab)].classList.add('active');
+
+  if (tab === 'today') renderTodayEntries();
+  if (tab === 'week') renderWeekOverview();
+  if (tab === 'hydration') renderHydration();
+  if (tab === 'school') renderSchoolPlan();
+}
+
+// ===== TIMER =====
+function startTimer() {
+  clearInterval(timerInterval);
+  var now = new Date();
+  var intervalMs = state.schedule.interval * 60 * 1000;
+
+  // Find next reminder time
+  var wakeParts = state.schedule.wake.split(':');
+  var bedParts = state.schedule.bed.split(':');
+  var wakeMin = parseInt(wakeParts[0]) * 60 + parseInt(wakeParts[1]);
+  var bedMin = parseInt(bedParts[0]) * 60 + parseInt(bedParts[1]);
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+
+  // Check if outside active hours
+  var outsideHours = false;
+  if (bedMin > wakeMin) {
+    // Normal: wake 07:00, bed 19:30
+    outsideHours = (nowMin < wakeMin || nowMin >= bedMin);
+  } else {
+    // Overnight: wake 19:00, bed 07:00 (unlikely but handle it)
+    outsideHours = (nowMin >= bedMin && nowMin < wakeMin);
+  }
+
+  if (outsideHours) {
+    var wakeStr = state.schedule.wake;
+    updateTimerDisplay(0, 0, 0, 'Starts at ' + wakeStr);
+    return;
+  }
+
+  // Calculate next reminder from wake time
+  var wakeToday = new Date(now);
+  wakeToday.setHours(parseInt(wakeParts[0]), parseInt(wakeParts[1]), 0, 0);
+  var elapsed = now.getTime() - wakeToday.getTime();
+  var nextOffset = Math.ceil(elapsed / intervalMs) * intervalMs;
+  timerEnd = new Date(wakeToday.getTime() + nextOffset);
+
+  if (timerEnd <= now) timerEnd = new Date(now.getTime() + intervalMs);
+
+  timerInterval = setInterval(function() { updateTimer(); }, 1000);
+  updateTimer();
+}
+
+function updateTimer() {
+  var now = new Date();
+  var remaining = timerEnd ? timerEnd.getTime() - now.getTime() : 0;
+
+  if (remaining <= 0) {
+    fireReminder();
+    // Reset for next interval
+    timerEnd = new Date(now.getTime() + state.schedule.interval * 60 * 1000);
+    return;
+  }
+
+  var totalSec = Math.ceil(remaining / 1000);
+  var hrs = Math.floor(totalSec / 3600);
+  var mins = Math.floor((totalSec % 3600) / 60);
+  var secs = totalSec % 60;
+  var progress = 1 - (remaining / (state.schedule.interval * 60 * 1000));
+
+  updateTimerDisplay(hrs, mins, secs, null, progress);
+}
+
+function updateTimerDisplay(hrs, mins, secs, message, progress) {
+  var timeStr;
+  if (message) {
+    timeStr = message;
+  } else if (hrs > 0) {
+    timeStr = hrs + 'h ' + String(mins).padStart(2, '0') + 'm';
+  } else {
+    timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+  }
+  var p = progress || 0;
+  var offset = CIRCUMFERENCE * (1 - p);
+
+  // Update all timer rings
+  var ids = ['parentTimerRing', 'childTimerRing', 'pottyTimerRing'];
+  var textIds = ['parentTimerText', 'childTimerText', 'pottyTimerText'];
+
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('stroke-dashoffset', offset);
+  });
+  textIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = timeStr;
+  });
+
+  // Child hint
+  var hint = document.getElementById('childTimerHint');
+  if (hint) {
+    var tier = getAgeTier();
+    if (message) {
+      hint.textContent = message;
+    } else if (tier === 'early') {
+      if (p < 0.5) hint.textContent = 'Plenty of time';
+      else if (p < 0.85) hint.textContent = 'Getting closer...';
+      else hint.textContent = 'Almost time!';
+    } else {
+      hint.textContent = 'Until next reminder';
+    }
+  }
+}
+
+function fireReminder() {
+  // Show alert in child mode
+  var childScreen = document.getElementById('childScreen');
+  if (childScreen.classList.contains('active')) {
+    showChildAlert();
+  }
+  // In parent mode, just reset the timer (native calendar handles actual notifications)
+}
+
+// ===== LOGGING =====
+function todayKey() { return new Date().toISOString().split('T')[0]; }
+
+function logVisit(type, opts) {
+  opts = opts || {};
+  var entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    type: type,
+    time: new Date().toISOString(),
+    note: opts.note || '',
+    source: opts.source || 'parent'
+  };
+  state.logs.push(entry);
+
+  // Award points
+  var pts = 0;
+  if (type === 'went') pts = 1;
+  if (type === 'self') pts = 3;
+  if (pts > 0) {
+    state.rewards.points += pts;
+    checkMilestones();
+  }
+
+  saveState();
+  renderTodayEntries();
+  showToast(type === 'went' ? 'Logged: went' : type === 'self' ? 'Self-initiated! +3 pts' : type === 'accident' ? 'Logged: accident' : 'Logged: didn\'t go');
+}
+
+function logPotty(type) {
+  var entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    type: type,
+    time: new Date().toISOString(),
+    note: '',
+    source: 'potty'
+  };
+  state.logs.push(entry);
+
+  if (type === 'potty') {
+    state.rewards.points += 3;
+    checkMilestones();
+    showToast('Used the potty! Amazing! +3 pts');
+  } else if (type === 'dry') {
+    state.rewards.points += 1;
+    showToast('Nappy dry!');
+  } else {
+    showToast('Logged');
+  }
+
+  saveState();
+  renderPottyEntries();
+}
+
+function checkMilestones() {
+  REWARD_MILESTONES.forEach(function(m) {
+    if (state.rewards.points >= m.points && state.rewards.unlocked.indexOf(m.points) === -1) {
+      state.rewards.unlocked.push(m.points);
+    }
+  });
+}
+
+function deleteEntry(id) {
+  kinConfirm('Delete this entry?').then(function(ok) {
+    if (!ok) return;
+    state.logs = state.logs.filter(function(e) { return e.id !== id; });
+    saveState();
+    renderTodayEntries();
+    showToast('Entry deleted');
+  });
+}
+
+// ===== RENDER TODAY =====
+function renderTodayEntries() {
+  var container = document.getElementById('todayEntries');
+  var today = todayKey();
+  var entries = state.logs.filter(function(e) { return e.time.startsWith(today); }).reverse();
+
+  if (entries.length === 0) {
+    container.innerHTML = '<p class="text-sm text-muted text-center" style="padding:20px 0;">No entries today yet</p>';
+    return;
+  }
+
+  var iconMap = { went: '\u2705', didnt: '\u274C', accident: '\u{1F4A7}', self: '\u2B50', dry: '\u2705', wet: '\u{1F4A7}', potty: '\u{1F389}', note: '\u{1F4DD}' };
+  var labelMap = { went: 'Went', didnt: 'Didn\'t go', accident: 'Accident', self: 'Self-initiated', dry: 'Nappy dry', wet: 'Nappy wet', potty: 'Used potty', note: 'Note' };
+
+  container.innerHTML = entries.map(function(e) {
+    var t = new Date(e.time);
+    var timeStr = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+    return '<div class="entry fade-in">' +
+      '<div class="entry-icon">' + (iconMap[e.type] || '') + '</div>' +
+      '<div class="entry-info">' +
+        '<div class="entry-time">' + timeStr + '</div>' +
+        '<div class="entry-type">' + (labelMap[e.type] || e.type) + '</div>' +
+        (e.note ? '<div class="entry-note">' + escHtml(e.note) + '</div>' : '') +
+      '</div>' +
+      '<button class="entry-delete" onclick="deleteEntry(\'' + e.id + '\')">\u00D7</button>' +
+    '</div>';
+  }).join('');
+}
+
+function renderPottyEntries() {
+  var container = document.getElementById('pottyEntries');
+  if (!container) return;
+  var today = todayKey();
+  var entries = state.logs.filter(function(e) { return e.time.startsWith(today); }).reverse().slice(0, 8);
+
+  var iconMap = { dry: '\u2705', wet: '\u{1F4A7}', potty: '\u{1F389}', accident: '\u{1F4A7}' };
+  var labelMap = { dry: 'Nappy dry', wet: 'Nappy wet', potty: 'Used potty!', accident: 'Accident' };
+
+  container.innerHTML = entries.map(function(e) {
+    var t = new Date(e.time);
+    var timeStr = String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0');
+    return '<div class="entry">' +
+      '<div class="entry-icon">' + (iconMap[e.type] || '') + '</div>' +
+      '<div class="entry-info"><div class="entry-time">' + timeStr + '</div><div class="entry-type">' + (labelMap[e.type] || e.type) + '</div></div>' +
+    '</div>';
+  }).join('');
+
+  // Day counter
+  if (state.pottyStartDate) {
+    var start = new Date(state.pottyStartDate);
+    var now = new Date();
+    var days = Math.floor((now - start) / 86400000) + 1;
+    document.getElementById('pottyDayNum').textContent = days;
+  }
+}
+
+// ===== RENDER WEEK =====
+function renderWeekOverview() {
+  var container = document.getElementById('weekOverview');
+  var summary = document.getElementById('weekSummary');
+
+  // Get Monday of current week
+  var now = new Date();
+  var day = now.getDay();
+  var mondayOffset = day === 0 ? -6 : 1 - day;
+  var monday = new Date(now);
+  monday.setDate(monday.getDate() + mondayOffset);
+  monday.setHours(0, 0, 0, 0);
+
+  var dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var weekData = [];
+  var totals = { went: 0, didnt: 0, accident: 0, self: 0 };
+
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(d.getDate() + i);
+    var key = d.toISOString().split('T')[0];
+    var dayEntries = state.logs.filter(function(e) { return e.time.startsWith(key); });
+    var counts = { went: 0, didnt: 0, accident: 0, self: 0 };
+    dayEntries.forEach(function(e) { if (counts[e.type] !== undefined) counts[e.type]++; });
+    var total = counts.went + counts.didnt + counts.accident + counts.self;
+    weekData.push({ label: dayLabels[i], counts: counts, total: total });
+    totals.went += counts.went;
+    totals.didnt += counts.didnt;
+    totals.accident += counts.accident;
+    totals.self += counts.self;
+  }
+
+  var maxTotal = Math.max.apply(null, weekData.map(function(d) { return d.total; })) || 1;
+
+  container.innerHTML = weekData.map(function(d) {
+    var barWidth = d.total > 0 ? (d.total / maxTotal * 100) : 0;
+    var segments = '';
+    if (d.total > 0) {
+      var colors = { went: 'var(--success)', self: 'var(--info)', accident: 'var(--danger)', didnt: 'var(--border)' };
+      ['went', 'self', 'accident', 'didnt'].forEach(function(type) {
+        if (d.counts[type] > 0) {
+          var w = (d.counts[type] / d.total) * barWidth;
+          segments += '<div class="week-segment" style="width:' + w + '%;background:' + colors[type] + ';"></div>';
+        }
+      });
+    }
+    return '<div class="week-row">' +
+      '<span class="week-day-label">' + d.label + '</span>' +
+      '<div class="week-bar">' + segments + '</div>' +
+      '<span class="week-count">' + d.total + '</span>' +
+    '</div>';
+  }).join('');
+
+  var grandTotal = totals.went + totals.didnt + totals.accident + totals.self;
+  summary.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">' +
+    '<div class="text-sm"><strong style="color:var(--success);">' + totals.went + '</strong> went</div>' +
+    '<div class="text-sm"><strong style="color:var(--info);">' + totals.self + '</strong> self-initiated</div>' +
+    '<div class="text-sm"><strong style="color:var(--danger);">' + totals.accident + '</strong> accidents</div>' +
+    '<div class="text-sm"><strong>' + grandTotal + '</strong> total</div>' +
+  '</div>';
+}
+
+// ===== HYDRATION =====
+function getHydrationTarget() {
+  var age = state.profile.age;
+  return WATER_TARGETS[Math.min(Math.max(age, 1), 17)] || 6;
+}
+
+function getHydrationCount() {
+  var key = todayKey();
+  return (state.hydration[key] || 0);
+}
+
+function logDrink() {
+  var key = todayKey();
+  state.hydration[key] = (state.hydration[key] || 0) + 1;
+  saveState();
+  renderHydration();
+  updateChildHydration();
+  showToast('Drink logged!');
+}
+
+function logDrinkChild() {
+  logDrink();
+}
+
+function renderHydration() {
+  var target = getHydrationTarget();
+  var count = getHydrationCount();
+  var pct = Math.min((count / target) * 100, 100);
+
+  document.getElementById('hydrationTarget').textContent = 'Target: ' + target + ' cups';
+  document.getElementById('hydrationFill').style.width = pct + '%';
+  document.getElementById('hydrationCount').textContent = count;
+
+  var note = '';
+  if (count === 0) note = 'No drinks logged today yet.';
+  else if (count < target * 0.5) note = 'Keep going! About halfway to the target.';
+  else if (count < target) note = 'Nearly there!';
+  else note = 'Target reached! Great job.';
+  document.getElementById('hydrationNote').textContent = note;
+}
+
+function updateChildHydration() {
+  var target = getHydrationTarget();
+  var count = getHydrationCount();
+  var pct = Math.min((count / target) * 100, 100);
+
+  var countEl = document.getElementById('childHydrationCount');
+  var fillEl = document.getElementById('childHydrationFill');
+  if (countEl) countEl.textContent = count + ' / ' + target;
+  if (fillEl) fillEl.style.width = pct + '%';
+}
+
+// ===== CHILD MODE =====
+function getAgeTier() {
+  var age = state.profile.age;
+  if (age <= 5) return 'early';
+  if (age <= 8) return 'confident';
+  return 'teen';
+}
+
+function enterChildMode() {
+  if (state.profile.mode === 'potty') {
+    showScreen('pottyScreen');
+    renderPottyEntries();
+  } else {
+    showScreen('childScreen');
+    document.getElementById('childWaiting').classList.remove('hidden');
+    document.getElementById('childAlert').classList.add('hidden');
+    updateChildView();
+  }
+  startTimer();
+}
+
+function updateChildView() {
+  var tier = getAgeTier();
+  var name = state.profile.name;
+
+  // Greeting
+  document.getElementById('childHeader').textContent = tier === 'early' ? ('Hi ' + name + '!') : tier === 'confident' ? ('Hey ' + name) : name;
+
+  // Self-init button text
+  var selfBtn = document.getElementById('childSelfBtn');
+  var accBtn = document.getElementById('childAccBtn');
+  if (tier === 'early') {
+    selfBtn.textContent = '\u2B50 I went by myself!';
+    accBtn.textContent = 'Oops, accident';
+  } else if (tier === 'confident') {
+    selfBtn.textContent = '\u2B50 I went on my own!';
+    accBtn.textContent = 'Had an accident';
+  } else {
+    selfBtn.textContent = 'Log: went on my own';
+    accBtn.textContent = 'Log: accident';
+  }
+
+  updateChildRewards();
+  updateChildHydration();
+}
+
+function updateChildRewards() {
+  var pts = state.rewards.points;
+  document.getElementById('childPoints').textContent = pts + ' point' + (pts !== 1 ? 's' : '');
+
+  // Find current milestone
+  var next = REWARD_MILESTONES.find(function(m) { return pts < m.points; }) || REWARD_MILESTONES[REWARD_MILESTONES.length - 1];
+  var prev = 0;
+  for (var i = 0; i < REWARD_MILESTONES.length; i++) {
+    if (REWARD_MILESTONES[i].points === next.points) break;
+    prev = REWARD_MILESTONES[i].points;
+  }
+  var progress = next.points > prev ? ((pts - prev) / (next.points - prev)) * 100 : 100;
+  document.getElementById('childRewardBar').style.width = Math.min(progress, 100) + '%';
+  document.getElementById('childNextReward').textContent = 'Next: ' + next.icon + ' ' + next.label + ' (' + next.points + ' pts)';
+
+  // Badges
+  var badgesHtml = REWARD_MILESTONES.map(function(m) {
+    var unlocked = state.rewards.unlocked.indexOf(m.points) !== -1;
+    return '<span class="reward-badge ' + (unlocked ? 'unlocked' : '') + '" title="' + m.label + ' (' + m.points + ' pts)">' + m.icon + '</span>';
+  }).join('');
+  document.getElementById('childBadges').innerHTML = badgesHtml;
+}
+
+function showChildAlert() {
+  var tier = getAgeTier();
+  var name = state.profile.name;
+
+  document.getElementById('childWaiting').classList.add('hidden');
+  document.getElementById('childAlert').classList.remove('hidden');
+
+  var title, message;
+  if (tier === 'early') {
+    title = 'Time to try!';
+    message = 'Let\'s go to the toilet, ' + name + '. You get a point for trying!';
+    document.getElementById('childRespWent').textContent = '\u2705 I tried!';
+    document.getElementById('childRespDidnt').textContent = 'Not right now';
+    document.getElementById('childRespAccident').textContent = 'Oops, accident';
+  } else if (tier === 'confident') {
+    title = 'Your alarm went off!';
+    message = 'Time to pause and try the toilet.';
+    document.getElementById('childRespWent').textContent = '\u2705 I went';
+    document.getElementById('childRespDidnt').textContent = 'Didn\'t need to';
+    document.getElementById('childRespAccident').textContent = 'Had an accident';
+  } else {
+    title = 'Reminder';
+    message = 'Take a bathroom break.';
+    document.getElementById('childRespWent').textContent = 'Went';
+    document.getElementById('childRespDidnt').textContent = 'Skipped';
+    document.getElementById('childRespAccident').textContent = 'Accident';
+  }
+
+  document.getElementById('childAlertTitle').textContent = title;
+  document.getElementById('childAlertMessage').textContent = message;
+}
+
+function childResponse(type) {
+  logVisit(type, { source: 'child' });
+  document.getElementById('childWaiting').classList.remove('hidden');
+  document.getElementById('childAlert').classList.add('hidden');
+  updateChildRewards();
+  startTimer();
+}
+
+function childSelfInitiated() {
+  logVisit('self', { source: 'child' });
+  updateChildRewards();
+  showToast('\u2B50 Amazing! +3 points');
+}
+
+function childAccident() {
+  logVisit('accident', { source: 'child' });
+}
+
+function exitChildMode() {
+  if (state.pin) {
+    requestPin(function() { goToModeSelect(); });
+  } else {
+    goToModeSelect();
+  }
+}
+
+// ===== SCHOOL PLAN =====
+function renderSchoolPlan() {
+  document.getElementById('schoolOverview').value = state.schoolPlan.overview;
+  document.getElementById('schoolNotes').value = state.schoolPlan.notes || '';
+  renderSchoolTimetable();
+}
+
+function renderSchoolTimetable() {
+  var tbody = document.getElementById('schoolTimetableBody');
+  tbody.innerHTML = state.schoolPlan.timetable.map(function(row, i) {
+    return '<tr>' +
+      '<td><input type="checkbox" ' + (row.active ? 'checked' : '') + ' onchange="updateSchoolRow(' + i + ',\'active\',this.checked)"></td>' +
+      '<td><input type="time" value="' + row.time + '" onchange="updateSchoolRow(' + i + ',\'time\',this.value)"></td>' +
+      '<td><input type="text" value="' + escHtml(row.label) + '" onchange="updateSchoolRow(' + i + ',\'label\',this.value)"></td>' +
+      '<td><button class="delete-btn" onclick="removeSchoolRow(' + i + ')">\u00D7</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function updateSchoolRow(i, field, value) {
+  state.schoolPlan.timetable[i][field] = value;
+  state.schoolPlan.overview = document.getElementById('schoolOverview').value;
+  state.schoolPlan.notes = document.getElementById('schoolNotes').value;
+  saveState();
+}
+
+function addSchoolRow() {
+  state.schoolPlan.timetable.push({ active: true, time: '12:00', label: 'New transition' });
+  saveState();
+  renderSchoolTimetable();
+}
+
+function removeSchoolRow(i) {
+  state.schoolPlan.timetable.splice(i, 1);
+  saveState();
+  renderSchoolTimetable();
+}
+
+function printSchoolPlan() {
+  // Save current school plan state
+  state.schoolPlan.overview = document.getElementById('schoolOverview').value;
+  state.schoolPlan.notes = document.getElementById('schoolNotes').value;
+  saveState();
+
+  var name = state.profile.name;
+  var activeRows = state.schoolPlan.timetable.filter(function(r) { return r.active; });
+  var timetableHtml = activeRows.map(function(r) {
+    return '<tr><td style="padding:6px 12px;border:1px solid #ddd;">' + r.time + '</td><td style="padding:6px 12px;border:1px solid #ddd;">' + escHtml(r.label) + '</td></tr>';
+  }).join('');
+
+  var printDiv = document.getElementById('schoolPlanPrint');
+  printDiv.innerHTML = '<div style="font-family:DM Sans,sans-serif;max-width:700px;margin:0 auto;padding:20px;">' +
+    '<h1 style="font-size:1.4rem;margin-bottom:4px;">Toileting Support Plan: ' + escHtml(name) + '</h1>' +
+    '<p style="color:#666;font-size:0.85rem;">Generated ' + new Date().toLocaleDateString('en-GB') + '</p>' +
+    '<hr style="margin:12px 0;border:none;border-top:1px solid #ddd;">' +
+    '<h2 style="font-size:1.1rem;">Overview</h2>' +
+    '<p style="margin:8px 0;">' + escHtml(state.schoolPlan.overview) + '</p>' +
+    '<h2 style="font-size:1.1rem;margin-top:16px;">Support Strategies</h2>' +
+    '<ol style="margin:8px 0 8px 20px;line-height:1.8;">' +
+      '<li><strong>Timed Toileting</strong> \u2014 prompt at agreed transition points using clear language: "It\'s toilet time."</li>' +
+      '<li><strong>Transition Support</strong> \u2014 prompt before major transitions (break, lunch, class changes, PE, home time).</li>' +
+      '<li><strong>No Punitive Response</strong> \u2014 accidents are not intentional and not behavioural. Respond calmly and help ' + escHtml(name) + ' change without fuss.</li>' +
+      '<li><strong>Discreet Support</strong> \u2014 maintain dignity and privacy. Avoid drawing peer attention.</li>' +
+      '<li><strong>Encouragement</strong> \u2014 praise the behaviour (trying) not the outcome (staying dry).</li>' +
+    '</ol>' +
+    '<h2 style="font-size:1.1rem;margin-top:16px;">Prompt Timetable</h2>' +
+    '<table style="border-collapse:collapse;width:100%;margin:8px 0;"><thead><tr><th style="text-align:left;padding:6px 12px;border:1px solid #ddd;background:#f5f5f5;">Time</th><th style="text-align:left;padding:6px 12px;border:1px solid #ddd;background:#f5f5f5;">Transition</th></tr></thead><tbody>' + timetableHtml + '</tbody></table>' +
+    (state.schoolPlan.notes ? '<h2 style="font-size:1.1rem;margin-top:16px;">Additional Notes</h2><p style="margin:8px 0;">' + escHtml(state.schoolPlan.notes) + '</p>' : '') +
+    '<p style="margin-top:20px;font-size:0.85rem;color:#666;"><strong>Goal:</strong> Build routine, awareness, and independence over time.</p>' +
+    '<p style="font-size:0.75rem;color:#999;margin-top:12px;">Generated by Wets Go! / kintools.net</p>' +
+  '</div>';
+
+  window.print();
+}
+
+// ===== WEEKLY REPORT =====
+function printWeeklyReport() {
+  var now = new Date();
+  var day = now.getDay();
+  var mondayOffset = day === 0 ? -6 : 1 - day;
+  var monday = new Date(now);
+  monday.setDate(monday.getDate() + mondayOffset);
+
+  var totals = { went: 0, didnt: 0, accident: 0, self: 0 };
+  var dayLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  var rows = '';
+
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday);
+    d.setDate(d.getDate() + i);
+    var key = d.toISOString().split('T')[0];
+    var dayEntries = state.logs.filter(function(e) { return e.time.startsWith(key); });
+    var c = { went: 0, didnt: 0, accident: 0, self: 0 };
+    dayEntries.forEach(function(e) { if (c[e.type] !== undefined) c[e.type]++; });
+    totals.went += c.went; totals.didnt += c.didnt; totals.accident += c.accident; totals.self += c.self;
+    rows += '<tr><td style="padding:4px 8px;border:1px solid #ddd;">' + dayLabels[i] + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.went + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.self + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.accident + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.didnt + '</td></tr>';
+  }
+
+  // Hydration totals
+  var hydRows = '';
+  for (var j = 0; j < 7; j++) {
+    var hd = new Date(monday);
+    hd.setDate(hd.getDate() + j);
+    var hk = hd.toISOString().split('T')[0];
+    hydRows += '<tr><td style="padding:4px 8px;border:1px solid #ddd;">' + dayLabels[j] + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + (state.hydration[hk] || 0) + '</td></tr>';
+  }
+
+  var printDiv = document.getElementById('schoolPlanPrint');
+  printDiv.innerHTML = '<div style="font-family:DM Sans,sans-serif;max-width:700px;margin:0 auto;padding:20px;">' +
+    '<h1 style="font-size:1.4rem;">Weekly Summary: ' + escHtml(state.profile.name) + '</h1>' +
+    '<p style="color:#666;font-size:0.85rem;">Week of ' + monday.toLocaleDateString('en-GB') + ' | Generated ' + now.toLocaleDateString('en-GB') + '</p>' +
+    '<hr style="margin:12px 0;border:none;border-top:1px solid #ddd;">' +
+    '<h2 style="font-size:1.1rem;">Bathroom Visits</h2>' +
+    '<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9rem;"><thead><tr><th style="text-align:left;padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Day</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Went</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Self</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Accident</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Didn\'t</th></tr></thead><tbody>' + rows +
+    '<tr style="font-weight:bold;"><td style="padding:4px 8px;border:1px solid #ddd;">Total</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.went + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.self + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.accident + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.didnt + '</td></tr>' +
+    '</tbody></table>' +
+    '<h2 style="font-size:1.1rem;margin-top:16px;">Hydration (cups)</h2>' +
+    '<table style="border-collapse:collapse;width:50%;margin:8px 0;font-size:0.9rem;"><thead><tr><th style="text-align:left;padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Day</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Cups</th></tr></thead><tbody>' + hydRows + '</tbody></table>' +
+    '<p style="font-size:0.85rem;color:#666;margin-top:12px;">Reminder interval: every ' + state.schedule.interval + ' minutes | Active hours: ' + state.schedule.wake + ' - ' + state.schedule.bed + '</p>' +
+    '<p style="font-size:0.75rem;color:#999;margin-top:12px;">Generated by Wets Go! / kintools.net</p>' +
+  '</div>';
+
+  window.print();
+}
+
+// ===== ICS GENERATION =====
+function getIANATimezone() {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone; }
+  catch(e) { return 'UTC'; }
+}
+
+function generateICS() {
+  var tz = getIANATimezone();
+  var interval = state.schedule.interval;
+  var wakeParts = state.schedule.wake.split(':');
+  var bedParts = state.schedule.bed.split(':');
+  var wakeH = parseInt(wakeParts[0]);
+  var wakeM = parseInt(wakeParts[1]);
+  var bedH = parseInt(bedParts[0]);
+  var bedM = parseInt(bedParts[1]);
+
+  // Use tomorrow as start date so events begin from next day
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var y = tomorrow.getFullYear();
+  var mo = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  var da = String(tomorrow.getDate()).padStart(2, '0');
+  var dateStr = y + mo + da;
+
+  var events = '';
+  var wakeMin = wakeH * 60 + wakeM;
+  var bedMin = bedH * 60 + bedM;
+  var uid = 0;
+
+  for (var min = wakeMin; min < bedMin; min += interval) {
+    var h = Math.floor(min / 60);
+    var m = min % 60;
+    var hStr = String(h).padStart(2, '0');
+    var mStr = String(m).padStart(2, '0');
+    uid++;
+
+    events += 'BEGIN:VEVENT\r\n' +
+      'UID:wetsgo-' + uid + '-' + dateStr + '@kintools.net\r\n' +
+      'DTSTART;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
+      'DTEND;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
+      'RRULE:FREQ=DAILY\r\n' +
+      'SUMMARY:Bathroom reminder\r\n' +
+      'DESCRIPTION:Time to try the toilet!\r\n' +
+      'BEGIN:VALARM\r\n' +
+      'TRIGGER:PT0M\r\n' +
+      'ACTION:DISPLAY\r\n' +
+      'DESCRIPTION:Bathroom reminder\r\n' +
+      'END:VALARM\r\n' +
+      'END:VEVENT\r\n';
+  }
+
+  var ics = 'BEGIN:VCALENDAR\r\n' +
+    'VERSION:2.0\r\n' +
+    'PRODID:-//KIN//Wets Go//EN\r\n' +
+    'CALSCALE:GREGORIAN\r\n' +
+    'X-WR-CALNAME:Wets Go! Reminders\r\n' +
+    'X-WR-TIMEZONE:' + tz + '\r\n' +
+    events +
+    'END:VCALENDAR';
+
+  var blob = new Blob([ics], { type: 'text/calendar' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'wetsgo-reminders.ics';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Calendar file downloaded (' + tz + ')');
+}
+
+// ===== SETTINGS =====
+function populateSettings() {
+  document.getElementById('settingsInterval').value = state.schedule.interval;
+  document.getElementById('settingsWake').value = state.schedule.wake;
+  document.getElementById('settingsBed').value = state.schedule.bed;
+  document.getElementById('settingsName').value = state.profile.name;
+  document.getElementById('settingsAge').value = state.profile.age;
+  document.getElementById('settingsMode').value = state.profile.mode;
+  document.getElementById('settingsPin').value = state.pin || '';
+}
+
+function updateSettings() {
+  state.schedule.interval = parseInt(document.getElementById('settingsInterval').value);
+  state.schedule.wake = document.getElementById('settingsWake').value;
+  state.schedule.bed = document.getElementById('settingsBed').value;
+  state.profile.name = document.getElementById('settingsName').value.trim() || state.profile.name;
+  state.profile.age = parseInt(document.getElementById('settingsAge').value) || state.profile.age;
+  state.profile.mode = document.getElementById('settingsMode').value;
+
+  var pin = document.getElementById('settingsPin').value.trim();
+  if (pin === '') {
+    state.pin = '';
+  } else if (/^\d{4}$/.test(pin)) {
+    state.pin = pin;
+  }
+
+  saveState();
+  startTimer();
+  showToast('Settings saved');
+}
+
+// ===== DATA MANAGEMENT =====
+function exportData() {
+  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'wetsgo-backup-' + todayKey() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data exported');
+}
+
+function importData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var imported = JSON.parse(e.target.result);
+      if (imported.profile && imported.logs) {
+        kinConfirm('This will replace all current data. Continue?').then(function(ok) {
+          if (!ok) return;
+          state = imported;
+          saveState();
+          showToast('Data imported');
+          goToModeSelect();
+        });
+      } else {
+        showToast('Invalid data file');
+      }
+    } catch(err) {
+      showToast('Could not read file');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearAllData() {
+  kinConfirm('Delete ALL data? This cannot be undone.').then(function(ok) {
+    if (!ok) return;
+    localStorage.removeItem(STORAGE_KEY);
+    state = null;
+    showScreen('setupScreen');
+    showToast('All data deleted');
+  });
+}
+
+// ===== NOTES =====
+function promptNote() {
+  document.getElementById('noteText').value = '';
+  document.getElementById('noteOverlay').classList.add('visible');
+}
+
+function closeNote() {
+  document.getElementById('noteOverlay').classList.remove('visible');
+}
+
+function saveNote() {
+  var text = document.getElementById('noteText').value.trim();
+  if (!text) { showToast('Please enter a note'); return; }
+  var entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
+    type: 'note',
+    time: new Date().toISOString(),
+    note: text,
+    source: 'parent'
+  };
+  state.logs.push(entry);
+  saveState();
+  closeNote();
+  renderTodayEntries();
+  showToast('Note added');
+}
+
+// ===== UTILITIES =====
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(function() { t.classList.remove('visible'); }, 2200);
+}
+
+function kinConfirm(msg) {
+  return new Promise(function(resolve) {
+    var overlay = document.getElementById('confirmOverlay');
+    document.getElementById('confirmMsg').textContent = msg;
+    overlay.classList.add('visible');
+    document.getElementById('confirmYes').onclick = function() { overlay.classList.remove('visible'); resolve(true); };
+    document.getElementById('confirmNo').onclick = function() { overlay.classList.remove('visible'); resolve(false); };
+  });
+}
+
+function escHtml(s) {
+  var div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function openBugReport() { document.getElementById('bugOverlay').classList.add('visible'); }
+function closeBugReport() { document.getElementById('bugOverlay').classList.remove('visible'); }
+
+function submitBug() {
+  var type = document.getElementById('bugType').value;
+  var desc = document.getElementById('bugDesc').value.trim();
+  var name = document.getElementById('bugName').value.trim();
+  if (!desc) { showToast('Please add a description'); return; }
+
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ form_type: 'bug_report', subject: 'KIN-036 Wets Go!', app: 'KIN-036', type: type, description: desc, name: name || 'Anonymous' })
+  });
+
+  closeBugReport();
+  document.getElementById('bugDesc').value = '';
+  document.getElementById('bugName').value = '';
+  showToast('Thanks for the feedback');
+}
+
+// ===== DEMO MODE =====
+function isDemo() {
+  return window.location.search.indexOf('demo=true') !== -1 || window.location.hash === '#demo';
+}
+
+function loadDemoData() {
+  var today = new Date();
+  var logs = [];
+  var hydration = {};
+
+  // Generate 7 days of sample data
+  for (var d = 6; d >= 0; d--) {
+    var date = new Date(today);
+    date.setDate(date.getDate() - d);
+    var key = date.toISOString().split('T')[0];
+    hydration[key] = Math.floor(Math.random() * 3) + 3;
+
+    var entriesPerDay = Math.floor(Math.random() * 3) + 3;
+    for (var e = 0; e < entriesPerDay; e++) {
+      var hour = 7 + Math.floor(Math.random() * 11);
+      var min = Math.floor(Math.random() * 60);
+      var entryDate = new Date(date);
+      entryDate.setHours(hour, min, 0, 0);
+      var types = ['went', 'went', 'went', 'didnt', 'accident', 'self'];
+      var type = types[Math.floor(Math.random() * types.length)];
+      logs.push({
+        id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4) + d + e,
+        type: type,
+        time: entryDate.toISOString(),
+        note: '',
+        source: 'parent'
+      });
+    }
+  }
+
+  state = {
+    version: 1,
+    profile: { name: 'Sam', age: 7, mode: 'standard' },
+    schedule: { interval: 120, wake: '07:00', bed: '19:30' },
+    pin: '',
+    logs: logs,
+    hydration: hydration,
+    rewards: { points: 34, unlocked: [5, 15, 30] },
+    schoolPlan: {
+      overview: '',
+      timetable: JSON.parse(JSON.stringify(DEFAULT_SCHOOL_ROWS)),
+      notes: ''
+    },
+    pottyStartDate: null,
+    createdAt: new Date().toISOString()
+  };
+}
+
+// ===== INIT =====
+function init() {
+  if (isDemo()) {
+    loadDemoData();
+    showScreen('parentScreen');
+    populateSettings();
+    showParentTab('today');
+    startTimer();
+    showToast('Demo mode');
+    return;
+  }
+
+  if (loadState()) {
+    goToModeSelect();
+  } else {
+    showScreen('setupScreen');
+  }
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function() {});
+}
+
+init();
+</script>
+
+</body>
+</html>
