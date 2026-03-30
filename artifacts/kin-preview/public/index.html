@@ -555,10 +555,8 @@ textarea { resize: vertical; min-height: 80px; }
       <strong>Setup:</strong><br>
       1. Open your phone's Calendar app<br>
       2. Create a new calendar called "Wets Go!"<br>
-      <span style="color:var(--text-muted);">(iPhone: Calendars > Add Calendar. Android: Settings > Add calendar.)</span><br>
       3. Come back here and tap Download<br>
-      4. Choose "Wets Go!" when asked which calendar<br>
-      <span style="color:var(--text-muted);">For the best experience, add this app to your Home Screen first.</span>
+      4. Choose "Wets Go!" when asked which calendar
     </div>
     <div class="form-group">
       <div class="label">Duration</div>
@@ -575,14 +573,14 @@ textarea { resize: vertical; min-height: 80px; }
       <input type="date" id="icsCustomDate">
     </div>
     <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
-    <p class="text-sm text-muted mt-sm" id="androidHint" style="display:none;">
-      <strong>Android users:</strong> Google Calendar on Android often can't open .ics files directly. Instead:<br>
-      1. Open Google Calendar <strong>in your phone's browser</strong> (not the app) at calendar.google.com<br>
-      2. Tap the gear icon > Settings > Import & Export<br>
-      3. Choose the downloaded .ics file<br>
-      4. Select your calendar and tap Import
-    </p>
-    <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
+    <div id="icsHintIOS" style="display:none;">
+      <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove: open Calendar settings, find "Wets Go! Reminders" and delete it.</p>
+      <p class="text-sm text-muted mt-sm">For the best experience, add this app to your Home Screen first.</p>
+    </div>
+    <div id="icsHintAndroid" style="display:none;">
+      <p class="text-sm text-muted mt-sm"><strong>After downloading:</strong> open the file from your Files app. If your calendar imports the events, you're done.</p>
+      <p class="text-sm text-muted mt-sm">If you see "Unable to launch event", this is a long-standing Android limitation. Instead, open <strong>calendar.google.com in your browser</strong> (not the app), go to Settings > Import & Export, and upload the file from there.</p>
+    </div>
   </div>
 
   <div class="card">
@@ -1885,11 +1883,6 @@ function generateICS() {
 
   setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
 
-  if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-    var hint = document.getElementById('androidHint');
-    if (hint) hint.style.display = 'block';
-  }
-
   var label = durationVal === '0' ? 'ongoing' : durationVal === 'custom' ? 'until ' + document.getElementById('icsCustomDate').value : durationVal + ' days';
   showToast('Downloaded (' + label + ', ' + tz + ')');
 }
@@ -2081,6 +2074,20 @@ function init() {
 }
 
 init();
+
+// Platform-specific calendar hints
+(function() {
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var iosHint = document.getElementById('icsHintIOS');
+  var androidHint = document.getElementById('icsHintAndroid');
+  if (iosHint && androidHint) {
+    if (isIOS) {
+      iosHint.style.display = 'block';
+    } else {
+      androidHint.style.display = 'block';
+    }
+  }
+})();
 </script>
 </body>
 </html>
