@@ -575,7 +575,9 @@ textarea { resize: vertical; min-height: 80px; }
       <input type="date" id="icsCustomDate">
     </div>
     <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
-    <p class="text-sm text-muted mt-sm" id="androidHint" style="display:none;">On Android, open the downloaded file from your Files app to add the events.</p>
+    <p class="text-sm text-muted mt-sm" id="androidHint" style="display:none;">
+      <strong>Android users:</strong> If you see "Unable to launch event", don't open the file from the download notification. Instead, open your Files app, go to Downloads, and tap the .ics file from there.
+    </p>
     <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
   </div>
 
