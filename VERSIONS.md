@@ -1,9 +1,9 @@
 # Kin Tools — Version Manifest
 
-Canonical reference for all 37 tools in the Kin ecosystem.  
+Canonical reference for all 38 tools in the Kin ecosystem.  
 All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
-**Last updated:** 2026-03-28  
+**Last updated:** 2026-03-30  
 **Stress-test phase:** in progress — do not push until all 35 checked.
 
 ---
@@ -60,6 +60,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |
 | KIN-036 | Blood Pressure | v1.0 | Darren | bloodpressure.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-037 | Unclaimed | v1.0 | Darren | unclaimed.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
+| KIN-038 | Wets Go! | v1.0 | Darren | wetsgo.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 
 ---
 

@@ -7,21 +7,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="KIN-036">
+<meta name="apple-mobile-web-app-title" content="KIN-038">
 <link rel="apple-touch-icon" id="apple-touch-icon">
-<title>Wets Go! — KIN-036</title>
+<title>Wets Go! — KIN-038</title>
 <link rel="canonical" href="https://wetsgo.kintools.net/">
 <meta name="description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
-<meta property="og:title" content="Wets Go! — KIN-036">
+<meta property="og:title" content="Wets Go! — KIN-038">
 <meta property="og:description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wetsgo.kintools.net/">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wets Go! — KIN-036">
+<meta name="twitter:title" content="Wets Go! — KIN-038">
 <meta name="twitter:description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
 <script>(function(){
   var m = {
-    name: "KIN-036 Wets Go!",
+    name: "KIN-038 Wets Go!",
     short_name: "Wets Go!",
     start_url: ".",
     display: "standalone",
@@ -36,7 +36,7 @@
 })();
 if ("serviceWorker" in navigator) {
   var _sw =
-    "const C='kin036-v1';" +
+    "const C='kin038-v1';" +
     "self.addEventListener('install',function(){self.skipWaiting();});" +
     "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
     "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
@@ -582,7 +582,7 @@ textarea { resize: vertical; min-height: 80px; }
   </div>
 
   <footer style="text-align:center;padding:40px 0 20px;">
-    KIN-036 &middot; v1.0 &middot; <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &middot; by Darren
+    KIN-038 &middot; v1.0 &middot; <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &middot; by Darren
     <div style="text-align:center;margin-top:8px;position:relative">
       <span style="display:inline-flex;align-items:center;gap:6px">
         <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:system-ui,sans-serif">
@@ -835,7 +835,7 @@ textarea { resize: vertical; min-height: 80px; }
     <div class="kin-br-head">
       <div>
         <h2>Report an issue</h2>
-        <p>KIN-036 &mdash; Wets Go!</p>
+        <p>KIN-038 &mdash; Wets Go!</p>
       </div>
       <button class="kin-br-close" id="kin-bug-close" aria-label="Close">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -952,8 +952,8 @@ textarea { resize: vertical; min-height: 80px; }
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         form_type: 'bug_report',
-        subject: 'KIN-036 \u2014 Wets Go!',
-        app: 'KIN-036',
+        subject: 'KIN-038 \u2014 Wets Go!',
+        app: 'KIN-038',
         type: typeRaw,
         description: data.get('description') || '',
         name: anon ? '' : (data.get('name') || '')
@@ -967,7 +967,7 @@ textarea { resize: vertical; min-height: 80px; }
 
 <script>
 // ===== CONSTANTS =====
-var STORAGE_KEY = 'kin036-wetsgo';
+var STORAGE_KEY = 'kin038-wetsgo';
 var CIRCUMFERENCE = 2 * Math.PI * 88; // ~553
 
 var REWARD_MILESTONES = [
