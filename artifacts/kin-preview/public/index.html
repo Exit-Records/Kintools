@@ -552,12 +552,13 @@ textarea { resize: vertical; min-height: 80px; }
   <div class="card">
     <h3>Calendar Reminders</h3>
     <div style="background:var(--bg-input);border-radius:10px;padding:14px;margin-bottom:14px;font-size:0.85rem;line-height:1.6;">
-      <strong>Before you download:</strong><br>
+      <strong>Setup:</strong><br>
       1. Open your phone's Calendar app<br>
       2. Create a new calendar called "Wets Go!"<br>
-      <span style="color:var(--text-muted);">(iOS: Calendars > Add Calendar. Android: Settings > Add calendar.)</span><br>
+      <span style="color:var(--text-muted);">(iPhone: Calendars > Add Calendar. Android: Settings > Add calendar.)</span><br>
       3. Come back here and tap Download<br>
-      4. When asked which calendar, choose "Wets Go!"
+      4. Choose "Wets Go!" when asked which calendar<br>
+      <span style="color:var(--text-muted);">For the best experience, add this app to your Home Screen first.</span>
     </div>
     <div class="form-group">
       <div class="label">Duration</div>
@@ -574,6 +575,7 @@ textarea { resize: vertical; min-height: 80px; }
       <input type="date" id="icsCustomDate">
     </div>
     <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
+    <p class="text-sm text-muted mt-sm" id="androidHint" style="display:none;">On Android, open the downloaded file from your Files app to add the events.</p>
     <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
   </div>
 
@@ -1876,6 +1878,11 @@ function generateICS() {
   }
 
   setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+
+  if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    var hint = document.getElementById('androidHint');
+    if (hint) hint.style.display = 'block';
+  }
 
   var label = durationVal === '0' ? 'ongoing' : durationVal === 'custom' ? 'until ' + document.getElementById('icsCustomDate').value : durationVal + ' days';
   showToast('Downloaded (' + label + ', ' + tz + ')');
