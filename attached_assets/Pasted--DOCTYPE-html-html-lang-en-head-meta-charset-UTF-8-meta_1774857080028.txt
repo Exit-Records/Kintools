@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -10,10 +11,6 @@
 <meta property="og:description" content="A curated colour picker with harmony palettes, WCAG accessibility, and colour vision simulation.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://colourpicker.kintools.net">
-<meta property="og:image" content="https://colourpicker.kintools.net/icon.svg">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KIN-004 — Colour Picker — Kin Tools">
-<meta name="twitter:description" content="A curated colour picker with harmony palettes, WCAG accessibility, and colour vision simulation.">
 <link rel="canonical" href="https://colourpicker.kintools.net">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -170,7 +167,7 @@ body.dark footer{color:rgba(255,255,255,0.35)}
 /* ===== BUG REPORT SHEET ===== */
 #bug-overlay{display:none;position:fixed;inset:0;z-index:901;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px)}
 #bug-overlay.active{display:block}
-#bug-sheet{position:fixed;bottom:0;left:0;right:0;z-index:902;background:#17171f;border-radius:20px 20px 0 0;border:1px solid rgba(255,255,255,0.08);border-bottom:none;padding:0 20px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.6);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);color:white}
+#bug-sheet{position:fixed;bottom:0;left:0;right:0;z-index:902;background:#17171f;border-radius:20px 20px 0 0;border:1px solid rgba(255,255,255,0.08);border-bottom:none;padding:0 20px 40px;box-shadow:0 -8px 40px rgba(0,0,0,0.6);font-family:-apple-system,BlinkMacSystemFont,‘Segoe UI’,sans-serif;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);color:white}
 #bug-sheet.open{transform:translateY(0)}
 .bug-handle{display:flex;justify-content:center;padding:12px 0 4px}
 .bug-handle div{width:36px;height:4px;border-radius:99px;background:rgba(255,255,255,0.15)}
@@ -196,10 +193,12 @@ body.dark footer{color:rgba(255,255,255,0.35)}
 body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
 .info-popover:hover .info-text,.info-popover:focus .info-text{display:block}
 </style>
+
 </head>
 <body>
 
 <!-- Landing Card -->
+
 <div id="landing-card">
   <div class="landing-inner">
     <h1>Colour Picker</h1>
@@ -209,9 +208,11 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
 </div>
 
 <!-- Toast -->
+
 <div id="toast-container"><div class="toast" id="toast"></div></div>
 
 <!-- Confirm Modal -->
+
 <div id="confirm-overlay">
   <div id="confirm-box">
     <p id="confirm-msg"></p>
@@ -223,6 +224,7 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
 </div>
 
 <!-- CVD SVG Filters -->
+
 <svg class="cvd-filter-wrap" aria-hidden="true">
   <defs>
     <filter id="cvd-deuteranopia" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.367 0.861 -0.228 0 0 0.280 0.673 0.047 0 0 -0.012 0.043 0.969 0 0 0 0 0 1 0"/></filter>
@@ -233,11 +235,12 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
 </svg>
 
 <!-- Dark Mode Toggle -->
+
 <button id="dark-toggle" aria-label="Toggle light/dark mode"></button>
 
 <!-- Main App -->
-<div id="app">
 
+<div id="app">
   <!-- Colour Header -->
   <div id="colour-header">
     <div id="cvd-wrap">
@@ -245,34 +248,36 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
       <div class="name" id="colour-name"></div>
       <div class="hex-display" id="hex-display"></div>
 
-      <div class="preview-row">
-        <div class="preview-box" id="preview-on-colour">
-          <div class="preview-label">Text preview</div>
-          <div>True To The Craft</div>
-        </div>
-        <div class="preview-box" id="preview-on-bg">
-          <div class="preview-label">On background</div>
-          <div>True To The Craft</div>
-        </div>
-      </div>
-
-      <div class="gradient-bar" id="gradient-bar"></div>
-
-      <!-- CVD Simulation -->
-      <div class="cvd-row" id="cvd-row" role="group" aria-label="Colour vision simulation"></div>
-
-      <!-- Action Buttons -->
-      <div class="action-row">
-        <button class="action-btn" id="btn-random">✦ Random</button>
-        <button class="action-btn" id="btn-eyedropper" style="display:none">⊙ Eyedropper</button>
-        <button class="action-btn" id="btn-export">↑ Export Palette</button>
-      </div>
-      <div class="status-msg" id="status-msg"></div>
+```
+  <div class="preview-row">
+    <div class="preview-box" id="preview-on-colour">
+      <div class="preview-label">Text preview</div>
+      <div>True To The Craft</div>
+    </div>
+    <div class="preview-box" id="preview-on-bg">
+      <div class="preview-label">On background</div>
+      <div>True To The Craft</div>
     </div>
   </div>
 
-  <div class="content">
+  <div class="gradient-bar" id="gradient-bar"></div>
 
+  <!-- CVD Simulation -->
+  <div class="cvd-row" id="cvd-row" role="group" aria-label="Colour vision simulation"></div>
+
+  <!-- Action Buttons -->
+  <div class="action-row">
+    <button class="action-btn" id="btn-random">✦ Random</button>
+    <button class="action-btn" id="btn-eyedropper" style="display:none">⊙ Eyedropper</button>
+    <button class="action-btn" id="btn-export">↑ Export Palette</button>
+  </div>
+  <div class="status-msg" id="status-msg"></div>
+</div>
+```
+
+  </div>
+
+  <div class="content">
     <!-- Colour Values -->
     <section class="section">
       <div class="section-title">Colour Values</div>
@@ -292,89 +297,92 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
       </div>
     </section>
 
-    <!-- Colour Wheel -->
-    <section class="section">
-      <div class="section-title">Colour Wheel</div>
-      <div class="wheel-wrap" id="wheel-wrap">
-        <canvas id="wheel-canvas" width="220" height="220"></canvas>
-        <div class="wheel-cursor" id="wheel-cursor"></div>
-      </div>
-      <div class="slider-group">
-        <div>
-          <div class="slider-header"><span>Lightness</span><span id="lightness-val"></span></div>
-          <input type="range" min="0" max="100" id="slider-lightness">
-        </div>
-        <div>
-          <div class="slider-header"><span>Saturation</span><span id="saturation-val"></span></div>
-          <input type="range" min="0" max="100" id="slider-saturation">
-        </div>
-      </div>
-    </section>
+```
+<!-- Colour Wheel -->
+<section class="section">
+  <div class="section-title">Colour Wheel</div>
+  <div class="wheel-wrap" id="wheel-wrap">
+    <canvas id="wheel-canvas" width="220" height="220"></canvas>
+    <div class="wheel-cursor" id="wheel-cursor"></div>
+  </div>
+  <div class="slider-group">
+    <div>
+      <div class="slider-header"><span>Lightness</span><span id="lightness-val"></span></div>
+      <input type="range" min="0" max="100" id="slider-lightness">
+    </div>
+    <div>
+      <div class="slider-header"><span>Saturation</span><span id="saturation-val"></span></div>
+      <input type="range" min="0" max="100" id="slider-saturation">
+    </div>
+  </div>
+</section>
 
-    <!-- Harmony Palette -->
-    <section class="section">
-      <div class="harmony-header">
-        <div class="section-title" style="margin-bottom:0">Harmony Palette</div>
-        <button class="shuffle-btn" id="btn-shuffle">⟳ Shuffle</button>
-      </div>
-      <div class="harmony-modes" id="harmony-modes"></div>
-      <div class="swatch-row" id="harmony-swatches"></div>
-      <div class="slider-group" style="margin-top:14px">
-        <div>
-          <div class="slider-header"><span>Rotate Hue</span><span id="rotate-val"></span></div>
-          <input type="range" min="0" max="359" id="slider-rotate">
-        </div>
-        <div>
-          <div class="slider-header"><span>Cool</span><span id="temp-val"></span><span>Warm</span></div>
-          <input type="range" min="-3" max="3" step="1" id="slider-temp">
-        </div>
-      </div>
-    </section>
+<!-- Harmony Palette -->
+<section class="section">
+  <div class="harmony-header">
+    <div class="section-title" style="margin-bottom:0">Harmony Palette</div>
+    <button class="shuffle-btn" id="btn-shuffle">⟳ Shuffle</button>
+  </div>
+  <div class="harmony-modes" id="harmony-modes"></div>
+  <div class="swatch-row" id="harmony-swatches"></div>
+  <div class="slider-group" style="margin-top:14px">
+    <div>
+      <div class="slider-header"><span>Rotate Hue</span><span id="rotate-val"></span></div>
+      <input type="range" min="0" max="359" id="slider-rotate">
+    </div>
+    <div>
+      <div class="slider-header"><span>Cool</span><span id="temp-val"></span><span>Warm</span></div>
+      <input type="range" min="-3" max="3" step="1" id="slider-temp">
+    </div>
+  </div>
+</section>
 
-    <!-- Shades & Tints -->
-    <section class="section">
-      <div class="section-title">Shades &amp; Tints</div>
-      <div class="shades-row" id="shades-row"></div>
-    </section>
+<!-- Shades & Tints -->
+<section class="section">
+  <div class="section-title">Shades & Tints</div>
+  <div class="shades-row" id="shades-row"></div>
+</section>
 
-    <!-- Accessibility -->
-    <section class="section">
-      <div class="section-title">Accessibility (WCAG)</div>
-      <div class="a11y-previews">
-        <div class="a11y-preview" id="a11y-white">
-          <div class="a11y-label">White text</div>
-          <div class="a11y-sample">Sample text on colour</div>
-          <div class="a11y-ratio" id="ratio-white"></div>
-        </div>
-        <div class="a11y-preview" id="a11y-black">
-          <div class="a11y-label">Black text</div>
-          <div class="a11y-sample">Sample text on colour</div>
-          <div class="a11y-ratio" id="ratio-black"></div>
-        </div>
-      </div>
-      <div class="a11y-badges" id="a11y-badges"></div>
-      <div class="a11y-best" id="a11y-best"></div>
-    </section>
+<!-- Accessibility -->
+<section class="section">
+  <div class="section-title">Accessibility (WCAG)</div>
+  <div class="a11y-previews">
+    <div class="a11y-preview" id="a11y-white">
+      <div class="a11y-label">White text</div>
+      <div class="a11y-sample">Sample text on colour</div>
+      <div class="a11y-ratio" id="ratio-white"></div>
+    </div>
+    <div class="a11y-preview" id="a11y-black">
+      <div class="a11y-label">Black text</div>
+      <div class="a11y-sample">Sample text on colour</div>
+      <div class="a11y-ratio" id="ratio-black"></div>
+    </div>
+  </div>
+  <div class="a11y-badges" id="a11y-badges"></div>
+  <div class="a11y-best" id="a11y-best"></div>
+</section>
 
-    <!-- Copy Colour -->
-    <section class="section">
-      <div class="section-title">Copy Colour</div>
-      <div class="copy-grid" id="copy-grid"></div>
-    </section>
+<!-- Copy Colour -->
+<section class="section">
+  <div class="section-title">Copy Colour</div>
+  <div class="copy-grid" id="copy-grid"></div>
+</section>
 
-    <!-- Recent Colours -->
-    <section class="section" id="recent-section" style="display:none">
-      <div class="section-title">Recent Colours
-        <span class="info-popover" tabindex="0">ⓘ
-          <span class="info-text">Recent colours are stored locally on your device. No data is sent anywhere.</span>
-        </span>
-      </div>
-      <div class="recent-row" id="recent-row"></div>
-    </section>
+<!-- Recent Colours -->
+<section class="section" id="recent-section" style="display:none">
+  <div class="section-title">Recent Colours
+    <span class="info-popover" tabindex="0">ⓘ
+      <span class="info-text">Recent colours are stored locally on your device. No data is sent anywhere.</span>
+    </span>
+  </div>
+  <div class="recent-row" id="recent-row"></div>
+</section>
+```
 
   </div>
 
   <!-- Footer -->
+
   <footer>
     <div style="display:flex;justify-content:center;margin-bottom:8px">
       <span class="local-badge">
@@ -387,10 +395,10 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
     </div>
     <div class="footer-id">KIN-004 · v2.0 · Kin Tools · by dBridge</div>
   </footer>
-
 </div>
 
 <!-- Bug Report Sheet -->
+
 <div id="bug-overlay"></div>
 <div id="bug-sheet">
   <div class="bug-handle"><div></div></div>
@@ -425,53 +433,54 @@ body.dark .info-popover .info-text{background:#e8e4dc;color:#1a1714}
 'use strict';
 
 // ── State ──
-var hue = 220, sat = 70, lit = 50;
-var harmonyMode = 'analogous';
-var hueRotate = 0, tempShift = 0;
-var lockedIndices = new Set();
-var recentColours = [];
-var cvdMode = 'none';
-var isDark = false;
-var DEMO = new URLSearchParams(location.search).has('demo');
+let hue = 220, sat = 70, lit = 50;
+let harmonyMode = 'analogous';
+let hueRotate = 0, tempShift = 0;
+let lockedIndices = new Set();
+let recentColours = [];
+let cvdMode = 'none';
+let isDark = false;
+const DEMO = new URLSearchParams(location.search).has('demo');
 
 // ── DOM refs ──
-var $ = function(id){ return document.getElementById(id); };
-var landingCard = $('landing-card');
-var darkToggle = $('dark-toggle');
-var colourHeader = $('colour-header');
-var cvdWrap = $('cvd-wrap');
-var colourName = $('colour-name');
-var hexDisplay = $('hex-display');
-var previewOnColour = $('preview-on-colour');
-var previewOnBg = $('preview-on-bg');
-var gradientBar = $('gradient-bar');
-var cvdRow = $('cvd-row');
-var statusMsg = $('status-msg');
-var inputHex = $('input-hex');
-var inputRgb = $('input-rgb');
-var inputHsl = $('input-hsl');
-var wheelCanvas = $('wheel-canvas');
-var wheelCursor = $('wheel-cursor');
-var sliderLightness = $('slider-lightness');
-var sliderSaturation = $('slider-saturation');
-var lightnessVal = $('lightness-val');
-var saturationVal = $('saturation-val');
-var harmonyModes = $('harmony-modes');
-var harmonySwatches = $('harmony-swatches');
-var sliderRotate = $('slider-rotate');
-var sliderTemp = $('slider-temp');
-var rotateVal = $('rotate-val');
-var tempVal = $('temp-val');
-var shadesRow = $('shades-row');
-var a11yWhite = $('a11y-white');
-var a11yBlack = $('a11y-black');
-var ratioWhite = $('ratio-white');
-var ratioBlack = $('ratio-black');
-var a11yBadges = $('a11y-badges');
-var a11yBest = $('a11y-best');
-var copyGrid = $('copy-grid');
-var recentSection = $('recent-section');
-var recentRow = $('recent-row');
+const $ = id => document.getElementById(id);
+const landingCard = $('landing-card');
+const darkToggle = $('dark-toggle');
+const colourHeader = $('colour-header');
+const cvdWrap = $('cvd-wrap');
+const colourName = $('colour-name');
+const hexDisplay = $('hex-display');
+const previewOnColour = $('preview-on-colour');
+const previewOnBg = $('preview-on-bg');
+const gradientBar = $('gradient-bar');
+const cvdRow = $('cvd-row');
+const statusMsg = $('status-msg');
+const inputHex = $('input-hex');
+const inputRgb = $('input-rgb');
+const inputHsl = $('input-hsl');
+const wheelCanvas = $('wheel-canvas');
+const wheelCursor = $('wheel-cursor');
+const wheelWrap = $('wheel-wrap');
+const sliderLightness = $('slider-lightness');
+const sliderSaturation = $('slider-saturation');
+const lightnessVal = $('lightness-val');
+const saturationVal = $('saturation-val');
+const harmonyModes = $('harmony-modes');
+const harmonySwatches = $('harmony-swatches');
+const sliderRotate = $('slider-rotate');
+const sliderTemp = $('slider-temp');
+const rotateVal = $('rotate-val');
+const tempVal = $('temp-val');
+const shadesRow = $('shades-row');
+const a11yWhite = $('a11y-white');
+const a11yBlack = $('a11y-black');
+const ratioWhite = $('ratio-white');
+const ratioBlack = $('ratio-black');
+const a11yBadges = $('a11y-badges');
+const a11yBest = $('a11y-best');
+const copyGrid = $('copy-grid');
+const recentSection = $('recent-section');
+const recentRow = $('recent-row');
 
 // ── Colour math ──
 function hexToRgb(hex) {
@@ -480,14 +489,14 @@ function hexToRgb(hex) {
   return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
 }
 function rgbToHex(r,g,b) {
-  return '#' + [r,g,b].map(function(v){ return Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0'); }).join('');
+  return '#' + [r,g,b].map(v => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
 }
 function rgbToHsl(r,g,b) {
   r/=255; g/=255; b/=255;
-  var max=Math.max(r,g,b), min=Math.min(r,g,b), l=(max+min)/2;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), l=(max+min)/2;
   if(max===min) return [0,0,Math.round(l*100)];
-  var d=max-min, s=l>0.5?d/(2-max-min):d/(max+min);
-  var h=0;
+  const d=max-min, s=l>0.5?d/(2-max-min):d/(max+min);
+  let h=0;
   if(max===r) h=(g-b)/d+(g<b?6:0);
   else if(max===g) h=(b-r)/d+2;
   else h=(r-g)/d+4;
@@ -495,18 +504,18 @@ function rgbToHsl(r,g,b) {
 }
 function hslToRgb(h,s,l) {
   s/=100; l/=100;
-  var a=s*Math.min(l,1-l);
-  function f(n){ var k=(n+h/30)%12; return l-a*Math.max(Math.min(k-3,9-k,1),-1); }
+  const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12; return l-a*Math.max(Math.min(k-3,9-k,1),-1);};
   return [Math.round(f(0)*255), Math.round(f(8)*255), Math.round(f(4)*255)];
 }
-function hslToHex(h,s,l) { var rgb=hslToRgb(h,s,l); return rgbToHex(rgb[0],rgb[1],rgb[2]); }
+function hslToHex(h,s,l) { const [r,g,b]=hslToRgb(h,s,l); return rgbToHex(r,g,b); }
 function clamp(v,lo,hi) { return Math.max(lo,Math.min(hi,v)); }
 function luminance(r,g,b) {
-  var vals = [r,g,b].map(function(v){ v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); });
-  return 0.2126*vals[0] + 0.7152*vals[1] + 0.0722*vals[2];
+  const [rl,gl,bl] = [r,g,b].map(v => { v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); });
+  return 0.2126*rl + 0.7152*gl + 0.0722*bl;
 }
 function contrastRatio(r1,g1,b1,r2,g2,b2) {
-  var l1=luminance(r1,g1,b1), l2=luminance(r2,g2,b2);
+  const l1=luminance(r1,g1,b1), l2=luminance(r2,g2,b2);
   return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
 }
 function textColour(r,g,b) { return luminance(r,g,b)>0.179?'#1a1a1a':'#f5f5f5'; }
@@ -514,9 +523,9 @@ function colourDescription(h,s,l) {
   if(s<8) return l<12?'Near Black':l<30?'Dark Grey':l<55?'Grey':l<80?'Light Grey':'Near White';
   if(l<15) return 'Very Dark';
   if(l>90) return 'Very Light';
-  var prefix = s<30?'Muted ':s>75?'Vivid ':'';
-  var shade = l<35?'Dark ':l>65?'Light ':'';
-  var name='';
+  const prefix = s<30?'Muted ':s>75?'Vivid ':'';
+  const shade = l<35?'Dark ':l>65?'Light ':'';
+  let name='';
   if(h<15||h>=345) name='Red';
   else if(h<40) name='Orange';
   else if(h<65) name='Yellow';
@@ -533,30 +542,47 @@ function colourDescription(h,s,l) {
 
 // ── Harmony ──
 function getHarmony(h,s,l,mode,temp) {
-  var rot = temp*15;
-  function shift(n){ return (h+n+rot+360)%360; }
+  const rot = temp*15;
+  const shift = n => (h+n+rot+360)%360;
   if(mode==='complementary') return [hslToHex(shift(0),s,l), hslToHex(shift(180),s,l)];
   if(mode==='analogous') return [hslToHex(shift(-30),s,l), hslToHex(shift(0),s,l), hslToHex(shift(30),s,l)];
   return [hslToHex(shift(0),s,l), hslToHex(shift(120),s,l), hslToHex(shift(240),s,l)];
 }
 function getShades(h,s) {
-  return [5,12,20,30,40,50,60,70,80,90,95].map(function(l){ return hslToHex(h,s,l); });
+  return [5,12,20,30,40,50,60,70,80,90,95].map(l => hslToHex(h,s,l));
 }
 
 // ── Toast & Confirm ──
-var toastTimer;
+let toastTimer;
 function showToast(msg) {
-  var t = $('toast');
+  const t = $('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+function kinConfirm(msg) {
+  return new Promise(resolve => {
+    const overlay = $('confirm-overlay');
+    $('confirm-msg').textContent = msg;
+    overlay.classList.add('active');
+    function cleanup(val) {
+      overlay.classList.remove('active');
+      $('confirm-ok').removeEventListener('click', onOk);
+      $('confirm-cancel').removeEventListener('click', onCancel);
+      resolve(val);
+    }
+    function onOk() { cleanup(true); }
+    function onCancel() { cleanup(false); }
+    $('confirm-ok').addEventListener('click', onOk);
+    $('confirm-cancel').addEventListener('click', onCancel);
+  });
 }
 
 // ── Landing card ──
 function dismissLanding() {
   landingCard.classList.add('hide');
-  setTimeout(function(){ landingCard.style.display = 'none'; }, 500);
+  setTimeout(() => { landingCard.style.display = 'none'; }, 500);
 }
 setTimeout(dismissLanding, 2200);
 landingCard.addEventListener('click', dismissLanding);
@@ -568,8 +594,8 @@ function applyTheme() {
   darkToggle.textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('kin004-theme', isDark ? 'dark' : 'light');
 }
-darkToggle.addEventListener('click', function(){ isDark = !isDark; applyTheme(); render(); });
-var savedTheme = localStorage.getItem('kin004-theme');
+darkToggle.addEventListener('click', () => { isDark = !isDark; applyTheme(); render(); });
+const savedTheme = localStorage.getItem('kin004-theme');
 if (savedTheme) isDark = savedTheme === 'dark';
 applyTheme();
 
@@ -579,19 +605,20 @@ if (DEMO) {
 }
 
 // ── Wheel drawing ──
-var WS = 220, WR = WS/2-4, WCX = WS/2, WCY = WS/2;
+// Matches original React implementation: atan2 + 180 so red sits at 9 o'clock
+const WS = 220, WR = WS/2-4, WCX = WS/2, WCY = WS/2;
 function drawWheel() {
-  var ctx = wheelCanvas.getContext('2d');
-  var img = ctx.createImageData(WS, WS);
-  for(var y=0; y<WS; y++) {
-    for(var x=0; x<WS; x++) {
-      var dx=x-WCX, dy=y-WCY, dist=Math.sqrt(dx*dx+dy*dy);
-      var i = (y*WS+x)*4;
+  const ctx = wheelCanvas.getContext('2d');
+  const img = ctx.createImageData(WS, WS);
+  for(let y=0; y<WS; y++) {
+    for(let x=0; x<WS; x++) {
+      const dx=x-WCX, dy=y-WCY, dist=Math.sqrt(dx*dx+dy*dy);
+      const i = (y*WS+x)*4;
       if(dist>WR) { img.data[i+3]=0; continue; }
-      var angle = Math.atan2(dy,dx)*180/Math.PI + 180;
-      var s2 = dist/WR*100;
-      var rgb = hslToRgb(angle, s2, 50);
-      img.data[i]=rgb[0]; img.data[i+1]=rgb[1]; img.data[i+2]=rgb[2]; img.data[i+3]=255;
+      const angle = Math.atan2(dy,dx)*180/Math.PI + 180;
+      const s2 = dist/WR*100;
+      const [r,g,b] = hslToRgb(angle, s2, 50);
+      img.data[i]=r; img.data[i+1]=g; img.data[i+2]=b; img.data[i+3]=255;
     }
   }
   ctx.putImageData(img, 0, 0);
@@ -599,10 +626,11 @@ function drawWheel() {
 drawWheel();
 
 function updateWheelCursor() {
-  var angle = hue*Math.PI/180 - Math.PI;
-  var dist = sat/100*WR;
-  var cx = WCX + Math.cos(angle)*dist;
-  var cy = WCY + Math.sin(angle)*dist;
+  // Convert hue back to canvas position: inverse of the +180 used when drawing
+  const angle = hue*Math.PI/180 - Math.PI;
+  const dist = sat/100*WR;
+  const cx = WCX + Math.cos(angle)*dist;
+  const cy = WCY + Math.sin(angle)*dist;
   wheelCursor.style.left = (cx/WS*100)+'%';
   wheelCursor.style.top = (cy/WS*100)+'%';
   wheelCursor.style.background = hslToHex(hue, sat, 50);
@@ -610,16 +638,17 @@ function updateWheelCursor() {
 
 function wheelPointer(e) {
   if(!(e.buttons & 1) && e.type !== 'pointerdown') return;
-  var rect = wheelCanvas.getBoundingClientRect();
-  var scaleX = WS/rect.width, scaleY = WS/rect.height;
-  var dx = (e.clientX - rect.left)*scaleX - WCX;
-  var dy = (e.clientY - rect.top)*scaleY - WCY;
-  var dist = Math.min(Math.sqrt(dx*dx+dy*dy), WR);
-  var angle = (Math.atan2(dy, dx)*180/Math.PI + 360) % 360;
-  var s = Math.round(dist/WR*100);
+  const rect = wheelCanvas.getBoundingClientRect();
+  const scaleX = WS/rect.width, scaleY = WS/rect.height;
+  const dx = (e.clientX - rect.left)*scaleX - WCX;
+  const dy = (e.clientY - rect.top)*scaleY - WCY;
+  const dist = Math.min(Math.sqrt(dx*dx+dy*dy), WR);
+  // Raw angle: cursor renders opposite via the +180 offset in drawing/positioning
+  const angle = (Math.atan2(dy, dx)*180/Math.PI + 360) % 360;
+  const s = Math.round(dist/WR*100);
   setColour(Math.round(angle), s, lit);
 }
-wheelCanvas.addEventListener('pointerdown', function(e){ wheelPointer(e); wheelCanvas.setPointerCapture(e.pointerId); });
+wheelCanvas.addEventListener('pointerdown', e => { wheelPointer(e); wheelCanvas.setPointerCapture(e.pointerId); });
 wheelCanvas.addEventListener('pointermove', wheelPointer);
 
 // ── Set colour (master update) ──
@@ -633,22 +662,22 @@ function setColour(h, s, l) {
 
 function setColourFromHex(hex) {
   try {
-    var rgb = hexToRgb(hex);
-    var hsl = rgbToHsl(rgb[0],rgb[1],rgb[2]);
-    setColour(hsl[0], hsl[1], hsl[2]);
+    const [r,g,b] = hexToRgb(hex);
+    const [h,s,l] = rgbToHsl(r,g,b);
+    setColour(h, s, l);
   } catch(e) {}
 }
 
 // ── Recent ──
 function addRecent(h, s, l) {
-  var hex = hslToHex(h, s, l);
+  const hex = hslToHex(h, s, l);
   if(recentColours[0] && recentColours[0].hex === hex) return;
-  recentColours = [{hex:hex, h:h, s:s, l:l}].concat(recentColours.filter(function(c){ return c.hex!==hex; })).slice(0, 10);
+  recentColours = [{hex, h, s, l}, ...recentColours.filter(c=>c.hex!==hex)].slice(0, 10);
   try { localStorage.setItem('kin004-recent', JSON.stringify(recentColours)); } catch(e){}
 }
 function loadRecent() {
   try {
-    var saved = localStorage.getItem('kin004-recent');
+    const saved = localStorage.getItem('kin004-recent');
     if(saved) recentColours = JSON.parse(saved);
   } catch(e){}
 }
@@ -656,43 +685,51 @@ loadRecent();
 
 // ── Render ──
 function render() {
-  var hex = hslToHex(hue, sat, lit);
-  var rgb = hexToRgb(hex);
-  var r=rgb[0], g=rgb[1], b=rgb[2];
-  var txtCol = textColour(r,g,b);
-  var desc = colourDescription(hue, sat, lit);
-  var palette = getHarmony((hue+hueRotate)%360, sat, lit, harmonyMode, tempShift);
-  var shades = getShades(hue, sat);
-  var whiteRatio = contrastRatio(r,g,b,255,255,255);
-  var blackRatio = contrastRatio(r,g,b,0,0,0);
-  var bestRatio = Math.max(whiteRatio, blackRatio);
+  const hex = hslToHex(hue, sat, lit);
+  const [r,g,b] = hexToRgb(hex);
+  const txtCol = textColour(r,g,b);
+  const desc = colourDescription(hue, sat, lit);
+  const palette = getHarmony((hue+hueRotate)%360, sat, lit, harmonyMode, tempShift);
+  const shades = getShades(hue, sat);
+  const whiteRatio = contrastRatio(r,g,b,255,255,255);
+  const blackRatio = contrastRatio(r,g,b,0,0,0);
+  const bestRatio = Math.max(whiteRatio, blackRatio);
 
-  cvdWrap.style.filter = cvdMode !== 'none' ? 'url(#cvd-'+cvdMode+')' : '';
+  // CVD filter
+  cvdWrap.style.filter = cvdMode !== 'none' ? `url(#cvd-${cvdMode})` : '';
 
+  // Header
   colourHeader.style.background = hex;
   colourHeader.style.color = txtCol;
   colourName.textContent = desc;
   hexDisplay.textContent = hex.toUpperCase();
 
+  // Previews
   previewOnColour.style.background = hex;
   previewOnColour.style.border = '1.5px solid rgba(255,255,255,0.25)';
   previewOnColour.style.color = txtCol;
   previewOnBg.style.background = txtCol === '#1a1a1a' ? '#f5f5f5' : '#1a1a1a';
   previewOnBg.style.color = hex;
 
-  gradientBar.style.background = 'linear-gradient(to right, '+palette.join(', ')+')';
+  // Gradient bar
+  gradientBar.style.background = `linear-gradient(to right, ${palette.join(', ')})`;
 
+  // CVD buttons
   renderCvdButtons(txtCol, hex);
 
-  document.querySelectorAll('.action-btn').forEach(function(btn){ btn.style.color = txtCol; });
+  // Action button styles
+  document.querySelectorAll('.action-btn').forEach(btn => { btn.style.color = txtCol; });
   statusMsg.style.color = txtCol;
 
+  // Inputs
   inputHex.value = hex;
-  inputRgb.value = r+', '+g+', '+b;
-  inputHsl.value = hue+', '+sat+'%, '+lit+'%';
+  inputRgb.value = `${r}, ${g}, ${b}`;
+  inputHsl.value = `${hue}, ${sat}%, ${lit}%`;
 
+  // Wheel cursor
   updateWheelCursor();
 
+  // Sliders
   sliderLightness.value = lit;
   lightnessVal.textContent = lit + '%';
   sliderSaturation.value = sat;
@@ -700,12 +737,18 @@ function render() {
   sliderRotate.value = hueRotate;
   rotateVal.textContent = hueRotate + '°';
   sliderTemp.value = tempShift;
-  tempVal.textContent = tempShift > 0 ? '+'+tempShift+' warm' : tempShift < 0 ? tempShift+' cool' : 'neutral';
+  tempVal.textContent = tempShift > 0 ? `+${tempShift} warm` : tempShift < 0 ? `${tempShift} cool` : 'neutral';
 
+  // Harmony modes
   renderHarmonyModes();
+
+  // Harmony swatches
   renderSwatches(palette, hex);
+
+  // Shades
   renderShades(shades, hex);
 
+  // Accessibility
   a11yWhite.style.background = hex;
   a11yWhite.style.color = '#fff';
   ratioWhite.textContent = whiteRatio.toFixed(2) + ':1';
@@ -714,19 +757,22 @@ function render() {
   ratioBlack.textContent = blackRatio.toFixed(2) + ':1';
   renderA11yBadges(bestRatio, whiteRatio, blackRatio);
 
+  // Copy grid
   renderCopyGrid(hex, r, g, b, hue, sat, lit, desc);
+
+  // Recent
   renderRecent(hex);
 }
 
 function renderCvdButtons(txtCol, hex) {
-  var modes = [
+  const modes = [
     {id:'none',label:'Normal'},{id:'deuteranopia',label:'Deuteranopia'},
     {id:'protanopia',label:'Protanopia'},{id:'tritanopia',label:'Tritanopia'},
     {id:'achromatopsia',label:'Achromatopsia'}
   ];
   cvdRow.innerHTML = '';
-  modes.forEach(function(m) {
-    var btn = document.createElement('button');
+  modes.forEach(m => {
+    const btn = document.createElement('button');
     btn.className = 'cvd-btn' + (cvdMode===m.id?' active':'');
     btn.textContent = m.label;
     btn.style.color = txtCol;
@@ -735,55 +781,56 @@ function renderCvdButtons(txtCol, hex) {
       btn.style.background = txtCol;
       btn.style.color = hex;
     }
-    btn.addEventListener('click', function(){ cvdMode = m.id; render(); });
+    btn.addEventListener('click', () => { cvdMode = m.id; render(); });
     cvdRow.appendChild(btn);
   });
 }
 
 function renderHarmonyModes() {
-  var modes = ['complementary','analogous','triadic'];
+  const modes = ['complementary','analogous','triadic'];
   harmonyModes.innerHTML = '';
-  modes.forEach(function(m) {
-    var btn = document.createElement('button');
+  modes.forEach(m => {
+    const btn = document.createElement('button');
     btn.className = 'mode-btn' + (harmonyMode===m?' active':'');
     btn.textContent = m;
-    btn.addEventListener('click', function(){ harmonyMode = m; render(); });
+    btn.addEventListener('click', () => { harmonyMode = m; render(); });
     harmonyModes.appendChild(btn);
   });
 }
 
-function makeSwatch(hex, size, opts) {
-  opts = opts || {};
-  var div = document.createElement('div');
+function makeSwatch(hex, size, opts = {}) {
+  const div = document.createElement('div');
   div.className = 'swatch' + (opts.active ? ' active-swatch' : '');
   div.style.width = size + 'px';
   div.style.height = size + 'px';
   div.style.background = hex;
   div.style.border = opts.active ? '3px solid white' : '2px solid rgba(0,0,0,0.08)';
-  var rgb = hexToRgb(hex);
-  var tc = textColour(rgb[0], rgb[1], rgb[2]);
+  const [cr,cg,cb] = hexToRgb(hex);
+  const tc = textColour(cr, cg, cb);
 
-  var copyBtn = document.createElement('button');
+  // Copy button overlay
+  const copyBtn = document.createElement('button');
   copyBtn.className = 'copy-overlay';
   copyBtn.style.color = tc;
   copyBtn.textContent = 'copy';
-  copyBtn.addEventListener('click', function(e) {
+  copyBtn.addEventListener('click', e => {
     e.stopPropagation();
-    navigator.clipboard.writeText(hex).then(function() {
+    navigator.clipboard.writeText(hex).then(() => {
       copyBtn.textContent = '✓';
-      setTimeout(function(){ copyBtn.textContent = 'copy'; }, 1200);
+      setTimeout(() => { copyBtn.textContent = 'copy'; }, 1200);
     });
   });
   div.appendChild(copyBtn);
 
   if(opts.onClick) div.addEventListener('click', opts.onClick);
 
+  // Lock button
   if(opts.onToggleLock !== undefined) {
-    var lockBtn = document.createElement('button');
+    const lockBtn = document.createElement('button');
     lockBtn.className = 'lock-btn';
     lockBtn.textContent = opts.locked ? '🔒' : '○';
     lockBtn.title = opts.locked ? 'Unlock' : 'Lock';
-    lockBtn.addEventListener('click', function(e){ e.stopPropagation(); opts.onToggleLock(); });
+    lockBtn.addEventListener('click', e => { e.stopPropagation(); opts.onToggleLock(); });
     div.appendChild(lockBtn);
   }
 
@@ -792,21 +839,21 @@ function makeSwatch(hex, size, opts) {
 
 function renderSwatches(palette, currentHex) {
   harmonySwatches.innerHTML = '';
-  palette.forEach(function(hex, i) {
-    var col = document.createElement('div');
+  palette.forEach((hex, i) => {
+    const col = document.createElement('div');
     col.className = 'swatch-col';
-    var sw = makeSwatch(hex, 60, {
+    const sw = makeSwatch(hex, 60, {
       active: hex.toLowerCase() === currentHex.toLowerCase(),
-      onClick: function(){ setColourFromHex(hex); },
+      onClick: () => setColourFromHex(hex),
       locked: lockedIndices.has(i),
-      onToggleLock: (function(idx){ return function() {
-        if(lockedIndices.has(idx)) lockedIndices.delete(idx);
-        else lockedIndices.add(idx);
+      onToggleLock: () => {
+        if(lockedIndices.has(i)) lockedIndices.delete(i);
+        else lockedIndices.add(i);
         render();
-      }; })(i)
+      }
     });
     col.appendChild(sw);
-    var label = document.createElement('div');
+    const label = document.createElement('div');
     label.className = 'swatch-label';
     label.textContent = hex;
     col.appendChild(label);
@@ -815,17 +862,17 @@ function renderSwatches(palette, currentHex) {
 }
 
 function renderShades(shades, currentHex) {
-  var levels = [5,12,20,30,40,50,60,70,80,90,95];
+  const levels = [5,12,20,30,40,50,60,70,80,90,95];
   shadesRow.innerHTML = '';
-  shades.forEach(function(hex, i) {
-    var col = document.createElement('div');
+  shades.forEach((hex, i) => {
+    const col = document.createElement('div');
     col.className = 'swatch-col';
-    var sw = makeSwatch(hex, 38, {
+    const sw = makeSwatch(hex, 38, {
       active: hex.toLowerCase() === currentHex.toLowerCase(),
-      onClick: function(){ setColourFromHex(hex); }
+      onClick: () => setColourFromHex(hex)
     });
     col.appendChild(sw);
-    var label = document.createElement('div');
+    const label = document.createElement('div');
     label.className = 'swatch-label';
     label.style.fontSize = '8px';
     label.textContent = levels[i];
@@ -835,41 +882,41 @@ function renderShades(shades, currentHex) {
 }
 
 function renderA11yBadges(bestRatio, whiteRatio, blackRatio) {
-  var checks = [
+  const checks = [
     {label:'AA Normal', pass:bestRatio>=4.5, threshold:'4.5:1'},
     {label:'AAA Normal', pass:bestRatio>=7, threshold:'7:1'},
     {label:'AA Large', pass:bestRatio>=3, threshold:'3:1'}
   ];
   a11yBadges.innerHTML = '';
-  checks.forEach(function(c) {
-    var badge = document.createElement('div');
+  checks.forEach(c => {
+    const badge = document.createElement('div');
     badge.className = 'a11y-badge ' + (c.pass?'pass':'fail');
-    badge.innerHTML = '<span class="badge-icon '+(c.pass?'pass-icon':'fail-icon')+'">'+(c.pass?'✓':'✗')+' '+c.label+'</span><span class="badge-threshold">&gt;'+c.threshold+'</span>';
+    badge.innerHTML = `<span class="badge-icon ${c.pass?'pass-icon':'fail-icon'}">${c.pass?'✓':'✗'} ${c.label}</span><span class="badge-threshold">>${c.threshold}</span>`;
     a11yBadges.appendChild(badge);
   });
-  a11yBest.textContent = 'Best contrast: '+bestRatio.toFixed(2)+':1 (with '+(whiteRatio>blackRatio?'white':'black')+' text)';
+  a11yBest.textContent = `Best contrast: ${bestRatio.toFixed(2)}:1 (with ${whiteRatio>blackRatio?'white':'black'} text)`;
 }
 
 function renderCopyGrid(hex, r, g, b, h, s, l, desc) {
-  var varName = '--color-'+desc.toLowerCase().replace(/\s+/g,'-');
-  var items = [
+  const varName = `--color-${desc.toLowerCase().replace(/\s+/g,'-')}`;
+  const items = [
     {label:'HEX', value:hex.toUpperCase()},
-    {label:'RGB', value:'rgb('+r+', '+g+', '+b+')'},
-    {label:'HSL', value:'hsl('+h+', '+s+'%, '+l+'%)'},
-    {label:'RGBA', value:'rgba('+r+', '+g+', '+b+', 1)'},
-    {label:'HSLA', value:'hsla('+h+', '+s+'%, '+l+'%, 1)'},
-    {label:'CSS Var', value:varName+': '+hex+';'}
+    {label:'RGB', value:`rgb(${r}, ${g}, ${b})`},
+    {label:'HSL', value:`hsl(${h}, ${s}%, ${l}%)`},
+    {label:'RGBA', value:`rgba(${r}, ${g}, ${b}, 1)`},
+    {label:'HSLA', value:`hsla(${h}, ${s}%, ${l}%, 1)`},
+    {label:'CSS Var', value:`${varName}: ${hex};`}
   ];
   copyGrid.innerHTML = '';
-  items.forEach(function(item) {
-    var chip = document.createElement('button');
+  items.forEach(item => {
+    const chip = document.createElement('button');
     chip.className = 'copy-chip';
-    chip.innerHTML = '<span class="chip-label">'+item.label+'</span><span class="chip-value">'+item.value+'</span>';
-    chip.addEventListener('click', function() {
-      navigator.clipboard.writeText(item.value).then(function() {
+    chip.innerHTML = `<span class="chip-label">${item.label}</span><span class="chip-value">${item.value}</span>`;
+    chip.addEventListener('click', () => {
+      navigator.clipboard.writeText(item.value).then(() => {
         chip.classList.add('copied');
         chip.querySelector('.chip-value').textContent = 'Copied!';
-        setTimeout(function() {
+        setTimeout(() => {
           chip.classList.remove('copied');
           chip.querySelector('.chip-value').textContent = item.value;
         }, 1200);
@@ -883,87 +930,96 @@ function renderRecent(currentHex) {
   if(recentColours.length === 0) { recentSection.style.display = 'none'; return; }
   recentSection.style.display = '';
   recentRow.innerHTML = '';
-  recentColours.forEach(function(c) {
-    var sw = makeSwatch(c.hex, 36, {
-      onClick: function(){ setColour(c.h, c.s, c.l); }
+  recentColours.forEach(c => {
+    const sw = makeSwatch(c.hex, 36, {
+      onClick: () => setColour(c.h, c.s, c.l)
     });
     recentRow.appendChild(sw);
   });
 }
 
 // ── Slider events ──
-sliderLightness.addEventListener('input', function(){ setColour(hue, sat, Number(sliderLightness.value)); });
-sliderSaturation.addEventListener('input', function(){ setColour(hue, Number(sliderSaturation.value), lit); });
-sliderRotate.addEventListener('input', function(){ hueRotate = Number(sliderRotate.value); render(); });
-sliderTemp.addEventListener('input', function(){ tempShift = Number(sliderTemp.value); render(); });
+sliderLightness.addEventListener('input', () => setColour(hue, sat, Number(sliderLightness.value)));
+sliderSaturation.addEventListener('input', () => setColour(hue, Number(sliderSaturation.value), lit));
+sliderRotate.addEventListener('input', () => { hueRotate = Number(sliderRotate.value); render(); });
+sliderTemp.addEventListener('input', () => { tempShift = Number(sliderTemp.value); render(); });
 
 // ── Input events ──
-inputHex.addEventListener('blur', function(){ setColourFromHex(inputHex.value); });
-inputHex.addEventListener('keydown', function(e){ if(e.key==='Enter') setColourFromHex(inputHex.value); });
+inputHex.addEventListener('blur', () => setColourFromHex(inputHex.value));
+inputHex.addEventListener('keydown', e => { if(e.key==='Enter') setColourFromHex(inputHex.value); });
 
-inputRgb.addEventListener('blur', function() {
+inputRgb.addEventListener('blur', () => {
   try {
-    var parts = inputRgb.value.split(',').map(function(v){ return parseInt(v.trim()); });
-    if(parts.length===3) { var hsl=rgbToHsl(parts[0],parts[1],parts[2]); setColour(hsl[0],hsl[1],hsl[2]); }
+    const parts = inputRgb.value.split(',').map(v=>parseInt(v.trim()));
+    if(parts.length===3) { const [h,s,l]=rgbToHsl(parts[0],parts[1],parts[2]); setColour(h,s,l); }
   } catch(e){}
 });
 
-inputHsl.addEventListener('blur', function() {
+inputHsl.addEventListener('blur', () => {
   try {
-    var parts = inputHsl.value.replace(/%/g,'').split(',').map(function(v){ return parseFloat(v.trim()); });
+    const parts = inputHsl.value.replace(/%/g,'').split(',').map(v=>parseFloat(v.trim()));
     if(parts.length===3) setColour(parts[0],parts[1],parts[2]);
   } catch(e){}
 });
 
 // ── Buttons ──
-$('btn-random').addEventListener('click', function() {
-  var h = Math.round(Math.random()*360);
-  var s = 40 + Math.round(Math.random()*50);
-  var l = 35 + Math.round(Math.random()*35);
+$('btn-random').addEventListener('click', () => {
+  const h = Math.round(Math.random()*360);
+  const s = 40 + Math.round(Math.random()*50);
+  const l = 35 + Math.round(Math.random()*35);
   setColour(h, s, l);
 });
 
+// Eyedropper
 if('EyeDropper' in window) {
   $('btn-eyedropper').style.display = '';
-  $('btn-eyedropper').addEventListener('click', function() {
+  $('btn-eyedropper').addEventListener('click', async () => {
     try {
-      var ed = new window.EyeDropper();
-      ed.open().then(function(result){ setColourFromHex(result.sRGBHex); }).catch(function(){});
+      const ed = new window.EyeDropper();
+      const {sRGBHex} = await ed.open();
+      setColourFromHex(sRGBHex);
     } catch(e){}
   });
 }
 
+// Shuffle
 function shufflePalette() {
-  lockedIndices.forEach(function(){});
-  var unlocked0 = !lockedIndices.has(0);
-  if(unlocked0) hue = Math.round(Math.random()*360);
+  const palette = getHarmony((hue+hueRotate)%360, sat, lit, harmonyMode, tempShift);
+  palette.forEach((_, i) => {
+    if(!lockedIndices.has(i)) {
+      if(i===0) hue = Math.round(Math.random()*360);
+    }
+  });
   hueRotate = Math.round(Math.random()*360);
   render();
 }
 $('btn-shuffle').addEventListener('click', shufflePalette);
 
-window.addEventListener('keydown', function(e) {
+// Spacebar shuffle
+window.addEventListener('keydown', e => {
   if(e.code === 'Space' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
     e.preventDefault();
     shufflePalette();
   }
 });
 
-$('btn-export').addEventListener('click', function() {
-  var palette = getHarmony((hue+hueRotate)%360, sat, lit, harmonyMode, tempShift);
-  var hashStr = palette.map(function(h){ return h.replace('#',''); }).join('-');
+// Export
+$('btn-export').addEventListener('click', () => {
+  const palette = getHarmony((hue+hueRotate)%360, sat, lit, harmonyMode, tempShift);
+  const hashStr = palette.map(h=>h.replace('#','')).join('-');
   window.location.hash = hashStr;
-  var paletteStr = palette.join(' - ');
-  navigator.clipboard.writeText(paletteStr).then(function() {
+  const paletteStr = palette.join(' - ');
+  navigator.clipboard.writeText(paletteStr).then(() => {
     showToast('Palette copied & URL updated');
   });
 });
 
+// ── URL hash load ──
 function loadFromHash() {
-  var hash = location.hash.replace('#','');
+  const hash = location.hash.replace('#','');
   if(hash && /^[0-9a-fA-F]{6}(-[0-9a-fA-F]{6})*$/.test(hash)) {
     try {
-      var first = '#' + hash.split('-')[0];
+      const first = '#' + hash.split('-')[0];
       setColourFromHex(first);
     } catch(e){}
   }
@@ -971,11 +1027,11 @@ function loadFromHash() {
 loadFromHash();
 
 // ── Bug report ──
-var bugOverlay = $('bug-overlay');
-var bugSheet = $('bug-sheet');
-var bugForm = $('bug-form');
-var bugContent = $('bug-content');
-var bugSuccess = $('bug-success');
+const bugOverlay = $('bug-overlay');
+const bugSheet = $('bug-sheet');
+const bugForm = $('bug-form');
+const bugContent = $('bug-content');
+const bugSuccess = $('bug-success');
 
 function openBug() {
   bugOverlay.classList.add('active');
@@ -993,12 +1049,14 @@ bugOverlay.addEventListener('click', closeBug);
 $('bug-close-btn').addEventListener('click', closeBug);
 $('bug-done-btn').addEventListener('click', closeBug);
 
-bugForm.addEventListener('submit', function(e) {
+bugForm.addEventListener('submit', async e => {
   e.preventDefault();
-  var fd = new FormData(bugForm);
-  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
-    method: 'POST', body: fd
-  }).catch(function(){});
+  const fd = new FormData(bugForm);
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+      method: 'POST', body: fd
+    });
+  } catch(e){}
   bugContent.style.display = 'none';
   bugSuccess.style.display = '';
 });
@@ -1006,31 +1064,32 @@ bugForm.addEventListener('submit', function(e) {
 // ── Initial render ──
 render();
 
-// ── Service Worker ──
+// ── Service Worker (Blob URL pattern) ──
 if('serviceWorker' in navigator) {
-  var swCode = [
-    "const CACHE_KEY = 'kin-004-v2.0';",
-    "self.addEventListener('install', e => { self.skipWaiting(); });",
-    "self.addEventListener('activate', e => {",
-    "  e.waitUntil(caches.keys().then(keys => Promise.all(",
-    "    keys.filter(k => k !== CACHE_KEY).map(k => caches.delete(k))",
-    "  )));",
-    "});",
-    "self.addEventListener('fetch', e => {",
-    "  e.respondWith(",
-    "    caches.match(e.request).then(r => r || fetch(e.request).then(res => {",
-    "      if(res.status === 200 && e.request.url.startsWith(self.location.origin)) {",
-    "        const clone = res.clone();",
-    "        caches.open(CACHE_KEY).then(c => c.put(e.request, clone));",
-    "      }",
-    "      return res;",
-    "    }).catch(() => caches.match(e.request)))",
-    "  );",
-    "});"
-  ].join('\n');
-  var blob = new Blob([swCode], {type: 'application/javascript'});
-  var swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(function(){});
+  const swCode = `
+const CACHE_KEY = 'kin-004-v2.0';
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(k => k !== CACHE_KEY).map(k => caches.delete(k))
+  )));
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+      if(res.status === 200 && e.request.url.startsWith(self.location.origin)) {
+        const clone = res.clone();
+        caches.open(CACHE_KEY).then(c => c.put(e.request, clone));
+      }
+      return res;
+    }).catch(() => caches.match(e.request)))
+  );
+});`;
+  const blob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
 }
 
 })();
