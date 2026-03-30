@@ -26,7 +26,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-001 | Ukulele Tuner | v1.1 | Maya | ukulele.kintools.net | ✅ | 8 issues fixed |
 | KIN-002 | Metronome | v1.1 | Darren | metronome.kintools.net | ✅ | 9 issues fixed; v1.1 — iOS double-tap zoom fix |
 | KIN-003 | BPM Counter | v1.1 | Darren | bpm.kintools.net | ✅ | 10 issues fixed; v1.1 — session average tempo readout |
-| KIN-004 | Colour Picker | — | Darren | colour-picker.kintools.net | 🔨 | React bundle, not single-file HTML |
+| KIN-004 | Colour Picker | v2.0 | dBridge | colour-picker.kintools.net | ✅ | v2.0 — full rebuild as single-file HTML; colour wheel, harmony palettes (complementary/analogous/triadic), WCAG accessibility checker, colour vision simulation (4 modes), shades & tints, copy as HEX/RGB/HSL/RGBA/HSLA/CSS var, dark mode, recent colours |
 | KIN-005 | QR Builder | v2.0 | Darren | qr.kintools.net | ✅ | v2.0 — full rebuild as native HTML; colour picker, SVG export, WiFi/email/contact/phone modes, inline SW+manifest |
 | KIN-006 | Classroom Timer | v1.0 | Darren | classroom-timer.kintools.net | ✅ | 3 issues fixed |
 | KIN-007 | Ambient Mixer | v1.0 | Darren | ambient.kintools.net | ✅ | 5 issues fixed; ScriptProcessorNode noted for future major update |
@@ -67,7 +67,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 ## Stress-test progress
 
 - **Tested:** 33 / 35 (KIN-001, 002, 003, 005, 006, 007, 008, 009, 010, 011, 012, 013, 014, 015, 016, 017, 018, 019, 020, 021, 022, 023, 024, 025, 026, 028, 029, 030, 031, 032, 033, 034, 035)
-- **Needs rebuild:** 1 (KIN-004)
+- **Needs rebuild:** 0
 - **Deferred:** 1 (KIN-027 — complex, user request)
 - **Pending:** 0 — stress-test phase complete ✅
 
@@ -93,4 +93,3 @@ Every compliant tool must have:
 
 | Tool | Issue |
 |------|-------|
-| KIN-004 | React bundle — needs full rebuild as single-file HTML |
