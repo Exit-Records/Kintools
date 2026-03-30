@@ -587,6 +587,13 @@ if ("serviceWorker" in navigator) {
   }
 
   function start() {
+    // iOS speaker fix: playing a silent HTMLAudioElement before AudioContext forces
+    // iOS to route audio through the speaker instead of the earpiece.
+    try {
+      var silence = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+      silence.play().catch(function(){});
+    } catch(e) {}
+
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
