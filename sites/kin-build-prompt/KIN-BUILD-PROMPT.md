@@ -43,15 +43,22 @@ Every Kin tool must:
 
 ### Fonts
 
-Load from Google Fonts (this is the only permitted external resource):
+**Do not load Google Fonts or any external font.** External font requests break the offline requirement — if the user has no connection on second visit, the font fails and layout breaks.
 
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+Use the system font stack instead:
+
+```css
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.kin-title {
+  font-family: Georgia, 'Times New Roman', serif;
+}
 ```
 
-- **UI text:** `DM Sans` — weights 400, 500, 600, 700
-- **Display / headings:** `Instrument Serif` — weight 400, italic available
+- **UI text:** system-ui stack — renders as San Francisco on iOS/macOS, Roboto on Android, Segoe UI on Windows
+- **Display / headings:** system serif stack — renders natively on every platform, no download needed
 
 ### Colour system — light first
 
@@ -411,11 +418,31 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
 <html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
+  <!-- Never add user-scalable=no — it is an accessibility violation -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KIN-NNN — [Tool Name] — Kin</title>
   <meta name="description" content="[One sentence description]. Free, offline, no accounts.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- PWA / install -->
+  <meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="[Tool Name]">
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="">
+
+  <!-- OG / sharing -->
+  <meta property="og:title" content="KIN-NNN — [Tool Name]">
+  <meta property="og:description" content="[One sentence description]. Free, offline, no accounts.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://[subdomain].kintools.net/">
+  <meta property="og:image" content="https://[subdomain].kintools.net/opengraph.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="KIN-NNN — [Tool Name]">
+  <meta name="twitter:description" content="[One sentence description]. Free, offline, no accounts.">
+  <meta name="twitter:image" content="https://[subdomain].kintools.net/opengraph.jpg">
+  <link rel="canonical" href="https://[subdomain].kintools.net/">
+
+  <!-- No external fonts — system stack only (Google Fonts breaks offline) -->
   <style>
     /* paste full CSS here — :root, html.light, body, .wrap,
        #theme-btn, .kin-header, .kin-footer, all component styles */
@@ -438,18 +465,45 @@ Every Kin tool must be installable to a phone's home screen and work offline aft
     <footer class="kin-footer">
       <div class="foot-brand">Kin</div>
       <div class="foot-meta">[Tool Name]<br>by [Creator] · No tracking · Works offline</div>
+      <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
     </footer>
 
+  </div>
+
+  <!-- Bug report drawer -->
+  <div id="kin-bug-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1999;" onclick="document.getElementById('kin-bug-sheet').style.transform='translateY(100%)';setTimeout(function(){document.getElementById('kin-bug-backdrop').style.display='none';},300);"></div>
+  <div id="kin-bug-sheet" style="position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:20px 20px 0 0;padding:28px 24px 40px;z-index:2000;transform:translateY(100%);transition:transform 0.3s ease;max-width:520px;margin:0 auto;">
+    <h3 style="margin:0 0 6px;font-size:1.05rem;">Report a bug</h3>
+    <p style="margin:0 0 16px;font-size:0.85rem;color:var(--text-muted, #888);">Describe what went wrong and we'll look into it.</p>
+    <textarea id="kin-bug-text" rows="4" style="width:100%;box-sizing:border-box;border:1px solid var(--border, #ddd);border-radius:10px;padding:10px 12px;font:inherit;font-size:0.9rem;resize:vertical;background:var(--bg-input,var(--surface2,#f5f5f5));color:inherit;" placeholder="e.g. The timer doesn't reset when I tap Stop."></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button onclick="(function(){var t=document.getElementById('kin-bug-text').value.trim();if(!t)return;window.open('mailto:hello@kintools.net?subject=Bug report — KIN-NNN [Tool Name]&body='+encodeURIComponent(t));document.getElementById('kin-bug-sheet').style.transform='translateY(100%)';setTimeout(function(){document.getElementById('kin-bug-backdrop').style.display='none';},300);})()" style="flex:1;padding:12px;background:var(--text,#111);color:var(--bg,#fff);border:none;border-radius:100px;font:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;">Send report</button>
+      <button onclick="document.getElementById('kin-bug-sheet').style.transform='translateY(100%)';setTimeout(function(){document.getElementById('kin-bug-backdrop').style.display='none';},300);" style="padding:12px 20px;background:none;border:1px solid var(--border,#ddd);border-radius:100px;font:inherit;font-size:0.9rem;cursor:pointer;">Cancel</button>
+    </div>
   </div>
 
   <script>
     // Theme toggle
     const themeBtn = document.getElementById('theme-btn');
-    let isDark = true;
+    let isDark = false;
     themeBtn.addEventListener('click', () => {
       isDark = !isDark;
       document.documentElement.classList.toggle('light', !isDark);
       themeBtn.textContent = isDark ? '☀️' : '🌙';
+      updateThemeMeta(isDark);
+    });
+
+    function updateThemeMeta(dark) {
+      document.getElementById('theme-color-meta')
+        .setAttribute('content', dark ? '#111110' : '#f5f4f0');
+    }
+
+    // Bug report drawer
+    document.getElementById('kin-bug-btn').addEventListener('click', function() {
+      document.getElementById('kin-bug-backdrop').style.display = 'block';
+      setTimeout(function() {
+        document.getElementById('kin-bug-sheet').style.transform = 'translateY(0)';
+      }, 10);
     });
 
     // YOUR TOOL LOGIC HERE
@@ -552,7 +606,7 @@ Run migration before init. Wrap in try/catch. If anything fails, leave the data 
 ## Rules for the AI building this
 
 1. Output all three files: `index.html`, `wrangler.jsonc`, and `icon.svg` — the tool will not deploy correctly without all three
-2. All CSS and JS must be inlined — no `<link>` tags except the Google Fonts `<link>`
+2. All CSS and JS must be inlined — no external `<link>` or `<script>` tags of any kind (no Google Fonts, no CDN libraries)
 3. Use only the CSS variables defined above — no hardcoded colours
 4. The dark/light toggle must work exactly as specified
 5. The header and footer must match the spec exactly, with the correct catalog number, tool name, and creator name
