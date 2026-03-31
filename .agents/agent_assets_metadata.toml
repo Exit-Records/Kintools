@@ -48,3 +48,9 @@ id = "KusBRqhuv7XP7gGzqKUvm"
 uri = "file://kin-tools-directory.md"
 type = "text"
 title = "Kin Tools Directory — All 36 Tools"
+
+[[outputs]]
+id = "zClqEpewCY9kXQNHa3MGY"
+uri = "file://kin-landing-icons.tar.gz"
+type = "unspecified"
+title = "Kin Landing Icons — 36 SVGs"
