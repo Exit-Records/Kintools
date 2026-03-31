@@ -636,6 +636,10 @@ textarea{min-height:80px;resize:vertical}
     <label>Email</label>
     <input id="fromEmail" type="email" placeholder="you@example.com">
   </div>
+  <div class="field">
+    <label>Tax / VAT number</label>
+    <input id="fromTaxNumber" placeholder="e.g. GB123456789">
+  </div>
 </div>
 
 <!-- TO -->
@@ -827,7 +831,7 @@ function todayStr(){
 function freshDoc(){
   return {
     meta:{id:'',type:'invoice',prefix:'',number:getNextNumber(),currency:'',sourceQuoteId:''},
-    from:{name:'',email:''},
+    from:{name:'',email:'',taxNumber:''},
     to:{name:'',email:''},
     dates:{invoice:todayStr(),due:''},
     items:[{description:'',quantity:null,rate:null}],
@@ -847,7 +851,7 @@ function freshDoc(){
 function demoData(){
   return {
     meta:{id:'INV-004',type:'invoice',prefix:'INV',number:4,currency:'GBP',sourceQuoteId:'DBR-004'},
-    from:{name:'Darren White',email:'darren@exitrecords.co.uk'},
+    from:{name:'Darren White',email:'darren@exitrecords.co.uk',taxNumber:'GB123456789'},
     to:{name:'Fabric London',email:'bookings@fabriclondon.com'},
     dates:{invoice:'2026-03-20',due:'2026-04-20'},
     items:[
@@ -895,6 +899,7 @@ function init(){
   bindInput('dueDate',function(v){doc.dates.due=v});
   bindInput('fromName',function(v){doc.from.name=v});
   bindInput('fromEmail',function(v){doc.from.email=v});
+  bindInput('fromTaxNumber',function(v){doc.from.taxNumber=v});
   bindInput('toName',function(v){doc.to.name=v});
   bindInput('toEmail',function(v){doc.to.email=v});
   bindInput('currency',function(v){doc.meta.currency=v.toUpperCase().trim();recalc()});
@@ -928,6 +933,7 @@ function applyDefaults(){
     if(d.from){
       if(d.from.name) doc.from.name=d.from.name;
       if(d.from.email) doc.from.email=d.from.email;
+      if(d.from.taxNumber!==undefined) doc.from.taxNumber=d.from.taxNumber;
     }
     if(d.payment){
       Object.keys(d.payment).forEach(function(k){
@@ -944,6 +950,7 @@ function syncToDOM(){
   setVal('dueDate',doc.dates.due);
   setVal('fromName',doc.from.name);
   setVal('fromEmail',doc.from.email);
+  setVal('fromTaxNumber',doc.from.taxNumber);
   setVal('toName',doc.to.name);
   setVal('toEmail',doc.to.email);
   setVal('currency',doc.meta.currency);
@@ -1197,7 +1204,7 @@ function saveDefaults(){
     prefix:doc.meta.prefix,
     currency:doc.meta.currency,
     taxRate:doc.totals.taxRate,
-    from:{name:doc.from.name,email:doc.from.email},
+    from:{name:doc.from.name,email:doc.from.email,taxNumber:doc.from.taxNumber},
     payment:Object.assign({},doc.payment)
   };
   localStorage.setItem('kin031-defaults',JSON.stringify(data));

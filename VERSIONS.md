@@ -52,9 +52,9 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-027 | Kin Gym | v1.0 | William & Darren | kin-gym.kintools.net | ⚠️ | Deferred — see scratchpad: custom modal, esc() incomplete, OG missing |
 | KIN-028 | Scan | v1.0 | Darren & Daisy | scan.kintools.net | ✅ | 3 fixes: CSS syntax error (missing { in dark mode), theme-color-meta id, OG |
 | KIN-029 | Nudge | v1.0 | Darren | nudge.kintools.net | ✅ | 3 fixes: CSS unclosed .toast.show, email removed from bug report, Google Fonts removed |
-| KIN-030 | Quote | v1.0 | Darren | quote.kintools.net | ✅ | 1 fix: Google Fonts removed; OG/theme-color-meta/bug report already correct |
-| KIN-031 | Invoice | v1.0 | Darren | invoice.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
-| KIN-032 | Receipt | v1.0 | Darren | receipt.kintools.net | ✅ | 1 fix: Google Fonts removed; cleanest in business trio |
+| KIN-030 | Quote | v1.1 | Darren | quote.kintools.net | ✅ | Added Tax / VAT number field to From section |
+| KIN-031 | Invoice | v1.1 | Darren | invoice.kintools.net | ✅ | Added Tax / VAT number field to From section |
+| KIN-032 | Receipt | v1.1 | Darren | receipt.kintools.net | ✅ | Added Tax / VAT number display (hidden when blank) |
 | KIN-033 | Page Surgeon | v1.0 | Darren | page-surgeon.kintools.net | ✅ | 2 fixes: missing file-info HTML element added, Google Fonts removed |
 | KIN-034 | Noise Meter | v1.0 | Liam | noise-meter.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
 | KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |

@@ -524,6 +524,10 @@ body.dark .btn-pdf{background:#333 !important;color:#e8e8e8 !important;border-co
     <label>Email</label>
     <input id="fromEmail" type="email" placeholder="you@example.com">
   </div>
+  <div class="field">
+    <label>Tax / VAT number</label>
+    <input id="fromTaxNumber" placeholder="e.g. GB123456789">
+  </div>
 </div>
 
 <!-- TO -->
@@ -686,7 +690,7 @@ function updateIdDisplay(){
 function freshDoc(){
   return {
     meta:{id:'',type:'quote',prefix:'',number:getNextNumber(),currency:''},
-    from:{name:'',email:''},
+    from:{name:'',email:'',taxNumber:''},
     to:{name:'',email:''},
     items:[{description:'',quantity:null,rate:null}],
     totals:{subtotal:0,taxRate:0,taxAmount:0,total:0},
@@ -699,7 +703,7 @@ function freshDoc(){
 function demoData(){
   return {
     meta:{id:'DBR-004',type:'quote',prefix:'DBR',number:4,currency:'GBP'},
-    from:{name:'Darren White',email:'darren@exitrecords.co.uk'},
+    from:{name:'Darren White',email:'darren@exitrecords.co.uk',taxNumber:'GB123456789'},
     to:{name:'Fabric London',email:'bookings@fabriclondon.com'},
     items:[
       {description:'DJ set - Main room (2hrs)',quantity:1,rate:1500},
@@ -737,6 +741,7 @@ function init(){
   bindInput('quoteNumber',function(v){doc.meta.number=parseInt(v,10)||1;updateIdDisplay()});
   bindInput('fromName',function(v){doc.from.name=v});
   bindInput('fromEmail',function(v){doc.from.email=v});
+  bindInput('fromTaxNumber',function(v){doc.from.taxNumber=v});
   bindInput('toName',function(v){doc.to.name=v});
   bindInput('toEmail',function(v){doc.to.email=v});
   bindInput('currency',function(v){doc.meta.currency=v.toUpperCase().trim();recalc()});
@@ -768,6 +773,7 @@ function applyDefaults(){
     if(d.from){
       if(d.from.name) doc.from.name=d.from.name;
       if(d.from.email) doc.from.email=d.from.email;
+      if(d.from.taxNumber!==undefined) doc.from.taxNumber=d.from.taxNumber;
     }
     if(d.payment){
       Object.keys(d.payment).forEach(function(k){
@@ -782,6 +788,7 @@ function syncToDOM(){
   setVal('quoteNumber',doc.meta.number||'');
   setVal('fromName',doc.from.name);
   setVal('fromEmail',doc.from.email);
+  setVal('fromTaxNumber',doc.from.taxNumber);
   setVal('toName',doc.to.name);
   setVal('toEmail',doc.to.email);
   setVal('currency',doc.meta.currency);
@@ -931,7 +938,7 @@ function saveDefaults(){
     prefix:doc.meta.prefix,
     currency:doc.meta.currency,
     taxRate:doc.totals.taxRate,
-    from:{name:doc.from.name,email:doc.from.email},
+    from:{name:doc.from.name,email:doc.from.email,taxNumber:doc.from.taxNumber},
     payment:Object.assign({},doc.payment)
   };
   localStorage.setItem('kin030-defaults',JSON.stringify(data));

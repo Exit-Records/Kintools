@@ -590,6 +590,7 @@ label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px
     <div class="val" id="dspFromName"></div>
     <div class="lbl">Email</div>
     <div class="val" id="dspFromEmail"></div>
+    <div id="taxNumRow" style="display:none"><div class="lbl">Tax / VAT number</div><div class="val" id="dspFromTaxNumber"></div></div>
   </div>
 
   <!-- TO -->
@@ -740,7 +741,7 @@ function formatDate(s){
 function freshDoc(){
   return {
     meta:{id:'',type:'receipt',prefix:'',number:getNextNumber(),currency:'',sourceInvoiceId:'',sourceQuoteId:''},
-    from:{name:'',email:''},
+    from:{name:'',email:'',taxNumber:''},
     to:{name:'',email:''},
     dates:{receipt:todayStr(),invoice:''},
     items:[],
@@ -754,7 +755,7 @@ function freshDoc(){
 function demoData(){
   return {
     meta:{id:'RCT-004',type:'receipt',prefix:'RCT',number:4,currency:'GBP',sourceInvoiceId:'INV-004',sourceQuoteId:'DBR-004'},
-    from:{name:'Darren White',email:'darren@exitrecords.co.uk'},
+    from:{name:'Darren White',email:'darren@exitrecords.co.uk',taxNumber:'GB123456789'},
     to:{name:'Fabric London',email:'bookings@fabriclondon.com'},
     dates:{receipt:'2026-03-20',invoice:'2026-03-20'},
     items:[
@@ -850,6 +851,9 @@ function render(){
   // From / To
   document.getElementById('dspFromName').textContent=doc.from.name||'--';
   document.getElementById('dspFromEmail').textContent=doc.from.email||'--';
+  var taxNum=doc.from.taxNumber||'';
+  document.getElementById('taxNumRow').style.display=taxNum?'':'none';
+  document.getElementById('dspFromTaxNumber').textContent=taxNum;
   document.getElementById('dspToName').textContent=doc.to.name||'--';
   document.getElementById('dspToEmail').textContent=doc.to.email||'--';
 
