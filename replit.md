@@ -20,9 +20,9 @@ These are not aspirational guidelines. They are entry requirements.
 
 **External resources policy:** Fonts, audio libraries, and open frameworks are permitted if they do not track users. Google Fonts — fine. An analytics script — not fine. The test: does this resource work without knowing anything about the person using it?
 
-**Current tools: KIN-001 through KIN-035 (35 tools).**
+**Current tools: KIN-001 through KIN-038 (38 tools).**
 
-Latest: KIN-035 · Random Acts — `sites/kin-035/` — `https://randomacts.kintools.net`
+Latest additions: KIN-036 Blood Pressure · KIN-037 Unclaimed (UK Benefits Finder) · KIN-038 Wets Go!
 
 ---
 
@@ -53,6 +53,7 @@ Latest: KIN-035 · Random Acts — `sites/kin-035/` — `https://randomacts.kint
 - **Icons**: Canvas-generated PNG (not SVG data URIs). Rounded rect with tool's gradient, initials centred. 192×192 and 512×512 for manifest; 180×180 for apple-touch-icon.
 - **Apple-touch-icon**: Canvas drawn at 180×180, same gradient as landing page cover card, tool initials in serif. Set on `#apple-touch-icon` href.
 - **Service worker**: Blob SW pattern. Cache key `kin0NN-v1`. Never use `data:` URI SW.
+- **Android home screen icon fix**: 27 tools have a PWA icon patcher injected before `</head>` that intercepts the manifest after creation and replaces SVG icons with Canvas-generated PNGs. Android Chrome/Brave does not support SVG in PWA manifests. The patcher code is marked with the comment `/* PWA icon patch: replace SVG manifest icons with Canvas PNG for Android support */`.
 
 ### Footer (every tool — canonical format)
 
@@ -94,54 +95,6 @@ const [bugSuccess, setBugSuccess] = useState(false);
 </footer>
 ```
 
-3. Wrap `return (` in a Fragment and add the bug backdrop + sheet after the closing root `</div>`:
-```tsx
-return (
-  <>
-  <div ...> {/* root div */}
-    ...
-    {/* footer JSX above */}
-  </div>
-
-  {bugOpen && (
-    <div onClick={() => setBugOpen(false)} style={{ display: "block", position: "fixed", inset: 0, zIndex: 901, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(2px)" }} />
-  )}
-  <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 902, background: "#17171f", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.08)", borderBottom: "none", padding: "0 20px 40px", boxShadow: "0 -8px 40px rgba(0,0,0,0.6)", fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif", transform: bugOpen ? "translateY(0)" : "translateY(100%)", transition: "transform 0.3s cubic-bezier(0.32,0.72,0,1)" }}>
-    {!bugSuccess ? (
-      <>
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 0 8px" }}>
-          <h2 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: 0 }}>Report a bug</h2>
-          <button onClick={() => setBugOpen(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 22, cursor: "pointer", padding: "0 4px", lineHeight: 1, flex: "none", minHeight: 0 }}>×</button>
-        </div>
-        <form onSubmit={async (e) => {
-          e.preventDefault();
-          const fd = new FormData(e.currentTarget);
-          await fetch("https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec", { method: "POST", body: fd });
-          setBugSuccess(true);
-        }} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <input type="hidden" name="tool" value="KIN-NNN Tool Name" />
-          <textarea name="description" required placeholder="What went wrong? What did you expect?" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none", resize: "none", height: 90 }} />
-          <input type="email" name="email" placeholder="Email for follow-up (optional)" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "10px 12px", color: "#fff", fontSize: 13, fontFamily: "inherit", outline: "none" }} />
-          <button type="submit" style={{ width: "100%", padding: 13, borderRadius: 12, background: "#5b5ef4", border: "none", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.02em" }}>Send report</button>
-        </form>
-      </>
-    ) : (
-      <>
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}><div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.15)" }} /></div>
-        <div style={{ textAlign: "center", padding: "28px 0 8px" }}>
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ display: "block", margin: "0 auto 16px" }}><circle cx="12" cy="12" r="11" stroke="#2ea043" strokeWidth="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 600, margin: "0 0 8px" }}>Thanks for the report</h3>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, lineHeight: 1.5, margin: "0 0 28px" }}>We'll take a look. Your feedback<br/>helps make Kin better for everyone.</p>
-          <button onClick={() => setBugOpen(false)} style={{ padding: "11px 32px", borderRadius: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>Done</button>
-        </div>
-      </>
-    )}
-  </div>
-  </>
-);
-```
-
 **Google Sheets endpoint (both app types):**
 `https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec`
 
@@ -153,13 +106,15 @@ return (
 ### Creator rule
 Always `Darren` unless the user explicitly specifies otherwise.
 
+Exceptions: KIN-015/018=Alice & Darren, KIN-017=Alice, KIN-028=Darren & Daisy, KIN-034=Liam, KIN-035/036/037/038=Darren, KIN-027=William & Darren, KIN-004=dBridge.
+
 ---
 
 ## Landing pages
 
-Two files kept in sync — always edit both:
+Two files kept in sync — always edit both, then `cp sites/kin-landing/index.html index.html`:
 - `index.html` (root — kept in sync with sites/kin-landing/)
-- `sites/kin-landing/index.html` (Cloudflare Pages deploy)
+- `sites/kin-landing/index.html` (canonical source)
 
 ### Adding a new tool card
 1. Add `--hb-NNN: #colour;` to `:root` CSS vars
@@ -167,6 +122,12 @@ Two files kept in sync — always edit both:
 3. Update count: `<span class="catalog-count">N tools</span>`
 4. Add card before closing `</div>` of `.catalog`
 5. Card `href="#"` until Cloudflare URL is confirmed — then update both files
+
+### ver-badge pattern (for tools with changelog)
+```html
+<div class="ver-badge has-log" data-changes='[{"v":"X.Y","date":"DD Mon YYYY","note":"..."},{"v":"1.0","date":"Initial release","note":"First release"}]'>vX.Y</div>
+```
+Place inside `release-info` after `release-name`.
 
 ### Category labels (consistent set)
 `Wellbeing` · `Utility` · `Music` · `Health` · `Design` · `Developer` · `Education` · `Learning` · `Shopping` · `Travel`
@@ -179,8 +140,9 @@ Never use: `Wellness`, `Utilities`
 
 - `Kin Catalog.md` — full record of every tool: URL, publish dir, summary, notes, fixes applied
 - `Kin Build Rules.md` — LLM-facing build instructions, transforms checklist, common pitfalls
+- `VERSIONS.md` — version history for all tools
 
-Always update both after a new tool is shipped.
+Always update all three after a new tool is shipped.
 
 ---
 
@@ -188,16 +150,25 @@ Always update both after a new tool is shipped.
 
 - GitHub repo: `Exit-Records/Kintools` (main branch)
 - No build command — static HTML files served directly
+- **Deployment: Fully automated via GitHub Actions** (`.github/workflows/deploy.yml`)
 
-### Cloudflare Pages setup for each new tool — ALWAYS REMIND USER
+### How deployment works (CI/CD — active as of 31 Mar 2026)
 
-When a new tool is ready to deploy, the user must create a new Cloudflare Pages project:
+Every push to `main` automatically deploys only changed tools to Cloudflare Workers.
 
-Steps to remind the user:
-1. Cloudflare → Workers & Pages → Create → Pages → Connect to Git → `Exit-Records/Kintools`
-2. Build command: leave blank
-3. Build output directory: `sites/kin-NNN-tool-name`
-4. Set custom domain: `toolname.kintools.net`
+- Detects which `sites/kin-*/index.html` files changed
+- Generates a Cloudflare Worker script wrapping the HTML
+- Deploys via `wrangler deploy` with `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` secrets
+- Worker names match directory names exactly (e.g. `kin-030-quote`)
+- Landing page (`sites/kin-landing/index.html`) deploys as worker `kin-landing`
+
+**Manual "Deploy All" trigger:** Go to GitHub Actions tab → Deploy to Cloudflare Workers → Run workflow → check "Deploy all workers". Redeploys all 38 tools in one run.
+
+**No more manual Wrangler** needed from dbridge's local machine.
+
+### GitHub Secrets (set 31 Mar 2026)
+- `CLOUDFLARE_API_TOKEN` — Workers Scripts Edit + Pages Edit permissions
+- `CLOUDFLARE_ACCOUNT_ID` — `ebf08e81432954472b0ee90383daa431`
 
 ### Start of session — CRITICAL: pull before any work
 Before touching any file, always sync with the remote to avoid divergent commits:
@@ -213,36 +184,22 @@ If the output says "Your branch is behind" or shows divergent commits, merge fir
 git merge origin/main
 ```
 
-If conflicts are expected (local work vs remote updates to same files), use:
+### GitHub push rule — CRITICAL
+**NEVER push without user confirmation.** This rule was violated twice in a previous session.
 
-```bash
-git merge -X ours origin/main
-```
-
-**Never start editing files while the local branch is behind `origin/main`.** Skipping this step caused a 30+ file conflict in a previous session when the remote gained 10 commits (SEO updates, Cloudflare configs) while local work was already underway.
+**Also: never push `.github/workflows/` files via the Replit GitHub integration** — it lacks `workflow` scope. Workflow file changes must be pushed by dbridge from their local machine.
 
 ---
 
-### GitHub push rule — CRITICAL
-**Always use the Git Tree API for pushes. Never use the Contents API (PUT per file).**
-Every Contents API PUT = one commit = one Cloudflare Pages deploy per connected site (~35 sites).
-Multiple individual pushes in a session burn through Cloudflare build minutes fast.
-
-Correct approach — single batched commit for all files changed in a session:
-1. Create blobs for each changed file (`POST /repos/.../git/blobs`)
-2. Fetch current tree SHA (`GET /repos/.../git/ref/heads/main`)
-3. Create new tree with all blob SHAs (`POST /repos/.../git/trees`)
-4. Create commit pointing to new tree (`POST /repos/.../git/commits`)
-5. Update ref (`PATCH /repos/.../git/refs/heads/main`)
-
-This produces **1 commit → 1 deploy per site**, no matter how many files changed.
+## localStorage key convention
+Always hyphens: `kin030-readings`, `kin036-theme`. Never underscores.
 
 ---
 
 ## User preferences
 
 - Iterative development; ask before major architectural changes
-- All changes pushed to GitHub before handing back
+- **NEVER push without explicit user confirmation** ("yes", "push it", "go ahead")
 - Landing page Cloudflare URLs confirmed by user before updating card hrefs
 - Description style: short conversational sentences, plain English, no jargon
 - Never default new tools to dark mode
@@ -250,9 +207,7 @@ This produces **1 commit → 1 deploy per site**, no matter how many files chang
 ### Demo preview pattern
 Whenever a tool gets a `?demo=true` mode, also update `artifacts/kin-preview/server.js` to:
 1. Add a named `/demo-NNN` redirect route (e.g. `/demo-008`) that 302s to `/kin-preview/kin-008-flashcards/?demo=true`
-2. Add a prominent button link in `buildIndex()` so it appears on the listing page — one tap from the Kin Static Preview thumbnail in the Replit mobile app
-
-This is necessary because the Replit mobile preview pane has no URL bar for typing query params.
+2. Add a prominent button link in `buildIndex()` so it appears on the listing page
 
 ---
 
@@ -261,8 +216,16 @@ This is necessary because the Replit mobile preview pane has no URL bar for typi
 The repo is a pnpm workspace. Kin tools live in `sites/`. There are also artifact packages:
 
 - `artifacts/api-server` — Express 5 / Node 24 API (PostgreSQL + Drizzle ORM)
-- `artifacts/kin-preview` — Local preview of the landing page
+- `artifacts/kin-preview` — Local preview of the landing page and all tools
 - `artifacts/kin-qr-builder` — React/Vite QR builder tool
 - `artifacts/mockup-sandbox` — Vite component preview server for canvas mockups
 
 TypeScript 5.9, Zod v4, OpenAPI 3.1, Orval for React Query client generation. Two landing page copies kept in sync (`index.html` root and `sites/kin-landing/index.html`).
+
+---
+
+## Known issues / watch list
+
+- **KIN-036 Blood Pressure** was overwritten by Wets Go content in a previous session (commit 43de278). Restored from git history (commit 96ce9cd) on 31 Mar 2026. localStorage keys `kin036-readings`, `kin036-theme`, `kin036-lastprint` — data is safe on user devices.
+- **KIN-018 Kin Nest** and **KIN-027 Kin Gym** landing card SVG icons were not captured in the icon export (31 Mar 2026) due to different card HTML structure — their icons exist in the landing page but the extractor missed them.
+- **Android PWA icons**: 27 tools have the Canvas PNG patcher. 11 tools (KIN-001, 004, 019, 020, 022, 024, 025, 026, 028, 033, 034, 035) either have no SVG manifest icon or were not patched — check these if Android icon issues reported.
