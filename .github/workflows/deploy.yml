@@ -1,0 +1,3 @@
+git pull
+git add .github/workflows/deploy.yml
+git push origin main
