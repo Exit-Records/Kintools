@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="utf-8">
+  <title>Kin — Canvas Icon Preview</title>
+  <style>
+    body { background:#1a1a18; font-family:system-ui,sans-serif; padding:32px; margin:0; }
+    h1 { color:#f0ede6; font-size:18px; margin:0 0 24px; font-weight:500; letter-spacing:.05em; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:20px; }
+    .item { text-align:center; }
+    canvas { display:block; margin:0 auto 8px; border-radius:16px; width:80px; height:80px; }
+    .label { color:#a0a09a; font-size:11px; line-height:1.3; }
+    .name { color:#f0ede6; font-size:12px; font-weight:500; }
+  </style>
+  </head>
+  <body>
+  <h1>Kin Tools — Android Home Screen Icon Preview (Canvas-generated)</h1>
+  <div class="grid" id="grid"></div>
+  <script>
+  const tools = [
+      { tool:'kin-001-ukulele', name:'Ukulele Tuner', bg:'#f5f0e8', initials:'UT', textColor:'#1a1a18' },
+    { tool:'kin-002-metronome', name:'Metronome', bg:'#f6f4ef', initials:'M', textColor:'#1a1a18' },
+    { tool:'kin-003-bpm', name:'BPM Counter', bg:'#f5f7fa', initials:'BC', textColor:'#1a1a18' },
+    { tool:'kin-004-colour-picker', name:'kin-004-colour-picker', bg:'#2c2c2a', initials:'C', textColor:'white' },
+    { tool:'kin-005-qr-builder', name:'QR Builder', bg:'#f5f0eb', initials:'QB', textColor:'#1a1a18' },
+    { tool:'kin-006-classroom-timer', name:'Timer', bg:'#f5f4f0', initials:'CT', textColor:'#1a1a18' },
+    { tool:'kin-007-ambient', name:'KIN-007', bg:'#f5f7fa', initials:'KI', textColor:'#1a1a18' },
+    { tool:'kin-008-flashcards', name:'Flashcards', bg:'#2D4A6B', initials:'FC', textColor:'white' },
+    { tool:'kin-009-jetlag', name:'Jet Lag Planner', bg:'#1A4060', initials:'JL', textColor:'white' },
+    { tool:'kin-010-audio-calc', name:'Audio Calculators', bg:'#1f1040', initials:'AC', textColor:'white' },
+    { tool:'kin-011-unit-price', name:'Unit Price Calc', bg:'#3D2A10', initials:'UP', textColor:'white' },
+    { tool:'kin-012-name-picker', name:'kin-012-name-picker', bg:'#111110', initials:'K', textColor:'white' },
+    { tool:'kin-013-mood-slider', name:'Mood Slider', bg:'#1A3A50', initials:'MS', textColor:'white' },
+    { tool:'kin-014-breathing', name:'Breathing', bg:'#1F3828', initials:'BR', textColor:'white' },
+    { tool:'kin-015-quiet-cycle', name:'Quiet Cycle', bg:'#7c5cbf', initials:'QC', textColor:'white' },
+    { tool:'kin-016-recipe-scaler', name:'Recipe Scaler', bg:'#b45309', initials:'RS', textColor:'white' },
+    { tool:'kin-017-decision-flip', name:'Decision Flip', bg:'#7c3aed', initials:'DF', textColor:'white' },
+    { tool:'kin-018-kin-nest', name:'Kin Nest', bg:'#f0fdf4', initials:'KN', textColor:'#1a1a18' },
+    { tool:'kin-019-markdown-download', name:'kin-019-markdown-download', bg:'#2c2c2a', initials:'M', textColor:'white' },
+    { tool:'kin-020-password-generator', name:'PassGen', bg:'#f5f4f0', initials:'P', textColor:'#1a1a18' },
+    { tool:'kin-021-text-counter', name:'KIN-021', bg:'#f5f0eb', initials:'TC', textColor:'#1a1a18' },
+    { tool:'kin-022-fair-share', name:'Fair Share', bg:'#f5f0eb', initials:'FS', textColor:'#1a1a18' },
+    { tool:'kin-023-json', name:'KIN JSON', bg:'#f2f0EC', initials:'KJ', textColor:'#1a1a18' },
+    { tool:'kin-024-thought-loop', name:'KIN-024', bg:'#f5f0eb', initials:'KI', textColor:'#1a1a18' },
+    { tool:'kin-025-stretch', name:'Stretch', bg:'#f5f0eb', initials:'S', textColor:'#1a1a18' },
+    { tool:'kin-026-kin-ground', name:'kin-026-kin-ground', bg:'#2c2c2a', initials:'K', textColor:'white' },
+    { tool:'kin-027-kin-gym', name:'Kin Gym', bg:'#ffffff', initials:'G', textColor:'#1a1a18' },
+    { tool:'kin-028-scan', name:'Scan', bg:'#ffffff', initials:'S', textColor:'#1a1a18' },
+    { tool:'kin-029-nudge', name:'Nudge', bg:'#ffffff', initials:'N', textColor:'#1a1a18' },
+    { tool:'kin-030-quote', name:'Quote', bg:'#f5f4f0', initials:'Q', textColor:'#1a1a18' },
+    { tool:'kin-031-invoice', name:'Invoice', bg:'#f5f4f0', initials:'I', textColor:'#1a1a18' },
+    { tool:'kin-032-receipt', name:'Receipt', bg:'#f5f4f0', initials:'R', textColor:'#1a1a18' },
+    { tool:'kin-033-page-surgeon', name:'Page Surgeon', bg:'#ffffff', initials:'PS', textColor:'#1a1a18' },
+    { tool:'kin-034-noise-meter', name:'Noise Meter', bg:'#f5f5f0', initials:'NM', textColor:'#1a1a18' },
+    { tool:'kin-035-random-acts', name:'Random Acts', bg:'#f5f0eb', initials:'RA', textColor:'#1a1a18' },
+    { tool:'kin-036-blood-pressure', name:'Wets Go!', bg:'#F5EDE4', initials:'WG', textColor:'#1a1a18' },
+    { tool:'kin-037-unclaimed', name:'Unclaimed', bg:'#f5f4f0', initials:'U', textColor:'#1a1a18' },
+    { tool:'kin-038-wets-go', name:'Wets Go!', bg:'#F5EDE4', initials:'WG', textColor:'#1a1a18' }
+  ];
+
+  tools.forEach(t => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 192;
+    const x = c.getContext('2d');
+    x.fillStyle = t.bg;
+    try { x.beginPath(); x.roundRect(0,0,192,192,32); x.fill(); }
+    catch(e) { x.fillRect(0,0,192,192); }
+    x.fillStyle = t.textColor;
+    x.font = 'bold 68px system-ui,sans-serif';
+    x.textAlign = 'center';
+    x.textBaseline = 'middle';
+    x.fillText(t.initials, 96, 100);
+    
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.appendChild(c);
+    div.innerHTML += '<div class="name">' + t.name + '</div><div class="label">' + t.initials + ' · ' + t.bg + '</div>';
+    document.getElementById('grid').appendChild(div);
+  });
+  </script>
+  </body>
+  </html>
