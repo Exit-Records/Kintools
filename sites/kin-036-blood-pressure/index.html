@@ -1,269 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" id="theme-color-meta" content="#F5EDE4">
+<title>KIN-036 -- Blood Pressure -- Kin</title>
+<meta name="theme-color" id="theme-color-meta" content="#f5f4f0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="KIN-036">
-<link rel="apple-touch-icon" id="apple-touch-icon">
-<title>Wets Go! — KIN-036</title>
-<link rel="canonical" href="https://wetsgo.kintools.net/">
-<meta name="description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
-<meta property="og:title" content="Wets Go! — KIN-036">
-<meta property="og:description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://wetsgo.kintools.net/">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wets Go! — KIN-036">
-<meta name="twitter:description" content="Bathroom reminders and hydration tracking for families. Set schedules, build routines, track progress.">
-<script>(function(){
-  var m = {
-    name: "KIN-036 Wets Go!",
-    short_name: "Wets Go!",
-    start_url: ".",
-    display: "standalone",
-    background_color: "#F5EDE4",
-    theme_color: "#F5EDE4"
-  };
-  var b = new Blob([JSON.stringify(m)], {type: "application/json"});
-  var lk = document.createElement("link");
-  lk.rel = "manifest";
-  lk.href = URL.createObjectURL(b);
-  document.head.appendChild(lk);
-})();
-if ("serviceWorker" in navigator) {
-  var _sw =
-    "const C='kin036-v1';" +
-    "self.addEventListener('install',function(){self.skipWaiting();});" +
-    "self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==C;}).map(function(k){return caches.delete(k);}));}));});" +
-    "self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.open(C).then(function(c){return c.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){c.put(e.request,res.clone());return res;});});}));});";
-  navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([_sw],{type:"application/javascript"}))
-  ).catch(function(){});
-}
-</script>
+<meta name="apple-mobile-web-app-title" content="Blood Pressure">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
 <style>
-:root {
-  --bg: #F5EDE4;
-  --bg-card: #FEFCF9;
-  --bg-input: #FAF6F1;
-  --text: #3D3229;
-  --text-muted: #8B7D6B;
-  --text-light: #B5A898;
-  --accent: #D4764E;
-  --accent-hover: #C06540;
-  --success: #7BA078;
-  --success-bg: #EDF5ED;
-  --info: #6B9EC4;
-  --info-bg: #EBF2F8;
-  --danger: #C47272;
-  --danger-bg: #F8ECEC;
-  --self-init: #6B9EC4;
-  --border: #E8DFD4;
-  --shadow: 0 2px 8px rgba(61,50,41,0.06);
-  --shadow-lg: 0 4px 20px rgba(61,50,41,0.1);
-  --radius: 14px;
-  --radius-sm: 10px;
-  --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --max-w: 440px;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#f5f4f0;--surface:#fff;--text:#111;--text-secondary:#666;
+--border:#ddd;--border-light:#eee;
+--accent:#1a56db;--accent-soft:rgba(26,86,219,0.08);
+--success:#1a7;--success-soft:rgba(17,170,119,0.08);
+--warning:#c60;--warning-soft:rgba(204,102,0,0.08);
+--danger:#c00;--danger-soft:rgba(204,0,0,0.08);
+--elevated:#d35;--elevated-soft:rgba(221,51,85,0.08);
+--crisis:#900;--crisis-soft:rgba(153,0,0,0.08);
+--toast-bg:#111;--toast-text:#fff;
+--shadow:0 1px 3px rgba(0,0,0,0.06);--radius:8px;--footer-muted:#888;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.5; min-height: 100dvh; overflow-x: hidden; }
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding:16px;padding-bottom:env(safe-area-inset-bottom,0);min-height:100vh;min-height:100dvh;line-height:1.5;-webkit-text-size-adjust:100%}
 
-.app { max-width: var(--max-w); margin: 0 auto; padding: 0 16px 100px; position: relative; }
+body.dark{--bg:#1a1a1a;--surface:#252525;--text:#e8e8e8;--text-secondary:#999;--border:#3a3a3a;--border-light:#333;--accent:#5b8def;--accent-soft:rgba(91,141,239,0.12);--success:#2c9;--success-soft:rgba(34,204,153,0.12);--warning:#e80;--warning-soft:rgba(238,136,0,0.12);--danger:#e44;--danger-soft:rgba(238,68,68,0.12);--elevated:#e57;--elevated-soft:rgba(238,85,119,0.12);--crisis:#f44;--crisis-soft:rgba(255,68,68,0.12);--toast-bg:#fff;--toast-text:#111;--shadow:0 1px 3px rgba(0,0,0,0.2);--footer-muted:#888}
 
-h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--text); line-height: 1.2; }
-h2 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--text); }
-.label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 6px; }
+body.dark{background:#1a1a1a !important;color:#e8e8e8 !important}
+body.dark .section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .section-title{color:#e8e8e8 !important}
+body.dark input,body.dark textarea,body.dark select{background:#252525 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark input::placeholder,body.dark textarea::placeholder{color:#777 !important}
+body.dark label{color:#999 !important}
+body.dark .theme-toggle{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .btn-primary{background:#5b8def !important;color:#fff !important}
+body.dark .btn-secondary{background:#333 !important;color:#e8e8e8 !important;border-color:#444 !important}
+body.dark .demo-bar{background:#1a3a2a !important;color:#6f6 !important;border-color:#2a4a3a !important}
+body.dark .log-entry{border-color:#333 !important}
+body.dark .log-date{color:#999 !important}
+body.dark .log-values{color:#e8e8e8 !important}
+body.dark .log-meta{color:#777 !important}
+body.dark .category-badge{border-color:#444 !important}
+body.dark .summary-card{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .summary-label{color:#999 !important}
+body.dark .summary-value{color:#e8e8e8 !important}
+body.dark .empty-state{color:#999 !important;border-color:#3a3a3a !important}
+body.dark .tab-btn{background:#333 !important;color:#999 !important;border-color:#444 !important}
+body.dark .tab-btn.active{background:#5b8def !important;color:#fff !important;border-color:#5b8def !important}
+body.dark .badge-local{color:#2c9 !important;background:rgba(34,204,153,0.12) !important}
+body.dark .bug-sheet{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .bug-sheet select,body.dark .bug-sheet textarea,body.dark .bug-sheet input{background:#1a1a1a !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark .bug-overlay{background:rgba(0,0,0,0.6) !important}
+body.dark .toggle-row{color:#999 !important}
+body.dark .print-range{background:#252525 !important;border-color:#3a3a3a !important;color:#e8e8e8 !important}
+body.dark .kinconfirm-box{background:#252525 !important;color:#e8e8e8 !important}
+body.dark .kinconfirm-cancel{background:#333 !important;color:#e8e8e8 !important}
+body.dark .chart-section{background:#252525 !important;border-color:#3a3a3a !important}
+body.dark .toggle-opt{background:#333 !important;color:#999 !important;border-color:#444 !important}
+body.dark .toggle-opt.active{background:rgba(91,141,239,0.12) !important;color:#5b8def !important;border-color:#5b8def !important}
 
-.screen { display: none; padding-top: 20px; }
-.screen.active { display: block; }
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.header h1{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+.theme-toggle{width:40px;height:40px;min-height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:background 0.2s,color 0.2s;flex-shrink:0}
 
-.header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 12px; }
-.header h1 { font-size: 1.3rem; }
-.header-actions { display: flex; gap: 8px; }
+.demo-bar{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;border-radius:var(--radius);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500}
+.demo-bar button{width:auto;min-height:32px;background:transparent;border:1px solid currentColor;color:inherit;border-radius:6px;padding:4px 12px;font-size:12px;font-weight:500;cursor:pointer}
 
-.card { background: var(--bg-card); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-.card-sm { padding: 14px 16px; }
+.tab-row{display:flex;gap:4px;margin-bottom:16px}
+.tab-btn{flex:1;min-height:44px;background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border: none; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s ease; min-height: 48px; }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-hover); }
-.btn-primary:active { transform: scale(0.97); }
-.btn-secondary { background: var(--bg-input); color: var(--text); border: 1px solid var(--border); }
-.btn-secondary:hover { background: var(--border); }
-.btn-success { background: var(--success); color: #fff; }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-info { background: var(--info); color: #fff; }
-.btn-full { width: 100%; }
-.btn-sm { padding: 10px 16px; font-size: 0.9rem; min-height: 40px; }
-.btn-icon { width: 44px; height: 44px; padding: 0; border-radius: 50%; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-muted); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.btn-icon:hover { background: var(--border); }
+.tab-content{display:none}.tab-content.active{display:block}
 
-input:not([type="checkbox"]), select, textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.95rem; background: var(--bg-input); color: var(--text); outline: none; transition: border-color 0.15s; box-sizing: border-box; }
-input:not([type="checkbox"]):focus, select:focus, textarea:focus { border-color: var(--accent); }
-input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
-input[type="time"] { padding: 0 8px; font-size: 0.9rem; text-align: center; height: 44px; -webkit-appearance: none; appearance: none; }
-textarea { resize: vertical; min-height: 80px; }
-.form-group { margin-bottom: 14px; }
-.form-group:last-child { margin-bottom: 0; }
-.form-row { display: flex; gap: 10px; }
-.form-row > * { flex: 1; min-width: 0; }
+.section{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.section-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;color:var(--text)}
 
-.tabs { display: flex; background: var(--bg-card); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 16px; border: 1px solid var(--border); overflow-x: auto; gap: 2px; }
-.tab { flex: 1; padding: 10px 8px; border: none; background: none; border-radius: 8px; font-family: var(--font-body); font-size: 0.82rem; font-weight: 500; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-.tab.active { background: var(--accent); color: #fff; font-weight: 600; }
+label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px}
+input,textarea,select{width:100%;min-height:44px;font-size:16px;font-family:inherit;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);color:var(--text);-webkit-appearance:none;appearance:none;transition:border-color 0.15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+input::placeholder,textarea::placeholder{color:#aaa}
+textarea{min-height:60px;resize:vertical}
+.field{margin-bottom:10px}
+.row{display:flex;gap:8px}.row .field{flex:1}
 
-.log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
-.log-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 10px; border-radius: var(--radius); border: 2px solid var(--border); background: var(--bg-card); cursor: pointer; transition: all 0.15s; }
-.log-btn:active { transform: scale(0.96); }
-.log-btn .log-icon { font-size: 1.8rem; }
-.log-btn .log-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.log-btn.went { border-color: var(--success); background: var(--success-bg); }
-.log-btn.didnt { border-color: var(--border); }
-.log-btn.accident { border-color: var(--danger); background: var(--danger-bg); }
-.log-btn.self-init { border-color: var(--info); background: var(--info-bg); }
+.toggle-group{display:flex;gap:4px}
+.toggle-opt{flex:1;min-height:44px;background:var(--surface);color:var(--text-secondary);border:1px solid var(--border);border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.toggle-opt.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 
-.entry { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-.entry:last-child { border-bottom: none; }
-.entry-icon { font-size: 1.3rem; width: 36px; text-align: center; }
-.entry-info { flex: 1; }
-.entry-time { font-size: 0.85rem; font-weight: 600; }
-.entry-type { font-size: 0.8rem; color: var(--text-muted); }
-.entry-note { font-size: 0.78rem; color: var(--text-light); font-style: italic; }
-.entry-delete { background: none; border: none; color: var(--text-light); cursor: pointer; padding: 8px; font-size: 0.9rem; font-weight: 600; border-radius: 6px; }
-.entry-delete:hover { background: var(--danger-bg); color: var(--danger); }
+.btn-primary{width:100%;min-height:48px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity 0.15s}
+.btn-primary:active{opacity:0.85}
+.btn-secondary{width:100%;min-height:44px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.15s}
+.btn-group{display:flex;flex-direction:column;gap:8px;margin-top:16px}
 
-.pattern-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 12px 0; }
-.pattern-day { text-align: center; }
-.pattern-day-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
-.pattern-cell { width: 100%; aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
-.pattern-cell.empty { background: var(--bg-input); color: var(--text-light); }
+.category-badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;letter-spacing:0.3px;text-transform:uppercase;border:1px solid transparent}
+.cat-normal{color:var(--success);background:var(--success-soft);border-color:var(--success)}
+.cat-elevated{color:var(--warning);background:var(--warning-soft);border-color:var(--warning)}
+.cat-high1{color:var(--elevated);background:var(--elevated-soft);border-color:var(--elevated)}
+.cat-high2{color:var(--danger);background:var(--danger-soft);border-color:var(--danger)}
+.cat-crisis{color:var(--crisis);background:var(--crisis-soft);border-color:var(--crisis)}
 
-.hydration-bar { height: 16px; background: var(--bg-input); border-radius: 8px; overflow: hidden; margin: 8px 0; }
-.hydration-fill { height: 100%; background: var(--info); border-radius: 8px; transition: width 0.3s ease; }
-.hydration-count { display: flex; align-items: center; justify-content: space-between; }
+.log-entry{padding:10px 0;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.log-entry:last-child{border-bottom:none}
+.log-left{flex:1;min-width:0}
+.log-date{font-size:12px;color:var(--text-secondary);margin-bottom:2px}
+.log-values{font-size:16px;font-weight:600}
+.log-meta{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.log-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.log-delete{background:none;border:none;color:var(--text-secondary);font-size:12px;cursor:pointer;padding:4px 8px;font-family:inherit;min-height:32px}
+.log-delete:hover{color:var(--danger)}
 
-.timer-display { text-align: center; padding: 24px 0; }
-.timer-ring { width: 180px; height: 180px; margin: 0 auto 16px; position: relative; }
-.timer-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.timer-ring .bg { fill: none; stroke: var(--border); stroke-width: 8; }
-.timer-ring .fg { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
-.timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-.timer-text .time { font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: var(--text); }
-.timer-text .hint { font-size: 0.85rem; color: var(--text-muted); }
+.summary-row{display:flex;gap:8px;margin-bottom:8px}
+.summary-card{flex:1;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:10px;text-align:center;box-shadow:var(--shadow)}
+.summary-label{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px}
+.summary-value{font-size:18px;font-weight:600}
 
-.child-view { text-align: center; padding: 20px 0; }
-.child-greeting { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
-.child-message { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 20px; }
-.child-response-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-.child-btn { padding: 20px; border-radius: var(--radius); border: none; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.15s; min-height: 64px; }
-.child-btn:active { transform: scale(0.96); }
-.child-btn.went { background: var(--success); color: #fff; }
-.child-btn.didnt { background: var(--bg-input); color: var(--text); border: 2px solid var(--border); }
-.child-btn.accident { background: var(--danger-bg); color: var(--danger); border: 2px solid var(--danger); }
-.child-btn.self-init { background: var(--info); color: #fff; }
+.chart-section{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow-x:auto}
+.chart-section svg{display:block;width:100%;height:auto}
 
-.reward-section { margin: 20px 0; }
-.reward-bar-outer { height: 20px; background: var(--bg-input); border-radius: 10px; overflow: hidden; margin: 8px 0; }
-.reward-bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent), #E8A87C); border-radius: 10px; transition: width 0.5s ease; }
-.reward-info { display: flex; justify-content: space-between; font-size: 0.85rem; }
-.reward-points { font-weight: 700; color: var(--accent); }
-.reward-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.reward-badge { font-size: 1.5rem; opacity: 0.3; transition: opacity 0.3s; }
-.reward-badge.unlocked { opacity: 1; }
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-secondary);border:1px dashed var(--border);border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.empty-state strong{display:block;font-size:16px;color:var(--text);margin-bottom:6px}
 
-.alert-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-.alert-overlay.visible { display: flex; }
-.alert-box { background: var(--bg-card); border-radius: 20px; padding: 32px 24px; text-align: center; max-width: 360px; width: 100%; box-shadow: var(--shadow-lg); }
-.alert-box h2 { font-size: 1.4rem; margin-bottom: 12px; }
-.alert-box p { color: var(--text-muted); margin-bottom: 24px; }
+.print-range{background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:12px}
 
-.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 0.9rem; font-weight: 500; opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 999; }
-.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-text);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:opacity 0.25s;pointer-events:none;z-index:100;white-space:nowrap}
 
-.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.6); z-index: 1001; align-items: center; justify-content: center; padding: 20px; }
-.confirm-overlay.visible { display: flex; }
-.confirm-box { background: var(--bg-card); border-radius: var(--radius); padding: 24px; max-width: 320px; width: 100%; text-align: center; }
-.confirm-box p { margin-bottom: 20px; }
-.confirm-btns { display: flex; gap: 10px; }
-.confirm-btns .btn { flex: 1; }
+.kinconfirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;align-items:center;justify-content:center}
+.kinconfirm-overlay.visible{display:flex}
+.kinconfirm-box{background:var(--surface);border-radius:14px;padding:24px;max-width:320px;width:90%;text-align:center}
+.kinconfirm-box p{font-size:15px;margin-bottom:20px;line-height:1.5}
+.kinconfirm-btns{display:flex;gap:8px}
+.kinconfirm-btns button{flex:1;min-height:44px;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none}
+.kinconfirm-cancel{background:var(--border-light);color:var(--text)}
+.kinconfirm-confirm{background:var(--danger);color:#fff}
 
-.pin-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 1002; align-items: center; justify-content: center; }
-.pin-overlay.visible { display: flex; }
-.pin-box { text-align: center; padding: 24px; }
-.pin-dots { display: flex; gap: 16px; justify-content: center; margin: 24px 0; }
-.pin-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--border); transition: background 0.15s; }
-.pin-dot.filled { background: var(--accent); }
-.pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 260px; margin: 0 auto; }
-.pin-key { width: 72px; height: 72px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg-card); font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.pin-key:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.pin-key.backspace { font-size: 1.2rem; }
+.bug-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.bug-overlay.open{opacity:1;pointer-events:auto}
+.bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--surface);color:var(--text);border-radius:16px 16px 0 0;padding:20px 16px env(safe-area-inset-bottom,16px);z-index:201;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
+.bug-overlay.open .bug-sheet{transform:translateY(0)}
+.bug-sheet h3{font-size:16px;margin-bottom:14px;font-weight:600}
+.bug-sheet .field{margin-bottom:10px}
+.bug-sheet label{font-size:12px;color:var(--text-secondary);margin-bottom:4px;display:block}
+.bug-sheet select,.bug-sheet textarea,.bug-sheet input{width:100%;min-height:44px;font-size:16px;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);color:var(--text);font-family:inherit;-webkit-appearance:none}
+.bug-sheet textarea{min-height:100px;resize:vertical}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:10px;padding:6px 0}
+.toggle-switch{width:44px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none;padding:0}
+.toggle-switch.on{background:var(--success)}
+.toggle-knob{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.toggle-switch.on .toggle-knob{transform:translateX(18px)}
+.bug-actions{display:flex;gap:8px;margin-top:14px}
+.badge-local{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043}
+.bug-actions button{flex:1;min-height:44px;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;border:none}
+.bug-cancel{background:var(--border-light);color:var(--text)}
+.bug-submit{background:var(--accent);color:#fff}
 
-.privacy-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--success-bg); border-radius: 20px; font-size: 0.78rem; font-weight: 500; color: var(--success); cursor: pointer; position: relative; }
-.privacy-tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 0.78rem; width: 220px; text-align: center; z-index: 10; }
-.privacy-badge:hover .privacy-tooltip, .privacy-badge:focus .privacy-tooltip { display: block; }
-
-.footer { text-align: center; padding: 40px 0 20px; }
-.footer-text { font-size: 0.75rem; color: var(--text-light); }
-.footer-text a { color: var(--text-muted); text-decoration: none; }
-
-.week-grid { margin: 12px 0; }
-.week-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.week-row:last-child { border-bottom: none; }
-.week-day-label { width: 36px; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
-.week-bar { flex: 1; height: 24px; background: var(--bg-input); border-radius: 6px; display: flex; overflow: hidden; }
-.week-segment { height: 100%; transition: width 0.3s; }
-.week-count { width: 28px; text-align: right; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
-
-.school-plan-preview { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin: 16px 0; }
-.school-timetable { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
-.school-timetable th { text-align: left; padding: 6px 4px; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--text-muted); font-size: 0.75rem; }
-.school-timetable td { padding: 4px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.school-timetable input[type="checkbox"] { width: 18px; height: 18px; margin: 0; }
-.school-timetable input[type="time"], .school-timetable input[type="text"] { padding: 0 6px; font-size: 0.85rem; width: 100%; border-radius: 8px; height: 38px; }
-.delete-btn { background: none; border: none; color: var(--text-light); cursor: pointer; padding: 6px; font-size: 0.85rem; font-weight: 600; line-height: 1; border-radius: 6px; }
-.delete-btn:hover { background: var(--danger-bg); color: var(--danger); }
-
-.potty-day-counter { text-align: center; padding: 16px; background: var(--accent); color: #fff; border-radius: var(--radius); margin-bottom: 16px; }
-.potty-day-counter .day-num { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; }
-.potty-day-counter .day-label { font-size: 0.9rem; opacity: 0.9; }
-
-.note-overlay { display: none; position: fixed; inset: 0; background: rgba(61,50,41,0.6); z-index: 1001; align-items: flex-end; justify-content: center; padding: 0; }
-.note-overlay.visible { display: flex; }
-.note-box { background: var(--bg-card); border-radius: 20px 20px 0 0; padding: 24px; width: 100%; max-width: var(--max-w); }
-
-.mt-sm { margin-top: 8px; }
-.mt-md { margin-top: 16px; }
-.mb-md { margin-bottom: 16px; }
-.text-center { text-align: center; }
-.text-muted { color: var(--text-muted); }
-.text-sm { font-size: 0.85rem; }
-.flex-between { display: flex; align-items: center; justify-content: space-between; }
-.gap-sm { gap: 8px; }
-.hidden { display: none !important; }
-
-@media print {
-  body { background: #fff; }
-  .app { padding: 0; max-width: 100%; }
-  .screen { display: none !important; }
-  #schoolPlanPrint { display: block !important; }
-  .no-print { display: none !important; }
+@media print{
+*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+body,body.dark{background:#fff !important;color:#111 !important;padding:0 !important;margin:0 !important;font-size:10pt !important}
+.header,.theme-toggle,.demo-bar,.tab-row,.btn-group,.toast,.bug-overlay,.kinconfirm-overlay,.log-delete,.print-range,.no-print{display:none !important}
+.tab-content{display:block !important}
+#tabAdd{display:none !important}
+#tabHistory{display:none !important}
+#tabReport{display:block !important}
+.section,.summary-card,.chart-section{box-shadow:none !important;border:1px solid #ddd !important;background:#fff !important;page-break-inside:avoid}
+.print-header{display:block !important;margin-bottom:16pt}
+.print-header h2{font-size:18pt;font-weight:600;margin:0 0 4pt}
+.print-header .print-sub{font-size:9pt;color:#666}
+.category-badge{border:1px solid currentColor !important}
+footer{display:none !important}
+.summary-label{color:#666 !important}
+.summary-value{color:#111 !important}
+.log-date{color:#666 !important}
+.log-values{color:#111 !important}
+.log-meta{color:#888 !important}
 }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.fade-in { animation: fadeIn 0.3s ease; }
-@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-.pop { animation: pop 0.4s ease; }
-@keyframes celebrate { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
-.celebrate { animation: celebrate 0.5s ease; }
+.print-header{display:none}
 </style>
+
+<script>
+(function(){
+  var STORE_KEY='kin036-theme';
+  var saved=localStorage.getItem(STORE_KEY);
+  if(saved==='dark'){
+    document.documentElement.className='dark';
+    document.body&&document.body.classList.add('dark');
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var manifest={name:'KIN-036 - Blood Pressure',short_name:'Blood Pressure',start_url:'.',display:'standalone',background_color:'#f5f4f0',theme_color:'#f5f4f0',icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2260%22>BP</text></svg>',sizes:'any',type:'image/svg+xml'}]};
+  var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(mBlob);
+  document.head.appendChild(link);
+
+  if('serviceWorker' in navigator){
+    var swCode="var CACHE='kin036-v1';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==CACHE}).map(function(n){return caches.delete(n)}))}))});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var c=res.clone();caches.open(CACHE).then(function(cache){cache.put(e.request,c)})}return res})}))});";
+    var swBlob=new Blob([swCode],{type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(function(){});
+  }
+
+  try{
+    var c=document.createElement('canvas');c.width=180;c.height=180;
+    var ctx=c.getContext('2d');
+    var r=36;
+    ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+    var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,'#1a0a18');g.addColorStop(1,'#0a0510');ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle='rgba(200,60,80,0.7)';ctx.lineWidth=2.5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(30,110);ctx.lineTo(50,110);ctx.lineTo(60,80);ctx.lineTo(70,130);ctx.lineTo(80,60);ctx.lineTo(90,120);ctx.lineTo(100,90);ctx.lineTo(110,110);ctx.lineTo(150,110);ctx.stroke();
+    ctx.fillStyle='rgba(200,60,80,0.9)';ctx.beginPath();ctx.arc(90,60,4,0,Math.PI*2);ctx.fill();
+    var icon=document.getElementById('apple-touch-icon');
+    if(icon) icon.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
+<meta name="description" content="Log blood pressure readings with clinical AHA categories. Track trends over time and print reports for your doctor. Nothing leaves your device.">
+<link rel="canonical" href="https://bloodpressure.kintools.net/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bloodpressure.kintools.net/">
+<meta property="og:title" content="KIN-036 -- Blood Pressure -- Kin">
+<meta property="og:description" content="Log blood pressure readings with clinical AHA categories. Track trends over time and print reports for your doctor. Nothing leaves your device.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-036 -- Blood Pressure -- Kin">
+<meta name="twitter:description" content="Log blood pressure readings with clinical AHA categories. Track trends over time and print reports for your doctor. Nothing leaves your device.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
   <script>
     /* PWA icon patch: replace SVG manifest icons with Canvas PNG for Android support */
     (function(){
@@ -307,1701 +277,417 @@ textarea { resize: vertical; min-height: 80px; }
     </script>
   </head>
 <body>
-<div class="app" id="app">
 
-<!-- PIN Lock Screen -->
-<div class="pin-overlay" id="pinOverlay">
-<div class="pin-box">
-  <h2>Enter PIN</h2>
-  <p class="text-muted text-sm mt-sm" id="pinPromptText">Enter your 4-digit PIN</p>
-  <div class="pin-dots" id="pinDots">
-    <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-  </div>
-  <div class="pin-pad" id="pinPad">
-    <button class="pin-key" onclick="pinInput(1)">1</button>
-    <button class="pin-key" onclick="pinInput(2)">2</button>
-    <button class="pin-key" onclick="pinInput(3)">3</button>
-    <button class="pin-key" onclick="pinInput(4)">4</button>
-    <button class="pin-key" onclick="pinInput(5)">5</button>
-    <button class="pin-key" onclick="pinInput(6)">6</button>
-    <button class="pin-key" onclick="pinInput(7)">7</button>
-    <button class="pin-key" onclick="pinInput(8)">8</button>
-    <button class="pin-key" onclick="pinInput(9)">9</button>
-    <div></div>
-    <button class="pin-key" onclick="pinInput(0)">0</button>
-    <button class="pin-key backspace" onclick="pinBackspace()">&#9003;</button>
-  </div>
-</div>
-</div>
-
-<!-- SETUP SCREEN -->
-<div class="screen" id="setupScreen">
-<div style="text-align:center;padding:40px 0 24px;">
-  <h1 style="font-size:2rem;">Wets Go!</h1>
-  <p class="text-muted mt-sm">Bathroom reminders and hydration tracking for families</p>
-</div>
-<div class="card">
-  <h3>Child Profile</h3>
-  <div class="form-group mt-md">
-    <div class="label">Name</div>
-    <input type="text" id="setupName" placeholder="Child's name" autocomplete="off">
-  </div>
-  <div class="form-group">
-    <div class="label">Age</div>
-    <input type="number" id="setupAge" placeholder="Age" min="1" max="17" inputmode="numeric">
-  </div>
-  <div class="form-group">
-    <div class="label">Mode</div>
-    <select id="setupMode">
-      <option value="standard">Standard (ages 3+)</option>
-      <option value="potty">Potty Training (toddlers)</option>
-    </select>
-  </div>
-</div>
-<div class="card">
-  <h3>Reminder Schedule</h3>
-  <div class="form-group mt-md">
-    <div class="label">Reminder interval</div>
-    <select id="setupInterval">
-      <option value="30">Every 30 minutes</option>
-      <option value="45">Every 45 minutes</option>
-      <option value="60">Every 60 minutes</option>
-      <option value="90">Every 90 minutes</option>
-      <option value="120" selected>Every 2 hours</option>
-      <option value="150">Every 2.5 hours</option>
-      <option value="180">Every 3 hours</option>
-    </select>
-  </div>
-  <div class="form-row">
-    <div class="form-group">
-      <div class="label">Wake time</div>
-      <input type="time" id="setupWake" value="07:00">
-    </div>
-    <div class="form-group">
-      <div class="label">Bed time</div>
-      <input type="time" id="setupBed" value="19:30">
-    </div>
-  </div>
-</div>
-<div class="card">
-  <h3>Security PIN</h3>
-  <p class="text-sm text-muted mb-md">Optional 4-digit PIN to protect parent mode</p>
-  <div class="form-group">
-    <input type="password" id="setupPin" placeholder="4-digit PIN (optional)" maxlength="4" inputmode="numeric" pattern="[0-9]*">
-  </div>
-</div>
-<button class="btn btn-primary btn-full mt-md" onclick="completeSetup()">Start</button>
-<div class="footer">
-  <div class="privacy-badge" tabindex="0" style="margin:16px auto 0;">
-    &#x1F6E1; Nothing leaves your device
-    <div class="privacy-tooltip">All data is stored locally on this device using your browser's storage. No accounts, no servers, no tracking.</div>
-  </div>
-</div>
-</div>
-
-<!-- MODE SELECT -->
-<div class="screen" id="modeSelectScreen">
-<div style="text-align:center;padding:40px 0 20px;">
-  <h1 style="font-size:1.6rem;">Wets Go!</h1>
-  <p class="text-muted mt-sm" id="modeSelectGreeting"></p>
-</div>
-<div style="display:flex;flex-direction:column;gap:14px;">
-  <button class="card card-sm" style="text-align:left;cursor:pointer;border:2px solid var(--border);" onclick="enterMode('parent')">
-    <h3>&#128100; Parent / Carer</h3>
-    <p class="text-sm text-muted mt-sm">Log visits, track patterns, manage schedule</p>
-  </button>
-  <button class="card card-sm" style="text-align:left;cursor:pointer;border:2px solid var(--accent);" onclick="enterMode('child')">
-    <h3>&#127775; <span id="modeChildName">Child</span> Mode</h3>
-    <p class="text-sm text-muted mt-sm">Timer, reminders, and rewards</p>
-  </button>
-</div>
-</div>
-
-<!-- PARENT MODE -->
-<div class="screen" id="parentScreen">
 <div class="header">
-  <h1>&#128100; Parent Mode</h1>
-  <div class="header-actions">
-    <button class="btn-icon" onclick="showScreen('modeSelectScreen')" title="Switch mode">&#8617;</button>
-  </div>
-</div>
-<div class="tabs" id="parentTabs">
-  <button class="tab active" onclick="showParentTab('today')">Today</button>
-  <button class="tab" onclick="showParentTab('week')">Week</button>
-  <button class="tab" onclick="showParentTab('hydration')">Water</button>
-  <button class="tab" onclick="showParentTab('school')">School</button>
-  <button class="tab" onclick="showParentTab('settings')">Settings</button>
+  <h1>KIN-036 Blood Pressure</h1>
+  <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme"></button>
 </div>
 
-<!-- Today Tab -->
-<div id="parentToday" class="parent-tab">
-  <div class="timer-display" id="parentTimer">
-    <div class="timer-ring">
-      <svg viewBox="0 0 200 200">
-        <circle class="bg" cx="100" cy="100" r="88"/>
-        <circle class="fg" id="parentTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-text">
-        <div class="time" id="parentTimerText">--:--</div>
-        <div class="hint">until next reminder</div>
+<div id="demoBar" class="demo-bar" style="display:none">
+  <span>Demo mode -- sample data</span>
+  <button onclick="startFresh()">Start fresh</button>
+</div>
+
+<div class="print-header" id="printHeader">
+  <h2>Blood Pressure Report</h2>
+  <div class="print-sub" id="printSub"></div>
+</div>
+
+<div class="tab-row no-print">
+  <button class="tab-btn active" data-tab="tabAdd" onclick="switchTab('tabAdd')">Log</button>
+  <button class="tab-btn" data-tab="tabHistory" onclick="switchTab('tabHistory')">History</button>
+  <button class="tab-btn" data-tab="tabReport" onclick="switchTab('tabReport')">Report</button>
+</div>
+
+<div class="tab-content active" id="tabAdd">
+  <div class="section">
+    <div class="section-title">New reading</div>
+    <div class="row">
+      <div class="field"><label>Systolic (mmHg)</label><input id="inSys" type="number" placeholder="120" inputmode="numeric"></div>
+      <div class="field"><label>Diastolic (mmHg)</label><input id="inDia" type="number" placeholder="80" inputmode="numeric"></div>
+      <div class="field"><label>Pulse (bpm)</label><input id="inPulse" type="number" placeholder="72" inputmode="numeric"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Date</label><input id="inDate" type="date"></div>
+      <div class="field"><label>Time</label><input id="inTime" type="time"></div>
+    </div>
+    <div class="field"><label>Arm</label>
+      <div class="toggle-group" id="armGroup">
+        <button class="toggle-opt active" data-val="L" type="button">Left</button>
+        <button class="toggle-opt" data-val="R" type="button">Right</button>
       </div>
     </div>
-  </div>
-
-  <h3>Log a Visit</h3>
-  <div class="log-grid">
-    <button class="log-btn went" onclick="logVisit('went')">
-      <span class="log-icon">&#9989;</span>
-      <span class="log-label">Went</span>
-    </button>
-    <button class="log-btn didnt" onclick="logVisit('didnt')">
-      <span class="log-icon">&#10060;</span>
-      <span class="log-label">Didn't go</span>
-    </button>
-    <button class="log-btn accident" onclick="logVisit('accident')">
-      <span class="log-icon">&#128167;</span>
-      <span class="log-label">Accident</span>
-    </button>
-    <button class="log-btn self-init" onclick="logVisit('self')">
-      <span class="log-icon">&#11088;</span>
-      <span class="log-label">Self-initiated</span>
-    </button>
-  </div>
-
-  <div class="flex-between mt-md">
-    <h3>Today's Log</h3>
-    <button class="btn btn-sm btn-secondary" onclick="promptNote()">+ Note</button>
-  </div>
-  <div id="todayEntries" class="mt-sm"></div>
-</div>
-
-<!-- Week Tab -->
-<div id="parentWeek" class="parent-tab hidden">
-  <h3>Weekly Overview</h3>
-  <p class="text-sm text-muted">Mon - Sun pattern view</p>
-  <div id="weekOverview" class="week-grid mt-md"></div>
-  <div class="mt-md" style="display:flex;gap:10px;flex-wrap:wrap;">
-    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--success);display:inline-block;"></span> Went</span>
-    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--info);display:inline-block;"></span> Self-initiated</span>
-    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--danger);display:inline-block;"></span> Accident</span>
-    <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;"><span style="width:12px;height:12px;border-radius:3px;background:var(--border);display:inline-block;"></span> Didn't go</span>
-  </div>
-  <div class="card mt-md">
-    <h3>Weekly Summary</h3>
-    <div id="weekSummary"></div>
-  </div>
-</div>
-
-<!-- Hydration Tab -->
-<div id="parentHydration" class="parent-tab hidden">
-  <div class="card">
-    <div class="flex-between">
-      <h3>&#128167; Hydration</h3>
-      <span class="text-sm text-muted" id="hydrationTarget"></span>
-    </div>
-    <div class="hydration-bar mt-sm">
-      <div class="hydration-fill" id="hydrationFill" style="width:0%"></div>
-    </div>
-    <div class="hydration-count">
-      <span id="hydrationCount" style="font-size:1.8rem;font-weight:800;color:var(--info);">0</span>
-      <button class="btn btn-sm btn-info" onclick="logDrink()">+ Drink</button>
-    </div>
-    <p class="text-sm text-muted mt-sm" id="hydrationNote"></p>
-  </div>
-  <div class="card mt-sm">
-    <h3>Daily Water Targets (cups)</h3>
-    <p class="text-sm text-muted mt-sm">Ages 1-3: ~4 cups<br>Ages 4-8: ~5 cups<br>Ages 9-13: ~7-8 cups<br>Ages 14+: ~8 cups</p>
-    <p class="text-sm text-muted mt-sm" style="font-style:italic;">Based on widely referenced paediatric hydration guidance. Adjust for activity, climate, and individual needs.</p>
-  </div>
-</div>
-
-<!-- School Tab -->
-<div id="parentSchool" class="parent-tab hidden">
-  <h3>School Toileting Plan</h3>
-  <p class="text-sm text-muted mb-md">A printable plan for your child's school. Edit the timetable and notes to match their day.</p>
-
-  <div class="card">
-    <div class="label">Overview (editable)</div>
-    <textarea id="schoolOverview" rows="3" placeholder="e.g. Child uses timed bathroom reminders to build routine and awareness. This is not a behavioural issue."></textarea>
-  </div>
-
-  <div class="card mt-sm">
-    <div class="flex-between">
-      <div class="label">School Timetable</div>
-      <button class="btn btn-sm btn-secondary" onclick="addSchoolRow()">+ Add</button>
-    </div>
-    <table class="school-timetable" id="schoolTimetable">
-      <thead><tr><th style="width:30px;"></th><th style="width:80px;">Time</th><th>Transition</th><th style="width:30px;"></th></tr></thead>
-      <tbody id="schoolTimetableBody"></tbody>
-    </table>
-  </div>
-
-  <div class="card mt-sm">
-    <div class="label">Additional Notes</div>
-    <textarea id="schoolNotes" rows="3" placeholder="Sensory triggers, preferred language, specific routines..."></textarea>
-  </div>
-
-  <button class="btn btn-primary btn-full mt-md" onclick="printSchoolPlan()">&#128424; Print School Plan</button>
-</div>
-
-<!-- Settings Tab -->
-<div id="parentSettings" class="parent-tab hidden">
-  <div class="card">
-    <h3>Schedule</h3>
-    <div class="form-group mt-md">
-      <div class="label">Reminder interval</div>
-      <select id="settingsInterval" onchange="updateSettings()">
-        <option value="30">Every 30 minutes</option>
-        <option value="45">Every 45 minutes</option>
-        <option value="60">Every 60 minutes</option>
-        <option value="90">Every 90 minutes</option>
-        <option value="120">Every 2 hours</option>
-        <option value="150">Every 2.5 hours</option>
-        <option value="180">Every 3 hours</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <div class="label">Wake time</div>
-        <input type="time" id="settingsWake" onchange="updateSettings()">
-      </div>
-      <div class="form-group">
-        <div class="label">Bed time</div>
-        <input type="time" id="settingsBed" onchange="updateSettings()">
+    <div class="field"><label>Position</label>
+      <div class="toggle-group" id="posGroup">
+        <button class="toggle-opt active" data-val="sitting" type="button">Sitting</button>
+        <button class="toggle-opt" data-val="standing" type="button">Standing</button>
+        <button class="toggle-opt" data-val="lying" type="button">Lying</button>
       </div>
     </div>
+    <div class="field"><label>Notes</label><textarea id="inNotes" placeholder="Medication, activity, how you felt"></textarea></div>
   </div>
+  <button class="btn-primary" type="button" onclick="saveReading()">Save reading</button>
+</div>
 
-  <div class="card">
-    <h3>Calendar Reminders</h3>
-    <p class="text-sm text-muted mb-md">Download a calendar file (.ics) with your reminder schedule. Add it to your phone's calendar for native notifications.</p>
-    <button class="btn btn-primary btn-full" onclick="generateICS()">&#128197; Download Calendar File</button>
-    <p class="text-sm text-muted mt-sm">Events are added under a "Wets Go! Reminders" calendar. To remove them: open your phone's Calendar settings, find "Wets Go! Reminders" and delete it. If you change the schedule, delete the old calendar first, then download a new file.</p>
+<div class="tab-content" id="tabHistory">
+  <div class="empty-state" id="emptyState"><strong>No readings yet</strong>Log your first blood pressure reading to get started.</div>
+  <div id="logList"></div>
+  <div class="btn-group" id="historyActions" style="display:none">
+    <button class="btn-secondary" type="button" onclick="exportJSON()">Export data (JSON)</button>
+    <button class="btn-secondary" type="button" onclick="importJSON()">Import data (JSON)</button>
+    <button class="btn-secondary" type="button" style="color:var(--danger)" onclick="clearAll()">Delete all readings</button>
   </div>
+</div>
 
-  <div class="card">
-    <h3>Profile</h3>
-    <div class="form-group mt-md">
-      <div class="label">Child's name</div>
-      <input type="text" id="settingsName" onchange="updateSettings()">
+<div class="tab-content" id="tabReport">
+  <div class="print-range no-print">
+    <div class="section-title">Report range</div>
+    <div class="row">
+      <div class="field"><label>From</label><input id="reportFrom" type="date"></div>
+      <div class="field"><label>To</label><input id="reportTo" type="date"></div>
     </div>
-    <div class="form-group">
-      <div class="label">Age</div>
-      <input type="number" id="settingsAge" min="1" max="17" inputmode="numeric" onchange="updateSettings()">
-    </div>
-    <div class="form-group">
-      <div class="label">Mode</div>
-      <select id="settingsMode" onchange="updateSettings()">
-        <option value="standard">Standard</option>
-        <option value="potty">Potty Training</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Security</h3>
-    <div class="form-group mt-md">
-      <div class="label">PIN (4 digits, blank to remove)</div>
-      <input type="password" id="settingsPin" maxlength="4" inputmode="numeric" pattern="[0-9]*" onchange="updateSettings()">
+    <div class="row" style="margin-top:8px">
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('all')">All</button>
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('last-print')">Since last print</button>
+      <button class="btn-secondary" type="button" style="flex:1" onclick="setReportRange('30')">Last 30 days</button>
     </div>
   </div>
-
-  <div class="card">
-    <h3>Data</h3>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
-      <button class="btn btn-sm btn-secondary btn-full" onclick="exportData()">&#128228; Export Data (JSON)</button>
-      <button class="btn btn-sm btn-secondary btn-full" onclick="document.getElementById('importFile').click()">&#128229; Import Data</button>
-      <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
-      <button class="btn btn-sm btn-danger btn-full" onclick="clearAllData()">&#128465; Delete All Data</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Weekly Report</h3>
-    <p class="text-sm text-muted mb-md">Printable summary for GP or health visitor</p>
-    <button class="btn btn-secondary btn-full" onclick="printWeeklyReport()">&#128424; Print Weekly Report</button>
-  </div>
-
-  <footer style="text-align:center;padding:40px 0 20px;">
-    KIN-036 &middot; v1.0 &middot; <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> &middot; by Darren
-    <div style="text-align:center;margin-top:8px;position:relative">
-      <span style="display:inline-flex;align-items:center;gap:6px">
-        <span id="kin-local-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(46,160,67,0.1);border:1px solid rgba(46,160,67,0.25);font-size:10px;font-weight:600;letter-spacing:0.08em;color:#2ea043;font-family:system-ui,sans-serif">
-          <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 0.5L0.5 2.25V5.25C0.5 7.75 2.25 10.05 4.5 10.5C6.75 10.05 8.5 7.75 8.5 5.25V2.25L4.5 0.5Z" fill="#2ea043" fill-opacity="0.15" stroke="#2ea043" stroke-width="0.75"/><path d="M2.5 5.5L3.75 6.75L6.5 4" stroke="#2ea043" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Local Only &middot; Verified
-        </span>
-      </span>
-    </div>
-    <div style="margin-top:10px"><button id="kin-bug-btn" style="background:none;border:none;padding:0;color:inherit;font:inherit;opacity:0.4;font-size:11px;cursor:pointer;letter-spacing:0.04em;text-decoration:underline;text-underline-offset:3px;">Report a bug</button></div>
-  </footer>
-</div>
-</div>
-
-<!-- CHILD MODE -->
-<div class="screen" id="childScreen">
-<div class="header">
-  <button class="btn-icon" onclick="exitChildMode()" title="Parent mode">&#128274;</button>
-  <h2 id="childHeader">Wets Go!</h2>
-  <button class="btn-icon" onclick="logDrinkChild()" title="Log a drink" style="font-size:1.4rem;">&#128167;</button>
-</div>
-
-<div class="child-view" id="childWaiting">
-  <div class="timer-display">
-    <div class="timer-ring">
-      <svg viewBox="0 0 200 200">
-        <circle class="bg" cx="100" cy="100" r="88"/>
-        <circle class="fg" id="childTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-text">
-        <div class="time" id="childTimerText">--:--</div>
-        <div class="hint" id="childTimerHint"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="reward-section">
-    <div class="reward-info">
-      <span class="reward-points" id="childPoints">0 points</span>
-      <span class="text-sm text-muted" id="childNextReward"></span>
-    </div>
-    <div class="reward-bar-outer">
-      <div class="reward-bar-inner" id="childRewardBar" style="width:0%"></div>
-    </div>
-    <div class="reward-badges" id="childBadges"></div>
-  </div>
-
-  <div id="childSelfInit" class="mt-md">
-    <button class="child-btn self-init" onclick="childSelfInitiated()" style="width:100%;" id="childSelfBtn">I went by myself!</button>
-  </div>
-
-  <div id="childAccidentBtn" class="mt-sm">
-    <button class="child-btn accident" onclick="childAccident()" style="width:100%;font-size:1rem;" id="childAccBtn">Oops, accident</button>
-  </div>
-
-  <div id="childHydrationDisplay" class="card card-sm mt-md">
-    <div class="flex-between">
-      <span class="text-sm" style="font-weight:600;">&#128167; Water today</span>
-      <span class="text-sm" id="childHydrationCount">0</span>
-    </div>
-    <div class="hydration-bar mt-sm">
-      <div class="hydration-fill" id="childHydrationFill" style="width:0%"></div>
-    </div>
+  <div id="reportContent"></div>
+  <div class="btn-group no-print">
+    <button class="btn-primary" type="button" onclick="printReport()">Print / Save as PDF</button>
   </div>
 </div>
 
-<div class="child-view hidden" id="childAlert">
-  <div style="padding:20px 0;">
-    <div style="font-size:3rem;" class="pop">&#9200;</div>
-    <h1 id="childAlertTitle" style="margin-top:16px;"></h1>
-    <p class="text-muted mt-sm" id="childAlertMessage"></p>
-  </div>
-  <div class="child-response-btns" id="childResponseBtns">
-    <button class="child-btn went" onclick="childResponse('went')" id="childRespWent">I tried!</button>
-    <button class="child-btn didnt" onclick="childResponse('didnt')" id="childRespDidnt">Not right now</button>
-    <button class="child-btn accident" onclick="childResponse('accident')" id="childRespAccident">Had an accident</button>
-  </div>
-</div>
-</div>
-
-<!-- POTTY TRAINING CHILD MODE -->
-<div class="screen" id="pottyScreen">
-<div class="header">
-  <button class="btn-icon" onclick="exitChildMode()" title="Parent mode">&#128274;</button>
-  <h2>Wets Go!</h2>
-  <button class="btn-icon" onclick="logDrinkChild()" title="Log a drink" style="font-size:1.4rem;">&#128167;</button>
-</div>
-<div class="child-view">
-  <div class="potty-day-counter">
-    <div class="day-num" id="pottyDayNum">1</div>
-    <div class="day-label">Day of training</div>
-  </div>
-  <div class="timer-display">
-    <div class="timer-ring">
-      <svg viewBox="0 0 200 200">
-        <circle class="bg" cx="100" cy="100" r="88"/>
-        <circle class="fg" id="pottyTimerRing" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
-      </svg>
-      <div class="timer-text">
-        <div class="time" id="pottyTimerText">--:--</div>
-        <div class="hint">Time to try!</div>
-      </div>
-    </div>
-  </div>
-  <div class="log-grid" style="margin-top:20px;">
-    <button class="log-btn went" onclick="logPotty('dry')" style="border-color:var(--success);background:var(--success-bg);">
-      <span class="log-icon">&#9989;</span>
-      <span class="log-label">Nappy dry</span>
-    </button>
-    <button class="log-btn" onclick="logPotty('wet')" style="border-color:var(--info);background:var(--info-bg);">
-      <span class="log-icon">&#128167;</span>
-      <span class="log-label">Nappy wet</span>
-    </button>
-    <button class="log-btn self-init" onclick="logPotty('potty')">
-      <span class="log-icon">&#127881;</span>
-      <span class="log-label">Used potty!</span>
-    </button>
-    <button class="log-btn accident" onclick="logPotty('accident')">
-      <span class="log-icon">&#128167;</span>
-      <span class="log-label">Accident</span>
-    </button>
-  </div>
-  <div id="pottyEntries" class="mt-md"></div>
-</div>
-</div>
-
-<!-- SCHOOL PLAN PRINT VIEW -->
-<div id="schoolPlanPrint" style="display:none;"></div>
-
-<!-- Note overlay -->
-<div class="note-overlay" id="noteOverlay">
-<div class="note-box">
-  <h3>Add a Note</h3>
-  <textarea id="noteText" rows="3" placeholder="Any context..." class="mt-md"></textarea>
-  <div style="display:flex;gap:10px;margin-top:14px;">
-    <button class="btn btn-secondary" style="flex:1;" onclick="closeNote()">Cancel</button>
-    <button class="btn btn-primary" style="flex:1;" onclick="saveNote()">Save</button>
-  </div>
-</div>
-</div>
-
-<!-- Confirm overlay -->
-<div class="confirm-overlay" id="confirmOverlay">
-<div class="confirm-box">
-  <p id="confirmMsg"></p>
-  <div class="confirm-btns">
-    <button class="btn btn-secondary" id="confirmNo">Cancel</button>
-    <button class="btn btn-primary" id="confirmYes">Confirm</button>
-  </div>
-</div>
-</div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-</div><!-- /.app -->
-
-<!-- ── Bug report ──────────────────────────────────────────────────── -->
-<style>
-  #kin-bug-backdrop {
-    display: none; position: fixed; inset: 0; z-index: 901;
-    background: rgba(0,0,0,0.55); backdrop-filter: blur(2px);
-  }
-  #kin-bug-sheet {
-    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 902;
-    background: #17171f;
-    border-radius: 20px 20px 0 0;
-    border: 1px solid rgba(255,255,255,0.08); border-bottom: none;
-    padding: 0 20px 40px;
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-  }
-  #kin-bug-sheet.open { transform: translateY(0); }
-  #kin-bug-backdrop.open { display: block; }
-  .kin-br-handle { display: flex; justify-content: center; padding: 12px 0 4px; }
-  .kin-br-handle div { width: 36px; height: 4px; border-radius: 99px; background: rgba(255,255,255,0.15); }
-  .kin-br-head { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 20px; }
-  .kin-br-head h2 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
-  .kin-br-head p  { color: rgba(255,255,255,0.35); font-size: 11px; margin: 3px 0 0; letter-spacing: 0.04em; }
-  .kin-br-close {
-    width: 30px !important; height: 30px !important; border-radius: 50%;
-    background: rgba(255,255,255,0.07); border: none;
-    color: rgba(255,255,255,0.5); cursor: pointer;
-    display: flex; align-items: center; justify-content: center; flex: none !important; min-height: 0 !important;
-  }
-  .kin-br-label { display: block; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 7px; }
-  .kin-br-field { margin-bottom: 14px; }
-  .kin-br-select-wrap { position: relative; }
-  .kin-br-select-wrap select {
-    width: 100%; background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
-    padding: 10px 36px 10px 12px; color: #fff; font-size: 13px;
-    appearance: none; cursor: pointer; outline: none; font-family: inherit;
-  }
-  .kin-br-select-wrap::after {
-    content: ''; position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
-    border: 5px solid transparent; border-top-color: rgba(255,255,255,0.4); margin-top: 3px;
-  }
-  .kin-br-ta {
-    width: 100%; background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
-    padding: 10px 12px; color: #fff; font-size: 13px; font-family: inherit;
-    resize: none; outline: none; box-sizing: border-box;
-  }
-  .kin-br-ta::placeholder { color: rgba(255,255,255,0.25); }
-  .kin-br-anon { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .kin-br-anon-text div:first-child { color: #fff; font-size: 13px; }
-  .kin-br-anon-text div:last-child  { color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px; }
-  .kin-br-toggle {
-    width: 44px !important; height: 26px !important; border-radius: 99px;
-    background: #5b5ef4; border: none; cursor: pointer;
-    position: relative; transition: background 0.2s; flex: none !important; min-height: 0 !important;
-  }
-  .kin-br-toggle::after {
-    content: ''; position: absolute; top: 3px; left: calc(100% - 23px);
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: left 0.2s;
-  }
-  .kin-br-toggle.off { background: rgba(255,255,255,0.1); }
-  .kin-br-toggle.off::after { left: 3px; }
-  .kin-br-extras { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; }
-  .kin-br-input {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 13px;
-    font-family: inherit; outline: none; width: 100%; box-sizing: border-box;
-  }
-  .kin-br-input::placeholder { color: rgba(255,255,255,0.25); }
-  .kin-br-submit {
-    width: 100%; padding: 13px; border-radius: 12px;
-    background: #5b5ef4; border: none; color: #fff;
-    font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
-    letter-spacing: 0.02em;
-  }
-  .kin-br-success { text-align: center; padding: 28px 0 8px; }
-  .kin-br-success svg { display: block; margin: 0 auto 16px; }
-  .kin-br-success h3 { color: #fff; font-size: 17px; font-weight: 600; margin: 0 0 8px; }
-  .kin-br-success p  { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.5; margin: 0 0 28px; }
-  .kin-br-done {
-    padding: 11px 32px; border-radius: 10px;
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer; font-family: inherit;
-  }
-</style>
-
-<div id="kin-bug-backdrop"></div>
-<div id="kin-bug-sheet">
-  <div id="kin-br-form-view">
-    <div class="kin-br-handle"><div></div></div>
-    <div class="kin-br-head">
-      <div>
-        <h2>Report an issue</h2>
-        <p>KIN-036 &mdash; Wets Go!</p>
-      </div>
-      <button class="kin-br-close" id="kin-bug-close" aria-label="Close">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <form id="kin-br-form">
-      <div class="kin-br-field">
-        <label class="kin-br-label">Type</label>
-        <div class="kin-br-select-wrap">
-          <select name="type">
-            <option value="bug">🐛 Bug — something isn't working</option>
-            <option value="suggestion">💡 Suggestion — an idea or request</option>
-            <option value="other">💬 Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="kin-br-field">
-        <label class="kin-br-label">What happened?</label>
-        <textarea class="kin-br-ta" name="description" rows="3" placeholder="Describe the issue or idea…" required></textarea>
-      </div>
-      <div class="kin-br-anon">
-        <div class="kin-br-anon-text">
-          <div>Send anonymously</div>
-          <div>No name or email needed</div>
-        </div>
-        <button type="button" class="kin-br-toggle" id="kin-br-anon-toggle" aria-pressed="true"></button>
-      </div>
-      <div class="kin-br-extras" id="kin-br-extras" style="display:none">
-        <input class="kin-br-input" type="text" name="name" placeholder="Your name (optional)">
-      </div>
-      <button type="submit" class="kin-br-submit">Send report</button>
-    </form>
-  </div>
-  <div id="kin-br-success-view" style="display:none">
-    <div class="kin-br-handle"><div></div></div>
-    <div class="kin-br-success">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#2ea043" stroke-width="1.5"/><path d="M7 12.5l3.5 3.5L17 9" stroke="#2ea043" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Thanks for the report</h3>
-      <p>We'll take a look. Your feedback<br>helps make Kin better for everyone.</p>
-      <button class="kin-br-done" id="kin-br-done">Done</button>
+<div class="kinconfirm-overlay" id="kinconfirmOverlay">
+  <div class="kinconfirm-box"><p id="kinconfirmMsg"></p>
+    <div class="kinconfirm-btns">
+      <button class="kinconfirm-cancel" id="kinconfirmCancel">Cancel</button>
+      <button class="kinconfirm-confirm" id="kinconfirmConfirm">Confirm</button>
     </div>
   </div>
 </div>
 
-<script>
-// ── Apple touch icon ──────────────────────────────────────────────────
-(function(){try{
-  var sz=180,c=document.createElement('canvas');c.width=sz;c.height=sz;
-  var ctx=c.getContext('2d');
-  var g=ctx.createLinearGradient(0,0,sz,sz);
-  g.addColorStop(0,'#D4764E');g.addColorStop(1,'#8B3E1F');
-  ctx.fillStyle=g;
-  var r=36;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.arcTo(sz,0,sz,r,r);ctx.lineTo(sz,sz-r);ctx.arcTo(sz,sz,sz-r,sz,r);ctx.lineTo(r,sz);ctx.arcTo(0,sz,0,sz-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();ctx.fill();
-  var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><ellipse cx="24" cy="30" rx="10" ry="12" fill="none" stroke="white" stroke-width="2.5"/><path d="M24 18 C24 18 20 12 24 8 C28 12 24 18 24 18Z" fill="white"/></svg>';
-  var img=new Image(),blob=new Blob([svgStr],{type:'image/svg+xml'}),url=URL.createObjectURL(blob);
-  img.onload=function(){ctx.drawImage(img,42,42,96,96);URL.revokeObjectURL(url);var el=document.getElementById('apple-touch-icon');if(el)el.href=c.toDataURL('image/png');};img.src=url;
-}catch(e){}})();
-</script>
+<footer style="text-align:center;padding:16px 16px 48px;font-size:11px;color:var(--footer-muted,#888)">
+  <div><a href="https://kintools.net/" style="color:var(--footer-muted,#888);text-decoration:none">KIN-036 &middot; v1.0 &middot; Kin Tools</a> &middot; by Darren</div>
+  <div style="text-align:center;margin-top:6px;position:relative">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span class="badge-local"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;vertical-align:middle"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Local Only &middot; Verified</span><button onclick="kinToggleStorageInfo()" title="What is stored?" style="background:none;border:none;padding:0;cursor:pointer;font-size:11px;line-height:1;color:rgba(0,0,0,0.25);min-height:24px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;font-family:inherit">ⓘ</button></span>
+  </div>
+  <div id="kinStorageInfo" style="display:none;margin-top:8px;font-size:11px;color:var(--footer-muted,#888);line-height:1.6;max-width:300px;margin-left:auto;margin-right:auto">Saves your readings to localStorage. Nothing is sent anywhere. Clear site data in your browser to reset. This is not a medical device.</div>
+  <div style="margin-top:10px"><button onclick="openBugReport()" style="background:none;border:none;color:var(--footer-muted,#888);font-size:11px;opacity:0.5;cursor:pointer;padding:4px 8px;font-family:inherit">Report a bug</button></div>
+</footer>
+
+<div class="bug-overlay" id="bugOverlay" onclick="closeBugReport(event)">
+  <div class="bug-sheet" onclick="event.stopPropagation()">
+    <h3>Report a bug</h3>
+    <div class="field"><label>Type</label><select id="bugType"><option>Bug</option><option>Suggestion</option><option>Other</option></select></div>
+    <div class="field"><label>Description</label><textarea id="bugDesc" placeholder="What happened?"></textarea></div>
+    <div class="toggle-row"><span>Submit anonymously</span>
+      <button class="toggle-switch on" id="bugAnonToggle" type="button" onclick="toggleAnon()"><div class="toggle-knob"></div></button>
+    </div>
+    <div id="bugIdentity" style="display:none"><div class="field"><label>Name</label><input id="bugName" placeholder="Your name"></div></div>
+    <div class="bug-actions">
+      <button class="bug-cancel" type="button" onclick="closeBugReport()">Cancel</button>
+      <button class="bug-submit" type="button" onclick="submitBug()">Send</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none">
 
 <script>
-// ── Bug sheet ─────────────────────────────────────────────────────────
-(function() {
-  var btn      = document.getElementById('kin-bug-btn');
-  var backdrop = document.getElementById('kin-bug-backdrop');
-  var sheet    = document.getElementById('kin-bug-sheet');
-  var closeBtn = document.getElementById('kin-bug-close');
-  var doneBtn  = document.getElementById('kin-br-done');
-  var form     = document.getElementById('kin-br-form');
-  var formView = document.getElementById('kin-br-form-view');
-  var successView = document.getElementById('kin-br-success-view');
-  var anonToggle = document.getElementById('kin-br-anon-toggle');
-  var extras   = document.getElementById('kin-br-extras');
-  var anon     = true;
+// === AHA Categories (2017 guidelines) ===
+function classify(sys,dia){
+  if(sys>=180||dia>=120) return{label:'Crisis',cls:'cat-crisis'};
+  if(sys>=140||dia>=90) return{label:'High Stage 2',cls:'cat-high2'};
+  if(sys>=130||dia>=80) return{label:'High Stage 1',cls:'cat-high1'};
+  if(sys>=120&&dia<80) return{label:'Elevated',cls:'cat-elevated'};
+  return{label:'Normal',cls:'cat-normal'};
+}
 
-  function openSheet() {
-    backdrop.classList.add('open');
-    sheet.style.display = 'block';
-    requestAnimationFrame(function() { sheet.classList.add('open'); });
+// === State ===
+var STORE_KEY='kin036-readings',PRINT_KEY='kin036-lastprint',isDemo=false;
+
+function loadReadings(){try{var r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[];}catch(e){return[];}}
+function saveReadings(a){if(!isDemo) localStorage.setItem(STORE_KEY,JSON.stringify(a));}
+
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function nowTime(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function formatDate(s){if(!s)return'';try{var p=s.split('-');var d=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}catch(e){return s;}}
+
+function demoData(){
+  var readings=[];var base=new Date();
+  for(var i=29;i>=0;i--){
+    var d=new Date(base);d.setDate(d.getDate()-i);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    readings.push({id:Date.now()-i*86400000,date:ds,time:'0'+(7+Math.floor(Math.random()*2))+':'+String(Math.floor(Math.random()*60)).padStart(2,'0'),systolic:118+Math.floor(Math.random()*30),diastolic:72+Math.floor(Math.random()*18),pulse:64+Math.floor(Math.random()*20),arm:Math.random()>0.5?'L':'R',position:'sitting',notes:i===15?'After morning walk':(i===5?'Took medication late':'')});
   }
-  function closeSheet() {
-    sheet.classList.remove('open');
-    setTimeout(function() {
-      sheet.style.display = 'none';
-      backdrop.classList.remove('open');
-      form.reset();
-      formView.style.display = 'block';
-      successView.style.display = 'none';
-      anon = true;
-      anonToggle.classList.remove('off');
-      extras.style.display = 'none';
-    }, 300);
-  }
-
-  btn.addEventListener('click', openSheet);
-  backdrop.addEventListener('click', closeSheet);
-  closeBtn.addEventListener('click', closeSheet);
-  doneBtn.addEventListener('click', closeSheet);
-
-  anonToggle.addEventListener('click', function() {
-    anon = !anon;
-    anonToggle.classList.toggle('off', !anon);
-    extras.style.display = anon ? 'none' : 'flex';
-  });
-
-  var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec';
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var data = new FormData(form);
-    var typeRaw = data.get('type') || '';
-    fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        form_type: 'bug_report',
-        subject: 'KIN-036 \u2014 Wets Go!',
-        app: 'KIN-036',
-        type: typeRaw,
-        description: data.get('description') || '',
-        name: anon ? '' : (data.get('name') || '')
-      })
-    }).catch(function() {});
-    formView.style.display = 'none';
-    successView.style.display = 'block';
-  });
-})();
-</script>
-
-<script>
-// ===== CONSTANTS =====
-var STORAGE_KEY = 'kin036-wetsgo';
-var CIRCUMFERENCE = 2 * Math.PI * 88; // ~553
-
-var REWARD_MILESTONES = [
-  { points: 5,   icon: '\u{1F331}', label: 'Seedling' },
-  { points: 15,  icon: '\u{1F33F}', label: 'Sprout' },
-  { points: 30,  icon: '\u{1F333}', label: 'Tree' },
-  { points: 50,  icon: '\u2B50',    label: 'Star' },
-  { points: 75,  icon: '\u{1F31F}', label: 'Glowing Star' },
-  { points: 100, icon: '\u{1F3C6}', label: 'Trophy' }
-];
-
-var WATER_TARGETS = { 1:4, 2:4, 3:4, 4:5, 5:5, 6:5, 7:5, 8:5, 9:7, 10:7, 11:7, 12:8, 13:8, 14:8, 15:8, 16:8, 17:8 };
-
-var DEFAULT_SCHOOL_ROWS = [
-  { active: true, time: '08:50', label: 'Arrival' },
-  { active: true, time: '10:30', label: 'Morning break' },
-  { active: true, time: '12:00', label: 'Lunch' },
-  { active: true, time: '13:00', label: 'Afternoon start' },
-  { active: true, time: '14:30', label: 'Afternoon break' },
-  { active: true, time: '15:15', label: 'Before home time' }
-];
-
-// ===== STATE =====
-var state = null;
-var timerInterval = null;
-var timerEnd = null;
-var currentParentTab = 'today';
-var pinBuffer = '';
-var pinCallback = null;
-
-// ===== DATA =====
-function loadState() {
-  try {
-    var raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      state = JSON.parse(raw);
-      if (state.schoolPlan && state.schoolPlan.overview && state.schoolPlan.overview.indexOf('toileting differences linked to interoception') !== -1) {
-        state.schoolPlan.overview = '';
-        saveState();
-      }
-      return true;
-    }
-  } catch(e) {}
-  return false;
+  return readings;
 }
 
-function saveState() {
-  if (state) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+function getData(){return isDemo?demoData():loadReadings();}
+
+// === Init ===
+function init(){
+  initTheme();
+  var params=new URLSearchParams(window.location.search);
+  isDemo=params.get('demo')==='true';
+  if(isDemo) document.getElementById('demoBar').style.display='flex';
+  document.getElementById('inDate').value=todayStr();
+  document.getElementById('inTime').value=nowTime();
+  setupToggleGroups();
+  renderHistory();
 }
 
-function createState(name, age, mode, interval, wake, bed, pin) {
-  state = {
-    version: 1,
-    profile: { name: name, age: parseInt(age), mode: mode },
-    schedule: { interval: parseInt(interval), wake: wake, bed: bed },
-    pin: pin || '',
-    logs: [],
-    hydration: {},
-    rewards: { points: 0, unlocked: [] },
-    schoolPlan: {
-      overview: '',
-      timetable: JSON.parse(JSON.stringify(DEFAULT_SCHOOL_ROWS)),
-      notes: ''
-    },
-    pottyStartDate: mode === 'potty' ? new Date().toISOString().split('T')[0] : null,
-    createdAt: new Date().toISOString()
-  };
-  saveState();
-}
-
-// ===== SCREENS =====
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var el = document.getElementById(id);
-  if (el) el.classList.add('active');
-}
-
-// ===== SETUP =====
-function completeSetup() {
-  var name     = document.getElementById('setupName').value.trim();
-  var age      = document.getElementById('setupAge').value;
-  var mode     = document.getElementById('setupMode').value;
-  var interval = document.getElementById('setupInterval').value;
-  var wake     = document.getElementById('setupWake').value;
-  var bed      = document.getElementById('setupBed').value;
-  var pin      = document.getElementById('setupPin').value.trim();
-
-  if (!name) { showToast('Please enter a name'); return; }
-  if (!age || age < 1 || age > 17) { showToast('Please enter age (1-17)'); return; }
-  if (pin && (pin.length !== 4 || !/^\d{4}$/.test(pin))) { showToast('PIN must be 4 digits'); return; }
-  if (mode === 'potty') { interval = '45'; }
-
-  createState(name, age, mode, interval, wake, bed, pin);
-  goToModeSelect();
-}
-
-// ===== MODE SELECT =====
-function goToModeSelect() {
-  if (!state) return;
-  document.getElementById('modeSelectGreeting').textContent = 'Hi! Who\'s using the app?';
-  document.getElementById('modeChildName').textContent = state.profile.name + '\'s';
-  showScreen('modeSelectScreen');
-}
-
-function enterMode(mode) {
-  if (mode === 'parent') {
-    if (state.pin) {
-      requestPin(function() { enterParentMode(); });
-    } else {
-      enterParentMode();
-    }
-  } else {
-    enterChildMode();
-  }
-}
-
-// ===== PIN =====
-function requestPin(callback) {
-  pinBuffer = '';
-  pinCallback = callback;
-  updatePinDots();
-  document.getElementById('pinPromptText').textContent = 'Enter your 4-digit PIN';
-  document.getElementById('pinOverlay').classList.add('visible');
-}
-
-function pinInput(n) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += n;
-  updatePinDots();
-  if (pinBuffer.length === 4) {
-    setTimeout(function() {
-      if (pinBuffer === state.pin) {
-        document.getElementById('pinOverlay').classList.remove('visible');
-        if (pinCallback) pinCallback();
-      } else {
-        pinBuffer = '';
-        updatePinDots();
-        document.getElementById('pinPromptText').textContent = 'Wrong PIN. Try again.';
-      }
-    }, 200);
-  }
-}
-
-function pinBackspace() {
-  pinBuffer = pinBuffer.slice(0, -1);
-  updatePinDots();
-}
-
-function updatePinDots() {
-  var dots = document.querySelectorAll('#pinDots .pin-dot');
-  dots.forEach(function(d, i) {
-    d.classList.toggle('filled', i < pinBuffer.length);
-  });
-}
-
-// ===== PARENT MODE =====
-function enterParentMode() {
-  showScreen('parentScreen');
-  populateSettings();
-  showParentTab('today');
-  startTimer();
-}
-
-function showParentTab(tab) {
-  if (currentParentTab === 'school') {
-    var ovEl = document.getElementById('schoolOverview');
-    var notesEl = document.getElementById('schoolNotes');
-    if (ovEl) state.schoolPlan.overview = ovEl.value;
-    if (notesEl) state.schoolPlan.notes = notesEl.value;
-    saveState();
-  }
-  currentParentTab = tab;
-  document.querySelectorAll('.parent-tab').forEach(function(t) { t.classList.add('hidden'); });
-  document.querySelectorAll('#parentTabs .tab').forEach(function(t) { t.classList.remove('active'); });
-
-  var tabMap = { today: 'parentToday', week: 'parentWeek', hydration: 'parentHydration', school: 'parentSchool', settings: 'parentSettings' };
-  document.getElementById(tabMap[tab]).classList.remove('hidden');
-
-  var tabs = document.querySelectorAll('#parentTabs .tab');
-  var tabNames = ['today','week','hydration','school','settings'];
-  tabs[tabNames.indexOf(tab)].classList.add('active');
-
-  if (tab === 'today') renderTodayEntries();
-  if (tab === 'week') renderWeekOverview();
-  if (tab === 'hydration') renderHydration();
-  if (tab === 'school') renderSchoolPlan();
-}
-
-// ===== TIMER =====
-function startTimer() {
-  clearInterval(timerInterval);
-  var now = new Date();
-  var intervalMs = state.schedule.interval * 60 * 1000;
-
-  var wakeParts = state.schedule.wake.split(':');
-  var bedParts  = state.schedule.bed.split(':');
-  var wakeMin   = parseInt(wakeParts[0]) * 60 + parseInt(wakeParts[1]);
-  var bedMin    = parseInt(bedParts[0])  * 60 + parseInt(bedParts[1]);
-  var nowMin    = now.getHours() * 60 + now.getMinutes();
-
-  var outsideHours = false;
-  if (bedMin > wakeMin) {
-    outsideHours = (nowMin < wakeMin || nowMin >= bedMin);
-  } else {
-    outsideHours = (nowMin >= bedMin && nowMin < wakeMin);
-  }
-
-  if (outsideHours) {
-    updateTimerDisplay(0, 0, 0, 'Starts at ' + state.schedule.wake);
-    return;
-  }
-
-  var wakeToday = new Date(now);
-  wakeToday.setHours(parseInt(wakeParts[0]), parseInt(wakeParts[1]), 0, 0);
-  var elapsed    = now.getTime() - wakeToday.getTime();
-  var nextOffset = Math.ceil(elapsed / intervalMs) * intervalMs;
-  timerEnd       = new Date(wakeToday.getTime() + nextOffset);
-
-  if (timerEnd <= now) timerEnd = new Date(now.getTime() + intervalMs);
-
-  timerInterval = setInterval(function() { updateTimer(); }, 1000);
-  updateTimer();
-}
-
-function updateTimer() {
-  var now       = new Date();
-  var remaining = timerEnd ? timerEnd.getTime() - now.getTime() : 0;
-
-  if (remaining <= 0) {
-    fireReminder();
-    timerEnd = new Date(now.getTime() + state.schedule.interval * 60 * 1000);
-    return;
-  }
-
-  var totalSec = Math.ceil(remaining / 1000);
-  var hrs  = Math.floor(totalSec / 3600);
-  var mins = Math.floor((totalSec % 3600) / 60);
-  var secs = totalSec % 60;
-  var progress = 1 - (remaining / (state.schedule.interval * 60 * 1000));
-
-  updateTimerDisplay(hrs, mins, secs, null, progress);
-}
-
-function updateTimerDisplay(hrs, mins, secs, message, progress) {
-  var timeStr;
-  if (message) {
-    timeStr = message;
-  } else if (hrs > 0) {
-    timeStr = hrs + 'h ' + String(mins).padStart(2, '0') + 'm';
-  } else {
-    timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-  }
-  var p      = progress || 0;
-  var offset = CIRCUMFERENCE * (1 - p);
-
-  ['parentTimerRing', 'childTimerRing', 'pottyTimerRing'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.setAttribute('stroke-dashoffset', offset);
-  });
-  ['parentTimerText', 'childTimerText', 'pottyTimerText'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = timeStr;
-  });
-
-  var hint = document.getElementById('childTimerHint');
-  if (hint) {
-    var tier = getAgeTier();
-    if (message) {
-      hint.textContent = message;
-    } else if (tier === 'early') {
-      if (p < 0.5) hint.textContent = 'Plenty of time';
-      else if (p < 0.85) hint.textContent = 'Getting closer...';
-      else hint.textContent = 'Almost time!';
-    } else {
-      hint.textContent = 'Until next reminder';
-    }
-  }
-}
-
-function fireReminder() {
-  var childScreen = document.getElementById('childScreen');
-  if (childScreen.classList.contains('active')) {
-    showChildAlert();
-  }
-}
-
-// ===== LOGGING =====
-function todayKey() { return new Date().toISOString().split('T')[0]; }
-
-function logVisit(type, opts) {
-  opts = opts || {};
-  var entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
-    type: type,
-    time: new Date().toISOString(),
-    note: opts.note || '',
-    source: opts.source || 'parent'
-  };
-  state.logs.push(entry);
-
-  var pts = 0;
-  if (type === 'went') pts = 1;
-  if (type === 'self') pts = 3;
-  if (pts > 0) {
-    state.rewards.points += pts;
-    checkMilestones();
-  }
-
-  saveState();
-  renderTodayEntries();
-  showToast(type === 'went' ? 'Logged: went' : type === 'self' ? 'Self-initiated! +3 pts' : type === 'accident' ? 'Logged: accident' : 'Logged: didn\'t go');
-}
-
-function logPotty(type) {
-  var entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
-    type: type,
-    time: new Date().toISOString(),
-    note: '',
-    source: 'potty'
-  };
-  state.logs.push(entry);
-
-  if (type === 'potty') {
-    state.rewards.points += 3;
-    checkMilestones();
-    showToast('Used the potty! Amazing! +3 pts');
-  } else if (type === 'dry') {
-    state.rewards.points += 1;
-    showToast('Nappy dry!');
-  } else {
-    showToast('Logged');
-  }
-
-  saveState();
-  renderPottyEntries();
-}
-
-function checkMilestones() {
-  REWARD_MILESTONES.forEach(function(m) {
-    if (state.rewards.points >= m.points && state.rewards.unlocked.indexOf(m.points) === -1) {
-      state.rewards.unlocked.push(m.points);
-    }
-  });
-}
-
-function deleteEntry(id) {
-  kinConfirm('Delete this entry?').then(function(ok) {
-    if (!ok) return;
-    state.logs = state.logs.filter(function(e) { return e.id !== id; });
-    saveState();
-    renderTodayEntries();
-    showToast('Entry deleted');
-  });
-}
-
-// ===== RENDER TODAY =====
-function renderTodayEntries() {
-  var container = document.getElementById('todayEntries');
-  var today     = todayKey();
-  var entries   = state.logs.filter(function(e) { return e.time.startsWith(today); }).reverse();
-
-  if (entries.length === 0) {
-    container.innerHTML = '<p class="text-sm text-muted text-center" style="padding:20px 0;">No entries today yet</p>';
-    return;
-  }
-
-  var iconMap  = { went: '\u2705', didnt: '\u274C', accident: '\u{1F4A7}', self: '\u2B50', dry: '\u2705', wet: '\u{1F4A7}', potty: '\u{1F389}', note: '\u{1F4DD}' };
-  var labelMap = { went: 'Went', didnt: "Didn't go", accident: 'Accident', self: 'Self-initiated', dry: 'Nappy dry', wet: 'Nappy wet', potty: 'Used potty', note: 'Note' };
-
-  container.innerHTML = entries.map(function(e) {
-    var t       = new Date(e.time);
-    var timeStr = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-    return '<div class="entry fade-in">' +
-      '<div class="entry-icon">' + (iconMap[e.type] || '') + '</div>' +
-      '<div class="entry-info">' +
-        '<div class="entry-time">' + timeStr + '</div>' +
-        '<div class="entry-type">' + (labelMap[e.type] || e.type) + '</div>' +
-        (e.note ? '<div class="entry-note">' + escHtml(e.note) + '</div>' : '') +
-      '</div>' +
-      '<button class="entry-delete" onclick="deleteEntry(\'' + e.id + '\')">\u00D7</button>' +
-    '</div>';
-  }).join('');
-}
-
-function renderPottyEntries() {
-  var container = document.getElementById('pottyEntries');
-  if (!container) return;
-  var today   = todayKey();
-  var entries = state.logs.filter(function(e) { return e.time.startsWith(today); }).reverse().slice(0, 8);
-
-  var iconMap  = { dry: '\u2705', wet: '\u{1F4A7}', potty: '\u{1F389}', accident: '\u{1F4A7}' };
-  var labelMap = { dry: 'Nappy dry', wet: 'Nappy wet', potty: 'Used potty!', accident: 'Accident' };
-
-  container.innerHTML = entries.map(function(e) {
-    var t       = new Date(e.time);
-    var timeStr = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-    return '<div class="entry">' +
-      '<div class="entry-icon">' + (iconMap[e.type] || '') + '</div>' +
-      '<div class="entry-info"><div class="entry-time">' + timeStr + '</div><div class="entry-type">' + (labelMap[e.type] || e.type) + '</div></div>' +
-    '</div>';
-  }).join('');
-
-  if (state.pottyStartDate) {
-    var start = new Date(state.pottyStartDate);
-    var now   = new Date();
-    var days  = Math.floor((now - start) / 86400000) + 1;
-    document.getElementById('pottyDayNum').textContent = days;
-  }
-}
-
-// ===== RENDER WEEK =====
-function renderWeekOverview() {
-  var container = document.getElementById('weekOverview');
-  var summary   = document.getElementById('weekSummary');
-
-  var now           = new Date();
-  var day           = now.getDay();
-  var mondayOffset  = day === 0 ? -6 : 1 - day;
-  var monday        = new Date(now);
-  monday.setDate(monday.getDate() + mondayOffset);
-  monday.setHours(0,0,0,0);
-
-  var dayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  var weekData  = [];
-  var totals    = { went: 0, didnt: 0, accident: 0, self: 0 };
-
-  for (var i = 0; i < 7; i++) {
-    var d   = new Date(monday);
-    d.setDate(d.getDate() + i);
-    var key = d.toISOString().split('T')[0];
-    var dayEntries = state.logs.filter(function(e) { return e.time.startsWith(key); });
-    var counts = { went: 0, didnt: 0, accident: 0, self: 0 };
-    dayEntries.forEach(function(e) { if (counts[e.type] !== undefined) counts[e.type]++; });
-    var total = counts.went + counts.didnt + counts.accident + counts.self;
-    weekData.push({ label: dayLabels[i], counts: counts, total: total });
-    totals.went += counts.went; totals.didnt += counts.didnt;
-    totals.accident += counts.accident; totals.self += counts.self;
-  }
-
-  var maxTotal = Math.max.apply(null, weekData.map(function(d) { return d.total; })) || 1;
-
-  container.innerHTML = weekData.map(function(d) {
-    var barWidth = d.total > 0 ? (d.total / maxTotal * 100) : 0;
-    var segments = '';
-    if (d.total > 0) {
-      var colors = { went: 'var(--success)', self: 'var(--info)', accident: 'var(--danger)', didnt: 'var(--border)' };
-      ['went','self','accident','didnt'].forEach(function(type) {
-        if (d.counts[type] > 0) {
-          var w = (d.counts[type] / d.total) * barWidth;
-          segments += '<div class="week-segment" style="width:' + w + '%;background:' + colors[type] + ';"></div>';
-        }
+function setupToggleGroups(){
+  document.querySelectorAll('.toggle-group').forEach(function(group){
+    group.querySelectorAll('.toggle-opt').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        group.querySelectorAll('.toggle-opt').forEach(function(b){b.classList.remove('active');});
+        btn.classList.add('active');
       });
-    }
-    return '<div class="week-row">' +
-      '<span class="week-day-label">' + d.label + '</span>' +
-      '<div class="week-bar">' + segments + '</div>' +
-      '<span class="week-count">' + d.total + '</span>' +
-    '</div>';
-  }).join('');
-
-  var grandTotal = totals.went + totals.didnt + totals.accident + totals.self;
-  summary.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">' +
-    '<div class="text-sm"><strong style="color:var(--success);">' + totals.went + '</strong> went</div>' +
-    '<div class="text-sm"><strong style="color:var(--info);">' + totals.self + '</strong> self-initiated</div>' +
-    '<div class="text-sm"><strong style="color:var(--danger);">' + totals.accident + '</strong> accidents</div>' +
-    '<div class="text-sm"><strong>' + grandTotal + '</strong> total</div>' +
-  '</div>';
-}
-
-// ===== HYDRATION =====
-function getHydrationTarget() {
-  var age = state.profile.age;
-  return WATER_TARGETS[Math.min(Math.max(age, 1), 17)] || 6;
-}
-function getHydrationCount() {
-  return (state.hydration[todayKey()] || 0);
-}
-function logDrink() {
-  var key = todayKey();
-  state.hydration[key] = (state.hydration[key] || 0) + 1;
-  saveState();
-  renderHydration();
-  updateChildHydration();
-  showToast('Drink logged!');
-}
-function logDrinkChild() { logDrink(); }
-
-function renderHydration() {
-  var target = getHydrationTarget();
-  var count  = getHydrationCount();
-  var pct    = Math.min((count / target) * 100, 100);
-
-  document.getElementById('hydrationTarget').textContent = 'Target: ' + target + ' cups';
-  document.getElementById('hydrationFill').style.width   = pct + '%';
-  document.getElementById('hydrationCount').textContent  = count;
-
-  var note = '';
-  if (count === 0)            note = 'No drinks logged today yet.';
-  else if (count < target * 0.5) note = 'Keep going! About halfway to the target.';
-  else if (count < target)    note = 'Nearly there!';
-  else                        note = 'Target reached! Great job.';
-  document.getElementById('hydrationNote').textContent = note;
-}
-
-function updateChildHydration() {
-  var target  = getHydrationTarget();
-  var count   = getHydrationCount();
-  var pct     = Math.min((count / target) * 100, 100);
-  var countEl = document.getElementById('childHydrationCount');
-  var fillEl  = document.getElementById('childHydrationFill');
-  if (countEl) countEl.textContent = count + ' / ' + target;
-  if (fillEl)  fillEl.style.width  = pct + '%';
-}
-
-// ===== CHILD MODE =====
-function getAgeTier() {
-  var age = state.profile.age;
-  if (age <= 5) return 'early';
-  if (age <= 8) return 'confident';
-  return 'teen';
-}
-
-function enterChildMode() {
-  if (state.profile.mode === 'potty') {
-    showScreen('pottyScreen');
-    renderPottyEntries();
-  } else {
-    showScreen('childScreen');
-    document.getElementById('childWaiting').classList.remove('hidden');
-    document.getElementById('childAlert').classList.add('hidden');
-    updateChildView();
-  }
-  startTimer();
-}
-
-function updateChildView() {
-  var tier = getAgeTier();
-  var name = state.profile.name;
-
-  document.getElementById('childHeader').textContent = tier === 'early' ? ('Hi ' + name + '!') : tier === 'confident' ? ('Hey ' + name) : name;
-
-  var selfBtn = document.getElementById('childSelfBtn');
-  var accBtn  = document.getElementById('childAccBtn');
-  if (tier === 'early') {
-    selfBtn.textContent = '\u2B50 I went by myself!';
-    accBtn.textContent  = 'Oops, accident';
-  } else if (tier === 'confident') {
-    selfBtn.textContent = '\u2B50 I went on my own!';
-    accBtn.textContent  = 'Had an accident';
-  } else {
-    selfBtn.textContent = 'Log: went on my own';
-    accBtn.textContent  = 'Log: accident';
-  }
-
-  updateChildRewards();
-  updateChildHydration();
-}
-
-function updateChildRewards() {
-  var pts  = state.rewards.points;
-  document.getElementById('childPoints').textContent = pts + ' point' + (pts !== 1 ? 's' : '');
-
-  var next = REWARD_MILESTONES.find(function(m) { return pts < m.points; }) || REWARD_MILESTONES[REWARD_MILESTONES.length - 1];
-  var prev = 0;
-  for (var i = 0; i < REWARD_MILESTONES.length; i++) {
-    if (REWARD_MILESTONES[i].points === next.points) break;
-    prev = REWARD_MILESTONES[i].points;
-  }
-  var progress = next.points > prev ? ((pts - prev) / (next.points - prev)) * 100 : 100;
-  document.getElementById('childRewardBar').style.width = Math.min(progress, 100) + '%';
-  document.getElementById('childNextReward').textContent = 'Next: ' + next.icon + ' ' + next.label + ' (' + next.points + ' pts)';
-
-  var badgesHtml = REWARD_MILESTONES.map(function(m) {
-    var unlocked = state.rewards.unlocked.indexOf(m.points) !== -1;
-    return '<span class="reward-badge ' + (unlocked ? 'unlocked' : '') + '" title="' + m.label + ' (' + m.points + ' pts)">' + m.icon + '</span>';
-  }).join('');
-  document.getElementById('childBadges').innerHTML = badgesHtml;
-}
-
-function showChildAlert() {
-  var tier = getAgeTier();
-  var name = state.profile.name;
-
-  document.getElementById('childWaiting').classList.add('hidden');
-  document.getElementById('childAlert').classList.remove('hidden');
-
-  var title, message;
-  if (tier === 'early') {
-    title   = 'Time to try!';
-    message = 'Let\'s go to the toilet, ' + name + '. You get a point for trying!';
-    document.getElementById('childRespWent').textContent     = '\u2705 I tried!';
-    document.getElementById('childRespDidnt').textContent    = 'Not right now';
-    document.getElementById('childRespAccident').textContent = 'Oops, accident';
-  } else if (tier === 'confident') {
-    title   = 'Your alarm went off!';
-    message = 'Time to pause and try the toilet.';
-    document.getElementById('childRespWent').textContent     = '\u2705 I went';
-    document.getElementById('childRespDidnt').textContent    = 'Didn\'t need to';
-    document.getElementById('childRespAccident').textContent = 'Had an accident';
-  } else {
-    title   = 'Reminder';
-    message = 'Take a bathroom break.';
-    document.getElementById('childRespWent').textContent     = 'Went';
-    document.getElementById('childRespDidnt').textContent    = 'Skipped';
-    document.getElementById('childRespAccident').textContent = 'Accident';
-  }
-  document.getElementById('childAlertTitle').textContent   = title;
-  document.getElementById('childAlertMessage').textContent = message;
-}
-
-function childResponse(type) {
-  logVisit(type, { source: 'child' });
-  document.getElementById('childWaiting').classList.remove('hidden');
-  document.getElementById('childAlert').classList.add('hidden');
-  updateChildRewards();
-  startTimer();
-}
-
-function childSelfInitiated() {
-  logVisit('self', { source: 'child' });
-  updateChildRewards();
-  showToast('\u2B50 Amazing! +3 points');
-}
-
-function childAccident() {
-  logVisit('accident', { source: 'child' });
-}
-
-function exitChildMode() {
-  if (state.pin) {
-    requestPin(function() { goToModeSelect(); });
-  } else {
-    goToModeSelect();
-  }
-}
-
-// ===== SCHOOL PLAN =====
-function renderSchoolPlan() {
-  document.getElementById('schoolOverview').value = state.schoolPlan.overview;
-  document.getElementById('schoolNotes').value    = state.schoolPlan.notes || '';
-  renderSchoolTimetable();
-}
-
-function renderSchoolTimetable() {
-  var tbody = document.getElementById('schoolTimetableBody');
-  tbody.innerHTML = state.schoolPlan.timetable.map(function(row, i) {
-    return '<tr>' +
-      '<td><input type="checkbox" ' + (row.active ? 'checked' : '') + ' onchange="updateSchoolRow(' + i + ',\'active\',this.checked)"></td>' +
-      '<td><input type="time" value="' + row.time + '" onchange="updateSchoolRow(' + i + ',\'time\',this.value)"></td>' +
-      '<td><input type="text" value="' + escHtml(row.label) + '" onchange="updateSchoolRow(' + i + ',\'label\',this.value)"></td>' +
-      '<td><button class="delete-btn" onclick="removeSchoolRow(' + i + ')">\u00D7</button></td>' +
-    '</tr>';
-  }).join('');
-}
-
-function updateSchoolRow(i, field, value) {
-  state.schoolPlan.timetable[i][field] = value;
-  state.schoolPlan.overview = document.getElementById('schoolOverview').value;
-  state.schoolPlan.notes    = document.getElementById('schoolNotes').value;
-  saveState();
-}
-
-function addSchoolRow() {
-  state.schoolPlan.timetable.push({ active: true, time: '12:00', label: 'New transition' });
-  saveState();
-  renderSchoolTimetable();
-}
-
-function removeSchoolRow(i) {
-  state.schoolPlan.timetable.splice(i, 1);
-  saveState();
-  renderSchoolTimetable();
-}
-
-function printSchoolPlan() {
-  state.schoolPlan.overview = document.getElementById('schoolOverview').value;
-  state.schoolPlan.notes    = document.getElementById('schoolNotes').value;
-  saveState();
-
-  var name        = state.profile.name;
-  var activeRows  = state.schoolPlan.timetable.filter(function(r) { return r.active; });
-  var timetableHtml = activeRows.map(function(r) {
-    return '<tr><td style="padding:6px 12px;border:1px solid #ddd;">' + r.time + '</td><td style="padding:6px 12px;border:1px solid #ddd;">' + escHtml(r.label) + '</td></tr>';
-  }).join('');
-
-  var printDiv = document.getElementById('schoolPlanPrint');
-  printDiv.innerHTML = '<div style="font-family:system-ui,sans-serif;max-width:700px;margin:0 auto;padding:20px;">' +
-    '<h1 style="font-size:1.4rem;margin-bottom:4px;">Toileting Support Plan: ' + escHtml(name) + '</h1>' +
-    '<p style="color:#666;font-size:0.85rem;">Generated ' + new Date().toLocaleDateString('en-GB') + '</p>' +
-    '<hr style="margin:12px 0;border:none;border-top:1px solid #ddd;">' +
-    '<h2 style="font-size:1.1rem;">Overview</h2>' +
-    '<p style="margin:8px 0;">' + escHtml(state.schoolPlan.overview) + '</p>' +
-    '<h2 style="font-size:1.1rem;margin-top:16px;">Support Strategies</h2>' +
-    '<ol style="margin:8px 0 8px 20px;line-height:1.8;">' +
-      '<li><strong>Timed Toileting</strong> \u2014 prompt at agreed transition points using clear language: "It\'s toilet time."</li>' +
-      '<li><strong>Transition Support</strong> \u2014 prompt before major transitions (break, lunch, class changes, PE, home time).</li>' +
-      '<li><strong>No Punitive Response</strong> \u2014 accidents are not intentional and not behavioural. Respond calmly and help ' + escHtml(name) + ' change without fuss.</li>' +
-      '<li><strong>Discreet Support</strong> \u2014 maintain dignity and privacy. Avoid drawing peer attention.</li>' +
-      '<li><strong>Encouragement</strong> \u2014 praise the behaviour (trying) not the outcome (staying dry).</li>' +
-    '</ol>' +
-    '<h2 style="font-size:1.1rem;margin-top:16px;">Prompt Timetable</h2>' +
-    '<table style="border-collapse:collapse;width:100%;margin:8px 0;"><thead><tr><th style="text-align:left;padding:6px 12px;border:1px solid #ddd;background:#f5f5f5;">Time</th><th style="text-align:left;padding:6px 12px;border:1px solid #ddd;background:#f5f5f5;">Transition</th></tr></thead><tbody>' + timetableHtml + '</tbody></table>' +
-    (state.schoolPlan.notes ? '<h2 style="font-size:1.1rem;margin-top:16px;">Additional Notes</h2><p style="margin:8px 0;">' + escHtml(state.schoolPlan.notes) + '</p>' : '') +
-    '<p style="margin-top:20px;font-size:0.85rem;color:#666;"><strong>Goal:</strong> Build routine, awareness, and independence over time.</p>' +
-    '<p style="font-size:0.75rem;color:#999;margin-top:12px;">Generated by Wets Go! / kintools.net</p>' +
-  '</div>';
-
-  window.print();
-}
-
-// ===== WEEKLY REPORT =====
-function printWeeklyReport() {
-  var now          = new Date();
-  var day          = now.getDay();
-  var mondayOffset = day === 0 ? -6 : 1 - day;
-  var monday       = new Date(now);
-  monday.setDate(monday.getDate() + mondayOffset);
-
-  var totals    = { went: 0, didnt: 0, accident: 0, self: 0 };
-  var dayLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-  var rows      = '';
-
-  for (var i = 0; i < 7; i++) {
-    var d   = new Date(monday);
-    d.setDate(d.getDate() + i);
-    var key = d.toISOString().split('T')[0];
-    var dayEntries = state.logs.filter(function(e) { return e.time.startsWith(key); });
-    var c = { went: 0, didnt: 0, accident: 0, self: 0 };
-    dayEntries.forEach(function(e) { if (c[e.type] !== undefined) c[e.type]++; });
-    totals.went += c.went; totals.didnt += c.didnt; totals.accident += c.accident; totals.self += c.self;
-    rows += '<tr><td style="padding:4px 8px;border:1px solid #ddd;">' + dayLabels[i] + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.went + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.self + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.accident + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + c.didnt + '</td></tr>';
-  }
-
-  var hydRows = '';
-  for (var j = 0; j < 7; j++) {
-    var hd = new Date(monday);
-    hd.setDate(hd.getDate() + j);
-    var hk = hd.toISOString().split('T')[0];
-    hydRows += '<tr><td style="padding:4px 8px;border:1px solid #ddd;">' + dayLabels[j] + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + (state.hydration[hk] || 0) + '</td></tr>';
-  }
-
-  var printDiv = document.getElementById('schoolPlanPrint');
-  printDiv.innerHTML = '<div style="font-family:system-ui,sans-serif;max-width:700px;margin:0 auto;padding:20px;">' +
-    '<h1 style="font-size:1.4rem;">Weekly Summary: ' + escHtml(state.profile.name) + '</h1>' +
-    '<p style="color:#666;font-size:0.85rem;">Week of ' + monday.toLocaleDateString('en-GB') + ' | Generated ' + now.toLocaleDateString('en-GB') + '</p>' +
-    '<hr style="margin:12px 0;border:none;border-top:1px solid #ddd;">' +
-    '<h2 style="font-size:1.1rem;">Bathroom Visits</h2>' +
-    '<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9rem;"><thead><tr><th style="text-align:left;padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Day</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Went</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Self</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Accident</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Didn\'t</th></tr></thead><tbody>' + rows +
-    '<tr style="font-weight:bold;"><td style="padding:4px 8px;border:1px solid #ddd;">Total</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.went + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.self + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.accident + '</td><td style="padding:4px 8px;border:1px solid #ddd;text-align:center;">' + totals.didnt + '</td></tr>' +
-    '</tbody></table>' +
-    '<h2 style="font-size:1.1rem;margin-top:16px;">Hydration (cups)</h2>' +
-    '<table style="border-collapse:collapse;width:50%;margin:8px 0;font-size:0.9rem;"><thead><tr><th style="text-align:left;padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Day</th><th style="padding:4px 8px;border:1px solid #ddd;background:#f5f5f5;">Cups</th></tr></thead><tbody>' + hydRows + '</tbody></table>' +
-    '<p style="font-size:0.85rem;color:#666;margin-top:12px;">Reminder interval: every ' + state.schedule.interval + ' minutes | Active hours: ' + state.schedule.wake + ' - ' + state.schedule.bed + '</p>' +
-    '<p style="font-size:0.75rem;color:#999;margin-top:12px;">Generated by Wets Go! / kintools.net</p>' +
-  '</div>';
-
-  window.print();
-}
-
-// ===== ICS GENERATION =====
-function getIANATimezone() {
-  try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch(e) { return 'UTC'; }
-}
-
-function generateICS() {
-  var tz       = getIANATimezone();
-  var interval = state.schedule.interval;
-  var wakeParts = state.schedule.wake.split(':');
-  var bedParts  = state.schedule.bed.split(':');
-  var wakeH = parseInt(wakeParts[0]), wakeM = parseInt(wakeParts[1]);
-  var bedH  = parseInt(bedParts[0]),  bedM  = parseInt(bedParts[1]);
-
-  var tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  var y       = tomorrow.getFullYear();
-  var mo      = String(tomorrow.getMonth() + 1).padStart(2, '0');
-  var da      = String(tomorrow.getDate()).padStart(2, '0');
-  var dateStr = y + mo + da;
-
-  var events  = '';
-  var wakeMin = wakeH * 60 + wakeM;
-  var bedMin  = bedH  * 60 + bedM;
-  var uid     = 0;
-
-  for (var min = wakeMin; min < bedMin; min += interval) {
-    var h    = Math.floor(min / 60);
-    var m    = min % 60;
-    var hStr = String(h).padStart(2, '0');
-    var mStr = String(m).padStart(2, '0');
-    uid++;
-    events += 'BEGIN:VEVENT\r\n' +
-      'UID:wetsgo-' + uid + '-' + dateStr + '@kintools.net\r\n' +
-      'DTSTART;TZID=' + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
-      'DTEND;TZID='   + tz + ':' + dateStr + 'T' + hStr + mStr + '00\r\n' +
-      'RRULE:FREQ=DAILY\r\n' +
-      'SUMMARY:Bathroom reminder\r\n' +
-      'DESCRIPTION:Time to try the toilet!\r\n' +
-      'BEGIN:VALARM\r\nTRIGGER:PT0M\r\nACTION:DISPLAY\r\nDESCRIPTION:Bathroom reminder\r\nEND:VALARM\r\n' +
-      'END:VEVENT\r\n';
-  }
-
-  var ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//KIN//Wets Go//EN\r\nCALSCALE:GREGORIAN\r\nX-WR-CALNAME:Wets Go! Reminders\r\nX-WR-TIMEZONE:' + tz + '\r\n' + events + 'END:VCALENDAR';
-
-  var blob = new Blob([ics], { type: 'text/calendar' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href   = url;
-  a.download = 'wetsgo-reminders.ics';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Calendar file downloaded (' + tz + ')');
-}
-
-// ===== SETTINGS =====
-function populateSettings() {
-  document.getElementById('settingsInterval').value = state.schedule.interval;
-  document.getElementById('settingsWake').value     = state.schedule.wake;
-  document.getElementById('settingsBed').value      = state.schedule.bed;
-  document.getElementById('settingsName').value     = state.profile.name;
-  document.getElementById('settingsAge').value      = state.profile.age;
-  document.getElementById('settingsMode').value     = state.profile.mode;
-  document.getElementById('settingsPin').value      = state.pin || '';
-}
-
-function updateSettings() {
-  state.schedule.interval = parseInt(document.getElementById('settingsInterval').value);
-  state.schedule.wake     = document.getElementById('settingsWake').value;
-  state.schedule.bed      = document.getElementById('settingsBed').value;
-  state.profile.name      = document.getElementById('settingsName').value.trim() || state.profile.name;
-  state.profile.age       = parseInt(document.getElementById('settingsAge').value) || state.profile.age;
-  state.profile.mode      = document.getElementById('settingsMode').value;
-
-  var pin = document.getElementById('settingsPin').value.trim();
-  if (pin === '')              { state.pin = ''; }
-  else if (/^\d{4}$/.test(pin)) { state.pin = pin; }
-
-  saveState();
-  startTimer();
-  showToast('Settings saved');
-}
-
-// ===== DATA MANAGEMENT =====
-function exportData() {
-  var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href   = url;
-  a.download = 'wetsgo-backup-' + todayKey() + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Data exported');
-}
-
-function importData(event) {
-  var file = event.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var imported = JSON.parse(e.target.result);
-      if (imported.profile && imported.logs) {
-        kinConfirm('This will replace all current data. Continue?').then(function(ok) {
-          if (!ok) return;
-          state = imported;
-          saveState();
-          showToast('Data imported');
-          goToModeSelect();
-        });
-      } else {
-        showToast('Invalid data file');
-      }
-    } catch(err) {
-      showToast('Could not read file');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-function clearAllData() {
-  kinConfirm('Delete ALL data? This cannot be undone.').then(function(ok) {
-    if (!ok) return;
-    localStorage.removeItem(STORAGE_KEY);
-    state = null;
-    showScreen('setupScreen');
-    showToast('All data deleted');
+    });
   });
 }
 
-// ===== NOTES =====
-function promptNote() {
-  document.getElementById('noteText').value = '';
-  document.getElementById('noteOverlay').classList.add('visible');
-}
-function closeNote() {
-  document.getElementById('noteOverlay').classList.remove('visible');
-}
-function saveNote() {
-  var text = document.getElementById('noteText').value.trim();
-  if (!text) { showToast('Please enter a note'); return; }
-  var entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).substr(2, 4),
-    type: 'note', time: new Date().toISOString(), note: text, source: 'parent'
-  };
-  state.logs.push(entry);
-  saveState();
-  closeNote();
-  renderTodayEntries();
-  showToast('Note added');
-}
-
-// ===== UTILITIES =====
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('visible');
-  setTimeout(function() { t.classList.remove('visible'); }, 2200);
+// === Save ===
+function saveReading(){
+  var sys=parseInt(document.getElementById('inSys').value);
+  var dia=parseInt(document.getElementById('inDia').value);
+  var pulse=parseInt(document.getElementById('inPulse').value);
+  if(!sys||!dia){showToast('Enter systolic and diastolic values');return;}
+  if(sys<50||sys>300){showToast('Systolic seems out of range');return;}
+  if(dia<30||dia>200){showToast('Diastolic seems out of range');return;}
+  var arm=document.querySelector('#armGroup .toggle-opt.active');
+  var pos=document.querySelector('#posGroup .toggle-opt.active');
+  var reading={id:Date.now(),date:document.getElementById('inDate').value||todayStr(),time:document.getElementById('inTime').value||nowTime(),systolic:sys,diastolic:dia,pulse:pulse||null,arm:arm?arm.dataset.val:'L',position:pos?pos.dataset.val:'sitting',notes:document.getElementById('inNotes').value.trim()};
+  var readings=getData();readings.push(reading);
+  readings.sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+  saveReadings(readings);
+  document.getElementById('inSys').value='';document.getElementById('inDia').value='';document.getElementById('inPulse').value='';document.getElementById('inNotes').value='';
+  document.getElementById('inDate').value=todayStr();document.getElementById('inTime').value=nowTime();
+  var cat=classify(sys,dia);
+  showToast(sys+'/'+dia+' saved - '+cat.label);
+  renderHistory();
 }
 
-function kinConfirm(msg) {
-  return new Promise(function(resolve) {
-    var overlay = document.getElementById('confirmOverlay');
-    document.getElementById('confirmMsg').textContent = msg;
-    overlay.classList.add('visible');
-    document.getElementById('confirmYes').onclick = function() { overlay.classList.remove('visible'); resolve(true); };
-    document.getElementById('confirmNo').onclick  = function() { overlay.classList.remove('visible'); resolve(false); };
+// === History ===
+function renderHistory(){
+  var readings=getData();var list=document.getElementById('logList');
+  var empty=document.getElementById('emptyState');var actions=document.getElementById('historyActions');
+  if(readings.length===0){empty.style.display='block';list.innerHTML='';actions.style.display='none';return;}
+  empty.style.display='none';actions.style.display='flex';
+  var sorted=readings.slice().reverse();var html='';
+  sorted.forEach(function(r){
+    var cat=classify(r.systolic,r.diastolic);var meta=[];
+    if(r.arm) meta.push(r.arm==='L'?'Left arm':'Right arm');
+    if(r.position) meta.push(r.position.charAt(0).toUpperCase()+r.position.slice(1));
+    if(r.pulse) meta.push(r.pulse+' bpm');
+    html+='<div class="log-entry"><div class="log-left">';
+    html+='<div class="log-date">'+escHtml(formatDate(r.date))+(r.time?' '+escHtml(r.time):'')+'</div>';
+    html+='<div class="log-values">'+r.systolic+'/'+r.diastolic+' <span class="category-badge '+cat.cls+'">'+escHtml(cat.label)+'</span></div>';
+    html+='<div class="log-meta">'+escHtml(meta.join(' - '))+(r.notes?' - '+escHtml(r.notes):'')+'</div>';
+    html+='</div><div class="log-right"><button class="log-delete" onclick="deleteReading('+r.id+')">Delete</button></div></div>';
+  });
+  list.innerHTML=html;
+}
+
+function deleteReading(id){
+  kinConfirm('Delete this reading?').then(function(ok){
+    if(!ok)return;var readings=loadReadings();
+    readings=readings.filter(function(r){return r.id!==id;});
+    saveReadings(readings);renderHistory();showToast('Reading deleted');
   });
 }
 
-function escHtml(s) {
-  var div = document.createElement('div');
-  div.textContent = s;
-  return div.innerHTML;
+// === Report ===
+function setReportRange(mode){
+  var readings=getData();if(readings.length===0)return;
+  var from=document.getElementById('reportFrom');var to=document.getElementById('reportTo');
+  to.value=todayStr();
+  if(mode==='all'){from.value=readings[0].date;}
+  else if(mode==='last-print'){var lp=localStorage.getItem(PRINT_KEY);from.value=lp||readings[0].date;}
+  else if(mode==='30'){var d=new Date();d.setDate(d.getDate()-30);from.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  generateReport();
 }
 
-// ===== DEMO MODE =====
-function isDemo() {
-  return window.location.search.indexOf('demo=true') !== -1 || window.location.hash === '#demo';
+function generateReport(){
+  var readings=getData();
+  var from=document.getElementById('reportFrom').value;var to=document.getElementById('reportTo').value;
+  var filtered=readings.filter(function(r){if(from&&r.date<from)return false;if(to&&r.date>to)return false;return true;});
+  var container=document.getElementById('reportContent');
+  if(filtered.length===0){container.innerHTML='<div class="empty-state">No readings in this range.</div>';return;}
+  var html='';
+  var sysArr=filtered.map(function(r){return r.systolic;});
+  var diaArr=filtered.map(function(r){return r.diastolic;});
+  var pulseArr=filtered.filter(function(r){return r.pulse;}).map(function(r){return r.pulse;});
+  var avgSys=Math.round(sysArr.reduce(function(a,b){return a+b;},0)/sysArr.length);
+  var avgDia=Math.round(diaArr.reduce(function(a,b){return a+b;},0)/diaArr.length);
+  var avgPulse=pulseArr.length?Math.round(pulseArr.reduce(function(a,b){return a+b;},0)/pulseArr.length):'--';
+  var avgCat=classify(avgSys,avgDia);
+
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Avg Systolic</div><div class="summary-value">'+avgSys+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Avg Diastolic</div><div class="summary-value">'+avgDia+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Avg Pulse</div><div class="summary-value">'+avgPulse+'</div></div>';
+  html+='</div>';
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Average Category</div><div class="summary-value"><span class="category-badge '+avgCat.cls+'">'+escHtml(avgCat.label)+'</span></div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Readings</div><div class="summary-value">'+filtered.length+'</div></div>';
+  html+='</div>';
+  html+='<div class="summary-row">';
+  html+='<div class="summary-card"><div class="summary-label">Min</div><div class="summary-value">'+Math.min.apply(null,sysArr)+'/'+Math.min.apply(null,diaArr)+'</div></div>';
+  html+='<div class="summary-card"><div class="summary-label">Max</div><div class="summary-value">'+Math.max.apply(null,sysArr)+'/'+Math.max.apply(null,diaArr)+'</div></div>';
+  html+='</div>';
+
+  html+=buildChart(filtered);
+
+  html+='<div class="section"><div class="section-title">Readings</div>';
+  filtered.forEach(function(r){
+    var cat=classify(r.systolic,r.diastolic);var meta=[];
+    if(r.arm) meta.push(r.arm==='L'?'L':'R');
+    if(r.position) meta.push(r.position.charAt(0).toUpperCase()+r.position.slice(1));
+    if(r.pulse) meta.push(r.pulse+' bpm');
+    html+='<div class="log-entry"><div class="log-left">';
+    html+='<div class="log-date">'+escHtml(formatDate(r.date))+(r.time?' '+escHtml(r.time):'')+'</div>';
+    html+='<div class="log-values">'+r.systolic+'/'+r.diastolic+' <span class="category-badge '+cat.cls+'">'+escHtml(cat.label)+'</span></div>';
+    html+='<div class="log-meta">'+escHtml(meta.join(' - '))+(r.notes?' - '+escHtml(r.notes):'')+'</div>';
+    html+='</div></div>';
+  });
+  html+='</div>';
+
+  html+='<div class="section"><div class="section-title">AHA Blood Pressure Categories</div>';
+  html+='<div style="font-size:12px;line-height:1.8;color:var(--text-secondary)">';
+  html+='<span class="category-badge cat-normal">Normal</span> Less than 120/80<br>';
+  html+='<span class="category-badge cat-elevated">Elevated</span> 120-129 / less than 80<br>';
+  html+='<span class="category-badge cat-high1">High Stage 1</span> 130-139 / 80-89<br>';
+  html+='<span class="category-badge cat-high2">High Stage 2</span> 140+ / 90+<br>';
+  html+='<span class="category-badge cat-crisis">Crisis</span> 180+ / 120+<br>';
+  html+='</div><div style="font-size:11px;color:var(--text-secondary);margin-top:8px">Source: American Heart Association 2017 guidelines. This tool is not a medical device.</div></div>';
+  container.innerHTML=html;
 }
 
-function loadDemoData() {
-  var today = new Date();
-  var logs = [], hydration = {};
-  for (var d = 6; d >= 0; d--) {
-    var date = new Date(today);
-    date.setDate(date.getDate() - d);
-    var key = date.toISOString().split('T')[0];
-    hydration[key] = Math.floor(Math.random() * 3) + 3;
-    var entriesPerDay = Math.floor(Math.random() * 3) + 3;
-    for (var e = 0; e < entriesPerDay; e++) {
-      var hour = 7 + Math.floor(Math.random() * 11);
-      var min  = Math.floor(Math.random() * 60);
-      var entryDate = new Date(date);
-      entryDate.setHours(hour, min, 0, 0);
-      var types = ['went','went','went','didnt','accident','self'];
-      var type  = types[Math.floor(Math.random() * types.length)];
-      logs.push({ id: Date.now().toString(36) + Math.random().toString(36).substr(2,4) + d + e, type: type, time: entryDate.toISOString(), note: '', source: 'parent' });
-    }
-  }
-  state = {
-    version: 1,
-    profile: { name: 'Sam', age: 7, mode: 'standard' },
-    schedule: { interval: 120, wake: '07:00', bed: '19:30' },
-    pin: '',
-    logs: logs,
-    hydration: hydration,
-    rewards: { points: 34, unlocked: [5, 15, 30] },
-    schoolPlan: { overview: '', timetable: JSON.parse(JSON.stringify(DEFAULT_SCHOOL_ROWS)), notes: '' },
-    pottyStartDate: null,
-    createdAt: new Date().toISOString()
+function buildChart(data){
+  if(data.length<2) return'';
+  var W=600,H=220,PAD=40,PADR=20,PADT=20,PADB=40;
+  var chartW=W-PAD-PADR,chartH=H-PADT-PADB;
+  var allVals=[];data.forEach(function(r){allVals.push(r.systolic,r.diastolic);});
+  var minV=Math.min.apply(null,allVals)-10,maxV=Math.max.apply(null,allVals)+10;
+  minV=Math.max(40,minV);maxV=Math.min(220,maxV);
+  function yPos(v){return PADT+chartH-((v-minV)/(maxV-minV))*chartH;}
+  function xPos(i){return PAD+(i/(data.length-1))*chartW;}
+  var isDark=document.body.classList.contains('dark');
+  var textCol=isDark?'#999':'#888',gridCol=isDark?'#333':'#eee',sysCol='#c44',diaCol='#1a56db';
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:DM Sans,sans-serif">';
+  var steps=[60,80,100,120,140,160,180];
+  steps.forEach(function(v){if(v>=minV&&v<=maxV){var y=yPos(v);svg+='<line x1="'+PAD+'" y1="'+y+'" x2="'+(W-PADR)+'" y2="'+y+'" stroke="'+gridCol+'" stroke-width="1"/>';svg+='<text x="'+(PAD-6)+'" y="'+(y+4)+'" text-anchor="end" fill="'+textCol+'" font-size="10">'+v+'</text>';}});
+  if(120>=minV&&120<=maxV){svg+='<line x1="'+PAD+'" y1="'+yPos(120)+'" x2="'+(W-PADR)+'" y2="'+yPos(120)+'" stroke="rgba(17,170,119,0.3)" stroke-width="1" stroke-dasharray="4,3"/>';}
+  if(140>=minV&&140<=maxV){svg+='<line x1="'+PAD+'" y1="'+yPos(140)+'" x2="'+(W-PADR)+'" y2="'+yPos(140)+'" stroke="rgba(204,0,0,0.3)" stroke-width="1" stroke-dasharray="4,3"/>';}
+  var sysPath='',diaPath='';
+  data.forEach(function(r,i){var x=xPos(i);sysPath+=(i===0?'M':'L')+x.toFixed(1)+','+yPos(r.systolic).toFixed(1);diaPath+=(i===0?'M':'L')+x.toFixed(1)+','+yPos(r.diastolic).toFixed(1);});
+  svg+='<path d="'+sysPath+'" fill="none" stroke="'+sysCol+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  svg+='<path d="'+diaPath+'" fill="none" stroke="'+diaCol+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  data.forEach(function(r,i){var x=xPos(i);svg+='<circle cx="'+x.toFixed(1)+'" cy="'+yPos(r.systolic).toFixed(1)+'" r="3" fill="'+sysCol+'"/>';svg+='<circle cx="'+x.toFixed(1)+'" cy="'+yPos(r.diastolic).toFixed(1)+'" r="3" fill="'+diaCol+'"/>';});
+  var step=Math.max(1,Math.floor(data.length/6));
+  for(var i=0;i<data.length;i+=step){svg+='<text x="'+xPos(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" fill="'+textCol+'" font-size="9">'+data[i].date.slice(5)+'</text>';}
+  svg+='<circle cx="'+(PAD+10)+'" cy="'+(H-10)+'" r="4" fill="'+sysCol+'"/><text x="'+(PAD+18)+'" y="'+(H-7)+'" fill="'+textCol+'" font-size="10">Systolic</text>';
+  svg+='<circle cx="'+(PAD+80)+'" cy="'+(H-10)+'" r="4" fill="'+diaCol+'"/><text x="'+(PAD+88)+'" y="'+(H-7)+'" fill="'+textCol+'" font-size="10">Diastolic</text>';
+  svg+='</svg>';
+  return'<div class="chart-section">'+svg+'</div>';
+}
+
+// === Print ===
+function printReport(){
+  generateReport();
+  var from=document.getElementById('reportFrom').value;var to=document.getElementById('reportTo').value;
+  document.getElementById('printSub').textContent=(from?formatDate(from):'Start')+' to '+(to?formatDate(to):'Today');
+  if(!isDemo) localStorage.setItem(PRINT_KEY,todayStr());
+  setTimeout(function(){window.print();},100);
+}
+
+// === Export/Import ===
+function exportJSON(){
+  var readings=loadReadings();var json=JSON.stringify(readings,null,2);
+  var blob=new Blob([json],{type:'application/json'});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='blood-pressure-'+todayStr()+'.json';a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},5000);showToast('Data exported');
+}
+function importJSON(){document.getElementById('fileInput').click();}
+document.getElementById('fileInput').addEventListener('change',function(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var imported=JSON.parse(ev.target.result);if(!Array.isArray(imported)){showToast('Invalid data format');return;}
+      var existing=loadReadings();var ids={};existing.forEach(function(r){ids[r.id]=true;});
+      var added=0;imported.forEach(function(r){if(r.systolic&&r.diastolic&&!ids[r.id]){existing.push(r);added++;}});
+      existing.sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+      saveReadings(existing);renderHistory();showToast(added+' reading'+(added!==1?'s':'')+' imported');
+    }catch(err){showToast('Failed to import: invalid JSON');}
   };
+  reader.readAsText(file);e.target.value='';
+});
+
+function clearAll(){
+  kinConfirm('Delete all readings? This cannot be undone.').then(function(ok){
+    if(!ok)return;localStorage.removeItem(STORE_KEY);localStorage.removeItem(PRINT_KEY);
+    renderHistory();showToast('All readings deleted');
+  });
 }
 
-// ===== INIT =====
-function init() {
-  if (isDemo()) {
-    loadDemoData();
-    showScreen('parentScreen');
-    populateSettings();
-    showParentTab('today');
-    startTimer();
-    showToast('Demo mode');
-    return;
-  }
-  if (loadState()) {
-    goToModeSelect();
-  } else {
-    showScreen('setupScreen');
-  }
+// === Tabs ===
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  document.querySelector('[data-tab="'+id+'"]').classList.add('active');
+  if(id==='tabReport'){var readings=getData();if(readings.length>0){if(!document.getElementById('reportFrom').value){setReportRange('all');}else{generateReport();}}}
 }
 
-init();
+function startFresh(){isDemo=false;document.getElementById('demoBar').style.display='none';history.replaceState(null,'',window.location.pathname);renderHistory();}
+
+// === Theme ===
+function initTheme(){
+  var STORE='kin036-theme';var btn=document.getElementById('themeBtn');
+  var saved=localStorage.getItem(STORE);var dark=saved==='dark';
+  function apply(){
+    if(dark){document.documentElement.className='dark';document.body.classList.add('dark');btn.textContent='\u2600';document.getElementById('theme-color-meta').content='#1a1a1a';}
+    else{document.documentElement.className='light';document.body.classList.remove('dark');btn.textContent='\uD83C\uDF19';document.getElementById('theme-color-meta').content='#f5f4f0';}
+    localStorage.setItem(STORE,dark?'dark':'light');
+  }
+  apply();btn.onclick=function(){dark=!dark;apply();};
+}
+
+function showToast(msg){var el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';setTimeout(function(){el.style.opacity='0';},2200);}
+
+function kinConfirm(msg){
+  return new Promise(function(resolve){
+    var o=document.getElementById('kinconfirmOverlay');
+    document.getElementById('kinconfirmMsg').textContent=msg;o.classList.add('visible');
+    document.getElementById('kinconfirmCancel').onclick=function(){o.classList.remove('visible');resolve(false);};
+    document.getElementById('kinconfirmConfirm').onclick=function(){o.classList.remove('visible');resolve(true);};
+  });
+}
+
+function kinToggleStorageInfo(){var el=document.getElementById('kinStorageInfo');el.style.display=el.style.display==='block'?'none':'block';}
+
+var bugAnon=true;
+function openBugReport(){document.getElementById('bugOverlay').classList.add('open');}
+function closeBugReport(e){if(e&&e.target!==document.getElementById('bugOverlay'))return;document.getElementById('bugOverlay').classList.remove('open');}
+function toggleAnon(){bugAnon=!bugAnon;var t=document.getElementById('bugAnonToggle');if(bugAnon){t.classList.add('on');}else{t.classList.remove('on');}document.getElementById('bugIdentity').style.display=bugAnon?'none':'block';}
+function submitBug(){
+  var desc=document.getElementById('bugDesc').value.trim();if(!desc){showToast('Please describe the issue');return;}
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{
+    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({form_type:'bug_report',subject:'KIN-036 \u2014 Blood Pressure',app:'KIN-036',type:document.getElementById('bugType').value,description:desc,name:bugAnon?'Anonymous':(document.getElementById('bugName').value||'Anonymous')})
+  }).then(function(){showToast('Bug report sent');document.getElementById('bugDesc').value='';closeBugReport();}).catch(function(){showToast('Failed to send - try again');});
+}
+
+document.addEventListener('DOMContentLoaded',init);
+document.getElementById('reportFrom').addEventListener('change',generateReport);
+document.getElementById('reportTo').addEventListener('change',generateReport);
 </script>
 </body>
 </html>
