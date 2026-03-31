@@ -54,3 +54,9 @@ id = "zClqEpewCY9kXQNHa3MGY"
 uri = "file://kin-landing-icons.tar.gz"
 type = "unspecified"
 title = "Kin Landing Icons — 36 SVGs"
+
+[[outputs]]
+id = "Naqxb6cNojykca6rsLYOF"
+uri = "file://kin-icons.zip"
+type = "unspecified"
+title = "Kin Landing Icons — 36 SVGs"
