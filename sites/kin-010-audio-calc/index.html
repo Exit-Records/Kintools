@@ -223,7 +223,48 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 <meta name="twitter:title" content="KIN-010 — Audio Calculators — Kin">
 <meta name="twitter:description" content="18 audio engineering and music production calculators. BPM, frequency, phase, sample rate, acoustics, file size and more. All calculations run locally.">
 <meta name="twitter:image" content="https://kintools.net/og-image.png">
-</head>
+  <script>
+    /* PWA icon patch: replace SVG manifest icons with Canvas PNG for Android support */
+    (function(){
+      function patchManifest(lnk){
+        if(!lnk.href||!lnk.href.startsWith('blob:'))return;
+        fetch(lnk.href).then(function(r){return r.json();}).then(function(m){
+          if(!m.icons||!m.icons.length)return;
+          if(!m.icons.some(function(i){return i.type==='image/svg+xml';}))return;
+          var bg=m.background_color||m.theme_color||'#2c2c2a';
+          var svgSrc=decodeURIComponent(m.icons[0].src||'');
+          var txtMatch=svgSrc.match(/<text[^>]*>([^<]{1,4})<\/text>/i);
+          var sn=(m.short_name||m.name||'');
+          var initials=txtMatch?txtMatch[1].replace(/[^A-Za-z0-9]/g,'').substring(0,2).toUpperCase()
+            :sn.replace(/^kin[-\s]?\d+[-\s]?/i,'').trim().split(/\s+/).map(function(w){return(w[0]||'');}).join('').substring(0,2).toUpperCase()||'K';
+          var c=document.createElement('canvas');c.width=c.height=192;
+          var x=c.getContext('2d');
+          x.fillStyle=bg;
+          try{x.beginPath();x.roundRect(0,0,192,192,32);x.fill();}catch(e){x.fillRect(0,0,192,192);}
+          x.fillStyle='white';x.font='bold 68px system-ui,sans-serif';
+          x.textAlign='center';x.textBaseline='middle';
+          x.fillText(initials,96,100);
+          var png=c.toDataURL('image/png');
+          m.icons=[{src:png,sizes:'192x192',type:'image/png'},{src:png,sizes:'512x512',type:'image/png'}];
+          var blob=new Blob([JSON.stringify(m)],{type:'application/json'});
+          lnk.href=URL.createObjectURL(blob);
+          var ati=document.querySelector('link[rel="apple-touch-icon"]');
+          if(ati)ati.href=png;
+        }).catch(function(){});
+      }
+      var obs=new MutationObserver(function(muts){
+        muts.forEach(function(m){
+          m.addedNodes.forEach(function(n){
+            if(n.nodeName==='LINK'&&n.rel==='manifest')patchManifest(n);
+          });
+        });
+      });
+      obs.observe(document.documentElement,{childList:true,subtree:true});
+      var ex=document.querySelector('link[rel="manifest"]');
+      if(ex)patchManifest(ex);
+    })();
+    </script>
+  </head>
 <body>
 
 <header class="kin-header">
