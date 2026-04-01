@@ -320,6 +320,7 @@
   <p>Drag sounds toward the listener to mix them. All audio generated locally — no streaming, no tracking.</p>
   <button id="btn-start">Start Relaxing</button>
   <span class="tagline">Audio starts on first interaction &nbsp;·&nbsp; Works offline</span>
+  <span class="tagline" style="margin-top:6px;font-size:11px;opacity:0.55">On iPhone, check your silent switch is off</span>
 </div>
 
 <!-- ═══ App ════════════════════════════════════════════════════ -->
@@ -993,12 +994,17 @@ async function releaseWakeLock() {
 }
 
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && state.playing) acquireWakeLock();
+  if (document.visibilityState === 'visible' && state.playing) {
+    acquireWakeLock();
+    if (ctx && (ctx.state === 'suspended' || ctx.state === 'interrupted')) ctx.resume();
+  }
 });
 
-function play() {
+async function play() {
   if (!ctx) initAudio();
-  if (ctx.state === 'suspended') ctx.resume();
+  if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+    await ctx.resume();
+  }
   state.playing = true;
   updateGains();
   acquireWakeLock();
@@ -1602,7 +1608,8 @@ window.addEventListener('load', () => { resizeCanvas(); drawFrame(); });
 // ── Service worker ───────────────────────────────────────────────
 (function() {
   if (!('serviceWorker' in navigator)) return;
-  const SW = `const CACHE='kin007-v2';const ASSETS=['./'];
+  const pageUrl = location.href.split('?')[0];
+  const SW = `const CACHE='kin007-v3';const ASSETS=['${pageUrl}'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{if(resp.ok){const c=resp.clone();caches.open(CACHE).then(ca=>ca.put(e.request,c));}return resp;})));});`;
