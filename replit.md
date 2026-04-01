@@ -55,6 +55,44 @@ Latest additions: KIN-036 Blood Pressure · KIN-037 Unclaimed (UK Benefits Finde
 - **Service worker**: Blob SW pattern. Cache key `kin0NN-v1`. Never use `data:` URI SW.
 - **Android home screen icon fix**: 27 tools have a PWA icon patcher injected before `</head>` that intercepts the manifest after creation and replaces SVG icons with Canvas-generated PNGs. Android Chrome/Brave does not support SVG in PWA manifests. The patcher code is marked with the comment `/* PWA icon patch: replace SVG manifest icons with Canvas PNG for Android support */`.
 
+### Web Audio API — required pattern for any tool using AudioContext
+
+**Tools using Web Audio:** KIN-001 Ukulele, KIN-002 Metronome, KIN-006 Classroom Timer, KIN-007 Ambient, KIN-014 Breathing, KIN-025 Stretch, KIN-029 Nudge, KIN-034 Noise Meter.
+
+All of the following rules apply to every tool that creates an `AudioContext`:
+
+1. **Create only on user gesture** — `new AudioContext()` must be called inside a user event handler (click/touchend), never on page load.
+
+2. **Always `await ctx.resume()`** — `resume()` returns a Promise. Any code that relies on the context running (e.g. `updateGains()`, starting oscillators) must come *after* the await. Make the enclosing function `async`:
+   ```js
+   async function play() {
+     if (!ctx) initAudio();
+     if (ctx.state === 'suspended' || ctx.state === 'interrupted') await ctx.resume();
+     // now safe to start audio
+   }
+   ```
+
+3. **Handle `'interrupted'` state** — iOS sets `ctx.state` to `'interrupted'` during phone calls or when the screen locks. Always check for it alongside `'suspended'`.
+
+4. **Resume on `visibilitychange`** — iOS suspends the AudioContext when the PWA is backgrounded. Re-resume when the tab becomes visible again:
+   ```js
+   document.addEventListener('visibilitychange', () => {
+     if (document.visibilityState === 'visible' && state.playing) {
+       if (ctx && (ctx.state === 'suspended' || ctx.state === 'interrupted')) ctx.resume();
+     }
+   });
+   ```
+
+5. **iOS silent switch** — the iPhone ringer switch mutes Web Audio output in PWA mode. There is no programmatic bypass. Always display a hint near the play/start control: `"On iPhone, check your silent switch is off"` (small, low opacity — not alarming).
+
+6. **Service worker absolute URL** — when caching a single-page tool, `ASSETS=['./']` resolves to the Blob URL origin (wrong). Inject the real URL at registration time:
+   ```js
+   const pageUrl = location.href.split('?')[0];
+   const SW = `const CACHE='kinNNN-v1';const ASSETS=['${pageUrl}'];...`;
+   ```
+
+---
+
 ### Footer (every tool — canonical format)
 
 The footer is always a single wrapper with three rows: badge · bug link · credit. Never use `position:fixed` on a footer element — it must flow naturally at the bottom of content.
@@ -128,6 +166,14 @@ Two files kept in sync — always edit both, then `cp sites/kin-landing/index.ht
 <div class="ver-badge has-log" data-changes='[{"v":"X.Y","date":"DD Mon YYYY","note":"..."},{"v":"1.0","date":"Initial release","note":"First release"}]'>vX.Y</div>
 ```
 Place inside `release-info` after `release-name`.
+
+### Version update checklist — ALL THREE places must be updated together
+When any tool receives a bug fix or new feature, bump the version in **all three locations**:
+1. **Tool footer** (`sites/kin-NNN-name/index.html`) — the `KIN-NNN · vX.Y · ...` line in the `<footer>`
+2. **Landing page card** (`sites/kin-landing/index.html` + sync to `index.html`) — replace plain version div with `ver-badge has-log` if not already present, or update the existing badge version and prepend new changelog entry
+3. **`VERSIONS.md`** — update the version column and notes for that tool
+
+Never push a version bump that is missing any of the three.
 
 ### Category labels (consistent set)
 `Wellbeing` · `Utility` · `Music` · `Health` · `Design` · `Developer` · `Education` · `Learning` · `Shopping` · `Travel`
