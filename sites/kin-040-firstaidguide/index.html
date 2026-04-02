@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KIN-040 — First Aid Guide — Kin</title>
+<meta name="theme-color" id="theme-color-meta" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="First Aid Guide">
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://firstaidguide.kintools.net">
+<meta property="og:title" content="KIN-040 — First Aid Guide">
+<meta property="og:description" content="Know what to do before help arrives. Step-by-step guides, emergency numbers for 45 countries, medication dosing by weight. Works offline.">
+<meta property="og:image" content="https://firstaidguide.kintools.net/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KIN-040 — First Aid Guide">
+<meta name="twitter:description" content="Know what to do before help arrives. Step-by-step guides, emergency numbers for 45 countries, medication dosing by weight. Works offline.">
+<meta name="twitter:image" content="https://firstaidguide.kintools.net/og.png">
+<link rel="canonical" href="https://firstaidguide.kintools.net">
+<link rel="manifest" id="manifest-link">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#fff;--bg-card:#f7f7f5;--text:#1a1a1a;--text-secondary:#555;--text-muted:#888;
+  --accent:#c23616;--accent-light:#fef0ed;--accent-green:#27ae60;--accent-green-light:#eafaf1;
+  --accent-amber:#e67e22;--accent-amber-light:#fef5e7;--accent-blue:#2980b9;--accent-blue-light:#ebf5fb;
+  --border:#e5e5e0;--border-light:#eeeeea;--shadow:0 1px 3px rgba(0,0,0,0.06);
+  --radius:10px;--radius-sm:6px;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px);
+}
+html.dark {
+  --bg:#1a1a1a !important;--bg-card:#242424 !important;--text:#e8e8e8 !important;
+  --text-secondary:#aaa !important;--text-muted:#777 !important;--accent:#e74c3c !important;
+  --accent-light:#2d1a1a !important;--accent-green:#2ecc71 !important;--accent-green-light:#1a2d1a !important;
+  --accent-amber:#f39c12 !important;--accent-amber-light:#2d2a1a !important;
+  --accent-blue:#3498db !important;--accent-blue-light:#1a2a3d !important;
+  --border:#333 !important;--border-light:#2a2a2a !important;--shadow:0 1px 3px rgba(0,0,0,0.3) !important;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);min-height:100vh;font-size:16px;}
+.app-container{max-width:640px;margin:0 auto;padding:16px;padding-bottom:calc(80px + var(--safe-bottom));}
+.region-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+.region-overlay.hidden{display:none;}
+.region-overlay .ri{font-size:48px;margin-bottom:16px;}
+.region-overlay h2{font-size:22px;font-weight:700;margin-bottom:8px;text-align:center;}
+.region-overlay .rs{font-size:14px;color:var(--text-muted);text-align:center;margin-bottom:20px;max-width:300px;line-height:1.5;}
+.region-options{display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px;}
+.region-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin:12px 0 4px;padding-left:4px;}
+.region-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;min-height:52px;transition:border-color 0.15s;}
+.region-btn:active{border-color:var(--accent);}
+.region-btn .rf{font-size:24px;flex-shrink:0;}
+.region-btn .rn{flex:1;}
+.region-btn .ra{color:var(--text-muted);font-size:16px;}
+.region-btn.detailed::after{content:'detailed';font-size:10px;background:var(--accent-green-light);color:var(--accent-green);padding:2px 6px;border-radius:8px;font-weight:600;margin-right:4px;}
+.region-search{width:100%;max-width:340px;padding:10px 14px 10px 36px;border:1px solid var(--border);border-radius:var(--radius);font-size:16px;background:var(--bg-card);color:var(--text);-webkit-appearance:none;min-height:44px;margin-bottom:8px;position:relative;}
+.region-search:focus{outline:none;border-color:var(--accent);}
+.region-search-wrap{position:relative;width:100%;max-width:340px;}
+.region-search-wrap .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;pointer-events:none;}
+.region-note{font-size:12px;color:var(--text-muted);text-align:center;margin-top:16px;max-width:280px;line-height:1.5;}
+.suggest-link{font-size:13px;color:var(--accent);cursor:pointer;text-align:center;margin-top:12px;padding:8px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+.header{text-align:center;padding:24px 0 20px;}
+.header-icon{width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px;}
+.header-sub{font-size:13px;color:var(--text-muted);}
+.search-wrap{position:sticky;top:0;z-index:100;background:var(--bg);padding:8px 0 12px;}
+.search-input{width:100%;padding:12px 16px 12px 42px;border:1px solid var(--border);border-radius:var(--radius);font-size:16px;background:var(--bg-card);color:var(--text);outline:none;-webkit-appearance:none;min-height:44px;}
+.search-input:focus{border-color:var(--accent);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:16px;pointer-events:none;}
+.search-wrap-inner{position:relative;}
+.emergency-banner{background:var(--accent);color:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;}
+.emergency-banner .bi{font-size:20px;flex-shrink:0;}
+.emergency-banner .bt{flex:1;}
+.emergency-banner .btt{font-weight:700;font-size:15px;}
+.emergency-banner .bth{font-size:12px;opacity:0.85;margin-top:2px;}
+.emergency-banner .ba{font-size:18px;opacity:0.7;}
+.region-change{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--text-muted);cursor:pointer;padding:4px 0;margin-bottom:12px;}
+.region-change:hover{color:var(--accent);}
+.cat-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tab{flex-shrink:0;padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;transition:all 0.15s;}
+.cat-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.topic-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:12px;transition:border-color 0.15s;}
+.topic-card:active{border-color:var(--accent);}
+.topic-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.topic-card .ti{flex:1;min-width:0;}
+.topic-card .tt{font-weight:600;font-size:15px;}
+.topic-card .td{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.topic-card .ta{color:var(--text-muted);font-size:16px;flex-shrink:0;}
+.detail-view{display:none;}.detail-view.active{display:block;}
+.detail-back{display:flex;align-items:center;gap:6px;color:var(--accent);font-size:15px;font-weight:500;cursor:pointer;padding:8px 0;min-height:44px;border:none;background:none;}
+.detail-header{display:flex;align-items:center;gap:12px;margin:8px 0 16px;}
+.detail-header .topic-icon{width:48px;height:48px;font-size:24px;}
+.detail-header h2{font-size:20px;font-weight:700;letter-spacing:-0.3px;}
+.detail-section{margin-bottom:16px;}
+.detail-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:8px;}
+.step-list{list-style:none;counter-reset:steps;}
+.step-list li{counter-increment:steps;padding:10px 12px 10px 40px;position:relative;font-size:14px;line-height:1.5;border-left:2px solid var(--border);margin-left:14px;}
+.step-list li:last-child{border-left-color:transparent;}
+.step-list li::before{content:counter(steps);position:absolute;left:-15px;top:8px;width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.warning-box{background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:12px;}
+.warning-box strong{color:var(--accent);}
+.info-box{background:var(--accent-blue-light);border:1px solid var(--accent-blue);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:12px;}
+.info-box strong{color:var(--accent-blue);}
+.green-box{background:var(--accent-green-light);border:1px solid var(--accent-green);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:12px;}
+.green-box strong{color:var(--accent-green);}
+.dose-calc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;}
+.dose-calc label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+.dose-calc input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:16px;background:var(--bg);color:var(--text);-webkit-appearance:none;min-height:44px;margin-bottom:12px;}
+.dose-calc input:focus{outline:none;border-color:var(--accent);}
+.dose-result{background:var(--accent-green-light);border:1px solid var(--accent-green);border-radius:var(--radius-sm);padding:12px;font-size:14px;line-height:1.6;}
+.dose-result .dl{display:flex;justify-content:space-between;padding:4px 0;}
+.dose-result .dlb{font-weight:500;}.dose-result .dlv{font-weight:700;color:var(--accent-green);}
+.number-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-sm);margin-bottom:8px;min-height:44px;}
+.number-card .ni{font-size:20px;flex-shrink:0;}.number-card .nf{flex:1;}
+.number-card .nl{font-size:13px;color:var(--text-secondary);}
+.number-card .nv{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;}
+.number-card a{color:var(--accent);text-decoration:none;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums;}
+.region-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.region-tab{flex:1;min-width:90px;padding:10px 8px;border:2px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:600;text-align:center;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;gap:4px;transition:all 0.15s;}
+.region-tab.active{border-color:var(--accent);background:var(--accent-light);color:var(--text);}
+.kin-footer{text-align:center;padding:32px 16px 24px;font-size:12px;color:var(--text-muted);line-height:1.8;}
+.kin-footer .footer-row{margin-bottom:4px;}
+.kin-footer .vb{display:inline-flex;align-items:center;gap:4px;}
+.kin-footer .vb svg{width:14px;height:14px;}
+.bug-report-btn{display:inline-block;padding:8px 16px;border:1px solid var(--border);border-radius:20px;background:none;color:var(--text-muted);font-size:12px;cursor:pointer;margin-top:8px;min-height:44px;line-height:28px;}
+.theme-toggle{position:fixed;bottom:calc(16px + var(--safe-bottom));right:calc(16px + var(--safe-right));width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:200;box-shadow:var(--shadow);}
+.no-results{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:14px;}
+.disclaimer{background:var(--accent-amber-light);border:1px solid var(--accent-amber);border-radius:var(--radius);padding:14px 16px;font-size:12px;line-height:1.6;color:var(--text-secondary);margin-bottom:16px;}
+.disclaimer strong{color:var(--accent-amber);font-size:13px;}
+.bug-sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:900;}
+.bug-sheet-overlay.active{display:block;}
+.bug-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + var(--safe-bottom));z-index:901;transform:translateY(100%);transition:transform 0.3s ease;max-height:80vh;overflow-y:auto;}
+.bug-sheet-overlay.active .bug-sheet{transform:translateY(0);}
+.bug-sheet h3{font-size:17px;font-weight:700;margin-bottom:16px;}
+.bug-sheet label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-secondary);}
+.bug-sheet select,.bug-sheet textarea,.bug-sheet input[type="text"]{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:16px;background:var(--bg-card);color:var(--text);-webkit-appearance:none;min-height:44px;margin-bottom:12px;font-family:inherit;}
+.bug-sheet textarea{min-height:100px;resize:vertical;}
+.bug-sheet-actions{display:flex;gap:10px;margin-top:8px;}
+.bug-sheet-actions button{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer;min-height:44px;border:none;}
+.bug-sheet .btn-cancel{background:var(--bg-card);color:var(--text);border:1px solid var(--border);}
+.bug-sheet .btn-submit{background:var(--accent);color:#fff;}
+.toast{position:fixed;bottom:calc(70px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:20px;font-size:14px;font-weight:500;z-index:999;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="region-overlay" id="regionOverlay">
+  <div class="ri">🏥</div>
+  <h2>First Aid Guide</h2>
+  <div class="rs">Choose your region for the right emergency numbers. You can change this any time.</div>
+  <div class="region-search-wrap"><span class="si">🔍</span><input class="region-search" type="text" id="regionSearch" placeholder="Search countries..." autocomplete="off"></div>
+  <div class="region-options" id="regionOptions"></div>
+  <div class="suggest-link" onclick="openSuggestCountry()">Don't see your country? Suggest it</div>
+  <div class="region-note">Nothing is sent or tracked. Your choice is stored on this device only.</div>
+</div>
+<div class="app-container" id="app">
+  <div id="homeView">
+    <div class="header"><div class="header-icon">🏥</div><h1>First Aid Guide</h1><div class="header-sub">Offline family reference</div></div>
+    <div class="disclaimer"><strong>⚠ Not a substitute for professional medical advice.</strong><br>Quick-reference guide for common emergencies. Always seek professional help for serious injuries or illness.</div>
+    <div class="emergency-banner" onclick="showDetail('emergency-numbers')">
+      <div class="bi">📞</div><div class="bt"><div class="btt" id="bannerTitle">Emergency Numbers</div><div class="bth">Ambulance, police, poison control, hospitals</div></div><div class="ba">›</div>
+    </div>
+    <div class="region-change" onclick="changeRegion()"><span id="regionFlag">🇹🇭</span> <span id="regionLabel">Thailand</span> · tap to change</div>
+    <div class="search-wrap"><div class="search-wrap-inner"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Search topics..." id="searchInput" autocomplete="off"></div></div>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div id="topicList"></div>
+  </div>
+  <div class="detail-view" id="detailView">
+    <button class="detail-back" onclick="goHome()">‹ Back</button>
+    <div id="detailContent"></div>
+  </div>
+  <div class="kin-footer" id="kinFooter">
+    <div class="footer-row">KIN-040 · v1.0 · Kin Tools</div>
+    <div class="footer-row">Local Only · <span class="vb">Verified <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span> <span style="cursor:pointer;" onclick="showToast('Region and theme stored locally on this device only')">ⓘ</span></div>
+    <div class="footer-row"><button class="bug-report-btn" onclick="openBugReport()">Report a bug</button></div>
+  </div>
+</div>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+<div class="bug-sheet-overlay" id="bugOverlay" onclick="closeBugReport(event)">
+  <div class="bug-sheet">
+    <h3 id="bugSheetTitle">Report a bug</h3>
+    <label>Type</label>
+    <select id="bugType"><option value="Bug">Bug</option><option value="Suggestion">Suggestion</option><option value="Country request">Suggest a country</option><option value="Other">Other</option></select>
+    <label>Description</label>
+    <textarea id="bugDesc" placeholder="What happened?"></textarea>
+    <label>Name (optional)</label>
+    <input type="text" id="bugName" placeholder="Your name">
+    <div class="bug-sheet-actions"><button class="btn-cancel" onclick="closeBugReport()">Cancel</button><button class="btn-submit" onclick="submitBugReport()">Send</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var RK='kin040-region',TK='kin040-theme';
+// Detailed regions (full contextual numbers + tips)
+var DETAILED=['th','uk','us'];
+// All regions: detailed + second tier
+var ALL_REGIONS={
+th:{flag:'\uD83C\uDDF9\uD83C\uDDED',name:'Thailand',amb:'1669',police:'191',fire:'199',poison:'1367'},
+uk:{flag:'\uD83C\uDDEC\uD83C\uDDE7',name:'United Kingdom',amb:'999',police:'999',fire:'999',poison:'0344 892 0111'},
+us:{flag:'\uD83C\uDDFA\uD83C\uDDF8',name:'United States',amb:'911',police:'911',fire:'911',poison:'1-800-222-1222'},
+au:{flag:'\uD83C\uDDE6\uD83C\uDDFA',name:'Australia',amb:'000',police:'000',fire:'000',poison:'131 126'},
+at:{flag:'\uD83C\uDDE6\uD83C\uDDF9',name:'Austria',amb:'144',police:'133',fire:'122',poison:'01 406 4343'},
+be:{flag:'\uD83C\uDDE7\uD83C\uDDEA',name:'Belgium',amb:'112',police:'101',fire:'112',poison:'070 245 245'},
+br:{flag:'\uD83C\uDDE7\uD83C\uDDF7',name:'Brazil',amb:'192',police:'190',fire:'193',poison:'0800 722 6001'},
+kh:{flag:'\uD83C\uDDF0\uD83C\uDDED',name:'Cambodia',amb:'119',police:'117',fire:'118',poison:null},
+ca:{flag:'\uD83C\uDDE8\uD83C\uDDE6',name:'Canada',amb:'911',police:'911',fire:'911',poison:'1-800-222-1222'},
+cn:{flag:'\uD83C\uDDE8\uD83C\uDDF3',name:'China',amb:'120',police:'110',fire:'119',poison:null},
+dk:{flag:'\uD83C\uDDE9\uD83C\uDDF0',name:'Denmark',amb:'112',police:'112',fire:'112',poison:'82 12 12 12'},
+eg:{flag:'\uD83C\uDDEA\uD83C\uDDEC',name:'Egypt',amb:'123',police:'122',fire:'180',poison:null},
+fr:{flag:'\uD83C\uDDEB\uD83C\uDDF7',name:'France',amb:'15',police:'17',fire:'18',poison:'01 40 05 48 48'},
+de:{flag:'\uD83C\uDDE9\uD83C\uDDEA',name:'Germany',amb:'112',police:'110',fire:'112',poison:'030 19240'},
+gr:{flag:'\uD83C\uDDEC\uD83C\uDDF7',name:'Greece',amb:'166',police:'100',fire:'199',poison:'210 779 3777'},
+hk:{flag:'\uD83C\uDDED\uD83C\uDDF0',name:'Hong Kong',amb:'999',police:'999',fire:'999',poison:null},
+in:{flag:'\uD83C\uDDEE\uD83C\uDDF3',name:'India',amb:'112',police:'112',fire:'112',poison:'1800 116 117'},
+id:{flag:'\uD83C\uDDEE\uD83C\uDDE9',name:'Indonesia',amb:'118',police:'110',fire:'113',poison:null},
+ie:{flag:'\uD83C\uDDEE\uD83C\uDDEA',name:'Ireland',amb:'999',police:'999',fire:'999',poison:'01 809 2166'},
+il:{flag:'\uD83C\uDDEE\uD83C\uDDF1',name:'Israel',amb:'101',police:'100',fire:'102',poison:'04 854 1900'},
+it:{flag:'\uD83C\uDDEE\uD83C\uDDF9',name:'Italy',amb:'118',police:'113',fire:'115',poison:'06 4997 8000'},
+jp:{flag:'\uD83C\uDDEF\uD83C\uDDF5',name:'Japan',amb:'119',police:'110',fire:'119',poison:null},
+kr:{flag:'\uD83C\uDDF0\uD83C\uDDF7',name:'South Korea',amb:'119',police:'112',fire:'119',poison:null},
+la:{flag:'\uD83C\uDDF1\uD83C\uDDE6',name:'Laos',amb:'195',police:'191',fire:'190',poison:null},
+my:{flag:'\uD83C\uDDF2\uD83C\uDDFE',name:'Malaysia',amb:'999',police:'999',fire:'994',poison:null},
+mx:{flag:'\uD83C\uDDF2\uD83C\uDDFD',name:'Mexico',amb:'911',police:'911',fire:'911',poison:'800 009 2800'},
+mm:{flag:'\uD83C\uDDF2\uD83C\uDDF2',name:'Myanmar',amb:'999',police:'999',fire:'191',poison:null},
+nl:{flag:'\uD83C\uDDF3\uD83C\uDDF1',name:'Netherlands',amb:'112',police:'112',fire:'112',poison:'030 274 8888'},
+nz:{flag:'\uD83C\uDDF3\uD83C\uDDFF',name:'New Zealand',amb:'111',police:'111',fire:'111',poison:'0800 764 766'},
+no:{flag:'\uD83C\uDDF3\uD83C\uDDF4',name:'Norway',amb:'113',police:'112',fire:'110',poison:'22 59 13 00'},
+ph:{flag:'\uD83C\uDDF5\uD83C\uDDED',name:'Philippines',amb:'911',police:'911',fire:'911',poison:null},
+pt:{flag:'\uD83C\uDDF5\uD83C\uDDF9',name:'Portugal',amb:'112',police:'112',fire:'112',poison:'808 250 143'},
+sg:{flag:'\uD83C\uDDF8\uD83C\uDDEC',name:'Singapore',amb:'995',police:'999',fire:'995',poison:'6423 9119'},
+za:{flag:'\uD83C\uDDFF\uD83C\uDDE6',name:'South Africa',amb:'10177',police:'10111',fire:'10177',poison:'0861 555 777'},
+es:{flag:'\uD83C\uDDEA\uD83C\uDDF8',name:'Spain',amb:'112',police:'112',fire:'112',poison:'915 620 420'},
+se:{flag:'\uD83C\uDDF8\uD83C\uDDEA',name:'Sweden',amb:'112',police:'112',fire:'112',poison:'010 456 6700'},
+ch:{flag:'\uD83C\uDDE8\uD83C\uDDED',name:'Switzerland',amb:'144',police:'117',fire:'118',poison:'145'},
+tw:{flag:'\uD83C\uDDF9\uD83C\uDDFC',name:'Taiwan',amb:'119',police:'110',fire:'119',poison:'02 2871 7121'},
+ae:{flag:'\uD83C\uDDE6\uD83C\uDDEA',name:'UAE',amb:'998',police:'999',fire:'997',poison:'800 424'},
+sa:{flag:'\uD83C\uDDF8\uD83C\uDDE6',name:'Saudi Arabia',amb:'997',police:'999',fire:'998',poison:null},
+qa:{flag:'\uD83C\uDDF6\uD83C\uDDE6',name:'Qatar',amb:'999',police:'999',fire:'999',poison:'4003 1111'},
+kw:{flag:'\uD83C\uDDF0\uD83C\uDDFC',name:'Kuwait',amb:'112',police:'112',fire:'112',poison:null},
+bh:{flag:'\uD83C\uDDE7\uD83C\uDDED',name:'Bahrain',amb:'999',police:'999',fire:'999',poison:null},
+om:{flag:'\uD83C\uDDF4\uD83C\uDDF2',name:'Oman',amb:'999',police:'999',fire:'999',poison:null},
+vn:{flag:'\uD83C\uDDFB\uD83C\uDDF3',name:'Vietnam',amb:'115',police:'113',fire:'114',poison:null}
+};
+
+var currentRegion=localStorage.getItem(RK)||null;
+var currentCat='all',currentSearch='';
+
+function nc(icon,label,number,tel){return '<div class="number-card"><div class="ni">'+icon+'</div><div class="nf"><div class="nl">'+label+'</div><div class="nv"><a href="tel:'+tel+'">'+number+'</a></div></div></div>';}
+
+function getThaiNumbers(){
+return '<div class="detail-section"><div class="detail-section-title">Life-threatening emergency</div>'+nc('\uD83D\uDEA8','General Emergency / Police','191','191')+nc('\uD83D\uDE91','Medical Emergency / Ambulance','1669','1669')+nc('\uD83D\uDE91','Bangkok Ambulance (Erawan Centre)','1646','1646')+nc('\uD83C\uDFE5','BDMS Private Ambulance (English)','1724','1724')+'</div><div class="detail-section"><div class="detail-section-title">Other important numbers</div>'+nc('\uD83D\uDD25','Fire Department','199','199')+nc('\uD83D\uDC6E','Tourist Police (English-speaking)','1155','1155')+nc('\u2620\uFE0F','Poison Control (Ramathibodi, 24h)','1367','1367')+nc('\uD83D\uDEE3\uFE0F','Highway Police','1193','1193')+nc('\uD83C\uDF0A','Disaster Warning Centre','1860','1860')+nc('\uD83C\uDDEC\uD83C\uDDE7','UK Embassy Bangkok','02 305 8333','+6623058333')+nc('\uD83C\uDDFA\uD83C\uDDF8','US Embassy Bangkok','02 205 4000','+6622054000')+'</div><div class="info-box"><strong>Tip:</strong> Calling a private hospital directly is often faster than 1669 in Bangkok. Save your nearest hospital\'s number. If you can\'t communicate in Thai, call Tourist Police (1155) first.</div>';
+}
+function getUKNumbers(){
+return '<div class="detail-section"><div class="detail-section-title">Life-threatening emergency</div>'+nc('\uD83D\uDEA8','Emergency (Police, Fire, Ambulance)','999','999')+nc('\uD83D\uDEA8','Emergency (alternative / mobile)','112','112')+'</div><div class="detail-section"><div class="detail-section-title">Urgent but not life-threatening</div>'+nc('\uD83C\uDFE5','NHS Urgent Medical Advice (24h)','111','111')+nc('\uD83D\uDC6E','Police (non-emergency)','101','101')+'</div><div class="detail-section"><div class="detail-section-title">Specialist helplines</div>'+nc('\u2620\uFE0F','National Poisons Information','0344 892 0111','03448920111')+nc('\uD83D\uDD0C','Gas Emergency','0800 111 999','0800111999')+nc('\uD83D\uDCA1','Power Cut','105','105')+nc('\uD83C\uDF0A','Coastguard (via 999)','999','999')+nc('\uD83E\uDDB7','NHS Dental Emergency (via 111)','111','111')+'</div><div class="info-box"><strong>Tip:</strong> 999 for life-threatening, 111 for urgent advice. 112 works from any phone, even without a SIM.</div>';
+}
+function getUSNumbers(){
+return '<div class="detail-section"><div class="detail-section-title">Life-threatening emergency</div>'+nc('\uD83D\uDEA8','Emergency (Police, Fire, Ambulance)','911','911')+'</div><div class="detail-section"><div class="detail-section-title">Specialist helplines</div>'+nc('\u2620\uFE0F','Poison Control (24h)','1-800-222-1222','18002221222')+nc('\uD83C\uDF0A','Coast Guard','(202) 372-2100','2023722100')+nc('\uD83D\uDD25','FEMA','1-800-621-3362','18006213362')+'</div><div class="info-box"><strong>Tip:</strong> 911 dispatchers can send police, fire, or EMS. Stay on the line. Many centres accept texts if you can\'t speak.</div>';
+}
+function getGenericNumbers(code){
+var r=ALL_REGIONS[code];if(!r)return '';
+var h='<div class="detail-section"><div class="detail-section-title">Emergency numbers</div>';
+h+=nc('\uD83D\uDE91','Ambulance',r.amb,r.amb.replace(/[^0-9+]/g,''));
+h+=nc('\uD83D\uDC6E','Police',r.police,r.police.replace(/[^0-9+]/g,''));
+h+=nc('\uD83D\uDD25','Fire',r.fire,r.fire.replace(/[^0-9+]/g,''));
+if(r.poison)h+=nc('\u2620\uFE0F','Poison Control',r.poison,r.poison.replace(/[^0-9+]/g,''));
+h+='</div>';
+if(!r.poison)h+='<div class="info-box"><strong>Note:</strong> No dedicated poison control number found for this country. In an emergency, call the ambulance number or go directly to hospital.</div>';
+h+='<div class="info-box"><strong>112</strong> is an international emergency number that works in many countries, especially within Europe and on mobile phones. Try it if the local number doesn\'t connect.</div>';
+return h;
+}
+function getEmergencyContent(code){
+if(code==='th')return getThaiNumbers();
+if(code==='uk')return getUKNumbers();
+if(code==='us')return getUSNumbers();
+return getGenericNumbers(code);
+}
+function getAmb(){var r=ALL_REGIONS[currentRegion];return r?r.amb:'112';}
+function getPoison(){
+if(currentRegion==='th')return{n:'1367',t:'Ramathibodi Hospital, 24h. Staff speak English.'};
+if(currentRegion==='uk')return{n:'0344 892 0111',t:'National Poisons Information Service, 24h.'};
+if(currentRegion==='us')return{n:'1-800-222-1222',t:'Available 24/7.'};
+var r=ALL_REGIONS[currentRegion];
+if(r&&r.poison)return{n:r.poison,t:'Local poison control.'};
+return{n:getAmb(),t:'No dedicated poison line. Call ambulance or go to hospital.'};
+}
+
+// Region picker
+function renderRegionPicker(filter){
+var el=document.getElementById('regionOptions');
+var f=(filter||'').toLowerCase().trim();
+var sorted=Object.keys(ALL_REGIONS).map(function(k){return{code:k,data:ALL_REGIONS[k]};});
+sorted.sort(function(a,b){
+var aD=DETAILED.indexOf(a.code)>-1?0:1;
+var bD=DETAILED.indexOf(b.code)>-1?0:1;
+if(aD!==bD)return aD-bD;
+return a.data.name.localeCompare(b.data.name);
+});
+if(f){sorted=sorted.filter(function(x){return x.data.name.toLowerCase().indexOf(f)!==-1||x.code.indexOf(f)!==-1;});}
+var html='';var lastSection='';
+sorted.forEach(function(x){
+var isDetailed=DETAILED.indexOf(x.code)>-1;
+var section=isDetailed?'detailed':'all';
+if(section!==lastSection&&!f){
+html+='<div class="region-section-label">'+(isDetailed?'Detailed guides':'All countries')+'</div>';
+lastSection=section;
+}
+html+='<button class="region-btn'+(isDetailed?' detailed':'')+'" onclick="selectRegion(\''+x.code+'\')"><span class="rf">'+x.data.flag+'</span><span class="rn">'+x.data.name+'</span><span class="ra">\u203A</span></button>';
+});
+if(!sorted.length)html='<div class="no-results">No countries found. <span class="suggest-link" onclick="openSuggestCountry()" style="display:inline;">Suggest it?</span></div>';
+el.innerHTML=html;
+}
+document.getElementById('regionSearch').addEventListener('input',function(){renderRegionPicker(this.value);});
+
+function selectRegion(r){currentRegion=r;localStorage.setItem(RK,r);document.getElementById('regionOverlay').classList.add('hidden');document.getElementById('regionSearch').value='';updateRegionUI();}
+function changeRegion(){document.getElementById('regionOverlay').classList.remove('hidden');renderRegionPicker();}
+function updateRegionUI(){if(!currentRegion)return;var r=ALL_REGIONS[currentRegion];if(!r)return;document.getElementById('bannerTitle').textContent=r.name+' Emergency Numbers';document.getElementById('regionFlag').textContent=r.flag;document.getElementById('regionLabel').textContent=r.name;}
+
+function switchEmergencyRegion(code){
+var c=document.getElementById('emergencyRegionContent');
+if(c)c.innerHTML=getEmergencyContent(code);
+document.querySelectorAll('.region-tab').forEach(function(t){t.classList.toggle('active',t.dataset.code===code);});
+}
+
+function openSuggestCountry(){
+document.getElementById('regionOverlay').classList.add('hidden');
+openBugReport();
+document.getElementById('bugType').value='Country request';
+document.getElementById('bugDesc').placeholder='Which country would you like added? Include emergency numbers if you know them.';
+document.getElementById('bugSheetTitle').textContent='Suggest a country';
+}
+var TOPICS=[
+{id:'emergency-numbers',title:'Emergency Numbers',desc:'Ambulance, police, hospitals, poison control',icon:'\uD83D\uDCDE',iconBg:'var(--accent-light)',cat:'emergency',keywords:'phone call ambulance hospital police emergency 191 1669 999 911 poison',
+content:function(){var h='<div class="region-tabs">';var codes=DETAILED.concat(currentRegion&&DETAILED.indexOf(currentRegion)===-1?[currentRegion]:[]);codes.forEach(function(r){var d=ALL_REGIONS[r];if(d)h+='<button class="region-tab'+(r===currentRegion?' active':'')+'" data-code="'+r+'" onclick="switchEmergencyRegion(\''+r+'\')">'+d.flag+' '+d.name+'</button>';});h+='</div><div id="emergencyRegionContent">'+getEmergencyContent(currentRegion)+'</div>';return h;}},
+{id:'choking-child',title:'Choking (Child)',desc:'Back blows and abdominal thrusts for children over 1',icon:'\uD83D\uDE2E',iconBg:'var(--accent-light)',cat:'emergency',keywords:'choking child coughing throat food blocked airway heimlich',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>If the child can cough forcefully</strong>, encourage them to keep coughing. Do not intervene unless coughing becomes weak, silent, or they stop breathing.</div><div class="detail-section"><div class="detail-section-title">If the child cannot cough, speak, or breathe</div><ol class="step-list"><li>Stand or kneel behind the child. Place one arm across their chest for support. Lean them forward.</li><li><strong>Give 5 back blows</strong> between the shoulder blades with the heel of your hand.</li><li>If still blocked, <strong>give 5 abdominal thrusts</strong>. Fist just above the belly button, pull sharply inward and upward.</li><li>Alternate 5 and 5 until cleared or unconscious.</li><li><strong>If unconscious:</strong> Lower to ground, call '+a+', begin CPR.</li></ol></div><div class="info-box"><strong>Infants under 1:</strong> Lay the baby face-down along your forearm, supporting their head and jaw with your hand. Keep their head lower than their body. Give 5 firm back blows between the shoulder blades with the heel of your hand. Turn the baby face-up on your other forearm. Give 5 chest thrusts using two fingers on the breastbone, just below the nipple line. Alternate 5 and 5 until cleared or unconscious. Never use abdominal thrusts on infants.</div>';}},
+{id:'choking-adult',title:'Choking (Adult)',desc:'Back blows and abdominal thrusts for adults',icon:'\uD83D\uDE2E',iconBg:'var(--accent-light)',cat:'emergency',keywords:'choking adult throat food blocked airway heimlich',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>If the person can cough forcefully</strong>, encourage them to keep coughing.</div><div class="detail-section"><div class="detail-section-title">If the person cannot cough, speak, or breathe</div><ol class="step-list"><li>Stand behind them. Lean forward. <strong>5 sharp back blows.</strong></li><li>If still blocked, <strong>5 abdominal thrusts</strong>. Fist above belly button, pull inward and upward.</li><li>Alternate 5 and 5 until cleared or unconscious.</li><li><strong>If unconscious:</strong> Lower to ground. Call '+a+'. Begin CPR.</li></ol></div>';}},
+{id:'cpr-adult',title:'CPR (Adult)',desc:'Chest compressions and rescue breaths for adults',icon:'\u2764\uFE0F',iconBg:'var(--accent-light)',cat:'emergency',keywords:'cpr heart stop breathing unconscious chest compressions rescue breath cardiac arrest adult',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>Call '+a+' immediately.</strong> Start CPR if the person is unconscious and not breathing normally.</div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Check responsiveness.</strong> Tap shoulders, shout. If no response, call '+a+' (or get someone else to call). Put the phone on speaker.</li><li><strong>Open the airway.</strong> Place one hand on the forehead, tilt the head back. Lift the chin with two fingertips under the bony part of the jaw.</li><li><strong>Check breathing.</strong> Look at the chest, listen, feel for breath on your cheek. Take no more than 10 seconds. Occasional gasps are NOT normal breathing.</li><li><strong>30 chest compressions.</strong> Place the heel of one hand on the centre of the chest (on the breastbone, between the nipples). Place your other hand on top and interlock your fingers. Keep your arms straight, shoulders directly above. Push hard and fast: at least 5cm deep, 100-120 per minute. Let the chest fully recoil between each compression.</li><li><strong>2 rescue breaths.</strong> Tilt head back, pinch nose shut, seal your mouth over theirs. Blow steadily for about 1 second. Watch for the chest to rise. If it doesn\'t rise, reposition the head and try again. Don\'t attempt more than 2 breaths before returning to compressions.</li><li><strong>Continue 30:2</strong> without stopping until emergency services arrive, the person starts breathing normally, or you are too exhausted to continue.</li></ol></div><div class="green-box"><strong>Compression-only CPR:</strong> If you are unable or unwilling to give rescue breaths, continuous chest compressions at 100-120 per minute is still effective and far better than doing nothing. Push hard, push fast, don\'t stop.</div><div class="info-box"><strong>Key points:</strong> Depth matters more than speed. Letting the chest fully recoil between compressions is as important as pushing down. Minimise any pauses. If two people are available, swap the compressor role every 2 minutes to avoid fatigue.</div>';}},
+{id:'cpr-child',title:'CPR (Child and Infant)',desc:'CPR for children and babies, including 5 initial breaths',icon:'\u2764\uFE0F',iconBg:'var(--accent-light)',cat:'emergency',keywords:'cpr heart stop breathing unconscious chest compressions rescue breath cardiac arrest child infant baby paediatric pediatric',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>Children and infants usually stop breathing before the heart stops.</strong> Giving breaths early is critical. This is the key difference from adult CPR.</div><div class="detail-section"><div class="detail-section-title">Child CPR (age 1 to puberty)</div><ol class="step-list"><li><strong>Check responsiveness.</strong> Tap and shout. If no response and you are alone, give CPR for about 2 minutes before calling '+a+'. If someone else is with you, have them call immediately.</li><li><strong>Open the airway.</strong> Head tilt, chin lift (same as adult).</li><li><strong>Give 5 initial rescue breaths.</strong> Pinch the nose, seal your mouth over theirs, blow steadily for 1 second. Watch for chest rise. These first breaths are the priority.</li><li><strong>30 chest compressions.</strong> Use one hand (or two hands for a larger child) on the centre of the chest. Compress about one-third of the chest depth (roughly 5cm). Rate of 100-120 per minute.</li><li><strong>2 rescue breaths.</strong></li><li><strong>Continue 30:2</strong> until help arrives, they start breathing, or you cannot continue.</li></ol></div><div class="detail-section"><div class="detail-section-title">Infant CPR (under 1 year)</div><ol class="step-list"><li><strong>Check responsiveness.</strong> Flick the sole of the foot or tap the shoulder gently. Never shake a baby.</li><li><strong>Open the airway.</strong> Tilt the head back into a neutral position (not as far back as an adult). Over-extending an infant\'s neck can block the airway.</li><li><strong>Give 5 initial rescue breaths.</strong> Cover the baby\'s mouth AND nose with your mouth. Give gentle puffs, just enough to see the chest rise. Do not blow hard.</li><li><strong>30 chest compressions.</strong> Use two fingers or the heel of one hand on the breastbone, just below the nipple line. Compress about one-third of the chest depth (roughly 4cm). Rate of 100-120 per minute.</li><li><strong>2 rescue breaths.</strong> Gentle puffs covering mouth and nose.</li><li><strong>Continue 30:2</strong> until help arrives.</li></ol></div><div class="warning-box"><strong>Why 5 breaths first?</strong> In children, cardiac arrest is almost always caused by a breathing problem (choking, drowning, illness), not a heart problem. Getting oxygen in early gives the best chance of survival. This is a key 2025 guideline update.</div><div class="info-box"><strong>If you are only trained in adult CPR:</strong> Using the adult 30:2 method on a child is far better than doing nothing. Don\'t let uncertainty stop you from acting.</div>';}},
+{id:'severe-bleeding',title:'Severe Bleeding',desc:'Direct pressure, elevation, tourniquet basics',icon:'\uD83E\uDE78',iconBg:'var(--accent-light)',cat:'emergency',keywords:'bleeding blood cut wound severe haemorrhage tourniquet pressure',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>Call '+a+' for heavy bleeding that won\'t stop.</strong></div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Apply direct pressure</strong> with a clean cloth. Press firmly, don\'t lift to check.</li><li>If soaked through, add more on top. Don\'t remove first layer.</li><li><strong>Elevate</strong> above the heart if possible.</li><li>If uncontrollable on a limb, <strong>tourniquet</strong> 5-7cm above wound. Tighten until bleeding stops. Note the time.</li><li>Keep warm, lying down. Watch for shock: pale, cold, rapid breathing.</li></ol></div><div class="info-box"><strong>Improvised tourniquet:</strong> Belt or fabric strip, at least 4cm wide. Never string or wire.</div>';}},
+{id:'burns',title:'Burns',desc:'Cooling, covering, and when to seek help',icon:'\uD83D\uDD25',iconBg:'var(--accent-amber-light)',cat:'injuries',keywords:'burn scald hot water fire flame cooking oil',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">Immediate response</div><ol class="step-list"><li><strong>Cool under running water</strong> for at least 20 minutes. The single most effective treatment.</li><li><strong>Remove</strong> clothing/jewellery near the burn unless stuck.</li><li><strong>Cover</strong> with cling film or clean non-fluffy material. Not tight.</li><li><strong>Pain relief:</strong> Paracetamol or ibuprofen.</li></ol></div><div class="warning-box"><strong>Do NOT:</strong> Ice, butter, toothpaste, cream. Don\'t burst blisters.</div><div class="info-box"><strong>Small children and large burns:</strong> When cooling a large burn area on a baby or small child, watch for signs of hypothermia (shivering, pale skin, drowsiness). You may need to pause cooling briefly to keep them warm, then resume. The 20-minute target is ideal but preventing hypothermia takes priority.</div><div class="detail-section"><div class="detail-section-title">Go to hospital if</div><ol class="step-list"><li>Larger than the person\'s palm</li><li>Face, hands, feet, joints, or genitals</li><li>White, waxy, or charred</li><li>Chemical or electrical</li><li>Child under 5</li><li>Encircles a limb or digit</li></ol></div>';}},
+{id:'wounds',title:'Cuts and Wounds',desc:'Cleaning, closing, infection signs',icon:'\uD83E\uDE79',iconBg:'var(--accent-green-light)',cat:'injuries',keywords:'cut wound gash laceration scrape graze clean stitch',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">Cleaning and care</div><ol class="step-list"><li><strong>Wash hands</strong> or use sanitiser.</li><li><strong>Stop bleeding</strong> with gentle pressure.</li><li><strong>Clean</strong> under running water. Remove dirt.</li><li><strong>Antiseptic</strong> (Betadine or chlorhexidine) around wound edges.</li><li><strong>Close small cuts</strong> with Steri-Strips or butterfly bandages.</li><li><strong>Cover</strong> with sterile dressing. Change daily.</li></ol></div><div class="warning-box"><strong>Infection signs (seek help):</strong> Spreading redness, warmth, swelling, pus, red streaks, fever. Usually 2-3 days after injury.</div>';}},
+{id:'fractures',title:'Broken Bones',desc:'Immobilisation and when to go to hospital',icon:'\uD83E\uDDB4',iconBg:'var(--accent-blue-light)',cat:'injuries',keywords:'fracture break broken bone arm leg wrist ankle',
+content:function(){var a=getAmb();return '<div class="detail-section"><div class="detail-section-title">How to help</div><ol class="step-list"><li><strong>Don\'t move</strong> the injured area. Support as found.</li><li><strong>Splint</strong> with a rigid item. Secure above and below. Don\'t straighten.</li><li><strong>Sling</strong> for arms (scarf or shirt).</li><li><strong>Ice</strong> wrapped in cloth, 15-20 minutes.</li><li><strong>Pain relief.</strong></li><li><strong>Go to hospital.</strong> All suspected fractures need X-ray.</li></ol></div><div class="warning-box"><strong>Call '+a+' if:</strong> Bone visible, can\'t move/feel limb, head/neck/spine injury, heavy bleeding.</div>';}},
+{id:'heat-illness',title:'Heat Exhaustion / Heatstroke',desc:'Recognition and cooling methods',icon:'\uD83C\uDF21\uFE0F',iconBg:'var(--accent-amber-light)',cat:'environment',keywords:'heat stroke exhaustion sun hot temperature dehydration fever sweat',
+content:function(){var a=getAmb();return '<div class="detail-section"><div class="detail-section-title">Heat Exhaustion</div><div class="info-box"><strong>Signs:</strong> Heavy sweating, pale/clammy skin, fast weak pulse, nausea, dizziness, headache.</div><ol class="step-list"><li><strong>Move to cool place.</strong></li><li><strong>Lie down</strong>, raise legs.</li><li><strong>Cool skin:</strong> Wet cloths on neck, armpits, groin. Fan.</li><li><strong>Sip</strong> cool water or ORS.</li><li>Should improve in 30 minutes. If not, hospital.</li></ol></div><div class="detail-section"><div class="detail-section-title">Heatstroke (Emergency)</div><div class="warning-box"><strong>Signs:</strong> 40\u00B0C+, hot DRY skin, confusion, seizures. <strong>Call '+a+'.</strong></div><ol class="step-list"><li>Call '+a+'.</li><li>Cool aggressively: immerse in water or drench and pack ice around neck/armpits/groin.</li><li>Do NOT give fluids if unconscious.</li><li>Recovery position if unconscious but breathing.</li></ol></div>';}},
+{id:'snake-bite',title:'Snake Bites',desc:'Immobilise, get to hospital, do not cut or suck',icon:'\uD83D\uDC0D',iconBg:'var(--accent-amber-light)',cat:'environment',keywords:'snake bite venom cobra krait viper',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>All snake bites = potential emergency.</strong> Hospital ASAP.</div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Move away.</strong> Don\'t catch the snake.</li><li><strong>Keep calm and still.</strong></li><li><strong>Immobilise</strong> bitten limb with splint. At/below heart level.</li><li>Remove rings, watches, tight clothing.</li><li><strong>Do NOT</strong> cut, suck, tourniquet, or ice.</li><li><strong>Photo of the snake</strong> from safe distance if possible.</li><li><strong>Hospital immediately.</strong> Call '+a+'.</li></ol></div><div class="info-box"><strong>Pressure immobilisation:</strong> For neurotoxic bites (cobras, kraits), wrap firmly from bite toward heart then splint. NOT for viper bites.</div>';}},
+{id:'insect-stings',title:'Insect Stings and Bites',desc:'Bees, wasps, scorpions, centipedes',icon:'\uD83D\uDC1D',iconBg:'var(--accent-amber-light)',cat:'environment',keywords:'bee wasp sting mosquito scorpion centipede bite insect allergic',
+content:function(){var a=getAmb();return '<div class="detail-section"><div class="detail-section-title">General care</div><ol class="step-list"><li>Bee sting: <strong>scrape stinger out</strong> sideways. Don\'t squeeze.</li><li><strong>Clean</strong> with soap and water.</li><li><strong>Cold compress</strong> 10-15 minutes.</li><li><strong>Antihistamine + paracetamol/ibuprofen</strong> for pain.</li></ol></div><div class="warning-box"><strong>Anaphylaxis - call '+a+' if:</strong> Face/throat swelling, difficulty breathing, dizziness, widespread hives. Use EpiPen if available.</div>';}},
+{id:'allergic-reaction',title:'Allergic Reaction / Anaphylaxis',desc:'Recognising and responding to severe allergy',icon:'\u26A0\uFE0F',iconBg:'var(--accent-light)',cat:'emergency',keywords:'allergy allergic anaphylaxis epipen swelling hives rash breathing',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>Anaphylaxis is life-threatening. Call '+a+'.</strong></div><div class="detail-section"><div class="detail-section-title">Signs</div><ul style="list-style:none;padding:0;"><li style="padding:5px 0;font-size:14px;">\u2022 Face/lips/tongue/throat swelling</li><li style="padding:5px 0;font-size:14px;">\u2022 Difficulty breathing, wheezing</li><li style="padding:5px 0;font-size:14px;">\u2022 Rapid heartbeat, dizziness, collapse</li><li style="padding:5px 0;font-size:14px;">\u2022 Widespread hives, abdominal pain</li></ul></div><div class="detail-section"><div class="detail-section-title">What to do</div><ol class="step-list"><li><strong>EpiPen</strong> in outer mid-thigh. Through clothing is fine.</li><li><strong>Call '+a+'.</strong></li><li>Lie down, legs raised (sit up if can\'t breathe).</li><li>Second dose after 5-15 min if no improvement.</li><li>CPR if unconscious and not breathing.</li></ol></div>';}},
+{id:'dehydration',title:'Dehydration',desc:'Signs, ORS recipe, when to seek help',icon:'\uD83D\uDCA7',iconBg:'var(--accent-blue-light)',cat:'illness',keywords:'dehydration water thirst diarrhoea vomiting oral rehydration ors',
+content:function(){return '<div class="info-box"><strong>Mild:</strong> Thirst, dark urine, dry mouth, headache.<br><br><strong>Severe (seek help):</strong> No urine, sunken eyes, rapid breathing, confusion, skin stays pinched. Children: no tears, sunken fontanelle.</div><div class="detail-section"><div class="detail-section-title">Treatment</div><ol class="step-list"><li><strong>ORS</strong> is most effective. Small frequent sips.</li><li>For children, use spoon/syringe every few minutes.</li><li>Continue breastfeeding if applicable.</li><li>Resume normal diet once rehydrated. Avoid sugary drinks.</li></ol></div><div class="green-box"><strong>Homemade ORS:</strong><br>1 litre clean water + 6 tsp sugar + \u00BD tsp salt.<br>Mix. Drink within 24 hours.</div><div class="warning-box"><strong>Hospital if:</strong> Can\'t keep fluids down, no urine 8+ hours, severe signs, infant/elderly, bloody diarrhoea, high fever.</div>';}},
+{id:'fever',title:'Fever',desc:'When to treat, when to worry, cooling methods',icon:'\uD83E\uDD12',iconBg:'var(--accent-amber-light)',cat:'illness',keywords:'fever temperature hot child sick paracetamol ibuprofen thermometer',
+content:function(){var a=getAmb();return '<div class="info-box"><strong>Normal:</strong> 36.5-37.5\u00B0C. Fever = 38\u00B0C+. It\'s the body\'s response to infection, not usually dangerous itself.</div><div class="detail-section"><div class="detail-section-title">Management</div><ol class="step-list"><li><strong>Treat discomfort, not the number.</strong></li><li><strong>Paracetamol or ibuprofen</strong> if uncomfortable.</li><li><strong>Fluids</strong> frequently.</li><li><strong>Dress lightly.</strong></li></ol></div><div class="warning-box"><strong>Seek help if:</strong><br>\u2022 Infant under 3 months with any fever<br>\u2022 Child under 5 with 39\u00B0C+ not responding to medication<br>\u2022 Fever 3+ days<br>\u2022 Stiff neck, non-blanching rash, confusion<br>\u2022 Difficulty breathing</div><div class="info-box"><strong>Febrile seizures (6m-5y):</strong> Place on side. Don\'t put anything in mouth. Time it. Call '+a+' if 5+ minutes.</div>';}},
+{id:'medication-dosing',title:'Medication Dosing',desc:'Paracetamol and ibuprofen by weight and age',icon:'\uD83D\uDC8A',iconBg:'var(--accent-green-light)',cat:'medication',keywords:'paracetamol ibuprofen dose dosage weight child adult medicine tylenol advil acetaminophen',
+content:function(){return '<div class="disclaimer"><strong>\u26A0 Always use weight-based dosing.</strong> Check concentration on your product label.</div><div class="dose-calc"><label>Child\'s weight (kg)</label><input type="number" id="childWeight" placeholder="e.g. 20" min="3" max="80" inputmode="decimal" oninput="calcDose()"><div id="doseResults" style="display:none;"><div class="dose-result"><div style="font-weight:700;margin-bottom:8px;font-size:15px;">Paracetamol (15 mg/kg)</div><div class="dl"><span class="dlb">Single dose</span><span class="dlv" id="paraDose">-</span></div><div class="dl"><span class="dlb">Liquid 120mg/5ml</span><span class="dlv" id="paraLiquid120">-</span></div><div class="dl"><span class="dlb">Liquid 250mg/5ml</span><span class="dlv" id="paraLiquid250">-</span></div><div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Every 4-6h. Max 4 doses/24h.</div></div><div style="height:12px;"></div><div class="dose-result"><div style="font-weight:700;margin-bottom:8px;font-size:15px;">Ibuprofen (7.5 mg/kg)</div><div class="dl"><span class="dlb">Single dose</span><span class="dlv" id="ibuDose">-</span></div><div class="dl"><span class="dlb">Liquid 100mg/5ml</span><span class="dlv" id="ibuLiquid">-</span></div><div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Every 6-8h. Max 3 doses/24h. Not under 6 months.</div></div></div></div><div class="detail-section"><div class="detail-section-title">Adult doses</div><div class="info-box"><strong>Paracetamol:</strong> 500-1000mg every 4-6h. Max 4g/24h.<br><br><strong>Ibuprofen:</strong> 200-400mg every 6-8h with food. Max 1200mg/24h OTC.</div></div><div class="warning-box"><strong>Safety:</strong><br>\u2022 No aspirin for children under 16<br>\u2022 No ibuprofen under 6 months<br>\u2022 Ibuprofen with food<br>\u2022 Paracetamol overdose = liver damage<br>\u2022 Check cold/flu products for hidden paracetamol</div>';}},
+{id:'diarrhoea-vomiting',title:'Diarrhoea and Vomiting',desc:'Fluid replacement, diet, when to worry',icon:'\uD83E\uDD22',iconBg:'var(--accent-amber-light)',cat:'illness',keywords:'diarrhoea vomiting stomach bug food poisoning gastro sick',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">Management</div><ol class="step-list"><li><strong>Replace fluids.</strong> ORS best. Small frequent sips.</li><li>After vomiting, wait 15-30 min before retrying fluids.</li><li><strong>Resume eating</strong> when able. Rice, toast, bananas, soup.</li><li><strong>Loperamide</strong>: Adults only. Not for children.</li><li><strong>Zinc</strong> shortens diarrhoea in children (WHO).</li></ol></div><div class="warning-box"><strong>Seek help if:</strong><br>\u2022 Blood in vomit or stool<br>\u2022 Can\'t keep fluids down 12h+ (adult), 6h+ (child)<br>\u2022 Severe dehydration signs<br>\u2022 High fever with diarrhoea<br>\u2022 7+ days duration<br>\u2022 Infant under 6 months</div>';}},
+{id:'sprains',title:'Sprains and Strains',desc:'PRICE method for soft tissue injuries',icon:'\uD83E\uDDB6',iconBg:'var(--accent-blue-light)',cat:'injuries',keywords:'sprain strain ankle knee twist swelling rice price',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">PRICE method</div><ol class="step-list"><li><strong>Protect</strong> from further damage.</li><li><strong>Rest</strong> 48-72 hours.</li><li><strong>Ice</strong> 15-20 min every 2-3h, wrapped in cloth.</li><li><strong>Compress</strong> with elastic bandage. Not too tight.</li><li><strong>Elevate</strong> above heart level.</li></ol></div><div class="info-box"><strong>Ibuprofen</strong> preferred (anti-inflammatory). With food.</div><div class="warning-box"><strong>Hospital if:</strong> Snap/pop at time of injury, can\'t bear weight, deformity, numbness, no improvement after 3-5 days.</div>';}},
+{id:'head-injury',title:'Head Injury',desc:'What to watch for, when to go to hospital',icon:'\uD83E\uDD15',iconBg:'var(--accent-light)',cat:'injuries',keywords:'head injury concussion bump fall child',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">After a head bump</div><ol class="step-list"><li><strong>Cold compress</strong> 15-20 minutes.</li><li><strong>Observe 2-4 hours.</strong></li><li><strong>Paracetamol</strong> for headache. NOT ibuprofen/aspirin (blood thinning).</li><li><strong>Rest</strong> from activity and screens 24-48h.</li></ol></div><div class="warning-box"><strong>Hospital immediately if:</strong><br>\u2022 Loss of consciousness<br>\u2022 Repeated vomiting<br>\u2022 Seizures<br>\u2022 Worsening headache<br>\u2022 Confusion, slurred speech<br>\u2022 Unequal pupils<br>\u2022 Fluid from nose/ears<br>\u2022 Children: persistent crying, won\'t eat/drink</div>';}},
+{id:'drowning',title:'Drowning / Near-Drowning',desc:'Rescue, CPR, secondary drowning',icon:'\uD83C\uDF0A',iconBg:'var(--accent-blue-light)',cat:'emergency',keywords:'drowning water pool sea swimming rescue',
+content:function(){var a=getAmb();return '<div class="warning-box"><strong>Don\'t enter water unless safe.</strong> Reach with a pole, throw rope/floatation.</div><div class="detail-section"><div class="detail-section-title">Once out</div><ol class="step-list"><li><strong>Call '+a+'.</strong></li><li>Not breathing? CPR. <strong>Start with 5 rescue breaths</strong>, then 30:2.</li><li>Possible spinal injury? Support head/neck in line.</li><li>Breathing? Recovery position, monitor.</li><li>Remove wet clothing, keep warm.</li></ol></div><div class="info-box"><strong>Secondary drowning:</strong> Watch 24h for persistent cough, breathing difficulty, extreme tiredness. Hospital if any appear.</div>';}},
+{id:'poisoning',title:'Poisoning / Ingestion',desc:'What to do if someone swallows something harmful',icon:'\u2620\uFE0F',iconBg:'var(--accent-light)',cat:'emergency',keywords:'poison ingestion swallow chemical cleaning medicine overdose child',
+content:function(){var p=getPoison();var a=getAmb();return '<div class="warning-box"><strong>Call Poison Control: '+p.n+'</strong><br>'+p.t+'</div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Do NOT induce vomiting</strong> unless told to.</li><li>Identify <strong>what, how much, when</strong>. Keep container.</li><li>Skin/eyes? Flush with water 20+ minutes.</li><li>Unconscious? Recovery position, call '+a+'.</li><li>Seizure? Protect from injury, don\'t restrain.</li></ol></div>';}},
+{id:'recovery-position',title:'Recovery Position',desc:'How to place an unconscious breathing person',icon:'\uD83D\uDECF\uFE0F',iconBg:'var(--accent-green-light)',cat:'technique',keywords:'recovery position unconscious breathing side',
+content:function(){return '<div class="info-box"><strong>Use when:</strong> Unconscious but breathing, no suspected spinal injury.</div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li>Kneel beside. Both legs straight.</li><li>Near arm at right angle to body, palm up.</li><li>Far arm across chest, hold back of hand against near cheek.</li><li>Pull far knee up, foot flat on ground.</li><li>Roll toward you using raised knee. Keep hand against cheek.</li><li>Adjust top leg: hip and knee at right angles.</li><li>Tilt head back gently for airway.</li><li>Monitor breathing. Ready to start CPR if it stops.</li></ol></div><div class="green-box"><strong>Final position check:</strong> They should be on their side. Top leg bent forward for stability. Lower arm out in front to stop them rolling onto their face. Hand tucked under cheek keeps airway angled open. Mouth should be pointing downward so fluid can drain.</div>';}},
+{id:'nosebleed',title:'Nosebleed',desc:'How to stop a nosebleed properly',icon:'\uD83D\uDC43',iconBg:'var(--accent-light)',cat:'injuries',keywords:'nosebleed nose bleed blood',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Sit upright, lean forward.</strong> Not back.</li><li><strong>Pinch soft part</strong> of nose firmly.</li><li><strong>Hold 10-15 minutes.</strong> Don\'t release to check.</li><li>Breathe through mouth.</li><li>If still bleeding, pinch 10 more minutes.</li></ol></div><div class="warning-box"><strong>Seek help if:</strong> 30+ minutes despite pressure, very heavy, follows head injury, on blood thinners.</div>';}},
+{id:'eye-injury',title:'Eye Injury',desc:'Chemical splash, foreign object, trauma',icon:'\uD83D\uDC41\uFE0F',iconBg:'var(--accent-blue-light)',cat:'injuries',keywords:'eye injury chemical splash object pain vision',
+content:function(){return '<div class="detail-section"><div class="detail-section-title">Chemical splash</div><ol class="step-list"><li><strong>Flush 20+ minutes</strong> under running water. Hold eye open.</li><li>Remove contacts.</li><li><strong>Hospital.</strong> Bring container.</li></ol></div><div class="detail-section"><div class="detail-section-title">Foreign object</div><ol class="step-list"><li><strong>Don\'t rub.</strong></li><li>Blink or flush with water.</li><li>If on the white, try lifting with damp cloth corner.</li><li><strong>Embedded or on coloured part? Cover both eyes, hospital.</strong></li></ol></div>';}},
+{id:'tooth-injury',title:'Knocked-Out Tooth',desc:'How to save a tooth and get to a dentist',icon:'\uD83E\uDDB7',iconBg:'var(--accent-green-light)',cat:'injuries',keywords:'tooth dental knocked out broken',
+content:function(){return '<div class="info-box"><strong>Permanent tooth can be saved if re-implanted within 30-60 min.</strong> Baby teeth: do NOT re-implant.</div><div class="detail-section"><div class="detail-section-title">Steps</div><ol class="step-list"><li><strong>Find tooth.</strong> Hold by crown only.</li><li>Rinse briefly with milk or saline. Don\'t scrub.</li><li><strong>Try to re-insert</strong> into socket. Bite on cloth.</li><li>Can\'t re-insert? Store in <strong>milk</strong>, saliva, or saline.</li><li><strong>Dentist within 30 minutes.</strong></li></ol></div>';}}
+];
+
+var CATEGORIES=[{id:'all',label:'All',icon:'\uD83D\uDCCB'},{id:'emergency',label:'Emergency',icon:'\uD83D\uDEA8'},{id:'injuries',label:'Injuries',icon:'\uD83E\uDE79'},{id:'illness',label:'Illness',icon:'\uD83E\uDD12'},{id:'environment',label:'Environment',icon:'\uD83C\uDF3F'},{id:'medication',label:'Medication',icon:'\uD83D\uDC8A'},{id:'technique',label:'Technique',icon:'\uD83D\uDEE0\uFE0F'}];
+
+function initTheme(){var s=localStorage.getItem(TK);if(s==='dark'){document.documentElement.classList.remove('light');document.documentElement.classList.add('dark');document.getElementById('theme-color-meta').content='#1a1a1a';document.getElementById('themeToggle').textContent='\u2600\uFE0F';}}
+document.getElementById('themeToggle').addEventListener('click',function(){var d=document.documentElement.classList.contains('dark');if(d){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');document.getElementById('theme-color-meta').content='#ffffff';this.textContent='\uD83C\uDF19';localStorage.setItem(TK,'light');}else{document.documentElement.classList.remove('light');document.documentElement.classList.add('dark');document.getElementById('theme-color-meta').content='#1a1a1a';this.textContent='\u2600\uFE0F';localStorage.setItem(TK,'dark');}});
+
+function renderCategories(){var el=document.getElementById('catTabs');el.innerHTML=CATEGORIES.map(function(c){return '<button class="cat-tab'+(c.id===currentCat?' active':'')+'" data-cat="'+c.id+'">'+c.icon+' '+c.label+'</button>';}).join('');el.querySelectorAll('.cat-tab').forEach(function(b){b.addEventListener('click',function(){currentCat=this.dataset.cat;renderCategories();renderTopics();});});}
+function renderTopics(){var el=document.getElementById('topicList');var s=currentSearch.toLowerCase().trim();var f=TOPICS.filter(function(t){if(t.id==='emergency-numbers')return false;var cm=currentCat==='all'||t.cat===currentCat;var sm=!s||t.title.toLowerCase().indexOf(s)!==-1||t.desc.toLowerCase().indexOf(s)!==-1||t.keywords.indexOf(s)!==-1;return cm&&sm;});if(!f.length){el.innerHTML='<div class="no-results">No topics found.</div>';return;}el.innerHTML=f.map(function(t){return '<div class="topic-card" onclick="showDetail(\''+t.id+'\')"><div class="topic-icon" style="background:'+t.iconBg+'">'+t.icon+'</div><div class="ti"><div class="tt">'+t.title+'</div><div class="td">'+t.desc+'</div></div><div class="ta">\u203A</div></div>';}).join('');}
+function showDetail(id){var t=TOPICS.find(function(x){return x.id===id;});if(!t)return;document.getElementById('homeView').style.display='none';document.getElementById('kinFooter').style.display='none';document.getElementById('detailView').classList.add('active');document.getElementById('detailContent').innerHTML='<div class="detail-header"><div class="topic-icon" style="background:'+t.iconBg+'">'+t.icon+'</div><h2>'+t.title+'</h2></div>'+t.content();window.scrollTo(0,0);}
+function goHome(){document.getElementById('detailView').classList.remove('active');document.getElementById('homeView').style.display='block';document.getElementById('kinFooter').style.display='block';}
+function calcDose(){var w=parseFloat(document.getElementById('childWeight').value);var r=document.getElementById('doseResults');if(!w||w<3||w>80){r.style.display='none';return;}r.style.display='block';var p=Math.min(Math.round(w*15),1000);document.getElementById('paraDose').textContent=p+' mg';document.getElementById('paraLiquid120').textContent=(p/120*5).toFixed(1)+' ml';document.getElementById('paraLiquid250').textContent=(p/250*5).toFixed(1)+' ml';var i=Math.min(Math.round(w*7.5),400);document.getElementById('ibuDose').textContent=i+' mg';document.getElementById('ibuLiquid').textContent=(i/100*5).toFixed(1)+' ml';}
+document.getElementById('searchInput').addEventListener('input',function(){currentSearch=this.value;renderTopics();});
+
+function openBugReport(){document.getElementById('bugOverlay').classList.add('active');document.getElementById('bugSheetTitle').textContent='Report a bug';document.getElementById('bugDesc').placeholder='What happened?';}
+function closeBugReport(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('bugOverlay').classList.remove('active');}
+function submitBugReport(){var t=document.getElementById('bugType').value;var d=document.getElementById('bugDesc').value.trim();var n=document.getElementById('bugName').value.trim();if(!d){showToast('Please add a description');return;}fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({form_type:'bug_report',subject:'KIN-040 First Aid Guide',app:'KIN-040',type:t,description:d,name:n||'Anonymous'})});document.getElementById('bugDesc').value='';document.getElementById('bugName').value='';closeBugReport();showToast(t==='Country request'?'Country suggestion sent. Thank you!':'Report sent. Thank you!');}
+function showToast(m){var e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2200);}
+
+initTheme();
+if(currentRegion&&ALL_REGIONS[currentRegion]){document.getElementById('regionOverlay').classList.add('hidden');updateRegionUI();}else{currentRegion='th';renderRegionPicker();}
+renderCategories();renderTopics();
+
+(function(){var c=document.createElement('canvas');c.width=180;c.height=180;var x=c.getContext('2d');x.fillStyle='#c23616';x.beginPath();x.roundRect(0,0,180,180,36);x.fill();x.font='80px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('\uD83C\uDFE5',90,95);var l=document.getElementById('apple-touch-icon');if(l)l.href=c.toDataURL('image/png');})();
+(function(){var m={name:'First Aid Guide',short_name:'First Aid',start_url:'.',display:'standalone',background_color:'#ffffff',theme_color:'#c23616'};var b=new Blob([JSON.stringify(m)],{type:'application/json'});var l=document.getElementById('manifest-link');if(l)l.href=URL.createObjectURL(b);})();
+
+if('serviceWorker' in navigator){var SW_SRC='var CACHE="kin040-v1",URLS=[location.href.split("?")[0]];self.addEventListener("install",function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(URLS);}));self.skipWaiting();});self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));}));self.clients.claim();});self.addEventListener("fetch",function(e){if(e.request.method!=="GET")return;e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request);}));});';var b=new Blob([SW_SRC],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(b),{scope:'./'}).catch(function(){});}
+</script>
+
+</body>
+</html>
