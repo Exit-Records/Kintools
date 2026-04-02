@@ -20,9 +20,9 @@ These are not aspirational guidelines. They are entry requirements.
 
 **External resources policy:** Fonts, audio libraries, and open frameworks are permitted if they do not track users. Google Fonts — fine. An analytics script — not fine. The test: does this resource work without knowing anything about the person using it?
 
-**Current tools: KIN-001 through KIN-039 (39 tools).**
+**Current tools: KIN-001 through KIN-040 (40 tools).**
 
-Latest additions: KIN-037 Unclaimed · KIN-038 Wets Go! · KIN-039 Is This Real? (consumer reality index)
+Latest additions: KIN-037 Unclaimed · KIN-038 Wets Go! · KIN-039 Is This Real? · KIN-040 First Aid Guide
 
 ---
 

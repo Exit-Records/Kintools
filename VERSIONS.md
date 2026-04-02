@@ -1,9 +1,9 @@
 # Kin Tools — Version Manifest
 
-Canonical reference for all 39 tools in the Kin ecosystem.  
+Canonical reference for all 40 tools in the Kin ecosystem.  
 All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
-**Last updated:** 2026-04-02  
+**Last updated:** 2026-04-02 (KIN-040 added)  
 **Stress-test phase:** in progress — do not push until all 35 checked.
 
 ---
@@ -62,6 +62,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-037 | Unclaimed | v1.0 | Darren | unclaimed.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-038 | Wets Go! | v1.0 | Darren | wetsgo.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-039 | Is This Real? | v1.1 | Darren | isthisreal.kintools.net | 🔄 | New — consumer reality index, 30+ entries; CSS en-dash bug fixed; Google Fonts removed; PWA manifest + SW + ATI added; full OG block |
+| KIN-040 | First Aid Guide | v1.0 | Darren | firstaidguide.kintools.net | 🔄 | New — step-by-step emergency guides, 45 country numbers, weight-based medication dosing; curly-quote bug fixed; SW + ATI + full OG block added |
 
 ---
 
