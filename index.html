@@ -61,6 +61,7 @@
     --hb-036: #1a0a18;
     --hb-037: #0a1525;
     --hb-038: #0a2218;
+    --hb-039: #5A1A0A;
   }
 
   body {
@@ -337,10 +338,11 @@
   }
 
   .release-replaces span {
-    text-decoration: line-through;
     opacity: 0.7;
     margin-left: 2px;
   }
+
+  .release-creator { display: none; }
 
   /* ---- VERSION BADGE + POPOVER ---- */
   .ver-badge {
@@ -764,7 +766,7 @@
 
 <div class="catalog-header">
   <h2>Catalog</h2>
-  <span class="catalog-count">33 tools</span>
+  <span class="catalog-count">39 tools</span>
 </div>
 
 <div id="filter-bar" class="filter-bar">
@@ -786,7 +788,7 @@
     </div>
     <div class="release-info">
       <div class="release-name">Ukulele Tuner</div>
-      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"28 Mar 2026","note":"Initial quality pass: viewport fix, PWA icons, manifest improvements, theme persistence, bug report added"},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
       <div class="release-creator">by Maya</div>
       <div class="release-desc">Tune your ukulele using your phone's microphone. Standard and alternate tunings. Shows you which way to turn the peg. That's it.</div>
       <div class="release-replaces">Replaces <span>GuitarTuna, Fender Tune</span></div>
@@ -907,7 +909,7 @@
       </div>
       <div class="release-info">
         <div class="release-name">Ambient Mixer</div>
-      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+        <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"01 Apr 2026","note":"Fixed offline loading (SW now caches absolute URL); audio properly resumes after background on iOS; added silent-switch hint"},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
         <div class="release-creator">by Darren</div>
         <div class="release-desc">Rain, wind, waves, fire, white noise and pink noise — layer and mix them however you like. Sleep timer included. Save presets or share a mix with someone.</div>
         <div class="release-replaces">Replaces <span>Noisli, A-Soft Murmur</span></div>
@@ -954,7 +956,7 @@
       </div>
       <div class="release-info">
         <div class="release-name">Jet Lag Planner</div>
-      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.1</div>
+        <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"28 Mar 2026","note":"Added bug report button and storage info panel"},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
         <div class="release-creator">by Darren</div>
         <div class="release-desc">Enter where you're flying from and to, get a plan to reset your body clock. When to seek light, when to sleep, when to expect the worst. Works offline.</div>
         <div class="release-replaces">Replaces <span>Timeshifter, Jet Lag Rooster</span></div>
@@ -1032,7 +1034,7 @@
     </div>
     <div class="release-info">
       <div class="release-name">Random Name Picker</div>
-      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.1</div>
+      <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"28 Mar 2026","note":"Security fix: XSS in name rendering; theme key migrated to kin012-theme; storage info panel; PWA manifest improvements; Google Fonts removed"},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
       <div class="release-creator">by Darren</div>
       <div class="release-desc">Paste a list, pick one or more at random. Save class lists, mark who's absent, split into teams. Keeps a history so nobody gets picked twice. Good for classrooms, PE lessons, standups, raffles — anything that needs to be fair.</div>
       <div class="release-replaces">Replaces <span>Wheel of Names, random.org</span></div>
@@ -1081,7 +1083,7 @@
     </div>
     <div class="release-info">
       <div class="release-name">Breathing Exercise</div>
-      <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
+      <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"28 Mar 2026","note":"Theme and streak keys migrated to kin014-theme/kin014-streak; viewport fix; bug report added"},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
       <div class="release-creator">by Darren</div>
       <div class="release-desc">Guided breathing exercises — box breathing, 4-7-8, ADHD reset, wind-down for sleep. Visual guide, audio cues, optional voice prompts. Fully offline, no account.</div>
       <div class="release-replaces">Replaces <span>Calm, Headspace, breathing apps with accounts</span></div>
@@ -1635,8 +1637,30 @@
           <div style="font-size:10px;opacity:0.45;letter-spacing:0.06em;margin-top:-4px">v1.0</div>
           <div class="release-creator">by Darren</div>
           <div class="release-desc">Build bathroom routines and track hydration for your family. Set timed reminders, log visits, spot patterns, and generate a printable plan for school. Age-adapted child mode makes it theirs, not yours. Nothing leaves your device.</div>
-          <div class="release-replaces">Replaces <span>subscription toilet trackers that charge monthly for a timer and a chart</span></div>
+          <div class="release-replaces">Replaces <span>apps that charge you to set a timer and track a chart</span></div>
           <span class="demo-pill" onclick="event.preventDefault();event.stopPropagation();window.open('https://wetsgo.kintools.net/?demo=true','_blank')">See it in action →</span>
+        </div>
+      </a>
+
+      <!-- KIN-039: Is This Real? -->
+      <a href="https://isthisreal.kintools.net" target="_blank" rel="noopener" class="release" data-category="Education">
+        <div class="release-cover">
+          <div class="cover-bg" style="background: linear-gradient(145deg, var(--hb-039), #1A0806);"></div>
+          <span class="cover-category">Education</span>
+          <span class="cover-number">KIN-039</span>
+          <div class="cover-icon">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <text x="26" y="40" font-size="44" font-family="Georgia,serif" font-weight="700" text-anchor="middle" fill="white" opacity="0.9">?</text>
+            </svg>
+          </div>
+          <span class="kin-mark">Kin</span>
+        </div>
+        <div class="release-info">
+          <div class="release-name">Is This Real?</div>
+          <div class="ver-badge has-log" data-changes='[{"v":"1.1","date":"02 Apr 2026","note":"Initial release — 30+ entries covering food fraud, fashion, health, luxury, technology, and finance. Full PWA support, offline caching, dark mode."},{"v":"1.0","date":"Initial release","note":"First release"}]'>v1.1</div>
+          <div class="release-creator">by Darren</div>
+          <div class="release-desc">Look up any product or practice and find out what is real. Food, fashion, health, software, finance. Each entry tells you the deception, how to spot it, and what to trust instead.</div>
+          <div class="release-replaces">Replaces <span>one place for what used to take hours of searching</span></div>
         </div>
       </a>
 

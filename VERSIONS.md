@@ -1,9 +1,9 @@
 # Kin Tools — Version Manifest
 
-Canonical reference for all 38 tools in the Kin ecosystem.  
+Canonical reference for all 39 tools in the Kin ecosystem.  
 All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
-**Last updated:** 2026-03-30  
+**Last updated:** 2026-04-02  
 **Stress-test phase:** in progress — do not push until all 35 checked.
 
 ---
@@ -29,9 +29,9 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-004 | Colour Picker | v2.0 | dBridge | colour-picker.kintools.net | ✅ | v2.0 — full rebuild as single-file HTML; colour wheel, harmony palettes (complementary/analogous/triadic), WCAG accessibility checker, colour vision simulation (4 modes), shades & tints, copy as HEX/RGB/HSL/RGBA/HSLA/CSS var, dark mode, recent colours |
 | KIN-005 | QR Builder | v2.0 | Darren | qr.kintools.net | ✅ | v2.0 — full rebuild as native HTML; colour picker, SVG export, WiFi/email/contact/phone modes, inline SW+manifest |
 | KIN-006 | Classroom Timer | v1.0 | Darren | classroom-timer.kintools.net | ✅ | 3 issues fixed |
-| KIN-007 | Ambient Mixer | v1.0 | Darren | ambient.kintools.net | ✅ | 5 issues fixed; ScriptProcessorNode noted for future major update |
+| KIN-007 | Ambient Mixer | v1.1 | Darren | ambient.kintools.net | ✅ | v1.1 — Fixed offline loading (SW absolute URL); audio properly awaited on iOS resume + interrupted state; silent-switch hint added |
 | KIN-008 | Flashcards | v1.0 | dBridge | flashcards.kintools.net | ✅ | 6 issues fixed; custom confirm modal noted (low priority) |
-| KIN-009 | Jet Lag Planner | v1.0 | Darren | jetlag.kintools.net | ✅ | 2 fixes: bug report + header storage ⓘ added |
+| KIN-009 | Jet Lag Planner | v1.1 | Darren | jetlag.kintools.net | ✅ | v1.1 — Bug report button + storage ⓘ info panel added |
 | KIN-010 | Audio Calculators | v1.0 | Darren | audio-calc.kintools.net | ✅ | 5 fixes: localStorage key bug, bug report, theme-color, OG, semitone text |
 | KIN-011 | Unit Price Calc | v1.0 | Darren | unit-price.kintools.net | ✅ | 5 fixes: theme persistence, bug report, theme-color, OG, footer+Google Fonts; pack regex already correct |
 | KIN-012 | Name Picker | v1.1 | Darren | name-picker.kintools.net | ✅ | 7 fixes: XSS in renderTeams+renderHistory (esc() added), theme persistence (kin012-theme), ⓘ storage popover, theme-color default #FAFAF7, duplicate apple-mobile metas removed, manifest→Blob URL, Google Fonts removed |
@@ -61,6 +61,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-036 | Blood Pressure | v1.0 | Darren | bloodpressure.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-037 | Unclaimed | v1.0 | Darren | unclaimed.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-038 | Wets Go! | v1.0 | Darren | wetsgo.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
+| KIN-039 | Is This Real? | v1.1 | Darren | isthisreal.kintools.net | 🔄 | New — consumer reality index, 30+ entries; CSS en-dash bug fixed; Google Fonts removed; PWA manifest + SW + ATI added; full OG block |
 
 ---
 

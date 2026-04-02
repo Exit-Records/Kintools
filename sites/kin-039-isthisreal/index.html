@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Is This Real?">
+<meta name="theme-color" id="theme-color-meta" content="#F5F1EB">
+<title>KIN-039 — Is This Real? — Kin</title>
+<link rel="apple-touch-icon" id="apple-touch-icon" href="">
+<meta name="description" content="Consumer reality index. The information they rely on you not having. 30+ categories covering food fraud, fashion, health, luxury, technology, and finance.">
+<meta name="author" content="Kin Tools">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://isthisreal.kintools.net">
+<meta property="og:title" content="Is This Real? — Consumer Reality Index — Kin">
+<meta property="og:description" content="Consumer reality index. The information they rely on you not having.">
+<meta property="og:image" content="https://kintools.net/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Kin Tools">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Is This Real? — Consumer Reality Index — Kin">
+<meta name="twitter:description" content="Consumer reality index. The information they rely on you not having.">
+<meta name="twitter:image" content="https://kintools.net/og-image.png">
+<link rel="canonical" href="https://isthisreal.kintools.net">
+<link rel="manifest" id="manifest-link" href="">
+<style>
+*, *::before, *::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+:root {
+--bg: #F5F1EB;
+--bg-card: #FFFFFF;
+--bg-card-hover: #FAF7F2;
+--text: #1A1714;
+--text-secondary: #5E564A;
+--text-tertiary: #8A8078;
+--accent: #B8301A;
+--accent-hover: #9A2814;
+--accent-soft: #F2DDD6;
+--border: #DDD6CC;
+--tag-bg: #EDE8E0;
+--tag-text: #5E564A;
+--tag-active-bg: #B8301A;
+--tag-active-text: #FFFFFF;
+--real-bg: #DFF0D8;
+--real-text: #2B6318;
+--fake-bg: #FCDCD4;
+--fake-text: #8E2710;
+--health-bg: #FFF3CD;
+--health-text: #856404;
+--env-bg: #D1ECF1;
+--env-text: #0C5460;
+--search-bg: #FFFFFF;
+--overlay-bg: rgba(245,241,235,0.98);
+--shadow: 0 1px 3px rgba(0,0,0,0.05);
+--shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+--radius: 10px;
+--radius-sm: 6px;
+}
+
+html.dark {
+--bg: #121010 !important;
+--bg-card: #1C1918 !important;
+--bg-card-hover: #262220 !important;
+--text: #E4DED4 !important;
+--text-secondary: #9A9088 !important;
+--text-tertiary: #6A6058 !important;
+--accent: #D84A2A !important;
+--accent-hover: #E85A3A !important;
+--accent-soft: #2E1C16 !important;
+--border: #2A2624 !important;
+--tag-bg: #262220 !important;
+--tag-text: #9A9088 !important;
+--tag-active-bg: #D84A2A !important;
+--tag-active-text: #FFFFFF !important;
+--real-bg: #1A2A14 !important;
+--real-text: #72B862 !important;
+--fake-bg: #2C1812 !important;
+--fake-text: #E07050 !important;
+--health-bg: #2A2410 !important;
+--health-text: #D4B44A !important;
+--env-bg: #0E2226 !important;
+--env-text: #5AC0D0 !important;
+--search-bg: #1C1918 !important;
+--overlay-bg: rgba(18,16,16,0.98) !important;
+--shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+--shadow-lg: 0 12px 40px rgba(0,0,0,0.4) !important;
+}
+
+body {
+font-family: ‘DM Sans’, -apple-system, sans-serif;
+background: var(--bg);
+color: var(--text);
+line-height: 1.65;
+min-height: 100vh;
+min-height: 100dvh;
+-webkit-font-smoothing: antialiased;
+padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* HEADER */
+.header {
+padding: 40px 20px 20px;
+text-align: center;
+max-width: 680px;
+margin: 0 auto;
+}
+
+.header h1 {
+font-family: ‘Libre Baskerville’, Georgia, serif;
+font-size: clamp(28px, 6vw, 42px);
+font-weight: 700;
+letter-spacing: -0.5px;
+line-height: 1.15;
+margin-bottom: 8px;
+color: var(--text);
+}
+
+.header h1 span {
+color: var(--accent);
+}
+
+.header .subtitle {
+font-size: 15px;
+color: var(--text-secondary);
+font-style: italic;
+font-family: ‘Libre Baskerville’, Georgia, serif;
+}
+
+.header .count {
+margin-top: 12px;
+font-size: 13px;
+color: var(--text-tertiary);
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+.header .suggest-link {
+margin-top: 6px;
+font-size: 13px;
+}
+
+.header .suggest-link a {
+color: var(--accent);
+text-decoration: none;
+border-bottom: 1px solid transparent;
+transition: border-color 0.15s;
+}
+
+.header .suggest-link a:hover {
+border-bottom-color: var(--accent);
+}
+
+/* THEME TOGGLE */
+.theme-toggle {
+position: fixed;
+top: calc(env(safe-area-inset-top, 0px) + 12px);
+right: calc(env(safe-area-inset-right, 0px) + 14px);
+z-index: 100;
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: 50%;
+width: 44px;
+height: 44px;
+min-height: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 18px;
+box-shadow: var(--shadow);
+transition: background 0.2s;
+-webkit-appearance: none;
+}
+
+.theme-toggle:hover { background: var(--bg-card-hover); }
+
+/* SEARCH */
+.search-wrap {
+max-width: 560px;
+margin: 20px auto 8px;
+padding: 0 20px;
+}
+
+.search-box {
+display: flex;
+align-items: center;
+background: var(--search-bg);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 0 16px;
+box-shadow: var(--shadow);
+transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box:focus-within {
+border-color: var(--accent);
+box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-box svg {
+flex-shrink: 0;
+color: var(--text-tertiary);
+}
+
+.search-box input {
+flex: 1;
+border: none;
+background: transparent;
+padding: 14px 12px;
+font-size: 16px;
+font-family: ‘DM Sans’, sans-serif;
+color: var(--text);
+outline: none;
+-webkit-appearance: none;
+}
+
+.search-box input::placeholder { color: var(--text-tertiary); }
+
+.search-clear {
+background: none;
+border: none;
+color: var(--text-tertiary);
+cursor: pointer;
+padding: 8px;
+min-height: 44px;
+min-width: 44px;
+display: none;
+align-items: center;
+justify-content: center;
+font-size: 18px;
+}
+
+.search-clear.visible { display: flex; }
+
+/* FILTERS */
+.filters {
+max-width: 680px;
+margin: 12px auto 24px;
+padding: 0 20px;
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+justify-content: center;
+}
+
+.filter-tag {
+padding: 8px 16px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: 500;
+background: var(--tag-bg);
+color: var(--tag-text);
+border: 1px solid transparent;
+cursor: pointer;
+transition: all 0.15s;
+-webkit-appearance: none;
+min-height: 44px;
+display: flex;
+align-items: center;
+white-space: nowrap;
+}
+
+.filter-tag:hover { border-color: var(--border); }
+
+.filter-tag.active {
+background: var(--tag-active-bg);
+color: var(--tag-active-text);
+}
+
+/* CARDS */
+.cards {
+max-width: 680px;
+margin: 0 auto;
+padding: 0 20px 40px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.card {
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 20px;
+cursor: pointer;
+transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+box-shadow: var(--shadow);
+}
+
+.card:hover {
+background: var(--bg-card-hover);
+box-shadow: var(--shadow-lg);
+transform: translateY(-1px);
+}
+
+.card-top {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 12px;
+margin-bottom: 8px;
+}
+
+.card-icon {
+font-size: 28px;
+line-height: 1;
+flex-shrink: 0;
+}
+
+.card-tags {
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+}
+
+.card-tag {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+padding: 3px 8px;
+border-radius: 4px;
+}
+
+.card-tag.food { background: var(--fake-bg); color: var(--fake-text); }
+.card-tag.fashion { background: var(--accent-soft); color: var(--accent); }
+.card-tag.health { background: var(--health-bg); color: var(--health-text); }
+.card-tag.luxury { background: var(--tag-bg); color: var(--tag-text); }
+.card-tag.environment { background: var(--env-bg); color: var(--env-text); }
+.card-tag.household { background: var(--real-bg); color: var(--real-text); }
+.card-tag.technology { background: #E8E0F0; color: #5B3E8A; }
+.card-tag.software { background: #E0E8F0; color: #2C4A6E; }
+.card-tag.finance { background: #D6EAF8; color: #1A5276; }
+
+html.dark .card-tag.technology { background: #2A2040 !important; color: #B89EDE !important; }
+html.dark .card-tag.software { background: #1E2A3A !important; color: #8AB4D8 !important; }
+html.dark .card-tag.finance { background: #162A3A !important; color: #6AB0E0 !important; }
+
+.card h2 {
+font-family: ‘Libre Baskerville’, Georgia, serif;
+font-size: 19px;
+font-weight: 700;
+line-height: 1.3;
+margin-bottom: 6px;
+}
+
+.card .hook {
+font-size: 14px;
+color: var(--text-secondary);
+line-height: 1.5;
+}
+
+.card .tap-hint {
+margin-top: 12px;
+font-size: 12px;
+color: var(--text-tertiary);
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+/* NO RESULTS */
+.no-results {
+text-align: center;
+padding: 60px 20px;
+color: var(--text-tertiary);
+}
+
+.no-results h3 {
+font-family: ‘Libre Baskerville’, Georgia, serif;
+font-size: 20px;
+margin-bottom: 8px;
+color: var(--text-secondary);
+}
+
+/* DETAIL OVERLAY */
+.detail-overlay {
+position: fixed;
+inset: 0;
+background: var(--overlay-bg);
+z-index: 200;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s;
+}
+
+.detail-overlay.open {
+opacity: 1;
+pointer-events: auto;
+}
+
+.detail-close {
+position: fixed;
+top: calc(env(safe-area-inset-top, 0px) + 12px);
+right: calc(env(safe-area-inset-right, 0px) + 14px);
+z-index: 210;
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: 50%;
+width: 44px;
+height: 44px;
+min-height: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 20px;
+box-shadow: var(--shadow);
+-webkit-appearance: none;
+color: var(--text);
+}
+
+.detail-content {
+max-width: 640px;
+margin: 0 auto;
+padding: 60px 24px 80px;
+}
+
+.detail-icon {
+font-size: 48px;
+margin-bottom: 16px;
+}
+
+.detail-content h1 {
+font-family: ‘Libre Baskerville’, Georgia, serif;
+font-size: clamp(24px, 5vw, 34px);
+font-weight: 700;
+line-height: 1.2;
+margin-bottom: 12px;
+}
+
+.detail-hook {
+font-size: 17px;
+color: var(--text-secondary);
+font-style: italic;
+font-family: ‘Libre Baskerville’, Georgia, serif;
+margin-bottom: 32px;
+line-height: 1.6;
+}
+
+.detail-section {
+margin-bottom: 28px;
+}
+
+.detail-section h3 {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+font-weight: 500;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+color: var(--text-tertiary);
+margin-bottom: 10px;
+padding-bottom: 6px;
+border-bottom: 1px solid var(--border);
+}
+
+.detail-section p, .detail-section ul {
+font-size: 15px;
+line-height: 1.7;
+color: var(--text);
+}
+
+.detail-section ul {
+padding-left: 20px;
+}
+
+.detail-section li {
+margin-bottom: 6px;
+}
+
+.detail-section li::marker {
+color: var(--accent);
+}
+
+.info-box {
+padding: 16px 18px;
+border-radius: var(--radius-sm);
+margin: 12px 0;
+font-size: 14px;
+line-height: 1.6;
+}
+
+.info-box.real { background: var(--real-bg); color: var(--real-text); }
+.info-box.fake { background: var(--fake-bg); color: var(--fake-text); }
+.info-box.health { background: var(--health-bg); color: var(--health-text); }
+.info-box.env { background: var(--env-bg); color: var(--env-text); }
+
+.info-box strong { display: block; margin-bottom: 4px; }
+
+.detail-tags {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
+margin-bottom: 24px;
+}
+
+/* BACK TO TOP */
+.back-to-top {
+position: fixed;
+bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+right: calc(env(safe-area-inset-right, 0px) + 14px);
+z-index: 90;
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: 50%;
+width: 44px;
+height: 44px;
+min-height: 44px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+font-size: 18px;
+box-shadow: var(--shadow);
+color: var(--text-secondary);
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s, background 0.15s;
+-webkit-appearance: none;
+}
+
+.back-to-top.visible {
+opacity: 1;
+pointer-events: auto;
+}
+
+.back-to-top:hover { background: var(--bg-card-hover); }
+
+/* IN SHORT */
+.in-short {
+background: var(--tag-bg);
+border-left: 3px solid var(--accent);
+padding: 14px 16px;
+margin-bottom: 28px;
+border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+font-size: 15px;
+font-weight: 500;
+line-height: 1.5;
+color: var(--text);
+}
+
+/* SOURCES */
+.detail-sources {
+margin-top: 4px;
+}
+
+.detail-sources a {
+display: inline-block;
+color: var(--accent);
+font-size: 13px;
+text-decoration: none;
+border-bottom: 1px solid transparent;
+transition: border-color 0.15s;
+margin-right: 16px;
+margin-bottom: 6px;
+line-height: 1.8;
+}
+
+.detail-sources a:hover {
+border-bottom-color: var(--accent);
+}
+
+/* UPDATED DATE */
+.detail-updated {
+font-size: 12px;
+color: var(--text-tertiary);
+font-family: ‘JetBrains Mono’, monospace;
+margin-bottom: 24px;
+}
+
+/* SHARE BUTTON */
+.detail-share {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 10px 20px;
+background: var(--tag-bg);
+color: var(--text-secondary);
+border: 1px solid var(--border);
+border-radius: 20px;
+font-size: 13px;
+font-weight: 500;
+cursor: pointer;
+margin-top: 24px;
+min-height: 44px;
+font-family: ‘DM Sans’, sans-serif;
+-webkit-appearance: none;
+transition: background 0.15s;
+}
+
+.detail-share:hover { background: var(--bg-card-hover); }
+
+/* COLLECTIONS */
+.collections {
+max-width: 680px;
+margin: 0 auto 24px;
+padding: 0 20px;
+}
+
+.collections-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+color: var(--text-tertiary);
+margin-bottom: 10px;
+}
+
+.collections-row {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 8px;
+}
+
+@media (min-width: 540px) {
+.collections-row {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+
+.collection-chip {
+padding: 12px 14px;
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+cursor: pointer;
+transition: background 0.15s, border-color 0.15s;
+min-height: 44px;
+-webkit-appearance: none;
+text-align: left;
+}
+
+.collection-chip:hover {
+background: var(--bg-card-hover);
+border-color: var(--accent);
+}
+
+.collection-chip.active {
+border-color: var(--accent);
+background: var(--accent-soft);
+}
+
+.collection-chip-title {
+font-size: 13px;
+font-weight: 600;
+color: var(--text);
+line-height: 1.3;
+}
+
+.collection-chip-desc {
+font-size: 11px;
+color: var(--text-tertiary);
+margin-top: 3px;
+line-height: 1.3;
+}
+
+/* SUGGEST SECTION */
+.suggest-section {
+max-width: 680px;
+margin: 48px auto 0;
+padding: 0 20px;
+}
+
+.suggest-inner {
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 32px 24px;
+text-align: center;
+}
+
+.suggest-label {
+font-family: ‘JetBrains Mono’, monospace;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+color: var(--text-tertiary);
+margin-bottom: 8px;
+}
+
+.suggest-heading {
+font-family: ‘Libre Baskerville’, Georgia, serif;
+font-size: 20px;
+font-weight: 700;
+color: var(--text);
+margin-bottom: 10px;
+line-height: 1.3;
+}
+
+.suggest-body {
+font-size: 14px;
+color: var(--text-secondary);
+line-height: 1.6;
+max-width: 480px;
+margin: 0 auto 20px;
+}
+
+.suggest-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 12px 28px;
+background: var(--accent);
+color: #fff;
+border: none;
+border-radius: 24px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+min-height: 44px;
+transition: background 0.15s;
+-webkit-appearance: none;
+}
+
+.suggest-btn:hover { background: var(--accent-hover); }
+
+/* FOOTER */
+.footer {
+text-align: center;
+padding: 40px 20px 32px;
+border-top: 1px solid var(--border);
+max-width: 680px;
+margin: 0 auto;
+}
+
+.footer-row {
+font-size: 12px;
+color: var(--text-tertiary);
+margin-bottom: 6px;
+font-family: ‘JetBrains Mono’, monospace;
+}
+
+.footer-row:last-child { margin-bottom: 0; }
+
+.footer .verified {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+}
+
+.footer .verified svg {
+width: 14px;
+height: 14px;
+}
+
+.bug-btn {
+background: none;
+border: 1px solid var(--border);
+color: var(--text-tertiary);
+padding: 8px 16px;
+border-radius: 20px;
+font-size: 12px;
+cursor: pointer;
+margin-top: 8px;
+min-height: 44px;
+font-family: ‘DM Sans’, sans-serif;
+-webkit-appearance: none;
+}
+
+.bug-btn:hover { border-color: var(--text-tertiary); }
+
+/* BUG REPORT SHEET */
+.bug-sheet {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background: var(--bg-card);
+border-top: 1px solid var(--border);
+border-radius: 16px 16px 0 0;
+padding: 24px 20px calc(env(safe-area-inset-bottom, 16px) + 16px);
+z-index: 300;
+box-shadow: var(--shadow-lg);
+transform: translateY(100%);
+transition: transform 0.25s ease;
+}
+
+.bug-sheet.open { transform: translateY(0); }
+
+.bug-sheet h3 {
+font-family: ‘Libre Baskerville’, serif;
+font-size: 18px;
+margin-bottom: 16px;
+}
+
+.bug-sheet select,
+.bug-sheet textarea,
+.bug-sheet input[type=“text”] {
+width: 100%;
+padding: 12px;
+border: 1px solid var(--border);
+border-radius: var(--radius-sm);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+background: var(--bg);
+color: var(--text);
+margin-bottom: 12px;
+-webkit-appearance: none;
+}
+
+.bug-sheet textarea { min-height: 100px; resize: vertical; }
+
+.bug-sheet-actions {
+display: flex;
+gap: 10px;
+margin-top: 4px;
+}
+
+.bug-sheet-actions button {
+flex: 1;
+padding: 12px;
+border-radius: var(--radius-sm);
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+min-height: 44px;
+font-family: ‘DM Sans’, sans-serif;
+-webkit-appearance: none;
+border: none;
+}
+
+.bug-cancel {
+background: var(--tag-bg);
+color: var(--text);
+}
+
+.bug-send {
+background: var(--accent);
+color: #fff;
+}
+
+/* BACKDROP */
+.backdrop {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.3);
+z-index: 250;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s;
+}
+
+.backdrop.open {
+opacity: 1;
+pointer-events: auto;
+}
+
+/* TOAST */
+.toast {
+position: fixed;
+bottom: calc(env(safe-area-inset-bottom, 16px) + 20px);
+left: 50%;
+transform: translateX(-50%) translateY(80px);
+background: var(--text);
+color: var(--bg);
+padding: 12px 24px;
+border-radius: 24px;
+font-size: 14px;
+font-weight: 500;
+z-index: 400;
+opacity: 0;
+transition: transform 0.25s, opacity 0.25s;
+pointer-events: none;
+white-space: nowrap;
+}
+
+.toast.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+
+/* KIN CONFIRM */
+.kin-confirm-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.4);
+z-index: 500;
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s;
+padding: 20px;
+}
+
+.kin-confirm-overlay.open {
+opacity: 1;
+pointer-events: auto;
+}
+
+.kin-confirm-box {
+background: var(--bg-card);
+border-radius: var(--radius);
+padding: 24px;
+max-width: 340px;
+width: 100%;
+box-shadow: var(--shadow-lg);
+}
+
+.kin-confirm-box p {
+font-size: 15px;
+margin-bottom: 20px;
+line-height: 1.5;
+}
+
+.kin-confirm-actions {
+display: flex;
+gap: 10px;
+}
+
+.kin-confirm-actions button {
+flex: 1;
+padding: 12px;
+border-radius: var(--radius-sm);
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+min-height: 44px;
+font-family: ‘DM Sans’, sans-serif;
+-webkit-appearance: none;
+border: none;
+}
+
+.kin-confirm-cancel {
+background: var(--tag-bg);
+color: var(--text);
+}
+
+.kin-confirm-ok {
+background: #C0392B;
+color: #fff;
+}
+</style>
+
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+
+<header class="header">
+  <h1>Is This <span>Real</span>?</h1>
+  <p class="subtitle">The information they rely on you not having.</p>
+  <p class="count" id="entryCount"></p>
+  <p class="suggest-link"><a href="#" id="suggestLink">Know something missing? Suggest it.</a></p>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search categories..." autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="search-clear" id="searchClear" aria-label="Clear search">&times;</button>
+  </div>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="collections" id="collections"></div>
+<div class="cards" id="cards"></div>
+
+<div class="detail-overlay" id="detailOverlay">
+  <button class="detail-close" id="detailClose" aria-label="Close">&times;</button>
+  <div class="detail-content" id="detailContent"></div>
+</div>
+
+<div class="suggest-section">
+  <div class="suggest-inner">
+    <p class="suggest-label">This is a growing database.</p>
+    <h3 class="suggest-heading">Know something that should be here?</h3>
+    <p class="suggest-body">If there is a product, label, or industry practice where consumers are being misled, we want to know about it. Every entry in this index started as someone asking the question.</p>
+    <button class="suggest-btn" id="suggestBtn">Suggest a category</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-row">KIN-039 &middot; v1.1 &middot; Kin Tools &middot; by Darren</div>
+  <div class="footer-row">
+    <span class="verified">
+      Nothing stored, nothing sent
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><path d="M12 2l3.09 1.26L18.18 2l1.82 3.09L22 8.18l-1.26 3.09L22 14.36l-3.09 1.82-1.82 3.09-3.09-1.26L12 22l-3.09-1.26L5.82 22 4 18.91 2 14.82l1.26-3.09L2 8.64l3.09-1.82L6.91 3.73 10.91 2z"/></svg>
+    </span>
+  </div>
+  <div class="footer-row">
+    <button class="bug-btn" id="bugBtn">Report a bug</button>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="bug-sheet" id="bugSheet">
+  <h3 id="bugSheetTitle">Report</h3>
+  <select id="bugType">
+    <option value="Bug">Bug</option>
+    <option value="Suggestion">Suggestion</option>
+    <option value="Other">Other</option>
+  </select>
+  <textarea id="bugDesc" placeholder="What happened, or what would you add?"></textarea>
+  <input type="text" id="bugName" placeholder="Your name (optional)">
+  <div class="bug-sheet-actions">
+    <button class="bug-cancel" onclick="closeBugReport()">Cancel</button>
+    <button class="bug-send" onclick="sendBugReport()">Send</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="kin-confirm-overlay" id="kinConfirmOverlay">
+  <div class="kin-confirm-box">
+    <p id="kinConfirmMsg"></p>
+    <div class="kin-confirm-actions">
+      <button class="kin-confirm-cancel" id="kinConfirmCancel">Cancel</button>
+      <button class="kin-confirm-ok" id="kinConfirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var DATA = [
+  {
+    id: 'truffle-oil',
+    icon: '\u{1F344}',
+    title: 'Truffle Oil',
+    tags: ['food', 'luxury'],
+    hook: 'Almost none of it has ever been near a truffle.',
+    real: 'Genuine truffle oil is made by infusing high-quality olive oil with shavings of real black or white truffle (Tuber melanosporum or Tuber magnatum). It is expensive, perishable, and subtle. The flavour varies batch to batch because it comes from an actual organism.',
+    fake: 'The vast majority of "truffle oil" is olive oil with 2,4-dithiapentane, a synthetic compound that mimics one component of truffle aroma. It is manufactured in a lab, costs pennies, and delivers an exaggerated, one-dimensional flavour. This is the version used in virtually every restaurant and supermarket product labelled "truffle."',
+    howToTell: [
+      'Check the ingredients: if it lists "truffle aroma," "truffle flavouring," or "natural flavouring," it is synthetic.',
+      'Real truffle oil is sold in small, dark bottles and refrigerated. It costs upward of \u00a340-80 for a small bottle.',
+      'If the truffle flavour is intense, uniform, and overwhelming, it is almost certainly synthetic. Real truffle flavour is delicate.'
+    ],
+    bigPicture: 'The synthetic version became so ubiquitous that most people who think they know what truffle tastes like have never actually experienced it. The copy replaced the original in our collective reference point. This is the simulacra problem: the substitute becomes the standard.',
+    trustMarkers: 'Look for products listing "Tuber melanosporum" or "Tuber magnatum" in the ingredients, with truffle content as a measurable percentage. Avoid anything that simply says "truffle flavour."',
+    healthNote: '',
+    envNote: '',
+    inShort: 'If the ingredients say "truffle aroma" or "truffle flavouring," it has never been near a truffle.',
+    updated: 'April 2026',
+    sources: [{label:'New York Times: Truffle oil investigation',url:'https://www.nytimes.com/2007/05/16/dining/16truf.html'}]
+  },
+  {
+    id: 'wasabi',
+    icon: '\u{1F33F}',
+    title: 'Wasabi',
+    tags: ['food'],
+    hook: 'That green paste is horseradish with food colouring.',
+    real: 'True wasabi (Wasabia japonica) is a plant that grows in cold running streams, primarily in Japan. It is grated fresh on a sharkskin grater and oxidises within 15 minutes. The flavour is complex, slightly sweet, and clears the sinuses without the aggressive burn of horseradish.',
+    fake: 'What you get at almost every sushi restaurant outside Japan (and many inside it) is a paste made from horseradish, mustard powder, and green food dye (often E102 and E133). Some versions contain no wasabi plant material at all. Others include a trace amount so they can say "wasabi" on the label.',
+    howToTell: [
+      'If it came from a tube or was pre-made, it is almost certainly horseradish-based.',
+      'Real wasabi has a visibly coarser, less uniform texture. Fake wasabi is smooth and bright green.',
+      'Real wasabi costs roughly \u00a380-100 per pound of fresh rhizome. If the restaurant is not charging premium prices, it is not serving real wasabi.'
+    ],
+    bigPicture: 'Wasabi is one of the clearest examples of a total substitution. The fake is so dominant that it has become what people mean when they say "wasabi." The real thing is genuinely rare and expensive, which means the market chose deception over education.',
+    trustMarkers: 'Restaurants that serve real wasabi will tell you, and charge accordingly. If the menu does not specifically mention fresh-grated wasabi, assume it is horseradish.',
+    healthNote: 'The fake version is not harmful but artificial colourings E102 (tartrazine) and E133 are linked to hyperactivity in children and are subject to warning labels in the EU.',
+    envNote: '',
+    inShort: 'If it came from a tube, it is horseradish. Real wasabi is grated fresh and costs £80+ per pound.',
+    updated: 'April 2026',
+    sources: [{label:'Mashed: What is real wasabi (citing Washington Post)',url:'https://www.mashed.com/159196/what-is-real-wasabi-and-why-youve-probably-never-eaten-it/'}]
+  },
+  {
+    id: 'leather',
+    icon: '\u{1F45C}',
+    title: '"Genuine" Leather',
+    tags: ['fashion'],
+    hook: '"Genuine" is a legal floor, not a quality claim.',
+    real: 'Leather quality runs in a hierarchy: full-grain (the complete hide, strongest, develops patina), top-grain (sanded, more uniform), and then "genuine leather." Full-grain leather comes from the outermost layer of the hide and retains natural markings.',
+    fake: '"Genuine leather" is the industry\u2019s way of saying "this is technically leather." It is often made from the innermost splits of a hide, bonded scraps pressed together with polyurethane, or heavily corrected surfaces stamped with artificial grain. It cracks, peels, and has a fraction of the lifespan.',
+    howToTell: [
+      'Look for "full grain" specifically. If a product just says "genuine leather," treat it as a warning, not a feature.',
+      'Real full-grain leather has natural variations, marks, and an uneven surface. If it looks perfectly uniform, it has been heavily processed.',
+      'Smell it. Full-grain leather has a rich, complex smell. Bonded or heavily treated leather smells chemical or plasticky.',
+      'Check the edges. Full-grain shows fibrous texture at cut edges. Bonded leather shows layered, papery construction.'
+    ],
+    bigPicture: 'The word "genuine" was strategically chosen to imply quality while legally meaning almost nothing. It is marketing dressed as certification. Most consumers interpret "genuine leather" as a positive claim when it is actually the lowest grade that can legally be called leather.',
+    trustMarkers: 'Look for full-grain or top-grain designations. Reputable manufacturers will specify the tannery, the type of hide, and the country of origin. Veg-tanned leather from established tanneries (Horween, Sedgwick, Pueblo) is a reliable indicator.',
+    healthNote: 'Chrome-tanned leather (the majority of global production) uses chromium salts. Poorly regulated tanneries in some countries release chromium VI, a carcinogen, as effluent. Workers in these tanneries face significant health risks.',
+    envNote: 'Leather production is tied to the cattle industry and deforestation. Chrome tanning produces toxic wastewater. However, well-maintained full-grain leather lasts decades, while bonded leather ends up in landfill within a year or two.',
+    inShort: 'Ignore "genuine leather." Look for "full grain" specifically.',
+    updated: 'April 2026',
+    sources: [{label:'Saddleback Leather: Leather 101',url:'https://saddlebackleather.com/leather-101'}]
+  },
+  {
+    id: 'cashmere',
+    icon: '\u{1F9E3}',
+    title: 'Cashmere',
+    tags: ['fashion', 'luxury'],
+    hook: 'A \u00a360 jumper and a \u00a31,500 jumper can carry the same label.',
+    real: 'True high-quality cashmere comes from the soft undercoat of specific goat breeds, primarily in Mongolia and Inner Mongolia. Quality is measured by fibre diameter (the best is under 15 microns), length, and processing. The finest cashmere is hand-combed during the spring moult.',
+    fake: 'A garment labelled "100% cashmere" can legally contain fibres ranging from 14 to 19+ microns, from any breed, processed in any way. Fast fashion cashmere uses the coarsest, shortest fibres, often blended with other materials at rates the label does not disclose. It pills instantly and loses shape after a few washes.',
+    howToTell: [
+      'Price is the first indicator. Genuine high-quality cashmere cannot be produced for under \u00a3150-200 per garment.',
+      'Touch and press the fabric. Good cashmere springs back. Cheap cashmere feels limp and thin.',
+      'Look for two-ply or higher. Single-ply cashmere (common in fast fashion) pills rapidly and is much less durable.',
+      'Woolmark certification is a baseline. SFA (Sustainable Fibre Alliance) or known origin (Mongolia, Scotland) adds credibility.'
+    ],
+    bigPicture: 'The democratisation of "cashmere" as a concept has been a deliberate marketing strategy by fast fashion. By using the same word for fundamentally different products, they borrow the luxury association while delivering a disposable garment. The label tells you nothing useful.',
+    trustMarkers: 'Woolmark Certification, SFA membership. Brands that disclose micron count, ply, origin, and goat breed. Johnstons of Elgin, Loro Piana, and similar heritage producers maintain standards. If a brand cannot tell you where the fibre came from, assume the worst.',
+    healthNote: '',
+    envNote: 'Cheap cashmere has driven overgrazing in Mongolia, contributing to desertification. When you buy a \u00a330 cashmere jumper, the environmental cost is paid by the landscape and the herding communities.',
+    inShort: 'If it costs under £150, the fibre quality is not what the label implies.',
+    updated: 'April 2026',
+    sources: [{label:'Sustainable Fibre Alliance',url:'https://www.sustainablefibre.org/what-we-do'},{label:'CNN: Mongolia cashmere and sustainability',url:'https://www.cnn.com/style/mongolia-cashmere-sustainable/index.html'}]
+  },
+  {
+    id: 'vanilla',
+    icon: '\u{1F33E}',
+    title: 'Vanilla',
+    tags: ['food'],
+    hook: 'Less than 1% of vanilla flavour comes from vanilla beans.',
+    real: 'Natural vanilla comes from the cured pods of the Vanilla planifolia orchid, primarily grown in Madagascar, Tahiti, and Mexico. Each flower must be hand-pollinated. Curing takes months. Real vanilla extract contains over 200 organic compounds that create its complex flavour.',
+    fake: 'Synthetic vanillin (the dominant compound in vanilla flavour) is manufactured from petrochemicals, wood pulp (a byproduct of the paper industry), or coal tar derivatives. It replicates one molecule out of 200+. This is what flavours the overwhelming majority of products labelled "vanilla."',
+    howToTell: [
+      '"Vanilla flavouring," "vanillin," or "vanilla flavour" on a label means synthetic.',
+      '"Pure vanilla extract" must legally contain vanilla bean extractives, but quality varies enormously.',
+      'Real vanilla extract is amber to brown and has a complex, slightly boozy aroma. Synthetic vanillin has a flat, one-note sweetness.',
+      'Price: real vanilla extract costs \u00a35-10 per 30ml. If it is cheaper, it is synthetic or heavily diluted.'
+    ],
+    bigPicture: 'Vanilla is the second most expensive spice in the world after saffron. Global demand vastly exceeds what vanilla orchids can produce. Rather than price products honestly, the industry synthesised a cheap substitute and called it the same thing. Most people have never tasted real vanilla in a commercial product.',
+    trustMarkers: 'Look for "pure vanilla extract" with vanilla bean specks visible. Nielsen-Massey and similar producers are reliable. For baking, whole vanilla pods are the gold standard.',
+    healthNote: 'Synthetic vanillin is generally considered safe, but it is a petrochemical derivative. Some people report sensitivity to it. The bigger issue is what it represents: the normalisation of chemical substitutes in food without transparent labelling.',
+    envNote: 'Vanilla farming, when done well, supports biodiversity in tropical regions and provides livelihoods. When synthetic vanillin undercuts the market, it destabilises farming communities in Madagascar and elsewhere.',
+    inShort: 'Check for "pure vanilla extract" with visible bean specks. Everything else is synthetic vanillin.',
+    updated: 'April 2026',
+    sources: [{label:'Scientific American: The problem with vanilla',url:'https://www.scientificamerican.com/article/the-problem-with-vanilla/'},{label:'FAO: Vanilla markets',url:'https://www.fao.org/markets-and-trade/'}]
+  },
+  {
+    id: 'olive-oil',
+    icon: '\u{1FAD2}',
+    title: 'Olive Oil',
+    tags: ['food'],
+    hook: 'The fraud is so widespread that entire police units investigate it.',
+    real: 'Extra virgin olive oil is mechanically pressed from fresh olives within hours of harvest, with no chemical processing. It has a free acidity below 0.8%, distinct fruity notes, and a peppery finish that can make you cough (that is the polyphenols, and it means it is good).',
+    fake: 'Studies have repeatedly found that 60-80% of olive oil sold as "extra virgin" in major markets fails to meet the standard. Common fraud includes blending with cheaper seed oils (sunflower, canola, soy), mixing old or rancid olive oil with deodorisers, mislabelling country of origin, and adding chlorophyll for colour.',
+    howToTell: [
+      'If a litre of "extra virgin" costs under \u00a38-10, be sceptical. Real EVOO is not cheap to produce.',
+      'Look for a harvest date, not just a best-before date. Olive oil deteriorates with age.',
+      'Good EVOO tastes fruity, bitter, and peppery. If it tastes bland, greasy, or like nothing, it has likely been adulterated or is rancid.',
+      'Buy from single-estate producers where possible. Blends labelled "packed in Italy" may contain oil from anywhere.'
+    ],
+    bigPicture: 'Olive oil fraud is one of the most profitable food crimes in Europe. It has been linked to organised crime networks. The economic incentive is enormous: seed oil costs a fraction of genuine EVOO but sells for the same price when relabelled. Regulatory enforcement is patchy at best.',
+    trustMarkers: 'Harvest date on bottle. Single estate or named producer. DOP or PDO certification. Awards from recognised competitions (Flos Olei, NYIOOC). The California Olive Oil Council seal (for US oils) maintains stricter standards than EU minimums.',
+    healthNote: 'If your "olive oil" is actually blended with seed oils, you are not getting the polyphenols and oleic acid that make EVOO beneficial. Some adulterated oils have been found to contain industrial-grade oils not intended for consumption.',
+    envNote: '',
+    inShort: 'Buy single-estate with a harvest date. If it is cheap and bland, it is probably not what it says.',
+    updated: 'April 2026',
+    sources: [{label:'UC Davis: Imported olive oil quality unreliable (2010)',url:'https://www.ucdavis.edu/news/imported-olive-oil-quality-unreliable-study-finds'},{label:'Europol: Olive oil fraud',url:'https://www.europol.europa.eu/publications-events'}]
+  },
+  {
+    id: 'honey',
+    icon: '\u{1F36F}',
+    title: 'Honey',
+    tags: ['food'],
+    hook: 'Supermarket honey may contain no pollen and no bees.',
+    real: 'Real honey is produced by bees from flower nectar. It contains pollen, enzymes, antioxidants, and trace vitamins. Its flavour, colour, and properties vary by floral source and season. Raw honey crystallises naturally over time, which is a sign of quality, not spoilage.',
+    fake: 'Ultra-filtered honey (the majority of commercial honey) has all pollen removed, making its origin untraceable. Some "honey" is adulterated with high-fructose corn syrup, rice syrup, or sugar water. The largest honey fraud operations involve transhipping Chinese honey through intermediary countries to avoid tariffs and testing.',
+    howToTell: [
+      'If it never crystallises, it has likely been ultra-filtered or adulterated.',
+      'Very cheap honey (\u00a31-3 for a jar) is almost certainly not pure honey.',
+      'Buy from local beekeepers when possible. They can tell you what the bees were foraging on.',
+      'Check the label for origin. "Blend of EU and non-EU honeys" is a legally permitted way of saying "we mixed cheap imports together."'
+    ],
+    bigPicture: 'Honey fraud is a global industry worth hundreds of millions. Ultra-filtering removes the only reliable way to test geographic origin (pollen analysis). This allows cheap, potentially contaminated honey to be sold as premium product. The people hurt most are small beekeepers who cannot compete with fraudulent pricing.',
+    trustMarkers: 'Local beekeepers. Named apiaries. Raw, unfiltered honey with visible pollen. Manuka honey should carry a UMF or MGO rating from a certified lab. In the UK, look for the British Beekeepers Association marque.',
+    healthNote: 'Adulterated honey may contain antibiotics banned in the EU/UK, heavy metals, or pesticide residues. Ultra-filtered honey has lost most of its beneficial enzymes and antioxidant properties.',
+    envNote: 'Cheap honey imports undercut local beekeeping, which is essential for pollination. When beekeepers go out of business, local ecosystems lose pollinators.',
+    inShort: 'Buy from a local beekeeper. If it never crystallises, it has been ultra-filtered or adulterated.',
+    updated: 'April 2026',
+    sources: [{label:'Food Safety News: Honey laundering',url:'https://www.foodsafetynews.com/2011/11/tests-show-most-store-honey-isnt-honey/'},{label:'EU coordinated actions on food fraud',url:'https://ec.europa.eu/food/safety/agri-food-fraud/'}]
+  },
+  {
+    id: 'supplements',
+    icon: '\u{1F48A}',
+    title: 'Supplements',
+    tags: ['health'],
+    hook: 'An unregulated industry selling promises in capsule form.',
+    real: 'Some supplements address genuine deficiencies (Vitamin D in northern climates, iron for anaemia, folic acid in pregnancy). These have robust clinical evidence and are often recommended by healthcare professionals.',
+    fake: 'The supplement industry is largely unregulated compared to pharmaceuticals. Products do not need to prove efficacy before sale. Independent testing regularly finds supplements that contain less active ingredient than labelled, contain unlisted ingredients, or contain contaminants. "Proprietary blends" hide actual dosages.',
+    howToTell: [
+      'Check for third-party testing: USP, NSF International, or Informed Sport certification.',
+      'Be suspicious of proprietary blends that do not disclose individual ingredient amounts.',
+      'If a supplement makes dramatic health claims, it is violating regulations. Legitimate products are cautious in their claims.',
+      'Examine the "other ingredients" list. Fillers, artificial colours, and unnecessary additives are common.'
+    ],
+    bigPicture: 'The global supplement industry is worth over $150 billion. It operates in a regulatory grey zone, with products classified as food rather than medicine in most countries. This means no requirement to prove a product works before selling it. The marketing targets anxiety about health, often in communities with least access to healthcare.',
+    trustMarkers: 'USP Verified mark. NSF International certification. Informed Sport (for athletes). Brands that publish third-party certificate of analysis. Avoid brands that rely heavily on influencer marketing or make cure-all claims.',
+    healthNote: 'Some supplements interact with medications. High-dose single vitamins can be harmful (excess Vitamin A, iron). The assumption that "natural" means "safe" is one of the industry\u2019s most effective marketing tools.',
+    envNote: '',
+    inShort: 'Look for USP or NSF third-party testing. If it makes dramatic claims, it is breaking the rules.',
+    updated: 'April 2026',
+    sources: [{label:'FDA: Dietary supplements',url:'https://www.fda.gov/food/dietary-supplements'},{label:'USP Verified programme',url:'https://www.usp.org/verification-services'}]
+  },
+  {
+    id: 'parmesan',
+    icon: '\u{1F9C0}',
+    title: 'Parmesan',
+    tags: ['food'],
+    hook: 'American "parmesan" has been found to contain wood pulp.',
+    real: 'Parmigiano-Reggiano is a DOP-protected cheese made in specific provinces of Italy (Parma, Reggio Emilia, Modena, Bologna, Mantua). It is aged a minimum of 12 months (often 24-36), made from raw cow\u2019s milk with no additives. Each wheel is inspected, and imperfect wheels have their rind markings scraped off.',
+    fake: 'In the US, "parmesan" has no legal protection and can be any hard cheese, often containing cellulose (wood pulp) as an anti-caking agent at rates of 2-8%. Pre-grated "parmesan" is the worst offender. Some tested products contained barely any cheese at all. In the EU, "Parmigiano-Reggiano" is protected, but "parmesan-style" products are not.',
+    howToTell: [
+      'Look for the full name "Parmigiano-Reggiano" and the DOP seal.',
+      'Buy it in wedges, never pre-grated. Grate it yourself.',
+      'Real Parmigiano-Reggiano has the name stamped repeatedly into the rind. If the rind is blank, it is not the real thing.',
+      'It should contain only three ingredients: milk, salt, rennet.'
+    ],
+    bigPicture: 'The "parmesan" situation perfectly illustrates how a protected, craft product can be diluted into meaninglessness by industrial food production. The word is used to evoke quality while delivering something fundamentally different.',
+    trustMarkers: 'DOP seal. "Parmigiano-Reggiano" stamped on the rind. Buy from cheese counters rather than pre-packaged. Check for the Consorzio certification number.',
+    healthNote: 'Cellulose (wood pulp) in pre-grated products is generally considered safe in small amounts but is not disclosed prominently. You are paying cheese prices for wood fibre.',
+    envNote: '',
+    inShort: 'Buy it in a wedge with "Parmigiano-Reggiano" stamped on the rind. Never pre-grated.',
+    updated: 'April 2026',
+    sources: [{label:'Bloomberg: Parmesan cheese could be wood',url:'https://www.bloomberg.com/news/articles/2016-02-16/the-parmesan-cheese-you-sprinkle-on-your-penne-could-be-wood'},{label:'Consorzio Parmigiano Reggiano',url:'https://www.parmigianoreggiano.com/'}]
+  },
+  {
+    id: 'palm-oil',
+    icon: '\u{1F334}',
+    title: 'Palm Oil',
+    tags: ['food', 'environment'],
+    hook: 'In half of all supermarket products. Rarely labelled honestly.',
+    real: 'Palm oil is a real product, pressed from the fruit of oil palms. The issue is not that it is fake, but that its presence and impact are deliberately obscured. It is the world\u2019s most widely used vegetable oil, found in an estimated 50% of packaged supermarket products: biscuits, bread, crisps, instant noodles, ice cream, chocolate, shampoo, detergent, lipstick.',
+    fake: 'Palm oil hides behind over 200 different names on ingredient lists: sodium lauryl sulphate, cetyl alcohol, palmitate, stearic acid, glyceryl stearate, and dozens more. This is not accidental. The industry benefits from consumers not being able to track their consumption. "Vegetable oil" on a label is very often palm oil.',
+    howToTell: [
+      'If the label says "vegetable oil" without specifying which, assume palm oil.',
+      'Learn the common derivatives: anything with "palm," "stear," "laur," or "glyceryl" in the name.',
+      'RSPO certification (Roundtable on Sustainable Palm Oil) exists but is widely criticised as insufficient.',
+      'Use apps like Giki or ethical consumer guides that flag palm oil in products.'
+    ],
+    bigPicture: 'Palm oil is in everything because it is cheap, versatile, and has a long shelf life. The problem is the destruction it causes: rainforest clearance, peatland burning, habitat loss for endangered species, and displacement of indigenous communities. The industry spends heavily on lobbying and greenwashing to prevent meaningful regulation.',
+    trustMarkers: 'RSPO certification is a minimum, but it is not enough. Look for RSPO Identity Preserved or Segregated (not just Mass Balance). Better: brands that disclose their full supply chain or use alternative oils. Best: products that do not use it at all.',
+    healthNote: 'Palm oil is high in saturated fat. When processed at high temperatures (as in most food manufacturing), it produces glycidyl esters and 3-MCPD, which are classified as potentially carcinogenic by EFSA. The people consuming the most processed food are most exposed.',
+    envNote: 'Palm oil plantations are the leading driver of deforestation in Indonesia and Malaysia. Peatland burning for plantations produces enormous carbon emissions. Orangutan, tiger, and rhinoceros populations are critically endangered as a direct result.',
+    inShort: '"Vegetable oil" on a label almost always means palm oil. Learn the 200+ derivative names.',
+    updated: 'April 2026',
+    sources: [{label:'WWF Palm Oil Buyers Scorecard',url:'https://palmoilscorecard.panda.org/'},{label:'EFSA: Palm oil contaminants (3-MCPD, glycidyl esters)',url:'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4426'}]
+  },
+  {
+    id: 'food-colouring',
+    icon: '\u{1F3A8}',
+    title: 'Artificial Food Colourings',
+    tags: ['food', 'health'],
+    hook: 'Making cheap food look expensive since the 1850s.',
+    real: 'Colour in food naturally comes from the ingredients: turmeric is yellow, beetroot is red, spinach is green. Traditional food preparation uses these ingredients for both flavour and appearance.',
+    fake: 'Industrial food production uses synthetic dyes derived from petroleum to make products look more appealing. The most common in the UK and EU are E102 (tartrazine), E110 (sunset yellow), E122 (carmoisine), E124 (ponceau 4R), E129 (allura red), and E133 (brilliant blue). These are in sweets, soft drinks, sauces, cereals, and processed foods aimed primarily at children and low-income consumers.',
+    howToTell: [
+      'Check ingredients for E-numbers in the E100-199 range. These are colourings.',
+      'If a food is unnaturally bright or vivid, it is likely dyed.',
+      'Compare budget and premium versions of the same product. Budget lines use more synthetic colour.',
+      'Products aimed at children tend to use the most aggressive colouring.'
+    ],
+    bigPicture: 'The EU requires warning labels on products containing certain artificial colours ("may have an adverse effect on activity and attention in children"). The UK retained this post-Brexit. The US does not require these warnings. Food companies reformulate products for EU markets while selling the dyed versions in less regulated markets. They know. They choose profit.',
+    trustMarkers: 'Look for "no artificial colours" or products using natural alternatives (annatto, beetroot extract, spirulina). The EU warning label system is helpful. Products marketed to children deserve extra scrutiny.',
+    healthNote: 'The "Southampton Six" artificial colours are linked to hyperactivity in children. The evidence was strong enough for the EU to mandate warning labels. Some individuals report sensitivity reactions including hives, asthma-like symptoms, and digestive issues.',
+    envNote: '',
+    inShort: 'Check E-numbers in the E100–199 range. Budget products aimed at children use the most.',
+    updated: 'April 2026',
+    sources: [{label:'FSA: Food additives guidance',url:'https://www.food.gov.uk/safety-hygiene/food-additives'},{label:'EFSA food colour evaluations',url:'https://www.efsa.europa.eu/en/topics/topic/food-colours'}]
+  },
+  {
+    id: 'processed-meat',
+    icon: '\u{1F953}',
+    title: 'Processed Meat',
+    tags: ['food', 'health'],
+    hook: 'Classified as a Group 1 carcinogen by the WHO. Same category as tobacco.',
+    real: 'Unprocessed meat is muscle tissue from an animal, sold as a cut or mince. It contains protein, fat, vitamins, and minerals. Whatever your views on meat consumption, unprocessed meat is a straightforward product.',
+    fake: 'Processed meat (bacon, ham, sausages, hot dogs, salami, corned beef) has been transformed through salting, curing, smoking, or adding preservatives. The key chemicals are nitrates and nitrites (E249-E252), which preserve colour and prevent bacterial growth but form nitrosamines during cooking or digestion, which are carcinogenic.',
+    howToTell: [
+      'Read the ingredients list. Sodium nitrite (E250) and potassium nitrate (E252) are the main ones to watch.',
+      '"Uncured" or "no added nitrates" products often use celery powder instead, which naturally contains nitrates. This is marketing, not a meaningful difference.',
+      'The more processed the meat, the more additives: phosphates for water retention, flavourings, colourings, soy protein as filler.',
+      'Budget sausages and ham can contain as little as 40-60% actual meat.'
+    ],
+    bigPicture: 'The WHO classified processed meat as a Group 1 carcinogen in 2015, meaning there is sufficient evidence that it causes cancer (specifically colorectal cancer). This is the same classification as tobacco and asbestos. The food industry spent heavily to downplay this finding. Processed meat remains one of the cheapest protein sources available, meaning low-income families are disproportionately exposed.',
+    trustMarkers: 'Look for nitrate-free products (genuinely free, not celery-powder substituted). Higher meat content percentages. Named cuts rather than "mechanically separated meat." Local butchers who can tell you exactly what is in their sausages.',
+    healthNote: 'Eating 50g of processed meat daily (about two slices of bacon) increases colorectal cancer risk by 18%. Nitrosamines formed from nitrites are the primary mechanism. Phosphate additives are linked to cardiovascular and kidney issues.',
+    envNote: '',
+    inShort: 'Check for sodium nitrite (E250). "Uncured" with celery powder is the same thing rebranded.',
+    updated: 'April 2026',
+    sources: [{label:'IARC: List of classifications (WHO)',url:'https://monographs.iarc.who.int/list-of-classifications/'},{label:'Cancer Research UK: Processed and red meat',url:'https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/diet-and-cancer/does-processed-and-red-meat-cause-cancer'}]
+  },
+  {
+    id: 'ultra-processed',
+    icon: '\u{1F35E}',
+    title: 'Ultra-Processed Foods (UPF)',
+    tags: ['food', 'health'],
+    hook: 'Engineered to be addictive. Marketed as convenient.',
+    real: 'Whole or minimally processed foods: fruit, vegetables, grains, legumes, meat, fish, eggs, dairy. Processed foods have a history measured in centuries: bread, cheese, pickles, cured meats. These involve simple, recognisable transformations.',
+    fake: 'Ultra-processed foods (NOVA Group 4) are industrial formulations of substances derived from foods, with additives. They include ingredients you would never find in a domestic kitchen: hydrogenated fats, modified starches, emulsifiers, humectants, flavour enhancers, protein isolates. They dominate supermarket shelves: breakfast cereals, instant noodles, ready meals, soft drinks, packaged bread, flavoured yoghurts, crisps, biscuits.',
+    howToTell: [
+      'The simplest test: does the ingredient list contain things you would not use if cooking at home?',
+      'Five or more ingredients, especially with names you do not recognise, is a strong indicator.',
+      'Emulsifiers (E471, E472, polysorbate 80), modified starches, and flavour enhancers (MSG, E621) are hallmarks.',
+      'If it has a long shelf life and does not need refrigeration despite containing what seems like fresh ingredients, it is heavily processed.'
+    ],
+    bigPicture: 'In the UK, ultra-processed foods now account for over 50% of calories consumed. In lower-income households, the figure is higher. These products are designed to be hyper-palatable (the exact combination of salt, sugar, and fat that maximises consumption), cheap to produce, and heavily marketed. The communities with least access to fresh food are most dependent on them.',
+    trustMarkers: 'Fewer ingredients. Recognisable ingredients. Shorter shelf lives. Products from the perimeter of the supermarket (fresh sections) rather than the centre aisles. Cooking from scratch when possible, though this is a privilege not everyone has equally.',
+    healthNote: 'Growing evidence links UPF consumption to obesity, type 2 diabetes, cardiovascular disease, depression, and certain cancers. Emulsifiers are being studied for their effect on gut lining integrity. The mechanisms are still being researched, but the epidemiological pattern is clear.',
+    envNote: 'UPF production relies on industrial monoculture agriculture (corn, soy, palm, wheat) which drives deforestation, soil depletion, and biodiversity loss.',
+    inShort: 'If the ingredient list has names you would not use in a kitchen, it is ultra-processed.',
+    updated: 'April 2026',
+    sources: [{label:'BMJ: UPF and mortality (2019)',url:'https://www.bmj.com/content/365/bmj.l1949'},{label:'FAO: NOVA food classification',url:'https://www.fao.org/3/ca5644en/ca5644en.pdf'}]
+  },
+  {
+    id: 'fruit-juice',
+    icon: '\u{1F34A}',
+    title: 'Fruit Juice & Smoothies',
+    tags: ['food', 'health'],
+    hook: 'Marketed as health food. Metabolised like a soft drink.',
+    real: 'Eating whole fruit provides fibre, vitamins, and water in a matrix that slows sugar absorption. The fibre is the critical component: it modulates how your body processes the fructose.',
+    fake: '"100% fruit juice" and commercial smoothies strip out the fibre and concentrate the sugar. A glass of orange juice contains as much sugar as a glass of Coca-Cola, approximately 26g per 250ml. "From concentrate" juice is even further removed: the water is extracted, the concentrate is shipped and stored, then water is added back. "Not from concentrate" often undergoes deaeration and flavour pack re-addition, meaning the "fresh" taste is engineered.',
+    howToTell: [
+      'Check the sugar content per serving. Compare it to a soft drink. The numbers are similar.',
+      '"From concentrate" means the juice was stripped down and reconstituted.',
+      '"Not from concentrate" sounds better but often involves significant industrial processing to maintain flavour over long shelf lives.',
+      'Smoothies that list fruit juice as a base ingredient are essentially sugar drinks with added fruit.'
+    ],
+    bigPicture: 'The juice industry successfully lobbied for fruit juice to be included in "5 a day" recommendations for decades, despite the fact that nutritionally it behaves more like a soft drink. The WHO now recommends limiting fruit juice. The marketing still says "natural" and "healthy" and "vitamin C." Sugar sold as wellness.',
+    trustMarkers: 'Eat the fruit instead. If you want juice, fresh-squeezed at home with pulp retained is the closest to whole fruit. Commercial juices, even premium ones, are a sugar delivery system.',
+    healthNote: 'Fructose without fibre puts load on the liver. Regular juice consumption is associated with similar metabolic risks to soft drink consumption: weight gain, insulin resistance, and dental erosion. Children are the heaviest consumers, and children\u2019s juice products are among the most aggressively marketed.',
+    envNote: '',
+    inShort: 'Eat the fruit. A glass of juice has as much sugar as a glass of Coca-Cola.',
+    updated: 'April 2026',
+    sources: [{label:'WHO: Sugar intake guideline',url:'https://www.who.int/publications/i/item/9789241549028'},{label:'NHS: 5 a day guidance',url:'https://www.nhs.uk/live-well/eat-well/5-a-day/'}]
+  },
+  {
+    id: 'chicken',
+    icon: '\u{1F357}',
+    title: 'Cheap Chicken',
+    tags: ['food', 'health'],
+    hook: 'Grown to slaughter weight in 35 days. Pumped with water to increase weight.',
+    real: 'A chicken raised at a natural growth rate takes 80+ days to reach maturity. Slow-grown, free-range, or organic chicken has denser muscle, more flavour, and a different nutritional profile. Heritage breeds take even longer.',
+    fake: 'Industrially farmed chicken (the vast majority of what is sold) reaches slaughter weight in 35 days through selective breeding for rapid growth. Many birds cannot support their own body weight. After slaughter, meat is often "plumped" or "enhanced" by injecting salt water, broth, or phosphate solutions, which adds up to 15% water weight that you pay for as if it were chicken. This is legal.',
+    howToTell: [
+      'If the label says "contains up to X% retained water" or "enhanced with broth," you are paying meat prices for salt water.',
+      'Cheap chicken releases a lot of white liquid when cooked. That is the injected water cooking out.',
+      'Compare price per kilo to a known free-range or organic product. The gap reflects what has been done to the cheaper one.',
+      'Look for growth rate labelling where available. "Higher welfare" schemes (RSPCA Assured in the UK) specify slower growth rates.'
+    ],
+    bigPicture: 'Chicken is the most consumed meat in the UK. The cheapest chicken is produced in conditions that most consumers would find unacceptable if they saw them. The price is artificially low because the true costs are externalised: animal welfare, antibiotic resistance, water pollution from factory farms, and the health consequences of a food system optimised for volume over nutrition.',
+    trustMarkers: 'RSPCA Assured. Soil Association Organic. Free-range with outdoor access (check stocking density, not just the label). Named farms. Slow-grown or heritage breed designations.',
+    healthNote: 'Routine antibiotic use in intensive poultry farming is a major driver of antimicrobial resistance, which the WHO calls one of the greatest threats to global health. Water-injected chicken also means higher sodium content.',
+    envNote: 'Industrial chicken farming produces significant ammonia and nitrate pollution from waste, contaminating waterways and soil. Soy-based feed is linked to deforestation in South America.',
+    inShort: 'If cheap chicken leaks white liquid when cooked, you paid meat prices for injected salt water.',
+    updated: 'April 2026',
+    sources: [{label:'RSPCA Assured',url:'https://www.rspcaassured.org.uk/farm-animal-welfare/chickens/'},{label:'Guardian: The true cost of cheap chicken',url:'https://www.theguardian.com/environment/2023/jan/11/revealed-scale-water-added-to-chicken-sold-in-uk'}]
+  },
+  {
+    id: 'fish-mislabelling',
+    icon: '\u{1F41F}',
+    title: 'Fish Mislabelling',
+    tags: ['food'],
+    hook: 'Up to 30% of fish sold is not the species on the label.',
+    real: 'Fish should be what it says it is. Cod should be cod. Snapper should be snapper. Sea bass should be sea bass. Species identification matters for flavour, nutrition, sustainability, and safety (some substituted species carry higher mercury or toxin levels).',
+    fake: 'DNA testing studies consistently find that 20-30% of fish sold in restaurants and shops is mislabelled. Common substitutions: cheaper species sold as premium (pangasius as cod, tilapia as snapper, escolar as white tuna). Escolar is particularly problematic because it causes digestive issues in many people and is banned or restricted in several countries. "Fish and chips" in the UK has been found to contain species that customers were not informed about.',
+    howToTell: [
+      'Buy whole fish where possible. It is harder to mislabel a whole fish than a fillet.',
+      'Know what the fish should look like. Cod has large, white flakes. Pangasius is thinner and more grey.',
+      'Extremely cheap fish of a "premium" species is suspicious.',
+      'Sushi is the most frequently mislabelled category. If you care about accuracy, go to restaurants you trust.'
+    ],
+    bigPicture: 'Fish fraud is driven by the gap between supply and demand for popular species. Rather than educating consumers about alternative species or honestly pricing scarce fish, the industry substitutes and mislabels. The regulatory infrastructure for fish identification is weak compared to other food categories.',
+    trustMarkers: 'MSC (Marine Stewardship Council) certification includes chain-of-custody tracking. Named boats or fisheries. Fish counters where staff can tell you provenance. Buy less popular species directly, they are less likely to be faked.',
+    healthNote: 'Escolar, commonly substituted for tuna, contains wax esters that cause severe gastrointestinal distress. Some substituted species carry higher mercury levels than the species on the label. Allergenic species may be swapped in without disclosure.',
+    envNote: 'Mislabelling undermines sustainable fishing efforts. If consumers cannot trust labels, they cannot make informed choices about endangered species.',
+    inShort: 'Buy whole fish where possible. Fillets are easy to mislabel. Sushi is the worst offender.',
+    updated: 'April 2026',
+    sources: [{label:'Oceana: Seafood fraud reports',url:'https://oceana.org/our-campaigns/seafood-fraud/'},{label:'Oceana: Fish mislabelling report',url:'https://oceana.org/reports/oceana-reveals-mislabeling-of-americas-favorite-fish/'}]
+  },
+  {
+    id: 'bread',
+    icon: '\u{1F35E}',
+    title: '"Artisan" Bread',
+    tags: ['food'],
+    hook: 'Supermarket "artisan" bread is industrial bread with a marketing department.',
+    real: 'Real bread requires flour, water, salt, and time. Sourdough uses a live fermentation culture instead of commercial yeast. The long fermentation (12-48 hours) breaks down gluten and phytic acid, produces organic acids, and develops complex flavour. A real bakery makes bread in small batches with these basic ingredients.',
+    fake: 'Supermarket "artisan," "sourdough-style," or "craft" bread is typically made using the Chorleywood Bread Process (developed in 1961 to make bread faster): high-speed mixing, added fats, enzyme "improvers," emulsifiers, preservatives, and very short fermentation times. Some "sourdough" loaves contain no sourdough culture at all, using flavourings instead. In the UK, there is no legal definition of "sourdough."',
+    howToTell: [
+      'Real sourdough should contain only flour, water, salt, and sourdough culture (or "levain"). If the ingredient list is longer than that, it is not real sourdough.',
+      'Real bread goes stale within a couple of days. If it stays soft for a week, it is full of preservatives and emulsifiers.',
+      'Look for the Real Bread Campaign\u2019s guidance. They advocate for legal protection of the term "sourdough."',
+      '"Baked in-store" usually means par-baked industrially, shipped frozen, and finished in an oven. It is still factory bread.'
+    ],
+    bigPicture: '"Artisan" is one of the most abused words in food marketing. It has no legal definition in most countries. Supermarkets use it to charge a premium for industrial bread that has been given aesthetic tweaks (flour-dusted tops, rustic shapes, brown paper bags). The real thing exists, but you have to look past the marketing to find it.',
+    trustMarkers: 'Independent bakeries that make bread on-site. Short ingredient lists. Real Bread Campaign supporters. "Sourdough" should mean long fermentation, not flavouring. Ask the baker if they are not sure.',
+    healthNote: 'Long-fermented bread may be more digestible for people with mild gluten sensitivity (the fermentation breaks down some of the proteins). Industrial bread\u2019s enzyme "improvers" do not have to be listed on labels in the UK because they are classified as processing aids, not ingredients.',
+    envNote: '',
+    inShort: 'Real sourdough has three ingredients: flour, water, salt. If the list is longer, it is not sourdough.',
+    updated: 'April 2026',
+    sources: [{label:'Real Bread Campaign',url:'https://www.sustainweb.org/realbread/'}]
+  },
+  {
+    id: 'cleaning-products',
+    icon: '\u{1F9F4}',
+    title: 'Cleaning Products',
+    tags: ['household', 'health', 'environment'],
+    hook: 'You don\u2019t need 15 different products. You need three.',
+    real: 'Most household cleaning can be done with a handful of basic agents: white vinegar (acid, cuts grease and limescale), bicarbonate of soda (mild abrasive and deodoriser), washing-up liquid (surfactant), and for disinfection, diluted bleach or hydrogen peroxide. This has been true for a century.',
+    fake: 'The cleaning product industry generates billions by selling specialised products for every surface, room, and scenario. "Bathroom cleaner," "kitchen cleaner," "floor cleaner," "glass cleaner," "stainless steel cleaner" are largely the same basic chemicals (surfactants, solvents, fragrance) in different bottles at different prices. Many contain unnecessary fragrances, dyes, and antimicrobials. "Antibacterial" products for home use are generally no more effective than soap and water.',
+    howToTell: [
+      'Compare ingredients across "different" products. You will find significant overlap.',
+      'If a product is heavily fragranced and brightly coloured, those additives serve marketing, not cleaning.',
+      '"Antibacterial" claims in household products have been questioned by health agencies. Regular soap disrupts bacteria effectively.',
+      'Concentrated products that you dilute yourself are better value and less wasteful.'
+    ],
+    bigPicture: 'The cleaning products industry is built on manufactured anxiety about germs and dirt, combined with product multiplication. Selling one bottle is less profitable than selling twelve. The expansion of "antibacterial" everything coincided with marketing spend, not with any change in hygiene science.',
+    trustMarkers: 'Products with disclosed ingredient lists (not all brands do this). Ecolabel or EU Ecolabel certification. Concentrated refill systems. Brands like Ecover, Bio-D, or Splosh that are transparent about ingredients.',
+    healthNote: 'Many conventional cleaning products release volatile organic compounds (VOCs). Regular use of spray cleaning products has been linked to respiratory issues in a study equivalent to smoking 20 cigarettes a day over 10-20 years. Fragrances are a common trigger for asthma and skin sensitisation.',
+    envNote: 'Cleaning product chemicals enter waterways. Phosphates cause algal blooms. Microplastics from product packaging and formulations persist in ecosystems. Per capita, the UK uses more cleaning products than almost any other European country.',
+    inShort: 'White vinegar, bicarb, washing-up liquid, and diluted bleach clean almost everything.',
+    updated: 'April 2026',
+    sources: [{label:'American Journal of Respiratory Medicine: Cleaning sprays study',url:'https://www.atsjournals.org/doi/full/10.1164/rccm.201706-1311OC'}]
+  },
+  {
+    id: 'bottled-water',
+    icon: '\u{1F4A7}',
+    title: 'Bottled Water',
+    tags: ['food', 'environment'],
+    hook: '40% of bottled water is tap water in a plastic bottle.',
+    real: 'In the UK and most of Europe, tap water is among the most rigorously tested consumer products available. It is tested far more frequently and for more contaminants than bottled water. The UK\u2019s Drinking Water Inspectorate enforces strict standards.',
+    fake: 'A significant portion of bottled water is simply filtered municipal (tap) water. In the US, studies have found that around 40% of bottled water originates from public sources. "Spring water" must come from a named source but may be treated. "Mineral water" has stricter rules but is not inherently healthier. The bottled water industry sells a product that, in most developed countries, comes out of the tap for a fraction of a penny per litre, at a markup of 500-2000x.',
+    howToTell: [
+      'Check the label for "source." If it names a municipal supply or says "purified" or "filtered," it is processed tap water.',
+      'Compare the mineral content of bottled water to your local tap water report (available from your water company). Often very similar.',
+      'The taste difference between bottled and filtered tap water is negligible in most blind tests.',
+      'A home water filter (Brita, etc.) costs pennies per litre and addresses any aesthetic concerns about tap water.'
+    ],
+    bigPicture: 'Bottled water is one of the most successful marketing achievements of the late 20th century: convincing people in countries with safe, tested tap water that they need to buy water in single-use plastic bottles. The marketing exploits vague anxieties about purity while the product is frequently identical to what comes from the tap.',
+    trustMarkers: 'Your tap. A reusable bottle. If you want filtration, a counter-top or jug filter. If you have specific mineral preferences, check the analysis on the label against your tap water report.',
+    healthNote: 'Plastic bottles leach microplastics, especially when warm or exposed to sunlight. Bottled water has been found to contain significantly more microplastic particles than tap water. BPA-free does not mean plastic-free.',
+    envNote: 'The UK uses over 7 billion plastic water bottles per year. Less than half are recycled. Bottled water production uses 2,000 times more energy than tap water. Water extraction by bottling companies depletes aquifers in source communities.',
+    inShort: 'Your tap water is tested more rigorously than bottled. A filter jug costs pennies per litre.',
+    updated: 'April 2026',
+    sources: [{label:'Drinking Water Inspectorate (UK)',url:'https://www.dwi.gov.uk/drinking-water-quality/'},{label:'NRDC: Bottled water report',url:'https://www.nrdc.org/resources/bottled-water-pure-drink-or-pure-hype'}]
+  },
+  {
+    id: 'chocolate',
+    icon: '\u{1F36B}',
+    title: 'Cheap Chocolate',
+    tags: ['food', 'environment'],
+    hook: 'The first ingredient is usually sugar. The second is usually not cocoa.',
+    real: 'Good chocolate is made primarily from cocoa mass (ground roasted cocoa beans), cocoa butter, and sugar, in that order. Dark chocolate should be 70%+ cocoa solids. Milk chocolate uses less cocoa but should still list cocoa mass as a primary ingredient. The cocoa should have flavour notes: fruity, nutty, earthy. Single-origin chocolate is to cocoa what single-estate wine is to grapes.',
+    fake: 'Budget chocolate replaces cocoa butter with vegetable fat (usually palm oil), maximises sugar, and uses vanillin for flavour. UK regulations allow up to 5% non-cocoa vegetable fat and still call it chocolate. "Chocolate flavour" products may contain almost no cocoa at all. Selection boxes, Easter eggs, and advent calendars are where the worst offenders live, products given to children.',
+    howToTell: [
+      'Read the ingredients in order. If sugar is first, cocoa is not the star.',
+      'Look for "cocoa butter" vs "vegetable fat." If vegetable fat appears, cocoa butter has been partially replaced.',
+      'Check the cocoa percentage. If it is not stated, be suspicious.',
+      'Good chocolate snaps cleanly. Cheap chocolate bends. Good chocolate melts smoothly on the tongue. Cheap chocolate feels waxy.'
+    ],
+    bigPicture: 'Cocoa farming relies heavily on child labour and poverty-wage labour in West Africa (principally Ivory Coast and Ghana). The chocolate industry has repeatedly committed to and missed deadlines for eliminating the worst forms of child labour from supply chains. When you buy the cheapest chocolate, the human cost is paid at the other end of the chain.',
+    trustMarkers: 'Fairtrade certification (imperfect but better than nothing). Tony\u2019s Chocolonely, Divine, and similar bean-to-bar makers with transparent supply chains. Cocoa percentage above 35% for milk, 70%+ for dark. Single origin. Ingredients you can count on one hand.',
+    healthNote: 'Cheap chocolate is essentially confectionery: sugar, fat, and flavouring. The health benefits associated with dark chocolate (flavanols, antioxidants) come from cocoa content that budget products do not deliver.',
+    envNote: 'Cocoa farming is linked to deforestation in West Africa. Sustainable certifications (Rainforest Alliance, Fairtrade) attempt to address this but coverage is incomplete. The industry\u2019s preferred substitute fats (palm oil) bring their own deforestation problems.',
+    inShort: 'Read the ingredients in order. If sugar is first and vegetable fat appears, cocoa is not the priority.',
+    updated: 'April 2026',
+    sources: [{label:'ILO: Child labour in cocoa',url:'https://www.ilo.org/topics-and-sectors/child-labour'},{label:'Tony\'s Chocolonely fair reports',url:'https://tonyschocolonely.com/uk/en/our-mission'}]
+  },
+  {
+    id: 'fast-fashion',
+    icon: '\u{1F455}',
+    title: 'Fast Fashion Fabrics',
+    tags: ['fashion', 'environment', 'health'],
+    hook: 'Your \u00a38 t-shirt costs the earth more than it costs you.',
+    real: 'Natural fibres (cotton, linen, wool, silk) and well-made synthetics have known properties, durability profiles, and care requirements. Quality garments are designed for longevity: reinforced seams, quality thread, pre-shrunk fabric, colour-fast dyes.',
+    fake: 'Fast fashion produces garments designed to last 10 wears. Fabrics are often the cheapest polyester blends, poorly dyed, badly finished. "Cotton" blends may contain minimal cotton. Fabric weight is reduced to cut costs. Sizing is inconsistent because quality control is minimal. The garment is not designed to be kept; it is designed to be replaced.',
+    howToTell: [
+      'Hold fabric up to light. If you can see through a t-shirt, it will not last.',
+      'Check seams. Single-stitch seams unravel. Flat-felled or French seams are durable.',
+      'Pull the fabric gently. If it distorts and does not snap back, it will lose shape after washing.',
+      'Polyester content above 50% in a garment marketed as cotton tells you cost was the priority.'
+    ],
+    bigPicture: 'The fashion industry produces over 100 billion garments per year. The average garment is worn 7 times before being discarded. Fast fashion has normalised disposable clothing by making it artificially cheap. The costs are paid by garment workers (poverty wages, unsafe conditions), the environment (textile waste, water pollution, microplastic shedding), and ultimately by consumers who spend more replacing disposable items than they would buying fewer, better things.',
+    trustMarkers: 'B Corp certified brands. GOTS (Global Organic Textile Standard) for organic cotton. OEKO-TEX Standard 100 for chemical safety. Brands that publish factory lists and wage data. Second-hand and vintage as alternatives.',
+    healthNote: 'Fast fashion textiles may contain formaldehyde (used in wrinkle-resistant finishes), azo dyes (some release carcinogenic amines), and heavy metals. Washing synthetic fabrics releases microplastics into waterways. Direct skin contact with poorly regulated textile chemicals is a known irritant.',
+    envNote: 'The fashion industry is responsible for 8-10% of global carbon emissions. Textile dyeing is the second-largest polluter of water globally. An estimated 92 million tonnes of textile waste is produced annually. Polyester sheds microplastics with every wash, contaminating oceans and entering the food chain.',
+    inShort: 'Hold it to the light. If you can see through it, it will not survive ten washes.',
+    updated: 'April 2026',
+    sources: [{label:'Ellen MacArthur Foundation: Fashion',url:'https://www.ellenmacarthurfoundation.org/topics/fashion/overview'},{label:'OEKO-TEX Standard 100',url:'https://www.oeko-tex.com/en/our-standards/oeko-tex-standard-100'}]
+  },
+  {
+    id: 'crab',
+    icon: '\u{1F980}',
+    title: 'Imitation Crab',
+    tags: ['food'],
+    hook: 'At least this one says "imitation" on the packet. Most don\u2019t.',
+    real: 'Crab meat comes from crabs. It has a sweet, delicate flavour, flaky texture, and costs accordingly. Fresh crab is seasonal and varies by species.',
+    fake: 'Surimi (imitation crab) is made from processed white fish (usually Alaskan pollock), mixed with starch, sugar, egg whites, flavourings, and coloured to look like crab. In packaged sushi, "California rolls," and many restaurant dishes, "crab" is surimi unless explicitly stated otherwise. Surimi is not unhealthy, but it is not crab, and it is often sold without clear labelling.',
+    howToTell: [
+      'Check ingredients. If it says "surimi," "crab-flavoured seafood," or "crab sticks," it is not crab.',
+      'Real crab meat has an irregular, flaky texture. Surimi has a uniform, slightly rubbery texture with visible layered strands.',
+      'In sushi restaurants, "California roll" almost always means surimi. If the menu says "real crab," it should be, and you will pay more for it.',
+      'Pre-packaged sandwich fillings and salads labelled "seafood" typically use surimi.'
+    ],
+    bigPicture: 'Imitation crab is one of the more honest deceptions because it at least labels itself as imitation in retail settings. The problem is in restaurants and prepared foods where "crab" is used without qualification. The larger issue is what it represents: the industrialisation of the idea of premium food, serving the image without the substance.',
+    trustMarkers: 'Buy actual crab meat if you want crab. For surimi, it is fine as a product in its own right, just make sure you know you are eating it. Transparency is the standard here, not avoidance.',
+    healthNote: 'Surimi is processed food: it contains added sugar, sodium, starch, and sometimes MSG. It is significantly less nutritious than real crab meat, which is high in protein, zinc, and B12.',
+    envNote: '',
+    inShort: 'If the menu does not say "real crab" and charge accordingly, it is surimi.',
+    updated: 'April 2026',
+    sources: [{label:'FDA: Seafood guidance',url:'https://www.fda.gov/food/resources-you-food/seafood'}]
+  },
+  {
+    id: 'saffron',
+    icon: '\u{1F33B}',
+    title: 'Saffron',
+    tags: ['food', 'luxury'],
+    hook: 'The world\u2019s most expensive spice. Also the most faked.',
+    real: 'Saffron is the dried stigma of the Crocus sativus flower. Each flower produces only three stigmas, which must be hand-picked. It takes 150,000+ flowers to produce one kilogram. Genuine saffron comes primarily from Iran (90% of global production), with smaller quantities from Spain, Kashmir, and Greece. It should cost \u00a35-10 per gram.',
+    fake: 'Saffron fraud is endemic. Common substitutions include: safflower petals dyed red, turmeric-stained corn silk, shredded dyed paper, and real saffron bulked with weight-adding substances (water, glycerine, oil). "Spanish saffron" may be Iranian saffron re-labelled. Powdered saffron is the most frequently adulterated form because adulteration is invisible.',
+    howToTell: [
+      'Never buy powdered saffron. Always buy threads.',
+      'Real saffron threads are dark red with a small yellow/orange tendril at one end. Uniformly coloured threads have been dyed.',
+      'Put a thread in warm water. Real saffron releases colour slowly over 10-15 minutes and the threads retain their shape. Fakes bleed colour immediately.',
+      'Real saffron has a complex, hay-like, slightly metallic aroma. Fake saffron smells like nothing or like artificial dye.',
+      'If it costs less than \u00a33-4 per gram, it is almost certainly adulterated.'
+    ],
+    bigPicture: 'Saffron\u2019s extreme price and the difficulty of visual inspection make it one of the most lucrative food frauds. The EU has intercepted shipments of entirely fake saffron worth millions. Consumers buying "saffron" at bargain prices are funding the fraud industry.',
+    trustMarkers: 'ISO 3632 grading (Category I is highest). Buy from specialist spice merchants, not supermarkets. Look for origin certification. Reputable Iranian or Spanish saffron with lot numbers and certification.',
+    healthNote: '',
+    envNote: 'Saffron farming is labour-intensive but ecologically gentle. When genuine saffron is undermined by fakes, farming communities in Iran and Kashmir lose their livelihoods.',
+    inShort: 'Never buy powdered saffron. Buy threads. Test in warm water: real saffron bleeds colour slowly.',
+    updated: 'April 2026',
+    sources: [{label:'EU anti-fraud: Saffron enforcement',url:'https://ec.europa.eu/food/safety/agri-food-fraud'},{label:'ISO 3632: Saffron grading',url:'https://www.iso.org/standard/65553.html'}]
+  },
+  {
+    id: 'maple-syrup',
+    icon: '\u{1F341}',
+    title: 'Maple Syrup',
+    tags: ['food'],
+    hook: 'Most "maple" products have never been near a maple tree.',
+    real: 'Real maple syrup is the boiled sap of sugar maple trees, primarily from Quebec and the northeastern US. It takes roughly 40 litres of sap to make 1 litre of syrup. It is graded by colour and flavour: Golden (delicate), Amber (rich), Dark (robust), Very Dark (strong). Ingredients: maple syrup.',
+    fake: '"Maple-flavoured syrup," "pancake syrup," "table syrup," and most branded syrups (including several well-known UK and US brands) are corn syrup or glucose-fructose syrup with maple flavouring, colouring, and sometimes 2-4% real maple. These products cost a fraction of real syrup but take up far more shelf space.',
+    howToTell: [
+      'The ingredient list should say "maple syrup." That is it. One ingredient.',
+      'If the label says "maple-flavoured" or "maple-style," it is not maple syrup.',
+      'Real maple syrup costs \u00a38-15 for 250ml. If it costs less, check the ingredients.',
+      'The consistency of real maple syrup is thin and pourable. Many fakes are thick and sticky because of added corn syrup.'
+    ],
+    bigPicture: 'The maple industry has strict grading and labelling standards within Canada and the US. The problem is the secondary market of "maple-flavoured" products that trade on the name while delivering corn syrup. Supermarket placement often puts the fake versions at eye level with the real ones on lower or higher shelves.',
+    trustMarkers: 'Look for the Quebec Maple Syrup Producers seal or US grading labels. Single ingredient: maple syrup. Grade designation on the bottle.',
+    healthNote: 'Maple-flavoured syrups are high-fructose corn syrup, which metabolises differently from the sucrose in real maple syrup. Real maple contains minerals (manganese, zinc) and antioxidants. Neither is a health food, but they are not the same product.',
+    envNote: '',
+    inShort: 'The ingredient list should say one thing: maple syrup.',
+    updated: 'April 2026',
+    sources: [{label:'Quebec Maple Syrup Producers',url:'https://ppaq.ca/en/'},{label:'USDA: Grading standards',url:'https://www.ams.usda.gov/grades-standards'}]
+  },
+  {
+    id: 'tea',
+    icon: '\u{2615}',
+    title: 'Tea Bags',
+    tags: ['food', 'health', 'environment'],
+    hook: 'You might be brewing plastic.',
+    real: 'Tea is dried leaves from the Camellia sinensis plant. Loose leaf tea, properly stored and brewed, delivers the full flavour and health benefits of the plant. Traditional paper tea bags used a simple filter paper.',
+    fake: 'Many modern tea bags, particularly the silky pyramid-shaped "premium" bags, are made from nylon or PET (polyethylene terephthalate). A single plastic tea bag can release over 11 billion microplastic particles into a cup of tea when brewed. Even paper tea bags often contain polypropylene as a sealant, which is why they do not fully decompose. The "premium" pyramid bag, marketed as a quality upgrade, may actually be worse than the basic paper bag it replaced.',
+    howToTell: [
+      'If the bag feels silky, smooth, or shiny, it is likely plastic (nylon or PET).',
+      'Paper bags that do not fully break down in compost contain polypropylene sealant.',
+      'Check the brand\u2019s website for bag material information. Many have been forced to disclose this.',
+      'Loose leaf tea avoids the problem entirely.'
+    ],
+    bigPicture: 'The tea bag was invented for convenience. The plastic tea bag was invented for aesthetics, to make the bag look cleaner and more "premium." Consumers were not told they were brewing plastic into their drink. The industry knew about microplastic release and did not voluntarily disclose it.',
+    trustMarkers: 'Brands using fully compostable, plastic-free bags (Pukka, Teapigs moved to plant-based, Clipper). Better still: loose leaf tea with a strainer or infuser.',
+    healthNote: 'Microplastics are being studied for their health effects. While the research is ongoing, ingesting billions of plastic particles per cup is not what anyone signed up for. Heat accelerates plastic leaching.',
+    envNote: 'Polypropylene-sealed tea bags do not compost. They contaminate compost systems and end up in landfill. The UK drinks an estimated 100 million cups of tea per day.',
+    inShort: 'If the bag feels silky or shiny, it is plastic. Switch to loose leaf or certified plastic-free bags.',
+    updated: 'April 2026',
+    sources: [{label:'McGill University: Microplastics in tea bags (2019)',url:'https://pubs.acs.org/doi/10.1021/acs.est.9b02540'}]
+  },
+  {
+    id: 'organic-labelling',
+    icon: '\u{1F33F}',
+    title: '"Organic" Labelling',
+    tags: ['food', 'health'],
+    hook: 'Organic means something. But not always what you think.',
+    real: 'In the UK and EU, "organic" is a legally regulated term. Certified organic food must meet standards on pesticide use, fertilisers, animal welfare, and GMOs. Certification bodies (Soil Association, OF&G) inspect farms. It is one of the few food labels that has legal teeth.',
+    fake: 'The complications: "organic" does not mean pesticide-free (approved organic pesticides exist, and some, like copper sulphate, have environmental issues). "Made with organic ingredients" requires only 70% organic content. "Natural" has no legal definition and means nothing. Some products use green imagery, leaf logos, and earthy packaging to imply organic without certification. In beauty and cleaning products, "organic" is even less regulated.',
+    howToTell: [
+      'Look for the specific certification logo: EU organic leaf, Soil Association, USDA Organic.',
+      '"Natural," "farm-fresh," "traditionally made," and "pure" have no legal definition. They are vibes, not standards.',
+      '"Made with organic ingredients" is a lower tier than "organic." Check the percentage.',
+      'In cosmetics, look for COSMOS or Soil Association certification. "Organic" without certification is meaningless.'
+    ],
+    bigPicture: 'Organic certification is one of the better-regulated food labels and represents genuine differences in production methods. The problem is the halo of unregulated terminology that surrounds it, designed to make conventional products feel organic-adjacent. The industry knows that consumers associate "natural" with "organic" and exploits this systematically.',
+    trustMarkers: 'Certified organic logos from recognised bodies. Soil Association is the gold standard in the UK. For imports, look for equivalent certifications. Ignore all uncertified "natural" or "pure" claims.',
+    healthNote: 'The health benefits of organic vs conventional food are debated. Pesticide residue levels are lower in organic produce. Whether this translates to measurable health outcomes at individual level is not settled. What is clear is that farmworkers and surrounding communities bear the highest pesticide exposure.',
+    envNote: 'Organic farming generally supports biodiversity and soil health better than conventional. But it is not zero-impact. Organic copper-based fungicides accumulate in soil. Lower yields per hectare mean more land is needed, which has its own trade-offs.',
+    inShort: 'Look for the certification logo. "Natural," "pure," and "farm-fresh" have no legal meaning.',
+    updated: 'April 2026',
+    sources: [{label:'Soil Association: Organic standards',url:'https://www.soilassociation.org/organic-living/what-is-organic/'},{label:'COSMOS organic standard',url:'https://www.cosmos-standard.org/en/the-cosmos-standard/'}]
+  },
+  {
+    id: 'diamond',
+    icon: '\u{1F48E}',
+    title: 'Diamonds',
+    tags: ['luxury'],
+    hook: 'The value is invented. The scarcity is manufactured.',
+    real: 'Diamonds are carbon crystals formed under extreme pressure. They are genuinely hard and have practical industrial applications. As gemstones, their market value is almost entirely a creation of De Beers\u2019 marketing from the 1930s onward. Before that campaign, diamonds were not the default engagement stone.',
+    fake: 'The diamond industry is built on manufactured scarcity, emotional manipulation, and supply control. Lab-grown diamonds are chemically identical to mined diamonds and cost 60-80% less, which is why the mined diamond industry spends heavily to stigmatise them. The "two months\u2019 salary" rule for engagement rings was invented by an ad agency (N.W. Ayer) for De Beers in 1947. Diamond resale value is typically 30-50% of retail.',
+    howToTell: [
+      'Lab-grown diamonds are real diamonds. They are chemically, physically, and optically identical. The only difference is origin.',
+      'The "4 Cs" grading system was created by the industry to make pricing seem objective. It serves the seller, not the buyer.',
+      'Try reselling a diamond. The gap between retail and resale reveals the true market value.',
+      'If a jeweller disparages lab-grown diamonds, they are protecting margin, not quality.'
+    ],
+    bigPicture: 'Diamonds are the ultimate example of manufactured desire. The industry created the cultural association between diamonds and love, suppressed supply to inflate prices, and convinced generations that a specific rock is the only acceptable symbol of commitment. It is one of the most successful marketing campaigns in human history.',
+    trustMarkers: 'If you want a diamond, lab-grown gives you the same stone for a fraction of the price. If you want coloured gemstones (sapphires, emeralds, rubies), the market is more honest about variation. The most trustworthy approach is to separate the emotional value of jewellery from the manufactured investment narrative.',
+    healthNote: '',
+    envNote: 'Diamond mining causes significant environmental destruction: open-pit mines, river diversion, habitat loss. The industry\u2019s "conflict-free" certification (Kimberley Process) has been widely criticised as inadequate, failing to address human rights abuses beyond the narrowest definition of "conflict diamonds."',
+    inShort: 'Lab-grown diamonds are chemically identical. The price difference is marketing, not material.',
+    updated: 'April 2026',
+    sources: [{label:'The Atlantic: Have you ever tried to sell a diamond? (1982)',url:'https://www.theatlantic.com/magazine/archive/1982/02/have-you-ever-tried-to-sell-a-diamond/304575/'}]
+  },
+  {
+    id: 'baby-food',
+    icon: '\u{1F37C}',
+    title: 'Baby Food & Toddler Snacks',
+    tags: ['food', 'health'],
+    hook: 'Marketed to worried parents. Engineered for shelf life.',
+    real: 'Babies and toddlers need simple, whole foods: mashed vegetables, fruit, grains, protein. The transition to solid food can be done with normal food from the family table, appropriately prepared. This is what humans did for thousands of years before the baby food industry existed.',
+    fake: 'Commercial baby food and toddler snacks are often high in sugar (even "savoury" pouches use fruit puree to sweeten), low in texture (which delays oral development), and marketed with health claims that exploit parental anxiety. Toddler snacks like puffs and biscuits are often nutritionally similar to adult crisps or sweets but packaged to look like health food. "No added sugar" hides behind fruit concentrate, which is biochemically sugar.',
+    howToTell: [
+      'Check sugar content per 100g. Many baby pouches contain 8-12g sugar per 100g, comparable to a dessert.',
+      '"No added sugar" with fruit concentrate in the ingredients is a labelling trick. The sugar is in the concentrate.',
+      'If a toddler snack dissolves instantly in the mouth, it is designed for convenience, not nutrition or oral development.',
+      'Compare the ingredient list to what you would actually cook at home. If they are not similar, the product is more engineered than you might think.'
+    ],
+    bigPicture: 'The baby food industry is worth billions and grows by convincing parents that specialised products are necessary. In reality, most of what they sell is convenient but nutritionally mediocre. The heavy use of fruit puree across all products normalises sweet flavours from the earliest age. This is not accidental; it is product design that prioritises taste acceptance (and repeat purchases) over nutritional best practice.',
+    trustMarkers: 'Ella\u2019s Kitchen and similar brands are better than average but still use fruit-heavy formulations. Best approach: home-prepared food when possible. If using pouches, treat them as occasional convenience, not a dietary staple. NHS Start4Life guidelines are evidence-based.',
+    healthNote: 'Early exposure to predominantly sweet flavours can shape taste preferences for life. High-sugar diets in toddlers are linked to obesity risk. Pouch feeding bypasses the chewing and texture experience that supports oral motor development.',
+    envNote: 'Single-use pouches are difficult to recycle (mixed materials). The baby food industry generates enormous packaging waste for products that could be replaced by a fork and a small container.',
+    inShort: 'Check sugar per 100g. Many pouches contain 8–12g, comparable to a dessert.',
+    updated: 'April 2026',
+    sources: [{label:'NHS Start4Life: Weaning',url:'https://www.nhs.uk/start-for-life/baby/weaning/'},{label:'First Steps Nutrition Trust',url:'https://www.firststepsnutrition.org/'}]
+  },
+  {
+    id: 'spice-adulteration',
+    icon: '\u{1F336}',
+    title: 'Spice Adulteration',
+    tags: ['food', 'health'],
+    hook: 'Ground spices are one of the most adulterated food categories on earth.',
+    real: 'Whole spices, ground fresh, deliver full flavour and are difficult to adulterate because you can see what you are buying. Turmeric should be a rhizome. Black pepper should be a dried berry. Cinnamon should be bark.',
+    fake: 'Ground spices are routinely adulterated with fillers, dyes, and cheaper substitutes. Ground turmeric has been found containing lead chromate (to boost colour) in multiple countries. Ground chilli may contain Sudan Red dye (a known carcinogen banned in food but found repeatedly in products). Ground pepper is bulked with papaya seeds. Ground cinnamon may be cassia (cheaper, with higher coumarin levels). The problem is worst in supply chains serving price-sensitive markets.',
+    howToTell: [
+      'Buy whole spices and grind them yourself. This is the single most effective defence.',
+      'If ground spice is unusually cheap or intensely coloured, be suspicious.',
+      'Buy from reputable spice merchants, not the cheapest option in the supermarket.',
+      'Whole turmeric, whole peppercorns, cinnamon sticks, whole cumin seeds. A basic spice grinder costs under \u00a320 and pays for itself immediately.'
+    ],
+    bigPicture: 'Spice adulteration has been documented for centuries and remains rampant. Modern supply chains, with multiple intermediaries between farm and consumer, create opportunities for adulteration at every stage. Regulatory testing is limited. Ground spices are essentially anonymous by the time they reach a consumer, and the incentive to bulk them is enormous.',
+    trustMarkers: 'Whole spices from named origins. Specialist spice companies (Burlap & Barrel, Steenbergs, Bart\u2019s premium range) with supply chain transparency. Buy whole, grind at home.',
+    healthNote: 'Lead chromate in turmeric is not a theoretical risk. It has been measured at dangerous levels in supply chains across South Asia and has been found in products sold in the US and EU. Sudan Red dyes are carcinogenic. Excessive coumarin from cassia cinnamon (sold as "cinnamon") can cause liver damage with regular consumption.',
+    envNote: '',
+    inShort: 'Buy whole spices and grind them yourself. A £20 grinder pays for itself immediately.',
+    updated: 'April 2026',
+    sources: [{label:'Stanford: Turmeric lead risk in Bangladesh',url:'https://news.stanford.edu/stories/2019/12/turmeric-lead-risk-bangladesh/'},{label:'FSA: Food safety and additives',url:'https://www.food.gov.uk/safety-hygiene/food-additives'}]
+  },
+  {
+    id: 'sunscreen',
+    icon: '\u{2600}',
+    title: 'Sunscreen',
+    tags: ['health'],
+    hook: 'The SPF number tells you less than you think.',
+    real: 'Effective sun protection requires: broad-spectrum coverage (UVA and UVB), adequate application (most people use a third of the recommended amount), regular reapplication (every 2 hours, or after swimming/sweating), and physical protection (clothing, shade, timing). SPF measures UVB protection only.',
+    fake: 'SPF marketing exploits misunderstanding. SPF 30 blocks about 97% of UVB rays. SPF 50 blocks about 98%. SPF 100 blocks about 99%. The difference between 30 and 100 is 2%, but the price difference and false confidence gap is enormous. More importantly, SPF does not measure UVA protection (which causes ageing and contributes to cancer). Many products have high SPF but inadequate UVA coverage.',
+    howToTell: [
+      'Look for "broad spectrum" and a UVA circle logo (EU) or PA++++ rating (Asian sunscreens).',
+      'SPF 30 with good UVA protection is more effective than SPF 100 with poor UVA coverage.',
+      'Check application amount: you need about 1/4 teaspoon for the face alone. Most people apply far less, which halves the effective SPF.',
+      'No sunscreen is "all-day." Reapplication every 2 hours is not optional.'
+    ],
+    bigPicture: 'The sunscreen industry benefits from the "higher number = better" misconception. Very high SPF products create a false sense of security that leads to longer, unprotected sun exposure and reduced reapplication. Dermatologists consistently recommend SPF 30-50 with proper reapplication over SPF 100 applied once.',
+    trustMarkers: 'Dermatologist-recommended brands. Products with specific UVA ratings (not just "broad spectrum" claim). La Roche-Posay, Avene, Altruist, and Asian brands (Biore, Anessa) tend to have strong UVA standards. The British Association of Dermatologists publishes guidance.',
+    healthNote: 'Oxybenzone and octinoxate (common chemical filters) are endocrine disruptors under investigation. Mineral filters (zinc oxide, titanium dioxide) are considered safer but can leave a white cast. The risk of not wearing sunscreen far outweighs the risk of chemical filters.',
+    envNote: 'Oxybenzone and octinoxate are toxic to coral reefs. Hawaii and several countries have banned these ingredients in sunscreen. Reef-safe formulations use mineral filters.',
+    inShort: 'SPF 30 with good UVA protection beats SPF 100 with poor UVA. Reapply every 2 hours.',
+    updated: 'April 2026',
+    sources: [{label:'British Association of Dermatologists',url:'https://www.bad.org.uk/public/skin-cancer/sunscreen-and-sun-safety-fact-sheet/'}]
+  },
+  {
+    id: 'down',
+    icon: '\u{1FAB6}',
+    title: 'Down Feathers',
+    tags: ['fashion', 'health'],
+    hook: 'The softest filling often comes from the hardest supply chains.',
+    real: 'Down is the soft underlayer of feathers from ducks and geese. Ethically sourced down comes from birds that have been humanely raised and slaughtered for meat, with down as a byproduct. Responsible Down Standard (RDS) certification requires animal welfare audits.',
+    fake: 'The majority of global down production comes with no welfare verification. Live-plucking (pulling feathers from living birds, which is extremely painful and can cause injury) is documented in some supply chains, particularly in Eastern Europe and Asia. Force-feeding for foie gras produces "byproduct" down under conditions most consumers would reject. Products labelled "down" may contain significant percentages of feathers (which are different: less insulating, with hard quills) or mixed fills.',
+    howToTell: [
+      'Look for Responsible Down Standard (RDS) or Traceable Down Standard (TDS) certification.',
+      'Check the down-to-feather ratio. "90/10" means 90% down, 10% feathers. Lower ratios mean more quills and less insulation.',
+      'Fill power indicates quality: 600+ is good, 800+ is excellent. If fill power is not stated, the down is likely low quality.',
+      'Synthetic alternatives (Primaloft, Thinsulate) perform well and avoid the supply chain issue entirely.'
+    ],
+    bigPicture: 'Down is a genuinely excellent insulator, but the supply chain is opaque and welfare standards vary enormously by country. The premium that brands charge for "down" jackets does not always translate into ethical sourcing. The industry resists transparency because it would reduce supply and increase cost.',
+    trustMarkers: 'RDS or TDS certification. Patagonia, Rab, and some other outdoor brands publish their down supply chain audits. For synthetic alternatives, check Primaloft or similar certifications.',
+    healthNote: 'Down allergies affect a small percentage of people. What is often labelled as a down allergy is actually a reaction to dust mites that live in down products. Proper casing and regular washing mitigate this.',
+    envNote: 'Down, as a natural byproduct, has a lower carbon footprint than synthetic alternatives (which are petroleum-based). The ethical issue is not the material but the sourcing practices.',
+    inShort: 'Look for Responsible Down Standard (RDS) certification. Or choose Primaloft synthetic.',
+    updated: 'April 2026',
+    sources: [{label:'Responsible Down Standard',url:'https://textileexchange.org/responsible-down-standard/'},{label:'Patagonia: Supply chain',url:'https://www.patagonia.com/our-footprint/'}]
+  },
+  {
+    id: 'mattresses',
+    icon: '\uD83D\uDECF\uFE0F',
+    title: 'Mattresses',
+    tags: ['household'],
+    hook: 'The markup is 900%. The model names exist so you can never compare prices.',
+    real: 'A mattress is springs or foam in a cover. The components that matter are: spring count and type (pocket springs are better than open coil), foam density (higher density lasts longer), and comfort layer materials. These specifications are objective and comparable.',
+    fake: 'The mattress industry uses exclusive model names for each retailer, making price comparison impossible. The same mattress is sold under different names at different shops. "Orthopaedic" has no medical definition or regulatory standard. "Memory foam" ranges from high-density NASA-derived material to cheap polyurethane that softens with heat. Markups of 900-1000% are standard. The "recommended retail price" exists purely to make "sale" prices look like bargains. Mattress shops are almost always having a sale.',
+    howToTell: [
+      'Ask for the specification: spring count, spring type, foam density (kg/m\u00b3), and materials. If the salesperson cannot provide these, walk away.',
+      '"Orthopaedic" is a marketing term with no medical backing. No mattress is clinically certified as orthopaedic.',
+      'Never buy at full "RRP." The permanent sale model means the "sale" price is the real price.',
+      'Compare specifications, not brand names. A 2000 pocket spring mattress from one brand is functionally similar to a 2000 pocket spring from another.',
+      'Online mattress companies (which cut out the retail markup) often offer identical specifications at 50-70% less.'
+    ],
+    bigPicture: 'The mattress industry is built on information asymmetry. By preventing comparison shopping through exclusive naming, they maintain margins that would be impossible in a transparent market. The people who pay the most are those who buy from high-street shops without researching specifications, which skews towards older and less internet-connected consumers.',
+    trustMarkers: 'Specification transparency. Companies that publish foam densities, spring counts, and material origins. Which? Best Buy ratings. Trial periods of 100+ nights (which force the company to stand behind the product). Avoid stores that will not let you compare specs.',
+    healthNote: 'Some foam mattresses off-gas volatile organic compounds (VOCs) when new. CertiPUR certification indicates lower VOC emissions. People with chemical sensitivities should air new mattresses for several days before use.',
+    envNote: 'Mattresses are extremely difficult to recycle. The UK disposes of 7-8 million mattresses per year, most going to landfill. Buying a quality mattress that lasts 10+ years is better than replacing a cheap one every 3-5.',
+    inShort: 'Ask for the spec: spring count, foam density, materials. If they cannot tell you, walk away.',
+    updated: 'April 2026',
+    sources: [{label:'Which? Mattress guide',url:'https://www.which.co.uk/reviews/mattresses'},{label:'CertiPUR certification',url:'https://certipur.us/'}]
+  },
+  {
+    id: 'eyewear',
+    icon: '\uD83D\uDC53',
+    title: 'Eyewear',
+    tags: ['health', 'fashion'],
+    hook: 'One company owns almost every brand, every shop, and the insurance too.',
+    real: 'Prescription glasses are a medical device: two lenses ground to your prescription, mounted in a frame. The lenses are the functional part. Frames are metal, acetate, or plastic. The manufacturing cost of most frames is between \u00a35-30.',
+    fake: 'EssilorLuxottica controls an estimated 80% of the global eyewear market. They own Ray-Ban, Oakley, Persol, Oliver Peoples, and manufacture frames for Armani, Prada, Chanel, Versace, and dozens more. They also own retail chains (LensCrafters, Sunglass Hut, Vision Express) and the insurance (EyeMed in the US). A frame that costs \u00a35-15 to manufacture is sold for \u00a3150-400. Lens coatings marketed as premium (anti-glare, blue light, scratch-resistant) cost pennies to apply but are charged at \u00a330-80 each.',
+    howToTell: [
+      'Check who actually makes the glasses. Most "designer" frames are manufactured by EssilorLuxottica under licence.',
+      'Online retailers (Zenni, EyeBuyDirect, Ace & Tate) sell comparable quality frames and lenses for 70-90% less than high-street opticians.',
+      '"Blue light blocking" lenses have minimal evidence supporting their marketed benefits. The American Academy of Ophthalmology does not recommend them.',
+      'Get your prescription (you are legally entitled to it) and shop around. You do not have to buy glasses from the optician who tested your eyes.'
+    ],
+    bigPicture: 'This is what a near-monopoly looks like. One company controls the brands, the retail channels, the manufacturing, and in some markets the insurance that pays for it. The result is that a medical necessity (corrective lenses) carries a luxury markup. The people who can least afford it pay the most, either through high-street prices or by not replacing glasses they need.',
+    trustMarkers: 'Independent frame makers (Moscot, Cutler and Gross, Kirk Originals). Online prescription retailers with transparent pricing. Your local independent optician, who may offer better value than chains. Always get your pupillary distance (PD) measured so you can order online.',
+    healthNote: 'Delaying or avoiding glasses due to cost is a real public health issue, particularly for children. The artificial inflation of eyewear prices creates a barrier to a basic medical need.',
+    envNote: '',
+    inShort: 'Get your prescription and PD measurement. Order online for 70–90% less than the high street.',
+    updated: 'April 2026',
+    sources: [{label:'AAO: Blue light glasses',url:'https://www.aao.org/eye-health/tips-prevention/are-computer-glasses-worth-it'}]
+  },
+  {
+    id: 'funeral',
+    icon: '\u26B0\uFE0F',
+    title: 'Funeral Industry',
+    tags: ['household'],
+    hook: 'An industry that profits from grief and the fear of being seen as cheap.',
+    real: 'A funeral requires very little by law: a body must be disposed of safely (burial or cremation), and a death must be registered. In the UK, there is no legal requirement for embalming, a specific type of coffin, or the involvement of a funeral director at all. You can legally arrange a funeral yourself.',
+    fake: 'The funeral industry has constructed an expectation of services that are presented as mandatory but are mostly optional. Embalming (often done without explicit consent) is rarely necessary. Coffin prices range from \u00a3100 for a simple cardboard option to \u00a35,000+ for hardwood, with markups of 300-500%. Funeral directors often present packages that bundle unnecessary services. The emotional pressure on grieving families makes price negotiation feel impossible. Average UK funeral cost is now over \u00a34,000.',
+    howToTell: [
+      'You have the right to supply your own coffin. Many funeral directors will not volunteer this information.',
+      'Embalming is almost never legally required and does not preserve a body long-term. It is a cosmetic procedure.',
+      'Ask for an itemised price list before agreeing to anything. Funeral directors are required to provide one.',
+      'Direct cremation (no service, no attendance) costs \u00a31,000-1,500 vs \u00a34,000+ for a traditional funeral. It is what David Bowie and many others have chosen.'
+    ],
+    bigPicture: 'The funeral industry exploits the emotional vulnerability of bereaved families and the social taboo around discussing death and money together. People making decisions while grieving are the least equipped to negotiate or compare prices. The industry knows this and structures its sales process accordingly.',
+    trustMarkers: 'Members of the National Association of Funeral Directors (NAFD) or SAIF must follow a code of practice. Compare at least three quotes. The Fair Funerals pledge (run by Quaker Social Action) identifies providers committed to transparency. Consider funeral planning co-operatives.',
+    healthNote: 'Embalming fluid contains formaldehyde, a known carcinogen. Funeral workers have elevated cancer risks. The routine use of embalming for cosmetic purposes exposes workers to unnecessary chemical hazards.',
+    envNote: 'Traditional burial and cremation both have environmental costs. Cremation produces CO2 and mercury emissions (from dental fillings). Burial uses land and non-biodegradable materials. Woodland burial and water cremation (resomation) are emerging lower-impact alternatives.',
+    inShort: 'You can supply your own coffin. Ask for an itemised price list. Direct cremation costs £1,000–1,500.',
+    updated: 'April 2026',
+    sources: [{label:'Fair Funerals pledge',url:'https://quakersocialaction.org.uk/we-can-help/helping-funerals/fair-funerals-pledge'},{label:'GOV.UK: Arranging a funeral',url:'https://www.gov.uk/after-a-death/arrange-the-funeral'}]
+  },
+  {
+    id: 'printer-ink',
+    icon: '\uD83D\uDDA8\uFE0F',
+    title: 'Printer Ink',
+    tags: ['technology'],
+    hook: 'More expensive per millilitre than vintage champagne.',
+    real: 'Printer ink is a mixture of pigments or dyes in a water or solvent base. The raw materials cost pennies. A typical ink cartridge contains 5-15ml of ink. The technology to produce and fill cartridges is well-established and inexpensive.',
+    fake: 'The printer industry operates on the "razor and blades" model: sell the printer below cost, then lock customers into proprietary cartridges at extreme markups. HP, Canon, and Epson use DRM chips in cartridges that prevent third-party alternatives from working. Firmware updates have been used to brick previously-working third-party cartridges. Some printers refuse to print in black and white when a colour cartridge is empty. "Subscription" ink models (HP Instant Ink) charge monthly and disable your cartridges if you cancel.',
+    howToTell: [
+      'Calculate the per-millilitre cost of your cartridges. Compare it to literally any other liquid. Ink at \u00a32,000-3,000 per litre is not a materials cost, it is a business model.',
+      'Printers that show "low ink" warnings often have 20-40% ink remaining. The warning protects profit, not your prints.',
+      'Ink subscription services own the ink in your printer. If you cancel, the cartridges stop working even if they are full.',
+      'Consider laser printers for text-heavy use. Toner cartridges cost more upfront but print thousands of pages and cannot be remotely disabled.'
+    ],
+    bigPicture: 'The printer ink model is one of the purest examples of manufactured lock-in. The product is sold at artificial loss to create dependency on consumables at artificial markups. DRM on a liquid is the industry telling you that you do not own what you paid for. Right-to-repair advocates have identified printer ink as one of the most consumer-hostile practices in technology.',
+    trustMarkers: 'Epson EcoTank and similar refillable ink tank printers break the cartridge model. Brother printers are generally less aggressive with DRM. Laser printers for text. If you must use cartridges, check if your printer accepts third-party options before buying.',
+    healthNote: '',
+    envNote: 'Ink cartridges generate enormous plastic waste. HP alone sells over 1 billion cartridges per year. While recycling programmes exist, return rates are low. The DRM chips mean cartridges cannot be refilled by third parties, increasing waste.',
+    inShort: 'Calculate cost per ml. Consider a laser printer or refillable ink tank system.',
+    updated: 'April 2026',
+    sources: [{label:'iFixit: Printer DRM',url:'https://www.ifixit.com/News'},{label:'EFF: Right to repair',url:'https://www.eff.org/issues/right-to-repair'}]
+  },
+  {
+    id: 'razors',
+    icon: '\uD83E\uDE92',
+    title: 'Razors',
+    tags: ['household', 'health'],
+    hook: 'Five blades are not better than one. They are more expensive than one.',
+    real: 'A sharp blade at the correct angle removes hair. This has been true for thousands of years. A double-edged safety razor (the standard from 1901 to the 1970s) provides a close shave with a single blade that costs 5-15p per unit.',
+    fake: 'The modern cartridge razor industry is built on planned obsolescence and manufactured complexity. Gillette, Schick, and others add blades (3, 4, 5, 6), lubricating strips, pivoting heads, and vibrating handles to justify prices of \u00a33-5 per cartridge. Each "innovation" is a pricing mechanism, not a shaving improvement. Dermatologists note that more blades can increase irritation (each blade is another pass over the skin). The "pink tax" on women\u2019s razors charges 10-50% more for identical or inferior products in different packaging.',
+    howToTell: [
+      'A double-edged safety razor and 100 blades costs \u00a320-30 total. That is 100 shaves for the price of 4-6 cartridges.',
+      'The "lubricating strip" is a fraction of a penny of material. It does not justify \u00a34 per cartridge.',
+      'Compare men\u2019s and women\u2019s versions of the same razor brand. The difference is colour and price, not function.',
+      'Subscription razor services (Harry\u2019s, Dollar Shave Club) are better than retail but still more expensive than safety razors.'
+    ],
+    bigPicture: 'Gillette\u2019s patent on the safety razor expired in the 1920s. Every innovation since then has been primarily about re-establishing patent protection and proprietary cartridges, not about better shaving. The industry spends more on marketing than on blade technology. The pink tax is a particularly clear example of pricing based on perceived market tolerance rather than cost.',
+    trustMarkers: 'Double-edged safety razors from Merkur, Edwin Jagger, Muhle. Feather blades (Japanese, widely considered the sharpest). For those who prefer cartridges, subscription services are better value than retail.',
+    healthNote: 'Multi-blade razors can cause more ingrown hairs and razor bumps, particularly on coarse or curly hair. Dermatologists often recommend single-blade shaving for people prone to pseudofolliculitis barbae (razor bumps), which disproportionately affects Black men.',
+    envNote: 'Cartridge razors are non-recyclable mixed plastic and metal. Billions end up in landfill annually. Safety razor blades are fully recyclable steel.',
+    inShort: 'A safety razor and 100 blades costs £25. That is the price of 5–6 cartridge refills.',
+    updated: 'April 2026',
+    sources: [{label:'Guardian: The pink tax',url:'https://www.theguardian.com/fashion/2024/jan/25/pink-tax-women-pay-more'}]
+  },
+  {
+    id: 'toothpaste',
+    icon: '\uD83E\uDDB7',
+    title: 'Toothpaste',
+    tags: ['health'],
+    hook: 'The 47 varieties on the shelf are mostly the same paste in different boxes.',
+    real: 'Toothpaste needs two things: fluoride (at 1350-1500 ppm for adults, the concentration proven to prevent decay) and a mild abrasive. That is it. The cheapest fluoride toothpaste on the shelf does the same job as the most expensive. Brushing technique and duration matter more than the paste.',
+    fake: 'The oral care industry generates premium pricing through product multiplication: whitening, sensitivity, gum care, charcoal, "natural," enamel repair, "advanced," "pro," and "expert" variants. Most contain the same active ingredients at the same concentrations. "Whitening" toothpastes use abrasives or low-concentration peroxide that produce minimal visible results. Charcoal toothpaste is actively harmful: it is abrasive enough to damage enamel and contains no fluoride in most formulations. "Natural" toothpastes without fluoride provide no cavity protection.',
+    howToTell: [
+      'Check the fluoride concentration: 1350-1500 ppm for adults, 1000 ppm for children. If this is correct, the toothpaste works.',
+      '"Whitening" toothpaste will not meaningfully change your tooth colour. Professional whitening uses far higher peroxide concentrations.',
+      'Charcoal toothpaste is a net negative: it damages enamel and most versions lack fluoride. Dentists advise against it.',
+      'The cheapest fluoride toothpaste in the shop is clinically equivalent to the most expensive. The NHS confirms this.'
+    ],
+    bigPicture: 'Oral care is a \u00a340 billion global industry built on anxiety about appearance and social acceptability. The science is simple: fluoride, brushing, flossing. Everything else is marketing. The proliferation of variants creates the illusion of meaningful choice where little exists. Meanwhile, dental care access remains deeply unequal, and the people who most need basic fluoride toothpaste are often targeted with expensive "premium" alternatives.',
+    trustMarkers: 'Any toothpaste with 1350-1500 ppm fluoride and the Oral Health Foundation recommended logo. Sensodyne for genuine sensitivity (the potassium nitrate is evidence-based). Everything else is preference, not performance.',
+    healthNote: 'Fluoride-free toothpaste provides no cavity protection. "Natural" oral care marketing has contributed to a measurable increase in childhood cavities in communities that have adopted fluoride-free products. Charcoal toothpaste abrades enamel, which does not grow back.',
+    envNote: '',
+    inShort: 'Any toothpaste with 1350–1500 ppm fluoride works. The cheapest one is clinically equivalent.',
+    updated: 'April 2026',
+    sources: [{label:'NHS: Fluoride guidance',url:'https://www.nhs.uk/live-well/healthy-teeth-and-gums/'},{label:'Oral Health Foundation',url:'https://www.dentalhealth.org/caring-for-my-teeth'}]
+  },
+  {
+    id: 'pet-food',
+    icon: '\uD83D\uDC36',
+    title: 'Pet Food',
+    tags: ['food', 'household'],
+    hook: '"Premium" and "gourmet" have no legal meaning. Neither does the picture on the packet.',
+    real: 'Dogs and cats need species-appropriate nutrition: protein from identifiable animal sources, fats, and limited carbohydrate. The quality of pet food depends on the quality and digestibility of the protein source, not the marketing, the packaging, or the price.',
+    fake: '"Premium," "gourmet," "natural," and "holistic" are unregulated marketing terms in pet food. "Meat derivatives" (or "animal by-products") means rendered material from slaughterhouses: organs, bones, blood, and tissues from unspecified species, which can change batch to batch. "Chicken flavour" may contain almost no chicken. Ingredients are listed by weight before cooking: "chicken" as the first ingredient can be 60-70% water, meaning the actual dry-weight chicken content is much lower than the grain listed second.',
+    howToTell: [
+      'Named protein sources ("chicken," "salmon") are better than unnamed ("meat derivatives," "animal by-products").',
+      'Check the analytical constituents: crude protein above 25-30% for dogs and 30-35% for cats indicates reasonable protein content.',
+      'Grain-free is not inherently better. The "grain-free" trend has been linked to potential heart issues (DCM) in dogs by the FDA.',
+      'Ignore the photography. The image of a steak on the packet has no legal relationship to the contents.'
+    ],
+    bigPicture: 'The pet food industry is worth over \u00a33 billion in the UK alone. It exploits the emotional bond between owners and pets to justify premium pricing on products that may not deliver premium nutrition. The people paying the most for "gourmet" pet food may be getting meat derivatives with better branding. Meanwhile, own-brand products with named ingredients can be nutritionally superior at a fraction of the price.',
+    trustMarkers: 'FEDIAF compliance (the European standard). Named protein sources as the first ingredient. Brands that publish full ingredient breakdowns and feeding trial data. AAFCO complete and balanced statement (US). Vet-recommended diets for specific conditions.',
+    healthNote: 'Unspecified "meat derivatives" can include 4D meat (dead, dying, diseased, disabled animals) in some markets. Mycotoxins in grain-based pet foods are a documented contamination risk. Raw feeding has both advocates and documented pathogen risks (Salmonella, Listeria) to pets and their owners.',
+    envNote: 'Pet food production has a significant carbon footprint, with meat-based pet diets contributing to demand for animal agriculture. The industry generates enormous packaging waste.',
+    inShort: 'Named protein source as the first ingredient. Ignore the photography on the packet.',
+    updated: 'April 2026',
+    sources: [{label:'FEDIAF: Nutritional guidelines',url:'https://fediaf.org/self-regulation/nutrition.html'},{label:'FDA: Grain-free diets and DCM',url:'https://www.fda.gov/animal-veterinary/animal-health-literacy/questions-answers-fda-center-veterinary-medicines-investigation-possible-connection-between-diet-and'}]
+  },
+  {
+    id: 'energy-drinks',
+    icon: '\u26A1',
+    title: 'Energy Drinks',
+    tags: ['food', 'health'],
+    hook: 'A can of caffeine and sugar marketed as a performance upgrade.',
+    real: 'Caffeine is a well-documented stimulant. A cup of coffee contains 80-100mg. It improves alertness and reaction time in the short term. That is the active ingredient in every energy drink.',
+    fake: 'Energy drinks are caffeine and sugar (or sweetener) in a branded can, with proprietary "energy blends" added to create the impression of sophisticated formulation. Taurine, B-vitamins, guarana, ginseng, and L-carnitine are standard additions, but at the doses included, evidence of benefit beyond the caffeine itself is minimal. A 500ml can may contain 150-160mg of caffeine (equivalent to two coffees) and 50-60g of sugar (12-15 teaspoons). Marketing targets young men and teenagers with language of extreme performance.',
+    howToTell: [
+      'Compare the caffeine content to coffee. You are paying 5-10x more per milligram of caffeine.',
+      'The "proprietary blend" or "energy complex" is not a meaningful differentiator. The caffeine does the work.',
+      'Check the sugar content. A 500ml energy drink may contain more sugar than a Mars bar.',
+      '"Sugar-free" versions replace sugar with sweeteners but still deliver the same caffeine dose, which is the only genuinely active component.'
+    ],
+    bigPicture: 'Energy drinks are one of the most effective marketing achievements in the beverage industry. They take a commodity stimulant (caffeine), add sugar and branding, and sell it at a 1000% markup over coffee. The marketing deliberately targets adolescents and young adults with aspirational imagery of extreme sports, gaming, and performance. Several countries have considered or implemented age restrictions.',
+    trustMarkers: 'If you want caffeine, coffee or tea is cheaper, better understood, and comes without the sugar payload. If you prefer cold caffeine, cold brew coffee is a fraction of the price. If you choose energy drinks, check the caffeine and sugar content and treat it as what it is: a caffeinated soft drink.',
+    healthNote: 'High caffeine intake in adolescents is associated with anxiety, sleep disruption, and heart palpitations. Energy drink-related A&E visits have risen sharply among under-25s. Mixing energy drinks with alcohol masks intoxication cues, increasing the risk of alcohol poisoning. The European Food Safety Authority considers 400mg of caffeine the upper daily limit for adults, and 3mg/kg for adolescents.',
+    envNote: '',
+    inShort: 'It is caffeine and sugar in a can. Coffee delivers the same stimulant at a fraction of the price.',
+    updated: 'April 2026',
+    sources: [{label:'EFSA: Caffeine safety',url:'https://www.efsa.europa.eu/en/efsajournal/pub/4102'}]
+  },
+  {
+    id: 'paint',
+    icon: '\uD83C\uDFA8',
+    title: 'Premium Paint',
+    tags: ['household'],
+    hook: 'Farrow & Ball charges 10x for the same pigments in a nicer tin.',
+    real: 'Paint is pigment suspended in a binder (acrylic, alkyd) with solvents and additives. Quality differences exist: higher pigment concentration gives better coverage, better binders improve durability, and lower VOC formulations are better for health. These differences are real but do not justify the price gaps in the market.',
+    fake: '"Heritage," "designer," and "luxury" paint brands (Farrow & Ball, Little Greene, Zoffany) charge \u00a345-60 per 2.5 litres for paint that professional decorators consistently say performs no better than mid-range trade paint at \u00a315-25 per 2.5 litres. The colour names are the product. "Elephant\u2019s Breath" and "Dead Salmon" cost three times more than a colour-matched equivalent. Hardware stores will colour-match any sample for a fraction of the price.',
+    howToTell: [
+      'Ask any professional decorator. Most use trade-grade paint (Dulux Trade, Crown Trade, Johnstone\u2019s) regardless of budget.',
+      'Any paint shop can colour-match a sample from any brand. You are paying for the name, not the pigment.',
+      'Check the coverage rate (m\u00b2/litre). If a cheaper paint covers the same area per litre, the formulation is equivalent.',
+      '"Eco" or "low VOC" is worth paying for (genuine health benefit). The brand name is not.'
+    ],
+    bigPicture: 'Premium paint branding is an exercise in lifestyle marketing. The product is commodity chemistry with a design-magazine narrative wrapped around it. The people who can least afford to overpay are renovating on tight budgets. The people who can most afford it are paying for social signalling, not paint quality.',
+    trustMarkers: 'Trade-grade paint from major manufacturers. Coverage rate per litre. VOC content (lower is better). Professional decorator recommendations. Colour matching services at any hardware store.',
+    healthNote: 'VOCs in paint off-gas during and after application. Low-VOC and zero-VOC formulations are genuinely better for indoor air quality, especially in children\u2019s rooms and poorly ventilated spaces. This is worth paying for. The brand name is not.',
+    envNote: '',
+    inShort: 'Any hardware store will colour-match a sample for a fraction of the "heritage" price.',
+    updated: 'April 2026',
+    sources: [{label:'Which? Paint reviews',url:'https://www.which.co.uk/reviews/paint/article/best-paints'}]
+  },
+  {
+    id: 'broadband',
+    icon: '\uD83C\uDF10',
+    title: 'Broadband Speeds',
+    tags: ['technology'],
+    hook: '"Up to" 100Mbps means legally you might get 30.',
+    real: 'Your broadband speed is determined by your infrastructure (fibre to the premises is fastest, fibre to the cabinet less so, copper slowest), distance from the exchange or cabinet, internal wiring, and network congestion. These are measurable, testable figures.',
+    fake: 'ISPs advertise "up to" speeds that represent theoretical maximums under ideal conditions. The Advertising Standards Authority requires that the "up to" speed must be achievable by at least 10% of customers. This means 90% of customers can legally receive less than advertised. Average actual speeds are typically 50-70% of the headline figure. Customer service teams are trained to blame your router, your wiring, or your devices before acknowledging network issues.',
+    howToTell: [
+      'Run a speed test (fast.com or speedtest.net) at multiple times of day. Compare to your advertised speed.',
+      'Ask your ISP for the estimated speed range for your specific address before signing up.',
+      'Check Ofcom\u2019s annual broadband performance reports, which measure actual vs advertised speeds by provider.',
+      'If you consistently get less than your contract\u2019s minimum guaranteed speed, you have the right to exit the contract penalty-free under Ofcom rules.'
+    ],
+    bigPicture: '"Up to" pricing allows ISPs to sell premium packages to customers whose infrastructure will never deliver the headline speed. People in rural areas and social housing are disproportionately affected by the gap between advertised and actual speeds, while paying the same prices. The regulatory framework permits this because the industry lobbied for the "at least 10%" standard.',
+    trustMarkers: 'Full-fibre (FTTP) providers deliver more consistent speeds. Ofcom\u2019s broadband checker gives address-level estimates. Community Fibre, Hyperoptic, and similar providers in fibre areas tend to deliver closer to advertised speeds. Always check the minimum guaranteed speed in your contract.',
+    healthNote: '',
+    envNote: '',
+    inShort: 'Run a speed test at multiple times of day. If below minimum guaranteed, you can exit penalty-free.',
+    updated: 'April 2026',
+    sources: [{label:'Ofcom: Broadband performance',url:'https://www.ofcom.org.uk/research-and-data/telecoms-research'},{label:'Ofcom broadband checker',url:'https://checker.ofcom.org.uk/en-gb/broadband-coverage'}]
+  },
+  {
+    id: 'banking-fees',
+    icon: '\uD83C\uDFE6',
+    title: '"Free" Banking',
+    tags: ['finance'],
+    hook: 'Free current accounts make their money from the people who can least afford it.',
+    real: 'Banks are businesses. Running a current account costs money: transaction processing, fraud prevention, branch and ATM networks, customer service. If you are not paying a visible fee, you are paying in other ways.',
+    fake: '"Free" current accounts generate revenue through: unarranged overdraft charges (now capped but still significant), arranged overdraft interest (typically 35-40% APR, higher than many credit cards), foreign transaction fees (2.5-3%), the spread between savings rates paid to you and lending rates charged to borrowers, and interchange fees on card transactions. The people who generate the most fee income are those who regularly go overdrawn, which correlates strongly with lower income. The "free" model is effectively a cross-subsidy: people in financial difficulty pay for the banking of those who are not.',
+    howToTell: [
+      'Calculate your actual annual cost: overdraft charges, foreign transaction fees, opportunity cost of low savings rates.',
+      'Arranged overdraft rates of 35-40% APR are higher than many credit cards. If you regularly use your overdraft, a low-interest credit card may be cheaper.',
+      'Fee-paying accounts (\u00a310-15/month) sometimes offer benefits (travel insurance, phone insurance) that are cheaper bought separately.',
+      '"Switching bonuses" of \u00a3100-175 are funded by the lifetime value the bank expects to extract from your account.'
+    ],
+    bigPicture: 'The "free banking" model was established in the 1980s. It has been criticised by consumer groups and the FCA for decades because it creates a system where the poorest customers subsidise the wealthiest. Unarranged overdraft charges were the most regressive element before the FCA\u2019s 2020 reforms. The industry resisted reform at every stage, spending heavily on lobbying to maintain the model.',
+    trustMarkers: 'Digital banks (Monzo, Starling, Revolut) are more transparent about fees and offer real-time notifications that help avoid overdraft charges. Credit unions offer ethical alternatives. Always know your overdraft rate and compare it to other credit options.',
+    healthNote: 'Financial stress is directly linked to mental health. Unexpected bank charges create a debt spiral that disproportionately affects people already in financial difficulty. The mental health cost of the "free" banking model falls on its most vulnerable customers.',
+    envNote: '',
+    inShort: 'Know your overdraft rate. At 39% APR it is more expensive than most credit cards.',
+    updated: 'April 2026',
+    sources: [{label:'FCA: Overdrafts guidance',url:'https://www.fca.org.uk/consumers/overdrafts'}]
+  },
+  {
+    id: 'probiotics',
+    icon: '\uD83E\uDDA0',
+    title: 'Probiotics',
+    tags: ['health'],
+    hook: 'Most of them are dead by the time they reach your gut.',
+    real: 'The gut microbiome is genuinely important to health. Specific probiotic strains, at specific doses, have evidence for specific conditions: Lactobacillus rhamnosus GG for antibiotic-associated diarrhoea, Saccharomyces boulardii for traveller\u2019s diarrhoea, VSL#3 for ulcerative colitis management. The science is real but strain-specific and dose-dependent.',
+    fake: 'The commercial probiotic industry sells general "gut health" products that mostly contain strains with no evidence for the conditions they imply they treat, at doses below therapeutic levels, in formats (capsules, drinks, yoghurts) where survival through stomach acid is questionable. Yakult, Actimel, and similar drinks contain modest doses of well-studied strains but are also loaded with sugar. Probiotic supplements are classified as food, not medicine, so they do not need to prove efficacy. The term "live cultures" on a label tells you nothing about whether those cultures are alive at the point of consumption.',
+    howToTell: [
+      'Look for specific named strains (e.g. Lactobacillus rhamnosus GG), not just genus and species.',
+      'Check the CFU count (colony-forming units) and whether it is guaranteed at expiry or at manufacture. Counts drop significantly over shelf life.',
+      'Effective doses are typically in the billions. Many products contain millions, which is too low.',
+      'Probiotic drinks marketed to children are often probiotic-adjacent desserts with significant sugar content.'
+    ],
+    bigPicture: 'The probiotic industry took legitimate microbiome science, stripped out the specificity, and turned it into a general wellness narrative worth billions. The EU banned most probiotic health claims in 2012 because they could not be substantiated. The industry responded by continuing to sell the same products with vaguer marketing. The gap between the science and the shelf is enormous.',
+    trustMarkers: 'Products with named strains that have clinical trial data. Gastroenterologist recommendations for specific conditions. NHS guidance on when probiotics are evidence-based. Fermented foods (kimchi, sauerkraut, kefir, live yoghurt) provide diverse live cultures more affordably than supplements.',
+    healthNote: 'Probiotics are not universally beneficial. In some cases (post-antibiotic recovery), specific probiotics may actually delay gut microbiome recovery compared to no intervention. Immunocompromised individuals should consult a doctor before taking probiotics. The "more is better" assumption has no evidence base.',
+    envNote: '',
+    inShort: 'Look for named strains with clinical trial data. Fermented foods are cheaper and more diverse.',
+    updated: 'April 2026',
+    sources: [{label:'Cell: Probiotic colonisation study',url:'https://www.cell.com/cell/fulltext/S0092-8674(18)31102-4'},{label:'NHS: Probiotics',url:'https://www.nhs.uk/conditions/probiotics/'}]
+  },
+  {
+    id: 'coffee-pods',
+    icon: '\u2615',
+    title: 'Coffee Pods',
+    tags: ['food', 'environment', 'household'],
+    hook: 'The most expensive way to make the least impressive coffee.',
+    real: 'Good coffee needs freshly roasted beans, ground just before brewing, extracted at the right temperature and pressure. An Aeropress (\u00a330), a Moka pot (\u00a320), or a V60 (\u00a38) with freshly ground beans produces better coffee than any pod machine. A basic espresso machine (\u00a3150-300) produces genuine espresso.',
+    fake: 'Coffee pods (Nespresso, Tassimo, Dolce Gusto, Keurig) are pre-ground coffee in sealed capsules. The coffee was ground weeks or months ago and has lost significant flavour and aroma (coffee begins to go stale within 15 minutes of grinding). A Nespresso pod contains 5-7g of coffee at a cost of 30-45p, which is \u00a345-65 per kilogram. Fresh speciality coffee beans cost \u00a320-35 per kilogram. You are paying 2-3x more for objectively inferior coffee because of the machine lock-in.',
+    howToTell: [
+      'Calculate your cost per cup and per kilo. Pods are almost always the most expensive way to make coffee.',
+      'Fresh coffee smells intensely aromatic when ground. Open a pod and compare. The difference is obvious.',
+      'The machine is sold at a loss or heavily subsidised. The profit is in the pods. This is the printer ink model applied to coffee.',
+      'Nespresso\u2019s patent expiry has enabled compatible pods at lower prices, but the format itself still delivers stale, pre-ground coffee.'
+    ],
+    bigPicture: 'Nespresso is one of the most successful consumer lock-in strategies of the 21st century. George Clooney made a Nestle product seem like a luxury European experience. The reality is pre-ground commodity coffee in an aluminium capsule. The machine creates dependency on the capsule ecosystem, which is where the margin lives.',
+    trustMarkers: 'Manual brew methods produce better coffee for less money. If convenience is essential, a bean-to-cup machine grinds fresh per cup. Reusable pod capsules exist but partially defeat the convenience argument.',
+    healthNote: '',
+    envNote: 'Nespresso claims high recycling rates but independent analysis suggests actual recycling is much lower. Aluminium pods need specialist recycling. Billions of pods go to landfill annually. A reusable filter and loose coffee produces zero packaging waste per cup.',
+    inShort: 'An Aeropress and fresh beans cost less per cup and taste better than any pod.',
+    updated: 'April 2026',
+    sources: [{label:'Environmental impact of coffee pods',url:'https://en.wikipedia.org/wiki/Environmental_impact_of_single-use_coffee_pods'}]
+  },
+  {
+    id: 'subscription-cancellation',
+    icon: '\u274C',
+    title: 'Subscription Cancellation',
+    tags: ['software', 'finance'],
+    hook: 'One click to subscribe. Fourteen clicks, a phone call, and a guilt trip to cancel.',
+    real: 'Cancelling a subscription should be as easy as starting one. The EU\u2019s Digital Services Act and the US FTC\u2019s "click to cancel" rule (2024) both recognise this principle. If you can sign up online, you should be able to cancel online, in the same number of steps.',
+    fake: 'Companies deliberately engineer cancellation flows to retain subscribers through friction, not value. Common tactics: hiding the cancel button behind multiple menu layers, requiring a phone call during limited hours, presenting a series of "retention offers" and guilt-based prompts ("Are you sure? You\u2019ll lose all your data"), requiring you to speak to a "specialist" whose job is to talk you out of leaving, greying out the cancel option while highlighting "pause" or "downgrade," and timing confirmation emails to arrive days later with auto-renewal buried in the fine print.',
+    howToTell: [
+      'If it takes more than 3 clicks to cancel, the friction is intentional.',
+      'If you have to call a phone line to cancel something you signed up for online, that is a deliberate barrier.',
+      '"We\u2019re sorry to see you go" screens with multiple options before the actual cancel button are retention dark patterns.',
+      'Check your bank statements for subscriptions. Many people pay for services they forgot they subscribed to, which is the business model.',
+      'In the EU, companies must provide an online cancellation method as easy as the sign-up process.'
+    ],
+    bigPicture: 'The subscription economy depends on inertia. Industry data shows that making cancellation harder reduces churn by 10-40%. Every friction point is measured and optimised. The people who lose the most are those who are less digitally confident, time-poor, or anxious about confrontation on retention calls. The FTC estimates that dark pattern cancellation costs US consumers billions annually.',
+    trustMarkers: 'Services with one-click cancellation (no retention flow, no phone call). Companies that confirm cancellation instantly by email. Check cancellation reviews before subscribing to any new service. In the UK, recurring card payments can be stopped by instructing your bank to block them.',
+    healthNote: 'Unwanted subscriptions contribute to financial stress. The cognitive load of managing multiple subscriptions and navigating hostile cancellation flows is a real burden, particularly for people managing mental health conditions.',
+    envNote: '',
+    inShort: 'If it takes more than 3 clicks to cancel, the friction is deliberate.',
+    updated: 'April 2026',
+    sources: [{label:'FTC: Click-to-cancel rule (2024)',url:'https://www.ftc.gov/news-events/news/press-releases/2024/10/federal-trade-commission-announces-final-click-cancel-rule'},{label:'EU Digital Services Act',url:'https://digital-strategy.ec.europa.eu/en/policies/digital-services-act-package'}]
+  },
+  {
+    id: 'free-trials',
+    icon: '\uD83C\uDD93',
+    title: '"Free" Trials',
+    tags: ['software', 'finance'],
+    hook: 'Free for 7 days. Charged forever after that.',
+    real: 'A genuine free trial lets you evaluate a product without risk. The original model: try it, decide if you want it, then actively choose to pay.',
+    fake: 'The modern "free trial" requires payment details upfront, activates auto-renewal by default, and relies on the user forgetting to cancel before the trial ends. The conversion rates tell the story: the industry knows that a significant percentage of "conversions" from free trials are people who forgot, not people who chose to continue. Dark patterns include: pre-checked "continue after trial" boxes, trial-end notifications sent at 3am or buried in promotional email folders, and making the cancellation process deliberately complex. Some services charge the full annual fee immediately when the trial converts, not a monthly rate.',
+    howToTell: [
+      'If a "free trial" requires your credit card, the business model is forgetfulness, not quality.',
+      'Set a calendar reminder for 2 days before any trial ends. Not the last day, because some services need 24-48 hours to process cancellation.',
+      'Use virtual card numbers (available from Revolut, Monzo, and others) with low limits for free trials. The charge will fail when the trial converts.',
+      'Read what happens at trial end. "Trial converts to annual plan" is not the same as "trial converts to monthly plan."'
+    ],
+    bigPicture: 'The credit-card-required free trial is designed to exploit the gap between intention and action. People intend to cancel but forget. The industry calls these conversions. A more honest word would be accidental charges. The people most vulnerable are those managing many subscriptions on tight budgets, where an unexpected \u00a3100 annual charge causes real financial harm.',
+    trustMarkers: 'Services that offer genuine free tiers (no card required). Products confident enough in their value to let you start paying only when you actively choose to. Transparent trial-to-paid conversion with clear email notification 48-72 hours before charging.',
+    healthNote: '',
+    envNote: '',
+    inShort: 'Set a reminder 2 days before trial end. Use a virtual card with a low limit.',
+    updated: 'April 2026',
+    sources: [{label:'Citizens Advice: Consumer rights',url:'https://www.citizensadvice.org.uk/consumer/'},{label:'FTC: Negative option marketing',url:'https://www.ftc.gov/legal-library/browse/federal-register-notices/negative-option-rule'}]
+  },
+  {
+    id: 'dark-patterns',
+    icon: '\u{1F5B1}\uFE0F',
+    title: 'Dark Patterns in UI Design',
+    tags: ['software', 'technology'],
+    hook: 'The button you are supposed to click is always the one they want you to click.',
+    real: 'Good user interface design makes the user\u2019s intent easy to execute. Buttons are clear, options are honest, and the default settings serve the user. Ethical design treats the user as the client.',
+    fake: 'Dark patterns are interface designs that trick users into actions they did not intend. Common examples: "confirmshaming" (the decline option reads "No, I don\u2019t want to save money"), misdirection (the accept button is bright and large, the decline button is grey and small), hidden costs (fees revealed only at checkout), forced continuity (auto-renewal hidden in terms), privacy zuckering (settings defaulting to maximum data sharing with the opt-out buried in sub-menus), bait and switch (clicking one thing triggers another), and the "roach motel" (easy to get in, impossible to get out).',
+    howToTell: [
+      'If you feel rushed, confused, or guilty during any digital interaction, you are likely encountering a dark pattern.',
+      'If the "no" option is phrased to make you feel bad ("No thanks, I hate saving money"), that is confirmshaming.',
+      'If the button they want you to press is visually prominent and the alternative is hidden or greyed out, your attention is being manipulated.',
+      'If default settings collect maximum data and opting out requires navigating multiple screens, that is privacy zuckering.',
+      'Check darkpatterns.org (now deceptive.design) for documented examples by company.'
+    ],
+    bigPicture: 'Dark patterns are not accidents. They are designed, tested, and optimised through A/B testing. Every major tech company employs teams whose job is to maximise engagement, conversion, and data collection, often against the user\u2019s actual interests. The EU\u2019s Digital Services Act explicitly bans certain dark patterns. The UK\u2019s Competition and Markets Authority has taken enforcement action against them. But regulation lags far behind deployment.',
+    trustMarkers: 'Companies that use clear, honest UI with equally weighted options. Privacy settings that default to minimum collection. One-click unsubscribe. The B Corp certification considers ethical design practices. Apps that respect your attention (no infinite scroll, no notification manipulation).',
+    healthNote: 'Dark patterns exploit cognitive biases: loss aversion, social proof, urgency, and decision fatigue. People with ADHD, anxiety, or cognitive impairments are disproportionately affected. Manipulative notification patterns contribute to screen addiction and anxiety.',
+    envNote: '',
+    inShort: 'If you feel rushed, confused, or guilty during a digital interaction, you are being manipulated.',
+    updated: 'April 2026',
+    sources: [{label:'deceptive.design (dark patterns DB)',url:'https://www.deceptive.design/types'},{label:'CMA: Enforcement actions',url:'https://www.gov.uk/cma-cases'}]
+  },
+  {
+    id: 'freemium-apps',
+    icon: '\uD83D\uDCF1',
+    title: 'Freemium Apps & In-App Purchases',
+    tags: ['software', 'finance'],
+    hook: 'The app is free. Your child\u2019s impulse control is the product.',
+    real: 'Some apps offer genuine free functionality with optional paid upgrades for power users. This is a legitimate business model when the free version is honestly useful and the upgrade is clearly presented.',
+    fake: 'The freemium model, particularly in gaming, is engineered around psychological manipulation. "Free" games are designed to create frustration at specific intervals, then offer paid solutions. Loot boxes and gacha mechanics use variable-ratio reinforcement (the same mechanism as slot machines). Children\u2019s games are the most aggressive: bright colours, celebratory sounds for purchases, and "energy" systems that run out mid-play. In-app purchases can accumulate to hundreds or thousands of pounds. "Pay to win" mechanics mean free players are deliberately disadvantaged to incentivise spending.',
+    howToTell: [
+      'If a game becomes frustrating at regular intervals and offers a paid solution, the frustration is the product design.',
+      'Check the "top grossing" charts. The biggest earners are almost always "free" games with aggressive in-app purchase systems.',
+      'If the game has a premium currency (gems, coins, diamonds) with complex exchange rates, it is obscuring real costs.',
+      'Disable in-app purchases in phone settings. For children, this is essential.',
+      'Loot boxes with random rewards are gambling mechanics regardless of what the industry calls them.'
+    ],
+    bigPicture: 'Mobile gaming revenue exceeds console and PC gaming combined, primarily through in-app purchases in "free" games. The model depends on "whales" (a small percentage of players who spend disproportionately), many of whom show signs of compulsive spending. Children, teenagers, and people with gambling tendencies are the most vulnerable. Belgium and the Netherlands have classified loot boxes as gambling. The UK is still deliberating.',
+    trustMarkers: 'Games with a one-time purchase price. Premium games without in-app currency. Apple and Google both require disclosure of in-app purchase price ranges. Parental controls that disable or limit in-app purchases. Toca Boca, Monument Valley, and similar studios that sell complete games without manipulation mechanics.',
+    healthNote: 'The WHO recognises gaming disorder. In-app purchase mechanics use the same psychological levers as gambling: variable rewards, near-miss effects, social pressure, and artificial scarcity. Children are particularly susceptible because impulse control develops into the mid-twenties.',
+    envNote: '',
+    inShort: 'Disable in-app purchases in phone settings. For children, this is essential.',
+    updated: 'April 2026',
+    sources: [{label:'Belgian Gaming Commission: Loot boxes',url:'https://www.gamingcommission.be/en'},{label:'WHO: Gaming disorder',url:'https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder'}]
+  },
+  {
+    id: 'saas-pricing',
+    icon: '\u{1F4B3}',
+    title: 'SaaS Pricing Tiers',
+    tags: ['software', 'technology'],
+    hook: 'The plan you need is always in the tier above the one you can afford.',
+    real: 'Software should cost what it costs to develop, maintain, and support, scaled fairly across users. Some SaaS products genuinely offer more infrastructure or features at higher tiers.',
+    fake: 'SaaS pricing is an exercise in manufactured scarcity. The most common pattern: cripple the lower tier so that one or two essential features sit just above the paywall. The "Basic" plan lacks the one feature you need. The "Pro" plan includes it but also bundles features you will never use. The "Enterprise" plan hides its price ("Contact sales") because the figure is whatever they think you will pay. Per-seat pricing penalises collaboration. Usage limits (API calls, storage, exports) are set to trigger upgrades at predictable growth points. Annual billing locks you in with a significant penalty for leaving mid-term.',
+    howToTell: [
+      'Check which features are excluded from lower tiers. If a basic feature (export, API access, more than 3 users) is paywalled, the tier structure is designed to force upgrades.',
+      '"Per seat" pricing adds up fast. Calculate total annual cost for your team, not the per-user-per-month headline.',
+      '"Contact sales" means the price is negotiable but they want to anchor high.',
+      'Check if the annual plan has a cancellation penalty. Many do not refund unused months.',
+      'Compare the actual features you use against what you pay for. Most teams use 20% of a tool\u2019s features but pay for 100%.'
+    ],
+    bigPicture: 'The SaaS model has shifted software from ownership to rental. This is not inherently bad, but the pricing strategies are designed to extract maximum revenue from dependency. Once your data and workflows are inside a platform, switching costs make you captive. Price increases on captive users are the norm: Jira, Slack, Notion, and others have increased prices significantly once market share was established.',
+    trustMarkers: 'Transparent pricing published on the website. Feature parity across tiers (scaling by usage, not by feature lockout). Monthly billing without penalty. Data export functionality on all tiers. Open-source alternatives exist for most SaaS categories.',
+    healthNote: 'Software subscription fatigue is a real cost burden for freelancers and small businesses. The cumulative cost of SaaS subscriptions can exceed the cost of the hardware they run on.',
+    envNote: '',
+    inShort: 'Calculate total annual cost for your team. Compare what you use vs what you pay for.',
+    updated: 'April 2026',
+    sources: [{label:'OpenSource alternatives directory',url:'https://opensource.com/alternatives'}]
+  },
+  {
+    id: 'data-collection',
+    icon: '\uD83D\uDC41\uFE0F',
+    title: '"Free" Apps & Data Collection',
+    tags: ['software', 'technology'],
+    hook: 'If the product is free, you are the product.',
+    real: 'Some software is genuinely free: open-source projects, public services, tools funded by donations or ethical business models. These exist and are worth supporting.',
+    fake: 'Most "free" consumer apps (social media, messaging, games, utilities) monetise through data collection and behavioural advertising. The data harvested goes far beyond what the app needs: location tracking, contact lists, browsing history, app usage patterns, purchase history, and biometric data. This is bundled into advertising profiles and sold to data brokers. Privacy policies are deliberately long and complex to discourage reading. "Personalised advertising" is the industry\u2019s preferred term for surveillance-based marketing. Cookie consent banners are designed with dark patterns: the "accept all" button is prominent, the "manage preferences" option requires 15 clicks across multiple screens.',
+    howToTell: [
+      'Check app permissions. A torch app does not need access to your contacts, microphone, and location.',
+      'Read the data section on the App Store or Google Play listing. It shows what data the app collects.',
+      'If a service is free and not open-source, ask how it makes money. The answer is almost always advertising and data.',
+      'Use privacy-focused alternatives: Signal instead of WhatsApp, Firefox instead of Chrome, DuckDuckGo instead of Google, ProtonMail instead of Gmail.',
+      'Cookie banners where "reject all" requires fewer clicks than "accept all" indicate a company that actually respects privacy.'
+    ],
+    bigPicture: 'The attention economy is built on extracting personal data and selling access to your behaviour. This is the business model of the biggest companies on earth. The trade-off (free service in exchange for total surveillance) is never presented honestly. Most users do not understand the scope or value of what they give away. The people with least digital literacy are the most exposed, and the least likely to use privacy tools.',
+    trustMarkers: 'Open-source software (code is auditable). Products with a clear paid business model (you are the customer, not the product). Privacy-first services: Proton, Signal, Mullvad, Firefox, DuckDuckGo. The EFF\u2019s recommendations. Apps that request minimal permissions.',
+    healthNote: 'Surveillance capitalism contributes to anxiety through targeted advertising that exploits insecurities. Behavioural profiling has been used to target vulnerable people: gambling addicts seeing betting ads, people with eating disorders seeing diet products, people in financial distress seeing predatory loan offers.',
+    envNote: 'Data centres consume enormous amounts of energy. The infrastructure required to harvest, process, and store behavioural data at scale has a significant carbon footprint that is rarely discussed when the product is positioned as "free."',
+    inShort: 'Check app permissions. A torch app does not need your contacts, microphone, and location.',
+    updated: 'April 2026',
+    sources: [{label:'EFF: Surveillance self-defence',url:'https://ssd.eff.org/'},{label:'ICO: GDPR overview',url:'https://ico.org.uk/for-organisations/guide-to-data-protection/'}]
+  },
+  {
+    id: 'planned-obsolescence',
+    icon: '\uD83D\uDD27',
+    title: 'Planned Obsolescence',
+    tags: ['technology', 'environment'],
+    hook: 'Your phone is not slow. The update made it slow.',
+    real: 'Well-designed hardware and software should last as long as the materials and components allow. Repairability, software support, and spare parts availability extend product life. A laptop from 2015 can still run modern software perfectly well if maintained.',
+    fake: 'Planned obsolescence takes multiple forms: software updates that slow older devices (Apple paid $113 million to settle the "Batterygate" lawsuit), withdrawal of software support that makes functional hardware insecure, glued-in batteries that cannot be replaced, proprietary screws and sealed enclosures that prevent repair, and fashion cycles that make last year\u2019s product feel outdated. Printers, phones, laptops, earbuds, and appliances are all designed with limited lifespans that maximise repurchase cycles.',
+    howToTell: [
+      'Check the repairability score (mandatory in France, coming to the EU). Lower scores mean the manufacturer does not want you to repair it.',
+      'If the battery cannot be replaced by the user, the product has a built-in expiry date.',
+      'Software support timelines tell you how long the manufacturer considers the product viable. Apple supports iPhones for 5-6 years. Many Android manufacturers offer 2-3.',
+      'If a product uses proprietary chargers, cables, or parts, the lock-in is intentional.',
+      'The EU\u2019s right-to-repair legislation is forcing manufacturers to offer spare parts for up to 10 years. Check which brands comply.'
+    ],
+    bigPicture: 'Planned obsolescence is the engine of consumer electronics growth. If products lasted as long as they could, companies would sell fewer of them. The environmental cost is staggering: 50 million tonnes of e-waste per year globally, much of it shipped to developing countries for informal recycling under hazardous conditions. The right-to-repair movement is the most significant consumer pushback in a generation.',
+    trustMarkers: 'Fairphone (modular, repairable). Framework Laptop (user-upgradeable). Brands with long software support commitments. Products with published repairability scores. Local repair shops over manufacturer "service" (which often means replacement at near-new prices).',
+    healthNote: '',
+    envNote: 'E-waste is the fastest-growing waste stream globally. It contains toxic materials (lead, mercury, cadmium) that leach into soil and water when improperly disposed of. The communities most exposed are those in West Africa and Southeast Asia where informal recycling takes place. Every product designed to be replaced rather than repaired contributes to this crisis.',
+    inShort: 'Check the repairability score. If the battery cannot be replaced, the product has a built-in expiry.',
+    updated: 'April 2026',
+    sources: [{label:'Right to Repair Europe',url:'https://repair.eu/'},{label:'iFixit: Repairability scores',url:'https://www.ifixit.com/repairability'}]
+  },
+  {
+    id: 'warranty-upsells',
+    icon: '\uD83D\uDEE1\uFE0F',
+    title: 'Extended Warranties',
+    tags: ['technology', 'finance'],
+    hook: 'The retailer makes more profit on the warranty than on the product.',
+    real: 'Products sold in the UK come with statutory consumer rights under the Consumer Rights Act 2015. Goods must be of satisfactory quality, fit for purpose, and as described. If a product fails within a reasonable time, you are entitled to a repair, replacement, or refund. These rights last up to 6 years in England (5 in Scotland) and cost you nothing.',
+    fake: 'Extended warranties and "care plans" are sold at checkout when you are least likely to research them. They are enormously profitable: industry data suggests that warranty providers pay out 15-20% of premiums in claims. The rest is profit and administration. Many warranty claims cover issues already protected by statutory rights or manufacturer warranties. Sales staff are incentivised (sometimes on commission) to push warranties. The language creates fear: "What if it breaks after the manufacturer warranty?" The answer, for most products, is that your statutory rights still apply.',
+    howToTell: [
+      'Your statutory rights last up to 6 years, not just the manufacturer\u2019s warranty period.',
+      'Credit card purchases over \u00a3100 get Section 75 protection, which makes the card company jointly liable. This is free.',
+      'Most product failures occur either within the manufacturer warranty or after the extended warranty expires. The warranty window is priced to cover the lowest-risk period.',
+      'If you are offered a warranty at checkout, ask: "What does this cover that my statutory rights do not?" Most staff cannot answer this.',
+      'Premium bank accounts often include gadget insurance and extended warranties as part of the monthly fee.'
+    ],
+    bigPicture: 'Extended warranties are one of the highest-margin products in retail. They are sold through fear and information asymmetry: most consumers do not know their statutory rights. Electronics retailers derive a significant portion of their profit from warranty sales, not from the products themselves. The people most likely to buy warranties are those most anxious about the cost of replacement, which tends to correlate with lower income.',
+    trustMarkers: 'Know your statutory rights (Consumer Rights Act 2015). Use Section 75 for credit card purchases over \u00a3100. Check your home insurance for accidental damage cover. If you do want extra cover, compare standalone gadget insurance against the retailer\u2019s warranty, which is almost always more expensive.',
+    healthNote: 'The high-pressure sales environment at checkout exploits decision fatigue. Adding a warranty at the till is designed to be a quick, emotional decision rather than a considered one.',
+    envNote: '',
+    inShort: 'Your statutory rights last up to 6 years. Section 75 covers credit card purchases over £100.',
+    updated: 'April 2026',
+    sources: [{label:'Consumer Rights Act 2015',url:'https://www.legislation.gov.uk/ukpga/2015/15/contents'},{label:'MoneySavingExpert: Section 75',url:'https://www.moneysavingexpert.com/shopping/section75-consumer-credit-act'}]
+  },
+  {
+    id: 'marketplace-counterfeits',
+    icon: '\uD83D\uDCE6',
+    title: 'Marketplace Counterfeits',
+    tags: ['technology', 'household'],
+    hook: 'Amazon mixes genuine and counterfeit stock in the same warehouse bin.',
+    real: 'A legitimate product is manufactured by or under licence from the brand on the label, meets the safety standards it claims (CE, UL, FCC), and has a traceable supply chain. When you buy a branded power bank, charger, or appliance, you expect it to be what it says it is.',
+    fake: 'Amazon, Lazada, AliExpress, Temu, and similar marketplaces are flooded with counterfeit and unbranded products sold under fake or misleading listings. Amazon\u2019s commingled inventory system (Fulfilment by Amazon) is the critical problem: genuine stock from the brand and counterfeit stock from third-party sellers are stored in the same bin and shipped interchangeably. Buying "sold by Amazon" does not guarantee you receive a genuine product. Power stations, chargers, batteries, and USB cables are among the most dangerous categories because counterfeits often lack the safety certifications they claim, using substandard components that can overheat, short-circuit, or catch fire. Product photos are frequently stolen from legitimate brands or are CGI renders that bear no resemblance to the actual item.',
+    howToTell: [
+      'Check the seller. "Sold by [random string of letters] and Fulfilled by Amazon" is not the same as sold by the brand.',
+      'If the price is significantly below what the brand charges on its own website, ask why.',
+      'Look for the product on the manufacturer\u2019s own site. If the brand does not exist outside the marketplace listing, the brand is the listing.',
+      'Safety certifications (CE, UL, FCC) on the listing mean nothing if they are not actually tested and certified. Counterfeits print fake certification marks on the product.',
+      'For electronics, check the weight. Counterfeits often use cheaper, lighter internal components. A power bank that weighs significantly less than its claimed capacity is lying about its battery.'
+    ],
+    bigPicture: 'Marketplaces profit from every sale, including counterfeit ones. Amazon takes a 15-45% commission on third-party sales. The financial incentive to aggressively police counterfeits is weaker than the incentive to maintain volume. The commingled inventory system was designed for efficiency, not authenticity. The people most harmed are those shopping on price, which overwhelmingly means lower-income consumers buying the cheapest charger, the cheapest power bank, the cheapest children\u2019s toy. When a counterfeit lithium battery catches fire, it does not catch fire in a wealthy household.',
+    trustMarkers: 'Buy directly from the manufacturer\u2019s own website when possible. On Amazon, look for "Ships from and sold by [brand name]" (not just "Fulfilled by Amazon"). Check if the seller is the brand\u2019s authorised Amazon storefront. For electronics, Anker, Ugreen, and similar brands with verified storefronts are safer. For anything safety-critical (chargers, batteries, power tools, car seats), never buy the cheapest option on a marketplace.',
+    healthNote: 'Counterfeit electronics are a documented fire hazard. The London Fire Brigade has attributed multiple house fires to counterfeit chargers and batteries. Fake children\u2019s toys may contain lead paint, small parts, or non-flame-retardant materials. Counterfeit cosmetics have been found to contain mercury, lead, and arsenic.',
+    envNote: 'Counterfeit goods are typically produced with no environmental oversight: unregulated factories, toxic waste disposal, and components that cannot be safely recycled. The volume of returns generated by counterfeit goods (which are often disposed of rather than resold) adds to landfill waste.',
+    inShort: 'Buy direct from the brand when possible. "Fulfilled by Amazon" does not mean genuine.',
+    updated: 'April 2026',
+    sources: [{label:'Wall Street Journal: Amazon commingled inventory',url:'https://www.wsj.com/articles/amazons-heavy-recruitment-of-chinese-sellers-puts-consumers-at-risk-11573489075'},{label:'London Fire Brigade: Safety advice',url:'https://www.london-fire.gov.uk/safety/'},{label:'Which? investigation: Unsafe marketplace products',url:'https://www.which.co.uk/news/article/hundreds-of-potentially-deadly-items-found-on-online-marketplaces-aEO5Q6g3qCHp'}]
+  },
+  {
+    id: 'fake-reviews',
+    icon: '\u2B50',
+    title: 'Fake Reviews & Manipulated Listings',
+    tags: ['technology', 'software'],
+    hook: '4.5 stars from 12,000 reviews. Most of them paid for.',
+    real: 'An honest product review is written by someone who bought and used the product, without incentive from the seller. Genuine reviews show a natural distribution: a mix of positive, negative, and detailed experiences. They mention specific strengths and weaknesses.',
+    fake: 'Fake reviews are an industry. Sellers pay for positive reviews through review farms (organised groups that purchase products, leave 5-star reviews, and get refunded via PayPal), incentivised reviews ("leave a review and get a free product"), and review manipulation services that generate hundreds of fake accounts. On the other side, sellers pay to leave negative reviews on competitors\u2019 products. Amazon, Google, TripAdvisor, and Trustpilot all have this problem. Beyond reviews, listings themselves are manipulated: "was \u00a3299 now \u00a379" pricing where the product was never sold at \u00a3299, keyword-stuffed titles designed for the algorithm rather than the buyer, and product images that are professional renders bearing no resemblance to the actual item.',
+    howToTell: [
+      'Use review analysis tools (such as The Review Index or browser extensions) to check review authenticity on Amazon. They detect patterns in review timing, language, and reviewer history.',
+      'If a product has thousands of reviews but is from a brand you have never heard of, the reviews are likely manufactured.',
+      'Check the review dates. A sudden spike of 5-star reviews in a short period indicates a review campaign.',
+      'Read the 3-star reviews. They are the most likely to be genuine because review farms rarely bother with mid-range ratings.',
+      '"Was \u00a3299 now \u00a379" is almost always fictional. Use price tracking tools (CamelCamelCamel for Amazon, PriceRunner) to see the actual price history.',
+      'If the product title is 150 characters of keywords rather than a clear product name, the listing is optimised for the algorithm, not for you.'
+    ],
+    bigPicture: 'The review economy is broken. An estimated 30-40% of online reviews are fake, according to studies by the CMA and academic researchers. Amazon removes hundreds of millions of fake reviews per year and the problem is not shrinking. The marketplaces benefit from the trust that reviews generate, even when that trust is manufactured. The CMA has taken enforcement action against fake review trading sites, but the economic incentive remains: a product with 4.5 stars sells dramatically more than the same product with 3.5 stars, so the return on investment for fake reviews is enormous.',
+    trustMarkers: 'Use The Review Index or similar analysis tools for Amazon. Use CamelCamelCamel or PriceRunner for price history. Read negative reviews first. Look for verified purchase badges. Trust editorial reviews from Which?, Wirecutter, or specialist publications over marketplace ratings. Be suspicious of any product with thousands of reviews from a brand that has no presence outside the marketplace.',
+    healthNote: '',
+    envNote: 'Fake reviews drive sales of cheap, disposable products that fail quickly and end up in landfill. When consumers cannot trust reviews, they are more likely to buy and return multiple items, increasing packaging waste and carbon emissions from shipping.',
+    inShort: 'Read the 3-star reviews. Check price history with CamelCamelCamel. Use review analysis tools to spot fakes.',
+    updated: 'April 2026',
+    sources: [{label:'CMA: Fake reviews enforcement',url:'https://www.gov.uk/cma-cases/online-reviews'},{label:'Which?: Fake reviews investigation',url:'https://www.which.co.uk/news/article/thousands-of-fake-customer-reviews-found-on-popular-tech-categories-on-amazon-agk4L2H5c96L'},{label:'CamelCamelCamel price tracker',url:'https://camelcamelcamel.com/'}]
+  }
+];
+
+DATA.sort(function(a, b) { return a.title.localeCompare(b.title); });
+
+var CATEGORIES = [
+  { id: 'all', label: 'All' },
+  { id: 'environment', label: 'Environment' },
+  { id: 'fashion', label: 'Fashion' },
+  { id: 'finance', label: 'Finance' },
+  { id: 'food', label: 'Food' },
+  { id: 'health', label: 'Health' },
+  { id: 'household', label: 'Household' },
+  { id: 'luxury', label: 'Luxury' },
+  { id: 'software', label: 'Software' },
+  { id: 'technology', label: 'Technology' }
+];
+
+
+var COLLECTIONS = [
+  {
+    id: 'grocery-shop',
+    title: 'At the Supermarket',
+    desc: 'What to watch for on your weekly shop.',
+    entries: ['olive-oil','honey','parmesan','vanilla','processed-meat','ultra-processed','fruit-juice','chicken','bread','chocolate','maple-syrup','spice-adulteration','palm-oil','food-colouring']
+  },
+  {
+    id: 'christmas',
+    title: 'Christmas Shopping',
+    desc: 'Before you buy gifts this year.',
+    entries: ['cashmere','diamond','chocolate','fast-fashion','coffee-pods','mattresses','warranty-upsells']
+  },
+  {
+    id: 'kids',
+    title: 'Protecting Children',
+    desc: 'What the industry markets at your kids.',
+    entries: ['baby-food','food-colouring','energy-drinks','freemium-apps','fruit-juice','ultra-processed','toothpaste']
+  },
+  {
+    id: 'digital-life',
+    title: 'Your Digital Life',
+    desc: 'How software exploits your attention, data, and wallet.',
+    entries: ['subscription-cancellation','free-trials','dark-patterns','freemium-apps','saas-pricing','data-collection','planned-obsolescence','printer-ink','broadband']
+  },
+  {
+    id: 'moving-house',
+    title: 'Moving House',
+    desc: 'Big purchases, big markups.',
+    entries: ['mattresses','paint','broadband','cleaning-products','bottled-water','warranty-upsells']
+  },
+  {
+    id: 'eating-out',
+    title: 'Eating Out',
+    desc: 'What restaurants rely on you not knowing.',
+    entries: ['truffle-oil','wasabi','fish-mislabelling','crab','saffron','olive-oil','parmesan']
+  },
+  {
+    id: 'online-shopping',
+    title: 'Online Shopping',
+    desc: 'What the marketplace relies on you not checking.',
+    entries: ['marketplace-counterfeits','fake-reviews','warranty-upsells','subscription-cancellation','free-trials','dark-patterns']
+  }
+];
+
+var activeFilter = 'all';
+var searchQuery = '';
+
+// ── THEME ──
+function getTheme() {
+  return localStorage.getItem('kin039-theme') || 'light';
+}
+
+function applyTheme(t) {
+  document.documentElement.className = t;
+  var meta = document.getElementById('theme-color-meta');
+  meta.content = t === 'dark' ? '#121010' : '#F5F1EB';
+  document.getElementById('themeToggle').textContent = t === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  localStorage.setItem('kin039-theme', t);
+}
+
+document.getElementById('themeToggle').addEventListener('click', function() {
+  applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+});
+
+// ── FILTERS ──
+function renderFilters() {
+  var el = document.getElementById('filters');
+  el.innerHTML = '';
+  CATEGORIES.forEach(function(cat) {
+    var btn = document.createElement('button');
+    var count = cat.id === 'all' ? DATA.length : DATA.filter(function(d) { return d.tags.indexOf(cat.id) !== -1; }).length;
+    btn.className = 'filter-tag' + (activeFilter === cat.id ? ' active' : '');
+    btn.textContent = cat.label + ' (' + count + ')';
+    btn.addEventListener('click', function() {
+      activeFilter = cat.id;
+      activeCollection = null;
+      renderCollections();
+      renderFilters();
+      renderCards();
+    });
+    el.appendChild(btn);
+  });
+}
+
+// ── SEARCH ──
+var searchInput = document.getElementById('searchInput');
+var searchClear = document.getElementById('searchClear');
+
+searchInput.addEventListener('input', function() {
+  searchQuery = this.value.toLowerCase().trim();
+  searchClear.classList.toggle('visible', searchQuery.length > 0);
+  renderCards();
+});
+
+searchClear.addEventListener('click', function() {
+  searchInput.value = '';
+  searchQuery = '';
+  searchClear.classList.remove('visible');
+  renderCards();
+  searchInput.focus();
+});
+
+// ── CARDS ──
+function getFilteredData() {
+  var collectionIds = null;
+  if (activeCollection) {
+    var col = COLLECTIONS.find(function(c) { return c.id === activeCollection; });
+    if (col) collectionIds = col.entries;
+  }
+  return DATA.filter(function(item) {
+    var matchCollection = !collectionIds || collectionIds.indexOf(item.id) !== -1;
+    var matchFilter = activeFilter === 'all' || item.tags.indexOf(activeFilter) !== -1;
+    var matchSearch = !searchQuery || 
+      item.title.toLowerCase().indexOf(searchQuery) !== -1 ||
+      item.hook.toLowerCase().indexOf(searchQuery) !== -1 ||
+      item.real.toLowerCase().indexOf(searchQuery) !== -1 ||
+      item.fake.toLowerCase().indexOf(searchQuery) !== -1 ||
+      item.bigPicture.toLowerCase().indexOf(searchQuery) !== -1 ||
+      item.trustMarkers.toLowerCase().indexOf(searchQuery) !== -1 ||
+      (item.healthNote && item.healthNote.toLowerCase().indexOf(searchQuery) !== -1) ||
+      (item.envNote && item.envNote.toLowerCase().indexOf(searchQuery) !== -1) ||
+      item.howToTell.some(function(tip) { return tip.toLowerCase().indexOf(searchQuery) !== -1; }) ||
+      item.tags.some(function(t) { return t.indexOf(searchQuery) !== -1; });
+    return matchCollection && matchFilter && matchSearch;
+  });
+}
+
+function renderCards() {
+  var container = document.getElementById('cards');
+  var filtered = getFilteredData();
+  container.innerHTML = '';
+
+  document.getElementById('entryCount').textContent = filtered.length + ' of ' + DATA.length + ' entries';
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="no-results"><h3>Nothing found</h3><p>Try a different search or filter.</p></div>';
+    return;
+  }
+
+  filtered.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+
+    var tagsHtml = item.tags.map(function(t) {
+      return '<span class="card-tag ' + t + '">' + t + '</span>';
+    }).join('');
+
+    card.innerHTML = '<div class="card-top"><span class="card-icon">' + item.icon + '</span><div class="card-tags">' + tagsHtml + '</div></div>' +
+      '<h2>' + item.title + '</h2>' +
+      '<p class="hook">' + item.hook + '</p>' +
+      '<p class="tap-hint">Tap to read more \u2192</p>';
+
+    card.addEventListener('click', function() { openDetail(item); });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(item); }
+    });
+
+    container.appendChild(card);
+  });
+}
+
+// ── DETAIL ──
+function openDetail(item) {
+  var overlay = document.getElementById('detailOverlay');
+  var content = document.getElementById('detailContent');
+
+  var tagsHtml = item.tags.map(function(t) {
+    return '<span class="card-tag ' + t + '">' + t + '</span>';
+  }).join('');
+
+  var howToTellHtml = item.howToTell.map(function(tip) {
+    return '<li>' + tip + '</li>';
+  }).join('');
+
+  var healthHtml = item.healthNote ? '<div class="info-box health"><strong>\u26A0 Health</strong>' + item.healthNote + '</div>' : '';
+  var envHtml = item.envNote ? '<div class="info-box env"><strong>\uD83C\uDF0D Environment</strong>' + item.envNote + '</div>' : '';
+
+  var sourcesHtml = '';
+  if (item.sources && item.sources.length > 0) {
+    sourcesHtml = '<div class="detail-section"><h3>Sources</h3><div class="detail-sources">' +
+      item.sources.map(function(s) { return '<a href="' + s.url + '" target="_blank" rel="noopener">' + s.label + ' \u2197</a>'; }).join('') +
+      '</div></div>';
+  }
+
+  var updatedHtml = item.updated ? '<p class="detail-updated">Last reviewed: ' + item.updated + '</p>' : '';
+
+  content.innerHTML = '<div class="detail-icon">' + item.icon + '</div>' +
+    '<div class="detail-tags">' + tagsHtml + '</div>' +
+    '<h1>' + item.title + '</h1>' +
+    '<p class="detail-hook">' + item.hook + '</p>' +
+    updatedHtml +
+
+    (item.inShort ? '<div class="in-short">\u{1F4CC} ' + item.inShort + '</div>' : '') +
+
+    '<div class="detail-section"><h3>The Real Thing</h3>' +
+    '<div class="info-box real">' + item.real + '</div></div>' +
+
+    '<div class="detail-section"><h3>What You Are Actually Getting</h3>' +
+    '<div class="info-box fake">' + item.fake + '</div></div>' +
+
+    '<div class="detail-section"><h3>How to Tell</h3><ul>' + howToTellHtml + '</ul></div>' +
+
+    '<div class="detail-section"><h3>The Bigger Picture</h3><p>' + item.bigPicture + '</p></div>' +
+
+    (healthHtml || envHtml ? '<div class="detail-section"><h3>Impact</h3>' + healthHtml + envHtml + '</div>' : '') +
+
+    '<div class="detail-section"><h3>What to Trust</h3><p>' + item.trustMarkers + '</p></div>' +
+
+    sourcesHtml +
+
+    '<button class="detail-share" onclick="shareEntry(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')">\u{1F517} Share this entry</button>';
+
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  history.pushState({ detail: true }, '', '#' + item.id);
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (window.location.hash) history.pushState('', '', window.location.pathname);
+}
+
+document.getElementById('detailClose').addEventListener('click', closeDetail);
+document.getElementById('detailOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeDetail();
+});
+
+// ── BUG REPORT ──
+document.getElementById('bugBtn').addEventListener('click', function() {
+  document.getElementById('bugSheet').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+  document.getElementById('bugSheetTitle').textContent = 'Report';
+  document.getElementById('bugType').value = 'Bug';
+  document.getElementById('bugDesc').placeholder = 'What happened, or what would you add?';
+});
+
+document.getElementById('suggestBtn').addEventListener('click', function() {
+  document.getElementById('bugSheet').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+  document.getElementById('bugSheetTitle').textContent = 'Suggest a Category';
+  document.getElementById('bugType').value = 'Suggestion';
+  document.getElementById('bugDesc').placeholder = 'What product, label, or practice should we investigate? Tell us what consumers are being misled about.';
+  document.getElementById('bugDesc').focus();
+});
+
+document.getElementById('suggestLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('bugSheet').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+  document.getElementById('bugSheetTitle').textContent = 'Suggest a Category';
+  document.getElementById('bugType').value = 'Suggestion';
+  document.getElementById('bugDesc').placeholder = 'What product, label, or practice should we investigate? Tell us what consumers are being misled about.';
+  document.getElementById('bugDesc').focus();
+});
+
+function closeBugReport() {
+  document.getElementById('bugSheet').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+}
+
+document.getElementById('backdrop').addEventListener('click', closeBugReport);
+
+function sendBugReport() {
+  var desc = document.getElementById('bugDesc').value.trim();
+  if (!desc) { showToast('Please add a description.'); return; }
+  var data = {
+    form_type: 'bug_report',
+    subject: 'KIN-039 Is This Real?',
+    app: 'KIN-039',
+    type: document.getElementById('bugType').value,
+    description: desc,
+    name: document.getElementById('bugName').value
+  };
+  fetch('https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  closeBugReport();
+  showToast('Report sent. Thank you.');
+  document.getElementById('bugDesc').value = '';
+  document.getElementById('bugName').value = '';
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+// ── KIN CONFIRM ──
+function kinConfirm(msg) {
+  return new Promise(function(resolve) {
+    var overlay = document.getElementById('kinConfirmOverlay');
+    document.getElementById('kinConfirmMsg').textContent = msg;
+    overlay.classList.add('open');
+    document.getElementById('kinConfirmOk').onclick = function() {
+      overlay.classList.remove('open');
+      resolve(true);
+    };
+    document.getElementById('kinConfirmCancel').onclick = function() {
+      overlay.classList.remove('open');
+      resolve(false);
+    };
+  });
+}
+
+
+// ── COLLECTIONS ──
+var activeCollection = null;
+
+function renderCollections() {
+  var el = document.getElementById('collections');
+  if (!COLLECTIONS || COLLECTIONS.length === 0) { el.innerHTML = ''; return; }
+  var label = '<p class="collections-label">Browse by situation</p>';
+  var chips = COLLECTIONS.map(function(col) {
+    return '<button class="collection-chip' + (activeCollection === col.id ? ' active' : '') + '" data-col="' + col.id + '">' +
+      '<div class="collection-chip-title">' + col.title + '</div>' +
+      '<div class="collection-chip-desc">' + col.desc + '</div>' +
+      '</button>';
+  }).join('');
+  el.innerHTML = label + '<div class="collections-row">' + chips + '</div>';
+  el.querySelectorAll('.collection-chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var colId = this.getAttribute('data-col');
+      if (activeCollection === colId) {
+        activeCollection = null;
+      } else {
+        activeCollection = colId;
+        activeFilter = 'all';
+      }
+      renderCollections();
+      renderFilters();
+      renderCards();
+    });
+  });
+}
+
+// ── INIT ──
+applyTheme(getTheme());
+renderCollections();
+renderFilters();
+renderCards();
+
+// ── DEEP LINKING ──
+function openEntryById(id) {
+  var item = DATA.find(function(d) { return d.id === id; });
+  if (item) openDetail(item);
+}
+
+function shareEntry(id, title) {
+  var url = window.location.origin + window.location.pathname + '#' + id;
+  if (navigator.share) {
+    navigator.share({ title: 'Is This Real? - ' + title, url: url }).catch(function() {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      showToast('Link copied');
+    }).catch(function() {
+      showToast('Could not copy link');
+    });
+  } else {
+    showToast('Share not supported');
+  }
+}
+
+// Check hash on load
+if (window.location.hash) {
+  var hashId = window.location.hash.substring(1);
+  openEntryById(hashId);
+}
+
+// Update hash when detail opens
+var _origOpenDetail = openDetail;
+
+
+// Back to top
+var backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', function() {
+  backToTop.classList.toggle('visible', window.scrollY > 600);
+}, { passive: true });
+backToTop.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDetail();
+});
+
+window.addEventListener('popstate', function() {
+  if (document.getElementById('detailOverlay').classList.contains('open')) {
+    closeDetail();
+  }
+});
+
+// ── Blob manifest ────────────────────────────────────────────────────────────
+(function() {
+  var mkIcon = function(size) {
+    var cv = document.createElement('canvas');
+    cv.width = size; cv.height = size;
+    var x = cv.getContext('2d');
+    var g = x.createLinearGradient(0, 0, size, size);
+    g.addColorStop(0, '#B8301A'); g.addColorStop(1, '#5A1A0A');
+    x.fillStyle = g;
+    var r = size * 0.2;
+    x.beginPath(); x.moveTo(r,0); x.lineTo(size-r,0); x.arcTo(size,0,size,r,r);
+    x.lineTo(size,size-r); x.arcTo(size,size,size-r,size,r);
+    x.lineTo(r,size); x.arcTo(0,size,0,size-r,r);
+    x.lineTo(0,r); x.arcTo(0,0,r,0,r); x.closePath(); x.fill();
+    var ic = size * 0.53; var io = (size - ic) / 2;
+    var svgStr = '<svg xmlns="http://www.w3.org/2000/svg" width="' + ic + '" height="' + ic + '" viewBox="0 0 48 48"><text x="24" y="35" font-size="36" font-family="Georgia,serif" font-weight="700" text-anchor="middle" fill="white" opacity="0.9">?</text></svg>';
+    return { cv: cv, x: x, io: io, ic: ic, svgStr: svgStr };
+  };
+  var r192 = mkIcon(192), r512 = mkIcon(512);
+  var cv192 = r192.cv, x192 = r192.x, io192 = r192.io, ic192 = r192.ic, svgStr = r192.svgStr;
+  var cv512 = r512.cv, x512 = r512.x, io512 = r512.io, ic512 = r512.ic;
+  var img192 = new Image(), img512 = new Image();
+  var blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  var url = URL.createObjectURL(blob);
+  img192.onload = function() {
+    x192.drawImage(img192, io192, io192, ic192, ic192);
+    img512.onload = function() {
+      x512.drawImage(img512, io512, io512, ic512, ic512);
+      URL.revokeObjectURL(url);
+      var icon192 = cv192.toDataURL('image/png');
+      var icon512 = cv512.toDataURL('image/png');
+      var manifest = {
+        name: 'Is This Real?', short_name: 'KIN-039',
+        description: 'Consumer reality index — the information they rely on you not having.',
+        start_url: './', display: 'standalone',
+        background_color: '#F5F1EB', theme_color: '#B8301A',
+        icons: [{ src: icon192, sizes: '192x192', type: 'image/png' },
+                { src: icon512, sizes: '512x512', type: 'image/png' }]
+      };
+      var mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      document.getElementById('manifest-link').href = URL.createObjectURL(mBlob);
+    };
+    img512.src = url;
+  };
+  img192.src = url;
+})();
+
+// ── Apple touch icon ──────────────────────────────────────────────────────────
+(function() {
+  try {
+    var sz=180, cv=document.createElement('canvas');
+    cv.width=sz; cv.height=sz;
+    var x=cv.getContext('2d');
+    var g=x.createLinearGradient(0,0,sz,sz);
+    g.addColorStop(0,'#B8301A'); g.addColorStop(1,'#5A1A0A');
+    x.fillStyle=g;
+    var r=36; x.beginPath(); x.moveTo(r,0); x.lineTo(sz-r,0); x.arcTo(sz,0,sz,r,r);
+    x.lineTo(sz,sz-r); x.arcTo(sz,sz,sz-r,sz,r); x.lineTo(r,sz); x.arcTo(0,sz,0,sz-r,r);
+    x.lineTo(0,r); x.arcTo(0,0,r,0,r); x.closePath(); x.fill();
+    var svgStr='<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48"><text x="24" y="35" font-size="36" font-family="Georgia,serif" font-weight="700" text-anchor="middle" fill="white" opacity="0.9">?</text></svg>';
+    var img=new Image(), iblob=new Blob([svgStr],{type:'image/svg+xml'}), burl=URL.createObjectURL(iblob);
+    img.onload=function(){x.drawImage(img,42,42,96,96); URL.revokeObjectURL(burl); var el=document.getElementById('apple-touch-icon'); if(el) el.href=cv.toDataURL('image/png');};
+    img.src=burl;
+  } catch(e) {}
+})();
+
+// ── Service worker ────────────────────────────────────────────────────────────
+(function() {
+  if (!('serviceWorker' in navigator)) return;
+  var pageUrl = location.href.split('?')[0];
+  var SW = "const CACHE='kin039-v1';const ASSETS=['" + pageUrl + "'];" +
+    "self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));" +
+    "self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));" +
+    "self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{if(resp.ok){const c=resp.clone();caches.open(CACHE).then(ca=>ca.put(e.request,c));}return resp;})));});";
+  var blob = new Blob([SW], { type: 'text/javascript' });
+  var url = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url).catch(function() {});
+})();
+
+</script>
+
+</body>
+</html>
