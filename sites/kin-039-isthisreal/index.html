@@ -2225,6 +2225,8 @@ var DATA = [
   }
 ];
 
+DATA.sort(function(a, b) { return a.title.localeCompare(b.title); });
+
 var CATEGORIES = [
   { id: 'all', label: 'All' },
   { id: 'environment', label: 'Environment' },
