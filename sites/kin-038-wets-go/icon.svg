@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="108" fill="#0a2218"/>
+<rect width="512" height="512" rx="108" fill="url(#g)" opacity="0.35"/>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a4a2e"/><stop offset="1" stop-color="#0a2218"/></linearGradient></defs>
+<!-- Water drop -->
+<path d="M256 96 C256 96 152 248 152 320 C152 379.6 198.4 424 256 424 C313.6 424 360 379.6 360 320 C360 248 256 96 256 96 Z" fill="none" stroke="#e8f5e9" stroke-width="18" stroke-linejoin="round" opacity="0.9"/>
+<!-- Inner highlight -->
+<path d="M220 310 C218 288 228 268 244 252" stroke="#e8f5e9" stroke-width="12" stroke-linecap="round" opacity="0.45" fill="none"/>
+</svg>
