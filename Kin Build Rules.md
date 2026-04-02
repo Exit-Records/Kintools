@@ -953,3 +953,152 @@ Every Kin tool must include the following block in `<head>`, inserted immediatel
   src = src.replace('</head>', () => ogBlock + '\n</head>');
   ```
 - **Existing tools:** KIN-001 through KIN-035 already have OG tags (added in batch commit `977b0f5`), except KIN-003, KIN-005 (had their own already), and KIN-018 (subdomain unconfirmed).
+
+---
+
+# KIN Verified Compliance — Build Rules Addition
+
+**Standard v1.0 · April 2026**
+All items are mandatory unless marked CONDITIONAL.
+
+---
+
+## Data Tier Declaration (mandatory for every tool)
+
+Identify the tier and implement accordingly before marking a tool complete.
+
+| Tier | Condition | Footer row 2 text | Badge |
+|------|-----------|-------------------|-------|
+| **Stateless** | No data written anywhere | `"Nothing stored, nothing sent"` | None |
+| **Local** | localStorage only, no network user data | `"Your data stays on this device. Nothing is sent anywhere."` | Verified shield + ⓘ popover declaring localStorage key |
+| **Cloud** | Any external data or API calls with user data | `"Some data is stored externally. See what, why, and how to delete it."` | Cloud icon + mandatory ⓘ popover linking full data declaration |
+
+**Cloud tier gates** — tool cannot ship without:
+- Explicit opt-in consent UI before first transmission (not implied, not pre-ticked)
+- In-tool plain language data declaration (what, where, why)
+- One-tap data deletion path — no longer than sign-up flow
+- No third-party data sharing without separate per-party consent
+
+---
+
+## Universal Checklist (all tools, all tiers)
+
+Run before every push. A single PROHIBITED item blocks the push.
+
+### Honest Communication
+- [ ] Tool purpose stated on first load or in immediately accessible help
+- [ ] Permissions requested at point of need with plain explanation
+- [ ] Footer declares: `KIN-NNN · vN.N · Kin Tools · by Creator` + tier badge + bug report
+- [ ] No claimed features the tool does not have — **PROHIBITED**
+- [ ] No technical complexity used to obscure data handling — **PROHIBITED**
+
+### Consent
+- [ ] All consent is affirmative — no pre-ticked boxes, no implied consent
+- [ ] Accept and decline options carry equal visual weight (size, colour, prominence)
+- [ ] Consent can be withdrawn as easily as it was given
+- [ ] No consent via manufactured urgency or guilt language — **PROHIBITED**
+- [ ] No repeated consent requests after user decline — **PROHIBITED**
+- [ ] Decline path must not require more steps than accept path — **PROHIBITED**
+
+### User Control
+- [ ] Destructive actions use `kinConfirm()` — never `confirm()` / `alert()` / `prompt()`
+- [ ] Local data tools include export or delete mechanism
+- [ ] `kinConfirm()` confirm button is red; cancel is neutral
+- [ ] No locking users into a state requiring a desired action to exit — **PROHIBITED**
+- [ ] Cancel / exit path not harder to find than primary action — **PROHIBITED**
+
+### Interface Honesty
+- [ ] Dark mode never defaults on — uses `html.light` as initial class
+- [ ] Dark mode preference persisted to tool-specific localStorage key
+- [ ] All touch targets ≥ 44px min-height
+- [ ] 16px minimum font on all inputs, `-webkit-appearance: none` on inputs
+- [ ] No countdown timers or scarcity claims unless real — **PROHIBITED**
+- [ ] No manufactured social proof — **PROHIBITED**
+- [ ] No guilt language on decline — **PROHIBITED**
+- [ ] No ads or promotional content disguised as tool output — **PROHIBITED**
+
+### Transparent Costs
+- [ ] Any paid feature declared before user begins any action toward payment
+- [ ] Free trials state conversion date and cost upfront
+- [ ] Cancellation path ≤ steps of sign-up path
+- [ ] No costs added after purchase flow begins — **PROHIBITED**
+- [ ] No auto-renewal without prior explicit notice — **PROHIBITED**
+
+### Accessibility
+- [ ] Input font size ≥ 16px
+- [ ] No `user-scalable=no` in viewport meta
+- [ ] Colour contrast WCAG AA minimum
+- [ ] No functionality conveyed by colour alone
+- [ ] `viewport-fit=cover` present
+- [ ] Safe area insets applied
+
+---
+
+## Elevated Category Checklist
+
+### Children / Education tools (`education` category or child audience)
+- [ ] No streak, point, or badge mechanics creating compulsion
+- [ ] No social comparison or leaderboard features
+- [ ] Data collection limited to tool function only
+- [ ] Language tested against stated age range
+- [ ] No advertising or commercial content of any kind — **PROHIBITED**
+- [ ] No push notifications targeting children — **PROHIBITED**
+- [ ] No design optimising time-on-tool over user benefit — **PROHIBITED**
+
+### Health / Wellbeing tools (`health` or `wellbeing` category)
+- [ ] No unsupported health outcome claims
+- [ ] Professional help signposting present where mental health or medical topics arise
+- [ ] No anxiety or vulnerability exploitation mechanics — **PROHIBITED**
+- [ ] No shame or guilt around health metrics or missed targets — **PROHIBITED**
+
+### Finance / Business tools (`business` category)
+- [ ] Clear distinction between information and recommendations
+- [ ] No urgency mechanics on financial decisions — **PROHIBITED**
+- [ ] No handling of financial credentials (card numbers, account numbers) — **PROHIBITED**
+
+---
+
+## Footer Compliance
+
+Footer must contain exactly three rows, all inline styles:
+
+**Row 1:** `KIN-NNN · vN.N · Kin Tools · by Creator`
+**Row 2:** Tier badge + declaration text (see Data Tier Declaration above). ⓘ tools include popover.
+**Row 3:** "Report a bug" button — slide-up sheet, POST to Google Apps Script endpoint
+
+ⓘ popover tools (localStorage): KIN-002, 007, 009, 010, 013, 014, 015, 016, 018, 022, 024, 025, 026, 027, 030, 031, 032, 035 + any new Local tier tool.
+
+---
+
+## KIN Verified Footer Declaration
+
+Once a tool passes all applicable checklists, add to footer row 2:
+
+```
+KIN Verified v1.0
+```
+
+This must match the version of the standard assessed against. If the standard version increments, reassessment of affected sections is required before the next push.
+
+---
+
+## Push Gate Summary
+
+Before every push, confirm:
+
+```
+[ ] Data tier identified and declared correctly
+[ ] Universal checklist complete — no PROHIBITED items present
+[ ] Elevated category checklist complete if applicable
+[ ] Footer rows 1, 2, 3 correct and in sync with landing card and SW cache key
+[ ] Version number bumped in tool footer, landing card, and VERSIONS.md
+[ ] KIN Verified v1.0 declared in footer row 2
+[ ] Syntax verified: vm module check, script tag count, no data: URI manifest
+[ ] Commit message format: "KIN-NNN Tool Name: summary" with bullet details
+```
+
+A tool with any PROHIBITED item present, or any REQUIRED item absent, does not ship.
+
+---
+
+*KIN Verified Compliance Standard v1.0 · Full document: KIN_Verified_Compliance_Standard_v1.0.docx*

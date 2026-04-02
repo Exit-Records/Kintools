@@ -237,6 +237,46 @@ git merge origin/main
 
 ---
 
+## KIN Verified Compliance Standard v1.0
+
+Full rules in `Kin Build Rules.md`. Key points every agent must know:
+
+### Data tier — declare on every tool
+| Tier | When | Footer row 2 |
+|------|------|--------------|
+| **Stateless** | Nothing written anywhere | `"Nothing stored, nothing sent"` |
+| **Local** | localStorage only | `"Your data stays on this device. Nothing is sent anywhere."` + shield badge + ⓘ popover |
+| **Cloud** | Any external data/API | `"Some data is stored externally. See what, why, and how to delete it."` + cloud icon + ⓘ popover |
+
+### Push gate — run before every push
+```
+[ ] Data tier declared in footer row 2
+[ ] Universal checklist passed — no PROHIBITED items
+[ ] Elevated checklist passed if Health / Wellbeing / Education / Finance
+[ ] Footer rows 1+2+3 correct
+[ ] Version bumped in tool footer, landing card, and VERSIONS.md
+[ ] KIN Verified v1.0 declared in footer row 2
+[ ] Commit message: "KIN-NNN Tool Name: summary"
+```
+
+### Absolute PROHIBITED items (any one blocks the push)
+- Claimed features the tool does not have
+- Technical complexity used to obscure data handling
+- Pre-ticked consent boxes or implied consent
+- Manufactured urgency, guilt language, or scarcity claims
+- Repeated consent requests after decline
+- Decline path harder than accept path
+- `confirm()` / `alert()` / `prompt()` for destructive actions — use `kinConfirm()`
+- Countdown timers or scarcity claims unless real
+- Ads or promotional content disguised as tool output
+- For Health/Wellbeing: shame/guilt around metrics or missed targets
+- For Finance: handling of financial credentials
+
+### Footer row 2 — ⓘ popover tools (localStorage tier)
+KIN-002, 007, 009, 010, 013, 014, 015, 016, 018, 022, 024, 025, 026, 027, 030, 031, 032, 035 + any new Local tier tool.
+
+---
+
 ## localStorage key convention
 Always hyphens: `kin030-readings`, `kin036-theme`. Never underscores.
 
