@@ -42,7 +42,7 @@ html.dark {
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);min-height:100vh;font-size:16px;}
 .app-container{max-width:640px;margin:0 auto;padding:16px;padding-bottom:calc(80px + var(--safe-bottom));}
-.region-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+.region-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;padding:24px;overflow-y:auto;}
 .region-overlay.hidden{display:none;}
 .region-overlay .ri{font-size:48px;margin-bottom:16px;}
 .region-overlay h2{font-size:22px;font-weight:700;margin-bottom:8px;text-align:center;}
@@ -315,7 +315,7 @@ el.innerHTML=html;
 document.getElementById('regionSearch').addEventListener('input',function(){renderRegionPicker(this.value);});
 
 function selectRegion(r){currentRegion=r;localStorage.setItem(RK,r);document.getElementById('regionOverlay').classList.add('hidden');document.getElementById('regionSearch').value='';updateRegionUI();}
-function changeRegion(){document.getElementById('regionOverlay').classList.remove('hidden');renderRegionPicker();}
+function changeRegion(){var o=document.getElementById('regionOverlay');o.classList.remove('hidden');o.scrollTop=0;renderRegionPicker();}
 function updateRegionUI(){if(!currentRegion)return;var r=ALL_REGIONS[currentRegion];if(!r)return;document.getElementById('bannerTitle').textContent=r.name+' Emergency Numbers';document.getElementById('regionFlag').textContent=r.flag;document.getElementById('regionLabel').textContent=r.name;}
 
 function switchEmergencyRegion(code){
@@ -402,7 +402,7 @@ function submitBugReport(){var t=document.getElementById('bugType').value;var d=
 function showToast(m){var e=document.getElementById('toast');e.textContent=m;e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2200);}
 
 initTheme();
-if(currentRegion&&ALL_REGIONS[currentRegion]){document.getElementById('regionOverlay').classList.add('hidden');updateRegionUI();}else{currentRegion='th';renderRegionPicker();}
+if(currentRegion&&ALL_REGIONS[currentRegion]){document.getElementById('regionOverlay').classList.add('hidden');updateRegionUI();}else{currentRegion='th';renderRegionPicker();document.getElementById('regionOverlay').scrollTop=0;}
 renderCategories();renderTopics();
 
 (function(){var c=document.createElement('canvas');c.width=180;c.height=180;var x=c.getContext('2d');x.fillStyle='#c23616';x.beginPath();x.roundRect(0,0,180,180,36);x.fill();x.font='80px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('\uD83C\uDFE5',90,95);var l=document.getElementById('apple-touch-icon');if(l)l.href=c.toDataURL('image/png');})();
