@@ -533,6 +533,96 @@ pointer-events: auto;
 
 .back-to-top:hover { background: var(--bg-card-hover); }
 
+/* MECHANISM TAGS */
+.mech-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  margin-right: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.mech-tag:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* QUICK SWAP */
+.quick-swap {
+  background: var(--real-bg);
+  border-left: 3px solid var(--real-text);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.quick-swap strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--real-text);
+  margin-bottom: 4px;
+}
+
+/* REGION BADGES */
+.region-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--tag-bg);
+  color: var(--text-tertiary);
+  margin-right: 4px;
+}
+
+/* RELATED ENTRIES */
+.related-entries {
+  margin-top: 20px;
+}
+.related-entries h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.related-link {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 0 6px 6px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-height: 44px;
+  line-height: 26px;
+  -webkit-appearance: none;
+}
+.related-link:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
 /* IN SHORT */
 .in-short {
 background: var(--tag-bg);
@@ -980,7 +1070,7 @@ color: #fff;
 </div>
 
 <footer class="footer">
-  <div class="footer-row">KIN-039 &middot; v1.1 &middot; Kin Tools &middot; by Darren</div>
+  <div class="footer-row">KIN-039 &middot; v1.2 &middot; Kin Tools &middot; by Darren</div>
   <div class="footer-row">
     <span class="verified">
       Nothing stored, nothing sent
@@ -1044,7 +1134,10 @@ var DATA = [
     envNote: '',
     inShort: 'If the ingredients say "truffle aroma" or "truffle flavouring," it has never been near a truffle.',
     updated: 'April 2026',
-    sources: [{label:'New York Times: Truffle oil investigation',url:'https://www.nytimes.com/2007/05/16/dining/16truf.html'}]
+    sources: [{label:'New York Times: Truffle oil investigation',url:'https://www.nytimes.com/2007/05/16/dining/16truf.html'}],
+    mechanisms: ['substitution','mislabelling'],
+    quickSwap: 'Buy oil listing "Tuber melanosporum" or "Tuber magnatum" with a percentage. Or skip it entirely and use real truffle shavings sparingly.',
+    regions: ['global']
   },
   {
     id: 'wasabi',
@@ -1065,7 +1158,10 @@ var DATA = [
     envNote: '',
     inShort: 'If it came from a tube, it is horseradish. Real wasabi is grated fresh and costs £80+ per pound.',
     updated: 'April 2026',
-    sources: [{label:'Mashed: What is real wasabi (citing Washington Post)',url:'https://www.mashed.com/159196/what-is-real-wasabi-and-why-youve-probably-never-eaten-it/'}]
+    sources: [{label:'Mashed: What is real wasabi (citing Washington Post)',url:'https://www.mashed.com/159196/what-is-real-wasabi-and-why-youve-probably-never-eaten-it/'}],
+    mechanisms: ['substitution'],
+    quickSwap: 'Ask for fresh-grated wasabi at high-end restaurants. Otherwise, accept it is horseradish and enjoy it for what it is.',
+    regions: ['global']
   },
   {
     id: 'leather',
@@ -1087,7 +1183,10 @@ var DATA = [
     envNote: 'Leather production is tied to the cattle industry and deforestation. Chrome tanning produces toxic wastewater. However, well-maintained full-grain leather lasts decades, while bonded leather ends up in landfill within a year or two.',
     inShort: 'Ignore "genuine leather." Look for "full grain" specifically.',
     updated: 'April 2026',
-    sources: [{label:'Saddleback Leather: Leather 101',url:'https://saddlebackleather.com/leather-101'}]
+    sources: [{label:'Saddleback Leather: Leather 101',url:'https://saddlebackleather.com/leather-101'}],
+    mechanisms: ['mislabelling','regulatory-loophole'],
+    quickSwap: 'Look for "full grain" from named tanneries (Horween, Sedgwick). Veg-tanned is a reliable indicator.',
+    regions: ['global']
   },
   {
     id: 'cashmere',
@@ -1109,7 +1208,10 @@ var DATA = [
     envNote: 'Cheap cashmere has driven overgrazing in Mongolia, contributing to desertification. When you buy a \u00a330 cashmere jumper, the environmental cost is paid by the landscape and the herding communities.',
     inShort: 'If it costs under £150, the fibre quality is not what the label implies.',
     updated: 'April 2026',
-    sources: [{label:'Sustainable Fibre Alliance',url:'https://www.sustainablefibre.org/what-we-do'},{label:'CNN: Mongolia cashmere and sustainability',url:'https://www.cnn.com/style/mongolia-cashmere-sustainable/index.html'}]
+    sources: [{label:'Sustainable Fibre Alliance',url:'https://www.sustainablefibre.org/what-we-do'},{label:'CNN: Mongolia cashmere and sustainability',url:'https://www.cnn.com/style/mongolia-cashmere-sustainable/index.html'}],
+    mechanisms: ['dilution','mislabelling','regulatory-loophole'],
+    quickSwap: 'Johnstons of Elgin, Loro Piana, or any brand disclosing micron count and origin. Two-ply minimum. Or try merino wool.',
+    regions: ['global']
   },
   {
     id: 'vanilla',
@@ -1131,7 +1233,10 @@ var DATA = [
     envNote: 'Vanilla farming, when done well, supports biodiversity in tropical regions and provides livelihoods. When synthetic vanillin undercuts the market, it destabilises farming communities in Madagascar and elsewhere.',
     inShort: 'Check for "pure vanilla extract" with visible bean specks. Everything else is synthetic vanillin.',
     updated: 'April 2026',
-    sources: [{label:'Scientific American: The problem with vanilla',url:'https://www.scientificamerican.com/article/the-problem-with-vanilla/'},{label:'FAO: Vanilla markets',url:'https://www.fao.org/markets-and-trade/'}]
+    sources: [{label:'Scientific American: The problem with vanilla',url:'https://www.scientificamerican.com/article/the-problem-with-vanilla/'},{label:'FAO: Vanilla markets',url:'https://www.fao.org/markets-and-trade/'}],
+    mechanisms: ['substitution'],
+    quickSwap: 'Nielsen-Massey pure vanilla extract or whole vanilla pods. Look for visible bean specks.',
+    regions: ['global']
   },
   {
     id: 'olive-oil',
@@ -1153,7 +1258,10 @@ var DATA = [
     envNote: '',
     inShort: 'Buy single-estate with a harvest date. If it is cheap and bland, it is probably not what it says.',
     updated: 'April 2026',
-    sources: [{label:'UC Davis: Imported olive oil quality unreliable (2010)',url:'https://www.ucdavis.edu/news/imported-olive-oil-quality-unreliable-study-finds'},{label:'Europol: Olive oil fraud',url:'https://www.europol.europa.eu/publications-events'}]
+    sources: [{label:'UC Davis: Imported olive oil quality unreliable (2010)',url:'https://www.ucdavis.edu/news/imported-olive-oil-quality-unreliable-study-finds'},{label:'Europol: Olive oil fraud',url:'https://www.europol.europa.eu/publications-events'}],
+    mechanisms: ['dilution','mislabelling','supply-chain-opacity'],
+    quickSwap: 'Single-estate EVOO with a harvest date. NYIOOC award winners. California Olive Oil Council seal.',
+    regions: ['global']
   },
   {
     id: 'honey',
@@ -1175,7 +1283,10 @@ var DATA = [
     envNote: 'Cheap honey imports undercut local beekeeping, which is essential for pollination. When beekeepers go out of business, local ecosystems lose pollinators.',
     inShort: 'Buy from a local beekeeper. If it never crystallises, it has been ultra-filtered or adulterated.',
     updated: 'April 2026',
-    sources: [{label:'Food Safety News: Honey laundering',url:'https://www.foodsafetynews.com/2011/11/tests-show-most-store-honey-isnt-honey/'},{label:'EU coordinated actions on food fraud',url:'https://ec.europa.eu/food/safety/agri-food-fraud/'}]
+    sources: [{label:'Food Safety News: Honey laundering',url:'https://www.foodsafetynews.com/2011/11/tests-show-most-store-honey-isnt-honey/'},{label:'EU coordinated actions on food fraud',url:'https://ec.europa.eu/food/safety/agri-food-fraud/'}],
+    mechanisms: ['dilution','supply-chain-opacity'],
+    quickSwap: 'Local beekeeper. Raw, unfiltered, with visible pollen. Named apiary.',
+    regions: ['global']
   },
   {
     id: 'supplements',
@@ -1197,7 +1308,10 @@ var DATA = [
     envNote: '',
     inShort: 'Look for USP or NSF third-party testing. If it makes dramatic claims, it is breaking the rules.',
     updated: 'April 2026',
-    sources: [{label:'FDA: Dietary supplements',url:'https://www.fda.gov/food/dietary-supplements'},{label:'USP Verified programme',url:'https://www.usp.org/verification-services'}]
+    sources: [{label:'FDA: Dietary supplements',url:'https://www.fda.gov/food/dietary-supplements'},{label:'USP Verified programme',url:'https://www.usp.org/verification-services'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'USP Verified or NSF International certified products only. Consult a GP before starting any supplement.',
+    regions: ['global']
   },
   {
     id: 'parmesan',
@@ -1219,7 +1333,10 @@ var DATA = [
     envNote: '',
     inShort: 'Buy it in a wedge with "Parmigiano-Reggiano" stamped on the rind. Never pre-grated.',
     updated: 'April 2026',
-    sources: [{label:'Bloomberg: Parmesan cheese could be wood',url:'https://www.bloomberg.com/news/articles/2016-02-16/the-parmesan-cheese-you-sprinkle-on-your-penne-could-be-wood'},{label:'Consorzio Parmigiano Reggiano',url:'https://www.parmigianoreggiano.com/'}]
+    sources: [{label:'Bloomberg: Parmesan cheese could be wood',url:'https://www.bloomberg.com/news/articles/2016-02-16/the-parmesan-cheese-you-sprinkle-on-your-penne-could-be-wood'},{label:'Consorzio Parmigiano Reggiano',url:'https://www.parmigianoreggiano.com/'}],
+    mechanisms: ['dilution','mislabelling'],
+    quickSwap: 'Buy a wedge of Parmigiano-Reggiano with the name stamped on the rind. Grate it yourself.',
+    regions: ['us']
   },
   {
     id: 'palm-oil',
@@ -1241,7 +1358,10 @@ var DATA = [
     envNote: 'Palm oil plantations are the leading driver of deforestation in Indonesia and Malaysia. Peatland burning for plantations produces enormous carbon emissions. Orangutan, tiger, and rhinoceros populations are critically endangered as a direct result.',
     inShort: '"Vegetable oil" on a label almost always means palm oil. Learn the 200+ derivative names.',
     updated: 'April 2026',
-    sources: [{label:'WWF Palm Oil Buyers Scorecard',url:'https://palmoilscorecard.panda.org/'},{label:'EFSA: Palm oil contaminants (3-MCPD, glycidyl esters)',url:'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4426'}]
+    sources: [{label:'WWF Palm Oil Buyers Scorecard',url:'https://palmoilscorecard.panda.org/'},{label:'EFSA: Palm oil contaminants (3-MCPD, glycidyl esters)',url:'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4426'}],
+    mechanisms: ['supply-chain-opacity','mislabelling'],
+    quickSwap: 'Products without palm oil, or RSPO Identity Preserved certified. Check ingredient lists for the 200+ derivative names.',
+    regions: ['global']
   },
   {
     id: 'food-colouring',
@@ -1263,7 +1383,10 @@ var DATA = [
     envNote: '',
     inShort: 'Check E-numbers in the E100–199 range. Budget products aimed at children use the most.',
     updated: 'April 2026',
-    sources: [{label:'FSA: Food additives guidance',url:'https://www.food.gov.uk/safety-hygiene/food-additives'},{label:'EFSA food colour evaluations',url:'https://www.efsa.europa.eu/en/topics/topic/food-colours'}]
+    sources: [{label:'FSA: Food additives guidance',url:'https://www.food.gov.uk/safety-hygiene/food-additives'},{label:'EFSA food colour evaluations',url:'https://www.efsa.europa.eu/en/topics/topic/food-colours'}],
+    mechanisms: ['substitution','regulatory-loophole'],
+    quickSwap: 'Products labelled "no artificial colours" or using natural alternatives (annatto, beetroot extract, spirulina).',
+    regions: ['uk','eu','us']
   },
   {
     id: 'processed-meat',
@@ -1285,7 +1408,10 @@ var DATA = [
     envNote: '',
     inShort: 'Check for sodium nitrite (E250). "Uncured" with celery powder is the same thing rebranded.',
     updated: 'April 2026',
-    sources: [{label:'IARC: List of classifications (WHO)',url:'https://monographs.iarc.who.int/list-of-classifications/'},{label:'Cancer Research UK: Processed and red meat',url:'https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/diet-and-cancer/does-processed-and-red-meat-cause-cancer'}]
+    sources: [{label:'IARC: List of classifications (WHO)',url:'https://monographs.iarc.who.int/list-of-classifications/'},{label:'Cancer Research UK: Processed and red meat',url:'https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/diet-and-cancer/does-processed-and-red-meat-cause-cancer'}],
+    mechanisms: ['supply-chain-opacity','regulatory-loophole'],
+    quickSwap: 'Genuinely nitrate-free products (not celery-powder substituted). Named cuts from a local butcher.',
+    regions: ['global']
   },
   {
     id: 'ultra-processed',
@@ -1307,7 +1433,10 @@ var DATA = [
     envNote: 'UPF production relies on industrial monoculture agriculture (corn, soy, palm, wheat) which drives deforestation, soil depletion, and biodiversity loss.',
     inShort: 'If the ingredient list has names you would not use in a kitchen, it is ultra-processed.',
     updated: 'April 2026',
-    sources: [{label:'BMJ: UPF and mortality (2019)',url:'https://www.bmj.com/content/365/bmj.l1949'},{label:'FAO: NOVA food classification',url:'https://www.fao.org/3/ca5644en/ca5644en.pdf'}]
+    sources: [{label:'BMJ: UPF and mortality (2019)',url:'https://www.bmj.com/content/365/bmj.l1949'},{label:'FAO: NOVA food classification',url:'https://www.fao.org/3/ca5644en/ca5644en.pdf'}],
+    mechanisms: ['supply-chain-opacity','marketing-illusion'],
+    quickSwap: 'Cook from scratch when possible. Products with fewer than five recognisable ingredients.',
+    regions: ['uk','us']
   },
   {
     id: 'fruit-juice',
@@ -1329,7 +1458,10 @@ var DATA = [
     envNote: '',
     inShort: 'Eat the fruit. A glass of juice has as much sugar as a glass of Coca-Cola.',
     updated: 'April 2026',
-    sources: [{label:'WHO: Sugar intake guideline',url:'https://www.who.int/publications/i/item/9789241549028'},{label:'NHS: 5 a day guidance',url:'https://www.nhs.uk/live-well/eat-well/5-a-day/'}]
+    sources: [{label:'WHO: Sugar intake guideline',url:'https://www.who.int/publications/i/item/9789241549028'},{label:'NHS: 5 a day guidance',url:'https://www.nhs.uk/live-well/eat-well/5-a-day/'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Eat the whole fruit. If you want juice, fresh-squeezed at home with pulp retained.',
+    regions: ['global']
   },
   {
     id: 'chicken',
@@ -1351,7 +1483,10 @@ var DATA = [
     envNote: 'Industrial chicken farming produces significant ammonia and nitrate pollution from waste, contaminating waterways and soil. Soy-based feed is linked to deforestation in South America.',
     inShort: 'If cheap chicken leaks white liquid when cooked, you paid meat prices for injected salt water.',
     updated: 'April 2026',
-    sources: [{label:'RSPCA Assured',url:'https://www.rspcaassured.org.uk/farm-animal-welfare/chickens/'},{label:'Guardian: The true cost of cheap chicken',url:'https://www.theguardian.com/environment/2023/jan/11/revealed-scale-water-added-to-chicken-sold-in-uk'}]
+    sources: [{label:'RSPCA Assured',url:'https://www.rspcaassured.org.uk/farm-animal-welfare/chickens/'},{label:'Guardian: The true cost of cheap chicken',url:'https://www.theguardian.com/environment/2023/jan/11/revealed-scale-water-added-to-chicken-sold-in-uk'}],
+    mechanisms: ['dilution','supply-chain-opacity'],
+    quickSwap: 'RSPCA Assured or Soil Association Organic. Slow-grown or heritage breed. Named farms.',
+    regions: ['uk']
   },
   {
     id: 'fish-mislabelling',
@@ -1373,7 +1508,10 @@ var DATA = [
     envNote: 'Mislabelling undermines sustainable fishing efforts. If consumers cannot trust labels, they cannot make informed choices about endangered species.',
     inShort: 'Buy whole fish where possible. Fillets are easy to mislabel. Sushi is the worst offender.',
     updated: 'April 2026',
-    sources: [{label:'Oceana: Seafood fraud reports',url:'https://oceana.org/our-campaigns/seafood-fraud/'},{label:'Oceana: Fish mislabelling report',url:'https://oceana.org/reports/oceana-reveals-mislabeling-of-americas-favorite-fish/'}]
+    sources: [{label:'Oceana: Seafood fraud reports',url:'https://oceana.org/our-campaigns/seafood-fraud/'},{label:'Oceana: Fish mislabelling report',url:'https://oceana.org/reports/oceana-reveals-mislabeling-of-americas-favorite-fish/'}],
+    mechanisms: ['mislabelling','supply-chain-opacity'],
+    quickSwap: 'Buy whole fish. MSC certified for chain-of-custody tracking. Named boats or fisheries.',
+    regions: ['global']
   },
   {
     id: 'bread',
@@ -1395,7 +1533,10 @@ var DATA = [
     envNote: '',
     inShort: 'Real sourdough has three ingredients: flour, water, salt. If the list is longer, it is not sourdough.',
     updated: 'April 2026',
-    sources: [{label:'Real Bread Campaign',url:'https://www.sustainweb.org/realbread/'}]
+    sources: [{label:'Real Bread Campaign',url:'https://www.sustainweb.org/realbread/'}],
+    mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Independent bakeries making bread on-site. Ingredient list: flour, water, salt, sourdough culture. Nothing else.',
+    regions: ['uk']
   },
   {
     id: 'cleaning-products',
@@ -1417,7 +1558,10 @@ var DATA = [
     envNote: 'Cleaning product chemicals enter waterways. Phosphates cause algal blooms. Microplastics from product packaging and formulations persist in ecosystems. Per capita, the UK uses more cleaning products than almost any other European country.',
     inShort: 'White vinegar, bicarb, washing-up liquid, and diluted bleach clean almost everything.',
     updated: 'April 2026',
-    sources: [{label:'American Journal of Respiratory Medicine: Cleaning sprays study',url:'https://www.atsjournals.org/doi/full/10.1164/rccm.201706-1311OC'}]
+    sources: [{label:'American Journal of Respiratory Medicine: Cleaning sprays study',url:'https://www.atsjournals.org/doi/full/10.1164/rccm.201706-1311OC'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'White vinegar, bicarbonate of soda, washing-up liquid, diluted bleach. Covers almost everything.',
+    regions: ['global']
   },
   {
     id: 'bottled-water',
@@ -1439,7 +1583,10 @@ var DATA = [
     envNote: 'The UK uses over 7 billion plastic water bottles per year. Less than half are recycled. Bottled water production uses 2,000 times more energy than tap water. Water extraction by bottling companies depletes aquifers in source communities.',
     inShort: 'Your tap water is tested more rigorously than bottled. A filter jug costs pennies per litre.',
     updated: 'April 2026',
-    sources: [{label:'Drinking Water Inspectorate (UK)',url:'https://www.dwi.gov.uk/drinking-water-quality/'},{label:'NRDC: Bottled water report',url:'https://www.nrdc.org/resources/bottled-water-pure-drink-or-pure-hype'}]
+    sources: [{label:'Drinking Water Inspectorate (UK)',url:'https://www.dwi.gov.uk/drinking-water-quality/'},{label:'NRDC: Bottled water report',url:'https://www.nrdc.org/resources/bottled-water-pure-drink-or-pure-hype'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'A reusable bottle and your tap. A counter-top filter if you want filtration.',
+    regions: ['global']
   },
   {
     id: 'chocolate',
@@ -1461,7 +1608,10 @@ var DATA = [
     envNote: 'Cocoa farming is linked to deforestation in West Africa. Sustainable certifications (Rainforest Alliance, Fairtrade) attempt to address this but coverage is incomplete. The industry\u2019s preferred substitute fats (palm oil) bring their own deforestation problems.',
     inShort: 'Read the ingredients in order. If sugar is first and vegetable fat appears, cocoa is not the priority.',
     updated: 'April 2026',
-    sources: [{label:'ILO: Child labour in cocoa',url:'https://www.ilo.org/topics-and-sectors/child-labour'},{label:'Tony\'s Chocolonely fair reports',url:'https://tonyschocolonely.com/uk/en/our-mission'}]
+    sources: [{label:'ILO: Child labour in cocoa',url:'https://www.ilo.org/topics-and-sectors/child-labour'},{label:'Tony\'s Chocolonely fair reports',url:'https://tonyschocolonely.com/uk/en/our-mission'}],
+    mechanisms: ['dilution','supply-chain-opacity'],
+    quickSwap: 'Fairtrade certified. 70%+ cocoa for dark, 35%+ for milk. Tony\'s Chocolonely, Divine, or bean-to-bar makers.',
+    regions: ['global']
   },
   {
     id: 'fast-fashion',
@@ -1483,7 +1633,10 @@ var DATA = [
     envNote: 'The fashion industry is responsible for 8-10% of global carbon emissions. Textile dyeing is the second-largest polluter of water globally. An estimated 92 million tonnes of textile waste is produced annually. Polyester sheds microplastics with every wash, contaminating oceans and entering the food chain.',
     inShort: 'Hold it to the light. If you can see through it, it will not survive ten washes.',
     updated: 'April 2026',
-    sources: [{label:'Ellen MacArthur Foundation: Fashion',url:'https://www.ellenmacarthurfoundation.org/topics/fashion/overview'},{label:'OEKO-TEX Standard 100',url:'https://www.oeko-tex.com/en/our-standards/oeko-tex-standard-100'}]
+    sources: [{label:'Ellen MacArthur Foundation: Fashion',url:'https://www.ellenmacarthurfoundation.org/topics/fashion/overview'},{label:'OEKO-TEX Standard 100',url:'https://www.oeko-tex.com/en/our-standards/oeko-tex-standard-100'}],
+    mechanisms: ['supply-chain-opacity','planned-obsolescence'],
+    quickSwap: 'Buy fewer, better things. Second-hand and vintage. GOTS certified organic cotton. OEKO-TEX Standard 100.',
+    regions: ['global']
   },
   {
     id: 'crab',
@@ -1505,7 +1658,10 @@ var DATA = [
     envNote: '',
     inShort: 'If the menu does not say "real crab" and charge accordingly, it is surimi.',
     updated: 'April 2026',
-    sources: [{label:'FDA: Seafood guidance',url:'https://www.fda.gov/food/resources-you-food/seafood'}]
+    sources: [{label:'FDA: Seafood guidance',url:'https://www.fda.gov/food/resources-you-food/seafood'}],
+    mechanisms: ['substitution','mislabelling'],
+    quickSwap: 'If the menu says "crab," ask if it is real. Surimi is fine as its own product, just know what you are eating.',
+    regions: ['global']
   },
   {
     id: 'saffron',
@@ -1528,7 +1684,10 @@ var DATA = [
     envNote: 'Saffron farming is labour-intensive but ecologically gentle. When genuine saffron is undermined by fakes, farming communities in Iran and Kashmir lose their livelihoods.',
     inShort: 'Never buy powdered saffron. Buy threads. Test in warm water: real saffron bleeds colour slowly.',
     updated: 'April 2026',
-    sources: [{label:'EU anti-fraud: Saffron enforcement',url:'https://ec.europa.eu/food/safety/agri-food-fraud'},{label:'ISO 3632: Saffron grading',url:'https://www.iso.org/standard/65553.html'}]
+    sources: [{label:'EU anti-fraud: Saffron enforcement',url:'https://ec.europa.eu/food/safety/agri-food-fraud'},{label:'ISO 3632: Saffron grading',url:'https://www.iso.org/standard/65553.html'}],
+    mechanisms: ['substitution','dilution'],
+    quickSwap: 'Buy threads, never powder. From specialist spice merchants with ISO 3632 grading. Test in warm water.',
+    regions: ['global']
   },
   {
     id: 'maple-syrup',
@@ -1550,7 +1709,10 @@ var DATA = [
     envNote: '',
     inShort: 'The ingredient list should say one thing: maple syrup.',
     updated: 'April 2026',
-    sources: [{label:'Quebec Maple Syrup Producers',url:'https://ppaq.ca/en/'},{label:'USDA: Grading standards',url:'https://www.ams.usda.gov/grades-standards'}]
+    sources: [{label:'Quebec Maple Syrup Producers',url:'https://ppaq.ca/en/'},{label:'USDA: Grading standards',url:'https://www.ams.usda.gov/grades-standards'}],
+    mechanisms: ['substitution','mislabelling'],
+    quickSwap: 'One ingredient: maple syrup. Quebec seal or US grade label. Amber or Dark for cooking.',
+    regions: ['us','uk']
   },
   {
     id: 'tea',
@@ -1572,7 +1734,10 @@ var DATA = [
     envNote: 'Polypropylene-sealed tea bags do not compost. They contaminate compost systems and end up in landfill. The UK drinks an estimated 100 million cups of tea per day.',
     inShort: 'If the bag feels silky or shiny, it is plastic. Switch to loose leaf or certified plastic-free bags.',
     updated: 'April 2026',
-    sources: [{label:'McGill University: Microplastics in tea bags (2019)',url:'https://pubs.acs.org/doi/10.1021/acs.est.9b02540'}]
+    sources: [{label:'McGill University: Microplastics in tea bags (2019)',url:'https://pubs.acs.org/doi/10.1021/acs.est.9b02540'}],
+    mechanisms: ['supply-chain-opacity'],
+    quickSwap: 'Loose leaf tea with a strainer. Or certified plastic-free bags (Pukka, Clipper).',
+    regions: ['uk','eu']
   },
   {
     id: 'organic-labelling',
@@ -1594,7 +1759,10 @@ var DATA = [
     envNote: 'Organic farming generally supports biodiversity and soil health better than conventional. But it is not zero-impact. Organic copper-based fungicides accumulate in soil. Lower yields per hectare mean more land is needed, which has its own trade-offs.',
     inShort: 'Look for the certification logo. "Natural," "pure," and "farm-fresh" have no legal meaning.',
     updated: 'April 2026',
-    sources: [{label:'Soil Association: Organic standards',url:'https://www.soilassociation.org/organic-living/what-is-organic/'},{label:'COSMOS organic standard',url:'https://www.cosmos-standard.org/en/the-cosmos-standard/'}]
+    sources: [{label:'Soil Association: Organic standards',url:'https://www.soilassociation.org/organic-living/what-is-organic/'},{label:'COSMOS organic standard',url:'https://www.cosmos-standard.org/en/the-cosmos-standard/'}],
+    mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Look for the EU organic leaf, Soil Association, or USDA Organic logo. Ignore "natural" and "pure."',
+    regions: ['uk','eu','us']
   },
   {
     id: 'diamond',
@@ -1616,7 +1784,10 @@ var DATA = [
     envNote: 'Diamond mining causes significant environmental destruction: open-pit mines, river diversion, habitat loss. The industry\u2019s "conflict-free" certification (Kimberley Process) has been widely criticised as inadequate, failing to address human rights abuses beyond the narrowest definition of "conflict diamonds."',
     inShort: 'Lab-grown diamonds are chemically identical. The price difference is marketing, not material.',
     updated: 'April 2026',
-    sources: [{label:'The Atlantic: Have you ever tried to sell a diamond? (1982)',url:'https://www.theatlantic.com/magazine/archive/1982/02/have-you-ever-tried-to-sell-a-diamond/304575/'}]
+    sources: [{label:'The Atlantic: Have you ever tried to sell a diamond? (1982)',url:'https://www.theatlantic.com/magazine/archive/1982/02/have-you-ever-tried-to-sell-a-diamond/304575/'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'Lab-grown for the same stone at a fraction of the price. Or coloured gemstones with more honest pricing.',
+    regions: ['global']
   },
   {
     id: 'baby-food',
@@ -1638,7 +1809,10 @@ var DATA = [
     envNote: 'Single-use pouches are difficult to recycle (mixed materials). The baby food industry generates enormous packaging waste for products that could be replaced by a fork and a small container.',
     inShort: 'Check sugar per 100g. Many pouches contain 8–12g, comparable to a dessert.',
     updated: 'April 2026',
-    sources: [{label:'NHS Start4Life: Weaning',url:'https://www.nhs.uk/start-for-life/baby/weaning/'},{label:'First Steps Nutrition Trust',url:'https://www.firststepsnutrition.org/'}]
+    sources: [{label:'NHS Start4Life: Weaning',url:'https://www.nhs.uk/start-for-life/baby/weaning/'},{label:'First Steps Nutrition Trust',url:'https://www.firststepsnutrition.org/'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Home-prepared food when possible. NHS Start4Life guidelines. Treat pouches as occasional convenience.',
+    regions: ['uk']
   },
   {
     id: 'spice-adulteration',
@@ -1660,7 +1834,10 @@ var DATA = [
     envNote: '',
     inShort: 'Buy whole spices and grind them yourself. A £20 grinder pays for itself immediately.',
     updated: 'April 2026',
-    sources: [{label:'Stanford: Turmeric lead risk in Bangladesh',url:'https://news.stanford.edu/stories/2019/12/turmeric-lead-risk-bangladesh/'},{label:'FSA: Food safety and additives',url:'https://www.food.gov.uk/safety-hygiene/food-additives'}]
+    sources: [{label:'Stanford: Turmeric lead risk in Bangladesh',url:'https://news.stanford.edu/stories/2019/12/turmeric-lead-risk-bangladesh/'},{label:'FSA: Food safety and additives',url:'https://www.food.gov.uk/safety-hygiene/food-additives'}],
+    mechanisms: ['dilution','substitution'],
+    quickSwap: 'Buy whole spices and grind at home. A basic grinder costs under £20.',
+    regions: ['global']
   },
   {
     id: 'sunscreen',
@@ -1682,7 +1859,10 @@ var DATA = [
     envNote: 'Oxybenzone and octinoxate are toxic to coral reefs. Hawaii and several countries have banned these ingredients in sunscreen. Reef-safe formulations use mineral filters.',
     inShort: 'SPF 30 with good UVA protection beats SPF 100 with poor UVA. Reapply every 2 hours.',
     updated: 'April 2026',
-    sources: [{label:'British Association of Dermatologists',url:'https://www.bad.org.uk/public/skin-cancer/sunscreen-and-sun-safety-fact-sheet/'}]
+    sources: [{label:'British Association of Dermatologists',url:'https://www.bad.org.uk/public/skin-cancer/sunscreen-and-sun-safety-fact-sheet/'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'SPF 30-50 broad spectrum with UVA circle logo or PA++++ rating. Reapply every 2 hours. Altruist, La Roche-Posay.',
+    regions: ['global']
   },
   {
     id: 'down',
@@ -1704,7 +1884,10 @@ var DATA = [
     envNote: 'Down, as a natural byproduct, has a lower carbon footprint than synthetic alternatives (which are petroleum-based). The ethical issue is not the material but the sourcing practices.',
     inShort: 'Look for Responsible Down Standard (RDS) certification. Or choose Primaloft synthetic.',
     updated: 'April 2026',
-    sources: [{label:'Responsible Down Standard',url:'https://textileexchange.org/responsible-down-standard/'},{label:'Patagonia: Supply chain',url:'https://www.patagonia.com/our-footprint/'}]
+    sources: [{label:'Responsible Down Standard',url:'https://textileexchange.org/responsible-down-standard/'},{label:'Patagonia: Supply chain',url:'https://www.patagonia.com/our-footprint/'}],
+    mechanisms: ['supply-chain-opacity','mislabelling'],
+    quickSwap: 'Responsible Down Standard (RDS) certified. Or Primaloft synthetic alternative.',
+    regions: ['global']
   },
   {
     id: 'mattresses',
@@ -1727,7 +1910,10 @@ var DATA = [
     envNote: 'Mattresses are extremely difficult to recycle. The UK disposes of 7-8 million mattresses per year, most going to landfill. Buying a quality mattress that lasts 10+ years is better than replacing a cheap one every 3-5.',
     inShort: 'Ask for the spec: spring count, foam density, materials. If they cannot tell you, walk away.',
     updated: 'April 2026',
-    sources: [{label:'Which? Mattress guide',url:'https://www.which.co.uk/reviews/mattresses'},{label:'CertiPUR certification',url:'https://certipur.us/'}]
+    sources: [{label:'Which? Mattress guide',url:'https://www.which.co.uk/reviews/mattresses'},{label:'CertiPUR certification',url:'https://certipur.us/'}],
+    mechanisms: ['marketing-illusion','supply-chain-opacity'],
+    quickSwap: 'Ask for the spec: spring count, foam density, materials. Compare specs not brands. Online mattress companies cut out the retail markup.',
+    regions: ['uk','us']
   },
   {
     id: 'eyewear',
@@ -1749,7 +1935,10 @@ var DATA = [
     envNote: '',
     inShort: 'Get your prescription and PD measurement. Order online for 70–90% less than the high street.',
     updated: 'April 2026',
-    sources: [{label:'AAO: Blue light glasses',url:'https://www.aao.org/eye-health/tips-prevention/are-computer-glasses-worth-it'}]
+    sources: [{label:'AAO: Blue light glasses',url:'https://www.aao.org/eye-health/tips-prevention/are-computer-glasses-worth-it'}],
+    mechanisms: ['marketing-illusion','supply-chain-opacity'],
+    quickSwap: 'Get your prescription and PD measurement. Order from Zenni, EyeBuyDirect, or Ace & Tate online.',
+    regions: ['global']
   },
   {
     id: 'funeral',
@@ -1771,7 +1960,10 @@ var DATA = [
     envNote: 'Traditional burial and cremation both have environmental costs. Cremation produces CO2 and mercury emissions (from dental fillings). Burial uses land and non-biodegradable materials. Woodland burial and water cremation (resomation) are emerging lower-impact alternatives.',
     inShort: 'You can supply your own coffin. Ask for an itemised price list. Direct cremation costs £1,000–1,500.',
     updated: 'April 2026',
-    sources: [{label:'Fair Funerals pledge',url:'https://quakersocialaction.org.uk/we-can-help/helping-funerals/fair-funerals-pledge'},{label:'GOV.UK: Arranging a funeral',url:'https://www.gov.uk/after-a-death/arrange-the-funeral'}]
+    sources: [{label:'Fair Funerals pledge',url:'https://quakersocialaction.org.uk/we-can-help/helping-funerals/fair-funerals-pledge'},{label:'GOV.UK: Arranging a funeral',url:'https://www.gov.uk/after-a-death/arrange-the-funeral'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'Ask for an itemised price list. Consider direct cremation. Supply your own coffin if you wish.',
+    regions: ['uk']
   },
   {
     id: 'printer-ink',
@@ -1793,7 +1985,10 @@ var DATA = [
     envNote: 'Ink cartridges generate enormous plastic waste. HP alone sells over 1 billion cartridges per year. While recycling programmes exist, return rates are low. The DRM chips mean cartridges cannot be refilled by third parties, increasing waste.',
     inShort: 'Calculate cost per ml. Consider a laser printer or refillable ink tank system.',
     updated: 'April 2026',
-    sources: [{label:'iFixit: Printer DRM',url:'https://www.ifixit.com/News'},{label:'EFF: Right to repair',url:'https://www.eff.org/issues/right-to-repair'}]
+    sources: [{label:'iFixit: Printer DRM',url:'https://www.ifixit.com/News'},{label:'EFF: Right to repair',url:'https://www.eff.org/issues/right-to-repair'}],
+    mechanisms: ['planned-obsolescence'],
+    quickSwap: 'Epson EcoTank or similar refillable ink tank printer. Laser printer for text-heavy use.',
+    regions: ['global']
   },
   {
     id: 'razors',
@@ -1815,7 +2010,10 @@ var DATA = [
     envNote: 'Cartridge razors are non-recyclable mixed plastic and metal. Billions end up in landfill annually. Safety razor blades are fully recyclable steel.',
     inShort: 'A safety razor and 100 blades costs £25. That is the price of 5–6 cartridge refills.',
     updated: 'April 2026',
-    sources: [{label:'Guardian: The pink tax',url:'https://www.theguardian.com/fashion/2024/jan/25/pink-tax-women-pay-more'}]
+    sources: [{label:'Guardian: The pink tax',url:'https://www.theguardian.com/fashion/2024/jan/25/pink-tax-women-pay-more'}],
+    mechanisms: ['planned-obsolescence','marketing-illusion'],
+    quickSwap: 'Double-edged safety razor (Merkur, Edwin Jagger) with Feather blades. £25 for razor + 100 blades.',
+    regions: ['global']
   },
   {
     id: 'toothpaste',
@@ -1837,7 +2035,10 @@ var DATA = [
     envNote: '',
     inShort: 'Any toothpaste with 1350–1500 ppm fluoride works. The cheapest one is clinically equivalent.',
     updated: 'April 2026',
-    sources: [{label:'NHS: Fluoride guidance',url:'https://www.nhs.uk/live-well/healthy-teeth-and-gums/'},{label:'Oral Health Foundation',url:'https://www.dentalhealth.org/caring-for-my-teeth'}]
+    sources: [{label:'NHS: Fluoride guidance',url:'https://www.nhs.uk/live-well/healthy-teeth-and-gums/'},{label:'Oral Health Foundation',url:'https://www.dentalhealth.org/caring-for-my-teeth'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'Any toothpaste with 1350-1500 ppm fluoride. The cheapest one works.',
+    regions: ['global']
   },
   {
     id: 'pet-food',
@@ -1859,7 +2060,10 @@ var DATA = [
     envNote: 'Pet food production has a significant carbon footprint, with meat-based pet diets contributing to demand for animal agriculture. The industry generates enormous packaging waste.',
     inShort: 'Named protein source as the first ingredient. Ignore the photography on the packet.',
     updated: 'April 2026',
-    sources: [{label:'FEDIAF: Nutritional guidelines',url:'https://fediaf.org/self-regulation/nutrition.html'},{label:'FDA: Grain-free diets and DCM',url:'https://www.fda.gov/animal-veterinary/animal-health-literacy/questions-answers-fda-center-veterinary-medicines-investigation-possible-connection-between-diet-and'}]
+    sources: [{label:'FEDIAF: Nutritional guidelines',url:'https://fediaf.org/self-regulation/nutrition.html'},{label:'FDA: Grain-free diets and DCM',url:'https://www.fda.gov/animal-veterinary/animal-health-literacy/questions-answers-fda-center-veterinary-medicines-investigation-possible-connection-between-diet-and'}],
+    mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Named protein source as first ingredient. FEDIAF compliant. Ignore the photography.',
+    regions: ['uk','eu']
   },
   {
     id: 'energy-drinks',
@@ -1881,7 +2085,10 @@ var DATA = [
     envNote: '',
     inShort: 'It is caffeine and sugar in a can. Coffee delivers the same stimulant at a fraction of the price.',
     updated: 'April 2026',
-    sources: [{label:'EFSA: Caffeine safety',url:'https://www.efsa.europa.eu/en/efsajournal/pub/4102'}]
+    sources: [{label:'EFSA: Caffeine safety',url:'https://www.efsa.europa.eu/en/efsajournal/pub/4102'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'Coffee or tea. Same caffeine, fraction of the price, no sugar payload.',
+    regions: ['global']
   },
   {
     id: 'paint',
@@ -1903,7 +2110,10 @@ var DATA = [
     envNote: '',
     inShort: 'Any hardware store will colour-match a sample for a fraction of the "heritage" price.',
     updated: 'April 2026',
-    sources: [{label:'Which? Paint reviews',url:'https://www.which.co.uk/reviews/paint/article/best-paints'}]
+    sources: [{label:'Which? Paint reviews',url:'https://www.which.co.uk/reviews/paint/article/best-paints'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'Trade-grade paint (Dulux Trade, Crown Trade). Any hardware store will colour-match a sample.',
+    regions: ['uk']
   },
   {
     id: 'broadband',
@@ -1925,7 +2135,10 @@ var DATA = [
     envNote: '',
     inShort: 'Run a speed test at multiple times of day. If below minimum guaranteed, you can exit penalty-free.',
     updated: 'April 2026',
-    sources: [{label:'Ofcom: Broadband performance',url:'https://www.ofcom.org.uk/research-and-data/telecoms-research'},{label:'Ofcom broadband checker',url:'https://checker.ofcom.org.uk/en-gb/broadband-coverage'}]
+    sources: [{label:'Ofcom: Broadband performance',url:'https://www.ofcom.org.uk/research-and-data/telecoms-research'},{label:'Ofcom broadband checker',url:'https://checker.ofcom.org.uk/en-gb/broadband-coverage'}],
+    mechanisms: ['mislabelling','regulatory-loophole'],
+    quickSwap: 'Check Ofcom broadband checker for your address. Compare minimum guaranteed speed, not headline "up to."',
+    regions: ['uk']
   },
   {
     id: 'banking-fees',
@@ -1947,7 +2160,10 @@ var DATA = [
     envNote: '',
     inShort: 'Know your overdraft rate. At 39% APR it is more expensive than most credit cards.',
     updated: 'April 2026',
-    sources: [{label:'FCA: Overdrafts guidance',url:'https://www.fca.org.uk/consumers/overdrafts'}]
+    sources: [{label:'FCA: Overdrafts guidance',url:'https://www.fca.org.uk/consumers/overdrafts'}],
+    mechanisms: ['regulatory-loophole','supply-chain-opacity'],
+    quickSwap: 'Monzo, Starling, or Revolut for transparent fee structure. Know your overdraft rate. Use Section 75 for purchases over £100.',
+    regions: ['uk']
   },
   {
     id: 'probiotics',
@@ -1969,7 +2185,10 @@ var DATA = [
     envNote: '',
     inShort: 'Look for named strains with clinical trial data. Fermented foods are cheaper and more diverse.',
     updated: 'April 2026',
-    sources: [{label:'Cell: Probiotic colonisation study',url:'https://www.cell.com/cell/fulltext/S0092-8674(18)31102-4'},{label:'NHS: Probiotics',url:'https://www.nhs.uk/conditions/probiotics/'}]
+    sources: [{label:'Cell: Probiotic colonisation study',url:'https://www.cell.com/cell/fulltext/S0092-8674(18)31102-4'},{label:'NHS: Probiotics',url:'https://www.nhs.uk/conditions/probiotics/'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Fermented foods (kimchi, sauerkraut, kefir, live yoghurt). For specific conditions, ask a gastroenterologist for named strains.',
+    regions: ['global']
   },
   {
     id: 'coffee-pods',
@@ -1991,7 +2210,10 @@ var DATA = [
     envNote: 'Nespresso claims high recycling rates but independent analysis suggests actual recycling is much lower. Aluminium pods need specialist recycling. Billions of pods go to landfill annually. A reusable filter and loose coffee produces zero packaging waste per cup.',
     inShort: 'An Aeropress and fresh beans cost less per cup and taste better than any pod.',
     updated: 'April 2026',
-    sources: [{label:'Environmental impact of coffee pods',url:'https://en.wikipedia.org/wiki/Environmental_impact_of_single-use_coffee_pods'}]
+    sources: [{label:'Environmental impact of coffee pods',url:'https://en.wikipedia.org/wiki/Environmental_impact_of_single-use_coffee_pods'}],
+    mechanisms: ['planned-obsolescence','marketing-illusion'],
+    quickSwap: 'Aeropress (£30), Moka pot (£20), or V60 (£8) with freshly ground beans.',
+    regions: ['global']
   },
   {
     id: 'subscription-cancellation',
@@ -2014,7 +2236,10 @@ var DATA = [
     envNote: '',
     inShort: 'If it takes more than 3 clicks to cancel, the friction is deliberate.',
     updated: 'April 2026',
-    sources: [{label:'FTC: Click-to-cancel rule (2024)',url:'https://www.ftc.gov/news-events/news/press-releases/2024/10/federal-trade-commission-announces-final-click-cancel-rule'},{label:'EU Digital Services Act',url:'https://digital-strategy.ec.europa.eu/en/policies/digital-services-act-package'}]
+    sources: [{label:'FTC: Click-to-cancel rule (2024)',url:'https://www.ftc.gov/news-events/news/press-releases/2024/10/federal-trade-commission-announces-final-click-cancel-rule'},{label:'EU Digital Services Act',url:'https://digital-strategy.ec.europa.eu/en/policies/digital-services-act-package'}],
+    mechanisms: ['data-manipulation','planned-obsolescence'],
+    quickSwap: 'Check bank statements for forgotten subscriptions. In the EU, cancellation must be as easy as sign-up.',
+    regions: ['us','eu','uk']
   },
   {
     id: 'free-trials',
@@ -2036,7 +2261,10 @@ var DATA = [
     envNote: '',
     inShort: 'Set a reminder 2 days before trial end. Use a virtual card with a low limit.',
     updated: 'April 2026',
-    sources: [{label:'Citizens Advice: Consumer rights',url:'https://www.citizensadvice.org.uk/consumer/'},{label:'FTC: Negative option marketing',url:'https://www.ftc.gov/legal-library/browse/federal-register-notices/negative-option-rule'}]
+    sources: [{label:'Citizens Advice: Consumer rights',url:'https://www.citizensadvice.org.uk/consumer/'},{label:'FTC: Negative option marketing',url:'https://www.ftc.gov/legal-library/browse/federal-register-notices/negative-option-rule'}],
+    mechanisms: ['data-manipulation'],
+    quickSwap: 'Set a calendar reminder 2 days before trial ends. Use a virtual card (Revolut, Monzo) with a low limit.',
+    regions: ['global']
   },
   {
     id: 'dark-patterns',
@@ -2059,7 +2287,10 @@ var DATA = [
     envNote: '',
     inShort: 'If you feel rushed, confused, or guilty during a digital interaction, you are being manipulated.',
     updated: 'April 2026',
-    sources: [{label:'deceptive.design (dark patterns DB)',url:'https://www.deceptive.design/types'},{label:'CMA: Enforcement actions',url:'https://www.gov.uk/cma-cases'}]
+    sources: [{label:'deceptive.design (dark patterns DB)',url:'https://www.deceptive.design/types'},{label:'CMA: Enforcement actions',url:'https://www.gov.uk/cma-cases'}],
+    mechanisms: ['data-manipulation'],
+    quickSwap: 'Pause before clicking. If the "no" option is phrased to shame you, the design is manipulative.',
+    regions: ['global']
   },
   {
     id: 'freemium-apps',
@@ -2082,7 +2313,10 @@ var DATA = [
     envNote: '',
     inShort: 'Disable in-app purchases in phone settings. For children, this is essential.',
     updated: 'April 2026',
-    sources: [{label:'Belgian Gaming Commission: Loot boxes',url:'https://www.gamingcommission.be/en'},{label:'WHO: Gaming disorder',url:'https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder'}]
+    sources: [{label:'Belgian Gaming Commission: Loot boxes',url:'https://www.gamingcommission.be/en'},{label:'WHO: Gaming disorder',url:'https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder'}],
+    mechanisms: ['data-manipulation','marketing-illusion'],
+    quickSwap: 'Disable in-app purchases in phone settings. Buy complete games (Monument Valley, Toca Boca) instead.',
+    regions: ['global']
   },
   {
     id: 'saas-pricing',
@@ -2105,7 +2339,10 @@ var DATA = [
     envNote: '',
     inShort: 'Calculate total annual cost for your team. Compare what you use vs what you pay for.',
     updated: 'April 2026',
-    sources: [{label:'OpenSource alternatives directory',url:'https://opensource.com/alternatives'}]
+    sources: [{label:'OpenSource alternatives directory',url:'https://opensource.com/alternatives'}],
+    mechanisms: ['marketing-illusion','planned-obsolescence'],
+    quickSwap: 'Calculate total annual cost. Check open-source alternatives (opensource.com/alternatives).',
+    regions: ['global']
   },
   {
     id: 'data-collection',
@@ -2128,7 +2365,10 @@ var DATA = [
     envNote: 'Data centres consume enormous amounts of energy. The infrastructure required to harvest, process, and store behavioural data at scale has a significant carbon footprint that is rarely discussed when the product is positioned as "free."',
     inShort: 'Check app permissions. A torch app does not need your contacts, microphone, and location.',
     updated: 'April 2026',
-    sources: [{label:'EFF: Surveillance self-defence',url:'https://ssd.eff.org/'},{label:'ICO: GDPR overview',url:'https://ico.org.uk/for-organisations/guide-to-data-protection/'}]
+    sources: [{label:'EFF: Surveillance self-defence',url:'https://ssd.eff.org/'},{label:'ICO: GDPR overview',url:'https://ico.org.uk/for-organisations/guide-to-data-protection/'}],
+    mechanisms: ['data-manipulation','supply-chain-opacity'],
+    quickSwap: 'Signal instead of WhatsApp. Firefox instead of Chrome. DuckDuckGo instead of Google. ProtonMail instead of Gmail.',
+    regions: ['global']
   },
   {
     id: 'planned-obsolescence',
@@ -2151,7 +2391,10 @@ var DATA = [
     envNote: 'E-waste is the fastest-growing waste stream globally. It contains toxic materials (lead, mercury, cadmium) that leach into soil and water when improperly disposed of. The communities most exposed are those in West Africa and Southeast Asia where informal recycling takes place. Every product designed to be replaced rather than repaired contributes to this crisis.',
     inShort: 'Check the repairability score. If the battery cannot be replaced, the product has a built-in expiry.',
     updated: 'April 2026',
-    sources: [{label:'Right to Repair Europe',url:'https://repair.eu/'},{label:'iFixit: Repairability scores',url:'https://www.ifixit.com/repairability'}]
+    sources: [{label:'Right to Repair Europe',url:'https://repair.eu/'},{label:'iFixit: Repairability scores',url:'https://www.ifixit.com/repairability'}],
+    mechanisms: ['planned-obsolescence'],
+    quickSwap: 'Check repairability scores. Fairphone. Framework Laptop. Local repair shops over manufacturer service.',
+    regions: ['global']
   },
   {
     id: 'warranty-upsells',
@@ -2174,7 +2417,10 @@ var DATA = [
     envNote: '',
     inShort: 'Your statutory rights last up to 6 years. Section 75 covers credit card purchases over £100.',
     updated: 'April 2026',
-    sources: [{label:'Consumer Rights Act 2015',url:'https://www.legislation.gov.uk/ukpga/2015/15/contents'},{label:'MoneySavingExpert: Section 75',url:'https://www.moneysavingexpert.com/shopping/section75-consumer-credit-act'}]
+    sources: [{label:'Consumer Rights Act 2015',url:'https://www.legislation.gov.uk/ukpga/2015/15/contents'},{label:'MoneySavingExpert: Section 75',url:'https://www.moneysavingexpert.com/shopping/section75-consumer-credit-act'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Know your statutory rights (6 years). Use Section 75 for credit card purchases over £100. Both are free.',
+    regions: ['uk']
   },
   {
     id: 'marketplace-counterfeits',
@@ -2197,7 +2443,10 @@ var DATA = [
     envNote: 'Counterfeit goods are typically produced with no environmental oversight: unregulated factories, toxic waste disposal, and components that cannot be safely recycled. The volume of returns generated by counterfeit goods (which are often disposed of rather than resold) adds to landfill waste.',
     inShort: 'Buy direct from the brand when possible. "Fulfilled by Amazon" does not mean genuine.',
     updated: 'April 2026',
-    sources: [{label:'Wall Street Journal: Amazon commingled inventory',url:'https://www.wsj.com/articles/amazons-heavy-recruitment-of-chinese-sellers-puts-consumers-at-risk-11573489075'},{label:'London Fire Brigade: Safety advice',url:'https://www.london-fire.gov.uk/safety/'},{label:'Which? investigation: Unsafe marketplace products',url:'https://www.which.co.uk/news/article/hundreds-of-potentially-deadly-items-found-on-online-marketplaces-aEO5Q6g3qCHp'}]
+    sources: [{label:'Wall Street Journal: Amazon commingled inventory',url:'https://www.wsj.com/articles/amazons-heavy-recruitment-of-chinese-sellers-puts-consumers-at-risk-11573489075'},{label:'London Fire Brigade: Safety advice',url:'https://www.london-fire.gov.uk/safety/'},{label:'Which? investigation: Unsafe marketplace products',url:'https://www.which.co.uk/news/article/hundreds-of-potentially-deadly-items-found-on-online-marketplaces-aEO5Q6g3qCHp'}],
+    mechanisms: ['mislabelling','supply-chain-opacity'],
+    quickSwap: 'Buy direct from the manufacturer. On Amazon, look for "Ships from and sold by [brand name]."',
+    regions: ['global']
   },
   {
     id: 'fake-reviews',
@@ -2221,7 +2470,137 @@ var DATA = [
     envNote: 'Fake reviews drive sales of cheap, disposable products that fail quickly and end up in landfill. When consumers cannot trust reviews, they are more likely to buy and return multiple items, increasing packaging waste and carbon emissions from shipping.',
     inShort: 'Read the 3-star reviews. Check price history with CamelCamelCamel. Use review analysis tools to spot fakes.',
     updated: 'April 2026',
-    sources: [{label:'CMA: Fake reviews enforcement',url:'https://www.gov.uk/cma-cases/online-reviews'},{label:'Which?: Fake reviews investigation',url:'https://www.which.co.uk/news/article/thousands-of-fake-customer-reviews-found-on-popular-tech-categories-on-amazon-agk4L2H5c96L'},{label:'CamelCamelCamel price tracker',url:'https://camelcamelcamel.com/'}]
+    sources: [{label:'CMA: Fake reviews enforcement',url:'https://www.gov.uk/cma-cases/online-reviews'},{label:'Which?: Fake reviews investigation',url:'https://www.which.co.uk/news/article/thousands-of-fake-customer-reviews-found-on-popular-tech-categories-on-amazon-agk4L2H5c96L'},{label:'CamelCamelCamel price tracker',url:'https://camelcamelcamel.com/'}],
+    mechanisms: ['data-manipulation'],
+    quickSwap: 'Read the 3-star reviews. Check price history with CamelCamelCamel. Trust editorial reviews (Which?, Wirecutter).',
+    regions: ['global']
+  }  ,
+  {
+    id: 'green-claims',
+    icon: '\uD83C\uDF3F',
+    title: 'Green Claims',
+    tags: ['environment', 'household'],
+    hook: 'Carbon neutral. Eco-friendly. Biodegradable. None of these mean what you think.',
+    real: 'Genuine environmental responsibility means measurably reducing emissions, waste, and resource use across a product\u2019s lifecycle. It involves third-party audited data, transparent supply chains, and verifiable targets with public reporting.',
+    fake: '\u201CCarbon neutral\u201D often means buying cheap offset credits while continuing to emit. \u201CEco-friendly\u201D has no legal definition. \u201CBiodegradable\u201D plastics require industrial composting conditions that most municipal waste systems do not provide. \u201CRecyclable\u201D packaging may be technically recyclable but practically never recycled. \u201CNet zero by 2050\u201D commitments are frequently made without interim targets or accountability.',
+    howToTell: [
+      '\u201CCarbon neutral\u201D without published, third-party verified emissions data is a marketing claim.',
+      '\u201CBiodegradable\u201D and \u201Ccompostable\u201D are different. Check if your local council accepts them.',
+      '\u201CRecyclable\u201D means nothing if your local recycling does not accept it.',
+      '\u201CEco-friendly,\u201D \u201Cgreen,\u201D \u201Cearth-conscious,\u201D and \u201Cplanet-positive\u201D have no legal definition.',
+      'Look for specific, measurable claims with third-party verification, not vague adjectives.'
+    ],
+    bigPicture: 'A 2021 EU screening found that 42% of green claims were exaggerated, false, or deceptive. The companies spending the most on green marketing are often the same ones lobbying against environmental regulation. The EU Green Claims Directive (expected 2026) will require substantiation.',
+    trustMarkers: 'B Corp certification (audited). Science Based Targets initiative membership. Specific material certifications: FSC for wood/paper, GOTS for textiles, EU Ecolabel. Avoid any product whose environmental claim is an adjective without a certification.',
+    healthNote: '',
+    envNote: 'The biggest risk of greenwashing is that it delays genuine action. When consumers believe they are making good choices based on misleading labels, demand for truly sustainable alternatives does not materialise.',
+    inShort: 'If the claim is an adjective without a certification logo, it is marketing.',
+    updated: 'April 2026',
+    sources: [{label:'EU: Screening of green claims',url:'https://ec.europa.eu/environment/eussd/smgp/initiative_on_green_claims.htm'},{label:'Changing Markets Foundation: Greenwashing files',url:'https://changingmarkets.org/portfolio/talking-trash/'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole','mislabelling'],
+    quickSwap: 'Look for B Corp, FSC, GOTS, or EU Ecolabel. Ignore adjectives. Buy less, buy better, repair what you have.',
+    regions: ['global']
+  },
+  {
+    id: 'dynamic-currency',
+    icon: '\uD83D\uDCB1',
+    title: 'Dynamic Currency Conversion',
+    tags: ['finance'],
+    hook: 'The ATM asks a friendly question. The answer costs you 8%.',
+    real: 'When you use a card abroad, your bank converts the currency at the interbank rate plus a small margin, typically 0\u20131.5%. This is the cheapest way to pay.',
+    fake: 'Dynamic Currency Conversion (DCC) is offered at ATMs, hotels, and shops abroad. The terminal asks: \u201CWould you like to pay in your home currency?\u201D If you say yes, the merchant\u2019s processor converts at a markup of 3\u20138% above the interbank rate. Some terminals default to DCC, requiring you to actively select local currency.',
+    howToTell: [
+      'If a terminal asks you to choose between local and home currency, always choose LOCAL CURRENCY.',
+      'If the terminal shows a conversion rate, it is offering DCC. The rate is always worse than your bank\u2019s.',
+      'Some terminals present DCC as the default. Look for \u201Cwithout conversion\u201D or \u201Cdecline conversion.\u201D',
+      'Hotels that offer to bill in your home currency at checkout are applying DCC.'
+    ],
+    bigPicture: 'DCC generates an estimated $6\u20138 billion annually worldwide. The question is always framed as helpful when the honest version would be \u201CWould you like to pay 5% more?\u201D Payment processors and merchants split the margin.',
+    trustMarkers: 'Always pay in the local currency. Use a card with no foreign transaction fee (Monzo, Starling, Revolut, Wise). If an ATM does not give you the option to decline DCC, cancel and find another one.',
+    healthNote: '',
+    envNote: '',
+    inShort: 'Always choose LOCAL currency. Saying yes to \u201Cpay in your home currency\u201D costs 3\u20138%.',
+    updated: 'April 2026',
+    sources: [{label:'MoneySavingExpert: DCC explained',url:'https://www.moneysavingexpert.com/travel/dcc-dynamic-currency-conversion/'}],
+    mechanisms: ['supply-chain-opacity','regulatory-loophole'],
+    quickSwap: 'Always press \u201Cpay in local currency.\u201D Use Monzo, Starling, or Wise abroad for interbank rates.',
+    regions: ['global']
+  },
+  {
+    id: 'travel-booking',
+    icon: '\u2708\uFE0F',
+    title: 'Travel Booking Manipulation',
+    tags: ['technology', 'finance'],
+    hook: '\u201COnly 2 rooms left!\u201D There are 200. But urgency sells.',
+    real: 'A hotel room or flight has a price. Comparison should be straightforward: dates, location, amenities, total cost.',
+    fake: 'Online travel agencies and airlines use urgency cues (\u201COnly 1 room left at this price!\u201D), drip pricing that reveals the true cost in stages, commission-ranked results, and \u201Cfree cancellation\u201D that auto-converts to non-refundable. Resort fees, cleaning fees, and service charges appear at checkout after you have invested time.',
+    howToTell: [
+      '\u201COnly X left\u201D warnings are algorithmic. They reflect a price tier, not total availability.',
+      'Always calculate total cost including all fees before comparing.',
+      'Booking directly with the hotel is often the same price or cheaper.',
+      '\u201CFree cancellation\u201D deadlines are designed to be forgotten. Set a calendar reminder.'
+    ],
+    bigPicture: 'Booking.com generated $21 billion in revenue in 2023. Every element on the page is A/B tested for conversion. The CMA has investigated urgency and pricing practices but the underlying model remains manipulation-first.',
+    trustMarkers: 'Book hotels direct. Use Google Flights for transparent airline pricing. Read the cancellation policy before entering payment details.',
+    healthNote: 'Manipulative booking interfaces contribute to decision fatigue and anxiety, particularly for people with anxiety disorders.',
+    envNote: '',
+    inShort: '\u201COnly 2 left\u201D is a price tier, not total availability. Calculate total cost including all fees.',
+    updated: 'April 2026',
+    sources: [{label:'CMA: Online hotel booking investigation',url:'https://www.gov.uk/cma-cases/online-hotel-booking'},{label:'Which? Travel: Booking tactics',url:'https://www.which.co.uk/news/article/booking-com-hotels-com-and-agoda-investigated-over-pressure-selling-and-misleading-discount-claims-aVWmz2l7W59p'}],
+    mechanisms: ['data-manipulation','marketing-illusion'],
+    quickSwap: 'Book hotels direct. Use Google Flights for total cost. Set calendar reminders for free cancellation deadlines.',
+    regions: ['global']
+  },
+  {
+    id: 'wellness-products',
+    icon: '\uD83E\uDDE4',
+    title: 'Wellness Products',
+    tags: ['health'],
+    hook: 'Collagen, detox, immunity boosters. The science does not match the price tag.',
+    real: 'Some wellness interventions have evidence: adequate sleep, regular exercise, a varied diet, stress management, and targeted supplementation for diagnosed deficiencies. These are boring, cheap, and do not come in attractive packaging.',
+    fake: 'Collagen drinks rely on the claim that ingested collagen improves skin and joints. Digestive enzymes break collagen into amino acids before absorption. \u201CDetox\u201D products imply your body needs help removing toxins. It does not. Your liver and kidneys do this continuously. \u201CImmunity boosting\u201D is not a real medical concept. \u201CSuperfood\u201D has no scientific or legal definition.',
+    howToTell: [
+      'If a product uses \u201Cdetox,\u201D \u201Ccleanse,\u201D \u201Cboost immunity,\u201D or \u201Csuperfood,\u201D it is marketing language.',
+      'Collagen supplements: ask what clinical trial, at what dose, showed what outcome.',
+      '\u201CImmunity boosting\u201D is not how the immune system works. An overactive immune system is autoimmune disease.',
+      'Celebrity endorsement is inversely correlated with evidence quality.'
+    ],
+    bigPicture: 'The global wellness market is worth $5.6 trillion. It grows by medicalising normal life and selling solutions to problems it invented. The target market is disproportionately women, and the marketing exploits anxieties about appearance and ageing.',
+    trustMarkers: 'NHS guidance on vitamins and supplements. Cochrane Reviews. Registered dietitians over \u201Cnutritional therapists\u201D (not a protected title). If a product makes a health claim, check the EFSA Register of approved claims.',
+    healthNote: 'Some wellness products interact with medications. \u201CDetox\u201D teas containing senna are laxatives and can cause dependency. The wellness industry has driven delayed medical treatment in cases where people self-treated instead of seeing a doctor.',
+    envNote: '',
+    inShort: '\u201CDetox\u201D is not a real medical need. \u201CImmunity boosting\u201D is not how immune systems work.',
+    updated: 'April 2026',
+    sources: [{label:'NHS: Supplements guidance',url:'https://www.nhs.uk/conditions/vitamins-and-minerals/'},{label:'Cochrane: Vitamin and mineral supplements',url:'https://www.cochrane.org/search/site/vitamin%20supplements'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Sleep, exercise, varied diet, and a GP appointment for specific concerns. Vitamin D in winter if you are in a northern climate.',
+    regions: ['global']
+  },
+  {
+    id: 'ai-powered',
+    icon: '\uD83E\uDD16',
+    title: '\u201CAI-Powered\u201D Products',
+    tags: ['technology', 'software'],
+    hook: 'The toothbrush is not intelligent. Neither is the app.',
+    real: 'Genuine AI applications solve problems that were previously impractical: medical image analysis, protein folding, language translation, code generation. These represent real technical achievement.',
+    fake: '\u201CAI-powered\u201D has become the most overused marketing term since \u201Cblockchain.\u201D A toothbrush with a timer is not AI. An app that wraps a single API call to GPT-4 and charges a subscription is not an AI product. \u201CAI-enhanced\u201D photo editing that applies a preset filter, \u201CAI-driven\u201D recommendations that are basic collaborative filtering, and \u201CAI-curated\u201D playlists that sort by popularity are all using the term to justify a price premium.',
+    howToTell: [
+      'Ask: what does the AI do that a simple rule or algorithm could not? If unclear, it is branding.',
+      'If an app charges a subscription for something ChatGPT does for free, it is a thin wrapper.',
+      '\u201CAI-powered\u201D consumer hardware almost always means a sensor plus basic logic.',
+      'If the product requires constant internet for its \u201CAI,\u201D it is sending your data to a cloud API.',
+      'If the company has no ML team or published research, the \u201CAI\u201D is licensed, not built.'
+    ],
+    bigPicture: 'The AI gold rush has incentivised every company to rebrand existing products. Consumer products add the label to justify premium pricing. The people most misled are those with least technical literacy.',
+    trustMarkers: 'Products from companies with genuine ML research. Open-source AI tools. Products that explain specifically what the AI does. If removing \u201CAI\u201D from the description changes nothing, it is branding.',
+    healthNote: '',
+    envNote: 'AI training and inference consume significant energy. Adding unnecessary AI features increases energy consumption for no genuine benefit.',
+    inShort: 'If removing \u201CAI\u201D from the description changes nothing about the product, it is branding.',
+    updated: 'April 2026',
+    sources: [{label:'FTC: AI claims guidance',url:'https://www.ftc.gov/business-guidance/blog/2023/02/keep-your-ai-claims-check'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'For AI writing/research: use ChatGPT, Claude, or Gemini directly. For \u201CAI\u201D consumer products: buy the non-AI version for half the price.',
+    regions: ['global']
   }
 ];
 
@@ -2258,7 +2637,7 @@ var COLLECTIONS = [
     id: 'kids',
     title: 'Protecting Children',
     desc: 'What the industry markets at your kids.',
-    entries: ['baby-food','food-colouring','energy-drinks','freemium-apps','fruit-juice','ultra-processed','toothpaste']
+    entries: ['baby-food','food-colouring','energy-drinks','freemium-apps','fruit-juice','ultra-processed','toothpaste','wellness-products']
   },
   {
     id: 'digital-life',
@@ -2270,7 +2649,7 @@ var COLLECTIONS = [
     id: 'moving-house',
     title: 'Moving House',
     desc: 'Big purchases, big markups.',
-    entries: ['mattresses','paint','broadband','cleaning-products','bottled-water','warranty-upsells']
+    entries: ['mattresses','paint','broadband','cleaning-products','bottled-water','warranty-upsells','green-claims']
   },
   {
     id: 'eating-out',
@@ -2282,7 +2661,24 @@ var COLLECTIONS = [
     id: 'online-shopping',
     title: 'Online Shopping',
     desc: 'What the marketplace relies on you not checking.',
-    entries: ['marketplace-counterfeits','fake-reviews','warranty-upsells','subscription-cancellation','free-trials','dark-patterns']
+    entries: ['marketplace-counterfeits','fake-reviews','warranty-upsells','subscription-cancellation','free-trials','dark-patterns','travel-booking']
+  }
+];
+
+var MECHANISMS = [
+  { id: 'substitution', label: 'Substitution', desc: 'Real thing replaced with a cheaper synthetic or alternative' },
+  { id: 'mislabelling', label: 'Mislabelling', desc: 'Label says one thing, product is another' },
+  { id: 'dilution', label: 'Dilution', desc: 'Real ingredient present but bulked with filler' },
+  { id: 'marketing-illusion', label: 'Marketing Illusion', desc: 'Value manufactured through branding, not substance' },
+  { id: 'regulatory-loophole', label: 'Regulatory Loophole', desc: 'Legal framework permits the deception' },
+  { id: 'supply-chain-opacity', label: 'Supply Chain Opacity', desc: 'Origin or process deliberately hidden' },
+  { id: 'planned-obsolescence', label: 'Planned Obsolescence', desc: 'Designed to fail, lock in, or force repurchase' },
+  { id: 'data-manipulation', label: 'Data Manipulation', desc: 'Fake reviews, dark patterns, manipulated metrics' }  ,
+  {
+    id: 'abroad',
+    title: 'Travelling Abroad',
+    desc: 'What to watch for when you travel.',
+    entries: ['dynamic-currency','travel-booking','bottled-water','sunscreen']
   }
 ];
 
@@ -2428,13 +2824,27 @@ function openDetail(item) {
       '</div></div>';
   }
 
-  var updatedHtml = item.updated ? '<p class="detail-updated">Last reviewed: ' + item.updated + '</p>' : '';
+  var updatedHtml = '';
+  if (item.updated || (item.regions && item.regions.length)) {
+    updatedHtml = '<p class="detail-updated">';
+    if (item.updated) updatedHtml += 'Last reviewed: ' + item.updated;
+    if (item.regions && item.regions.length && item.regions[0] !== 'global') {
+      var regionLabels = { uk: 'UK', us: 'US', eu: 'EU', global: 'Global' };
+      updatedHtml += (item.updated ? ' \u00B7 ' : '') + item.regions.map(function(r) { return '<span class="region-badge">' + (regionLabels[r] || r) + '</span>'; }).join('');
+    }
+    updatedHtml += '</p>';
+  }
+
+  var mechHtml = (item.mechanisms && item.mechanisms.length) ? '<div style="margin-bottom:16px">' + item.mechanisms.map(function(m) { var mech = MECHANISMS.find(function(x){return x.id===m;}); return mech ? '<span class="mech-tag" title="' + mech.desc + '">' + mech.label + '</span>' : ''; }).join('') + '</div>' : '';
 
   content.innerHTML = '<div class="detail-icon">' + item.icon + '</div>' +
     '<div class="detail-tags">' + tagsHtml + '</div>' +
     '<h1>' + item.title + '</h1>' +
     '<p class="detail-hook">' + item.hook + '</p>' +
     updatedHtml +
+    mechHtml +
+
+    (item.quickSwap ? '<div class="quick-swap"><strong>\u2705 Quick swap</strong>' + item.quickSwap + '</div>' : '') +
 
     (item.inShort ? '<div class="in-short">\u{1F4CC} ' + item.inShort + '</div>' : '') +
 
@@ -2453,6 +2863,18 @@ function openDetail(item) {
     '<div class="detail-section"><h3>What to Trust</h3><p>' + item.trustMarkers + '</p></div>' +
 
     sourcesHtml +
+
+    (function() {
+      if (!item.mechanisms || !item.mechanisms.length) return '';
+      var related = DATA.filter(function(d) {
+        if (d.id === item.id) return false;
+        return d.mechanisms && d.mechanisms.some(function(m) { return item.mechanisms.indexOf(m) !== -1; });
+      }).slice(0, 6);
+      if (!related.length) return '';
+      return '<div class="related-entries"><h3>Related</h3>' +
+        related.map(function(r) { return '<span class="related-link" onclick="closeDetail();setTimeout(function(){openEntryById(\'' + r.id + '\')},200)">' + r.icon + ' ' + r.title + '</span>'; }).join('') +
+        '</div>';
+    })() +
 
     '<button class="detail-share" onclick="shareEntry(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')">\u{1F517} Share this entry</button>';
 
@@ -2713,7 +3135,7 @@ window.addEventListener('popstate', function() {
 (function() {
   if (!('serviceWorker' in navigator)) return;
   var pageUrl = location.href.split('?')[0];
-  var SW = "const CACHE='kin039-v1';const ASSETS=['" + pageUrl + "'];" +
+  var SW = "const CACHE='kin039-v1.2';const ASSETS=['" + pageUrl + "'];" +
     "self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));" +
     "self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));" +
     "self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{if(resp.ok){const c=resp.clone();caches.open(CACHE).then(ca=>ca.put(e.request,c));}return resp;})));});";
