@@ -1,0 +1,395 @@
+# KIN-039 v1.2 Additions
+
+All additions to apply to the clean v1.1 index.html.
+
+---
+
+## 1. NEW CSS (add before `/* IN SHORT */` in the style block)
+
+```css
+/* MECHANISM TAGS */
+.mech-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  margin-right: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.mech-tag:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* QUICK SWAP */
+.quick-swap {
+  background: var(--real-bg);
+  border-left: 3px solid var(--real-text);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.quick-swap strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--real-text);
+  margin-bottom: 4px;
+}
+
+/* REGION BADGES */
+.region-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--tag-bg);
+  color: var(--text-tertiary);
+  margin-right: 4px;
+}
+
+/* RELATED ENTRIES */
+.related-entries {
+  margin-top: 20px;
+}
+.related-entries h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.related-link {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 0 6px 6px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-height: 44px;
+  line-height: 26px;
+  -webkit-appearance: none;
+}
+.related-link:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+```
+
+---
+
+## 2. MECHANISMS TAXONOMY (add just before `var activeFilter = 'all';`)
+
+```javascript
+var MECHANISMS = [
+  { id: 'substitution', label: 'Substitution', desc: 'Real thing replaced with a cheaper synthetic or alternative' },
+  { id: 'mislabelling', label: 'Mislabelling', desc: 'Label says one thing, product is another' },
+  { id: 'dilution', label: 'Dilution', desc: 'Real ingredient present but bulked with filler' },
+  { id: 'marketing-illusion', label: 'Marketing Illusion', desc: 'Value manufactured through branding, not substance' },
+  { id: 'regulatory-loophole', label: 'Regulatory Loophole', desc: 'Legal framework permits the deception' },
+  { id: 'supply-chain-opacity', label: 'Supply Chain Opacity', desc: 'Origin or process deliberately hidden' },
+  { id: 'planned-obsolescence', label: 'Planned Obsolescence', desc: 'Designed to fail, lock in, or force repurchase' },
+  { id: 'data-manipulation', label: 'Data Manipulation', desc: 'Fake reviews, dark patterns, manipulated metrics' }
+];
+```
+
+---
+
+## 3. NEW FIELDS ON EVERY EXISTING ENTRY
+
+Add these three fields after `sources` on each entry. Here is the complete mapping:
+
+```
+truffle-oil:       mechanisms: ['substitution','mislabelling'], quickSwap: 'Buy oil listing "Tuber melanosporum" or "Tuber magnatum" with a percentage. Or skip it entirely and use real truffle shavings sparingly.', regions: ['global']
+wasabi:            mechanisms: ['substitution'], quickSwap: 'Ask for fresh-grated wasabi at high-end restaurants. Otherwise, accept it is horseradish and enjoy it for what it is.', regions: ['global']
+leather:           mechanisms: ['mislabelling','regulatory-loophole'], quickSwap: 'Look for "full grain" from named tanneries (Horween, Sedgwick). Veg-tanned is a reliable indicator.', regions: ['global']
+cashmere:          mechanisms: ['dilution','mislabelling','regulatory-loophole'], quickSwap: 'Johnstons of Elgin, Loro Piana, or any brand disclosing micron count and origin. Two-ply minimum. Or try merino wool.', regions: ['global']
+vanilla:           mechanisms: ['substitution'], quickSwap: 'Nielsen-Massey pure vanilla extract or whole vanilla pods. Look for visible bean specks.', regions: ['global']
+olive-oil:         mechanisms: ['dilution','mislabelling','supply-chain-opacity'], quickSwap: 'Single-estate EVOO with a harvest date. NYIOOC award winners. California Olive Oil Council seal.', regions: ['global']
+honey:             mechanisms: ['dilution','supply-chain-opacity'], quickSwap: 'Local beekeeper. Raw, unfiltered, with visible pollen. Named apiary.', regions: ['global']
+supplements:       mechanisms: ['marketing-illusion','regulatory-loophole'], quickSwap: 'USP Verified or NSF International certified products only. Consult a GP before starting any supplement.', regions: ['global']
+parmesan:          mechanisms: ['dilution','mislabelling'], quickSwap: 'Buy a wedge of Parmigiano-Reggiano with the name stamped on the rind. Grate it yourself.', regions: ['us']
+palm-oil:          mechanisms: ['supply-chain-opacity','mislabelling'], quickSwap: 'Products without palm oil, or RSPO Identity Preserved certified. Check ingredient lists for the 200+ derivative names.', regions: ['global']
+food-colouring:    mechanisms: ['substitution','regulatory-loophole'], quickSwap: 'Products labelled "no artificial colours" or using natural alternatives (annatto, beetroot extract, spirulina).', regions: ['uk','eu','us']
+processed-meat:    mechanisms: ['supply-chain-opacity','regulatory-loophole'], quickSwap: 'Genuinely nitrate-free products (not celery-powder substituted). Named cuts from a local butcher.', regions: ['global']
+ultra-processed:   mechanisms: ['supply-chain-opacity','marketing-illusion'], quickSwap: 'Cook from scratch when possible. Products with fewer than five recognisable ingredients.', regions: ['uk','us']
+fruit-juice:       mechanisms: ['marketing-illusion','regulatory-loophole'], quickSwap: 'Eat the whole fruit. If you want juice, fresh-squeezed at home with pulp retained.', regions: ['global']
+chicken:           mechanisms: ['dilution','supply-chain-opacity'], quickSwap: 'RSPCA Assured or Soil Association Organic. Slow-grown or heritage breed. Named farms.', regions: ['uk']
+fish-mislabelling: mechanisms: ['mislabelling','supply-chain-opacity'], quickSwap: 'Buy whole fish. MSC certified for chain-of-custody tracking. Named boats or fisheries.', regions: ['global']
+bread:             mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'], quickSwap: 'Independent bakeries making bread on-site. Ingredient list: flour, water, salt, sourdough culture. Nothing else.', regions: ['uk']
+cleaning-products: mechanisms: ['marketing-illusion'], quickSwap: 'White vinegar, bicarbonate of soda, washing-up liquid, diluted bleach. Covers almost everything.', regions: ['global']
+bottled-water:     mechanisms: ['marketing-illusion'], quickSwap: 'A reusable bottle and your tap. A counter-top filter if you want filtration.', regions: ['global']
+chocolate:         mechanisms: ['dilution','supply-chain-opacity'], quickSwap: 'Fairtrade certified. 70%+ cocoa for dark, 35%+ for milk. Tony\'s Chocolonely, Divine, or bean-to-bar makers.', regions: ['global']
+fast-fashion:      mechanisms: ['supply-chain-opacity','planned-obsolescence'], quickSwap: 'Buy fewer, better things. Second-hand and vintage. GOTS certified organic cotton. OEKO-TEX Standard 100.', regions: ['global']
+crab:              mechanisms: ['substitution','mislabelling'], quickSwap: 'If the menu says "crab," ask if it is real. Surimi is fine as its own product, just know what you are eating.', regions: ['global']
+saffron:           mechanisms: ['substitution','dilution'], quickSwap: 'Buy threads, never powder. From specialist spice merchants with ISO 3632 grading. Test in warm water.', regions: ['global']
+maple-syrup:       mechanisms: ['substitution','mislabelling'], quickSwap: 'One ingredient: maple syrup. Quebec seal or US grade label. Amber or Dark for cooking.', regions: ['us','uk']
+tea:               mechanisms: ['supply-chain-opacity'], quickSwap: 'Loose leaf tea with a strainer. Or certified plastic-free bags (Pukka, Clipper).', regions: ['uk','eu']
+organic-labelling: mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'], quickSwap: 'Look for the EU organic leaf, Soil Association, or USDA Organic logo. Ignore "natural" and "pure."', regions: ['uk','eu','us']
+diamond:           mechanisms: ['marketing-illusion'], quickSwap: 'Lab-grown for the same stone at a fraction of the price. Or coloured gemstones with more honest pricing.', regions: ['global']
+baby-food:         mechanisms: ['marketing-illusion','regulatory-loophole'], quickSwap: 'Home-prepared food when possible. NHS Start4Life guidelines. Treat pouches as occasional convenience.', regions: ['uk']
+spice-adulteration: mechanisms: ['dilution','substitution'], quickSwap: 'Buy whole spices and grind at home. A basic grinder costs under £20.', regions: ['global']
+sunscreen:         mechanisms: ['marketing-illusion'], quickSwap: 'SPF 30-50 broad spectrum with UVA circle logo or PA++++ rating. Reapply every 2 hours. Altruist, La Roche-Posay.', regions: ['global']
+down:              mechanisms: ['supply-chain-opacity','mislabelling'], quickSwap: 'Responsible Down Standard (RDS) certified. Or Primaloft synthetic alternative.', regions: ['global']
+mattresses:        mechanisms: ['marketing-illusion','supply-chain-opacity'], quickSwap: 'Ask for the spec: spring count, foam density, materials. Compare specs not brands. Online mattress companies cut out the retail markup.', regions: ['uk','us']
+eyewear:           mechanisms: ['marketing-illusion','supply-chain-opacity'], quickSwap: 'Get your prescription and PD measurement. Order from Zenni, EyeBuyDirect, or Ace & Tate online.', regions: ['global']
+funeral:           mechanisms: ['marketing-illusion'], quickSwap: 'Ask for an itemised price list. Consider direct cremation. Supply your own coffin if you wish.', regions: ['uk']
+printer-ink:       mechanisms: ['planned-obsolescence'], quickSwap: 'Epson EcoTank or similar refillable ink tank printer. Laser printer for text-heavy use.', regions: ['global']
+razors:            mechanisms: ['planned-obsolescence','marketing-illusion'], quickSwap: 'Double-edged safety razor (Merkur, Edwin Jagger) with Feather blades. £25 for razor + 100 blades.', regions: ['global']
+toothpaste:        mechanisms: ['marketing-illusion'], quickSwap: 'Any toothpaste with 1350-1500 ppm fluoride. The cheapest one works.', regions: ['global']
+pet-food:          mechanisms: ['mislabelling','marketing-illusion','regulatory-loophole'], quickSwap: 'Named protein source as first ingredient. FEDIAF compliant. Ignore the photography.', regions: ['uk','eu']
+energy-drinks:     mechanisms: ['marketing-illusion'], quickSwap: 'Coffee or tea. Same caffeine, fraction of the price, no sugar payload.', regions: ['global']
+paint:             mechanisms: ['marketing-illusion'], quickSwap: 'Trade-grade paint (Dulux Trade, Crown Trade). Any hardware store will colour-match a sample.', regions: ['uk']
+broadband:         mechanisms: ['mislabelling','regulatory-loophole'], quickSwap: 'Check Ofcom broadband checker for your address. Compare minimum guaranteed speed, not headline "up to."', regions: ['uk']
+banking-fees:      mechanisms: ['regulatory-loophole','supply-chain-opacity'], quickSwap: 'Monzo, Starling, or Revolut for transparent fee structure. Know your overdraft rate. Use Section 75 for purchases over £100.', regions: ['uk']
+probiotics:        mechanisms: ['marketing-illusion','regulatory-loophole'], quickSwap: 'Fermented foods (kimchi, sauerkraut, kefir, live yoghurt). For specific conditions, ask a gastroenterologist for named strains.', regions: ['global']
+coffee-pods:       mechanisms: ['planned-obsolescence','marketing-illusion'], quickSwap: 'Aeropress (£30), Moka pot (£20), or V60 (£8) with freshly ground beans.', regions: ['global']
+subscription-cancellation: mechanisms: ['data-manipulation','planned-obsolescence'], quickSwap: 'Check bank statements for forgotten subscriptions. In the EU, cancellation must be as easy as sign-up.', regions: ['us','eu','uk']
+free-trials:       mechanisms: ['data-manipulation'], quickSwap: 'Set a calendar reminder 2 days before trial ends. Use a virtual card (Revolut, Monzo) with a low limit.', regions: ['global']
+dark-patterns:     mechanisms: ['data-manipulation'], quickSwap: 'Pause before clicking. If the "no" option is phrased to shame you, the design is manipulative.', regions: ['global']
+freemium-apps:     mechanisms: ['data-manipulation','marketing-illusion'], quickSwap: 'Disable in-app purchases in phone settings. Buy complete games (Monument Valley, Toca Boca) instead.', regions: ['global']
+saas-pricing:      mechanisms: ['marketing-illusion','planned-obsolescence'], quickSwap: 'Calculate total annual cost. Check open-source alternatives (opensource.com/alternatives).', regions: ['global']
+data-collection:   mechanisms: ['data-manipulation','supply-chain-opacity'], quickSwap: 'Signal instead of WhatsApp. Firefox instead of Chrome. DuckDuckGo instead of Google. ProtonMail instead of Gmail.', regions: ['global']
+planned-obsolescence: mechanisms: ['planned-obsolescence'], quickSwap: 'Check repairability scores. Fairphone. Framework Laptop. Local repair shops over manufacturer service.', regions: ['global']
+warranty-upsells:  mechanisms: ['marketing-illusion','regulatory-loophole'], quickSwap: 'Know your statutory rights (6 years). Use Section 75 for credit card purchases over £100. Both are free.', regions: ['uk']
+marketplace-counterfeits: mechanisms: ['mislabelling','supply-chain-opacity'], quickSwap: 'Buy direct from the manufacturer. On Amazon, look for "Ships from and sold by [brand name]."', regions: ['global']
+fake-reviews:      mechanisms: ['data-manipulation'], quickSwap: 'Read the 3-star reviews. Check price history with CamelCamelCamel. Trust editorial reviews (Which?, Wirecutter).', regions: ['global']
+```
+
+---
+
+## 4. FIVE NEW ENTRIES (add before the closing `];` of DATA array, after fake-reviews)
+
+```javascript
+  ,
+  {
+    id: 'green-claims',
+    icon: '\u{1F33F}',
+    title: 'Green Claims',
+    tags: ['environment', 'household'],
+    hook: 'Carbon neutral. Eco-friendly. Biodegradable. None of these mean what you think.',
+    real: 'Genuine environmental responsibility means measurably reducing emissions, waste, and resource use across a product\u2019s lifecycle. It involves third-party audited data, transparent supply chains, and verifiable targets with public reporting.',
+    fake: '\u201CCarbon neutral\u201D often means buying cheap offset credits while continuing to emit. \u201CEco-friendly\u201D has no legal definition. \u201CBiodegradable\u201D plastics require industrial composting conditions that most municipal waste systems do not provide. \u201CRecyclable\u201D packaging may be technically recyclable but practically never recycled. \u201CNet zero by 2050\u201D commitments are frequently made without interim targets or accountability.',
+    howToTell: [
+      '\u201CCarbon neutral\u201D without published, third-party verified emissions data is a marketing claim.',
+      '\u201CBiodegradable\u201D and \u201Ccompostable\u201D are different. Check if your local council accepts them.',
+      '\u201CRecyclable\u201D means nothing if your local recycling does not accept it.',
+      '\u201CEco-friendly,\u201D \u201Cgreen,\u201D \u201Cearth-conscious,\u201D and \u201Cplanet-positive\u201D have no legal definition.',
+      'Look for specific, measurable claims with third-party verification, not vague adjectives.'
+    ],
+    bigPicture: 'A 2021 EU screening found that 42% of green claims were exaggerated, false, or deceptive. The companies spending the most on green marketing are often the same ones lobbying against environmental regulation. The EU Green Claims Directive (expected 2026) will require substantiation.',
+    trustMarkers: 'B Corp certification (audited). Science Based Targets initiative membership. Specific material certifications: FSC for wood/paper, GOTS for textiles, EU Ecolabel. Avoid any product whose environmental claim is an adjective without a certification.',
+    healthNote: '',
+    envNote: 'The biggest risk of greenwashing is that it delays genuine action. When consumers believe they are making good choices based on misleading labels, demand for truly sustainable alternatives does not materialise.',
+    inShort: 'If the claim is an adjective without a certification logo, it is marketing.',
+    updated: 'April 2026',
+    sources: [{label:'EU: Screening of green claims',url:'https://ec.europa.eu/environment/eussd/smgp/initiative_on_green_claims.htm'},{label:'Changing Markets Foundation: Greenwashing files',url:'https://changingmarkets.org/portfolio/talking-trash/'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole','mislabelling'],
+    quickSwap: 'Look for B Corp, FSC, GOTS, or EU Ecolabel. Ignore adjectives. Buy less, buy better, repair what you have.',
+    regions: ['global']
+  },
+  {
+    id: 'dynamic-currency',
+    icon: '\u{1F4B1}',
+    title: 'Dynamic Currency Conversion',
+    tags: ['finance'],
+    hook: 'The ATM asks a friendly question. The answer costs you 8%.',
+    real: 'When you use a card abroad, your bank converts the currency at the interbank rate plus a small margin, typically 0\u20131.5%. This is the cheapest way to pay.',
+    fake: 'Dynamic Currency Conversion (DCC) is offered at ATMs, hotels, and shops abroad. The terminal asks: \u201CWould you like to pay in your home currency?\u201D If you say yes, the merchant\u2019s processor converts at a markup of 3\u20138% above the interbank rate. Some terminals default to DCC, requiring you to actively select local currency.',
+    howToTell: [
+      'If a terminal asks you to choose between local and home currency, always choose LOCAL CURRENCY.',
+      'If the terminal shows a conversion rate, it is offering DCC. The rate is always worse than your bank\u2019s.',
+      'Some terminals present DCC as the default. Look for \u201Cwithout conversion\u201D or \u201Cdecline conversion.\u201D',
+      'Hotels that offer to bill in your home currency at checkout are applying DCC.'
+    ],
+    bigPicture: 'DCC generates an estimated $6\u20138 billion annually worldwide. The question is always framed as helpful when the honest version would be \u201CWould you like to pay 5% more?\u201D Payment processors and merchants split the margin.',
+    trustMarkers: 'Always pay in the local currency. Use a card with no foreign transaction fee (Monzo, Starling, Revolut, Wise). If an ATM does not give you the option to decline DCC, cancel and find another one.',
+    healthNote: '',
+    envNote: '',
+    inShort: 'Always choose LOCAL currency. Saying yes to \u201Cpay in your home currency\u201D costs 3\u20138%.',
+    updated: 'April 2026',
+    sources: [{label:'MoneySavingExpert: DCC explained',url:'https://www.moneysavingexpert.com/travel/dcc-dynamic-currency-conversion/'}],
+    mechanisms: ['supply-chain-opacity','regulatory-loophole'],
+    quickSwap: 'Always press \u201Cpay in local currency.\u201D Use Monzo, Starling, or Wise abroad for interbank rates.',
+    regions: ['global']
+  },
+  {
+    id: 'travel-booking',
+    icon: '\u{2708}\u{FE0F}',
+    title: 'Travel Booking Manipulation',
+    tags: ['technology', 'finance'],
+    hook: '\u201COnly 2 rooms left!\u201D There are 200. But urgency sells.',
+    real: 'A hotel room or flight has a price. Comparison should be straightforward: dates, location, amenities, total cost.',
+    fake: 'Online travel agencies and airlines use urgency cues (\u201COnly 1 room left at this price!\u201D), drip pricing that reveals the true cost in stages, commission-ranked results, and \u201Cfree cancellation\u201D that auto-converts to non-refundable. Resort fees, cleaning fees, and service charges appear at checkout after you have invested time.',
+    howToTell: [
+      '\u201COnly X left\u201D warnings are algorithmic. They reflect a price tier, not total availability.',
+      'Always calculate total cost including all fees before comparing.',
+      'Booking directly with the hotel is often the same price or cheaper.',
+      '\u201CFree cancellation\u201D deadlines are designed to be forgotten. Set a calendar reminder.'
+    ],
+    bigPicture: 'Booking.com generated $21 billion in revenue in 2023. Every element on the page is A/B tested for conversion. The CMA has investigated urgency and pricing practices but the underlying model remains manipulation-first.',
+    trustMarkers: 'Book hotels direct. Use Google Flights for transparent airline pricing. Read the cancellation policy before entering payment details.',
+    healthNote: 'Manipulative booking interfaces contribute to decision fatigue and anxiety, particularly for people with anxiety disorders.',
+    envNote: '',
+    inShort: '\u201COnly 2 left\u201D is a price tier, not total availability. Calculate total cost including all fees.',
+    updated: 'April 2026',
+    sources: [{label:'CMA: Online hotel booking investigation',url:'https://www.gov.uk/cma-cases/online-hotel-booking'},{label:'Which? Travel: Booking tactics',url:'https://www.which.co.uk/news/article/booking-com-hotels-com-and-agoda-investigated-over-pressure-selling-and-misleading-discount-claims-aVWmz2l7W59p'}],
+    mechanisms: ['data-manipulation','marketing-illusion'],
+    quickSwap: 'Book hotels direct. Use Google Flights for total cost. Set calendar reminders for free cancellation deadlines.',
+    regions: ['global']
+  },
+  {
+    id: 'wellness-products',
+    icon: '\u{1F9E4}',
+    title: 'Wellness Products',
+    tags: ['health'],
+    hook: 'Collagen, detox, immunity boosters. The science does not match the price tag.',
+    real: 'Some wellness interventions have evidence: adequate sleep, regular exercise, a varied diet, stress management, and targeted supplementation for diagnosed deficiencies. These are boring, cheap, and do not come in attractive packaging.',
+    fake: 'Collagen drinks rely on the claim that ingested collagen improves skin and joints. Digestive enzymes break collagen into amino acids before absorption. \u201CDetox\u201D products imply your body needs help removing toxins. It does not. Your liver and kidneys do this continuously. \u201CImmunity boosting\u201D is not a real medical concept. \u201CSuperfood\u201D has no scientific or legal definition.',
+    howToTell: [
+      'If a product uses \u201Cdetox,\u201D \u201Ccleanse,\u201D \u201Cboost immunity,\u201D or \u201Csuperfood,\u201D it is marketing language.',
+      'Collagen supplements: ask what clinical trial, at what dose, showed what outcome.',
+      '\u201CImmunity boosting\u201D is not how the immune system works. An overactive immune system is autoimmune disease.',
+      'Celebrity endorsement is inversely correlated with evidence quality.'
+    ],
+    bigPicture: 'The global wellness market is worth $5.6 trillion. It grows by medicalising normal life and selling solutions to problems it invented. The target market is disproportionately women, and the marketing exploits anxieties about appearance and ageing.',
+    trustMarkers: 'NHS guidance on vitamins and supplements. Cochrane Reviews. Registered dietitians over \u201Cnutritional therapists\u201D (not a protected title). If a product makes a health claim, check the EFSA Register of approved claims.',
+    healthNote: 'Some wellness products interact with medications. \u201CDetox\u201D teas containing senna are laxatives and can cause dependency. The wellness industry has driven delayed medical treatment in cases where people self-treated instead of seeing a doctor.',
+    envNote: '',
+    inShort: '\u201CDetox\u201D is not a real medical need. \u201CImmunity boosting\u201D is not how immune systems work.',
+    updated: 'April 2026',
+    sources: [{label:'NHS: Supplements guidance',url:'https://www.nhs.uk/conditions/vitamins-and-minerals/'},{label:'Cochrane: Vitamin and mineral supplements',url:'https://www.cochrane.org/search/site/vitamin%20supplements'}],
+    mechanisms: ['marketing-illusion','regulatory-loophole'],
+    quickSwap: 'Sleep, exercise, varied diet, and a GP appointment for specific concerns. Vitamin D in winter if you are in a northern climate.',
+    regions: ['global']
+  },
+  {
+    id: 'ai-powered',
+    icon: '\u{1F916}',
+    title: '\u201CAI-Powered\u201D Products',
+    tags: ['technology', 'software'],
+    hook: 'The toothbrush is not intelligent. Neither is the app.',
+    real: 'Genuine AI applications solve problems that were previously impractical: medical image analysis, protein folding, language translation, code generation. These represent real technical achievement.',
+    fake: '\u201CAI-powered\u201D has become the most overused marketing term since \u201Cblockchain.\u201D A toothbrush with a timer is not AI. An app that wraps a single API call to GPT-4 and charges a subscription is not an AI product. \u201CAI-enhanced\u201D photo editing that applies a preset filter, \u201CAI-driven\u201D recommendations that are basic collaborative filtering, and \u201CAI-curated\u201D playlists that sort by popularity are all using the term to justify a price premium.',
+    howToTell: [
+      'Ask: what does the AI do that a simple rule or algorithm could not? If unclear, it is branding.',
+      'If an app charges a subscription for something ChatGPT does for free, it is a thin wrapper.',
+      '\u201CAI-powered\u201D consumer hardware almost always means a sensor plus basic logic.',
+      'If the product requires constant internet for its \u201CAI,\u201D it is sending your data to a cloud API.',
+      'If the company has no ML team or published research, the \u201CAI\u201D is licensed, not built.'
+    ],
+    bigPicture: 'The AI gold rush has incentivised every company to rebrand existing products. Consumer products add the label to justify premium pricing. The people most misled are those with least technical literacy.',
+    trustMarkers: 'Products from companies with genuine ML research. Open-source AI tools. Products that explain specifically what the AI does. If removing \u201CAI\u201D from the description changes nothing, it is branding.',
+    healthNote: '',
+    envNote: 'AI training and inference consume significant energy. Adding unnecessary AI features increases energy consumption for no genuine benefit.',
+    inShort: 'If removing \u201CAI\u201D from the description changes nothing about the product, it is branding.',
+    updated: 'April 2026',
+    sources: [{label:'FTC: AI claims guidance',url:'https://www.ftc.gov/business-guidance/blog/2023/02/keep-your-ai-claims-check'}],
+    mechanisms: ['marketing-illusion'],
+    quickSwap: 'For AI writing/research: use ChatGPT, Claude, or Gemini directly. For \u201CAI\u201D consumer products: buy the non-AI version for half the price.',
+    regions: ['global']
+  }
+```
+
+---
+
+## 5. UPDATED DETAIL RENDERER (replace the `openDetail` function's content builder)
+
+Replace the existing `updatedHtml` line:
+
+```javascript
+  var updatedHtml = item.updated ? '<p class="detail-updated">Last reviewed: ' + item.updated + '</p>' : '';
+```
+
+With:
+
+```javascript
+  var updatedHtml = '';
+  if (item.updated || (item.regions && item.regions.length)) {
+    updatedHtml = '<p class="detail-updated">';
+    if (item.updated) updatedHtml += 'Last reviewed: ' + item.updated;
+    if (item.regions && item.regions.length && item.regions[0] !== 'global') {
+      var regionLabels = { uk: 'UK', us: 'US', eu: 'EU', global: 'Global' };
+      updatedHtml += (item.updated ? ' \u00B7 ' : '') + item.regions.map(function(r) { return '<span class="region-badge">' + (regionLabels[r] || r) + '</span>'; }).join('');
+    }
+    updatedHtml += '</p>';
+  }
+
+  var mechHtml = (item.mechanisms && item.mechanisms.length) ? '<div style="margin-bottom:16px">' + item.mechanisms.map(function(m) { var mech = MECHANISMS.find(function(x){return x.id===m}); return mech ? '<span class="mech-tag" title="' + mech.desc + '">' + mech.label + '</span>' : ''; }).join('') + '</div>' : '';
+```
+
+Then in the `content.innerHTML` builder, after `updatedHtml +` add:
+
+```javascript
+    mechHtml +
+```
+
+Before the `inShort` line, add the quick swap:
+
+```javascript
+    (item.quickSwap ? '<div class="quick-swap"><strong>\u2705 Quick swap</strong>' + item.quickSwap + '</div>' : '') +
+```
+
+Before the share button, add related entries:
+
+```javascript
+    (function() {
+      if (!item.mechanisms || !item.mechanisms.length) return '';
+      var related = DATA.filter(function(d) {
+        if (d.id === item.id) return false;
+        return d.mechanisms && d.mechanisms.some(function(m) { return item.mechanisms.indexOf(m) !== -1; });
+      }).slice(0, 6);
+      if (!related.length) return '';
+      return '<div class="related-entries"><h3>Related</h3>' +
+        related.map(function(r) { return '<span class="related-link" onclick="closeDetail();setTimeout(function(){openEntryById(\'' + r.id + '\')},200)">' + r.icon + ' ' + r.title + '</span>'; }).join('') +
+        '</div>';
+    })() +
+```
+
+---
+
+## 6. COLLECTION UPDATES
+
+Add `'travel-booking'` to Online Shopping entries array.
+Add `'green-claims'` to Moving House entries array.
+Add `'wellness-products'` to Protecting Children entries array.
+Add a new collection:
+
+```javascript
+  {
+    id: 'abroad',
+    title: 'Travelling Abroad',
+    desc: 'What to watch for when you travel.',
+    entries: ['dynamic-currency','travel-booking','bottled-water','sunscreen']
+  }
+```
+
+---
+
+## 7. VERSION BUMP
+
+Change all `v1.1` references to `v1.2`:
+- Footer row
+- SW cache key (`kin039-v1` to `kin039-v1.2`)
