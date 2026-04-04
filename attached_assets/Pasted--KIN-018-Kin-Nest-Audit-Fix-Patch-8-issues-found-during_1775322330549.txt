@@ -1,0 +1,303 @@
+# KIN-018 Kin Nest — Audit Fix Patch
+
+> 8 issues found during stress test audit. Apply all fixes, then bump to **v1.1**.
+> SW cache key, footer version, and landing card version must all update together.
+
+-----
+
+## Fix 1 — §5.4: theme-color meta missing id
+
+The `<meta name="theme-color">` tag needs `id="theme-color-meta"` so JS can update it during night mode.
+
+**Find:**
+
+```html
+<meta name="theme-color" content="#059669">
+```
+
+**Replace with:**
+
+```html
+<meta name="theme-color" id="theme-color-meta" content="#059669">
+```
+
+-----
+
+## Fix 2 — §5.4+§6: Night mode doesn’t update theme-color
+
+`checkNightMode()` toggles `body.dark` but never touches the theme-color meta. Status bar stays green in night mode.
+
+**Find:**
+
+```js
+function checkNightMode() {
+  const h = new Date().getHours();
+  const isNight = state.settings.nightAuto && (h >= 20 || h < 6);
+  document.body.classList.toggle('dark', isNight);
+  document.getElementById('night-pill').classList.toggle('hidden', !isNight);
+}
+```
+
+**Replace with:**
+
+```js
+function checkNightMode() {
+  const h = new Date().getHours();
+  const isNight = state.settings.nightAuto && (h >= 20 || h < 6);
+  document.body.classList.toggle('dark', isNight);
+  document.getElementById('night-pill').classList.toggle('hidden', !isNight);
+  var tcm = document.getElementById('theme-color-meta');
+  if (tcm) tcm.content = isNight ? '#071a10' : '#059669';
+}
+```
+
+-----
+
+## Fix 3 — §9: Input font sizes below 16px (iOS auto-zoom)
+
+Three input classes use font sizes below 16px, triggering Safari auto-zoom on focus.
+
+### 3a — `.setup-inp`: 13px → 16px
+
+**Find:**
+
+```css
+.setup-inp{flex:1;min-width:120px;height:38px;border:1.5px solid var(--accent-bd);border-radius:8px;background:var(--card);padding:0 10px;font-size:13px;font-family:inherit;color:var(--fg);outline:none}
+```
+
+**Replace with:**
+
+```css
+.setup-inp{flex:1;min-width:120px;height:38px;border:1.5px solid var(--accent-bd);border-radius:8px;background:var(--card);padding:0 10px;font-size:16px;font-family:inherit;color:var(--fg);outline:none}
+```
+
+### 3b — `.g-inp`: 13px → 16px
+
+**Find:**
+
+```css
+.g-inp{flex:1;min-width:80px;height:38px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);padding:0 10px;font-size:13px;font-family:inherit;color:var(--fg);outline:none}
+```
+
+**Replace with:**
+
+```css
+.g-inp{flex:1;min-width:80px;height:38px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);padding:0 10px;font-size:16px;font-family:inherit;color:var(--fg);outline:none}
+```
+
+### 3c — `.finput`: 15px → 16px
+
+**Find:**
+
+```css
+.finput{width:100%;height:42px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);padding:0 12px;font-size:15px;font-family:inherit;color:var(--fg);outline:none;transition:border-color .15s}
+```
+
+**Replace with:**
+
+```css
+.finput{width:100%;height:42px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);padding:0 12px;font-size:16px;font-family:inherit;color:var(--fg);outline:none;transition:border-color .15s}
+```
+
+-----
+
+## Fix 4 — §9: `.tl-del` touch target below 44px
+
+Timeline delete buttons have `padding:2px 6px` with no min-height. Well below the 44px minimum.
+
+**Find:**
+
+```css
+.tl-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:6px;flex-shrink:0}
+```
+
+**Replace with:**
+
+```css
+.tl-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px;border-radius:6px;flex-shrink:0;min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;-webkit-appearance:none}
+```
+
+-----
+
+## Fix 5 — §16.1: `deleteEntry()` has no confirmation
+
+Tapping ✕ on any timeline event immediately deletes it with no confirmation. Destructive action needs `confirm2()`.
+
+**Find:**
+
+```js
+function deleteEntry(type, id) {
+  const realId = id.endsWith('_w') ? id.slice(0,-2) : id;
+  if (type === 'feed') state.feeds = state.feeds.filter(f => f.id !== realId);
+  else if (type === 'sleep' || type === 'wake') state.sleep = state.sleep.filter(s => s.id !== realId);
+  else if (type === 'diaper') state.diapers = state.diapers.filter(d => d.id !== realId);
+  else if (type === 'growth') state.growth = state.growth.filter(g => g.id !== realId);
+  save(); render();
+}
+```
+
+**Replace with:**
+
+```js
+function deleteEntry(type, id) {
+  const realId = id.endsWith('_w') ? id.slice(0,-2) : id;
+  confirm2('Delete entry?', 'This will permanently remove this log entry.', function() {
+    if (type === 'feed') state.feeds = state.feeds.filter(f => f.id !== realId);
+    else if (type === 'sleep' || type === 'wake') state.sleep = state.sleep.filter(s => s.id !== realId);
+    else if (type === 'diaper') state.diapers = state.diapers.filter(d => d.id !== realId);
+    else if (type === 'growth') state.growth = state.growth.filter(g => g.id !== realId);
+    save(); render();
+  });
+}
+```
+
+-----
+
+## Fix 6 — §19: Missing standalone meta description
+
+OG description exists but a plain `<meta name="description">` is absent. Needed for non-OG search indexing.
+
+**Find:**
+
+```html
+<link rel="canonical" href="https://nest.kintools.net/">
+```
+
+**Replace with:**
+
+```html
+<meta name="description" content="Baby feeding, sleep and diaper tracker with routine intelligence and report export. Free, offline, no accounts.">
+<link rel="canonical" href="https://nest.kintools.net/">
+```
+
+-----
+
+## Fix 7 — §8: Settings footer credit line wrong format
+
+The `.kin-ftr` div in the Settings tab uses non-standard copy and wrong field order.
+
+**Find:**
+
+```html
+      Kin Nest · KIN-018 · v1.0 · by Alice and Darren<br>
+      Part of the <a href="https://kintools.net/" target="_blank">Kin</a> collection · No accounts · No tracking · Offline‑ready
+```
+
+**Replace with:**
+
+```html
+      KIN-018 · v1.1 · <a href="https://kintools.net/" target="_blank" rel="noopener">Kin Tools</a> · by Alice and Darren
+```
+
+-----
+
+## Fix 8 — Compliance: Add “KIN Verified v1.0” to footer row 2
+
+The standard `<footer>` badge text needs to include the compliance declaration.
+
+**Find (in the `<footer>` badge span):**
+
+```
+Local Only · Verified</span>
+```
+
+**Replace with:**
+
+```
+Local Only · KIN Verified v1.0</span>
+```
+
+-----
+
+## Version bump — v1.0 → v1.1
+
+All three locations must update in the same commit.
+
+### SW cache key
+
+**Find:**
+
+```js
+const C='kin018-v1';
+```
+
+**Replace with:**
+
+```js
+const C='kin018-v2';
+```
+
+Note: this string appears twice — once in the main page SW block and once inside the `exportHTML()` report template. Update **both**.
+
+### Standard footer credit line
+
+**Find:**
+
+```html
+KIN-018 · v1.0 · <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Alice and Darren
+```
+
+**Replace with:**
+
+```html
+KIN-018 · v1.1 · <a href="https://kintools.net/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Kin Tools</a> · by Alice and Darren
+```
+
+### Landing card version (in `sites/kin-landing/index.html`)
+
+**Find:**
+
+```html
+<div class="version">v1.0</div>
+```
+
+(on the KIN-018 card)
+
+**Replace with:**
+
+```html
+<div class="version">v1.1</div>
+```
+
+-----
+
+## Post-fix checklist
+
+```
+[ ] Fix 1  — theme-color meta has id="theme-color-meta"
+[ ] Fix 2  — checkNightMode() updates theme-color content
+[ ] Fix 3a — .setup-inp font-size: 16px
+[ ] Fix 3b — .g-inp font-size: 16px
+[ ] Fix 3c — .finput font-size: 16px
+[ ] Fix 4  — .tl-del min-height: 44px
+[ ] Fix 5  — deleteEntry() wrapped in confirm2()
+[ ] Fix 6  — standalone meta description added
+[ ] Fix 7  — Settings footer matches §8 format
+[ ] Fix 8  — "KIN Verified v1.0" in footer row 2 badge
+[ ] Version — SW cache key: kin018-v2
+[ ] Version — footer credit: v1.1
+[ ] Version — Settings footer credit: v1.1
+[ ] Version — landing card: v1.1
+[ ] Syntax — all script blocks parse clean
+[ ] Test   — night mode toggles theme-color between #059669 / #071a10
+[ ] Test   — timeline delete shows confirmation dialog
+[ ] Test   — inputs don't trigger iOS auto-zoom on focus
+[ ] Test   — timeline delete button tappable on mobile
+```
+
+-----
+
+## Commit message
+
+```
+KIN-018 Kin Nest: v1.1 audit fixes
+
+- Add id to theme-color meta, update on night mode toggle
+- Bump all input font sizes to 16px (iOS auto-zoom prevention)
+- Add min-height 44px to timeline delete buttons
+- Wrap deleteEntry() in confirm2() for destructive action safety
+- Add standalone meta description for search indexing
+- Fix Settings footer to match §8 standard credit format
+- Add KIN Verified v1.0 to footer badge
+- Bump version: v1.0 → v1.1, SW kin018-v1 → kin018-v2
+```
