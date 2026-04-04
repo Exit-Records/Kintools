@@ -40,7 +40,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-015 | Quiet Cycle | v1.0 | Alice & Darren | quiet-cycle.kintools.net | ✅ | 4 fixes: viewport, XSS in renderEntries (note escaped), bug report, OG |
 | KIN-016 | Recipe Scaler | v1.0 | Darren | recipe-scaler.kintools.net | ✅ | 3 fixes: viewport, bug report, OG |
 | KIN-017 | Decision Flip | v1.0 | Alice | decision-flip.kintools.net | ✅ | 3 fixes: viewport, bug report, OG |
-| KIN-018 | Kin Nest | v1.0 | Alice & Darren | kin-nest.kintools.net | ✅ | 3 fixes: viewport, bug report, OG; duplicate footer is inside report export template (correct) |
+| KIN-018 | Kin Nest | v1.1 | Alice & Darren | nest.kintools.net | ✅ | v1.1: iOS input zoom (16px font-size), 44px touch targets on delete, confirm dialog on delete, night-mode theme-color meta toggle, standalone meta description, footer text + badge updated, SW cache key → kin018-v2 |
 | KIN-019 | Markdown Download | v1.0 | Darren | markdown-download.kintools.net | ✅ | 3 fixes: Google Fonts removed, bug report, OG |
 | KIN-020 | Password Generator | v1.0 | Darren | password-generator.kintools.net | ✅ | 2 fixes: bug report, OG; viewport + manifest already clean |
 | KIN-021 | Text Counter | v1.0 | Darren | text-counter.kintools.net | ✅ | 5 fixes: SW key→kin021-v1, manifest icon→data URI, Google Fonts removed, bug report, OG |
