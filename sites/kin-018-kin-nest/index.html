@@ -200,6 +200,9 @@ body { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-are
 
 <style>
 body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
+.demo-bar{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:10px;padding:10px 14px;margin:10px 16px 0;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500;gap:10px}
+.demo-bar button{width:auto;min-height:36px;background:transparent;border:1px solid currentColor;color:inherit;border-radius:8px;padding:4px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+body.dark .demo-bar{background:#022c22;color:#6ee7b7;border-color:#065f46}
 </style>
 <meta name="description" content="Baby feeding, sleep and diaper tracker with routine intelligence and report export. Free, offline, no accounts.">
 <link rel="canonical" href="https://nest.kintools.net/">
@@ -275,6 +278,11 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
   <span class="kin-num">KIN-018</span>
 </header>
 
+<div id="demoBar" class="demo-bar" style="display:none">
+  <span>Demo mode — sample data for Baby Sunny</span>
+  <button onclick="exitDemo()">Exit demo</button>
+</div>
+
 <!-- TABS -->
 <div class="tabs">
   <button class="tab active" onclick="showTab('today')">Today</button>
@@ -297,6 +305,9 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
         <input class="setup-inp" id="setup-dob" type="date" title="Date of birth">
         <button class="setup-btn" onclick="saveSetup()">Save</button>
       </div>
+    </div>
+    <div id="demo-link-wrap" style="text-align:center;margin-top:2px;margin-bottom:4px">
+      <a href="?demo=true" style="font-size:12px;color:var(--accent);text-decoration:none;opacity:0.7">Try demo</a>
     </div>
 
     <!-- Export reminder banner -->
@@ -550,6 +561,7 @@ body.dark #kin-storage-info-btn { color: rgba(255,255,255,0.3) !important; }
 // State
 // ═══════════════════════════════════════════════════════════
 const SK = 'kin-nest';
+let isDemo = false;
 
 function defaultState() {
   return {
@@ -575,7 +587,85 @@ function load() {
   return defaultState();
 }
 
-function save() { localStorage.setItem(SK, JSON.stringify(state)); }
+function save() { if (!isDemo) localStorage.setItem(SK, JSON.stringify(state)); }
+
+function demoData() {
+  const now = Date.now();
+  const DAY = 86400000;
+  const H = 3600000;
+  let _di = 0;
+  function did() { return 'demo-' + (++_di) + '-' + Math.random().toString(36).slice(2,5); }
+
+  const feeds = [], sleep = [], diapers = [], growth = [];
+
+  // 5 days of history
+  const feedPattern = [
+    {h:1,   type:'left',    amount:''},
+    {h:3.5, type:'right',   amount:''},
+    {h:6,   type:'bottle',  amount:'80ml'},
+    {h:8.5, type:'left',    amount:''},
+    {h:11,  type:'right',   amount:''},
+    {h:13.5,type:'bottle',  amount:'85ml'},
+    {h:16,  type:'left',    amount:''},
+    {h:18.5,type:'right',   amount:''},
+    {h:21,  type:'bottle',  amount:'80ml'},
+  ];
+  const sleepPattern = [
+    {h:0,   dur:2.5},
+    {h:4,   dur:1.5},
+    {h:9,   dur:1.0},
+    {h:14,  dur:2.0},
+    {h:19.5,dur:3.5},
+  ];
+  const diaperPattern = [
+    {h:2,  type:'wet'},
+    {h:5,  type:'dirty'},
+    {h:8,  type:'wet'},
+    {h:11, type:'both'},
+    {h:14, type:'wet'},
+    {h:17, type:'dirty'},
+    {h:20, type:'wet'},
+  ];
+
+  for (let d = 4; d >= 0; d--) {
+    const base = now - d * DAY;
+    const dayStart = new Date(base); dayStart.setHours(0,0,0,0);
+    const ds = dayStart.getTime();
+
+    feedPattern.forEach(f => {
+      const t = ds + f.h * H;
+      if (t < now) feeds.push({ id: did(), time: t, type: f.type, amount: f.amount, notes: '' });
+    });
+    sleepPattern.forEach(s => {
+      const start = ds + s.h * H;
+      const end = start + s.dur * H;
+      if (end < now) sleep.push({ id: did(), start, end });
+    });
+    diaperPattern.forEach(dp => {
+      const t = ds + dp.h * H;
+      if (t < now) diapers.push({ id: did(), time: t, type: dp.type });
+    });
+  }
+
+  growth.push({ id: did(), date: now - 14*DAY, weight: '3.5', height: '51', head: '34.5' });
+  growth.push({ id: did(), date: now -  7*DAY, weight: '3.8', height: '52', head: '35.0' });
+  growth.push({ id: did(), date: now -  2*DAY, weight: '4.1', height: '53', head: '35.5' });
+
+  return {
+    baby: { name: 'Sunny', dob: new Date(now - 21*DAY).toISOString().slice(0,10) },
+    settings: { nightAuto: true, remind: false, remindFreq: 'weekly', remindLast: 0 },
+    feeds, sleep, diapers, growth, medicine: []
+  };
+}
+
+function exitDemo() {
+  isDemo = false;
+  document.getElementById('demoBar').style.display = 'none';
+  history.replaceState(null, '', window.location.pathname);
+  state = load();
+  render();
+}
+
 let state = load();
 
 // ═══════════════════════════════════════════════════════════
@@ -805,6 +895,8 @@ function render() {
 function renderSetup() {
   const hasName = !!state.baby.name;
   document.getElementById('setup-card').classList.toggle('hidden', hasName);
+  const dl = document.getElementById('demo-link-wrap');
+  if (dl) dl.style.display = (hasName || isDemo) ? 'none' : 'block';
   if (!hasName) {
     document.getElementById('setup-name').value = state.baby.name;
     document.getElementById('setup-dob').value = state.baby.dob;
@@ -1652,6 +1744,13 @@ function nukeAll() {
 // Init
 // ═══════════════════════════════════════════════════════════
 function init() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('demo') === 'true') {
+    isDemo = true;
+    state = demoData();
+    document.getElementById('demoBar').style.display = 'flex';
+  }
+
   checkNightMode();
   render();
 
