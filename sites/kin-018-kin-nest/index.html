@@ -306,10 +306,6 @@ body.dark .demo-bar{background:#022c22;color:#6ee7b7;border-color:#065f46}
         <button class="setup-btn" onclick="saveSetup()">Save</button>
       </div>
     </div>
-    <div id="demo-link-wrap" style="text-align:center;margin-top:2px;margin-bottom:4px">
-      <a href="?demo=true" style="font-size:12px;color:var(--accent);text-decoration:none;opacity:0.7">Try demo</a>
-    </div>
-
     <!-- Export reminder banner -->
     <div class="remind-banner hidden" id="remind-banner">
       <div class="remind-body">
@@ -895,8 +891,6 @@ function render() {
 function renderSetup() {
   const hasName = !!state.baby.name;
   document.getElementById('setup-card').classList.toggle('hidden', hasName);
-  const dl = document.getElementById('demo-link-wrap');
-  if (dl) dl.style.display = (hasName || isDemo) ? 'none' : 'block';
   if (!hasName) {
     document.getElementById('setup-name').value = state.baby.name;
     document.getElementById('setup-dob').value = state.baby.dob;
