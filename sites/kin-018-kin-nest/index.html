@@ -280,7 +280,7 @@ body.dark .demo-bar{background:#022c22;color:#6ee7b7;border-color:#065f46}
 
 <div id="demoBar" class="demo-bar" style="display:none">
   <span>Demo mode — sample data for Baby Sunny</span>
-  <button onclick="exitDemo()">Exit demo</button>
+  <button onclick="startFresh()">Start fresh</button>
 </div>
 
 <!-- TABS -->
@@ -654,7 +654,7 @@ function demoData() {
   };
 }
 
-function exitDemo() {
+function startFresh() {
   isDemo = false;
   document.getElementById('demoBar').style.display = 'none';
   history.replaceState(null, '', window.location.pathname);
