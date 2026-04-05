@@ -1,0 +1,27 @@
+  {
+    id: 'craft-beer',
+    icon: '\u{1F37A}',
+    title: '"Craft" Beer & Brewery Ownership',
+    tags: ['food', 'household'],
+    hook: 'That independent-looking brewery on the tap? It might be owned by the same company as Budweiser.',
+    real: 'A genuinely independent brewery is owned by the people who brew the beer. They make decisions about ingredients, recipes, and distribution without corporate oversight. The flavour, the experimentation, and the local identity are the point. Independent beer supports local economies and offers genuine variety.',
+    fake: 'AB InBev, the world\u2019s largest brewer, owns over 500 brands and produces roughly one in four beers sold globally. Their portfolio includes Budweiser, Stella Artois, Corona, Beck\u2019s, Hoegaarden, Leffe, and dozens of acquired "craft" brands including Camden Town Brewery, Goose Island, Meantime, Breckenridge, and Four Pines. Heineken owns Birra Moretti, Red Stripe, Amstel, Brixton Brewery, and Beavertown. Molson Coors owns Sharp\u2019s (Doom Bar), Aspall, and Franciscan Well. After acquisition, these brands continue trading on their independent image: the logos stay, the taproom stays, the story stays. The ownership changes. "Craft" has no legal definition in the UK or EU. Any beer can call itself craft.',
+    howToTell: [
+      '"Craft" on the label means nothing legally. Any brewery, any size, any ownership can use it.',
+      'Check who owns the brewery. SIBA (Society of Independent Brewers) membership indicates genuine independence in the UK.',
+      'Look for the INDIE BEER mark on cask, keg, and packaging. It means the brewery is independently owned.',
+      'If a "craft" brand is available in every supermarket and chain pub, ask how a small brewery achieved that distribution. The answer is usually that it is no longer small.',
+      'Acquired breweries often keep their original branding, social media, and taprooms. The acquisition is not advertised.',
+      'Pub tap lines are controlled through tied agreements, exclusive supply deals, and loan-to-pub schemes by major brewers. The "choice" on the bar is often pre-selected by one or two companies.'
+    ],
+    bigPicture: 'The craft beer revolution was real. Small breweries made better, more interesting beer than the corporations. The corporations responded not by improving their beer but by buying the breweries. The strategy is called "craftwashing": acquire independent brands, maintain their independent aesthetic, use corporate distribution to put them everywhere, and squeeze the genuinely independent breweries off the taps. The consumer pays a craft premium for a corporate product. Meanwhile, actual independent breweries struggle to access pub taps and shelf space controlled by the companies that bought their former peers. AB InBev\u2019s revenue exceeds $57 billion. Camden Town Brewery\u2019s "independent" branding helps sell their lager at twice the price of Budweiser. Both are AB InBev.',
+    trustMarkers: 'INDIE BEER mark and brewery checker at indiebeer.uk (UK). Brewers Association Independent Craft Brewer seal (US). Buy directly from brewery taprooms. Ask your local pub who owns the brands on tap. Support genuinely independent breweries: if the brewery has a taproom you can visit, staff who made the beer, and no corporate parent, it is probably independent.',
+    healthNote: 'Corporate acquisitions often lead to recipe changes to reduce production costs: cheaper hops, shorter fermentation, adjuncts replacing malt. The beer you liked from the independent version may not be the same beer after acquisition, even if the name and branding are identical.',
+    envNote: 'Genuinely local breweries have shorter supply chains and lower transport emissions. A pint brewed five miles away has a fraction of the carbon footprint of one brewed in Belgium and shipped globally, regardless of what the label looks like.',
+    inShort: '"Craft" has no legal definition. Check the INDIE BEER mark or use the brewery checker at indiebeer.uk.',
+    updated: 'April 2026',
+    sources: [{label:'SIBA: Assured Independent British Craft Brewer',url:'https://www.siba.co.uk/independentcraftbeer/'},{label:'Brewers Association: Independent Craft Brewer seal',url:'https://www.brewersassociation.org/independent-craft-brewer-seal/'}],
+    mechanisms: ['marketing-illusion','supply-chain-opacity'],
+    quickSwap: 'Look for the INDIE BEER mark. Use the brewery checker at indiebeer.uk. Buy from brewery taprooms. Ask your pub who owns each tap.',
+    regions: ['uk','us','eu']
+  }
