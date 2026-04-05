@@ -1,0 +1,26 @@
+  {
+    id: 'wedding-premium',
+    icon: '\u{1F490}',
+    title: 'The Wedding Premium',
+    tags: ['household', 'fashion'],
+    hook: 'Say "party" and it costs £2,000. Say "wedding" and it costs £5,000. Same room.',
+    real: 'A wedding is a gathering of people for a ceremony and a meal. The logistics are identical to any large private event: a venue, food, drinks, decoration, and music. A dress is fabric, cut, and construction. Flowers are flowers. A cake is a cake.',
+    fake: 'The moment the word "wedding" is attached, pricing changes. Venues charge 30-60% more for a "wedding package" than an equivalent private event booking, often for the same room with the same catering. Wedding dresses that cost £200-400 to manufacture retail at £1,500-3,000. The bridal retail model deliberately prevents comparison: labels are removed or obscured, shops discourage photography, and the emotional intensity of the appointment is engineered to close the sale on the day. "Alterations" are charged separately at rates far above standard tailoring. Wedding cakes cost 3-5x an equivalent celebration cake from the same baker. Florists apply a wedding multiplier. Photographers offer tiered packages that mirror SaaS pricing: the package you actually need is always in the tier above the one you can afford.',
+    howToTell: [
+      'Call a venue twice: once asking about a private party, once about a wedding reception. Compare the quotes for the same date, same numbers, same room.',
+      'Wedding dress construction is not inherently complex. Compare the fabric, weight, and finishing to formalwear at a fraction of the price.',
+      'Ask any baker to quote for "a three-tier white cake for 100 people" vs "a wedding cake for 100 people." The difference is the word.',
+      'Photographers and videographers who charge £3,000+ for a wedding will shoot a corporate event of the same duration for less. The skill is identical.',
+      'If a vendor will not give you a price without knowing the event type first, the pricing is event-dependent, not cost-dependent.'
+    ],
+    bigPicture: 'The global wedding industry is worth over $300 billion. It is built on the cultural pressure that a wedding must be "the most important day of your life" and that spending less signals caring less. This emotional leverage makes price resistance feel like a character flaw. The industry reinforces this through bridal magazines, social media, and the language of "investment in memories." The people most affected are couples on moderate incomes who take on debt to meet expectations the industry itself manufactured. The average UK wedding now costs over £18,000. That is a house deposit in most of the country.',
+    trustMarkers: 'Book venues as "private events" where possible. Buy formalwear rather than bridal-specific. Use independent bakers, florists, and caterers who price by the job, not the occasion. Ask for itemised quotes from multiple vendors. Consider registry offices, community halls, and restaurants with private dining. The legal requirement for a wedding is a registrar, two witnesses, and a licensed venue. Everything else is optional.',
+    healthNote: 'Wedding debt is a documented source of relationship stress. Couples who spend more on weddings are statistically more likely to divorce than those who spend less, according to research from Emory University. The financial pressure of wedding spending disproportionately affects younger couples at the start of their financial lives.',
+    envNote: 'Single-use wedding decoration, fast fashion bridesmaid dresses worn once, imported out-of-season flowers flown thousands of miles, and food waste from over-catered receptions all carry environmental costs that scale with spending.',
+    inShort: 'The word "wedding" is a pricing trigger, not a quality indicator. Call it a party and compare.',
+    updated: 'April 2026',
+    sources: [{label:'Emory University: Wedding spending and marriage duration',url:'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2501480'},{label:'CMA: Wedding services market',url:'https://www.gov.uk/cma-cases'}],
+    mechanisms: ['marketing-illusion','supply-chain-opacity'],
+    quickSwap: 'Book the venue as a private event. Buy formalwear not bridalwear. Use independent bakers and florists who price by the job. The legal requirement is a registrar, two witnesses, and a licensed venue.',
+    regions: ['global']
+  }
