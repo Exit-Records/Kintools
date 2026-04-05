@@ -1,0 +1,27 @@
+  {
+    id: 'fast-furniture',
+    icon: '\u{1FA91}',
+    title: 'Fast Furniture',
+    tags: ['household', 'environment'],
+    hook: 'Your grandparents\u2019 wardrobe lasted 60 years. Your bookcase will last 3.',
+    real: 'Solid wood furniture, properly jointed (mortise and tenon, dovetail, dowel in solid timber), lasts generations. It can be repaired, refinished, and passed on. A solid oak table from 1960 is still a solid oak table. The material gets better with age. Second-hand solid furniture holds its value and is widely resold.',
+    fake: 'The majority of mass-market furniture is MDF (medium-density fibreboard) or particleboard: wood dust bound with urea-formaldehyde resin, wrapped in a printed paper veneer or plastic foil designed to look like wood. It cannot survive a second assembly. Cam locks and pre-drilled holes strip out. Shelves sag under modest weight. Contact with water causes irreversible swelling. "Veneer" increasingly means a photograph of wood grain printed on paper, not a thin slice of real wood. "Solid wood" on a product listing may mean solid pine legs with MDF panels everywhere else. IKEA alone sells over 100 million pieces per year. The Billy bookcase has sold 110 million units since 1979. Almost none will exist in 20 years.',
+    howToTell: [
+      'Check the material description. "Wood effect," "wood-look," "melamine faced," and "laminated" all mean MDF or particleboard with a printed surface.',
+      'Lift it. Solid wood furniture is heavy. If a bookcase or wardrobe feels light for its size, the panels are hollow or particleboard.',
+      'Look at the edges and drill holes. MDF has a uniform, sandlike cross-section with no visible grain. Solid wood shows growth rings.',
+      'Check the joints. Cam locks and plastic connectors are designed for one assembly. Screws into MDF strip on the second or third attempt.',
+      '"Solid wood" on a listing does not mean the whole piece is solid. Read the full materials breakdown. Legs and frames may be pine while panels are MDF.',
+      'If the price seems impossibly low for the size of the piece, the material is the reason.'
+    ],
+    bigPicture: 'Fast furniture follows the same model as fast fashion: make it cheap enough that replacement feels easier than repair. The UK sends an estimated 22 million pieces of furniture to landfill every year. MDF and particleboard cannot be meaningfully recycled because of the resin content. The formaldehyde in the resin off-gasses for months after purchase, with highest concentrations in enclosed spaces like wardrobes and drawers. The people most exposed to fast furniture are those on the tightest budgets: students, renters, and young families who cannot afford the upfront cost of solid wood, so they buy MDF three times instead. The per-decade cost is often higher than buying one solid piece.',
+    trustMarkers: 'Second-hand solid wood furniture (charity shops, Facebook Marketplace, auction houses) is almost always better value and quality than new MDF. For new: look for FSC-certified solid timber with traditional joinery. IKEA\u2019s own solid wood ranges (where they exist) are significantly better than the MDF lines. Local joiners and small furniture makers produce pieces that will outlast you. British Standard, Another Country, and similar makers offer transparency on materials and construction.',
+    healthNote: 'MDF and particleboard are bound with urea-formaldehyde resin, which off-gasses formaldehyde, a known carcinogen (IARC Group 1). New MDF furniture in enclosed, poorly ventilated rooms can produce formaldehyde levels above WHO guidelines. Children\u2019s bedroom furniture and cot mattress bases made from MDF are a particular concern. CARB Phase 2 and E1 emission standards exist but are not always met or enforced.',
+    envNote: 'MDF cannot be recycled in standard waste streams due to resin contamination. Particleboard swells and disintegrates, making it unrecoverable. The UK furniture industry contributes an estimated 670,000 tonnes of waste to landfill annually. Flat-pack shipping is carbon-efficient per unit, but the disposable lifespan means the true per-year carbon cost is far higher than solid furniture that lasts decades.',
+    inShort: 'Check the material. "Wood effect" means printed paper on MDF. Second-hand solid wood is cheaper per decade.',
+    updated: 'April 2026',
+    sources: [{label:'WRAP: Bulky waste reuse study',url:'https://www.wrap.ngo/resources/report/study-re-use-potential-household-bulky-items'},{label:'WHO: Indoor air quality guidelines (formaldehyde)',url:'https://www.who.int/publications/i/item/9789289002134'}],
+    mechanisms: ['planned-obsolescence','marketing-illusion','supply-chain-opacity'],
+    quickSwap: 'Buy second-hand solid wood (charity shops, Marketplace, auctions). For new: FSC solid timber with traditional joints. A \u00a3200 second-hand oak table outlasts a \u00a3200 new MDF one by decades.',
+    regions: ['global']
+  }
