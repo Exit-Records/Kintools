@@ -62,6 +62,7 @@ const SUBDOMAIN_MAP = {
   "wetsgo":       "kin-038-wetsgo",
   "isthisreal":   "kin-039-isthisreal",
   "firstaidguide":"kin-040-firstaidguide",
+  "dosage":        "kin-041-dosage",
 };
 
 // Rewrite all https://SUBDOMAIN.kintools.net/... → BASE_PATH/DIR/...

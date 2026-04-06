@@ -1,9 +1,9 @@
 # Kin Tools — Version Manifest
 
-Canonical reference for all 40 tools in the Kin ecosystem.  
+Canonical reference for all 42 tools in the Kin ecosystem.  
 All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 
-**Last updated:** 2026-04-02 (KIN-040 added)  
+**Last updated:** 2026-04-05 (KIN-041 added)  
 **Stress-test phase:** in progress — do not push until all 35 checked.
 
 ---
@@ -63,6 +63,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-038 | Wets Go! | v1.0 | Darren | wetsgo.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-039 | Is This Real? | v1.2 | 03 Apr 2026 | 5 new entries; mechanism tags, Quick Swap, region badges, related entries on all entries; Travelling Abroad collection |
 | KIN-040 | First Aid Guide | v1.0 | Darren | firstaidguide.kintools.net | 🔄 | New — step-by-step emergency guides, 45 country numbers, weight-based medication dosing; curly-quote bug fixed; SW + ATI + full OG block added |
+| KIN-041 | Dosage | v1.0 | Darren | dosage.kintools.net | 🔄 | New — medication tracker; dose log; refill alerts; GP print export; .ics calendar reminders; label scan (OCR); demo mode |
 
 ---
 
