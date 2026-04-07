@@ -1469,27 +1469,32 @@ function loadScript(src) {
 }
 
 function parseLabel(text) {
-  const lines = text.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
-  const full = lines.join(' ');
+  const lines = text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
 
-  // Drug name: usually first meaningful line or before dosage
   let name = '';
   let dose = '';
   let prescriber = '';
   let freq = '';
 
-  // Dosage pattern: number + unit
-  const doseMatch = full.match(/(\d+\.?\d*)\s*(mg|mcg|µg|ml|g|iu|units?|tablets?|capsules?)/i);
-  if (doseMatch) {
-    dose = doseMatch[1] + doseMatch[2].toLowerCase();
+  // Dosage pattern: number + unit (only strength units, not container words)
+  const doseRegex = /(\d+\.?\d*)\s*(mg|mcg|µg|ug|ml|iu|units?)\b/i;
+  let doseLineIdx = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(doseRegex);
+    if (m) {
+      dose = m[1] + m[2].toLowerCase().replace('ug', 'mcg').replace('µg', 'mcg');
+      doseLineIdx = i;
+      break;
+    }
   }
 
-  // Frequency
+  // Frequency detection (on whole text)
+  const full = lines.join(' ');
   const freqPatterns = [
-    { pattern: /three times\s*(a\s*)?da(y|ily)/i, value: 'three_daily' },
-    { pattern: /twice\s*(a\s*)?da(y|ily)|two times\s*(a\s*)?da(y|ily)|bd|b\.d\./i, value: 'twice_daily' },
-    { pattern: /once\s*(a\s*)?da(y|ily)|one\s*(a\s*)?da(y|ily)|daily|od|o\.d\./i, value: 'once_daily' },
-    { pattern: /as\s*(needed|required)|prn|p\.r\.n\./i, value: 'as_needed' },
+    { pattern: /three times\s*(a\s*)?da(y|ily)|\btds\b|t\.d\.s\./i, value: 'three_daily' },
+    { pattern: /twice\s*(a\s*)?da(y|ily)|two times\s*(a\s*)?da(y|ily)|\bbd\b|b\.d\.|\bbid\b/i, value: 'twice_daily' },
+    { pattern: /once\s*(a\s*)?da(y|ily)|one\s*(a\s*)?da(y|ily)|\bdaily\b|\bod\b|o\.d\.|\bqd\b|every\s+\d+\s*hours?/i, value: 'once_daily' },
+    { pattern: /as\s*(needed|required)|\bprn\b|p\.r\.n\./i, value: 'as_needed' },
     { pattern: /weekly|once\s*a\s*week/i, value: 'weekly' }
   ];
   for (let i = 0; i < freqPatterns.length; i++) {
@@ -1499,32 +1504,139 @@ function parseLabel(text) {
     }
   }
 
-  // Prescriber: "Dr." or "Doctor"
-  const drMatch = full.match(/(Dr\.?\s+[A-Z][a-z]+(\s+[A-Z][a-z]+)?)/);
-  if (drMatch) prescriber = drMatch[1];
+  // Prescriber: "Dr." followed by ONE capitalised surname. Stop at word boundary.
+  const drMatch = full.match(/\bDr\.?\s+([A-Z][a-z]{2,})\b/);
+  if (drMatch) prescriber = 'Dr. ' + drMatch[1];
 
-  // Name: try to get from first line or the text before dosage
-  if (doseMatch && doseMatch.index > 0) {
-    name = full.slice(0, doseMatch.index).trim();
-    // Clean up: remove common prefixes
-    name = name.replace(/^(take|one|two|each|tablet[s]?|capsule[s]?)\s+/i, '').trim();
+  // Drug name extraction: score each line
+  const rejectPatterns = [
+    /pharmacy|chemist|\bboots\b|lloyds|tesco|superdrug|asda|sainsbury/i,
+    /patient|name:|\bdob\b|\bnhs\b/i,
+    /^(mr|mrs|miss|ms|dr)\.?\s/i,
+    /^(take|swallow|chew|apply|inject|insert|use)\b/i,
+    /before|after|with food|without food|empty stomach/i,
+    /keep out|store|refrigerate|discard|expires?|expiry|\bexp\.?\b|batch|\blot\b/i,
+    /warning|caution|side effect|allergic|children/i,
+    /\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}/, // dates
+    /\bdr\.?\s/i, // prescriber lines
+    /prescription|repeat|refill|quantity|\bqty\b/i,
+    /^\d+$/, // just numbers
+    /[@#]/, // emails, hashtags
+    /www\.|http|\.com|\.co\.uk/i,
+    /^(once|twice|three times|daily|weekly)\s/i, // frequency instructions
+    /^(as needed|as required)/i,
+    /^\d+\s*(tablets?|capsules?|times?)$/i, // "2 tablets", "3 times"
+    /^(tablets?|capsules?|liquid|cream|ointment)$/i // bare unit words
+  ];
+
+  // Common drug suffixes - strong signal for drug names
+  const drugSuffixes = /(ine|ol|il|ate|ide|pril|sartan|statin|azole|mycin|cillin|zepam|profen|dipine|formin|oxine|caine|phine|tidine|prazole|codeine|morphine)$/i;
+
+  // Strip common decorative words from a candidate
+  function cleanCandidate(s) {
+    return s
+      .replace(/\b(tablets?|capsules?|film[- ]?coated|modified[- ]?release|extended[- ]?release|mr|xl|sr|prolonged[- ]?release|oral|solution|suspension|liquid)\b/gi, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
-  if (!name && lines.length > 0) {
-    // Use longest capitalised word cluster
-    for (let i = 0; i < Math.min(lines.length, 5); i++) {
-      const caps = lines[i].match(/[A-Z][a-z]{3,}(\s+[A-Z][a-z]+)*/);
-      if (caps && caps[0].length > name.length) name = caps[0];
+
+  function scoreLine(line, idx, originalIdx) {
+    if (!line || line.length < 3 || line.length > 40) return -1;
+
+    // Reject lines matching reject patterns
+    for (let i = 0; i < rejectPatterns.length; i++) {
+      if (rejectPatterns[i].test(line)) return -1;
+    }
+
+    const words = line.split(/\s+/).filter(function(w) { return w.length > 0; });
+    if (words.length === 0 || words.length > 4) return -1;
+
+    // Reject lines with too much punctuation
+    const punctCount = (line.match(/[.,;:!?()]/g) || []).length;
+    if (punctCount > 1) return -1;
+
+    let score = 0;
+
+    // Starts with capital letter
+    if (/^[A-Z]/.test(line)) score += 2;
+
+    // Matches drug suffix on first word (strong signal)
+    const firstWord = words[0];
+    if (firstWord && drugSuffixes.test(firstWord) && firstWord.length >= 5) score += 15;
+
+    // First word is long-ish (drug names tend to be 7+ chars)
+    if (firstWord && firstWord.length >= 7) score += 3;
+
+    // Short (1-2 words) is ideal
+    if (words.length === 1) score += 4;
+    else if (words.length === 2) score += 2;
+
+    // Mostly letters (not numbers)
+    const letterRatio = (line.match(/[a-zA-Z]/g) || []).length / line.length;
+    if (letterRatio > 0.7) score += 2;
+
+    // Bonus if on or near the dose line
+    if (doseLineIdx >= 0) {
+      if (originalIdx === doseLineIdx) score += 6; // same line as dose = very likely
+      else if (originalIdx === doseLineIdx - 1) score += 4; // line just before
+      else if (Math.abs(originalIdx - doseLineIdx) <= 2) score += 1;
+    }
+
+    // Penalty for lines that are mostly uppercase (likely headers/pharmacy names)
+    if (line === line.toUpperCase() && line.length > 8) score -= 3;
+    // But ALL CAPS single word that looks like a drug is ok
+    if (line === line.toUpperCase() && words.length === 1 && line.length >= 5 && line.length <= 15) score += 2;
+
+    return score;
+  }
+
+  let bestScore = 0;
+  let bestCandidate = '';
+  for (let i = 0; i < lines.length; i++) {
+    // Try the line as-is
+    let candidate = cleanCandidate(lines[i]);
+
+    // If this is the dose line, also try with the dose stripped
+    if (i === doseLineIdx) {
+      candidate = candidate.replace(doseRegex, '').trim();
+      candidate = candidate.replace(/^[\d\s\-.,]+/, '').trim();
+      candidate = cleanCandidate(candidate);
+    }
+
+    if (!candidate) continue;
+
+    const score = scoreLine(candidate, i, i);
+    if (score > bestScore) {
+      bestScore = score;
+      bestCandidate = candidate;
     }
   }
 
-  // Fill form
-  if (name) document.getElementById('med-name').value = name;
+  if (bestCandidate) {
+    const cleanWords = bestCandidate.split(/\s+/).filter(function(w) { return w.length > 1; });
+    if (cleanWords.length > 0) {
+      // Capitalise first letter, lowercase rest (proper case)
+      name = cleanWords.slice(0, 2).map(function(w) {
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+      }).join(' ');
+    }
+  }
+
+  // Fill form fields only if we're reasonably confident about the name
+  if (name && bestScore >= 5) document.getElementById('med-name').value = name;
   if (dose) document.getElementById('med-dose').value = dose;
   if (freq) document.getElementById('med-freq').value = freq;
   if (prescriber) document.getElementById('med-prescriber').value = prescriber;
   updateTimesVisibility();
 
-  showToast('Label scanned. Please review the details.');
+  const foundCount = [name && bestScore >= 5, dose, freq, prescriber].filter(Boolean).length;
+  if (foundCount === 0) {
+    showToast('Could not read label clearly. Please enter manually.');
+  } else if (foundCount < 3) {
+    showToast('Partial match. Please check and fill in the rest.');
+  } else {
+    showToast('Label scanned. Please review the details.');
+  }
 }
 
 /* === RENDER: HISTORY === */
