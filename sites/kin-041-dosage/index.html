@@ -670,54 +670,6 @@ opacity: 1;
 transform: translateX(-50%) translateY(0);
 }
 
-/* === OCR === */
-.ocr-area {
-border: 2px dashed var(--border);
-border-radius: var(--radius);
-padding: 24px;
-text-align: center;
-cursor: pointer;
-transition: border-color 0.2s;
-margin-bottom: 16px;
-}
-
-.ocr-area:hover, .ocr-area.dragover {
-border-color: var(--accent);
-}
-
-.ocr-area p {
-font-size: 16px;
-color: var(--text-secondary);
-margin-top: 8px;
-}
-
-.ocr-progress {
-display: none;
-align-items: center;
-gap: 12px;
-padding: 16px;
-background: var(--accent-light);
-border-radius: var(--radius-sm);
-margin-bottom: 16px;
-}
-
-.ocr-progress.active {
-display: flex;
-}
-
-.ocr-spinner {
-width: 24px;
-height: 24px;
-border: 3px solid var(--border);
-border-top-color: var(--accent);
-border-radius: 50%;
-animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-to { transform: rotate(360deg); }
-}
-
 /* === SETTINGS ROW === */
 .setting-row {
 display: flex;
@@ -1278,7 +1230,6 @@ function openAddMed() {
   document.getElementById('med-freq').value = 'once_daily';
   renderFormTimes();
   updateTimesVisibility();
-  document.getElementById('ocr-progress').classList.remove('active');
   document.getElementById('modal-med').classList.add('open');
 }
 
@@ -1400,243 +1351,6 @@ async function deleteMed(id) {
   save();
   renderMeds();
   showToast('Removed');
-}
-
-/* === OCR === */
-let tesseractLoaded = false;
-
-function initOCR() {
-  const area = document.getElementById('ocr-area');
-  const input = document.getElementById('ocr-input');
-
-  area.addEventListener('click', function() { input.click(); });
-  area.addEventListener('dragover', function(e) { e.preventDefault(); area.classList.add('dragover'); });
-  area.addEventListener('dragleave', function() { area.classList.remove('dragover'); });
-  area.addEventListener('drop', function(e) {
-    e.preventDefault();
-    area.classList.remove('dragover');
-    if (e.dataTransfer.files.length) processOCR(e.dataTransfer.files[0]);
-  });
-  input.addEventListener('change', function() {
-    if (input.files.length) processOCR(input.files[0]);
-    input.value = '';
-  });
-}
-
-async function processOCR(file) {
-  const prog = document.getElementById('ocr-progress');
-  const progText = document.getElementById('ocr-progress-text');
-  prog.classList.add('active');
-  progText.textContent = 'Loading OCR engine...';
-
-  try {
-    if (!tesseractLoaded) {
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js');
-      tesseractLoaded = true;
-    }
-
-    progText.textContent = 'Reading label...';
-
-    const worker = await Tesseract.createWorker('eng', 1, {
-      logger: function(m) {
-        if (m.status === 'recognizing text') {
-          progText.textContent = 'Reading... ' + Math.round((m.progress || 0) * 100) + '%';
-        }
-      }
-    });
-
-    const { data: { text } } = await worker.recognize(file);
-    await worker.terminate();
-
-    prog.classList.remove('active');
-    parseLabel(text);
-  } catch (e) {
-    prog.classList.remove('active');
-    showToast('Could not read label. Try a clearer photo.');
-    console.error('OCR error:', e);
-  }
-}
-
-function loadScript(src) {
-  return new Promise(function(resolve, reject) {
-    if (document.querySelector('script[src="' + src + '"]')) { resolve(); return; }
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-function parseLabel(text) {
-  const lines = text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
-
-  let name = '';
-  let dose = '';
-  let prescriber = '';
-  let freq = '';
-
-  // Dosage pattern: number + unit (only strength units, not container words)
-  const doseRegex = /(\d+\.?\d*)\s*(mg|mcg|µg|ug|ml|iu|units?)\b/i;
-  let doseLineIdx = -1;
-  for (let i = 0; i < lines.length; i++) {
-    const m = lines[i].match(doseRegex);
-    if (m) {
-      dose = m[1] + m[2].toLowerCase().replace('ug', 'mcg').replace('µg', 'mcg');
-      doseLineIdx = i;
-      break;
-    }
-  }
-
-  // Frequency detection (on whole text)
-  const full = lines.join(' ');
-  const freqPatterns = [
-    { pattern: /three times\s*(a\s*)?da(y|ily)|\btds\b|t\.d\.s\./i, value: 'three_daily' },
-    { pattern: /twice\s*(a\s*)?da(y|ily)|two times\s*(a\s*)?da(y|ily)|\bbd\b|b\.d\.|\bbid\b/i, value: 'twice_daily' },
-    { pattern: /once\s*(a\s*)?da(y|ily)|one\s*(a\s*)?da(y|ily)|\bdaily\b|\bod\b|o\.d\.|\bqd\b|every\s+\d+\s*hours?/i, value: 'once_daily' },
-    { pattern: /as\s*(needed|required)|\bprn\b|p\.r\.n\./i, value: 'as_needed' },
-    { pattern: /weekly|once\s*a\s*week/i, value: 'weekly' }
-  ];
-  for (let i = 0; i < freqPatterns.length; i++) {
-    if (freqPatterns[i].pattern.test(full)) {
-      freq = freqPatterns[i].value;
-      break;
-    }
-  }
-
-  // Prescriber: "Dr." followed by ONE capitalised surname. Stop at word boundary.
-  const drMatch = full.match(/\bDr\.?\s+([A-Z][a-z]{2,})\b/);
-  if (drMatch) prescriber = 'Dr. ' + drMatch[1];
-
-  // Drug name extraction: score each line
-  const rejectPatterns = [
-    /pharmacy|chemist|\bboots\b|lloyds|tesco|superdrug|asda|sainsbury/i,
-    /patient|name:|\bdob\b|\bnhs\b/i,
-    /^(mr|mrs|miss|ms|dr)\.?\s/i,
-    /^(take|swallow|chew|apply|inject|insert|use)\b/i,
-    /before|after|with food|without food|empty stomach/i,
-    /keep out|store|refrigerate|discard|expires?|expiry|\bexp\.?\b|batch|\blot\b/i,
-    /warning|caution|side effect|allergic|children/i,
-    /\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}/, // dates
-    /\bdr\.?\s/i, // prescriber lines
-    /prescription|repeat|refill|quantity|\bqty\b/i,
-    /^\d+$/, // just numbers
-    /[@#]/, // emails, hashtags
-    /www\.|http|\.com|\.co\.uk/i,
-    /^(once|twice|three times|daily|weekly)\s/i, // frequency instructions
-    /^(as needed|as required)/i,
-    /^\d+\s*(tablets?|capsules?|times?)$/i, // "2 tablets", "3 times"
-    /^(tablets?|capsules?|liquid|cream|ointment)$/i // bare unit words
-  ];
-
-  // Common drug suffixes - strong signal for drug names
-  const drugSuffixes = /(ine|ol|il|ate|ide|pril|sartan|statin|azole|mycin|cillin|zepam|profen|dipine|formin|oxine|caine|phine|tidine|prazole|codeine|morphine)$/i;
-
-  // Strip common decorative words from a candidate
-  function cleanCandidate(s) {
-    return s
-      .replace(/\b(tablets?|capsules?|film[- ]?coated|modified[- ]?release|extended[- ]?release|mr|xl|sr|prolonged[- ]?release|oral|solution|suspension|liquid)\b/gi, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-  }
-
-  function scoreLine(line, idx, originalIdx) {
-    if (!line || line.length < 3 || line.length > 40) return -1;
-
-    // Reject lines matching reject patterns
-    for (let i = 0; i < rejectPatterns.length; i++) {
-      if (rejectPatterns[i].test(line)) return -1;
-    }
-
-    const words = line.split(/\s+/).filter(function(w) { return w.length > 0; });
-    if (words.length === 0 || words.length > 4) return -1;
-
-    // Reject lines with too much punctuation
-    const punctCount = (line.match(/[.,;:!?()]/g) || []).length;
-    if (punctCount > 1) return -1;
-
-    let score = 0;
-
-    // Starts with capital letter
-    if (/^[A-Z]/.test(line)) score += 2;
-
-    // Matches drug suffix on first word (strong signal)
-    const firstWord = words[0];
-    if (firstWord && drugSuffixes.test(firstWord) && firstWord.length >= 5) score += 15;
-
-    // First word is long-ish (drug names tend to be 7+ chars)
-    if (firstWord && firstWord.length >= 7) score += 3;
-
-    // Short (1-2 words) is ideal
-    if (words.length === 1) score += 4;
-    else if (words.length === 2) score += 2;
-
-    // Mostly letters (not numbers)
-    const letterRatio = (line.match(/[a-zA-Z]/g) || []).length / line.length;
-    if (letterRatio > 0.7) score += 2;
-
-    // Bonus if on or near the dose line
-    if (doseLineIdx >= 0) {
-      if (originalIdx === doseLineIdx) score += 6; // same line as dose = very likely
-      else if (originalIdx === doseLineIdx - 1) score += 4; // line just before
-      else if (Math.abs(originalIdx - doseLineIdx) <= 2) score += 1;
-    }
-
-    // Penalty for lines that are mostly uppercase (likely headers/pharmacy names)
-    if (line === line.toUpperCase() && line.length > 8) score -= 3;
-    // But ALL CAPS single word that looks like a drug is ok
-    if (line === line.toUpperCase() && words.length === 1 && line.length >= 5 && line.length <= 15) score += 2;
-
-    return score;
-  }
-
-  let bestScore = 0;
-  let bestCandidate = '';
-  for (let i = 0; i < lines.length; i++) {
-    // Try the line as-is
-    let candidate = cleanCandidate(lines[i]);
-
-    // If this is the dose line, also try with the dose stripped
-    if (i === doseLineIdx) {
-      candidate = candidate.replace(doseRegex, '').trim();
-      candidate = candidate.replace(/^[\d\s\-.,]+/, '').trim();
-      candidate = cleanCandidate(candidate);
-    }
-
-    if (!candidate) continue;
-
-    const score = scoreLine(candidate, i, i);
-    if (score > bestScore) {
-      bestScore = score;
-      bestCandidate = candidate;
-    }
-  }
-
-  if (bestCandidate) {
-    const cleanWords = bestCandidate.split(/\s+/).filter(function(w) { return w.length > 1; });
-    if (cleanWords.length > 0) {
-      // Capitalise first letter, lowercase rest (proper case)
-      name = cleanWords.slice(0, 2).map(function(w) {
-        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
-      }).join(' ');
-    }
-  }
-
-  // Fill form fields only if we're reasonably confident about the name
-  if (name && bestScore >= 5) document.getElementById('med-name').value = name;
-  if (dose) document.getElementById('med-dose').value = dose;
-  if (freq) document.getElementById('med-freq').value = freq;
-  if (prescriber) document.getElementById('med-prescriber').value = prescriber;
-  updateTimesVisibility();
-
-  const foundCount = [name && bestScore >= 5, dose, freq, prescriber].filter(Boolean).length;
-  if (foundCount === 0) {
-    showToast('Could not read label clearly. Please enter manually.');
-  } else if (foundCount < 3) {
-    showToast('Partial match. Please check and fill in the rest.');
-  } else {
-    showToast('Label scanned. Please review the details.');
-  }
 }
 
 /* === RENDER: HISTORY === */
@@ -1954,7 +1668,6 @@ function init() {
   }
 
   initTheme();
-  initOCR();
   switchTab('today');
 
   // Freq change handler
@@ -2030,7 +1743,7 @@ document.addEventListener('DOMContentLoaded', init);
   <!-- Footer -->
 
   <div class="kin-footer">
-    <div>KIN-041 · v1.0 · <a href="https://kintools.net" target="_blank" rel="noopener">Kin Tools</a> · by Darren</div>
+    <div>KIN-041 · v1.1 · <a href="https://kintools.net" target="_blank" rel="noopener">Kin Tools</a> · by Darren</div>
     <div>
       Local Only · <span class="verified-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> KIN Verified v1.0</span>
       <button class="info-trigger" onclick="this.classList.toggle('open')" aria-label="Data info">ⓘ<div class="info-popover">Your medication data is stored only on this device using your browser's local storage. Nothing is sent to any server. Clearing your browser data will remove it.</div></button>
@@ -2073,15 +1786,7 @@ document.addEventListener('DOMContentLoaded', init);
       <button class="modal-close" onclick="closeModal('modal-med')" aria-label="Close">&times;</button>
     </div>
 
-<!-- OCR -->
-<div class="ocr-area" id="ocr-area">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/></svg>
-  <p>Scan a medication label</p>
-  <p style="font-size:14px;color:var(--text-muted)">Tap to take a photo or choose an image</p>
-</div>
-<input type="file" id="ocr-input" accept="image/*" capture="environment" style="display:none">
-<div class="ocr-progress" id="ocr-progress"><div class="ocr-spinner"></div><span id="ocr-progress-text">Reading label...</span></div>
-
+```
 <form id="med-form" onsubmit="event.preventDefault();saveMed()">
   <div class="form-group">
     <label class="form-label" for="med-name">Medication name *</label>
@@ -2108,7 +1813,7 @@ document.addEventListener('DOMContentLoaded', init);
   </div>
   <div class="form-group">
     <label class="form-label" for="med-prescriber">Prescriber</label>
-    <input type="text" class="form-input" id="med-prescriber" placeholder="e.g. Dr. Patel" autocomplete="off">
+    <input type="text" class="form-input" id="med-prescriber" placeholder="e.g. Dr. Smith" autocomplete="off">
   </div>
   <div class="form-group">
     <label class="form-label" for="med-start">Start date</label>
@@ -2125,6 +1830,7 @@ document.addEventListener('DOMContentLoaded', init);
   </div>
   <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px">Save</button>
 </form>
+```
 
   </div>
 </div>
@@ -2187,6 +1893,16 @@ async function clearAllData() {
   doseLog = [];
   switchTab('today');
   showToast('All data cleared');
+}
+</script>
+
+<script>
+/* === SERVICE WORKER === */
+if ('serviceWorker' in navigator) {
+  const swCode = "const CACHE='kin041-v1.1';const ASSETS=['/'];self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});";
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(function() {});
 }
 </script>
 
