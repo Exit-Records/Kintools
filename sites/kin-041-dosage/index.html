@@ -1786,7 +1786,6 @@ document.addEventListener('DOMContentLoaded', init);
       <button class="modal-close" onclick="closeModal('modal-med')" aria-label="Close">&times;</button>
     </div>
 
-```
 <form id="med-form" onsubmit="event.preventDefault();saveMed()">
   <div class="form-group">
     <label class="form-label" for="med-name">Medication name *</label>
@@ -1830,7 +1829,6 @@ document.addEventListener('DOMContentLoaded', init);
   </div>
   <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px">Save</button>
 </form>
-```
 
   </div>
 </div>
@@ -1896,15 +1894,6 @@ async function clearAllData() {
 }
 </script>
 
-<script>
-/* === SERVICE WORKER === */
-if ('serviceWorker' in navigator) {
-  const swCode = "const CACHE='kin041-v1.1';const ASSETS=['/'];self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});";
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(function() {});
-}
-</script>
 
 </body>
 </html>
