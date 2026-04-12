@@ -1278,45 +1278,36 @@ function renderFormTimes() {
   const container = document.getElementById('times-container');
   let html = '';
   formTimes.forEach(function(t, i) {
-    html += '<div class="time-chip">' + formatTime12(t) + '<button onclick="removeFormTime(' + i + ')" aria-label="Remove time">&times;</button></div>';
+    html += '<div class="time-row">';
+    html += '<input type="time" class="time-input" value="' + t + '" onchange="updateFormTime(' + i + ', this.value)" aria-label="Dose time ' + (i + 1) + '">';
+    if (formTimes.length > 1) {
+      html += '<button type="button" class="time-remove" onclick="removeFormTime(' + i + ')" aria-label="Remove time">&times;</button>';
+    }
+    html += '</div>';
   });
-  html += '<button class="add-time-btn" onclick="addFormTime()">+ Add time</button>';
+  html += '<button type="button" class="add-time-btn" onclick="addFormTime()">+ Add another time</button>';
   container.innerHTML = html;
 }
 
-function addFormTime() {
-  // Pick next sensible time
-  const defaults = ['08:00', '12:00', '18:00', '22:00'];
-  const next = defaults.find(function(d) { return formTimes.indexOf(d) === -1; }) || '08:00';
+function updateFormTime(i, val) {
+  if (!val) return;
+  formTimes[i] = val;
+  formTimes.sort();
+  renderFormTimes();
+}
 
-  // Use native time input
-  const input = document.createElement('input');
-  input.type = 'time';
-  input.value = next;
-  input.style.cssText = 'position:fixed;opacity:0;top:-100px';
-  document.body.appendChild(input);
-  input.addEventListener('change', function() {
-    if (input.value) {
-      formTimes.push(input.value);
-      formTimes.sort();
-      renderFormTimes();
-    }
-    document.body.removeChild(input);
-  });
-  input.showPicker ? input.showPicker() : input.click();
-  // Fallback: if nothing happens after 5s, use default
-  setTimeout(function() {
-    if (document.body.contains(input)) {
-      formTimes.push(next);
-      formTimes.sort();
-      renderFormTimes();
-      document.body.removeChild(input);
-    }
-  }, 5000);
+function addFormTime() {
+  // Pick next sensible time that isn't already in the list
+  const defaults = ['08:00', '12:00', '18:00', '22:00', '14:00', '10:00'];
+  const next = defaults.find(function(d) { return formTimes.indexOf(d) === -1; }) || '12:00';
+  formTimes.push(next);
+  formTimes.sort();
+  renderFormTimes();
 }
 
 function removeFormTime(i) {
   formTimes.splice(i, 1);
+  if (formTimes.length === 0) formTimes.push('08:00');
   renderFormTimes();
 }
 
