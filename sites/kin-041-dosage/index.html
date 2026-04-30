@@ -1697,6 +1697,40 @@ function startFresh() {
 document.addEventListener('DOMContentLoaded', init);
 </script>
 
+<script>
+(function(){
+  var manifest={name:'KIN-041 - Dosage',short_name:'Dosage',start_url:'.',display:'standalone',background_color:'#ffffff',theme_color:'#ffffff',icons:[{src:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',sizes:'1x1',type:'image/png'}]};
+  var mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  var link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(mBlob);
+  document.head.appendChild(link);
+
+  if('serviceWorker' in navigator){
+    var swCode="var CACHE='kin041-v1';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==CACHE}).map(function(n){return caches.delete(n)}))}))});self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var c=res.clone();caches.open(CACHE).then(function(cache){cache.put(e.request,c)})}return res})}))});";
+    var swBlob=new Blob([swCode],{type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(function(){});
+  }
+
+  try{
+    var c=document.createElement('canvas');c.width=180;c.height=180;
+    var ctx=c.getContext('2d');
+    var r=36;
+    ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(180-r,0);ctx.quadraticCurveTo(180,0,180,r);ctx.lineTo(180,180-r);ctx.quadraticCurveTo(180,180,180-r,180);ctx.lineTo(r,180);ctx.quadraticCurveTo(0,180,0,180-r);ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+    var g=ctx.createLinearGradient(0,0,180,180);g.addColorStop(0,'#1a0a2e');g.addColorStop(1,'#0d0520');ctx.fillStyle=g;ctx.fill();
+    // Draw pill capsule
+    var px=35,py=68,pw=110,ph=44,pr=22;
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(px+pr,py);ctx.lineTo(px+pw-pr,py);ctx.arc(px+pw-pr,py+pr,pr,-Math.PI/2,Math.PI/2);ctx.lineTo(px+pr,py+ph);ctx.arc(px+pr,py+pr,pr,Math.PI/2,3*Math.PI/2);ctx.closePath();ctx.clip();
+    ctx.fillStyle='rgba(255,150,0,0.92)';ctx.fillRect(px,py,pw/2,ph);
+    ctx.fillStyle='rgba(255,255,255,0.88)';ctx.fillRect(px+pw/2,py,pw/2,ph);
+    ctx.restore();
+    ctx.beginPath();ctx.moveTo(px+pr,py);ctx.lineTo(px+pw-pr,py);ctx.arc(px+pw-pr,py+pr,pr,-Math.PI/2,Math.PI/2);ctx.lineTo(px+pr,py+ph);ctx.arc(px+pr,py+pr,pr,Math.PI/2,3*Math.PI/2);ctx.closePath();
+    ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=2;ctx.stroke();
+    var icon=document.getElementById('apple-touch-icon');
+    if(icon) icon.href=c.toDataURL('image/png');
+  }catch(e){}
+})();
+</script>
+
 </head>
 <body>
 
