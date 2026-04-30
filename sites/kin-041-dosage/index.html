@@ -1292,8 +1292,6 @@ function renderFormTimes() {
 function updateFormTime(i, val) {
   if (!val) return;
   formTimes[i] = val;
-  formTimes.sort();
-  renderFormTimes();
 }
 
 function addFormTime() {
@@ -1330,7 +1328,11 @@ function saveMed() {
     name: name,
     dose: dose,
     frequency: freq,
-    times: freq === 'as_needed' ? [] : formTimes.slice(),
+    times: freq === 'as_needed' ? [] : (function(){
+      var inputs = document.querySelectorAll('#times-container .time-input');
+      var vals = Array.prototype.slice.call(inputs).map(function(inp){return inp.value;}).filter(Boolean);
+      return vals.length ? vals.sort() : formTimes.slice().sort();
+    })(),
     prescriber: document.getElementById('med-prescriber').value.trim(),
     startDate: document.getElementById('med-start').value,
     refillDate: document.getElementById('med-refill').value,
