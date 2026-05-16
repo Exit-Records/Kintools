@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIN — Together Cards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+--cream: #F5F0E8;
+--ink: #1C1C1A;
+--warm-mid: #8C7B6B;
+--accent-a: #D4845A;
+--accent-b: #6B8FAB;
+--accent-c: #7BAF8A;
+--accent-couples: #A57BAB;
+--card-bg: #FEFCF8;
+--shadow: rgba(28,28,26,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+height: 100%;
+background: var(--cream);
+font-family: ‘DM Sans’, sans-serif;
+color: var(--ink);
+overflow: hidden;
+}
+
+/* ---- SCREENS ---- */
+.screen {
+position: absolute;
+inset: 0;
+display: none;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 2rem;
+}
+.screen.active { display: flex; }
+
+/* ---- WELCOME ---- */
+#welcome { gap: 2rem; text-align: center; }
+.kin-mark {
+font-family: ‘Fraunces’, serif;
+font-size: 0.75rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--warm-mid);
+margin-bottom: -1rem;
+}
+.welcome-title {
+font-family: ‘Fraunces’, serif;
+font-size: clamp(2.8rem, 8vw, 4.5rem);
+font-weight: 300;
+line-height: 1.05;
+}
+.welcome-title em { font-style: italic; color: var(--warm-mid); }
+.welcome-sub {
+font-size: 1rem;
+font-weight: 300;
+color: var(--warm-mid);
+max-width: 320px;
+line-height: 1.6;
+}
+.btn-primary {
+background: var(--ink);
+color: var(--cream);
+border: none;
+padding: 1rem 2.5rem;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.95rem;
+font-weight: 400;
+letter-spacing: 0.04em;
+border-radius: 100px;
+cursor: pointer;
+transition: transform 0.15s ease, background 0.15s ease;
+margin-top: 0.5rem;
+}
+.btn-primary:hover { background: #3a3a38; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+/* ---- SETUP ---- */
+#setup {
+gap: 1rem;
+max-width: 480px;
+width: 100%;
+overflow-y: auto;
+padding: 2rem 1.5rem;
+justify-content: flex-start;
+padding-top: 3rem;
+}
+.setup-heading {
+font-family: ‘Fraunces’, serif;
+font-size: 1.6rem;
+font-weight: 400;
+text-align: center;
+line-height: 1.2;
+}
+.setup-heading span { font-style: italic; color: var(--warm-mid); }
+.setup-sub {
+text-align: center;
+font-size: 0.85rem;
+color: var(--warm-mid);
+min-height: 2.5em;
+line-height: 1.5;
+}
+.profile-grid {
+display: flex;
+flex-direction: column;
+gap: 0.6rem;
+width: 100%;
+transition: opacity 0.3s ease;
+}
+.profile-card {
+display: flex;
+align-items: flex-start;
+gap: 1rem;
+padding: 0.85rem 1.1rem;
+border-radius: 14px;
+border: 1.5px solid transparent;
+background: var(--card-bg);
+cursor: pointer;
+transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+user-select: none;
+}
+.profile-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px var(--shadow); }
+.profile-card.selected { box-shadow: 0 4px 20px var(--shadow); }
+.profile-card[data-profile=“fast”].selected { border-color: var(--accent-a); }
+.profile-card[data-profile=“deep”].selected { border-color: var(--accent-b); }
+.profile-card[data-profile=“flow”].selected { border-color: var(--accent-c); }
+.profile-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.profile-card[data-profile=“fast”] .profile-dot { background: var(--accent-a); }
+.profile-card[data-profile=“deep”] .profile-dot { background: var(--accent-b); }
+.profile-card[data-profile=“flow”] .profile-dot { background: var(--accent-c); }
+.profile-text { flex: 1; }
+.profile-name { font-family: ‘Fraunces’, serif; font-size: 0.95rem; font-weight: 400; }
+.profile-desc { font-size: 0.75rem; color: var(--warm-mid); margin-top: 0.15rem; line-height: 1.4; }
+.profile-check {
+width: 20px; height: 20px; border-radius: 50%;
+border: 1.5px solid #ccc; flex-shrink: 0; margin-top: 2px;
+display: flex; align-items: center; justify-content: center;
+transition: background 0.2s, border-color 0.2s;
+}
+.profile-card.selected .profile-check { background: var(--ink); border-color: var(--ink); }
+.profile-check::after {
+content: ‘’; display: none;
+width: 5px; height: 8px;
+border-right: 2px solid var(--cream); border-bottom: 2px solid var(--cream);
+transform: rotate(40deg) translate(-1px,-1px);
+}
+.profile-card.selected .profile-check::after { display: block; }
+
+.toggle-btn {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 1rem;
+width: 100%;
+background: var(--card-bg);
+border: 1.5px solid #e8e2d8;
+border-radius: 14px;
+padding: 0.9rem 1.1rem;
+cursor: pointer;
+user-select: none;
+transition: border-color 0.2s;
+text-align: left;
+font-family: ‘DM Sans’, sans-serif;
+}
+.toggle-btn.on-default { border-color: var(--ink); }
+.toggle-btn.on-couples { border-color: var(--accent-couples); }
+.toggle-text { flex: 1; }
+.toggle-label { display: block; font-family: ‘Fraunces’, serif; font-size: 0.95rem; font-weight: 400; color: var(--ink); }
+.toggle-desc { display: block; font-size: 0.75rem; color: var(--warm-mid); margin-top: 0.15rem; line-height: 1.4; }
+.toggle-switch {
+width: 44px; height: 26px; background: #ddd;
+border-radius: 100px; flex-shrink: 0; position: relative;
+transition: background 0.25s;
+}
+.toggle-btn.on-default .toggle-switch,
+.toggle-btn.on-couples .toggle-switch { background: var(--ink); }
+.toggle-btn.on-couples .toggle-switch { background: var(--accent-couples); }
+.toggle-knob {
+position: absolute; top: 3px; left: 3px;
+width: 20px; height: 20px; background: white; border-radius: 50%;
+transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle-btn.on-default .toggle-knob,
+.toggle-btn.on-couples .toggle-knob { transform: translateX(18px); }
+
+.setup-actions {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.75rem;
+padding-bottom: 1rem;
+}
+.btn-ghost {
+background: none; border: none;
+color: var(--warm-mid);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.85rem; cursor: pointer;
+text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ---- GAME ---- */
+#game {
+gap: 0;
+justify-content: space-between;
+padding: 1.5rem 1.5rem 1.25rem;
+max-width: 540px;
+width: 100%;
+margin: 0 auto;
+}
+.game-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+}
+.game-kin {
+font-family: ‘Fraunces’, serif;
+font-size: 0.8rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--warm-mid);
+}
+.game-top-right {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+}
+.game-counter { font-size: 0.8rem; color: var(--warm-mid); font-weight: 300; }
+.home-btn {
+background: none; border: none; cursor: pointer;
+color: var(--warm-mid); padding: 0.25rem;
+transition: color 0.15s;
+}
+.home-btn:hover { color: var(--ink); }
+.home-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 3D Card */
+.card-stage {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+padding: 1rem 0;
+perspective: 1000px;
+}
+.card {
+width: 100%;
+max-width: 400px;
+aspect-ratio: 3/4;
+position: relative;
+transform-style: preserve-3d;
+transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+cursor: pointer;
+}
+.card.flipped { transform: rotateY(180deg); }
+.card-face {
+position: absolute; inset: 0;
+border-radius: 24px;
+backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 2.5rem 2rem;
+box-shadow: 0 8px 40px var(--shadow), 0 2px 8px rgba(28,28,26,0.06);
+pointer-events: none;
+}
+.card-front { background: var(--card-bg); }
+.card-front-inner {
+display: flex; flex-direction: column;
+align-items: center; gap: 1rem; text-align: center;
+}
+.card-category-dot { width: 12px; height: 12px; border-radius: 50%; }
+.card-category {
+font-size: 0.72rem; letter-spacing: 0.18em;
+text-transform: uppercase; color: var(--warm-mid); font-weight: 400;
+}
+.card-question {
+font-family: ‘Fraunces’, serif;
+font-size: clamp(1.2rem, 3.5vw, 1.55rem);
+font-weight: 300; line-height: 1.35; color: var(--ink);
+}
+.card-meta {
+display: flex; flex-direction: column; align-items: center; gap: 0.4rem; margin-top: 0.5rem;
+}
+.card-tap-hint { font-size: 0.72rem; color: #bbb; letter-spacing: 0.05em; }
+.card-profiles { display: flex; gap: 0.35rem; }
+.card-profile-tag { width: 7px; height: 7px; border-radius: 50%; opacity: 0.6; }
+.card-turn-tag {
+font-size: 0.7rem; color: var(--warm-mid);
+border: 1px solid #ddd; border-radius: 100px;
+padding: 0.2rem 0.6rem; letter-spacing: 0.03em;
+}
+
+.card-back { background: var(--ink); transform: rotateY(180deg); }
+.card-back-inner {
+text-align: center; color: var(--cream);
+display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.card-back-label {
+font-size: 0.72rem; letter-spacing: 0.2em;
+text-transform: uppercase; color: var(--warm-mid);
+}
+.card-reflection {
+font-family: ‘Fraunces’, serif;
+font-size: 1rem; font-weight: 300; font-style: italic;
+line-height: 1.6; color: rgba(245,240,232,0.75); max-width: 260px;
+}
+
+/* Game controls */
+.game-controls {
+display: flex; align-items: center;
+justify-content: space-between;
+width: 100%; gap: 1rem;
+}
+.ctrl-btn {
+display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+background: none; border: none; cursor: pointer;
+color: var(--warm-mid);
+font-family: ‘DM Sans’, sans-serif;
+font-size: 0.7rem; letter-spacing: 0.04em;
+transition: color 0.15s; padding: 0.5rem;
+}
+.ctrl-btn:hover { color: var(--ink); }
+.ctrl-btn.active-save { color: var(--accent-a); }
+.ctrl-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.ctrl-btn.active-save svg { fill: var(--accent-a); }
+.ctrl-next {
+background: var(--ink); color: var(--cream); border: none;
+padding: 0.9rem 2rem;
+font-family: ‘DM Sans’, sans-serif; font-size: 0.9rem; font-weight: 400;
+border-radius: 100px; cursor: pointer;
+transition: transform 0.15s, background 0.15s; flex: 1; max-width: 200px;
+}
+.ctrl-next:hover { background: #3a3a38; transform: translateY(-1px); }
+
+/* End of deck screen */
+#endofdeck {
+gap: 1.5rem; text-align: center; max-width: 320px;
+}
+.end-emoji { font-size: 2.5rem; }
+.end-title {
+font-family: ‘Fraunces’, serif;
+font-size: 1.8rem; font-weight: 300; line-height: 1.2;
+}
+.end-title em { font-style: italic; color: var(--warm-mid); }
+.end-sub { font-size: 0.9rem; color: var(--warm-mid); line-height: 1.6; }
+.end-actions { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: 100%; }
+
+/* Flash */
+.saved-flash {
+position: fixed; bottom: 5rem; left: 50%;
+transform: translateX(-50%) translateY(10px);
+background: var(--ink); color: var(--cream);
+padding: 0.6rem 1.4rem; border-radius: 100px;
+font-size: 0.8rem; opacity: 0;
+transition: opacity 0.3s, transform 0.3s;
+pointer-events: none; white-space: nowrap;
+}
+.saved-flash.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---- SAVED ---- */
+#saved {
+gap: 1.25rem; max-width: 480px; width: 100%;
+justify-content: flex-start; padding-top: 3rem;
+overflow-y: auto;
+}
+.saved-header {
+display: flex; align-items: center;
+justify-content: space-between; width: 100%;
+flex-shrink: 0;
+}
+.saved-title { font-family: ‘Fraunces’, serif; font-size: 1.4rem; font-weight: 400; }
+.saved-actions { display: flex; gap: 1rem; align-items: center; }
+.saved-list { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
+.saved-item {
+background: var(--card-bg); border-radius: 12px;
+padding: 0.9rem 1.1rem;
+font-family: ‘Fraunces’, serif; font-size: 0.9rem;
+font-weight: 300; line-height: 1.4; color: var(--ink);
+box-shadow: 0 2px 8px var(--shadow);
+display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;
+}
+.saved-item-content { flex: 1; }
+.saved-item-cat {
+font-family: ‘DM Sans’, sans-serif; font-size: 0.65rem;
+letter-spacing: 0.15em; text-transform: uppercase;
+color: var(--warm-mid); margin-bottom: 0.3rem;
+}
+.saved-item-star {
+background: none; border: none; cursor: pointer;
+font-size: 1rem; line-height: 1; padding: 0; flex-shrink: 0;
+opacity: 0.4; transition: opacity 0.2s;
+}
+.saved-item-star.starred { opacity: 1; }
+.empty-saved {
+text-align: center; color: var(--warm-mid);
+font-size: 0.9rem; font-style: italic; padding: 2rem;
+}
+.saved-filter {
+display: flex; gap: 0.5rem; flex-shrink: 0;
+}
+.filter-pill {
+background: none; border: 1.5px solid #ddd;
+border-radius: 100px; padding: 0.3rem 0.9rem;
+font-size: 0.75rem; font-family: ‘DM Sans’, sans-serif;
+color: var(--warm-mid); cursor: pointer; transition: all 0.15s;
+}
+.filter-pill.active { background: var(--ink); border-color: var(--ink); color: var(--cream); }
+
+/* Grain */
+body::after {
+content: ‘’; position: fixed; inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.03’/%3E%3C/svg%3E”);
+pointer-events: none; opacity: 0.4; z-index: 9999;
+}
+
+@media (max-height: 680px) {
+.card { aspect-ratio: 4/5; }
+#setup { gap: 0.6rem; padding-top: 2rem; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- WELCOME -->
+
+<div class="screen active" id="welcome">
+  <p class="kin-mark">KIN Tools</p>
+  <h1 class="welcome-title">Together<br><em>Cards</em></h1>
+  <p class="welcome-sub">Questions to help your family understand each other — really understand each other.</p>
+  <button class="btn-primary" onclick="showSetup()">Let's play</button>
+</div>
+
+<!-- SETUP -->
+
+<div class="screen" id="setup">
+  <h2 class="setup-heading">Who's <span>playing</span> today?</h2>
+  <p class="setup-sub" id="setupSub">Pick all that feel right. You can choose more than one.</p>
+
+  <div class="profile-grid" id="profileGrid">
+    <div class="profile-card" data-profile="fast" onclick="toggleProfile(this)">
+      <div class="profile-dot"></div>
+      <div class="profile-text">
+        <div class="profile-name">My brain moves fast</div>
+        <div class="profile-desc">Restless, jumps between ideas, easily bored — but hyper-focused on things that matter to me</div>
+      </div>
+      <div class="profile-check"></div>
+    </div>
+    <div class="profile-card" data-profile="deep" onclick="toggleProfile(this)">
+      <div class="profile-dot"></div>
+      <div class="profile-text">
+        <div class="profile-name">I feel things deeply</div>
+        <div class="profile-desc">Sensitive to sounds, moods, and details others might miss — I notice everything</div>
+      </div>
+      <div class="profile-check"></div>
+    </div>
+    <div class="profile-card" data-profile="flow" onclick="toggleProfile(this)">
+      <div class="profile-dot"></div>
+      <div class="profile-text">
+        <div class="profile-name">I go with the flow</div>
+        <div class="profile-desc">Adapts easily, comfortable with change, tends to read the room and bring calm</div>
+      </div>
+      <div class="profile-check"></div>
+    </div>
+  </div>
+
+  <button class="toggle-btn" id="littleOnesBtn" onclick="toggleLittleOnes()">
+    <div class="toggle-text">
+      <span class="toggle-label">Little ones playing too?</span>
+      <span class="toggle-desc">Shifts the mix toward simpler, more playful questions</span>
+    </div>
+    <div class="toggle-switch"><div class="toggle-knob"></div></div>
+  </button>
+
+  <button class="toggle-btn" id="couplesBtn" onclick="toggleCouples()">
+    <div class="toggle-text">
+      <span class="toggle-label">Just the two of us?</span>
+      <span class="toggle-desc">Unlocks a deeper set of questions for partners only</span>
+    </div>
+    <div class="toggle-switch"><div class="toggle-knob"></div></div>
+  </button>
+
+  <div class="setup-actions">
+    <button class="btn-primary" id="startBtn" onclick="startGame()" style="opacity:0.4;pointer-events:none">Start playing</button>
+    <button class="btn-ghost" id="skipBtn" onclick="startGame(true)">Skip — just shuffle all cards</button>
+  </div>
+</div>
+
+<!-- GAME -->
+
+<div class="screen" id="game">
+  <div class="game-top">
+    <span class="game-kin">Together Cards</span>
+    <div class="game-top-right">
+      <span class="game-counter" id="counter">1 / 20</span>
+      <button class="home-btn" onclick="goHome()" title="Back to start">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-stage">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="card-front-inner">
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <div class="card-category-dot" id="catDot"></div>
+            <span class="card-category" id="cardCategory">—</span>
+          </div>
+          <p class="card-question" id="cardQuestion">Loading...</p>
+          <div class="card-meta">
+            <div class="card-profiles" id="cardProfiles"></div>
+            <span class="card-turn-tag" id="cardTurnTag" style="display:none"></span>
+            <span class="card-tap-hint">Tap to flip</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-back-inner">
+          <span class="card-back-label" id="backLabel">Something to sit with</span>
+          <p class="card-reflection" id="cardReflection"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <button class="ctrl-btn" id="saveBtn" onclick="saveCard()" title="Save this card">
+      <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Save
+    </button>
+    <button class="ctrl-next" onclick="nextCard()">Next card</button>
+    <button class="ctrl-btn" onclick="showSaved()" title="Saved cards">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10"/></svg>
+      Saved
+    </button>
+  </div>
+</div>
+
+<!-- END OF DECK -->
+
+<div class="screen" id="endofdeck">
+  <div class="end-emoji">✦</div>
+  <h2 class="end-title">You've seen<br><em>them all</em></h2>
+  <p class="end-sub" id="endSub">That's the whole deck. Not bad for one sitting.</p>
+  <div class="end-actions">
+    <button class="btn-primary" onclick="reshuffleAndContinue()">Shuffle and go again</button>
+    <button class="btn-ghost" onclick="goHome()">Back to start</button>
+    <button class="btn-ghost" onclick="showSaved()">See saved cards</button>
+  </div>
+</div>
+
+<!-- SAVED -->
+
+<div class="screen" id="saved">
+  <div class="saved-header">
+    <h2 class="saved-title">Saved cards</h2>
+    <div class="saved-actions">
+      <div class="saved-filter">
+        <button class="filter-pill active" id="filterAll" onclick="setSavedFilter('all')">All</button>
+        <button class="filter-pill" id="filterStarred" onclick="setSavedFilter('starred')">★ Starred</button>
+      </div>
+      <button class="btn-ghost" onclick="showGame()">Back</button>
+    </div>
+  </div>
+  <div class="saved-list" id="savedList"></div>
+  <button class="btn-ghost" id="clearSavedBtn" onclick="clearSaved()" style="margin-top:1rem;color:#c47b7b">Clear all saved</button>
+</div>
+
+<div class="saved-flash" id="flash">Saved ✓</div>
+
+<script>
+// ---- QUESTION DATA ----
+const QUESTIONS = [
+  { q: "What's something you could talk about for hours without getting bored?", kidsQ: "What's your absolute favourite thing to talk about?", cat: "What you love", ref: "Sometimes our obsessions are the truest map of who we are.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could spend an entire day doing exactly what makes you happiest, what would it look like?", kidsQ: "If you had a whole free day to do anything you wanted, what would you do?", cat: "What you love", ref: "Joy is personal. What lights one person up might leave another cold.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's a sound, smell, or place that instantly makes you feel good?", kidsQ: "What's something you can smell or hear that makes you feel really happy?", cat: "What you love", ref: "Our senses hold memories we can't always put into words.", profiles: ["deep","flow"], kids: true },
+  { q: "What's something you're proud you got really good at?", kidsQ: "What's something you've got really good at that you're proud of?", cat: "What you love", ref: "Mastery feels different for everyone — what did the journey look like?", profiles: ["fast","deep"], kids: true },
+  { q: "What game, show, or story has meant the most to you and why?", kidsQ: "What's your favourite game or show right now, and what do you love about it?", cat: "What you love", ref: "The things we return to again and again say a lot about us.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something that's really hard for you that most people wouldn't guess?", kidsQ: "What's something that feels really tricky for you that people might not know about?", cat: "What's hard", ref: "Hidden struggles are the ones that most need saying out loud.", profiles: ["fast","deep"], kids: true },
+  { q: "Is there something that makes you feel overwhelmed that's hard to explain to others?", kidsQ: "Is there something that sometimes makes you feel like everything is too much at once?", cat: "What's hard", ref: "Not every difficulty has an obvious cause — and that's okay.", profiles: ["deep","fast"], kids: true },
+  { q: "What does it feel like inside your head when things are getting too much?", kidsQ: "What happens in your body when you start to feel upset or angry?", cat: "What's hard", ref: "Everyone has a different 'too much.' Knowing each other's threshold matters.", profiles: ["fast","deep"], kids: true },
+  { q: "What's something you find really easy that surprises other people?", kidsQ: "What's something you're really good at that surprises people?", cat: "What's hard", ref: "Strengths and struggles often travel together.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What helps when you're having a really rough day — and what definitely doesn't help?", kidsQ: "When you're having a bad day, what makes you feel better? And what makes it worse?", cat: "What's hard", ref: "Sometimes the kindest thing is just knowing what not to do.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you wish your family understood better about you?", kidsQ: "What's one thing you wish your family knew about you?", cat: "What we miss", ref: "The things we most need others to know are often the things we never say.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "Is there a version of you that only certain people get to see? What's it like?", kidsQ: "Do you act differently at school than at home? What's different?", cat: "What we miss", ref: "We all have parts of ourselves we keep closer than others.", profiles: ["deep","flow"], kids: true },
+  { q: "What do you wish someone had told you when you were younger?", kidsQ: "What's something important you've learned that you wish you'd known sooner?", cat: "What we miss", ref: "The advice we needed says a lot about what we were missing.", profiles: ["flow","deep"], kids: false },
+  { q: "When do you feel like people are getting you completely wrong?", kidsQ: "Has anyone ever misunderstood you? What did they get wrong?", cat: "What we miss", ref: "Misunderstandings happen — but some hit harder than others.", profiles: ["fast","deep"], kids: true },
+  { q: "What's something you do that has a reason behind it others might not realise?", kidsQ: "Is there something you do that people think is weird, but actually makes total sense to you?", cat: "What we miss", ref: "Behaviour that looks strange from outside often makes perfect sense from inside.", profiles: ["deep","fast"], kids: true },
+  { q: "What makes you feel most calm and settled?", kidsQ: "What helps you feel calm and cosy when you need it?", cat: "Feeling safe", ref: "Safety feels different for everyone. What does yours look like?", profiles: ["deep","flow"], kids: true },
+  { q: "What does it look like when you need space — and how can we tell?", kidsQ: "How do you show people that you need a bit of time on your own?", cat: "Feeling safe", ref: "Needing space isn't the same as wanting to be alone.", profiles: ["fast","deep"], kids: true },
+  { q: "Is there something a family member does that makes you feel really looked after?", kidsQ: "What's something someone in this family does that makes you feel really loved?", cat: "Feeling safe", ref: "Small acts of care often matter more than big ones.", profiles: ["deep","flow"], kids: true },
+  { q: "What would a perfect, low-pressure family evening look like for you?", kidsQ: "What would your perfect cosy night in look like?", cat: "Feeling safe", ref: "Comfort is underrated. What does yours look like?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What helps you come back to yourself after a hard moment?", kidsQ: "What do you do to feel better after something upsets you?", cat: "Feeling safe", ref: "Recovery looks different for everyone. There's no right way.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's made you laugh so hard you couldn't stop?", kidsQ: "What's the funniest thing that's ever happened to you?", cat: "What makes you laugh", ref: "Laughter is one of the best ways to understand someone.", profiles: ["fast","flow"], kids: true },
+  { q: "What kind of humour do you love — and what kind just doesn't land for you?", kidsQ: "What kind of jokes do you find funny? Are there any that you just don't get?", cat: "What makes you laugh", ref: "Humour isn't universal. Knowing what lands matters.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's an inside joke in this family that still makes you smile?", kidsQ: "What's a funny thing that happened in our family that still makes you laugh?", cat: "What makes you laugh", ref: "Shared laughter is a kind of glue.", profiles: ["flow"], kids: true },
+  { q: "When do you feel most like the real you?", kidsQ: "When do you feel the most like yourself — totally comfortable and happy?", cat: "Being you", ref: "The moments we feel most ourselves are worth paying attention to.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you do just for yourself, with no audience?", kidsQ: "What's something you love doing even when nobody else is watching?", cat: "Being you", ref: "The private things we love say a lot about who we really are.", profiles: ["deep","flow"], kids: true },
+  { q: "Is there a person in your life (not in this room) you feel completely yourself around?", kidsQ: "Who's someone outside this family you feel totally comfortable with? What makes it easy?", cat: "Being you", ref: "What is it about that person that makes it easy?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something about yourself you've come to accept that took a while?", kidsQ: "Is there something about yourself that took you a while to be okay with?", cat: "Being you", ref: "Acceptance isn't giving up — it's often where real confidence starts.", profiles: ["deep","flow"], kids: false },
+  { q: "What's something other people do that you genuinely don't understand?", kidsQ: "What's something other people do that you just don't get?", cat: "Confusing things", ref: "Not understanding isn't a flaw — it's a starting point for curiosity.", profiles: ["deep","fast"], kids: true },
+  { q: "Is there an unspoken rule that most people seem to know but you had to figure out the hard way?", kidsQ: "Is there a rule that everyone else seemed to know but nobody told you?", cat: "Confusing things", ref: "A lot of rules were never written down — but they're still expected.", profiles: ["deep"], kids: true },
+  { q: "What's something about school that makes no sense to you?", kidsQ: "What's something about school that you think doesn't make sense?", cat: "Confusing things", ref: "Systems often weren't designed with everyone in mind.", profiles: ["fast","deep"], kids: true },
+  { q: "What's something you did that you're really proud of, even if no one noticed?", kidsQ: "What's something you did that made you feel really proud, even if nobody else saw it?", cat: "Proud moments", ref: "Some of our best moments happen quietly.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's a challenge you got through that you didn't think you could?", kidsQ: "What's something hard that you got through even when you weren't sure you could?", cat: "Proud moments", ref: "Looking back at what we survived reminds us of what we're made of.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you taught yourself that no one showed you how to do?", kidsQ: "What's something you figured out how to do all by yourself?", cat: "Proud moments", ref: "Self-taught skills often mean the most.", profiles: ["fast","deep"], kids: true },
+  { q: "What's something you can focus on for hours that most people would find boring?", kidsQ: "What's something you can do for ages without getting bored, even if others find it dull?", cat: "How your brain works", ref: "Hyperfocus is a superpower — what does yours switch on for?", profiles: ["fast"], kids: true },
+  { q: "What helps you slow down when your brain is going too fast?", kidsQ: "What do you do when your brain feels like it won't stop racing?", cat: "How your brain works", ref: "Finding the brake matters just as much as having the engine.", profiles: ["fast"], kids: true },
+  { q: "What's it like inside your head when you're really interested in something?", kidsQ: "What happens in your head when you get really excited about something you love?", cat: "How your brain works", ref: "Not everyone experiences interest the same way.", profiles: ["fast"], kids: true },
+  { q: "Is there a texture, sound, or smell that really bothers you that others don't seem to notice?", kidsQ: "Is there a sound, smell, or texture that really bothers you that other people don't seem to mind?", cat: "How your brain works", ref: "Sensory experience is real and personal — not fussy, not dramatic.", profiles: ["deep"], kids: true },
+  { q: "What does it feel like when something is too loud or too bright or too much?", kidsQ: "What happens in your body when something feels too loud or too bright?", cat: "How your brain works", ref: "Overwhelm isn't weakness. It's information.", profiles: ["deep"], kids: true },
+  { q: "What are the best and worst parts about noticing everything?", kidsQ: "What's good about noticing lots of things other people miss? What's hard about it?", cat: "How your brain works", ref: "High sensitivity has a shadow and a light side.", profiles: ["deep"], kids: true },
+  { q: "What's your favourite thing this family does together?", kidsQ: "What's your favourite thing we do together as a family?", cat: "Us together", ref: "Simple rituals matter more than grand gestures.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you'd like to do as a family that we haven't tried yet?", kidsQ: "What's something fun you'd love us to do together that we haven't done yet?", cat: "Us together", ref: "New shared experiences create new shared memories.", profiles: ["fast","flow"], kids: true },
+  { q: "What's something you've learned from someone else in this family?", kidsQ: "What's something you've learned from someone in this family?", cat: "Us together", ref: "We teach each other more than we realise.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could change one thing about how our family works, what would it be?", kidsQ: "If you could change one thing about how our family does things, what would it be?", cat: "Us together", ref: "Wanting things to be different isn't disloyal — it's caring enough to say so.", profiles: ["flow","deep"], kids: true },
+  { q: "How do you usually handle it when you disagree with someone in this family?", kidsQ: "What do you do when you and someone in the family don't agree on something?", cat: "Us together", ref: "Conflict styles are learned. They can also be changed.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something we do as a family that you think helps when things are tense?", kidsQ: "What helps in this family when everyone is a bit stressed or grumpy?", cat: "Us together", ref: "Every family develops its own repair rituals.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could live anywhere in the world, where would it be and why?", kidsQ: "If you could live anywhere in the whole world, where would you pick?", cat: "What if", ref: "The places we dream of living say a lot about who we want to be.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could have one superpower but couldn't tell anyone about it, what would you pick?", kidsQ: "If you could have any superpower, what would it be?", cat: "What if", ref: "What we'd do in secret reveals a lot about what we actually care about.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could swap lives with anyone for a single day, who would it be?", kidsQ: "If you could be any person for one day, who would you choose?", cat: "What if", ref: "It doesn't have to be someone famous — anyone at all.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could instantly become brilliant at one thing, what would you choose?", kidsQ: "If you could wake up tomorrow amazing at one thing, what would you pick?", cat: "What if", ref: "Not what you should want to be good at — what you actually want.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could build your perfect day from scratch, what would it look like from morning to night?", kidsQ: "What would your perfect day look like from when you wake up to when you go to sleep?", cat: "What if", ref: "No obligations, no compromises — just what you actually want.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could only keep three possessions, what would they be?", kidsQ: "If you could only keep three things you own, what would you choose?", cat: "What if", ref: "What we can't let go of tells us what we truly value.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could invite anyone to dinner — alive or dead — who would you pick?", kidsQ: "If you could have dinner with any famous person, who would you pick and what would you ask them?", cat: "What if", ref: "What would you most want to ask them?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's one of the best days you can remember?", kidsQ: "What's one of the best days you can remember? What made it so good?", cat: "Looking back", ref: "Not a big occasion necessarily — just a day that felt really good.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something from when you were younger that you still think about?", kidsQ: "What's something from when you were little that you still remember really clearly?", cat: "Looking back", ref: "The things that stick with us are worth understanding.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's a moment you felt really proud of yourself, even if no one else knew why?", kidsQ: "What's a time you felt really proud of yourself?", cat: "Looking back", ref: "Private pride is often the most honest kind.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "Is there something you used to love that you've left behind? Do you miss it?", kidsQ: "Is there something you used to love doing that you don't do anymore? Do you miss it?", cat: "Looking back", ref: "Growing up means putting things down. Sometimes we put down too much.", profiles: ["deep","flow"], kids: true },
+  { q: "What's the kindest thing anyone has ever done for you?", kidsQ: "What's the nicest thing anyone has ever done for you?", cat: "Looking back", ref: "Kindness that lands usually does so because it was exactly right for you.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something that changed how you see the world?", kidsQ: "Has anything ever happened that made you see things in a completely new way?", cat: "Looking back", ref: "It might be a moment, a person, a book, or something small you almost missed.", profiles: ["deep","flow"], kids: false },
+  { q: "What do you think makes someone a really good friend?", kidsQ: "What do you think makes someone a really good friend?", cat: "What matters", ref: "And do you think you have those qualities yourself?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you think is unfair about the world that most people just accept?", kidsQ: "What's something you think isn't fair that grown-ups don't seem to notice?", cat: "What matters", ref: "Noticing unfairness is the first step to doing something about it.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you believe that you find hard to explain to other people?", kidsQ: "Is there something you really believe in that's hard to put into words?", cat: "What matters", ref: "Some of our deepest beliefs resist easy words.", profiles: ["deep","flow"], kids: false },
+  { q: "What does success mean to you — not what it's supposed to mean, what it actually means?", kidsQ: "What does doing really well at something mean to you?", cat: "What matters", ref: "Most people never stop to answer this for themselves.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's one thing you'd want to be remembered for?", kidsQ: "What's one thing you'd want people to remember about you?", cat: "What matters", ref: "Not by history — just by the people in your life.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you were in charge of one rule everyone had to follow, what would it be?", kidsQ: "If you were in charge of one rule that everyone in the world had to follow, what would it be?", cat: "What matters", ref: "One rule only. Make it count.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you're genuinely looking forward to?", kidsQ: "What's something coming up that you're really excited about?", cat: "What's next", ref: "Big or small — what's got a little light around it right now?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What do you want to get better at over the next few years?", kidsQ: "What's something you really want to learn or get better at?", cat: "What's next", ref: "Not what you think you should improve — what you actually want.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "Is there something you've always wanted to try but haven't yet?", kidsQ: "What's something you've always wanted to try but haven't done yet?", cat: "What's next", ref: "What's been stopping you?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What does your ideal life look like in ten years?", kidsQ: "What do you think your life will be like when you're grown up?", cat: "What's next", ref: "Where are you, what are you doing, who are you with?", profiles: ["fast","deep","flow"], kids: true },
+  { q: "Is there something you're working towards right now that matters a lot to you?", kidsQ: "Is there something you're trying to get better at or work towards right now?", cat: "What's next", ref: "It doesn't have to be big — just something that's yours.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's your desert island meal — the one food you could eat every day without ever getting bored?", kidsQ: "If you could only eat one meal for the rest of your life, what would it be?", cat: "Just for fun", ref: "No wrong answers here.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you were an animal, what would you be and why?", kidsQ: "If you were an animal, what would you be and why?", cat: "Just for fun", ref: "Pick based on personality, not which animal is coolest.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's a completely useless skill you'd love to have?", kidsQ: "What's a silly, totally useless skill you'd love to have?", cat: "Just for fun", ref: "The more pointless the better.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's the worst job you could imagine having to do?", kidsQ: "What's the most horrible job you can imagine doing when you grow up?", cat: "Just for fun", ref: "Everyone has a different answer to this one.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you had to eat one cuisine for the rest of your life, what would you pick?", kidsQ: "If you could only eat food from one country forever, which country would you pick?", cat: "Just for fun", ref: "Think it through carefully.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's something you're surprisingly bad at, given everything else about you?", kidsQ: "What's something you're really bad at that surprises people?", cat: "Just for fun", ref: "We all have at least one ridiculous blind spot.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "If you could rename yourself, what name would you pick?", kidsQ: "If you could pick any name for yourself, what would you choose?", cat: "Just for fun", ref: "First and last. Take your time.", profiles: ["fast","deep","flow"], kids: true },
+  { q: "What's the strangest thing you've ever eaten?", kidsQ: "What's the weirdest or grossest thing you've ever eaten?", cat: "Just for fun", ref: "Did you like it?", profiles: ["fast","deep","flow"], kids: true },
+];
+
+// Some cards have a special mechanic on the back
+const TURN_AROUND_CARDS = new Set([
+  "What's something you've learned from someone else in this family?",
+  "What's the kindest thing anyone has ever done for you?",
+  "What do you think makes someone a really good friend?",
+  "What's something I do that you find quietly impressive?",
+  "What's your favourite thing this family does together?",
+]);
+
+const COUPLES_QUESTIONS = [
+  { q: "What's something about me you think I don't know you've noticed?", cat: "Just us", ref: "We see more than we say.", turn: false },
+  { q: "What do you think I secretly find difficult that I rarely admit?", cat: "Just us", ref: "The things we protect each other from are worth naming.", turn: false },
+  { q: "What's something I do that you find quietly impressive?", cat: "Just us", ref: "Not the obvious things. The small ones.", turn: true },
+  { q: "Is there something you've wanted to ask me but haven't?", cat: "Just us", ref: "This is the time.", turn: false },
+  { q: "What's something you understand about me that most people don't?", cat: "Just us", ref: "Being really known by someone is rare.", turn: true },
+  { q: "What do you think I need more of right now?", cat: "Just us", ref: "Not what I say I need. What you actually think.", turn: true },
+  { q: "What's a belief I hold that you quietly disagree with?", cat: "Just us", ref: "Honest disagreement is a form of respect.", turn: false },
+  { q: "What's something I do that drives you quietly mad?", cat: "Just us", ref: "Say it gently. Hear it openly.", turn: false },
+  { q: "Is there something we've stopped talking about that we probably should revisit?", cat: "Just us", ref: "Avoidance has a cost.", turn: false },
+  { q: "What's something you've changed your mind about since we got together?", cat: "Just us", ref: "People shift. It's worth tracking.", turn: false },
+  { q: "When do you feel like I'm not really listening?", cat: "Just us", ref: "This one takes courage to answer and to hear.", turn: false },
+  { q: "What's something you wish we did differently as a team?", cat: "Just us", ref: "Not a complaint — a direction.", turn: false },
+  { q: "What's something you've never quite said out loud to me?", cat: "Just us", ref: "Even one true thing counts.", turn: false },
+  { q: "What's the version of yourself you find hardest to show me?", cat: "Just us", ref: "We all keep parts back. What's yours?", turn: false },
+  { q: "When do you feel most alone, even when we're together?", cat: "Just us", ref: "Loneliness inside a relationship is real and worth knowing.", turn: false },
+  { q: "What are you most afraid of getting wrong as a parent?", cat: "Just us", ref: "Fear named is fear halved.", turn: false },
+  { q: "What do you need from me that you rarely ask for?", cat: "Just us", ref: "The unasked things accumulate.", turn: true },
+  { q: "Is there something you've forgiven but haven't fully let go of?", cat: "Just us", ref: "Forgiveness and release aren't always the same thing.", turn: false },
+  { q: "What do you think is our greatest strength as a couple?", cat: "Just us", ref: "Name it. Then protect it.", turn: false },
+  { q: "Where do you think we're drifting and don't talk about it?", cat: "Just us", ref: "Drift is gradual. That's what makes it hard to catch.", turn: false },
+  { q: "What's something we used to do together that you miss?", cat: "Just us", ref: "Not nostalgia — information.", turn: false },
+  { q: "If you could change one dynamic between us, what would it be?", cat: "Just us", ref: "Not a criticism. A wish.", turn: false },
+  { q: "What do you think we're teaching our kids about relationships without meaning to?", cat: "Just us", ref: "They're watching everything.", turn: false },
+  { q: "What does a good week together look like for you?", cat: "Just us", ref: "Concrete, not abstract. What actually fills you up?", turn: false },
+  { q: "When do you feel closest to me?", cat: "Just us", ref: "The answer might surprise both of you.", turn: true },
+  { q: "What's something that made you fall for me that you don't think I know about?", cat: "Just us", ref: "Go back to the beginning.", turn: true },
+  { q: "What would you want more of between us?", cat: "Just us", ref: "Not a demand. An invitation.", turn: true },
+  { q: "Is there a part of yourself you feel like you've lost since we became parents?", cat: "Just us", ref: "It's okay to grieve parts of your old self.", turn: false },
+  { q: "What's something that still excites you about us?", cat: "Just us", ref: "The answer matters. Say it out loud.", turn: true },
+  { q: "What do you want our life to look like in five years that it doesn't look like now?", cat: "Just us", ref: "Not the default trajectory. The chosen one.", turn: false },
+  { q: "Is there something you want to do before you're too old that we haven't made space for?", cat: "Just us", ref: "Time is the thing we always think we have more of.", turn: false },
+  { q: "What's something you hope we figure out together?", cat: "Just us", ref: "Still unresolved. Still worth trying.", turn: false },
+  // Lighter questions for couples
+  { q: "What's something small I do that you actually love?", cat: "Just us", ref: "The small things are often the whole thing.", turn: true },
+  { q: "What's a trip or experience you'd love us to have together that we haven't talked about?", cat: "Just us", ref: "Say it now before life fills the gap.", turn: false },
+  { q: "What's the funniest thing that's ever happened to us?", cat: "Just us", ref: "Laugh about it again.", turn: false },
+  { q: "If we could have a completely free weekend with no kids and no plans, what would you want to do?", cat: "Just us", ref: "No wrong answers.", turn: false },
+];
+
+const CAT_COLORS = {
+  "What you love": "#D4845A", "What's hard": "#6B8FAB", "What we miss": "#AB8B6B",
+  "Feeling safe": "#7BAF8A", "What makes you laugh": "#C4A55A", "Being you": "#A57BAB",
+  "Confusing things": "#7B9BAB", "Proud moments": "#8BAB7B", "How your brain works": "#AB7B7B",
+  "Us together": "#8B7BAB", "What if": "#C4916B", "Looking back": "#6B9BAB",
+  "What matters": "#AB6B8B", "What's next": "#7BAB9B", "Just for fun": "#C4AB5A",
+  "Just us": "#A57BAB",
+};
+
+// ---- STATE ----
+let selectedProfiles = [];
+let deck = [];
+let currentIndex = 0;
+let saved = JSON.parse(localStorage.getItem('kin_together_saved') || '[]');
+let isFlipped = false;
+let littleOnes = false;
+let couplesMode = false;
+let savedFilter = 'all';
+
+// ---- SETUP ----
+function showSetup() { setScreen('setup'); }
+
+function toggleProfile(el) {
+  if (couplesMode) return;
+  el.classList.toggle('selected');
+  selectedProfiles = [...document.querySelectorAll('.profile-card.selected')].map(e => e.dataset.profile);
+  const btn = document.getElementById('startBtn');
+  btn.style.opacity = selectedProfiles.length > 0 ? '1' : '0.4';
+  btn.style.pointerEvents = selectedProfiles.length > 0 ? 'all' : 'none';
+}
+
+function toggleLittleOnes() {
+  if (couplesMode) return;
+  littleOnes = !littleOnes;
+  document.getElementById('littleOnesBtn').classList.toggle('on-default', littleOnes);
+  const profileGrid = document.getElementById('profileGrid');
+  const startBtn = document.getElementById('startBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  if (littleOnes) {
+    profileGrid.style.opacity = '0.35';
+    profileGrid.style.pointerEvents = 'none';
+    document.getElementById('setupSub').textContent = 'All cards — weighted toward the playful end.';
+    startBtn.style.opacity = '1';
+    startBtn.style.pointerEvents = 'all';
+    skipBtn.style.display = 'none';
+  } else {
+    profileGrid.style.opacity = '1';
+    profileGrid.style.pointerEvents = 'all';
+    document.getElementById('setupSub').textContent = 'Pick all that feel right. You can choose more than one.';
+    skipBtn.style.display = 'block';
+    const has = selectedProfiles.length > 0;
+    startBtn.style.opacity = has ? '1' : '0.4';
+    startBtn.style.pointerEvents = has ? 'all' : 'none';
+  }
+}
+
+function toggleCouples() {
+  couplesMode = !couplesMode;
+  document.getElementById('couplesBtn').classList.toggle('on-couples', couplesMode);
+  const profileGrid = document.getElementById('profileGrid');
+  const littleOnesBtn = document.getElementById('littleOnesBtn');
+  const startBtn = document.getElementById('startBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  if (couplesMode) {
+    profileGrid.style.display = 'none';
+    littleOnesBtn.style.display = 'none';
+    littleOnes = false;
+    document.getElementById('littleOnesBtn').classList.remove('on-default');
+    document.getElementById('setupSub').textContent = '36 questions for the two of you. Best after the kids are in bed.';
+    startBtn.style.opacity = '1';
+    startBtn.style.pointerEvents = 'all';
+    skipBtn.style.display = 'none';
+  } else {
+    profileGrid.style.display = 'flex';
+    littleOnesBtn.style.display = 'flex';
+    document.getElementById('setupSub').textContent = 'Pick all that feel right. You can choose more than one.';
+    skipBtn.style.display = 'block';
+    const has = selectedProfiles.length > 0;
+    startBtn.style.opacity = has ? '1' : '0.4';
+    startBtn.style.pointerEvents = has ? 'all' : 'none';
+  }
+}
+
+// ---- GAME ----
+function startGame(all = false) {
+  if (couplesMode) {
+    deck = shuffle([...COUPLES_QUESTIONS]);
+  } else if (littleOnes || all) {
+    deck = buildLittleOnesDeck([...QUESTIONS]);
+  } else {
+    const filtered = QUESTIONS.filter(q => q.profiles.some(p => selectedProfiles.includes(p)));
+    deck = shuffle(filtered.length >= 5 ? filtered : [...QUESTIONS]);
+  }
+  currentIndex = 0;
+  setScreen('game');
+  renderCard();
+}
+
+function buildLittleOnesDeck(pool) {
+  const kids = shuffle(pool.filter(q => q.kids));
+  const adult = shuffle(pool.filter(q => !q.kids));
+  const out = [];
+  let ki = 0, ai = 0;
+  while (ki < kids.length || ai < adult.length) {
+    if (ki < kids.length) out.push(kids[ki++]);
+    if (ki < kids.length) out.push(kids[ki++]);
+    if (ai < adult.length) out.push(adult[ai++]);
+  }
+  return out;
+}
+
+function renderCard() {
+  // Check end of deck
+  if (currentIndex >= deck.length) {
+    const sub = document.getElementById('endSub');
+    sub.textContent = couplesMode
+      ? 'That\'s all 36. Hopefully a few landed somewhere useful.'
+      : `That's all ${deck.length} cards. Not bad for one sitting.`;
+    setScreen('endofdeck');
+    return;
+  }
+
+  const q = deck[currentIndex];
+  isFlipped = false;
+  const card = document.getElementById('card');
+  card.classList.remove('flipped');
+
+  document.getElementById('cardQuestion').textContent = (littleOnes && q.kidsQ) ? q.kidsQ : q.q;
+  document.getElementById('cardCategory').textContent = q.cat;
+  document.getElementById('cardReflection').textContent = q.ref;
+  const color = CAT_COLORS[q.cat] || '#8C7B6B';
+  document.getElementById('catDot').style.background = color;
+  document.getElementById('counter').textContent = `${currentIndex + 1} / ${deck.length}`;
+
+  // Back label
+  const isTurn = q.turn || TURN_AROUND_CARDS.has(q.q);
+  document.getElementById('backLabel').textContent = isTurn ? 'Now ask them the same question' : 'Something to sit with';
+
+  // Turn tag on front
+  const turnTag = document.getElementById('cardTurnTag');
+  turnTag.style.display = isTurn ? 'block' : 'none';
+  if (isTurn) turnTag.textContent = 'Ask each other';
+
+  // Profile dots
+  const pEl = document.getElementById('cardProfiles');
+  pEl.innerHTML = '';
+  if (q.profiles) {
+    q.profiles.forEach(p => {
+      const dot = document.createElement('div');
+      dot.className = 'card-profile-tag';
+      dot.style.background = p === 'fast' ? 'var(--accent-a)' : p === 'deep' ? 'var(--accent-b)' : 'var(--accent-c)';
+      pEl.appendChild(dot);
+    });
+  }
+
+  // Save button state
+  const alreadySaved = saved.some(s => s.q === q.q);
+  document.getElementById('saveBtn').classList.toggle('active-save', alreadySaved);
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('card').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  currentIndex++;
+  renderCard();
+}
+
+function reshuffleAndContinue() {
+  deck = shuffle([...deck]);
+  currentIndex = 0;
+  setScreen('game');
+  renderCard();
+}
+
+function goHome() {
+  // Reset state
+  littleOnes = false;
+  couplesMode = false;
+  selectedProfiles = [];
+  document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('littleOnesBtn').classList.remove('on-default');
+  document.getElementById('couplesBtn').classList.remove('on-couples');
+  document.getElementById('profileGrid').style.display = 'flex';
+  document.getElementById('profileGrid').style.opacity = '1';
+  document.getElementById('profileGrid').style.pointerEvents = 'all';
+  document.getElementById('littleOnesBtn').style.display = 'flex';
+  document.getElementById('skipBtn').style.display = 'block';
+  document.getElementById('setupSub').textContent = 'Pick all that feel right. You can choose more than one.';
+  const startBtn = document.getElementById('startBtn');
+  startBtn.style.opacity = '0.4';
+  startBtn.style.pointerEvents = 'none';
+  setScreen('setup');
+}
+
+// ---- SAVED ----
+function saveCard() {
+  const q = deck[currentIndex];
+  const idx = saved.findIndex(s => s.q === q.q);
+  if (idx === -1) {
+    saved.push({ q: q.q, cat: q.cat, starred: false });
+    document.getElementById('saveBtn').classList.add('active-save');
+    showFlash('Saved ✓');
+  } else {
+    saved.splice(idx, 1);
+    document.getElementById('saveBtn').classList.remove('active-save');
+    showFlash('Removed');
+  }
+  localStorage.setItem('kin_together_saved', JSON.stringify(saved));
+}
+
+function showFlash(msg) {
+  const flash = document.getElementById('flash');
+  flash.textContent = msg;
+  flash.classList.add('show');
+  setTimeout(() => flash.classList.remove('show'), 1800);
+}
+
+function setSavedFilter(f) {
+  savedFilter = f;
+  document.getElementById('filterAll').classList.toggle('active', f === 'all');
+  document.getElementById('filterStarred').classList.toggle('active', f === 'starred');
+  renderSavedList();
+}
+
+function renderSavedList() {
+  const list = document.getElementById('savedList');
+  const items = savedFilter === 'starred' ? saved.filter(s => s.starred) : saved;
+  if (items.length === 0) {
+    list.innerHTML = `<p class="empty-saved">${savedFilter === 'starred' ? 'No starred cards yet. Tap ★ on any saved card.' : 'Nothing saved yet. Tap the bookmark during the game.'}</p>`;
+    return;
+  }
+  list.innerHTML = items.map((s, i) => `
+    <div class="saved-item">
+      <div class="saved-item-content">
+        <div class="saved-item-cat">${s.cat}</div>
+        ${s.q}
+      </div>
+      <button class="saved-item-star ${s.starred ? 'starred' : ''}" onclick="toggleStar(${saved.indexOf(s)})" title="Star this card">★</button>
+    </div>
+  `).join('');
+}
+
+function toggleStar(idx) {
+  if (saved[idx]) {
+    saved[idx].starred = !saved[idx].starred;
+    localStorage.setItem('kin_together_saved', JSON.stringify(saved));
+    renderSavedList();
+  }
+}
+
+function clearSaved() {
+  if (saved.length === 0) return;
+  if (confirm('Clear all saved cards?')) {
+    saved = [];
+    localStorage.setItem('kin_together_saved', JSON.stringify(saved));
+    renderSavedList();
+  }
+}
+
+function showSaved() {
+  renderSavedList();
+  setScreen('saved');
+}
+
+function showGame() { setScreen('game'); }
+
+function setScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Attach flip once
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('card').addEventListener('click', flipCard);
+});
+</script>
+
+</body>
+</html>
