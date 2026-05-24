@@ -65,7 +65,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-040 | First Aid Guide | v1.0 | Darren | firstaidguide.kintools.net | 🔄 | New — step-by-step emergency guides, 45 country numbers, weight-based medication dosing; curly-quote bug fixed; SW + ATI + full OG block added |
 | KIN-041 | Dosage | v1.0 | Darren | dosage.kintools.net | 🔄 | New — medication tracker; dose log; refill alerts; GP print export; .ics calendar reminders; label scan (OCR); demo mode |
 | KIN-042 | Together Cards | v1.0 | Darren | together.kintools.net | 🔄 | New — conversation card game for families; profile-based question filtering; couples mode; kids mode; save & star cards; 60+ questions across 12 categories |
-| KIN-043 | Frequency | v1.8 | Darren | frequency.kintools.net | 🔄 | New — binaural beats with carrier mix, breath guide, pre/post set glide modes, ring visualiser, dark mode |
+| KIN-043 | Frequency | v1 | Darren | frequency.kintools.net | 🔄 | New — binaural beats with carrier mix, breath guide, pre/post set glide modes, ring visualiser, dark mode |
 
 ---
 
