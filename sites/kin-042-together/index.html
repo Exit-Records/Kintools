@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KIN — Together Cards</title>
+<title>KIN — Together Cards — v1.1</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -302,6 +302,11 @@ font-size: 0.7rem; color: var(--warm-mid);
 border: 1px solid #ddd; border-radius: 100px;
 padding: 0.2rem 0.6rem; letter-spacing: 0.03em;
 }
+.card-directed-label {
+font-size: 0.68rem; letter-spacing: 0.12em;
+text-transform: uppercase; color: #C4A55A;
+font-weight: 500; margin-bottom: -0.25rem;
+}
 
 .card-back { background: var(--ink); transform: rotateY(180deg); }
 .card-back-inner {
@@ -516,6 +521,7 @@ pointer-events: none; opacity: 0.4; z-index: 9999;
     <div class="card" id="card">
       <div class="card-face card-front">
         <div class="card-front-inner">
+          <span class="card-directed-label" id="cardDirectedLabel" style="display:none">A question from you to them</span>
           <div style="display:flex;align-items:center;gap:0.5rem">
             <div class="card-category-dot" id="catDot"></div>
             <span class="card-category" id="cardCategory">—</span>
@@ -662,6 +668,28 @@ const QUESTIONS = [
   { q: "What's something you're surprisingly bad at, given everything else about you?", kidsQ: "What's something you're really bad at that surprises people?", cat: "Just for fun", ref: "We all have at least one ridiculous blind spot.", profiles: ["fast","deep","flow"], kids: true },
   { q: "If you could rename yourself, what name would you pick?", kidsQ: "If you could pick any name for yourself, what would you choose?", cat: "Just for fun", ref: "First and last. Take your time.", profiles: ["fast","deep","flow"], kids: true },
   { q: "What's the strangest thing you've ever eaten?", kidsQ: "What's the weirdest or grossest thing you've ever eaten?", cat: "Just for fun", ref: "Did you like it?", profiles: ["fast","deep","flow"], kids: true },
+
+  // Ask me anything — parent to child, directed
+  { q: "Do you ever feel like I don't spend enough time with you?", kidsQ: "Do you ever feel like I don't spend enough time with you?", cat: "Ask me anything", ref: "This one takes courage to ask. It takes courage to answer too.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "When you're trying to tell me something, do you feel like I really listen?", kidsQ: "When you're trying to tell me something, do you feel like I really listen?", cat: "Ask me anything", ref: "Listening and hearing aren't always the same thing.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you ever feel like I compare you to other people?", kidsQ: "Do you ever feel like I compare you to other people?", cat: "Ask me anything", ref: "Every person deserves to be seen as just themselves.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "When I say no to something, do you still feel okay with me afterwards?", kidsQ: "When I say no to something, do you still feel okay with me afterwards?", cat: "Ask me anything", ref: "Being safe with someone means knowing they won't stay cross forever.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "When something goes wrong, do you feel like you can come and tell me?", kidsQ: "When something goes wrong, do you feel like you can come and tell me?", cat: "Ask me anything", ref: "The most important thing is that you know you can always come to me.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Is there something I do that sometimes hurts your feelings?", kidsQ: "Is there something I do that sometimes hurts your feelings?", cat: "Ask me anything", ref: "You're allowed to say it. I want to know.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "What's something you wish I noticed more about you?", kidsQ: "What's something you wish I noticed more about you?", cat: "Ask me anything", ref: "We all have parts of ourselves that are waiting to be seen.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you ever feel like I'm too busy for you?", kidsQ: "Do you ever feel like I'm too busy for you?", cat: "Ask me anything", ref: "Busy is never more important than you.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Is there something you've wanted to tell me but weren't sure how I'd react?", kidsQ: "Is there something you've wanted to tell me but weren't sure how I'd react?", cat: "Ask me anything", ref: "Whatever it is, I'd rather know.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you feel like I treat you and your siblings the same?", kidsQ: "Do you feel like I treat you and your siblings the same?", cat: "Ask me anything", ref: "It's okay to say if something doesn't feel fair.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "What's something I do that makes you feel really proud of me?", kidsQ: "What's something I do that makes you feel really proud of me?", cat: "Ask me anything", ref: "Parents need to hear this too.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Is there something you wish we did more together, just the two of us?", kidsQ: "Is there something you wish we did more together, just the two of us?", cat: "Ask me anything", ref: "One-on-one time matters. What would you pick?", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you ever feel like I don't believe you when you tell me something?", kidsQ: "Do you ever feel like I don't believe you when you tell me something?", cat: "Ask me anything", ref: "Being trusted is one of the most important feelings there is.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "What's something you wish I understood better about how you feel?", kidsQ: "What's something you wish I understood better about how you feel?", cat: "Ask me anything", ref: "Feelings that are hard to explain are still real.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you feel like you can be silly and weird around me, or do you feel like you have to behave?", kidsQ: "Do you feel like you can be silly and weird around me, or do you feel like you have to behave?", cat: "Ask me anything", ref: "You should never have to perform for the people who love you.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Is there a time you felt really let down by me?", kidsQ: "Is there a time you felt really let down by me?", cat: "Ask me anything", ref: "I get things wrong sometimes. It's okay to say so.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "What's something I say that you really like hearing?", kidsQ: "What's something I say that you really like hearing?", cat: "Ask me anything", ref: "Words matter more than we know.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you ever feel like I'm harder on you than I should be?", kidsQ: "Do you ever feel like I'm harder on you than I should be?", cat: "Ask me anything", ref: "If something feels unfair, it's worth saying out loud.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "What would you want me to do differently when you're upset?", kidsQ: "What would you want me to do differently when you're upset?", cat: "Ask me anything", ref: "Everyone needs something different. Tell me what helps you.", profiles: ["fast","deep","flow"], kids: true, directed: true },
+  { q: "Do you feel like I'm proud of you?", kidsQ: "Do you feel like I'm proud of you?", cat: "Ask me anything", ref: "The answer should always be yes. And I want you to feel it, not just hear it.", profiles: ["fast","deep","flow"], kids: true, directed: true },
 ];
 
 // Some cards have a special mechanic on the back
@@ -720,6 +748,7 @@ const CAT_COLORS = {
   "Us together": "#8B7BAB", "What if": "#C4916B", "Looking back": "#6B9BAB",
   "What matters": "#AB6B8B", "What's next": "#7BAB9B", "Just for fun": "#C4AB5A",
   "Just us": "#A57BAB",
+  "Ask me anything": "#C4A55A",
 };
 
 // ---- STATE ----
@@ -797,14 +826,22 @@ function toggleCouples() {
 }
 
 // ---- GAME ----
+function capDirected(arr, max) {
+  let n = 0;
+  return arr.filter(q => {
+    if (q.directed) { if (n >= max) return false; n++; }
+    return true;
+  });
+}
+
 function startGame(all = false) {
   if (couplesMode) {
     deck = shuffle([...COUPLES_QUESTIONS]);
   } else if (littleOnes || all) {
-    deck = buildLittleOnesDeck([...QUESTIONS]);
+    deck = capDirected(buildLittleOnesDeck([...QUESTIONS]), 3);
   } else {
     const filtered = QUESTIONS.filter(q => q.profiles.some(p => selectedProfiles.includes(p)));
-    deck = shuffle(filtered.length >= 5 ? filtered : [...QUESTIONS]);
+    deck = capDirected(shuffle(filtered.length >= 5 ? filtered : [...QUESTIONS]), 3);
   }
   currentIndex = 0;
   setScreen('game');
@@ -847,9 +884,13 @@ function renderCard() {
   document.getElementById('catDot').style.background = color;
   document.getElementById('counter').textContent = `${currentIndex + 1} / ${deck.length}`;
 
+  // Directed label
+  const directedLabel = document.getElementById('cardDirectedLabel');
+  directedLabel.style.display = q.directed ? 'block' : 'none';
+
   // Back label
   const isTurn = q.turn || TURN_AROUND_CARDS.has(q.q);
-  document.getElementById('backLabel').textContent = isTurn ? 'Now ask them the same question' : 'Something to sit with';
+  document.getElementById('backLabel').textContent = q.directed ? 'Worth sitting with' : isTurn ? 'Now ask them the same question' : 'Something to sit with';
 
   // Turn tag on front
   const turnTag = document.getElementById('cardTurnTag');
