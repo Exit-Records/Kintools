@@ -90,10 +90,14 @@ html.dark .session-glide-status{color:rgba(200,180,100,0.25);}
 html.dark .session-stop{border-color:rgba(200,180,100,0.15);color:rgba(200,180,100,0.28);}
 .session-stop:hover{border-color:rgba(80,90,80,0.45);color:rgba(80,90,80,0.55);}
 html.dark .session-stop:hover{border-color:rgba(200,180,100,0.4);color:rgba(200,180,100,0.55);}
+.session-presets{background:transparent;border:none;cursor:pointer;color:rgba(80,90,80,0.28);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-family:inherit;padding:8px 16px;min-height:44px;transition:color 0.25s;}
+html.dark .session-presets{color:rgba(200,180,100,0.25);}
+.session-presets:hover{color:rgba(80,90,80,0.55);}
+html.dark .session-presets:hover{color:rgba(200,180,100,0.55);}
 /* Sheets */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:10;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:45;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .overlay.visible{opacity:1;pointer-events:all;}
-.sheet{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--bg2);border-radius:20px 20px 0 0;border:0.5px solid var(--border);z-index:11;padding:0 1.25rem env(safe-area-inset-bottom,1.5rem);transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:88vh;overflow-y:auto;}
+.sheet{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--bg2);border-radius:20px 20px 0 0;border:0.5px solid var(--border);z-index:50;padding:0 1.25rem env(safe-area-inset-bottom,1.5rem);transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:88vh;overflow-y:auto;}
 .sheet.visible{transform:translateY(0);}
 .sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px;}
 .sheet-title{font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);margin-bottom:1rem;}
@@ -147,6 +151,7 @@ html.dark .session-stop:hover{border-color:rgba(200,180,100,0.4);color:rgba(200,
       <div class="session-glide-status" id="so-glide-status"></div>
     </div>
     <button class="session-stop" onclick="stopSession()" aria-label="Stop session">■</button>
+    <button class="session-presets" onclick="openSheet()" aria-label="Change preset">presets</button>
   </div>
 </div>
 
