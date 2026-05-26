@@ -17,7 +17,6 @@ export interface Env {
   VUNIQUE_LISTS: R2Bucket
   REPORTS: KVNamespace
   BLOCKLIST: KVNamespace
-  RESEND_API_KEY: string
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -148,32 +147,28 @@ function formatCategorySummary(counts: Record<string, number>): string {
     .join(', ')
 }
 
-// ── Resend email ──────────────────────────────────────────────────────────────
+// ── Notification via Google Apps Script ──────────────────────────────────────
 
-async function sendReportEmail(env: Env, report: ReportPayload): Promise<void> {
-  if (!env.RESEND_API_KEY) return
-  const lines = [
-    `Slug: ${report.slug}`,
-    `Reason: ${report.reason}`,
-    report.details ? `Details: ${report.details}` : null,
-    '',
-    `Preview: https://vunique.kintools.net/u/${report.slug}`,
-    `Raw: https://vunique.kintools.net/u/${report.slug}/raw`,
-  ].filter((l): l is string => l !== null)
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxBRGfOmtQUxyaBGjYVj2mtKinI7qlGm1v921K49TiBDP5RUY9CWK_M-vpLCm2HWJxhuA/exec'
 
-  await fetch('https://api.resend.com/emails', {
+async function sendReportNotification(report: ReportPayload): Promise<void> {
+  await fetch(SHEETS_URL, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'reports@kintools.net',
-      to: 'dbridge@mac.com',
-      subject: `[Vunique Report] ${report.slug} — ${report.reason}`,
-      text: lines.join('\n'),
+      form_type: 'report',
+      subject: `Vunique report: ${report.slug}`,
+      app: 'KIN-073',
+      type: report.reason,
+      description: [
+        `Slug: ${report.slug}`,
+        `Reason: ${report.reason}`,
+        report.details ? `Details: ${report.details}` : '',
+        `Preview: https://vunique.kintools.net/u/${report.slug}`,
+      ].filter(Boolean).join('\n'),
     }),
-  })
+  }).catch(() => {})
 }
 
 // ── Preview page ──────────────────────────────────────────────────────────────
@@ -515,7 +510,7 @@ async function handleReportSubmit(request: Request, env: Env): Promise<Response>
     ])
   }
 
-  await sendReportEmail(env, { slug: cleanSlug, reason, details })
+  await sendReportNotification({ slug: cleanSlug, reason, details })
 
   return jsonResponse({ received: true })
 }
