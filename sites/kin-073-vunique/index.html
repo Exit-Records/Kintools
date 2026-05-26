@@ -7,6 +7,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Vunique" />
+    <link rel="apple-touch-icon" id="apple-touch-icon" href="">
+    <script>
+      (function(){
+        var c=document.createElement('canvas');c.width=c.height=192;
+        var x=c.getContext('2d');
+        x.fillStyle='#1a1a2e';
+        try{x.beginPath();x.roundRect(0,0,192,192,36);x.fill();}catch(e){x.fillRect(0,0,192,192);}
+        x.fillStyle='#ffffff';
+        x.font='bold 96px Georgia,serif';
+        x.textAlign='center';x.textBaseline='middle';
+        x.fillText('V',96,100);
+        var png=c.toDataURL('image/png');
+        document.getElementById('apple-touch-icon').href=png;
+      })();
+    </script>
     <meta name="description" content="A personal curation tool. Private list of URLs with notes, categories, and attribution. Part of the KIN Tools ecosystem." />
     <title>Vunique</title>
     <script type="module" crossorigin>(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const h of document.querySelectorAll('link[rel="modulepreload"]'))r(h);new MutationObserver(h=>{for(const p of h)if(p.type==="childList")for(const _ of p.addedNodes)_.tagName==="LINK"&&_.rel==="modulepreload"&&r(_)}).observe(document,{childList:!0,subtree:!0});function f(h){const p={};return h.integrity&&(p.integrity=h.integrity),h.referrerPolicy&&(p.referrerPolicy=h.referrerPolicy),h.crossOrigin==="use-credentials"?p.credentials="include":h.crossOrigin==="anonymous"?p.credentials="omit":p.credentials="same-origin",p}function r(h){if(h.ep)return;h.ep=!0;const p=f(h);fetch(h.href,p)}})();function Ug(c){return c&&c.__esModule&&Object.prototype.hasOwnProperty.call(c,"default")?c.default:c}var Nr={exports:{}},Un={};/**
