@@ -53,14 +53,25 @@
       margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid var(--border);
-      font-size: 0.75rem;
-      color: #999;
       display: flex;
-      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
+      gap: 1rem;
     }
-    footer a { color: #999 }
-    footer a:hover { color: var(--ink) }
+    .foot-left {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.125rem;
+      color: #999;
+    }
+    .foot-right {
+      font-size: 0.75rem;
+      color: #aaa;
+      line-height: 1.6;
+      text-align: right;
+    }
+    .foot-right a { color: #aaa; text-decoration: none }
+    .foot-right a:hover { color: var(--ink) }
   </style>
 </head>
 <body>
@@ -111,9 +122,11 @@
     </section>
 
     <footer>
-      <a href="https://kintools.net">KIN Tools</a>
-      <a href="https://vunique.kintools.net">Vunique</a>
-      <a href="mailto:dbridge@mac.com">dbridge@mac.com</a>
+      <div class="foot-left">Kin</div>
+      <div class="foot-right">
+        Free tools, built by people, for everyone.<br>
+        <a href="https://kintools.net">kintools.net</a> &middot; <a href="https://vunique.kintools.net">Vunique</a>
+      </div>
     </footer>
   </div>
 </body>
