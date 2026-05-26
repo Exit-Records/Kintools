@@ -9,9 +9,30 @@
       "bucket_name": "vunique-lists"
     }
   ],
+  "kv_namespaces": [
+    {
+      "binding": "REPORTS",
+      "id": "PLACEHOLDER_REPORTS_KV_ID"
+    },
+    {
+      "binding": "BLOCKLIST",
+      "id": "PLACEHOLDER_BLOCKLIST_KV_ID"
+    }
+  ],
+  "triggers": {
+    "crons": ["0 2 * * *"]
+  },
   "routes": [
     {
       "pattern": "vunique.kintools.net/u/*",
+      "zone_name": "kintools.net"
+    },
+    {
+      "pattern": "vunique.kintools.net/report",
+      "zone_name": "kintools.net"
+    },
+    {
+      "pattern": "vunique.kintools.net/upload",
       "zone_name": "kintools.net"
     }
   ]
