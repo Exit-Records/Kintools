@@ -12,7 +12,7 @@
   "routes": [
     {
       "pattern": "vunique.kintools.net/u/*",
-      "custom_domain": true
+      "zone_name": "kintools.net"
     }
   ]
 }
