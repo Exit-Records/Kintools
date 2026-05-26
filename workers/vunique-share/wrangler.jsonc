@@ -12,11 +12,11 @@
   "kv_namespaces": [
     {
       "binding": "REPORTS",
-      "id": "PLACEHOLDER_REPORTS_KV_ID"
+      "id": "71bdb9f3202a4795a42d80676400f6d3"
     },
     {
       "binding": "BLOCKLIST",
-      "id": "PLACEHOLDER_BLOCKLIST_KV_ID"
+      "id": "9facdc76d6a04a0a8cb5e45a1520070d"
     }
   ],
   "triggers": {
