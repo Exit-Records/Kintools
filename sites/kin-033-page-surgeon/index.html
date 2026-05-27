@@ -768,7 +768,7 @@ color: #e8e8e0 !important;
 <div class="export-row">
   <button class="btn btn-primary" id="save-btn" onclick="exportPdf('all')">Save as new PDF</button>
   <button class="btn" id="export-btn" onclick="exportPdf('selected')">Export checked only</button>
-  <button class="btn" onclick="exportPdf('split')">Split to separate PDFs</button>
+  <button class="btn" onclick="exportPdf('split')">Split to ZIP (one PDF per page)</button>
   <button class="btn" onclick="resetOrder()">Reset order</button>
 </div>
 
@@ -930,6 +930,21 @@ function loadPdfLib() {
     pdfLibPromise = import('https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.esm.min.js');
   }
   return pdfLibPromise;
+}
+
+var jsZipPromise = null;
+function loadJSZip() {
+  if (!jsZipPromise) {
+    jsZipPromise = new Promise(function(resolve, reject) {
+      if (window.JSZip) { resolve(window.JSZip); return; }
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      s.onload = function() { resolve(window.JSZip); };
+      s.onerror = function() { reject(new Error('Failed to load JSZip')); };
+      document.head.appendChild(s);
+    });
+  }
+  return jsZipPromise;
 }
 
 function waitForPdfJs() {
@@ -1286,16 +1301,26 @@ window.exportPdf = async function(mode) {
     var srcDoc = await PDFDocument.load(pdfBytes);
 
     if (mode === 'split') {
+      var JSZip = await loadJSZip();
+      var zip = new JSZip();
       for (var i = 0; i < toExport.length; i++) {
         var singleDoc = await PDFDocument.create();
         var copied = await singleDoc.copyPages(srcDoc, [toExport[i].origIndex]);
         var pg = singleDoc.addPage(copied[0]);
         if (toExport[i].rotation !== 0) pg.setRotation(degrees(toExport[i].rotation));
         var outBytes = await singleDoc.save();
-        downloadBlob(outBytes, baseName() + '-page' + (toExport[i].origIndex + 1) + '.pdf');
-        if (i < toExport.length - 1) await sleep(300);
+        zip.file(baseName() + '-page' + (toExport[i].origIndex + 1) + '.pdf', outBytes);
       }
-      showToast('Exported ' + toExport.length + ' separate PDFs');
+      var zipBlob = await zip.generateAsync({ type: 'blob' });
+      var zipUrl = URL.createObjectURL(zipBlob);
+      var a = document.createElement('a');
+      a.href = zipUrl;
+      a.download = baseName() + '-split.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(zipUrl); }, 5000);
+      showToast('Downloaded ' + toExport.length + ' PDFs as ZIP');
     } else {
       var newDoc = await PDFDocument.create();
       var indices = toExport.map(function(p) { return p.origIndex; });
@@ -1325,7 +1350,9 @@ function downloadBlob(bytes, filename) {
   var a = document.createElement('a');
   a.href = url;
   a.download = filename;
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
 }
 
