@@ -55,7 +55,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-030 | Quote | v1.1 | Darren | quote.kintools.net | ✅ | Added Tax / VAT number field to From section |
 | KIN-031 | Invoice | v1.1 | Darren | invoice.kintools.net | ✅ | Added Tax / VAT number field to From section |
 | KIN-032 | Receipt | v1.1 | Darren | receipt.kintools.net | ✅ | Added Tax / VAT number display (hidden when blank) |
-| KIN-033 | Page Surgeon | v1.0 | Darren | page-surgeon.kintools.net | ✅ | 2 fixes: missing file-info HTML element added, Google Fonts removed |
+| KIN-033 | Page Surgeon | v1.1 | Darren | page-surgeon.kintools.net | ✅ | v1.1 — Split export now bundles pages into a single ZIP download (browsers block multiple simultaneous downloads) |
 | KIN-034 | Noise Meter | v1.0 | Liam | noise-meter.kintools.net | ✅ | 1 fix: Google Fonts removed; all else compliant |
 | KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |
 | KIN-036 | Blood Pressure | v1.0 | Darren | bloodpressure.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
@@ -65,7 +65,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-040 | First Aid Guide | v1.0 | Darren | firstaidguide.kintools.net | 🔄 | New — step-by-step emergency guides, 45 country numbers, weight-based medication dosing; curly-quote bug fixed; SW + ATI + full OG block added |
 | KIN-041 | Dosage | v1.0 | Darren | dosage.kintools.net | 🔄 | New — medication tracker; dose log; refill alerts; GP print export; .ics calendar reminders; label scan (OCR); demo mode |
 | KIN-042 | Together Cards | v1.1 | Darren | together.kintools.net | 🔄 | v1.1 — "Ask me anything" category added (20 directed parent-to-child questions, warm gold, max 3 per shuffle, directed label on card front) |
-| KIN-043 | Frequency | v1 | Darren | frequency.kintools.net | 🔄 | New — binaural beats with carrier mix, breath guide, pre/post set glide modes, ring visualiser, dark mode |
+| KIN-043 | Frequency | v1.1 | Darren | frequency.kintools.net | 🔄 | v1.1 — Preset list accessible during active session; tap presets to glide to a new frequency without stopping |
 | KIN-073 | Vunique | v1 | Darren | vunique.kintools.net | 🔄 | New — personal URL curation list with notes, categories, attribution, and clean page export; all data local |
 
 ---
