@@ -45,7 +45,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-020 | Password Generator | v1.0 | Darren | password-generator.kintools.net | ✅ | 2 fixes: bug report, OG; viewport + manifest already clean |
 | KIN-021 | Text Counter | v1.0 | Darren | text-counter.kintools.net | ✅ | 5 fixes: SW key→kin021-v1, manifest icon→data URI, Google Fonts removed, bug report, OG |
 | KIN-022 | Fair Share | v1.0 | Darren | fair-share.kintools.net | ✅ | 5 fixes: theme key fs-theme→kin022-theme (migrated), theme-color-meta id, Google Fonts removed, bug report, OG |
-| KIN-023 | JSON | v1.0 | Darren | json.kintools.net | ✅ | 6 fixes: SW key→kin023-v1, manifest icon→data URI, theme-meta id, Google Fonts removed, bug report, OG |
+| KIN-023 | JSON | v1.1 | Darren | json.kintools.net | ✅ | v1.1 — Save .json button added; download formatted output as a file |
 | KIN-024 | Thought Loop | v1.0 | Darren | thought-loop.kintools.net | ✅ | 6 fixes: storage keys→kin024-* (migrated), theme extracted to kin024-theme, theme-color-meta id, Google Fonts removed, bug report, OG |
 | KIN-025 | Stretch | v1.0 | Darren | stretch.kintools.net | ✅ | 2 fixes: bug report, OG; already best-structured in batch |
 | KIN-026 | Kin Ground | v1.0 | Darren | kin-ground.kintools.net | ✅ | 7 fixes: storage keys→kin026-* (migrated), theme-color-meta id, SW activate handler, footer URL kin.tools→kintools.net, bug report, OG |
