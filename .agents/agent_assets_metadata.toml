@@ -60,3 +60,9 @@ id = "Naqxb6cNojykca6rsLYOF"
 uri = "file://kin-icons.zip"
 type = "unspecified"
 title = "Kin Landing Icons — 36 SVGs"
+
+[[outputs]]
+id = "0ihrZtHjIEbDvCqDViSY6"
+uri = "file://KIN-BUILD-RULES.md"
+type = "text"
+title = "Kin Build Rules & Compliance Reference"
