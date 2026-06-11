@@ -35,7 +35,9 @@ These are **entry requirements**, not aspirational guidelines.
 | Page `<title>` | `KIN-NNN — Tool Name — Kin` | `KIN-073 — Vunique — Kin` |
 | VERSIONS.md row | See §13 | — |
 
-**Next available number:** KIN-074
+**Next available number:** KIN-044
+
+> KIN-073 is reserved and intentionally out of sequence.
 
 ---
 
