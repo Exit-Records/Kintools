@@ -66,7 +66,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-041 | Dosage | v1.0 | Darren | dosage.kintools.net | 🔄 | New — medication tracker; dose log; refill alerts; GP print export; .ics calendar reminders; label scan (OCR); demo mode |
 | KIN-042 | Together Cards | v1.1 | Darren | together.kintools.net | 🔄 | v1.1 — "Ask me anything" category added (20 directed parent-to-child questions, warm gold, max 3 per shuffle, directed label on card front) |
 | KIN-043 | Frequency | v1.1 | Darren | frequency.kintools.net | 🔄 | v1.1 — Preset list accessible during active session; tap presets to glide to a new frequency without stopping |
-| KIN-073 | Vunique | v1.3 | Darren | vunique.kintools.net | 🔄 | v1.3 — Security: input sanitisation (sanitiseEntry), entry count cap (500), URL scheme validation (isSafeUrl), prototype pollution prevention (stripDangerousKeys), identity field sanitisation, Worker entry sanitisation + HTML escaping in preview page |
+| KIN-073 | Vunique | v1.4 | Darren | vunique.kintools.net | 🔄 | v1.4 — Mixed-case handles: formatHandle() preserves caps for display/storage; all comparisons case-insensitive; URL slugs stay lowercase |
 
 ---
 
