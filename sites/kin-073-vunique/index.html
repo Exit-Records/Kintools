@@ -11,10 +11,15 @@
   (function(){
     var c=document.createElement('canvas');c.width=180;c.height=180;
     var x=c.getContext('2d');
-    x.fillStyle='#1a1a1a';x.fillRect(0,0,180,180);
-    x.fillStyle='#f5f5f0';x.font='italic 90px Georgia,serif';
-    x.textAlign='center';x.textBaseline='middle';
-    x.fillText('V',90,95);
+    var g=x.createLinearGradient(0,0,180,180);
+    g.addColorStop(0,'#1e2a3a');g.addColorStop(1,'#0d1117');
+    x.fillStyle=g;x.fillRect(0,0,180,180);
+    x.strokeStyle='rgba(160,185,210,0.9)';x.lineWidth=6;x.lineCap='round';x.lineJoin='round';
+    var s=3,o=18;
+    x.beginPath();x.roundRect(o+8*s,o+8*s,32*s,32*s,6);x.stroke();
+    x.beginPath();x.moveTo(o+16*s,o+20*s);x.lineTo(o+32*s,o+20*s);x.stroke();
+    x.beginPath();x.moveTo(o+16*s,o+26*s);x.lineTo(o+26*s,o+26*s);x.stroke();
+    x.beginPath();x.moveTo(o+28*s,o+32*s);x.lineTo(o+32*s,o+28*s);x.lineTo(o+36*s,o+32*s);x.stroke();
     var l=document.createElement('link');
     l.rel='apple-touch-icon';l.href=c.toDataURL('image/png');
     document.head.appendChild(l);
