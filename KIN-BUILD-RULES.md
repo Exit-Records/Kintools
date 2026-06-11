@@ -37,7 +37,11 @@ These are **entry requirements**, not aspirational guidelines.
 
 **Next available number:** KIN-044
 
-> KIN-073 is reserved and intentionally out of sequence.
+**Numbering rules:**
+- Tools are numbered sequentially from KIN-001 upwards
+- KIN-044 is the next slot — do not skip numbers
+- **KIN-073 is a permanent exception:** it is intentionally out of sequence and will always sit outside the sequential run. It is not a gap to be filled — numbers KIN-044 through KIN-072 are the next 29 available slots
+- Zero-pad to 3 digits always: KIN-044, not KIN-44
 
 ---
 

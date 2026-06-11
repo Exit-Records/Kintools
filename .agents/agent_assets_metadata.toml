@@ -65,4 +65,10 @@ title = "Kin Landing Icons — 36 SVGs"
 id = "0ihrZtHjIEbDvCqDViSY6"
 uri = "file://KIN-BUILD-RULES.md"
 type = "text"
-title = "Kin Build Rules & Compliance Reference"
+title = "Kin Build Rules & Compliance Reference (updated)"
+
+[[outputs]]
+id = "BaAbJdHwfi0mmE9g0OZ-1"
+uri = "file://KIN-CATALOGUE.md"
+type = "text"
+title = "Kin Tools — Catalogue"
