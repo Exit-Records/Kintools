@@ -59,10 +59,13 @@ const SUBDOMAIN_MAP = {
   "randomacts":   "kin-035-random-acts",
   "bloodpressure":"kin-036-blood-pressure",
   "unclaimed":    "kin-037-unclaimed",
-  "wetsgo":       "kin-038-wetsgo",
+  "wetsgo":       "kin-038-wets-go",
   "isthisreal":   "kin-039-isthisreal",
   "firstaidguide":"kin-040-firstaidguide",
   "dosage":        "kin-041-dosage",
+  "together":      "kin-042-together",
+  "frequency":     "kin-043-frequency",
+  "vunique":       "kin-073-vunique",
 };
 
 // Rewrite all https://SUBDOMAIN.kintools.net/... → BASE_PATH/DIR/...
