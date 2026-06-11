@@ -131,6 +131,50 @@ function htmlResponse(html: string, status = 200): Response {
   })
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function sanitiseWorkerEntries(entries: unknown[]): VuniqueEntry[] {
+  const MAX = 500
+  return entries
+    .slice(0, MAX)
+    .filter((e): e is Record<string, unknown> =>
+      typeof e === 'object' && e !== null &&
+      typeof (e as Record<string, unknown>).url === 'string' &&
+      typeof (e as Record<string, unknown>).title === 'string')
+    .filter((e) => {
+      const url = (e.url as string).trim()
+      return (url.startsWith('http://') || url.startsWith('https://')) && url.length <= 2048
+    })
+    .map((e) => ({
+      url: (e.url as string).trim(),
+      title: String(e.title).trim().slice(0, 200),
+      note: e.note && typeof e.note === 'string' ? e.note.trim().slice(0, 500) : undefined,
+      category: e.category && typeof e.category === 'string'
+        ? e.category.toLowerCase().trim().slice(0, 50) : undefined,
+      tags: Array.isArray(e.tags)
+        ? (e.tags as unknown[]).filter((t): t is string => typeof t === 'string').slice(0, 5)
+        : [],
+      added: typeof e.added === 'string' ? e.added.trim().slice(0, 10) : undefined,
+      trail: Array.isArray(e.trail)
+        ? (e.trail as unknown[])
+            .filter((h): h is Record<string, unknown> =>
+              typeof h === 'object' && h !== null &&
+              typeof (h as Record<string, unknown>).handle === 'string' &&
+              typeof (h as Record<string, unknown>).date === 'string')
+            .slice(0, 20)
+            .map((h) => ({ handle: String(h.handle).trim().slice(0, 100), date: String(h.date).trim().slice(0, 10) }))
+        : [],
+      via: e.via && typeof e.via === 'string' ? e.via.trim().slice(0, 100) : undefined,
+    }))
+}
+
 function summariseEntries(entries: VuniqueEntry[]): Record<string, number> {
   const counts: Record<string, number> = {}
   for (const entry of entries) {
@@ -183,24 +227,25 @@ function buildPreviewPage(data: VuniqueExport, slug: string, uploadedAt: string)
   const entryItems = entries
     .map(e => {
       const trail = (e.trail || [])
-        .map(h => `<span class="hop">via ${h.handle}</span>`)
+        .map(h => `<span class="hop">via ${escapeHtml(h.handle)}</span>`)
         .join('')
       return `<li>
-        <a href="${e.url}" target="_blank" rel="noopener noreferrer">${e.title}</a>
-        ${e.note ? `<p>${e.note}</p>` : ''}
-        ${e.category ? `<span class="tag">${e.category}</span>` : ''}
+        <a href="${escapeHtml(e.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(e.title)}</a>
+        ${e.note ? `<p>${escapeHtml(e.note)}</p>` : ''}
+        ${e.category ? `<span class="tag">${escapeHtml(e.category)}</span>` : ''}
         ${trail}
       </li>`
     })
     .join('\n')
 
+  const descContent = escapeHtml(identity.statement || ('A curated list by ' + identity.handle))
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>${identity.handle} — Vunique</title>
-  <meta name="description" content="${identity.statement || `A curated list by ${identity.handle}`}">
+  <title>${escapeHtml(identity.handle)} — Vunique</title>
+  <meta name="description" content="${descContent}">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
     :root { --ink: #0a0a0a; --grey: #666; --light: #f5f5f0; --border: #e0e0d8; --accent: #2a5caa }
@@ -229,18 +274,18 @@ function buildPreviewPage(data: VuniqueExport, slug: string, uploadedAt: string)
 <body>
   <div class="wrap">
     <header>
-      <h1>@${identity.handle}</h1>
-      ${identity.statement ? `<p class="statement">${identity.statement}</p>` : ''}
-      <p class="meta">${entries.length} links &middot; ${categorySummary} &middot; shared ${date}</p>
+      <h1>@${escapeHtml(identity.handle)}</h1>
+      ${identity.statement ? `<p class="statement">${escapeHtml(identity.statement)}</p>` : ''}
+      <p class="meta">${entries.length} links &middot; ${escapeHtml(categorySummary)} &middot; shared ${escapeHtml(date)}</p>
     </header>
     <ul>${entryItems}</ul>
-    <a class="download" href="/u/${slug}/raw" download="vunique-${slug}.json">Download JSON</a>
+    <a class="download" href="/u/${escapeHtml(slug)}/raw" download="vunique-${escapeHtml(slug)}.json">Download JSON</a>
     <footer>
       <a href="https://kintools.net">KIN Tools</a>
       <span class="sep">&middot;</span>
       <a href="https://vunique.kintools.net">Vunique</a>
       <span class="sep">&middot;</span>
-      <a href="/report?slug=${slug}">Report this list</a>
+      <a href="/report?slug=${escapeHtml(slug)}">Report this list</a>
       <span class="sep">&middot;</span>
       <a href="https://kintools.net/terms">Terms</a>
     </footer>
@@ -351,6 +396,16 @@ async function handleUpload(request: Request, env: Env): Promise<Response> {
   const baseSlug = normaliseSlug(data.identity.handle)
   if (!baseSlug) {
     return errorResponse('Handle required to generate a share URL', 400)
+  }
+
+  data = {
+    ...data,
+    entries: sanitiseWorkerEntries(data.entries as unknown[]),
+    identity: {
+      handle: data.identity.handle.trim().slice(0, 100),
+      statement: data.identity.statement?.trim().slice(0, 300),
+      contact: data.identity.contact?.trim().slice(0, 200),
+    },
   }
 
   const blocked = await env.BLOCKLIST.get(baseSlug)
