@@ -1867,22 +1867,26 @@ function generateICS() {
     events +
     'END:VCALENDAR';
 
-  var blob = new Blob([ics], { type: 'text/calendar' });
-  var url = URL.createObjectURL(blob);
-
-  // iOS Safari: open directly to trigger calendar import
-  // Others: download as file
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  // iOS Safari: blob URLs for text/calendar don't trigger calendar import;
+  // use a data URI instead so iOS opens the .ics in the Calendar app.
+  // iPadOS 13+ reports as Mac, so also check maxTouchPoints.
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   if (isIOS) {
-    window.location.href = url;
+    var dataUrl = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    window.location.href = dataUrl;
   } else {
+    var blob = new Blob([ics], { type: 'text/calendar' });
+    var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
+    a.style.display = 'none';
     a.href = url;
     a.download = 'wetsgo-reminders.ics';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
   }
-
-  setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
 
   var label = durationVal === '0' ? 'ongoing' : durationVal === 'custom' ? 'until ' + document.getElementById('icsCustomDate').value : durationVal + ' days';
   showToast('Downloaded (' + label + ', ' + tz + ')');
