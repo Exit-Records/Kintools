@@ -60,7 +60,7 @@ All tools deploy as Cloudflare Pages at `<subdomain>.kintools.net`.
 | KIN-035 | Random Acts | v1.0 | Darren | random-acts.kintools.net | ✅ | 1 fix: Google Fonts removed; kin035-* key prefix is correct |
 | KIN-036 | Blood Pressure | v1.0 | Darren | bloodpressure.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
 | KIN-037 | Unclaimed | v1.0 | Darren | unclaimed.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
-| KIN-038 | Wets Go! | v1.0 | Darren | wetsgo.kintools.net | 🔄 | New — awaiting Cloudflare Pages setup |
+| KIN-038 | Wets Go! | v1.1 | Darren | wetsgo.kintools.net | 🔄 | v1.1 — Fix calendar export: data URI for iOS (blob URLs don't trigger Calendar app), DOM-append anchor pattern for desktop browsers |
 | KIN-039 | Is This Real? | v1.2 | 03 Apr 2026 | 5 new entries; mechanism tags, Quick Swap, region badges, related entries on all entries; Travelling Abroad collection |
 | KIN-040 | First Aid Guide | v1.0 | Darren | firstaidguide.kintools.net | 🔄 | New — step-by-step emergency guides, 45 country numbers, weight-based medication dosing; curly-quote bug fixed; SW + ATI + full OG block added |
 | KIN-041 | Dosage | v1.0 | Darren | dosage.kintools.net | 🔄 | New — medication tracker; dose log; refill alerts; GP print export; .ics calendar reminders; label scan (OCR); demo mode |
